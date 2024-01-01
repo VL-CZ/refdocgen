@@ -16,6 +16,9 @@ trim_trailing_whitespace = false
 dotnet_analyzer_diagnostic.category-Style.severity = warning
 dotnet_analyzer_diagnostic.category-CodeQuality.severity = warning
 
+# Supressed rules
+dotnet_diagnostic.CA1303.severity = none
+
 # Symbol specifications
 dotnet_naming_symbols.interface.applicable_kinds = interface
 dotnet_naming_symbols.interface.applicable_accessibilities = *
