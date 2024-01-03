@@ -1,12 +1,14 @@
 namespace RefDocGen;
 
-public class Program
+public static class Program
 {
-    private static void Main()
+    public static void Main()
     {
-        int value = 50;
+        string? rootPath = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.Parent.Parent.Parent.FullName;
+        string dllPath = Path.Join(rootPath, "demo-lib", "MyLibrary.dll");
+        string docPath = Path.Join(rootPath, "demo-lib", "MyLibrary.xml");
 
-        Console.WriteLine(value);
-        Console.WriteLine("Hello, World!");
+        var docGenerator = new DocGenerator(dllPath, docPath);
+        docGenerator.GenerateDoc();
     }
 }

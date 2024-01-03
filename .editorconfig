@@ -12,12 +12,23 @@ trim_trailing_whitespace = true
 [*.md]
 trim_trailing_whitespace = false
 
-[*.{cs}]
+[*.{cs,cshtml}]
 dotnet_analyzer_diagnostic.category-Style.severity = warning
 dotnet_analyzer_diagnostic.category-CodeQuality.severity = warning
 
 # Supressed rules
 dotnet_diagnostic.CA1303.severity = none
+dotnet_diagnostic.CA1062.severity = none
+
+# Use var for non-built in types
+csharp_style_var_for_built_in_types = false
+csharp_style_var_when_type_is_apparent = true
+csharp_style_var_elsewhere = true
+
+# custom rules
+csharp_style_namespace_declarations = file_scoped
+csharp_style_prefer_top_level_statements = false
+csharp_style_prefer_primary_constructors = false
 
 # Symbol specifications
 dotnet_naming_symbols.interface.applicable_kinds = interface
@@ -34,7 +45,6 @@ dotnet_naming_symbols.scoped_variables.applicable_accessibilities = *
 
 dotnet_naming_symbols.restricted_access_fields.applicable_kinds = field
 dotnet_naming_symbols.restricted_access_fields.applicable_accessibilities = private, protected
-
 
 # Naming rules
 dotnet_naming_rule.interface_should_be_begins_with_i.symbols = interface
@@ -64,12 +74,3 @@ dotnet_naming_style.begins_with_i.capitalization = pascal_case
 dotnet_naming_style.pascal_case.capitalization = pascal_case
 
 dotnet_naming_style.camel_case.capitalization = camel_case
-
-# Use var for non-built in types
-csharp_style_var_for_built_in_types	= false
-csharp_style_var_when_type_is_apparent = true
-csharp_style_var_elsewhere = true
-
-csharp_style_namespace_declarations = file_scoped
-csharp_style_prefer_top_level_statements = false
-# csharp_style_prefer_primary_constructors = false

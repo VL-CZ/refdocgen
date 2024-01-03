@@ -1,0 +1,35 @@
+@model RefDocGen.TemplateModels.ClassTemplateModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+    <div>
+        <h1>Class @Model.Name</h1>
+        <p><i>@Model.DocComment</i></p>
+        <h2>Fields</h2>
+        <div>
+            @foreach (var field in Model.Fields)
+            {
+                <div>
+                    <h3>@field.Name</h3>
+                    <div>Type: @field.Type</div>
+                    <p><i>@field.DocComment</i></p>
+                </div>
+            }
+        </div>
+        <h2>Methods</h2>
+        <div>
+            @foreach (var method in Model.Methods)
+            {
+                <div>
+                    <h3>@method.Name</h3>
+                    <div>Return type: @method.ReturnType</div>
+                    <p><i>@method.DocComment</i></p>
+                </div>
+            }
+        </div>
+    </div>
+</body>
+</html>
