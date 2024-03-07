@@ -16,10 +16,6 @@ trim_trailing_whitespace = false
 dotnet_analyzer_diagnostic.category-Style.severity = warning
 dotnet_analyzer_diagnostic.category-CodeQuality.severity = warning
 
-# Supressed rules
-dotnet_diagnostic.CA1303.severity = none
-dotnet_diagnostic.CA1062.severity = none
-
 # Use var for non-built in types
 csharp_style_var_for_built_in_types = false
 csharp_style_var_when_type_is_apparent = true
