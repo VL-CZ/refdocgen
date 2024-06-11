@@ -1,6 +1,5 @@
 namespace RefDocGen.TemplateModels;
 
-public record FieldTemplateModel(string Name, string Type, string DocComment)
+public record FieldTemplateModel(string Name, string Type, string DocComment, string[] Modifiers)
 {
-    public string DocComment { get; set; } = DocComment;
 }
