@@ -10,7 +10,7 @@ public record FieldIntermed(string Name, string Type, AccessibilityModifier Acce
 
 //public record PropertyAccessorIntermed(AccessibilityModifier AccessibilityModifier);
 
-public record PropertyIntermed(string Name, string Type, AccessibilityModifier? Getter, AccessibilityModifier? Setter /*, bool IsStatic, bool IsVirtual, bool IsAbstract */)
+public record PropertyIntermed(string Name, string Type, AccessibilityModifier AccessibilityModifier, AccessibilityModifier? Getter, AccessibilityModifier? Setter /*, bool IsStatic, bool IsVirtual, bool IsAbstract */)
 {
 }
 

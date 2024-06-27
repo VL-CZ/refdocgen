@@ -19,13 +19,36 @@
                 </div>
             }
         </div>
+
+        <h2>Properties</h2>
+        <div>
+            @foreach (var property in Model.Properties)
+            {
+                <div>
+                    <h3>@string.Join(' ', property.Modifiers) @property.Name</h3>
+                    <div>Type: @property.Type</div>
+                    <p><i>@property.DocComment</i></p>
+                    <ul>
+                        @if (property.HasGetter)
+                        {
+                            <li>get</li>
+                        }
+                        @if (property.HasSetter)
+                        {
+                            <li>set</li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+
         <h2>Methods</h2>
         <div>
             @foreach (var method in Model.Methods)
             {
                 <div>
                     <h3>@string.Join(' ', method.Modifiers) @method.Name</h3>
-                    
+
                     <h4>Parameters</h4>
                     @foreach (var parameter in method.Parameters)
                     {

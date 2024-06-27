@@ -36,7 +36,7 @@ public class AssemblyAnalyzer
 
         var fieldModels = fields.Select(f => new FieldIntermed(f.Name, f.FieldType.Name, f.GetAccessibilityModifier(), f.IsStatic)).ToArray();
 
-        var propertyModels = properties.Select(p => new PropertyIntermed(p.Name, p.PropertyType.Name, p.GetMethod?.GetAccessibilityModifier(), p.SetMethod?.GetAccessibilityModifier())).ToArray();
+        var propertyModels = properties.Select(p => new PropertyIntermed(p.Name, p.PropertyType.Name, p.GetAccessibilityModifier(), p.GetMethod?.GetAccessibilityModifier(), p.SetMethod?.GetAccessibilityModifier())).ToArray();
 
         var methodModels = methods.Select(m =>
             new MethodIntermed(m.Name,
