@@ -30,9 +30,9 @@ public class AssemblyAnalyzer
     {
         var bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
 
-        var fields = type.GetFields(bindingFlags);
-        var properties = type.GetProperties(bindingFlags);
-        var methods = type.GetMethods(bindingFlags);
+        var fields = type.GetFields(bindingFlags).Where(f => !f.IsCompilerGenerated());
+        var properties = type.GetProperties(bindingFlags).Where(f => !f.IsCompilerGenerated());
+        var methods = type.GetMethods(bindingFlags).Where(f => !f.IsCompilerGenerated());
 
         var fieldModels = fields.Select(f => new FieldIntermed(f.Name, f.FieldType.Name, f.GetAccessibilityModifier(), f.IsStatic)).ToArray();
 
