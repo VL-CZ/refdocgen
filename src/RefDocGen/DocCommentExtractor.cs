@@ -1,3 +1,4 @@
+using RefDocGen.Intermed;
 using RefDocGen.TemplateModels;
 using System.Xml;
 
@@ -39,9 +40,11 @@ public class DocCommentExtractor
                 if (sp[0] == "T") // TODO: code quality
                 {
                     string className = sp[1];
-                    var templateNode = models.Where(m => m.Name == className).First();
+                    var templateNode = models.First(m => m.Name == className);
 
-                    templateNode.DocComment = summaryText;
+                    int index = Array.IndexOf(models, templateNode);
+
+                    models[index] = templateNode with { DocComment = summaryText };
                 }
                 else if (sp[0] == "F")
                 {
@@ -51,9 +54,12 @@ public class DocCommentExtractor
                     string fieldName = nameParts[^1];
                     string className = string.Join('.', nameParts, 0, nameParts.Length - 1);
 
-                    var fieldNode = models.First(m => m.Name == className).Fields.First(f => f.Name == fieldName);
+                    var type = models.First(m => m.Name == className);
+                    var fieldNode = type.Fields.First(f => f.Name == fieldName);
 
-                    fieldNode.DocComment = summaryText;
+                    int index = Array.IndexOf(type.Fields, fieldNode);
+
+                    type.Fields[index] = fieldNode with { DocComment = summaryText };
                 }
             }
         }

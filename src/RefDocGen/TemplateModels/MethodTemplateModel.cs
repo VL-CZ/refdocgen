@@ -1,6 +1,7 @@
 namespace RefDocGen.TemplateModels;
 
-public record MethodTemplateModel(string Name, string ReturnType, string DocComment)
+public record MethodTemplateModel(string Name, MethodParameterModel[] Parameters, string ReturnType, string DocComment, string[] Modifiers)
 {
-    public string DocComment { get; set; } = DocComment;
 }
+
+public record MethodParameterModel(string Name, string Type);
