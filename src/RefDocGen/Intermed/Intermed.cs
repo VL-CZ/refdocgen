@@ -1,10 +1,16 @@
 namespace RefDocGen.Intermed;
 
-public record ClassIntermed(string Name, AccessibilityModifier AccessibilityModifier, FieldIntermed[] Fields, MethodIntermed[] Methods)
+public record ClassIntermed(string Name, AccessibilityModifier AccessibilityModifier, FieldIntermed[] Fields, PropertyIntermed[] Properties, MethodIntermed[] Methods)
 {
 }
 
 public record FieldIntermed(string Name, string Type, AccessibilityModifier AccessibilityModifier, bool IsStatic)
+{
+}
+
+//public record PropertyAccessorIntermed(AccessibilityModifier AccessibilityModifier);
+
+public record PropertyIntermed(string Name, string Type, AccessibilityModifier? Getter, AccessibilityModifier? Setter /*, bool IsStatic, bool IsVirtual, bool IsAbstract */)
 {
 }
 
