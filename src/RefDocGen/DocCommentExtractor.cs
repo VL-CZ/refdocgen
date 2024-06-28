@@ -61,6 +61,21 @@ public class DocCommentExtractor
 
                     type.Fields[index] = fieldNode with { DocComment = summaryText };
                 }
+                else if (sp[0] == "P")
+                {
+                    string fullName = sp[1];
+                    string[] nameParts = fullName.Split('.');
+
+                    string fieldName = nameParts[^1];
+                    string className = string.Join('.', nameParts, 0, nameParts.Length - 1);
+
+                    var type = models.First(m => m.Name == className);
+                    var fieldNode = type.Properties.First(f => f.Name == fieldName);
+
+                    int index = Array.IndexOf(type.Properties, fieldNode);
+
+                    type.Properties[index] = fieldNode with { DocComment = summaryText };
+                }
             }
         }
     }
