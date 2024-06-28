@@ -1,27 +1,14 @@
 using RefDocGen.Intermed;
+using RefDocGen.Tools;
 using System.Reflection;
 
 namespace RefDocGen.Extensions;
 
 internal static class MethodInfoExtensions
 {
-    public static AccessibilityModifier GetAccessibilityModifier(this MethodInfo method)
+    public static AccessModifier GetAccessModifier(this MethodInfo method)
     {
-        if (method.IsPrivate)
-        {
-            return AccessibilityModifier.Private;
-        }
-        else if (method.IsFamily)
-        {
-            return AccessibilityModifier.Protected;
-        }
-        else if (method.IsAssembly)
-        {
-            return AccessibilityModifier.Internal;
-        }
-        else
-        {
-            return AccessibilityModifier.Public; // TODO: additional checks
-        }
+        return new MemberAccessibility(method.IsPrivate, method.IsFamily, method.IsAssembly, method.IsPublic, method.IsFamilyAndAssembly, method.IsFamilyOrAssembly)
+            .GetAccessModifier();
     }
 }

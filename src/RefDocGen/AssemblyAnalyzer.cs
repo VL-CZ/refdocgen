@@ -38,12 +38,12 @@ public class AssemblyAnalyzer
         var propertyModels = properties.Select(ConstructProperty).ToArray();
         var methodModels = methods.Select(ConstructMethod).ToArray();
 
-        return new ClassIntermed(type.FullName, AccessibilityModifier.Public, fieldModels, propertyModels, methodModels);
+        return new ClassIntermed(type.FullName, AccessModifier.Public, fieldModels, propertyModels, methodModels);
     }
 
     private FieldIntermed ConstructField(FieldInfo field)
     {
-        return new FieldIntermed(field.Name, field.FieldType.Name, field.GetAccessibilityModifier(), field.IsStatic);
+        return new FieldIntermed(field.Name, field.FieldType.Name, field.GetAccessModifier(), field.IsStatic, field.IsInitOnly, field.IsLiteral);
     }
 
     private PropertyIntermed ConstructProperty(PropertyInfo property)
@@ -54,15 +54,15 @@ public class AssemblyAnalyzer
         bool isAbstract = accessors.All(a => a.IsAbstract);
         bool isVirtual = accessors.All(a => a.IsVirtual);
 
-        return new PropertyIntermed(property.Name, property.PropertyType.Name, property.GetAccessibilityModifier(),
-            property.GetMethod?.GetAccessibilityModifier(), property.SetMethod?.GetAccessibilityModifier(),
+        return new PropertyIntermed(property.Name, property.PropertyType.Name, property.GetAccessModifier(),
+            property.GetMethod?.GetAccessModifier(), property.SetMethod?.GetAccessModifier(),
             isStatic, isVirtual, isAbstract);
     }
 
     private MethodIntermed ConstructMethod(MethodInfo method)
     {
         var parameters = method.GetParameters().Select(ConstructMethodParameter).ToArray();
-        return new MethodIntermed(method.Name, parameters, method.ReturnType.Name, method.GetAccessibilityModifier(), method.IsStatic, method.IsVirtual, method.IsAbstract);
+        return new MethodIntermed(method.Name, parameters, method.ReturnType.Name, method.GetAccessModifier(), method.IsStatic, method.IsVirtual, method.IsAbstract);
     }
 
     private MethodParameter ConstructMethodParameter(ParameterInfo p)
