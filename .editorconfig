@@ -70,3 +70,6 @@ dotnet_naming_style.begins_with_i.capitalization = pascal_case
 dotnet_naming_style.pascal_case.capitalization = pascal_case
 
 dotnet_naming_style.camel_case.capitalization = camel_case
+
+# Suppressed rules
+dotnet_diagnostic.IDE0072.severity = none

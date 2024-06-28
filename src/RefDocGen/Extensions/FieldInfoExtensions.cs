@@ -10,4 +10,5 @@ internal static class FieldInfoExtensions
     {
         return new MemberAccessibility(field.IsPrivate, field.IsFamily, field.IsAssembly, field.IsPublic, field.IsFamilyAndAssembly, field.IsFamilyOrAssembly)
             .GetAccessModifier();
+    }
 }
