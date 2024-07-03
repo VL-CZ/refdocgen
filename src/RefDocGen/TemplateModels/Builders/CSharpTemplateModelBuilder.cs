@@ -14,24 +14,24 @@ internal class CSharpTemplateModelBuilder : ITemplateModelBuilder
         return new ClassTemplateModel(classIntermed.Name, string.Empty, [classIntermed.AccessibilityModifier.ToString()], fields, properties, methods);
     }
 
-    private FieldTemplateModel CreateFieldTemplateModel(FieldIntermed fieldIntermed)
+    private FieldTemplateModel CreateFieldTemplateModel(FieldIntermed field)
     {
-        List<string> modifiers = [fieldIntermed.AccessibilityModifier.ToString()];
+        List<string> modifiers = [field.AccessibilityModifier.ToString()];
 
-        if (fieldIntermed.IsStatic)
+        if (field.IsStatic && !field.IsConstant)
         {
             modifiers.Add(Placeholder.Static.GetString());
         }
-        if (fieldIntermed.IsConst)
+        if (field.IsConstant)
         {
             modifiers.Add(Placeholder.Const.GetString());
         }
-        if (fieldIntermed.IsReadonly)
+        if (field.IsReadonly)
         {
             modifiers.Add(Placeholder.Readonly.GetString());
         }
 
-        return new FieldTemplateModel(fieldIntermed.Name, fieldIntermed.Type, string.Empty, [.. modifiers]);
+        return new FieldTemplateModel(field.Name, field.Type, string.Empty, [.. modifiers]);
     }
 
     private PropertyTemplateModel CreatePropertyTemplateModel(PropertyIntermed propertyIntermed)
@@ -42,9 +42,31 @@ internal class CSharpTemplateModelBuilder : ITemplateModelBuilder
 
     private MethodTemplateModel CreateMethodTemplateModel(MethodIntermed methodIntermed)
     {
-        string[] modifiers = [methodIntermed.AccessibilityModifier.ToString()];
+        List<string> modifiers = [methodIntermed.AccessibilityModifier.ToString()];
+
+        if (methodIntermed.IsStatic)
+        {
+            modifiers.Add(Placeholder.Static.GetString());
+        }
+        if (methodIntermed.HasVirtualKeyword)
+        {
+            modifiers.Add(Placeholder.Virtual.GetString());
+        }
+        if (methodIntermed.OverridesAnotherMethod)
+        {
+            modifiers.Add(Placeholder.Override.GetString());
+        }
+        if (methodIntermed.IsSealed)
+        {
+            modifiers.Add(Placeholder.Sealed.GetString());
+        }
+        if (methodIntermed.IsAsync)
+        {
+            modifiers.Add(Placeholder.Async.GetString());
+        }
+
         return new MethodTemplateModel(methodIntermed.Name,
             methodIntermed.Parameters.Select(p => new MethodParameterModel(p.Name, p.Type)).ToArray(),
-            methodIntermed.ReturnType, string.Empty, modifiers);
+            methodIntermed.ReturnType, string.Empty, [.. modifiers]);
     }
 }

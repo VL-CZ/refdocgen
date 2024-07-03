@@ -2,7 +2,7 @@ namespace RefDocGen.Tools;
 
 internal enum Placeholder
 {
-    Abstract, Class, Const, Delegate, Enum, Event, Explicit, Extern, Implicit,
+    Abstract, Async, Class, Const, Delegate, Enum, Event, Explicit, Extern, Implicit,
     In, Interface, Internal, Namespace, New, Null, Object, Out, Override, Params,
     Private, Protected, Public, Readonly, Ref, Sealed, Static, Struct, Virtual,
     Void, Volatile, PrivateProtected, ProtectedInternal

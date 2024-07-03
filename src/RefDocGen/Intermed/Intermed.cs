@@ -4,7 +4,7 @@ public record ClassIntermed(string Name, AccessModifier AccessibilityModifier, F
 {
 }
 
-public record FieldIntermed(string Name, string Type, AccessModifier AccessibilityModifier, bool IsStatic, bool IsReadonly, bool IsConst)
+public record FieldIntermed(string Name, string Type, AccessModifier AccessibilityModifier, bool IsStatic, bool IsReadonly, bool IsConstant)
 {
 }
 
@@ -12,10 +12,14 @@ public record FieldIntermed(string Name, string Type, AccessModifier Accessibili
 
 public record PropertyIntermed(string Name, string Type, AccessModifier AccessibilityModifier, AccessModifier? Getter, AccessModifier? Setter, bool IsStatic, bool IsVirtual, bool IsAbstract)
 {
+
 }
 
-public record MethodIntermed(string Name, MethodParameter[] Parameters, string ReturnType, AccessModifier AccessibilityModifier, bool IsStatic, bool IsVirtual, bool IsAbstract)
+public record MethodIntermed(string Name, MethodParameter[] Parameters, string ReturnType, AccessModifier AccessibilityModifier, bool IsStatic, bool IsOverridable, bool OverridesAnotherMethod, bool IsAbstract, bool IsFinal, bool IsAsync)
 {
+    public bool IsSealed => OverridesAnotherMethod && IsFinal;
+
+    public bool HasVirtualKeyword => IsOverridable && !IsAbstract && !OverridesAnotherMethod;
 }
 
 public record MethodParameter(string Name, string Type);

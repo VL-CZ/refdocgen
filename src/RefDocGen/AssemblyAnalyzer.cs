@@ -2,6 +2,7 @@ using RefDocGen.Extensions;
 using RefDocGen.Intermed;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace RefDocGen;
 
@@ -62,7 +63,11 @@ public class AssemblyAnalyzer
     private MethodIntermed ConstructMethod(MethodInfo method)
     {
         var parameters = method.GetParameters().Select(ConstructMethodParameter).ToArray();
-        return new MethodIntermed(method.Name, parameters, method.ReturnType.Name, method.GetAccessModifier(), method.IsStatic, method.IsVirtual, method.IsAbstract);
+        bool isOverridable = method.IsVirtual && !method.IsFinal;
+        bool overridesAnotherMethod = !method.Equals(method.GetBaseDefinition());
+        bool isAsync = method.GetCustomAttribute(typeof(AsyncStateMachineAttribute)) != null;
+
+        return new MethodIntermed(method.Name, parameters, method.ReturnType.Name, method.GetAccessModifier(), method.IsStatic, isOverridable, overridesAnotherMethod, method.IsAbstract, method.IsFinal, isAsync);
     }
 
     private MethodParameter ConstructMethodParameter(ParameterInfo p)
