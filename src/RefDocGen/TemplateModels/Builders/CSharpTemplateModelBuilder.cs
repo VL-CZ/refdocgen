@@ -16,7 +16,7 @@ internal class CSharpTemplateModelBuilder : ITemplateModelBuilder
 
     private FieldTemplateModel CreateFieldTemplateModel(FieldIntermed field)
     {
-        List<string> modifiers = [field.AccessibilityModifier.ToString()];
+        List<string> modifiers = [field.AccessibilityModifier.GetString()];
 
         if (field.IsStatic && !field.IsConstant)
         {
@@ -36,13 +36,13 @@ internal class CSharpTemplateModelBuilder : ITemplateModelBuilder
 
     private PropertyTemplateModel CreatePropertyTemplateModel(PropertyIntermed propertyIntermed)
     {
-        string[] modifiers = [propertyIntermed.AccessibilityModifier.ToString()];
+        string[] modifiers = [propertyIntermed.AccessibilityModifier.GetString()];
         return new PropertyTemplateModel(propertyIntermed.Name, propertyIntermed.Type, string.Empty, modifiers, propertyIntermed.Getter is not null, propertyIntermed.Setter is not null, [], []);
     }
 
     private MethodTemplateModel CreateMethodTemplateModel(MethodIntermed methodIntermed)
     {
-        List<string> modifiers = [methodIntermed.AccessibilityModifier.ToString()];
+        List<string> modifiers = [methodIntermed.AccessibilityModifier.GetString()];
 
         if (methodIntermed.IsStatic)
         {

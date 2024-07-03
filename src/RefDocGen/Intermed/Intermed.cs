@@ -1,3 +1,5 @@
+using RefDocGen.Tools;
+
 namespace RefDocGen.Intermed;
 
 public record ClassIntermed(string Name, AccessModifier AccessibilityModifier, FieldIntermed[] Fields, PropertyIntermed[] Properties, MethodIntermed[] Methods)
@@ -25,3 +27,16 @@ public record MethodIntermed(string Name, MethodParameter[] Parameters, string R
 public record MethodParameter(string Name, string Type);
 
 public enum AccessModifier { Private, Protected, Internal, Public, ProtectedInternal, PrivateProtected, File }
+
+internal static class AccessModifierExtensions
+{
+    internal static string GetString(this AccessModifier accessModifier)
+    {
+        return accessModifier switch
+        {
+            AccessModifier.PrivateProtected => "private protected",
+            AccessModifier.ProtectedInternal => "internal protected",
+            _ => accessModifier.ToString().ToLowerInvariant()
+        };
+    }
+}
