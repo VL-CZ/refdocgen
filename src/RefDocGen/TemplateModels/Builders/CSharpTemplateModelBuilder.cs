@@ -36,17 +36,39 @@ internal class CSharpTemplateModelBuilder : ITemplateModelBuilder
 
     private PropertyTemplateModel CreatePropertyTemplateModel(PropertyIntermed propertyIntermed)
     {
-        string[] modifiers = [propertyIntermed.AccessibilityModifier.GetString()];
-        return new PropertyTemplateModel(propertyIntermed.Name, propertyIntermed.Type, string.Empty, modifiers, propertyIntermed.Getter is not null, propertyIntermed.Setter is not null, [], []);
+        List<string> modifiers = [propertyIntermed.AccessModifier.GetString()];
+
+        if (propertyIntermed.IsStatic)
+        {
+            modifiers.Add(Placeholder.Static.GetString());
+        }
+        if (propertyIntermed.HasVirtualKeyword)
+        {
+            modifiers.Add(Placeholder.Virtual.GetString());
+        }
+        if (propertyIntermed.OverridesAnotherProperty)
+        {
+            modifiers.Add(Placeholder.Override.GetString());
+        }
+        if (propertyIntermed.IsSealed)
+        {
+            modifiers.Add(Placeholder.Sealed.GetString());
+        }
+
+        return new PropertyTemplateModel(propertyIntermed.Name, propertyIntermed.Type, string.Empty, [.. modifiers], propertyIntermed.Getter is not null, propertyIntermed.Setter is not null, [], []);
     }
 
     private MethodTemplateModel CreateMethodTemplateModel(MethodIntermed methodIntermed)
     {
-        List<string> modifiers = [methodIntermed.AccessibilityModifier.GetString()];
+        List<string> modifiers = [methodIntermed.AccessModifier.GetString()];
 
         if (methodIntermed.IsStatic)
         {
             modifiers.Add(Placeholder.Static.GetString());
+        }
+        if (methodIntermed.IsAbstract)
+        {
+            modifiers.Add(Placeholder.Abstract.GetString());
         }
         if (methodIntermed.HasVirtualKeyword)
         {

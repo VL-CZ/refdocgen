@@ -1,6 +1,5 @@
 using RefDocGen.Extensions;
 using RefDocGen.Intermed;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -49,15 +48,11 @@ public class AssemblyAnalyzer
 
     private PropertyIntermed ConstructProperty(PropertyInfo property)
     {
-        var accessors = property.GetAccessors();
 
-        bool isStatic = accessors.All(a => a.IsStatic);
-        bool isAbstract = accessors.All(a => a.IsAbstract);
-        bool isVirtual = accessors.All(a => a.IsVirtual);
+        var getter = property.GetMethod is not null ? ConstructMethod(property.GetMethod) : null;
+        var setter = property.SetMethod is not null ? ConstructMethod(property.SetMethod) : null;
 
-        return new PropertyIntermed(property.Name, property.PropertyType.Name, property.GetAccessModifier(),
-            property.GetMethod?.GetAccessModifier(), property.SetMethod?.GetAccessModifier(),
-            isStatic, isVirtual, isAbstract);
+        return new PropertyIntermed(property.Name, property.PropertyType.Name, getter, setter);
     }
 
     private MethodIntermed ConstructMethod(MethodInfo method)
