@@ -3,25 +3,10 @@ using System.Reflection;
 
 namespace RefDocGen.Extensions;
 
-internal static class FieldInfoExtensions
+internal static class PropertyInfoExtensions
 {
-    public static AccessibilityModifier GetAccessibilityModifier(this FieldInfo field)
+    public static AccessModifier GetAccessModifier(this PropertyInfo property)
     {
-        if (field.IsPrivate)
-        {
-            return AccessibilityModifier.Private;
-        }
-        else if (field.IsFamily)
-        {
-            return AccessibilityModifier.Protected;
-        }
-        else if (field.IsAssembly)
-        {
-            return AccessibilityModifier.Internal;
-        }
-        else
-        {
-            return AccessibilityModifier.Public; // TODO: additional checks
-        }
+        return AccessModifier.Public;
     }
 }

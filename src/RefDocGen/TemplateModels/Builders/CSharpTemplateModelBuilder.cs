@@ -1,4 +1,5 @@
 using RefDocGen.Intermed;
+using RefDocGen.Tools;
 
 namespace RefDocGen.TemplateModels.Builders;
 
@@ -6,30 +7,100 @@ internal class CSharpTemplateModelBuilder : ITemplateModelBuilder
 {
     public ClassTemplateModel CreateClassTemplateModel(ClassIntermed classIntermed)
     {
-        var fields = classIntermed.Fields.Select(CreateFieldTemplateModels).ToArray();
-        var properties = classIntermed.Properties.Select(CreatePropertyTemplateModels).ToArray();
-        var methods = classIntermed.Methods.Select(CreateMethodTemplateModels).ToArray();
+        var fields = classIntermed.Fields.Select(CreateFieldTemplateModel).ToArray();
+        var properties = classIntermed.Properties.Select(CreatePropertyTemplateModel).ToArray();
+        var methods = classIntermed.Methods.Select(CreateMethodTemplateModel).ToArray();
 
         return new ClassTemplateModel(classIntermed.Name, string.Empty, [classIntermed.AccessibilityModifier.ToString()], fields, properties, methods);
     }
 
-    private FieldTemplateModel CreateFieldTemplateModels(FieldIntermed fieldIntermed)
+    private FieldTemplateModel CreateFieldTemplateModel(FieldIntermed field)
     {
-        string[] modifiers = [fieldIntermed.AccessibilityModifier.ToString()];
-        return new FieldTemplateModel(fieldIntermed.Name, fieldIntermed.Type, string.Empty, modifiers);
+        List<string> modifiers = [field.AccessibilityModifier.GetString()];
+
+        if (field.IsStatic && !field.IsConstant)
+        {
+            modifiers.Add(Placeholder.Static.GetString());
+        }
+        if (field.IsConstant)
+        {
+            modifiers.Add(Placeholder.Const.GetString());
+        }
+        if (field.IsReadonly)
+        {
+            modifiers.Add(Placeholder.Readonly.GetString());
+        }
+
+        return new FieldTemplateModel(field.Name, field.Type, string.Empty, [.. modifiers]);
     }
 
-    private PropertyTemplateModel CreatePropertyTemplateModels(PropertyIntermed propertyIntermed)
+    private PropertyTemplateModel CreatePropertyTemplateModel(PropertyIntermed propertyIntermed)
     {
-        string[] modifiers = [propertyIntermed.AccessibilityModifier.ToString()];
-        return new PropertyTemplateModel(propertyIntermed.Name, propertyIntermed.Type, string.Empty, modifiers, propertyIntermed.Getter is not null, propertyIntermed.Setter is not null, [], []);
+        List<string> modifiers = [propertyIntermed.AccessModifier.GetString()];
+
+        if (propertyIntermed.IsStatic)
+        {
+            modifiers.Add(Placeholder.Static.GetString());
+        }
+        if (propertyIntermed.HasVirtualKeyword)
+        {
+            modifiers.Add(Placeholder.Virtual.GetString());
+        }
+        if (propertyIntermed.OverridesAnotherProperty)
+        {
+            modifiers.Add(Placeholder.Override.GetString());
+        }
+        if (propertyIntermed.IsSealed)
+        {
+            modifiers.Add(Placeholder.Sealed.GetString());
+        }
+
+        List<string> getterModifiers = [];
+        List<string> setterModifiers = [];
+
+        if (propertyIntermed.Getter is not null && propertyIntermed.Getter.AccessModifier != propertyIntermed.AccessModifier)
+        {
+            getterModifiers.Add(propertyIntermed.Getter.AccessModifier.GetString());
+        }
+        if (propertyIntermed.Setter is not null && propertyIntermed.Setter.AccessModifier != propertyIntermed.AccessModifier)
+        {
+            setterModifiers.Add(propertyIntermed.Setter.AccessModifier.GetString());
+        }
+
+        return new PropertyTemplateModel(propertyIntermed.Name, propertyIntermed.Type, string.Empty, [.. modifiers], propertyIntermed.Getter is not null, propertyIntermed.Setter is not null, [.. getterModifiers], [.. setterModifiers]);
     }
 
-    private MethodTemplateModel CreateMethodTemplateModels(MethodIntermed methodIntermed)
+    private MethodTemplateModel CreateMethodTemplateModel(MethodIntermed methodIntermed)
     {
-        string[] modifiers = [methodIntermed.AccessibilityModifier.ToString()];
+        List<string> modifiers = [methodIntermed.AccessModifier.GetString()];
+
+        if (methodIntermed.IsStatic)
+        {
+            modifiers.Add(Placeholder.Static.GetString());
+        }
+        if (methodIntermed.IsAbstract)
+        {
+            modifiers.Add(Placeholder.Abstract.GetString());
+        }
+        if (methodIntermed.HasVirtualKeyword)
+        {
+            modifiers.Add(Placeholder.Virtual.GetString());
+        }
+        if (methodIntermed.OverridesAnotherMethod)
+        {
+            modifiers.Add(Placeholder.Override.GetString());
+        }
+        if (methodIntermed.IsSealed)
+        {
+            modifiers.Add(Placeholder.Sealed.GetString());
+        }
+        if (methodIntermed.IsAsync)
+        {
+            modifiers.Add(Placeholder.Async.GetString());
+        }
+
         return new MethodTemplateModel(methodIntermed.Name,
-            methodIntermed.Parameters.Select(p => new MethodParameterModel(p.Name, p.Type)).ToArray(),
-            methodIntermed.ReturnType, string.Empty, modifiers);
+            methodIntermed.GetParameters().Select(p => new MethodParameterModel(p.Name, p.Type)).ToArray(),
+            methodIntermed.ReturnType, string.Empty, [.. modifiers]);
     }
 }

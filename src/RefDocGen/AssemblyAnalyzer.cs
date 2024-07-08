@@ -1,6 +1,5 @@
 using RefDocGen.Extensions;
 using RefDocGen.Intermed;
-using System.Linq;
 using System.Reflection;
 
 namespace RefDocGen;
@@ -34,39 +33,10 @@ public class AssemblyAnalyzer
         var properties = type.GetProperties(bindingFlags).Where(f => !f.IsCompilerGenerated());
         var methods = type.GetMethods(bindingFlags).Where(f => !f.IsCompilerGenerated());
 
-        var fieldModels = fields.Select(ConstructField).ToArray();
-        var propertyModels = properties.Select(ConstructProperty).ToArray();
-        var methodModels = methods.Select(ConstructMethod).ToArray();
+        var fieldModels = fields.Select(f => new FieldIntermed(f)).ToArray();
+        var propertyModels = properties.Select(p => new PropertyIntermed(p)).ToArray();
+        var methodModels = methods.Select(m => new MethodIntermed(m)).ToArray();
 
-        return new ClassIntermed(type.FullName, AccessibilityModifier.Public, fieldModels, propertyModels, methodModels);
-    }
-
-    private FieldIntermed ConstructField(FieldInfo field)
-    {
-        return new FieldIntermed(field.Name, field.FieldType.Name, field.GetAccessibilityModifier(), field.IsStatic);
-    }
-
-    private PropertyIntermed ConstructProperty(PropertyInfo property)
-    {
-        var accessors = property.GetAccessors();
-
-        bool isStatic = accessors.All(a => a.IsStatic);
-        bool isAbstract = accessors.All(a => a.IsAbstract);
-        bool isVirtual = accessors.All(a => a.IsVirtual);
-
-        return new PropertyIntermed(property.Name, property.PropertyType.Name, property.GetAccessibilityModifier(),
-            property.GetMethod?.GetAccessibilityModifier(), property.SetMethod?.GetAccessibilityModifier(),
-            isStatic, isVirtual, isAbstract);
-    }
-
-    private MethodIntermed ConstructMethod(MethodInfo method)
-    {
-        var parameters = method.GetParameters().Select(ConstructMethodParameter).ToArray();
-        return new MethodIntermed(method.Name, parameters, method.ReturnType.Name, method.GetAccessibilityModifier(), method.IsStatic, method.IsVirtual, method.IsAbstract);
-    }
-
-    private MethodParameter ConstructMethodParameter(ParameterInfo p)
-    {
-        return new MethodParameter(p.Name, p.ParameterType.Name);
+        return new ClassIntermed(type.FullName, AccessModifier.Public, fieldModels, propertyModels, methodModels);
     }
 }
