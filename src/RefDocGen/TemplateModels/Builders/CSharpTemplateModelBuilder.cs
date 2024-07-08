@@ -55,7 +55,19 @@ internal class CSharpTemplateModelBuilder : ITemplateModelBuilder
             modifiers.Add(Placeholder.Sealed.GetString());
         }
 
-        return new PropertyTemplateModel(propertyIntermed.Name, propertyIntermed.Type, string.Empty, [.. modifiers], propertyIntermed.Getter is not null, propertyIntermed.Setter is not null, [], []);
+        List<string> getterModifiers = [];
+        List<string> setterModifiers = [];
+
+        if (propertyIntermed.Getter is not null && propertyIntermed.Getter.AccessModifier != propertyIntermed.AccessModifier)
+        {
+            getterModifiers.Add(propertyIntermed.Getter.AccessModifier.GetString());
+        }
+        if (propertyIntermed.Setter is not null && propertyIntermed.Setter.AccessModifier != propertyIntermed.AccessModifier)
+        {
+            setterModifiers.Add(propertyIntermed.Setter.AccessModifier.GetString());
+        }
+
+        return new PropertyTemplateModel(propertyIntermed.Name, propertyIntermed.Type, string.Empty, [.. modifiers], propertyIntermed.Getter is not null, propertyIntermed.Setter is not null, [.. getterModifiers], [.. setterModifiers]);
     }
 
     private MethodTemplateModel CreateMethodTemplateModel(MethodIntermed methodIntermed)

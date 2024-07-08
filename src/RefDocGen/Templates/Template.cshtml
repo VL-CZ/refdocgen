@@ -29,11 +29,11 @@
                     <ul>
                         @if (property.HasGetter)
                         {
-                            <li>get</li>
+                            <li>@string.Join(' ', property.GetterModifiers) get</li>
                         }
                         @if (property.HasSetter)
                         {
-                            <li>set</li>
+                            <li>@string.Join(' ', property.SetterModifiers) set</li>
                         }
                     </ul>
                 </div>
