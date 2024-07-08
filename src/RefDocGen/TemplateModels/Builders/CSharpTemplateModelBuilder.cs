@@ -100,7 +100,7 @@ internal class CSharpTemplateModelBuilder : ITemplateModelBuilder
         }
 
         return new MethodTemplateModel(methodIntermed.Name,
-            methodIntermed.Parameters.Select(p => new MethodParameterModel(p.Name, p.Type)).ToArray(),
+            methodIntermed.GetParameters().Select(p => new MethodParameterModel(p.Name, p.Type)).ToArray(),
             methodIntermed.ReturnType, string.Empty, [.. modifiers]);
     }
 }

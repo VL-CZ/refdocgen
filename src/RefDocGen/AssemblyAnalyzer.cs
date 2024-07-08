@@ -1,7 +1,6 @@
 using RefDocGen.Extensions;
 using RefDocGen.Intermed;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace RefDocGen;
 
@@ -34,39 +33,10 @@ public class AssemblyAnalyzer
         var properties = type.GetProperties(bindingFlags).Where(f => !f.IsCompilerGenerated());
         var methods = type.GetMethods(bindingFlags).Where(f => !f.IsCompilerGenerated());
 
-        var fieldModels = fields.Select(ConstructField).ToArray();
-        var propertyModels = properties.Select(ConstructProperty).ToArray();
-        var methodModels = methods.Select(ConstructMethod).ToArray();
+        var fieldModels = fields.Select(f => new FieldIntermed(f)).ToArray();
+        var propertyModels = properties.Select(p => new PropertyIntermed(p)).ToArray();
+        var methodModels = methods.Select(m => new MethodIntermed(m)).ToArray();
 
         return new ClassIntermed(type.FullName, AccessModifier.Public, fieldModels, propertyModels, methodModels);
-    }
-
-    private FieldIntermed ConstructField(FieldInfo field)
-    {
-        return new FieldIntermed(field.Name, field.FieldType.Name, field.GetAccessModifier(), field.IsStatic, field.IsInitOnly, field.IsLiteral);
-    }
-
-    private PropertyIntermed ConstructProperty(PropertyInfo property)
-    {
-
-        var getter = property.GetMethod is not null ? ConstructMethod(property.GetMethod) : null;
-        var setter = property.SetMethod is not null ? ConstructMethod(property.SetMethod) : null;
-
-        return new PropertyIntermed(property.Name, property.PropertyType.Name, getter, setter);
-    }
-
-    private MethodIntermed ConstructMethod(MethodInfo method)
-    {
-        var parameters = method.GetParameters().Select(ConstructMethodParameter).ToArray();
-        bool isOverridable = method.IsVirtual && !method.IsFinal;
-        bool overridesAnotherMethod = !method.Equals(method.GetBaseDefinition());
-        bool isAsync = method.GetCustomAttribute(typeof(AsyncStateMachineAttribute)) != null;
-
-        return new MethodIntermed(method.Name, parameters, method.ReturnType.Name, method.GetAccessModifier(), method.IsStatic, isOverridable, overridesAnotherMethod, method.IsAbstract, method.IsFinal, isAsync);
-    }
-
-    private MethodParameter ConstructMethodParameter(ParameterInfo p)
-    {
-        return new MethodParameter(p.Name, p.ParameterType.Name);
     }
 }
