@@ -1,5 +1,5 @@
 using RefDocGen.Intermed;
-using RefDocGen.Tools;
+using RefDocGen.TemplateModels.Tools;
 
 namespace RefDocGen.TemplateModels.Builders;
 
@@ -104,7 +104,7 @@ internal class CSharpTemplateModelBuilder : ITemplateModelBuilder
             methodIntermed.ReturnType, string.Empty, [.. modifiers]);
     }
 
-    private MethodParameterModel CreateMethodParameterModel(MethodParameter methodParameter)
+    private MethodParameterModel CreateMethodParameterModel(MethodParameterIntermed methodParameter)
     {
         var modifiers = new List<string>();
 
