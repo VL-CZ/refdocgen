@@ -21,7 +21,8 @@ public class FieldIntermed
 
     public string Type => FieldInfo.FieldType.Name;
 
-    public AccessModifier AccessibilityModifier => FieldInfo.GetAccessModifier();
+    public AccessModifier AccessibilityModifier => AccessModifierExtensions.GetAccessModifier(FieldInfo.IsPrivate, FieldInfo.IsFamily,
+        FieldInfo.IsAssembly, FieldInfo.IsPublic, FieldInfo.IsFamilyAndAssembly, FieldInfo.IsFamilyOrAssembly);
 
     public bool IsStatic => FieldInfo.IsStatic;
 
@@ -29,8 +30,6 @@ public class FieldIntermed
 
     public bool IsConstant => FieldInfo.IsLiteral;
 }
-
-//public record PropertyAccessorIntermed(AccessibilityModifier AccessibilityModifier);
 
 // public record MethodBase(string Name, bool IsStatic, bool IsOverridable, bool OverridesAnotherMethod, bool IsAbstract, bool IsFinal);
 
@@ -94,6 +93,8 @@ public record PropertyIntermed
             return AccessModifierExtensions.GetTheLeastRestrictive(modifiers);
         }
     }
+
+    public bool HasGetter => Getter is not null;
 }
 
 public class MethodIntermed
@@ -109,7 +110,8 @@ public class MethodIntermed
 
     public string ReturnType => MethodInfo.ReturnType.Name;
 
-    public AccessModifier AccessModifier => MethodInfo.GetAccessModifier();
+    public AccessModifier AccessModifier => AccessModifierExtensions.GetAccessModifier(MethodInfo.IsPrivate, MethodInfo.IsFamily,
+        MethodInfo.IsAssembly, MethodInfo.IsPublic, MethodInfo.IsFamilyAndAssembly, MethodInfo.IsFamilyOrAssembly);
 
     public bool IsStatic => MethodInfo.IsStatic;
 
@@ -145,8 +147,19 @@ public class MethodParameter
     public string Name => ParameterInfo.Name;
 
     public string Type => ParameterInfo.ParameterType.Name;
-}
 
+    public bool IsParamsArray => ParameterInfo.GetCustomAttribute(typeof(ParamArrayAttribute)) != null;
+
+    public bool IsOptional => ParameterInfo.IsOptional;
+
+    public bool IsInput => ParameterInfo.IsIn;
+
+    public bool IsOutput => ParameterInfo.IsOut;
+
+    public bool IsPassedByReference => ParameterInfo.ParameterType.IsByRef;
+
+    public bool HasRefKeyword => IsPassedByReference && !IsInput && !IsOutput;
+}
 
 public enum AccessModifier { Private, PrivateProtected, Protected, Internal, ProtectedInternal, Public } // sorted from the MOST restrictive
 
@@ -166,5 +179,19 @@ internal static class AccessModifierExtensions
     {
         int minIntegerValue = accessModifiers.Max(a => (int)a);
         return (AccessModifier)minIntegerValue;
+    }
+
+    internal static AccessModifier GetAccessModifier(bool isPrivate, bool isFamily, bool isAssembly, bool isPublic, bool isFamilyAndAssembly, bool isFamilyOrAssembly)
+    {
+        return (isPrivate, isFamily, isAssembly, isFamilyAndAssembly, isFamilyOrAssembly, isPublic) switch
+        {
+            (true, _, _, _, _, _) => AccessModifier.Private,
+            (_, true, _, _, _, _) => AccessModifier.Protected,
+            (_, _, true, _, _, _) => AccessModifier.Internal,
+            (_, _, _, true, _, _) => AccessModifier.PrivateProtected, // C# private protected
+            (_, _, _, _, true, _) => AccessModifier.ProtectedInternal, // C# protected internal
+            (_, _, _, _, _, true) => AccessModifier.Public,
+            _ => throw new ArgumentException() // TODO: custom exception
+        };
     }
 }
