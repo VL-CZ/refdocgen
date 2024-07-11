@@ -4,4 +4,4 @@ public record MethodTemplateModel(string Name, MethodParameterModel[] Parameters
 {
 }
 
-public record MethodParameterModel(string Name, string Type);
+public record MethodParameterModel(string Name, string Type, IReadOnlyCollection<string> Modifiers);

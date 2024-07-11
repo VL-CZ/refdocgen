@@ -1,5 +1,5 @@
 using RefDocGen.Intermed;
-using RefDocGen.Tools;
+using RefDocGen.TemplateModels.Tools;
 
 namespace RefDocGen.TemplateModels.Builders;
 
@@ -100,7 +100,35 @@ internal class CSharpTemplateModelBuilder : ITemplateModelBuilder
         }
 
         return new MethodTemplateModel(methodIntermed.Name,
-            methodIntermed.GetParameters().Select(p => new MethodParameterModel(p.Name, p.Type)).ToArray(),
+            methodIntermed.GetParameters().Select(CreateMethodParameterModel).ToArray(),
             methodIntermed.ReturnType, string.Empty, [.. modifiers]);
+    }
+
+    private MethodParameterModel CreateMethodParameterModel(MethodParameterIntermed methodParameter)
+    {
+        var modifiers = new List<string>();
+
+        if (methodParameter.IsInput)
+        {
+            modifiers.Add(Placeholder.In.GetString());
+        }
+        if (methodParameter.IsOutput)
+        {
+            modifiers.Add(Placeholder.Out.GetString());
+        }
+        if (methodParameter.HasRefKeyword)
+        {
+            modifiers.Add(Placeholder.Ref.GetString());
+        }
+        if (methodParameter.IsParamsArray)
+        {
+            modifiers.Add(Placeholder.Params.GetString());
+        }
+        if (methodParameter.IsOptional)
+        {
+            modifiers.Add("optional"); // TODO: add default value
+        }
+
+        return new MethodParameterModel(methodParameter.Name, methodParameter.Type, modifiers);
     }
 }

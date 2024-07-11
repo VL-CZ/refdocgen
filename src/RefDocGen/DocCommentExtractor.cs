@@ -1,4 +1,3 @@
-using RefDocGen.Intermed;
 using RefDocGen.TemplateModels;
 using System.Xml;
 
