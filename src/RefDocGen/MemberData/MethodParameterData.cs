@@ -1,8 +1,8 @@
 using System.Reflection;
 
-namespace RefDocGen.Intermed;
+namespace RefDocGen.MemberData;
 
-public record MethodParameterIntermed(ParameterInfo ParameterInfo)
+public record MethodParameterData(ParameterInfo ParameterInfo)
 {
     public string Name => ParameterInfo.Name;
 

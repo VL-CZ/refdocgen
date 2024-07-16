@@ -1,3 +1,4 @@
+using RefDocGen.AssemblyAnalysis;
 using RefDocGen.TemplateModels.Builders;
 
 namespace RefDocGen;
@@ -18,15 +19,15 @@ public class DocGenerator
 
     public void GenerateDoc()
     {
-        var assemblyAnalyzer = new AssemblyAnalyzer(assemblyPath);
-        var types = assemblyAnalyzer.GetIntermedTypes();
+        var assemblyAnalyzer = new AssemblyTypeExtractor(assemblyPath);
+        var types = assemblyAnalyzer.GetDeclaredClasses();
 
         var templateModels = types.Select(templateModelBuilder.CreateClassTemplateModel).ToArray();
 
         var docCommentExtractor = new DocCommentExtractor(docXmlPath, templateModels);
         templateModels = docCommentExtractor.GetTemplateModels();
 
-        var templateGenerator = new TemplateGenerator();
+        var templateGenerator = new RazorTemplateGenerator();
         templateGenerator.GenerateTemplates(templateModels);
     }
 }

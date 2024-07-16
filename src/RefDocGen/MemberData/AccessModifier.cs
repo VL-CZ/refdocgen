@@ -1,4 +1,4 @@
-namespace RefDocGen.Intermed;
+namespace RefDocGen.MemberData;
 
 public enum AccessModifier { Private, PrivateProtected, Protected, Internal, ProtectedInternal, Public } // sorted from the MOST restrictive
 

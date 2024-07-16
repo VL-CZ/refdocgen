@@ -1,29 +1,29 @@
 using System.Reflection;
 
-namespace RefDocGen.Intermed;
+namespace RefDocGen.MemberData;
 
 // public record MethodBase(string Name, bool IsStatic, bool IsOverridable, bool OverridesAnotherMethod, bool IsAbstract, bool IsFinal);
 
-public class PropertyIntermed
+public class PropertyData
 {
-    public PropertyIntermed(PropertyInfo propertyInfo)
+    public PropertyData(PropertyInfo propertyInfo)
     {
         PropertyInfo = propertyInfo;
-        Getter = PropertyInfo.GetMethod is not null ? new MethodIntermed(PropertyInfo.GetMethod) : null;
-        Setter = PropertyInfo.SetMethod is not null ? new MethodIntermed(PropertyInfo.SetMethod) : null;
+        Getter = PropertyInfo.GetMethod is not null ? new MethodData(PropertyInfo.GetMethod) : null;
+        Setter = PropertyInfo.SetMethod is not null ? new MethodData(PropertyInfo.SetMethod) : null;
     }
 
     public PropertyInfo PropertyInfo { get; }
 
-    public MethodIntermed? Getter { get; }
+    public MethodData? Getter { get; }
 
-    public MethodIntermed? Setter { get; }
+    public MethodData? Setter { get; }
 
     public string Name => PropertyInfo.Name;
 
     public string Type => PropertyInfo.PropertyType.Name;
 
-    public IEnumerable<MethodIntermed> Accessors
+    public IEnumerable<MethodData> Accessors
     {
         get
         {

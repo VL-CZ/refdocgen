@@ -1,19 +1,18 @@
-using RefDocGen.Extensions;
-using RefDocGen.Intermed;
+using RefDocGen.MemberData;
 using System.Reflection;
 
-namespace RefDocGen;
+namespace RefDocGen.AssemblyAnalysis;
 
-public class AssemblyAnalyzer
+public class AssemblyTypeExtractor
 {
     private readonly string assemblyPath;
 
-    public AssemblyAnalyzer(string assemblyPath)
+    public AssemblyTypeExtractor(string assemblyPath)
     {
         this.assemblyPath = assemblyPath;
     }
 
-    public ClassIntermed[] GetIntermedTypes()
+    public ClassData[] GetDeclaredClasses()
     {
         var types = GetDeclaredTypes();
         return types.Select(ConstructFromType).ToArray();
@@ -25,7 +24,7 @@ public class AssemblyAnalyzer
         return assembly.GetTypes();
     }
 
-    private ClassIntermed ConstructFromType(Type type)
+    private ClassData ConstructFromType(Type type)
     {
         var bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
 
@@ -33,10 +32,10 @@ public class AssemblyAnalyzer
         var properties = type.GetProperties(bindingFlags).Where(f => !f.IsCompilerGenerated());
         var methods = type.GetMethods(bindingFlags).Where(f => !f.IsCompilerGenerated());
 
-        var fieldModels = fields.Select(f => new FieldIntermed(f)).ToArray();
-        var propertyModels = properties.Select(p => new PropertyIntermed(p)).ToArray();
-        var methodModels = methods.Select(m => new MethodIntermed(m)).ToArray();
+        var fieldModels = fields.Select(f => new FieldData(f)).ToArray();
+        var propertyModels = properties.Select(p => new PropertyData(p)).ToArray();
+        var methodModels = methods.Select(m => new MethodData(m)).ToArray();
 
-        return new ClassIntermed(type.FullName, AccessModifier.Public, fieldModels, propertyModels, methodModels);
+        return new ClassData(type.FullName, AccessModifier.Public, fieldModels, propertyModels, methodModels);
     }
 }

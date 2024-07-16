@@ -1,7 +1,7 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace RefDocGen.Extensions;
+namespace RefDocGen.AssemblyAnalysis;
 
 internal static class MemberInfoExtensions
 {

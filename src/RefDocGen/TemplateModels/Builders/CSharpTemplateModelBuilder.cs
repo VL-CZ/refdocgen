@@ -1,11 +1,11 @@
-using RefDocGen.Intermed;
+using RefDocGen.MemberData;
 using RefDocGen.TemplateModels.Tools;
 
 namespace RefDocGen.TemplateModels.Builders;
 
 internal class CSharpTemplateModelBuilder : ITemplateModelBuilder
 {
-    public ClassTemplateModel CreateClassTemplateModel(ClassIntermed classIntermed)
+    public ClassTemplateModel CreateClassTemplateModel(ClassData classIntermed)
     {
         var fields = classIntermed.Fields.Select(CreateFieldTemplateModel).ToArray();
         var properties = classIntermed.Properties.Select(CreatePropertyTemplateModel).ToArray();
@@ -14,9 +14,9 @@ internal class CSharpTemplateModelBuilder : ITemplateModelBuilder
         return new ClassTemplateModel(classIntermed.Name, string.Empty, [classIntermed.AccessibilityModifier.ToString()], fields, properties, methods);
     }
 
-    private FieldTemplateModel CreateFieldTemplateModel(FieldIntermed field)
+    private FieldTemplateModel CreateFieldTemplateModel(FieldData field)
     {
-        List<string> modifiers = [field.AccessibilityModifier.GetString()];
+        List<string> modifiers = [field.AccessModifier.GetString()];
 
         if (field.IsStatic && !field.IsConstant)
         {
@@ -34,7 +34,7 @@ internal class CSharpTemplateModelBuilder : ITemplateModelBuilder
         return new FieldTemplateModel(field.Name, field.Type, string.Empty, [.. modifiers]);
     }
 
-    private PropertyTemplateModel CreatePropertyTemplateModel(PropertyIntermed propertyIntermed)
+    private PropertyTemplateModel CreatePropertyTemplateModel(PropertyData propertyIntermed)
     {
         List<string> modifiers = [propertyIntermed.AccessModifier.GetString()];
 
@@ -70,7 +70,7 @@ internal class CSharpTemplateModelBuilder : ITemplateModelBuilder
         return new PropertyTemplateModel(propertyIntermed.Name, propertyIntermed.Type, string.Empty, [.. modifiers], propertyIntermed.Getter is not null, propertyIntermed.Setter is not null, [.. getterModifiers], [.. setterModifiers]);
     }
 
-    private MethodTemplateModel CreateMethodTemplateModel(MethodIntermed methodIntermed)
+    private MethodTemplateModel CreateMethodTemplateModel(MethodData methodIntermed)
     {
         List<string> modifiers = [methodIntermed.AccessModifier.GetString()];
 
@@ -104,7 +104,7 @@ internal class CSharpTemplateModelBuilder : ITemplateModelBuilder
             methodIntermed.ReturnType, string.Empty, [.. modifiers]);
     }
 
-    private MethodParameterModel CreateMethodParameterModel(MethodParameterIntermed methodParameter)
+    private MethodParameterModel CreateMethodParameterModel(MethodParameterData methodParameter)
     {
         var modifiers = new List<string>();
 

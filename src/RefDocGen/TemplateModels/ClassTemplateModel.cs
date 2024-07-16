@@ -1,5 +1,10 @@
 namespace RefDocGen.TemplateModels;
 
-public record ClassTemplateModel(string Name, string DocComment, string[] Modifiers, FieldTemplateModel[] Fields, PropertyTemplateModel[] Properties, MethodTemplateModel[] Methods)
+public interface ITypeModel
+{
+    string Name { get; }
+}
+
+public record ClassTemplateModel(string Name, string DocComment, string[] Modifiers, FieldTemplateModel[] Fields, PropertyTemplateModel[] Properties, MethodTemplateModel[] Methods) : ITypeModel
 {
 }

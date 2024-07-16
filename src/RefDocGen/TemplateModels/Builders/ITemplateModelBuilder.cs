@@ -1,8 +1,8 @@
-using RefDocGen.Intermed;
+using RefDocGen.MemberData;
 
 namespace RefDocGen.TemplateModels.Builders;
 
 internal interface ITemplateModelBuilder
 {
-    ClassTemplateModel CreateClassTemplateModel(ClassIntermed classIntermed);
+    ClassTemplateModel CreateClassTemplateModel(ClassData classIntermed);
 }

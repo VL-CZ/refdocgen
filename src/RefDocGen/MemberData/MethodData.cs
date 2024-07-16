@@ -1,9 +1,9 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace RefDocGen.Intermed;
+namespace RefDocGen.MemberData;
 
-public record MethodIntermed(MethodInfo MethodInfo)
+public record MethodData(MethodInfo MethodInfo)
 {
     public string Name => MethodInfo.Name;
 
@@ -28,8 +28,8 @@ public record MethodIntermed(MethodInfo MethodInfo)
 
     public bool HasVirtualKeyword => IsOverridable && !IsAbstract && !OverridesAnotherMethod;
 
-    public IEnumerable<MethodParameterIntermed> GetParameters()
+    public IEnumerable<MethodParameterData> GetParameters()
     {
-        return MethodInfo.GetParameters().Select(p => new MethodParameterIntermed(p));
+        return MethodInfo.GetParameters().Select(p => new MethodParameterData(p));
     }
 }
