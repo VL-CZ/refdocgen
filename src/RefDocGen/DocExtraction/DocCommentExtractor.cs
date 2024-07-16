@@ -1,7 +1,7 @@
-using RefDocGen.TemplateModels;
+using RefDocGen.TemplateGenerators.Default.TemplateModels;
 using System.Xml;
 
-namespace RefDocGen;
+namespace RefDocGen.DocExtraction;
 
 public class DocCommentExtractor
 {

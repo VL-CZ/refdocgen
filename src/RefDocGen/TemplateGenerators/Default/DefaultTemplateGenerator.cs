@@ -1,10 +1,10 @@
 using RazorLight;
-using RefDocGen.TemplateModels;
+using RefDocGen.MemberData;
 
-namespace RefDocGen;
+namespace RefDocGen.TemplateGenerators.Default;
 
 
-public class RazorTemplateGenerator
+public class DefaultTemplateGenerator : ITemplateGenerator
 {
     private readonly string projectPath = @"C:\Users\vojta\UK\mgr-thesis\refdocgen\src\RefDocGen"; // TODO: use relative path
 
@@ -15,7 +15,9 @@ public class RazorTemplateGenerator
 
     private readonly RazorLightEngine razorLightEngine;
 
-    public RazorTemplateGenerator()
+    private readonly DefaultTemplateModelBuilder templateModelBuilder = new();
+
+    public DefaultTemplateGenerator()
     {
         outputDir = Path.Combine(projectPath, "out"); // TODO: use relative path
         razorLightEngine = new RazorLightEngineBuilder()
@@ -24,8 +26,12 @@ public class RazorTemplateGenerator
             .Build();
     }
 
-    public void GenerateTemplates(ClassTemplateModel[] templateModels)
+    public void GenerateTemplates(ClassData[] classes)
     {
+        var templateModels = classes.Select(templateModelBuilder.CreateClassTemplateModel);
+
+        // convert to template model
+
         foreach (var model in templateModels)
         {
             string outputFileName = Path.Join(outputDir, $"{model.Name}.html");
