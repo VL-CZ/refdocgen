@@ -2,8 +2,16 @@ namespace RefDocGen.MemberData;
 
 public enum AccessModifier { Private, FamilyAndAssembly, Family, Assembly, FamilyOrAssembly, Public } // sorted from the MOST restrictive
 
+/// <summary>
+/// Class containing extension and helper methods for <see cref="AccessModifier"/> enum.
+/// </summary>
 internal static class AccessModifierExtensions
 {
+    /// <summary>
+    /// Select the least restrictive access modifier out of the provided
+    /// </summary>
+    /// <param name="accessModifiers"></param>
+    /// <returns></returns>
     internal static AccessModifier GetTheLeastRestrictive(IEnumerable<AccessModifier> accessModifiers)
     {
         int minIntegerValue = accessModifiers.Max(a => (int)a);

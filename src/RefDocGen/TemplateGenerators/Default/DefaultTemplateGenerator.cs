@@ -28,9 +28,8 @@ public class DefaultTemplateGenerator : ITemplateGenerator
 
     public void GenerateTemplates(ClassData[] classes)
     {
-        var templateModels = classes.Select(templateModelBuilder.CreateClassTemplateModel);
-
         // convert to template model
+        var templateModels = classes.Select(templateModelBuilder.CreateClassTemplateModel);
 
         foreach (var model in templateModels)
         {

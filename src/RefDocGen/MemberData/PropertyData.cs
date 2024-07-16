@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace RefDocGen.MemberData;
 
-public record PropertyData : ICallableMember
+public record PropertyData : ICallableMemberData
 {
     public PropertyData(PropertyInfo propertyInfo)
     {
@@ -39,18 +39,25 @@ public record PropertyData : ICallableMember
         }
     }
 
+    /// <inheritdoc/>
     public bool IsStatic => Accessors.All(a => a.IsStatic);
 
+    /// <inheritdoc/>
     public bool IsOverridable => Accessors.All(a => a.IsOverridable);
 
+    /// <inheritdoc/>
     public bool OverridesAnotherMember => Accessors.All(a => a.OverridesAnotherMember);
 
+    /// <inheritdoc/>
     public bool IsAbstract => Accessors.All(a => a.IsAbstract);
 
+    /// <inheritdoc/>
     public bool IsFinal => Accessors.All(a => a.IsFinal);
 
+    /// <inheritdoc/>
     public bool IsSealed => Accessors.All(a => a.IsSealed);
 
+    /// <inheritdoc/>
     public bool IsAsync => false;
 
     public AccessModifier? GetterAccessModifier => Getter?.AccessModifier;

@@ -1,10 +1,11 @@
 using RefDocGen.DocExtraction;
+using RefDocGen.MemberData.Interfaces;
 using System.Reflection;
 using System.Xml.Linq;
 
 namespace RefDocGen.MemberData;
 
-public record FieldData(FieldInfo FieldInfo)
+public record FieldData(FieldInfo FieldInfo) : IMemberData
 {
     public string Name => FieldInfo.Name;
 
