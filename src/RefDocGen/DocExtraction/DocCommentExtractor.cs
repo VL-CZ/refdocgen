@@ -1,20 +1,20 @@
-using RefDocGen.TemplateModels;
-using System.Xml;
+using RefDocGen.MemberData;
+using System.Xml.Linq;
 
-namespace RefDocGen;
+namespace RefDocGen.DocExtraction;
 
 public class DocCommentExtractor
 {
     private readonly string docXmlPath;
-    private readonly ClassTemplateModel[] models;
+    private readonly ClassData[] models;
 
-    public DocCommentExtractor(string docXmlPath, ClassTemplateModel[] models)
+    public DocCommentExtractor(string docXmlPath, ClassData[] models)
     {
         this.docXmlPath = docXmlPath;
         this.models = models;
     }
 
-    public ClassTemplateModel[] GetTemplateModels()
+    public ClassData[] ExtractComments()
     {
         AddComments();
         return models;
@@ -23,29 +23,30 @@ public class DocCommentExtractor
     private void AddComments()
     {
         var xmlDoc = GetDocCommentsFile();
-        var memberNodes = xmlDoc.SelectNodes("//member"); // TODO: check formal file specification
-        foreach (XmlNode memberNode in memberNodes)
+        var memberNodes = xmlDoc.Descendants("member");
+
+        foreach (var memberNode in memberNodes)
         {
-            var memberAttr = memberNode.Attributes?["name"];
-            var summaryNode = memberNode.SelectSingleNode("summary");
+            var memberAttr = memberNode.Attribute("name");
+            var summaryNode = memberNode.Element("summary");
 
             if (summaryNode is not null && memberAttr is not null)
             {
-                string summaryText = summaryNode.InnerText.Trim();
+                string summaryText = summaryNode.Value.Trim();
                 string memberName = memberAttr.Value;
 
                 string[] sp = memberName.Split(':');
 
-                if (sp[0] == "T") // TODO: code quality
+                if (sp[0] == "T") // Class
                 {
                     string className = sp[1];
                     var templateNode = models.First(m => m.Name == className);
 
                     int index = Array.IndexOf(models, templateNode);
 
-                    models[index] = templateNode with { DocComment = summaryText };
+                    models[index] = templateNode with { DocComment = summaryNode };
                 }
-                else if (sp[0] == "F")
+                else if (sp[0] == "F") // Field
                 {
                     string fullName = sp[1];
                     string[] nameParts = fullName.Split('.');
@@ -58,31 +59,29 @@ public class DocCommentExtractor
 
                     int index = Array.IndexOf(type.Fields, fieldNode);
 
-                    type.Fields[index] = fieldNode with { DocComment = summaryText };
+                    type.Fields[index] = fieldNode with { DocComment = summaryNode };
                 }
-                else if (sp[0] == "P")
+                else if (sp[0] == "P") // Property
                 {
                     string fullName = sp[1];
                     string[] nameParts = fullName.Split('.');
 
-                    string fieldName = nameParts[^1];
+                    string propertyName = nameParts[^1];
                     string className = string.Join('.', nameParts, 0, nameParts.Length - 1);
 
                     var type = models.First(m => m.Name == className);
-                    var fieldNode = type.Properties.First(f => f.Name == fieldName);
+                    var propertyNode = type.Properties.First(p => p.Name == propertyName);
 
-                    int index = Array.IndexOf(type.Properties, fieldNode);
+                    int index = Array.IndexOf(type.Properties, propertyNode);
 
-                    type.Properties[index] = fieldNode with { DocComment = summaryText };
+                    type.Properties[index] = propertyNode with { DocComment = summaryNode };
                 }
             }
         }
     }
 
-    private XmlDocument GetDocCommentsFile()
+    private XDocument GetDocCommentsFile()
     {
-        var xmlDoc = new XmlDocument();
-        xmlDoc.Load(docXmlPath);
-        return xmlDoc;
+        return XDocument.Load(docXmlPath);
     }
 }

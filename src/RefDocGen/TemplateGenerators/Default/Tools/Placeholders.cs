@@ -1,4 +1,4 @@
-namespace RefDocGen.TemplateModels.Tools;
+namespace RefDocGen.TemplateGenerators.Default.Tools;
 
 internal enum Placeholder
 {

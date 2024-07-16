@@ -1,29 +1,30 @@
+using RefDocGen.DocExtraction;
+using RefDocGen.MemberData.Interfaces;
 using System.Reflection;
+using System.Xml.Linq;
 
-namespace RefDocGen.Intermed;
+namespace RefDocGen.MemberData;
 
-// public record MethodBase(string Name, bool IsStatic, bool IsOverridable, bool OverridesAnotherMethod, bool IsAbstract, bool IsFinal);
-
-public class PropertyIntermed
+public record PropertyData : ICallableMember
 {
-    public PropertyIntermed(PropertyInfo propertyInfo)
+    public PropertyData(PropertyInfo propertyInfo)
     {
         PropertyInfo = propertyInfo;
-        Getter = PropertyInfo.GetMethod is not null ? new MethodIntermed(PropertyInfo.GetMethod) : null;
-        Setter = PropertyInfo.SetMethod is not null ? new MethodIntermed(PropertyInfo.SetMethod) : null;
+        Getter = PropertyInfo.GetMethod is not null ? new MethodData(PropertyInfo.GetMethod) : null;
+        Setter = PropertyInfo.SetMethod is not null ? new MethodData(PropertyInfo.SetMethod) : null;
     }
 
     public PropertyInfo PropertyInfo { get; }
 
-    public MethodIntermed? Getter { get; }
+    public MethodData? Getter { get; }
 
-    public MethodIntermed? Setter { get; }
+    public MethodData? Setter { get; }
 
     public string Name => PropertyInfo.Name;
 
     public string Type => PropertyInfo.PropertyType.Name;
 
-    public IEnumerable<MethodIntermed> Accessors
+    public IEnumerable<MethodData> Accessors
     {
         get
         {
@@ -42,7 +43,7 @@ public class PropertyIntermed
 
     public bool IsOverridable => Accessors.All(a => a.IsOverridable);
 
-    public bool OverridesAnotherProperty => Accessors.All(a => a.OverridesAnotherMethod);
+    public bool OverridesAnotherMember => Accessors.All(a => a.OverridesAnotherMember);
 
     public bool IsAbstract => Accessors.All(a => a.IsAbstract);
 
@@ -50,7 +51,7 @@ public class PropertyIntermed
 
     public bool IsSealed => Accessors.All(a => a.IsSealed);
 
-    public bool HasVirtualKeyword => Accessors.All(a => a.HasVirtualKeyword);
+    public bool IsAsync => false;
 
     public AccessModifier? GetterAccessModifier => Getter?.AccessModifier;
 
@@ -65,5 +66,6 @@ public class PropertyIntermed
         }
     }
 
-    public bool HasGetter => Getter is not null;
+    public XElement DocComment { get; init; } = DocCommentTools.Empty;
+
 }

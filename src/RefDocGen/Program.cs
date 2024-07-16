@@ -1,3 +1,5 @@
+using RefDocGen.TemplateGenerators.Default;
+
 namespace RefDocGen;
 
 public static class Program
@@ -8,7 +10,9 @@ public static class Program
         string dllPath = Path.Join(rootPath, "demo-lib", "MyLibrary.dll");
         string docPath = Path.Join(rootPath, "demo-lib", "MyLibrary.xml");
 
-        var docGenerator = new DocGenerator(dllPath, docPath);
+        var templateGenerator = new DefaultTemplateGenerator();
+
+        var docGenerator = new DocGenerator(dllPath, docPath, templateGenerator);
         docGenerator.GenerateDoc();
     }
 }
