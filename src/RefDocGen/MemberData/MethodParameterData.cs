@@ -20,7 +20,5 @@ public record MethodParameterData(ParameterInfo ParameterInfo)
 
     public bool IsPassedByReference => ParameterInfo.ParameterType.IsByRef;
 
-    public bool HasRefKeyword => IsPassedByReference && !IsInput && !IsOutput;
-
     public XElement DocComment { get; init; } = DocCommentTools.Empty;
 }

@@ -1,6 +1,6 @@
 using System.Xml.Linq;
 
-namespace RefDocGen.MemberData;
+namespace RefDocGen.MemberData.Interfaces;
 
 public interface IDocumentedMember
 {

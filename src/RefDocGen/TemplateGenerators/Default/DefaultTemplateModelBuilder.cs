@@ -1,6 +1,7 @@
 using RefDocGen.MemberData;
-using RefDocGen.TemplateGenerators.Default;
 using RefDocGen.TemplateGenerators.Default.TemplateModels;
+using RefDocGen.TemplateGenerators.Default.Tools;
+using RefDocGen.TemplateGenerators.Default.Tools.Extensions;
 
 namespace RefDocGen.TemplateGenerators.Default;
 
@@ -17,7 +18,7 @@ internal class DefaultTemplateModelBuilder
 
     private FieldTemplateModel CreateFieldTemplateModel(FieldData fieldData)
     {
-        List<string> modifiers = [fieldData.AccessModifier.GetString()];
+        List<string> modifiers = [fieldData.AccessModifier.GetPlaceholderString()];
 
         if (fieldData.IsStatic && !fieldData.IsConstant)
         {
@@ -37,17 +38,17 @@ internal class DefaultTemplateModelBuilder
 
     private PropertyTemplateModel CreatePropertyTemplateModel(PropertyData propertyData)
     {
-        List<string> modifiers = [propertyData.AccessModifier.GetString()];
+        List<string> modifiers = [propertyData.AccessModifier.GetPlaceholderString()];
 
         if (propertyData.IsStatic)
         {
             modifiers.Add(Placeholder.Static.GetString());
         }
-        if (propertyData.HasVirtualKeyword)
+        if (propertyData.HasVirtualKeyword())
         {
             modifiers.Add(Placeholder.Virtual.GetString());
         }
-        if (propertyData.OverridesAnotherProperty)
+        if (propertyData.OverridesAnotherMember)
         {
             modifiers.Add(Placeholder.Override.GetString());
         }
@@ -61,11 +62,11 @@ internal class DefaultTemplateModelBuilder
 
         if (propertyData.Getter is not null && propertyData.Getter.AccessModifier != propertyData.AccessModifier)
         {
-            getterModifiers.Add(propertyData.Getter.AccessModifier.GetString());
+            getterModifiers.Add(propertyData.Getter.AccessModifier.GetPlaceholderString());
         }
         if (propertyData.Setter is not null && propertyData.Setter.AccessModifier != propertyData.AccessModifier)
         {
-            setterModifiers.Add(propertyData.Setter.AccessModifier.GetString());
+            setterModifiers.Add(propertyData.Setter.AccessModifier.GetPlaceholderString());
         }
 
         return new PropertyTemplateModel(propertyData.Name, propertyData.Type, propertyData.DocComment.Value, [.. modifiers], propertyData.Getter is not null, propertyData.Setter is not null, [.. getterModifiers], [.. setterModifiers]);
@@ -73,7 +74,7 @@ internal class DefaultTemplateModelBuilder
 
     private MethodTemplateModel CreateMethodTemplateModel(MethodData methodData)
     {
-        List<string> modifiers = [methodData.AccessModifier.GetString()];
+        List<string> modifiers = [methodData.AccessModifier.GetPlaceholderString()];
 
         if (methodData.IsStatic)
         {
@@ -83,11 +84,11 @@ internal class DefaultTemplateModelBuilder
         {
             modifiers.Add(Placeholder.Abstract.GetString());
         }
-        if (methodData.HasVirtualKeyword)
+        if (methodData.HasVirtualKeyword())
         {
             modifiers.Add(Placeholder.Virtual.GetString());
         }
-        if (methodData.OverridesAnotherMethod)
+        if (methodData.OverridesAnotherMember)
         {
             modifiers.Add(Placeholder.Override.GetString());
         }
@@ -117,7 +118,7 @@ internal class DefaultTemplateModelBuilder
         {
             modifiers.Add(Placeholder.Out.GetString());
         }
-        if (parameterData.HasRefKeyword)
+        if (parameterData.HasRefKeyword())
         {
             modifiers.Add(Placeholder.Ref.GetString());
         }

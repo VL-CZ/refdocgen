@@ -4,18 +4,6 @@ public enum AccessModifier { Private, FamilyAndAssembly, Family, Assembly, Famil
 
 internal static class AccessModifierExtensions
 {
-    internal static string GetString(this AccessModifier accessModifier)
-    {
-        return accessModifier switch
-        {
-            AccessModifier.Family => "protected",
-            AccessModifier.Assembly => "internal",
-            AccessModifier.FamilyAndAssembly => "private protected",
-            AccessModifier.FamilyOrAssembly => "internal protected",
-            _ => accessModifier.ToString().ToLowerInvariant()
-        };
-    }
-
     internal static AccessModifier GetTheLeastRestrictive(IEnumerable<AccessModifier> accessModifiers)
     {
         int minIntegerValue = accessModifiers.Max(a => (int)a);

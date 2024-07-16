@@ -1,11 +1,12 @@
 using RefDocGen.DocExtraction;
+using RefDocGen.MemberData.Interfaces;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
 namespace RefDocGen.MemberData;
 
-public record MethodData(MethodInfo MethodInfo)
+public record MethodData(MethodInfo MethodInfo) : ICallableMember
 {
     public string Name => MethodInfo.Name;
 
@@ -18,7 +19,7 @@ public record MethodData(MethodInfo MethodInfo)
 
     public bool IsOverridable => MethodInfo.IsVirtual && !MethodInfo.IsFinal;
 
-    public bool OverridesAnotherMethod => !MethodInfo.Equals(MethodInfo.GetBaseDefinition());
+    public bool OverridesAnotherMember => !MethodInfo.Equals(MethodInfo.GetBaseDefinition());
 
     public bool IsAbstract => MethodInfo.IsAbstract;
 
@@ -26,9 +27,7 @@ public record MethodData(MethodInfo MethodInfo)
 
     public bool IsAsync => MethodInfo.GetCustomAttribute(typeof(AsyncStateMachineAttribute)) != null;
 
-    public bool IsSealed => OverridesAnotherMethod && IsFinal;
-
-    public bool HasVirtualKeyword => IsOverridable && !IsAbstract && !OverridesAnotherMethod;
+    public bool IsSealed => OverridesAnotherMember && IsFinal;
 
     public XElement DocComment { get; init; } = DocCommentTools.Empty;
 

@@ -1,12 +1,11 @@
 using RefDocGen.DocExtraction;
+using RefDocGen.MemberData.Interfaces;
 using System.Reflection;
 using System.Xml.Linq;
 
 namespace RefDocGen.MemberData;
 
-// public record MethodBase(string Name, bool IsStatic, bool IsOverridable, bool OverridesAnotherMethod, bool IsAbstract, bool IsFinal);
-
-public record PropertyData
+public record PropertyData : ICallableMember
 {
     public PropertyData(PropertyInfo propertyInfo)
     {
@@ -44,7 +43,7 @@ public record PropertyData
 
     public bool IsOverridable => Accessors.All(a => a.IsOverridable);
 
-    public bool OverridesAnotherProperty => Accessors.All(a => a.OverridesAnotherMethod);
+    public bool OverridesAnotherMember => Accessors.All(a => a.OverridesAnotherMember);
 
     public bool IsAbstract => Accessors.All(a => a.IsAbstract);
 
@@ -52,7 +51,7 @@ public record PropertyData
 
     public bool IsSealed => Accessors.All(a => a.IsSealed);
 
-    public bool HasVirtualKeyword => Accessors.All(a => a.HasVirtualKeyword);
+    public bool IsAsync => false;
 
     public AccessModifier? GetterAccessModifier => Getter?.AccessModifier;
 
@@ -68,4 +67,5 @@ public record PropertyData
     }
 
     public XElement DocComment { get; init; } = DocCommentTools.Empty;
+
 }
