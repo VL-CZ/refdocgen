@@ -2,7 +2,7 @@ using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction;
 
-public class DocCommentTools
+internal class DocCommentTools
 {
-    public static XElement Empty => new("summary");
+    internal static XElement Empty => new("summary");
 }

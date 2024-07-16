@@ -8,7 +8,7 @@ public enum AccessModifier { Private, FamilyAndAssembly, Family, Assembly, Famil
 internal static class AccessModifierExtensions
 {
     /// <summary>
-    /// Select the least restrictive access modifier out of the provided
+    /// Select the least restrictive access modifier out of the provided ones.
     /// </summary>
     /// <param name="accessModifiers"></param>
     /// <returns></returns>

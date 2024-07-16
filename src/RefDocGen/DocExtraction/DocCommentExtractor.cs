@@ -3,18 +3,18 @@ using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction;
 
-public class DocCommentExtractor
+internal class DocCommentExtractor
 {
     private readonly string docXmlPath;
     private readonly ClassData[] models;
 
-    public DocCommentExtractor(string docXmlPath, ClassData[] models)
+    internal DocCommentExtractor(string docXmlPath, ClassData[] models)
     {
         this.docXmlPath = docXmlPath;
         this.models = models;
     }
 
-    public ClassData[] ExtractComments()
+    internal ClassData[] ExtractComments()
     {
         AddComments();
         return models;

@@ -6,7 +6,7 @@ namespace RefDocGen.AssemblyAnalysis;
 /// <summary>
 /// Class responsible for extracting type information from a selected assembly.
 /// </summary>
-public class AssemblyTypeExtractor
+internal class AssemblyTypeExtractor
 {
     /// <summary>
     /// Path to the DLL assembly to analyze and extract types.
@@ -17,7 +17,7 @@ public class AssemblyTypeExtractor
     /// Initializes a new instance of the <see cref="AssemblyTypeExtractor"/> class with the specified assembly path.
     /// </summary>
     /// <param name="assemblyPath">The path to the DLL assembly file</param>
-    public AssemblyTypeExtractor(string assemblyPath)
+    internal AssemblyTypeExtractor(string assemblyPath)
     {
         this.assemblyPath = assemblyPath;
     }
@@ -26,7 +26,7 @@ public class AssemblyTypeExtractor
     /// Get all the declared classes in the assembly and return them as <see cref="ClassData"/> objects.
     /// </summary>
     /// <returns>An array of <see cref="ClassData"/> objects representing the classes in the assembly.</returns>
-    public ClassData[] GetDeclaredClasses()
+    internal ClassData[] GetDeclaredClasses()
     {
         var types = GetDeclaredTypes();
         return types.Select(ConstructFromType).ToArray();

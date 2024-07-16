@@ -8,10 +8,10 @@ public interface IMemberData
     /// <summary>
     /// Name of the member.
     /// </summary>
-    string Name { get; }
+    internal string Name { get; }
 
     /// <summary>
     /// Access modifier of the member.
     /// </summary>
-    AccessModifier AccessModifier { get; }
+    internal AccessModifier AccessModifier { get; }
 }
