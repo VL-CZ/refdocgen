@@ -1,10 +1,12 @@
+using RefDocGen.DocExtraction;
 using System.Reflection;
+using System.Xml.Linq;
 
 namespace RefDocGen.MemberData;
 
 // public record MethodBase(string Name, bool IsStatic, bool IsOverridable, bool OverridesAnotherMethod, bool IsAbstract, bool IsFinal);
 
-public class PropertyData
+public record PropertyData
 {
     public PropertyData(PropertyInfo propertyInfo)
     {
@@ -65,5 +67,5 @@ public class PropertyData
         }
     }
 
-    public bool HasGetter => Getter is not null;
+    public XElement DocComment { get; init; } = DocCommentTools.Empty;
 }

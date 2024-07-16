@@ -1,4 +1,5 @@
 using RefDocGen.AssemblyAnalysis;
+using RefDocGen.DocExtraction;
 using RefDocGen.TemplateGenerators;
 
 namespace RefDocGen;
@@ -22,10 +23,8 @@ public class DocGenerator
         var assemblyAnalyzer = new AssemblyTypeExtractor(assemblyPath);
         var types = assemblyAnalyzer.GetDeclaredClasses();
 
-        // var templateModels = types.Select(templateModelBuilder.CreateClassTemplateModel).ToArray();
-
-        // var docCommentExtractor = new DocCommentExtractor(docXmlPath, templateModels);
-        // templateModels = docCommentExtractor.GetTemplateModels();
+        var docCommentExtractor = new DocCommentExtractor(docXmlPath, types);
+        types = docCommentExtractor.ExtractComments();
 
         templateGenerator.GenerateTemplates(types);
     }

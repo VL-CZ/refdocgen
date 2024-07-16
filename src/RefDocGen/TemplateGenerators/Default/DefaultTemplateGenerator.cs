@@ -9,7 +9,7 @@ public class DefaultTemplateGenerator : ITemplateGenerator
     private readonly string projectPath = @"C:\Users\vojta\UK\mgr-thesis\refdocgen\src\RefDocGen"; // TODO: use relative path
 
     // Path to your Razor template file
-    private readonly string templatePath = "Templates/Template.cshtml";
+    private readonly string templatePath = "TemplateGenerators/Default/Templates/Template.cshtml";
 
     private readonly string outputDir;
 
@@ -37,7 +37,7 @@ public class DefaultTemplateGenerator : ITemplateGenerator
             string outputFileName = Path.Join(outputDir, $"{model.Name}.html");
 
             var task = razorLightEngine.CompileRenderAsync(templatePath, model);
-            task.Wait(); // TODO: consider using Async
+            //task.Wait(); // TODO: consider using Async
             string result = task.Result;
 
             File.WriteAllText(outputFileName, result);

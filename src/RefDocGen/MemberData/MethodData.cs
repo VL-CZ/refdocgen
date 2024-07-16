@@ -1,5 +1,7 @@
+using RefDocGen.DocExtraction;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Xml.Linq;
 
 namespace RefDocGen.MemberData;
 
@@ -27,6 +29,8 @@ public record MethodData(MethodInfo MethodInfo)
     public bool IsSealed => OverridesAnotherMethod && IsFinal;
 
     public bool HasVirtualKeyword => IsOverridable && !IsAbstract && !OverridesAnotherMethod;
+
+    public XElement DocComment { get; init; } = DocCommentTools.Empty;
 
     public IEnumerable<MethodParameterData> GetParameters()
     {

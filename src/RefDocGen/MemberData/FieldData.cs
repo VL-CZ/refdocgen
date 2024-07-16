@@ -1,4 +1,6 @@
+using RefDocGen.DocExtraction;
 using System.Reflection;
+using System.Xml.Linq;
 
 namespace RefDocGen.MemberData;
 
@@ -16,4 +18,6 @@ public record FieldData(FieldInfo FieldInfo)
     public bool IsReadonly => FieldInfo.IsInitOnly;
 
     public bool IsConstant => FieldInfo.IsLiteral;
+
+    public XElement DocComment { get; init; } = DocCommentTools.Empty;
 }

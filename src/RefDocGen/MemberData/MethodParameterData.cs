@@ -1,4 +1,6 @@
+using RefDocGen.DocExtraction;
 using System.Reflection;
+using System.Xml.Linq;
 
 namespace RefDocGen.MemberData;
 
@@ -19,4 +21,6 @@ public record MethodParameterData(ParameterInfo ParameterInfo)
     public bool IsPassedByReference => ParameterInfo.ParameterType.IsByRef;
 
     public bool HasRefKeyword => IsPassedByReference && !IsInput && !IsOutput;
+
+    public XElement DocComment { get; init; } = DocCommentTools.EmptyParam;
 }
