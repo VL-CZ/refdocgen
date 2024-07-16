@@ -1,6 +1,6 @@
 namespace RefDocGen.MemberData;
 
-public enum AccessModifier { Private, PrivateProtected, Protected, Internal, ProtectedInternal, Public } // sorted from the MOST restrictive
+public enum AccessModifier { Private, FamilyAndAssembly, Family, Assembly, FamilyOrAssembly, Public } // sorted from the MOST restrictive
 
 internal static class AccessModifierExtensions
 {
@@ -8,8 +8,10 @@ internal static class AccessModifierExtensions
     {
         return accessModifier switch
         {
-            AccessModifier.PrivateProtected => "private protected",
-            AccessModifier.ProtectedInternal => "internal protected",
+            AccessModifier.Family => "protected",
+            AccessModifier.Assembly => "internal",
+            AccessModifier.FamilyAndAssembly => "private protected",
+            AccessModifier.FamilyOrAssembly => "internal protected",
             _ => accessModifier.ToString().ToLowerInvariant()
         };
     }
@@ -25,10 +27,10 @@ internal static class AccessModifierExtensions
         return (isPrivate, isFamily, isAssembly, isFamilyAndAssembly, isFamilyOrAssembly, isPublic) switch
         {
             (true, _, _, _, _, _) => AccessModifier.Private,
-            (_, true, _, _, _, _) => AccessModifier.Protected,
-            (_, _, true, _, _, _) => AccessModifier.Internal,
-            (_, _, _, true, _, _) => AccessModifier.PrivateProtected, // C# private protected
-            (_, _, _, _, true, _) => AccessModifier.ProtectedInternal, // C# protected internal
+            (_, true, _, _, _, _) => AccessModifier.Family, // C# protected
+            (_, _, true, _, _, _) => AccessModifier.Assembly, // C# internal
+            (_, _, _, true, _, _) => AccessModifier.FamilyAndAssembly, // C# private protected
+            (_, _, _, _, true, _) => AccessModifier.FamilyOrAssembly, // C# protected internal
             (_, _, _, _, _, true) => AccessModifier.Public,
             _ => throw new ArgumentException() // TODO: custom exception
         };

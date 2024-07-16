@@ -12,7 +12,7 @@ internal class DefaultTemplateModelBuilder
         var properties = classData.Properties.Select(CreatePropertyTemplateModel).ToArray();
         var methods = classData.Methods.Select(CreateMethodTemplateModel).ToArray();
 
-        return new ClassTemplateModel(classData.Name, string.Empty, [classData.AccessModifier.ToString()], fields, properties, methods);
+        return new ClassTemplateModel(classData.Name, classData.DocComment.Value, [classData.AccessModifier.ToString()], fields, properties, methods);
     }
 
     private FieldTemplateModel CreateFieldTemplateModel(FieldData fieldData)
@@ -32,7 +32,7 @@ internal class DefaultTemplateModelBuilder
             modifiers.Add(Placeholder.Readonly.GetString());
         }
 
-        return new FieldTemplateModel(fieldData.Name, fieldData.Type, string.Empty, [.. modifiers]);
+        return new FieldTemplateModel(fieldData.Name, fieldData.Type, fieldData.DocComment.Value, [.. modifiers]);
     }
 
     private PropertyTemplateModel CreatePropertyTemplateModel(PropertyData propertyData)
@@ -68,7 +68,7 @@ internal class DefaultTemplateModelBuilder
             setterModifiers.Add(propertyData.Setter.AccessModifier.GetString());
         }
 
-        return new PropertyTemplateModel(propertyData.Name, propertyData.Type, string.Empty, [.. modifiers], propertyData.Getter is not null, propertyData.Setter is not null, [.. getterModifiers], [.. setterModifiers]);
+        return new PropertyTemplateModel(propertyData.Name, propertyData.Type, propertyData.DocComment.Value, [.. modifiers], propertyData.Getter is not null, propertyData.Setter is not null, [.. getterModifiers], [.. setterModifiers]);
     }
 
     private MethodTemplateModel CreateMethodTemplateModel(MethodData methodData)
@@ -102,7 +102,7 @@ internal class DefaultTemplateModelBuilder
 
         return new MethodTemplateModel(methodData.Name,
             methodData.GetParameters().Select(CreateMethodParameterModel).ToArray(),
-            methodData.ReturnType, string.Empty, [.. modifiers]);
+            methodData.ReturnType, methodData.DocComment.Value, [.. modifiers]);
     }
 
     private MethodParameterTemplateModel CreateMethodParameterModel(MethodParameterData parameterData)
@@ -130,6 +130,6 @@ internal class DefaultTemplateModelBuilder
             modifiers.Add("optional"); // TODO: add default value
         }
 
-        return new MethodParameterTemplateModel(parameterData.Name, parameterData.Type, modifiers);
+        return new MethodParameterTemplateModel(parameterData.Name, parameterData.Type, parameterData.DocComment.Value, modifiers);
     }
 }

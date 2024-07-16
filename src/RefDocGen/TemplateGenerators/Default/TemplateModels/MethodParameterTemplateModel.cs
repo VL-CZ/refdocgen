@@ -1,3 +1,3 @@
 namespace RefDocGen.TemplateGenerators.Default.TemplateModels;
 
-public record MethodParameterTemplateModel(string Name, string Type, IReadOnlyCollection<string> Modifiers);
+public record MethodParameterTemplateModel(string Name, string Type, string DocComment, IReadOnlyCollection<string> Modifiers);
