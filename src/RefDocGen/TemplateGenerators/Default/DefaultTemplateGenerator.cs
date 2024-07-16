@@ -1,45 +1,18 @@
-using RazorLight;
 using RefDocGen.MemberData;
+using RefDocGen.TemplateGenerators.Default.TemplateModels;
 
 namespace RefDocGen.TemplateGenerators.Default;
 
-
-public class DefaultTemplateGenerator : ITemplateGenerator
+public class DefaultTemplateGenerator : RazorTemplateGenerator<ClassTemplateModel>
 {
-    private readonly string projectPath = @"C:\Users\vojta\UK\mgr-thesis\refdocgen\src\RefDocGen"; // TODO: use relative path
-
-    // Path to your Razor template file
-    private readonly string templatePath = "TemplateGenerators/Default/Templates/Default/Template.cshtml";
-
-    private readonly string outputDir;
-
-    private readonly RazorLightEngine razorLightEngine;
-
     private readonly DefaultTemplateModelBuilder templateModelBuilder = new();
 
-    public DefaultTemplateGenerator()
+    public DefaultTemplateGenerator(string projectPath, string templatePath, string outputDir) : base(projectPath, templatePath, outputDir)
     {
-        outputDir = Path.Combine(projectPath, "out"); // TODO: use relative path
-        razorLightEngine = new RazorLightEngineBuilder()
-            .UseFileSystemProject(projectPath)
-            .UseMemoryCachingProvider()
-            .Build();
     }
 
-    public void GenerateTemplates(ClassData[] classes)
+    protected override IEnumerable<ClassTemplateModel> GetTemplateModels(ClassData[] classes)
     {
-        // convert to template model
-        var templateModels = classes.Select(templateModelBuilder.CreateClassTemplateModel);
-
-        foreach (var model in templateModels)
-        {
-            string outputFileName = Path.Join(outputDir, $"{model.Name}.html");
-
-            var task = razorLightEngine.CompileRenderAsync(templatePath, model);
-            task.Wait(); // TODO: consider using Async
-            string result = task.Result;
-
-            File.WriteAllText(outputFileName, result);
-        }
+        return classes.Select(templateModelBuilder.CreateClassTemplateModel);
     }
 }
