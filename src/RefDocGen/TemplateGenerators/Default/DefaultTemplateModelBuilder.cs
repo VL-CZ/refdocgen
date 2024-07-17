@@ -23,15 +23,15 @@ internal class DefaultTemplateModelBuilder
 
         if (fieldData.IsStatic && !fieldData.IsConstant)
         {
-            modifiers.Add(Placeholder.Static.GetString());
+            modifiers.Add(Keyword.Static.GetString());
         }
         if (fieldData.IsConstant)
         {
-            modifiers.Add(Placeholder.Const.GetString());
+            modifiers.Add(Keyword.Const.GetString());
         }
         if (fieldData.IsReadonly)
         {
-            modifiers.Add(Placeholder.Readonly.GetString());
+            modifiers.Add(Keyword.Readonly.GetString());
         }
 
         return new FieldTemplateModel(fieldData.Name, fieldData.Type, fieldData.DocComment.Value, modifiers);
@@ -75,19 +75,19 @@ internal class DefaultTemplateModelBuilder
 
         if (parameterData.IsInput)
         {
-            modifiers.Add(Placeholder.In.GetString());
+            modifiers.Add(Keyword.In.GetString());
         }
         if (parameterData.IsOutput)
         {
-            modifiers.Add(Placeholder.Out.GetString());
+            modifiers.Add(Keyword.Out.GetString());
         }
         if (parameterData.HasRefKeyword())
         {
-            modifiers.Add(Placeholder.Ref.GetString());
+            modifiers.Add(Keyword.Ref.GetString());
         }
         if (parameterData.IsParamsCollection)
         {
-            modifiers.Add(Placeholder.Params.GetString());
+            modifiers.Add(Keyword.Params.GetString());
         }
         if (parameterData.IsOptional)
         {
@@ -102,27 +102,27 @@ internal class DefaultTemplateModelBuilder
         var modifiers = new List<string>();
         if (memberData.IsStatic)
         {
-            modifiers.Add(Placeholder.Static.GetString());
+            modifiers.Add(Keyword.Static.GetString());
         }
         if (memberData.IsAbstract)
         {
-            modifiers.Add(Placeholder.Abstract.GetString());
+            modifiers.Add(Keyword.Abstract.GetString());
         }
         if (memberData.HasVirtualKeyword())
         {
-            modifiers.Add(Placeholder.Virtual.GetString());
+            modifiers.Add(Keyword.Virtual.GetString());
         }
         if (memberData.OverridesAnotherMember)
         {
-            modifiers.Add(Placeholder.Override.GetString());
+            modifiers.Add(Keyword.Override.GetString());
         }
         if (memberData.IsSealed)
         {
-            modifiers.Add(Placeholder.Sealed.GetString());
+            modifiers.Add(Keyword.Sealed.GetString());
         }
         if (memberData.IsAsync)
         {
-            modifiers.Add(Placeholder.Async.GetString());
+            modifiers.Add(Keyword.Async.GetString());
         }
 
         return modifiers;

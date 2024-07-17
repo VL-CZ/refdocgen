@@ -55,6 +55,7 @@ internal class AssemblyTypeExtractor
         var properties = type.GetProperties(bindingFlags).Where(f => !f.IsCompilerGenerated());
         var methods = type.GetMethods(bindingFlags).Where(f => !f.IsCompilerGenerated());
 
+        // construct *Data objects
         var fieldModels = fields.Select(f => new FieldData(f)).ToArray();
         var propertyModels = properties.Select(p => new PropertyData(p)).ToArray();
         var methodModels = methods.Select(m => new MethodData(m)).ToArray();

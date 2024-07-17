@@ -2,8 +2,14 @@ using RefDocGen.TemplateGenerators.Default;
 
 namespace RefDocGen;
 
+/// <summary>
+/// Program class, containing main method
+/// </summary>
 public static class Program
 {
+    /// <summary>
+    /// Main method, entry point of the RefDocGen app
+    /// </summary>
     public static void Main()
     {
         string? rootPath = new DirectoryInfo(Environment.CurrentDirectory)?.Parent?.Parent?.Parent?.Parent?.Parent?.FullName;
