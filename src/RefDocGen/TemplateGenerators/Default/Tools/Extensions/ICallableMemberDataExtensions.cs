@@ -2,9 +2,9 @@ using RefDocGen.MemberData.Interfaces;
 
 namespace RefDocGen.TemplateGenerators.Default.Tools.Extensions;
 
-internal static class ICallableMemberExtensions
+internal static class ICallableMemberDataExtensions
 {
-    public static bool HasVirtualKeyword(this ICallableMember member)
+    internal static bool HasVirtualKeyword(this ICallableMemberData member)
     {
         return member.IsOverridable && !member.IsAbstract && !member.OverridesAnotherMember;
     }

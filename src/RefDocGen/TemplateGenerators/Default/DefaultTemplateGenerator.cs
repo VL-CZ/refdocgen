@@ -1,46 +1,31 @@
-using RazorLight;
 using RefDocGen.MemberData;
+using RefDocGen.TemplateGenerators.Default.TemplateModels;
 
 namespace RefDocGen.TemplateGenerators.Default;
 
-
-public class DefaultTemplateGenerator : ITemplateGenerator
+/// <summary>
+/// A class used for generating default Razor templates using the <see cref="ClassTemplateModel"/> as a template model
+/// </summary>
+public class DefaultTemplateGenerator : RazorTemplateGenerator<ClassTemplateModel>
 {
-    private readonly string projectPath = @"C:\Users\vojta\UK\mgr-thesis\refdocgen\src\RefDocGen"; // TODO: use relative path
-
-    // Path to your Razor template file
-    private readonly string templatePath = "TemplateGenerators/Default/Templates/Default/Template.cshtml";
-
-    private readonly string outputDir;
-
-    private readonly RazorLightEngine razorLightEngine;
-
+    /// <summary>
+    /// The instance used for building template models.
+    /// </summary>
     private readonly DefaultTemplateModelBuilder templateModelBuilder = new();
 
-    public DefaultTemplateGenerator()
+    /// <summary>
+    /// Create a new instance of <see cref="DefaultTemplateGenerator"/> class
+    /// </summary>
+    /// <param name="projectPath">Path to the project root directory.</param>
+    /// <param name="templatePath">Path to the Razor template file.</param>
+    /// <param name="outputDir">RazorLight engine used for generating the templates.</param>
+    public DefaultTemplateGenerator(string projectPath, string templatePath, string outputDir) : base(projectPath, templatePath, outputDir)
     {
-        outputDir = Path.Combine(projectPath, "out"); // TODO: use relative path
-        razorLightEngine = new RazorLightEngineBuilder()
-            .UseFileSystemProject(projectPath)
-            .UseMemoryCachingProvider()
-            .Build();
     }
 
-    public void GenerateTemplates(ClassData[] classes)
+    /// <inheritdoc/>
+    protected override IEnumerable<ClassTemplateModel> GetTemplateModels(ClassData[] classes)
     {
-        var templateModels = classes.Select(templateModelBuilder.CreateClassTemplateModel);
-
-        // convert to template model
-
-        foreach (var model in templateModels)
-        {
-            string outputFileName = Path.Join(outputDir, $"{model.Name}.html");
-
-            var task = razorLightEngine.CompileRenderAsync(templatePath, model);
-            task.Wait(); // TODO: consider using Async
-            string result = task.Result;
-
-            File.WriteAllText(outputFileName, result);
-        }
+        return classes.Select(templateModelBuilder.CreateClassTemplateModel);
     }
 }

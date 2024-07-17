@@ -8,12 +8,12 @@ internal static class AccessModifierExtensions
     {
         var placeholder = accessModifier switch
         {
-            AccessModifier.Private => Placeholder.Private,
-            AccessModifier.Family => Placeholder.Protected,
-            AccessModifier.Assembly => Placeholder.Internal,
-            AccessModifier.FamilyAndAssembly => Placeholder.PrivateProtected,
-            AccessModifier.FamilyOrAssembly => Placeholder.ProtectedInternal,
-            AccessModifier.Public => Placeholder.Public,
+            AccessModifier.Private => Keyword.Private,
+            AccessModifier.Family => Keyword.Protected,
+            AccessModifier.Assembly => Keyword.Internal,
+            AccessModifier.FamilyAndAssembly => Keyword.PrivateProtected,
+            AccessModifier.FamilyOrAssembly => Keyword.ProtectedInternal,
+            AccessModifier.Public => Keyword.Public,
             _ => throw new ArgumentException()
         };
 

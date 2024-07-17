@@ -1,4 +1,5 @@
 using RefDocGen.MemberData;
+using RefDocGen.MemberData.Interfaces;
 using RefDocGen.TemplateGenerators.Default.TemplateModels;
 using RefDocGen.TemplateGenerators.Default.Tools;
 using RefDocGen.TemplateGenerators.Default.Tools.Extensions;
@@ -13,7 +14,7 @@ internal class DefaultTemplateModelBuilder
         var properties = classData.Properties.Select(CreatePropertyTemplateModel).ToArray();
         var methods = classData.Methods.Select(CreateMethodTemplateModel).ToArray();
 
-        return new ClassTemplateModel(classData.Name, classData.DocComment.Value, [classData.AccessModifier.ToString()], fields, properties, methods);
+        return new ClassTemplateModel(classData.Name, classData.DocComment.Value, [classData.AccessModifier.GetPlaceholderString()], fields, properties, methods);
     }
 
     private FieldTemplateModel CreateFieldTemplateModel(FieldData fieldData)
@@ -22,40 +23,25 @@ internal class DefaultTemplateModelBuilder
 
         if (fieldData.IsStatic && !fieldData.IsConstant)
         {
-            modifiers.Add(Placeholder.Static.GetString());
+            modifiers.Add(Keyword.Static.GetString());
         }
         if (fieldData.IsConstant)
         {
-            modifiers.Add(Placeholder.Const.GetString());
+            modifiers.Add(Keyword.Const.GetString());
         }
         if (fieldData.IsReadonly)
         {
-            modifiers.Add(Placeholder.Readonly.GetString());
+            modifiers.Add(Keyword.Readonly.GetString());
         }
 
-        return new FieldTemplateModel(fieldData.Name, fieldData.Type, fieldData.DocComment.Value, [.. modifiers]);
+        return new FieldTemplateModel(fieldData.Name, fieldData.Type, fieldData.DocComment.Value, modifiers);
     }
 
     private PropertyTemplateModel CreatePropertyTemplateModel(PropertyData propertyData)
     {
         List<string> modifiers = [propertyData.AccessModifier.GetPlaceholderString()];
 
-        if (propertyData.IsStatic)
-        {
-            modifiers.Add(Placeholder.Static.GetString());
-        }
-        if (propertyData.HasVirtualKeyword())
-        {
-            modifiers.Add(Placeholder.Virtual.GetString());
-        }
-        if (propertyData.OverridesAnotherMember)
-        {
-            modifiers.Add(Placeholder.Override.GetString());
-        }
-        if (propertyData.IsSealed)
-        {
-            modifiers.Add(Placeholder.Sealed.GetString());
-        }
+        modifiers.AddRange(GetCallableMemberModifiers(propertyData));
 
         List<string> getterModifiers = [];
         List<string> setterModifiers = [];
@@ -69,41 +55,18 @@ internal class DefaultTemplateModelBuilder
             setterModifiers.Add(propertyData.Setter.AccessModifier.GetPlaceholderString());
         }
 
-        return new PropertyTemplateModel(propertyData.Name, propertyData.Type, propertyData.DocComment.Value, [.. modifiers], propertyData.Getter is not null, propertyData.Setter is not null, [.. getterModifiers], [.. setterModifiers]);
+        return new PropertyTemplateModel(propertyData.Name, propertyData.Type, propertyData.DocComment.Value, modifiers, propertyData.Getter is not null, propertyData.Setter is not null, [.. getterModifiers], [.. setterModifiers]);
     }
 
     private MethodTemplateModel CreateMethodTemplateModel(MethodData methodData)
     {
         List<string> modifiers = [methodData.AccessModifier.GetPlaceholderString()];
 
-        if (methodData.IsStatic)
-        {
-            modifiers.Add(Placeholder.Static.GetString());
-        }
-        if (methodData.IsAbstract)
-        {
-            modifiers.Add(Placeholder.Abstract.GetString());
-        }
-        if (methodData.HasVirtualKeyword())
-        {
-            modifiers.Add(Placeholder.Virtual.GetString());
-        }
-        if (methodData.OverridesAnotherMember)
-        {
-            modifiers.Add(Placeholder.Override.GetString());
-        }
-        if (methodData.IsSealed)
-        {
-            modifiers.Add(Placeholder.Sealed.GetString());
-        }
-        if (methodData.IsAsync)
-        {
-            modifiers.Add(Placeholder.Async.GetString());
-        }
+        modifiers.AddRange(GetCallableMemberModifiers(methodData));
 
         return new MethodTemplateModel(methodData.Name,
             methodData.GetParameters().Select(CreateMethodParameterModel).ToArray(),
-            methodData.ReturnType, methodData.DocComment.Value, [.. modifiers]);
+            methodData.ReturnType, methodData.DocComment.Value, modifiers);
     }
 
     private MethodParameterTemplateModel CreateMethodParameterModel(MethodParameterData parameterData)
@@ -112,19 +75,19 @@ internal class DefaultTemplateModelBuilder
 
         if (parameterData.IsInput)
         {
-            modifiers.Add(Placeholder.In.GetString());
+            modifiers.Add(Keyword.In.GetString());
         }
         if (parameterData.IsOutput)
         {
-            modifiers.Add(Placeholder.Out.GetString());
+            modifiers.Add(Keyword.Out.GetString());
         }
         if (parameterData.HasRefKeyword())
         {
-            modifiers.Add(Placeholder.Ref.GetString());
+            modifiers.Add(Keyword.Ref.GetString());
         }
-        if (parameterData.IsParamsArray)
+        if (parameterData.IsParamsCollection)
         {
-            modifiers.Add(Placeholder.Params.GetString());
+            modifiers.Add(Keyword.Params.GetString());
         }
         if (parameterData.IsOptional)
         {
@@ -132,5 +95,36 @@ internal class DefaultTemplateModelBuilder
         }
 
         return new MethodParameterTemplateModel(parameterData.Name, parameterData.Type, parameterData.DocComment.Value, modifiers);
+    }
+
+    private List<string> GetCallableMemberModifiers(ICallableMemberData memberData)
+    {
+        var modifiers = new List<string>();
+        if (memberData.IsStatic)
+        {
+            modifiers.Add(Keyword.Static.GetString());
+        }
+        if (memberData.IsAbstract)
+        {
+            modifiers.Add(Keyword.Abstract.GetString());
+        }
+        if (memberData.HasVirtualKeyword())
+        {
+            modifiers.Add(Keyword.Virtual.GetString());
+        }
+        if (memberData.OverridesAnotherMember)
+        {
+            modifiers.Add(Keyword.Override.GetString());
+        }
+        if (memberData.IsSealed)
+        {
+            modifiers.Add(Keyword.Sealed.GetString());
+        }
+        if (memberData.IsAsync)
+        {
+            modifiers.Add(Keyword.Async.GetString());
+        }
+
+        return modifiers;
     }
 }

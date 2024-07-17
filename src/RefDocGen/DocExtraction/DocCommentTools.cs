@@ -2,7 +2,13 @@ using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction;
 
-public class DocCommentTools
+/// <summary>
+/// Contains helper methods for anything related to XML documentation comments.
+/// </summary>
+internal class DocCommentTools
 {
-    public static XElement Empty => new("summary");
+    /// <summary>
+    /// Get new empty 'summary' <see cref="XElement"/>.
+    /// </summary>
+    internal static XElement EmptySummary => new("summary");
 }
