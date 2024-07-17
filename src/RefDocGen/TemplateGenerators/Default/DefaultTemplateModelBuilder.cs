@@ -85,7 +85,7 @@ internal class DefaultTemplateModelBuilder
         {
             modifiers.Add(Placeholder.Ref.GetString());
         }
-        if (parameterData.IsParamsArray)
+        if (parameterData.IsParamsCollection)
         {
             modifiers.Add(Placeholder.Params.GetString());
         }

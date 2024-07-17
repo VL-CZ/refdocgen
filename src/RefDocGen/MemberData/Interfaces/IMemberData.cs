@@ -1,7 +1,7 @@
 namespace RefDocGen.MemberData.Interfaces;
 
 /// <summary>
-/// Represents data of any type member (such as field, property or method).
+/// Represents data of a type member (such as field, property or method).
 /// </summary>
 public interface IMemberData
 {
