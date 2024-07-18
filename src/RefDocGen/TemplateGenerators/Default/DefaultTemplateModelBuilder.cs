@@ -14,12 +14,12 @@ internal class DefaultTemplateModelBuilder
         var properties = classData.Properties.Select(CreatePropertyTemplateModel).ToArray();
         var methods = classData.Methods.Select(CreateMethodTemplateModel).ToArray();
 
-        return new ClassTemplateModel(classData.Name, classData.DocComment.Value, [classData.AccessModifier.GetPlaceholderString()], fields, properties, methods);
+        return new ClassTemplateModel(classData.Name, classData.DocComment.Value, [classData.AccessModifier.GetKeywordString()], fields, properties, methods);
     }
 
     private FieldTemplateModel CreateFieldTemplateModel(FieldData fieldData)
     {
-        List<string> modifiers = [fieldData.AccessModifier.GetPlaceholderString()];
+        List<string> modifiers = [fieldData.AccessModifier.GetKeywordString()];
 
         if (fieldData.IsStatic && !fieldData.IsConstant)
         {
@@ -39,7 +39,7 @@ internal class DefaultTemplateModelBuilder
 
     private PropertyTemplateModel CreatePropertyTemplateModel(PropertyData propertyData)
     {
-        List<string> modifiers = [propertyData.AccessModifier.GetPlaceholderString()];
+        List<string> modifiers = [propertyData.AccessModifier.GetKeywordString()];
 
         modifiers.AddRange(GetCallableMemberModifiers(propertyData));
 
@@ -48,11 +48,11 @@ internal class DefaultTemplateModelBuilder
 
         if (propertyData.Getter is not null && propertyData.Getter.AccessModifier != propertyData.AccessModifier)
         {
-            getterModifiers.Add(propertyData.Getter.AccessModifier.GetPlaceholderString());
+            getterModifiers.Add(propertyData.Getter.AccessModifier.GetKeywordString());
         }
         if (propertyData.Setter is not null && propertyData.Setter.AccessModifier != propertyData.AccessModifier)
         {
-            setterModifiers.Add(propertyData.Setter.AccessModifier.GetPlaceholderString());
+            setterModifiers.Add(propertyData.Setter.AccessModifier.GetKeywordString());
         }
 
         return new PropertyTemplateModel(propertyData.Name, propertyData.Type, propertyData.DocComment.Value, modifiers, propertyData.Getter is not null, propertyData.Setter is not null, [.. getterModifiers], [.. setterModifiers]);
@@ -60,7 +60,7 @@ internal class DefaultTemplateModelBuilder
 
     private MethodTemplateModel CreateMethodTemplateModel(MethodData methodData)
     {
-        List<string> modifiers = [methodData.AccessModifier.GetPlaceholderString()];
+        List<string> modifiers = [methodData.AccessModifier.GetKeywordString()];
 
         modifiers.AddRange(GetCallableMemberModifiers(methodData));
 
