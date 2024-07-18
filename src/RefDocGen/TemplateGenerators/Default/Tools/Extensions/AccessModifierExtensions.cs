@@ -4,7 +4,7 @@ namespace RefDocGen.TemplateGenerators.Default.Tools.Extensions;
 
 internal static class AccessModifierExtensions
 {
-    internal static string GetPlaceholderString(this AccessModifier accessModifier)
+    internal static string GetKeywordString(this AccessModifier accessModifier)
     {
         var placeholder = accessModifier switch
         {

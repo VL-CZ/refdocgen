@@ -48,7 +48,7 @@ public record PropertyData : ICallableMemberData
 
     /// <summary>
     /// Gets the declared accessors (getter and setter) of the property represented as <see cref="MethodData"/> objects.
-    /// <para>If one of the accessors is missing, only a single <see cref="MethodData"/> object is returned.</para>
+    /// <para>If one of the accessors is missing, enumerable with a single <see cref="MethodData"/> object is returned.</para>
     /// </summary>
     public IEnumerable<MethodData> Accessors
     {
