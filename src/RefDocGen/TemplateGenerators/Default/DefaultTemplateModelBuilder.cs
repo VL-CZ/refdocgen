@@ -69,7 +69,7 @@ internal class DefaultTemplateModelBuilder
             methodData.ReturnType, methodData.DocComment.Value, modifiers);
     }
 
-    private MethodParameterTemplateModel CreateMethodParameterModel(MethodParameterData parameterData)
+    private static MethodParameterTemplateModel CreateMethodParameterModel(MethodParameterData parameterData)
     {
         var modifiers = new List<string>();
 

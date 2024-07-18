@@ -13,7 +13,7 @@ public record MethodParameterData(ParameterInfo ParameterInfo)
     /// <summary>
     /// Name of the parameter.
     /// </summary>
-    public string Name => ParameterInfo.Name;
+    public string Name => ParameterInfo.Name ?? string.Empty;
 
     /// <summary>
     /// Type of the parameter.
