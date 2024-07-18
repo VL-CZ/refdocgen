@@ -14,7 +14,7 @@ internal static class AccessModifierExtensions
             AccessModifier.FamilyAndAssembly => Keyword.PrivateProtected,
             AccessModifier.FamilyOrAssembly => Keyword.ProtectedInternal,
             AccessModifier.Public => Keyword.Public,
-            _ => throw new ArgumentException()
+            _ => throw new ArgumentException($"Invalid {nameof(AccessModifier)} enum value.")
         };
 
         return placeholder.GetString();

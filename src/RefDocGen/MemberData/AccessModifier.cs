@@ -72,13 +72,13 @@ internal static class AccessModifierExtensions
     {
         return (isPrivate, isFamily, isAssembly, isFamilyAndAssembly, isFamilyOrAssembly, isPublic) switch
         {
-            (true, _, _, _, _, _) => AccessModifier.Private,
-            (_, true, _, _, _, _) => AccessModifier.Family, // C# protected
-            (_, _, true, _, _, _) => AccessModifier.Assembly, // C# internal
-            (_, _, _, true, _, _) => AccessModifier.FamilyAndAssembly, // C# private protected
-            (_, _, _, _, true, _) => AccessModifier.FamilyOrAssembly, // C# protected internal
-            (_, _, _, _, _, true) => AccessModifier.Public,
-            _ => throw new ArgumentException() // TODO: custom exception
+            (true, false, false, false, false, false) => AccessModifier.Private,
+            (false, true, false, false, false, false) => AccessModifier.Family, // C# protected
+            (false, false, true, false, false, false) => AccessModifier.Assembly, // C# internal
+            (false, false, false, true, false, false) => AccessModifier.FamilyAndAssembly, // C# private protected
+            (false, false, false, false, true, false) => AccessModifier.FamilyOrAssembly, // C# protected internal
+            (false, false, false, false, false, true) => AccessModifier.Public,
+            _ => throw new ArgumentException("Invalid combination of the arguments. There must be exactly one of them set to true.")
         };
     }
 }

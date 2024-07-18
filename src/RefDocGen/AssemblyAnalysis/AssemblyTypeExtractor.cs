@@ -60,6 +60,6 @@ internal class AssemblyTypeExtractor
         var propertyModels = properties.Select(p => new PropertyData(p)).ToArray();
         var methodModels = methods.Select(m => new MethodData(m)).ToArray();
 
-        return new ClassData(type.FullName, AccessModifier.Public, fieldModels, propertyModels, methodModels);
+        return new ClassData(type.FullName ?? type.Name, AccessModifier.Public, fieldModels, propertyModels, methodModels);
     }
 }
