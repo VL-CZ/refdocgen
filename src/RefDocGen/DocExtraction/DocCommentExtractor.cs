@@ -88,6 +88,21 @@ internal class DocCommentExtractor
 
                     type.Properties[index] = propertyNode with { DocComment = summaryNode };
                 }
+                else if (sp[0] == "M") // Method
+                {
+                    string fullName = sp[1];
+                    string[] nameParts = fullName.Split('(')[0].Split('.');
+
+                    string fullMethodName = nameParts[^1];
+                    string className = string.Join('.', nameParts, 0, nameParts.Length - 1);
+
+                    var type = classData.First(m => m.Name == className);
+                    var methodNode = type.Methods.First(p => p.Name == fullMethodName);
+
+                    int index = Array.IndexOf(type.Methods, methodNode);
+
+                    type.Methods[index] = methodNode with { DocComment = summaryNode };
+                }
             }
         }
     }
