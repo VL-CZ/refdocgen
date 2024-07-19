@@ -16,5 +16,5 @@ public record ClassData(string Name, AccessModifier AccessModifier, FieldData[] 
     /// <summary>
     /// Documentation comment provided to the class.
     /// </summary>
-    public XElement DocComment { get; init; } = DocCommentTools.EmptySummary;
+    public XElement DocComment { get; init; } = DocCommentTools.EmptySummaryNode;
 }

@@ -51,7 +51,7 @@ public record MethodData(MethodInfo MethodInfo) : ICallableMemberData
     /// <summary>
     /// XML doc comment for the method
     /// </summary>
-    public XElement DocComment { get; init; } = DocCommentTools.EmptySummary;
+    public XElement DocComment { get; init; } = DocCommentTools.EmptySummaryNode;
 
     /// <summary>
     /// Gets the method parameters represented as <see cref="MethodParameterData"/> objects, ordered by their position.

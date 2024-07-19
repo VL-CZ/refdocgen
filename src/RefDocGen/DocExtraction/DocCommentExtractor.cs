@@ -18,6 +18,8 @@ internal class DocCommentExtractor
     /// </summary>
     private readonly ClassData[] classData;
 
+    private readonly XDocument xmlDocument;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
     /// </summary>
@@ -27,6 +29,9 @@ internal class DocCommentExtractor
     {
         this.docXmlPath = docXmlPath;
         this.classData = classData;
+
+        // load the document
+        xmlDocument = XDocument.Load(docXmlPath);
     }
 
     /// <summary>
@@ -34,8 +39,7 @@ internal class DocCommentExtractor
     /// </summary>
     internal void AddComments()
     {
-        var xmlDoc = GetDocCommentsFile();
-        var memberNodes = xmlDoc.Descendants("member");
+        var memberNodes = xmlDocument.Descendants("member");
 
         foreach (var memberNode in memberNodes)
         {
@@ -44,7 +48,7 @@ internal class DocCommentExtractor
 
             if (summaryNode is not null && memberAttr is not null)
             {
-                string summaryText = summaryNode.Value.Trim();
+                //string summaryText = summaryNode.Value.Trim();
                 string memberName = memberAttr.Value;
 
                 string[] sp = memberName.Split(':');
@@ -105,14 +109,5 @@ internal class DocCommentExtractor
                 }
             }
         }
-    }
-
-    /// <summary>
-    /// Get the XML documentation file represented as a <see cref="XDocument"/>.
-    /// </summary>
-    /// <returns>The XML documentation file represented as a <see cref="XDocument"/>.</returns>
-    private XDocument GetDocCommentsFile()
-    {
-        return XDocument.Load(docXmlPath);
     }
 }
