@@ -9,9 +9,23 @@ namespace RefDocGen.MemberData;
 /// <summary>
 /// Represents data of a method.
 /// </summary>
-/// <param name="MethodInfo"><see cref="MethodInfo"/> object representing the field.</param>
-public record MethodData(MethodInfo MethodInfo) : ICallableMemberData
+public record MethodData : ICallableMemberData
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="methodInfo"><see cref="System.Reflection.MethodInfo"/> object representing the field.</param>
+    public MethodData(MethodInfo methodInfo)
+    {
+        MethodInfo = methodInfo;
+        Parameters = MethodInfo.GetParameters().OrderBy(p => p.Position).Select(p => new MethodParameterData(p)).ToArray();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public MethodInfo MethodInfo { get; }
+
     /// <inheritdoc/>
     public string Name => MethodInfo.Name;
 
@@ -56,9 +70,6 @@ public record MethodData(MethodInfo MethodInfo) : ICallableMemberData
     /// <summary>
     /// Gets the method parameters represented as <see cref="MethodParameterData"/> objects, ordered by their position.
     /// </summary>
-    /// <returns>Method parameters represented as <see cref="MethodParameterData"/> objects.</returns>
-    public IEnumerable<MethodParameterData> GetParameters()
-    {
-        return MethodInfo.GetParameters().OrderBy(p => p.Position).Select(p => new MethodParameterData(p));
-    }
+    public MethodParameterData[] Parameters { get; }
+
 }

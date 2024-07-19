@@ -1,4 +1,5 @@
 using RefDocGen.MemberData;
+using RefDocGen.MemberData.Interfaces;
 using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction;
@@ -43,71 +44,97 @@ internal class DocCommentExtractor
 
         foreach (var memberNode in memberNodes)
         {
-            var memberAttr = memberNode.Attribute("name");
-            var summaryNode = memberNode.Element("summary");
+            var memberNameAttr = memberNode.Attribute("name");
+            // var summaryNode = memberNode.Element("summary");
 
-            if (summaryNode is not null && memberAttr is not null)
+            if (memberNameAttr is not null)
             {
                 //string summaryText = summaryNode.Value.Trim();
-                string memberName = memberAttr.Value;
+                string[] splitMemberName = memberNameAttr.Value.Split(':');
 
-                string[] sp = memberName.Split(':');
+                (string memberIdentifier, string fullMemberName) = (splitMemberName[0], splitMemberName[1]);
 
-                if (sp[0] == "T") // Class
+                if (memberIdentifier == "T") // Type
                 {
-                    string className = sp[1];
-                    var templateNode = classData.First(m => m.Name == className);
-
+                    var templateNode = GetClassByItsName(fullMemberName);
                     int index = Array.IndexOf(classData, templateNode);
-
-                    classData[index] = templateNode with { DocComment = summaryNode };
+                    classData[index] = templateNode with { DocComment = memberNode };
                 }
-                else if (sp[0] == "F") // Field
+                else
                 {
-                    string fullName = sp[1];
-                    string[] nameParts = fullName.Split('.');
+                    (string className, string memberName) = GetClassAndMemberName(fullMemberName);
+                    var type = GetClassByItsName(className);
 
-                    string fieldName = nameParts[^1];
-                    string className = string.Join('.', nameParts, 0, nameParts.Length - 1);
-
-                    var type = classData.First(m => m.Name == className);
-                    var fieldNode = type.Fields.First(f => f.Name == fieldName);
-
-                    int index = Array.IndexOf(type.Fields, fieldNode);
-
-                    type.Fields[index] = fieldNode with { DocComment = summaryNode };
-                }
-                else if (sp[0] == "P") // Property
-                {
-                    string fullName = sp[1];
-                    string[] nameParts = fullName.Split('.');
-
-                    string propertyName = nameParts[^1];
-                    string className = string.Join('.', nameParts, 0, nameParts.Length - 1);
-
-                    var type = classData.First(m => m.Name == className);
-                    var propertyNode = type.Properties.First(p => p.Name == propertyName);
-
-                    int index = Array.IndexOf(type.Properties, propertyNode);
-
-                    type.Properties[index] = propertyNode with { DocComment = summaryNode };
-                }
-                else if (sp[0] == "M") // Method
-                {
-                    string fullName = sp[1];
-                    string[] nameParts = fullName.Split('(')[0].Split('.');
-
-                    string fullMethodName = nameParts[^1];
-                    string className = string.Join('.', nameParts, 0, nameParts.Length - 1);
-
-                    var type = classData.First(m => m.Name == className);
-                    var methodNode = type.Methods.First(p => p.Name == fullMethodName);
-
-                    int index = Array.IndexOf(type.Methods, methodNode);
-
-                    type.Methods[index] = methodNode with { DocComment = summaryNode };
+                    switch (memberIdentifier)
+                    {
+                        case "F":
+                            AddFieldComment(type, memberName, memberNode);
+                            break;
+                        case "P":
+                            AddPropertyComment(type, memberName, memberNode);
+                            break;
+                        case "M":
+                            AddMethodComment(type, memberName, memberNode);
+                            break;
+                        default:
+                            throw new ArgumentException($"Unknown member identifier: {memberIdentifier}");
+                    }
                 }
             }
         }
+    }
+
+    private void AddFieldComment(ClassData type, string memberName, XElement commentNode)
+    {
+        int index = GetClassMemberIndex(type.Fields, memberName);
+        type.Fields[index] = type.Fields[index] with { DocComment = commentNode };
+    }
+
+    private void AddPropertyComment(ClassData type, string memberName, XElement commentNode)
+    {
+        int index = GetClassMemberIndex(type.Properties, memberName);
+        type.Properties[index] = type.Properties[index] with { DocComment = commentNode };
+    }
+
+    private void AddMethodComment(ClassData type, string memberName, XElement commentNode)
+    {
+        int index = GetClassMemberIndex(type.Methods, memberName);
+        var method = type.Methods[index];
+        type.Methods[index] = method with { DocComment = commentNode };
+
+        var paramElements = commentNode.Descendants("param");
+        foreach (var paramElement in paramElements)
+        {
+            var nameAttr = paramElement.Attribute("name");
+            if (nameAttr is not null)
+            {
+                string paramName = nameAttr.Value;
+                var member = method.Parameters.Single(p => p.Name == paramName);
+                int paramIndex = Array.IndexOf(method.Parameters, member);
+
+                method.Parameters[index] = member with { DocComment = paramElement };
+            }
+        }
+    }
+
+    private (string className, string memberName) GetClassAndMemberName(string fullMemberName)
+    {
+        string memberNameWithoutParameters = fullMemberName.Split('(')[0]; // this is done because of methods
+        string[] nameParts = memberNameWithoutParameters.Split('.');
+        string memberName = nameParts[^1];
+        string className = string.Join('.', nameParts, 0, nameParts.Length - 1);
+
+        return (className, memberName);
+    }
+
+    private ClassData GetClassByItsName(string className)
+    {
+        return classData.Single(m => m.Name == className);
+    }
+
+    private int GetClassMemberIndex(IMemberData[] memberCollection, string memberName)
+    {
+        var member = memberCollection.Single(m => m.Name == memberName);
+        return Array.IndexOf(memberCollection, member);
     }
 }

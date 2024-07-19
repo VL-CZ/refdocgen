@@ -54,6 +54,7 @@
                         @foreach (var parameter in method.Parameters)
                         {
                             <div>@string.Join(' ', parameter.Modifiers) @parameter.Type @parameter.Name</div>
+                            <p><i>@parameter.DocComment</i></p>
                         }
                     }
                 </div>
