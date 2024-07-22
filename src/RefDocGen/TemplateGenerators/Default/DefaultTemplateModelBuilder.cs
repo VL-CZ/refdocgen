@@ -65,7 +65,7 @@ internal class DefaultTemplateModelBuilder
         modifiers.AddRange(GetCallableMemberModifiers(methodData));
 
         return new MethodTemplateModel(methodData.Name,
-            methodData.GetParameters().Select(CreateMethodParameterModel).ToArray(),
+            methodData.Parameters.Select(CreateMethodParameterModel).ToArray(),
             methodData.ReturnType, methodData.DocComment.Value, modifiers);
     }
 

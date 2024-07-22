@@ -10,5 +10,7 @@ internal class DocCommentTools
     /// <summary>
     /// Get new empty 'summary' <see cref="XElement"/>.
     /// </summary>
-    internal static XElement EmptySummary => new("summary");
+    internal static XElement EmptySummaryNode => new("summary");
+
+    internal static XElement EmptyParamNode => new("param");
 }

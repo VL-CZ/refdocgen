@@ -1,3 +1,5 @@
+using System.Xml.Linq;
+
 namespace RefDocGen.MemberData.Interfaces;
 
 /// <summary>
@@ -8,10 +10,15 @@ public interface IMemberData
     /// <summary>
     /// Name of the member.
     /// </summary>
-    internal string Name { get; }
+    string Name { get; }
 
     /// <summary>
     /// Access modifier of the member.
     /// </summary>
-    internal AccessModifier AccessModifier { get; }
+    AccessModifier AccessModifier { get; }
+
+    /// <summary>
+    /// Doc comment for the member.
+    /// </summary>
+    XElement DocComment { get; }
 }

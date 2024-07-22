@@ -7,7 +7,7 @@ public class UnitTest1
     [Fact]
     public void Test1()
     {
-        var emptySummary = DocCommentTools.EmptySummary;
+        var emptySummary = DocCommentTools.EmptySummaryNode;
         Assert.Equal("summary", emptySummary.Name);
     }
 }

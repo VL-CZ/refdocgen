@@ -49,5 +49,5 @@ public record MethodParameterData(ParameterInfo ParameterInfo)
     /// <summary>
     /// XML doc comment for the parameter
     /// </summary>
-    public XElement DocComment { get; init; } = DocCommentTools.EmptySummary;
+    public XElement DocComment { get; init; } = DocCommentTools.EmptySummaryNode;
 }
