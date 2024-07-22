@@ -1,3 +1,4 @@
+using RefDocGen.DocExtraction.Tools;
 using RefDocGen.MemberData;
 using RefDocGen.MemberData.Interfaces;
 using System.Xml.Linq;
@@ -10,15 +11,13 @@ namespace RefDocGen.DocExtraction;
 internal class DocCommentExtractor
 {
     /// <summary>
-    /// Path to the XML documentation file.
-    /// </summary>
-    private readonly string docXmlPath;
-
-    /// <summary>
     /// Array of class data to which the documentation comments will be added.
     /// </summary>
     private readonly ClassData[] classData;
 
+    /// <summary>
+    /// XML document with the doc comments
+    /// </summary>
     private readonly XDocument xmlDocument;
 
     /// <summary>
@@ -28,7 +27,6 @@ internal class DocCommentExtractor
     /// <param name="classData">Array of class data to which the documentation comments will be added.</param>
     internal DocCommentExtractor(string docXmlPath, ClassData[] classData)
     {
-        this.docXmlPath = docXmlPath;
         this.classData = classData;
 
         // load the document
@@ -60,10 +58,10 @@ internal class DocCommentExtractor
                     int index = Array.IndexOf(classData, templateNode);
                     classData[index] = templateNode with { DocComment = memberNode };
                 }
-                else
+                else // Type member
                 {
-                    (string className, string memberName) = GetClassAndMemberName(fullMemberName);
-                    var type = GetClassByItsName(className);
+                    (string typeName, string memberName) = MemberNameExtractor.GetTypeAndMemberName(fullMemberName);
+                    var type = GetClassByItsName(typeName);
 
                     switch (memberIdentifier)
                     {
@@ -84,21 +82,39 @@ internal class DocCommentExtractor
         }
     }
 
-    private void AddFieldComment(ClassData type, string memberName, XElement commentNode)
+    /// <summary>
+    /// Add doc comment to the given field.
+    /// </summary>
+    /// <param name="type">Type containing the field.</param>
+    /// <param name="fieldName">Name of the field.</param>
+    /// <param name="commentNode">Doc comment for the field.</param>
+    private void AddFieldComment(ClassData type, string fieldName, XElement commentNode)
     {
-        int index = GetClassMemberIndex(type.Fields, memberName);
+        int index = GetTypeMemberIndex(type.Fields, fieldName);
         type.Fields[index] = type.Fields[index] with { DocComment = commentNode };
     }
 
-    private void AddPropertyComment(ClassData type, string memberName, XElement commentNode)
+    /// <summary>
+    /// Add doc comment to the given property.
+    /// </summary>
+    /// <param name="type">Type containing the propety.</param>
+    /// <param name="fieldName">Name of the property.</param>
+    /// <param name="commentNode">Doc comment for the property.</param>
+    private void AddPropertyComment(ClassData type, string propertyName, XElement commentNode)
     {
-        int index = GetClassMemberIndex(type.Properties, memberName);
+        int index = GetTypeMemberIndex(type.Properties, propertyName);
         type.Properties[index] = type.Properties[index] with { DocComment = commentNode };
     }
 
-    private void AddMethodComment(ClassData type, string memberName, XElement commentNode)
+    /// <summary>
+    /// Add doc comment to the given method.
+    /// </summary>
+    /// <param name="type">Type containing the method.</param>
+    /// <param name="fieldName">Name of the method.</param>
+    /// <param name="commentNode">Doc comment for the method.</param>
+    private void AddMethodComment(ClassData type, string methodNode, XElement commentNode)
     {
-        int index = GetClassMemberIndex(type.Methods, memberName);
+        int index = GetTypeMemberIndex(type.Methods, methodNode);
         var method = type.Methods[index];
         type.Methods[index] = method with { DocComment = commentNode };
 
@@ -117,22 +133,23 @@ internal class DocCommentExtractor
         }
     }
 
-    private (string className, string memberName) GetClassAndMemberName(string fullMemberName)
-    {
-        string memberNameWithoutParameters = fullMemberName.Split('(')[0]; // this is done because of methods
-        string[] nameParts = memberNameWithoutParameters.Split('.');
-        string memberName = nameParts[^1];
-        string className = string.Join('.', nameParts, 0, nameParts.Length - 1);
-
-        return (className, memberName);
-    }
-
+    /// <summary>
+    /// Get <see cref="ClassData"/> object by its name.
+    /// </summary>
+    /// <param name="className">Name of the class to find.</param>
+    /// <returns>Found <see cref="ClassData"/> object.</returns>
     private ClassData GetClassByItsName(string className)
     {
         return classData.Single(m => m.Name == className);
     }
 
-    private int GetClassMemberIndex(IMemberData[] memberCollection, string memberName)
+    /// <summary>
+    /// Get index of the given member in the collection.
+    /// </summary>
+    /// <param name="memberCollection">Collection containing member data.</param>
+    /// <param name="memberName">Name of the member to find.</param>
+    /// <returns>Index of the given member in the collection.</returns>
+    private int GetTypeMemberIndex(IMemberData[] memberCollection, string memberName)
     {
         var member = memberCollection.Single(m => m.Name == memberName);
         return Array.IndexOf(memberCollection, member);
