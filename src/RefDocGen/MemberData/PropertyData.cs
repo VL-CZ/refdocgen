@@ -13,7 +13,7 @@ public record PropertyData : ICallableMemberData
     /// <summary>
     /// Initializes a new instance of the <see cref="PropertyData"/> class.
     /// </summary>
-    /// <param name="propertyInfo"><see cref="PropertyInfo"/> object representing the property.</param>
+    /// <param name="propertyInfo"><see cref="System.Reflection.PropertyInfo"/> object representing the property.</param>
     public PropertyData(PropertyInfo propertyInfo)
     {
         PropertyInfo = propertyInfo;
@@ -22,7 +22,7 @@ public record PropertyData : ICallableMemberData
     }
 
     /// <summary>
-    /// <see cref="PropertyInfo"/> object representing the property.
+    /// <see cref="System.Reflection.PropertyInfo"/> object representing the property.
     /// </summary>
     public PropertyInfo PropertyInfo { get; }
 

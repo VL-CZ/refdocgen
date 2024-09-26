@@ -12,7 +12,7 @@ namespace RefDocGen.MemberData;
 public record MethodData : ICallableMemberData
 {
     /// <summary>
-    /// 
+    /// Create new <see cref="MethodData"/> instance.
     /// </summary>
     /// <param name="methodInfo"><see cref="System.Reflection.MethodInfo"/> object representing the field.</param>
     public MethodData(MethodInfo methodInfo)
@@ -22,7 +22,7 @@ public record MethodData : ICallableMemberData
     }
 
     /// <summary>
-    /// 
+    /// <see cref="System.Reflection.MethodInfo"/> object representing the field.
     /// </summary>
     public MethodInfo MethodInfo { get; }
 

@@ -18,6 +18,11 @@ public interface IMemberData
     AccessModifier AccessModifier { get; }
 
     /// <summary>
+    /// Checks whether the member is static.
+    /// </summary>
+    bool IsStatic { get; }
+
+    /// <summary>
     /// Doc comment for the member.
     /// </summary>
     XElement DocComment { get; }

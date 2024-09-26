@@ -6,11 +6,6 @@ namespace RefDocGen.MemberData.Interfaces;
 public interface ICallableMemberData : IMemberData
 {
     /// <summary>
-    /// Checks whether the member is static.
-    /// </summary>
-    bool IsStatic { get; }
-
-    /// <summary>
     /// Checks whether the member can be overridden.
     /// <para>True for virtual non-final methods</para>
     /// </summary>
