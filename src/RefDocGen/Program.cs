@@ -12,11 +12,11 @@ public static class Program
     /// </summary>
     public static void Main()
     {
-        string? rootPath = new DirectoryInfo(Environment.CurrentDirectory)?.Parent?.Parent?.Parent?.Parent?.Parent?.FullName;
+        string? rootPath = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.Parent?.Parent?.FullName;
         string dllPath = Path.Join(rootPath, "demo-lib", "MyLibrary.dll");
         string docPath = Path.Join(rootPath, "demo-lib", "MyLibrary.xml");
 
-        string projectPath = @"C:\Users\vojta\UK\mgr-thesis\refdocgen\src\RefDocGen";
+        string projectPath = Path.Join(rootPath, "src", "RefDocGen");
         string templatePath = "TemplateGenerators/Default/Templates/Default/Template.cshtml";
         string outputDir = Path.Combine(projectPath, "out");
 
@@ -24,5 +24,7 @@ public static class Program
 
         var docGenerator = new DocGenerator(dllPath, docPath, templateGenerator);
         docGenerator.GenerateDoc();
+
+        Console.WriteLine("Done...");
     }
 }
