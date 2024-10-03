@@ -7,7 +7,7 @@ namespace RefDocGen.MemberData;
 /// <summary>
 /// Represents data of a method parameter
 /// </summary>
-/// <param name="ParameterInfo"><see cref="ParameterInfo"/> object representing the parameter</param>
+/// <param name="ParameterInfo"><see cref="System.Reflection.ParameterInfo"/> object representing the parameter</param>
 public record MethodParameterData(ParameterInfo ParameterInfo)
 {
     /// <summary>

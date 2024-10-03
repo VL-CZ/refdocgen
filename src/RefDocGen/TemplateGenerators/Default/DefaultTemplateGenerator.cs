@@ -4,9 +4,9 @@ using RefDocGen.TemplateGenerators.Default.TemplateModels;
 namespace RefDocGen.TemplateGenerators.Default;
 
 /// <summary>
-/// A class used for generating default Razor templates using the <see cref="ClassTemplateModel"/> as a template model
+/// A class used for generating RazorLight templates using the <see cref="ClassTemplateModel"/> as a template model
 /// </summary>
-public class DefaultTemplateGenerator : RazorTemplateGenerator<ClassTemplateModel>
+public class DefaultTemplateGenerator : RazorLightTemplateGenerator<ClassTemplateModel>
 {
     /// <summary>
     /// The instance used for building template models.

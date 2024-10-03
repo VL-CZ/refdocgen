@@ -8,7 +8,7 @@ namespace RefDocGen.MemberData;
 /// <summary>
 /// Represents data of a field.
 /// </summary>
-/// <param name="FieldInfo"><see cref="FieldInfo"/> object representing the field.</param>
+/// <param name="FieldInfo"><see cref="System.Reflection.FieldInfo"/> object representing the field.</param>
 public record FieldData(FieldInfo FieldInfo) : IMemberData
 {
     /// <inheritdoc/>
@@ -23,9 +23,7 @@ public record FieldData(FieldInfo FieldInfo) : IMemberData
     public AccessModifier AccessModifier => AccessModifierExtensions.GetAccessModifier(FieldInfo.IsPrivate, FieldInfo.IsFamily,
         FieldInfo.IsAssembly, FieldInfo.IsPublic, FieldInfo.IsFamilyAndAssembly, FieldInfo.IsFamilyOrAssembly);
 
-    /// <summary>
-    /// Checks if the field is static.
-    /// </summary>
+    /// <inheritdoc/>
     public bool IsStatic => FieldInfo.IsStatic;
 
     /// <summary>
