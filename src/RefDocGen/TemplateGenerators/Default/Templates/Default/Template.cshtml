@@ -190,9 +190,17 @@
                                 @foreach (var parameter in method.Parameters)
                                 {
                                     <samp>
-                                        @string.Join(' ', parameter.Modifiers) @parameter.Type @parameter.Name
+                                        <span class="text-primary">
+                                            @string.Join(' ', parameter.Modifiers)
+                                        </span>
+                                        <span class="text-secondary">
+                                            @parameter.Type
+                                        </span>
+                                        <span class="text-dark">
+                                            @parameter.Name
+                                        </span>
                                     </samp>
-                                    <p>
+                                    <p class="text-muted">
                                         <i>@parameter.DocComment</i>
                                     </p>
                                 }
