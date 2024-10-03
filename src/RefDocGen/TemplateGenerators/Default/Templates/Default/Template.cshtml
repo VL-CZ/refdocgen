@@ -54,11 +54,11 @@
             </samp>
         </h1>
 
-        <hr />
-
         <p class="text-muted">
             <i>@Model.DocComment</i>
         </p>
+
+        <hr />
 
         <h2 class="display-5">Fields</h2>
         <div class="row">
@@ -107,16 +107,21 @@
 
                                 <span class="text-secondary">{ </span>
 
+                                @{
+                                    var getterWithModifiers = property.HasGetter ? $"{string.Join(' ', property.GetterModifiers)} get" : string.Empty;
+                                    var setterWithModifiers = property.HasSetter ? $"{string.Join(' ', property.SetterModifiers)} set" : string.Empty;
+                                }
+
                                 @if (property.HasGetter)
                                 {
                                     <span class="text-primary">
-                                        @string.Join(' ', property.GetterModifiers) get;
+                                        @getterWithModifiers<span class="text-secondary">;</span>
                                     </span>
                                 }
                                 @if (property.HasSetter)
                                 {
                                     <span class="text-primary">
-                                        @string.Join(' ', property.SetterModifiers) set;
+                                        @setterWithModifiers<span class="text-secondary">;</span>
                                     </span>
                                 }
 
@@ -151,18 +156,25 @@
                                     @method.Name
                                 </span>
                                 <span class="text-secondary">
-                                    <span>(</span>
-                                    @foreach (var p in method.Parameters)
+                                    @if (method.Parameters.Any())
                                     {
-                                        <span class="text-secondary">
-                                            @p.Type
-                                        </span>
-                                        <span class="text-dark">
-                                            @p.Name
-                                        </span>
-                                        <span>, </span>
+                                        <span>(</span>
+                                        @foreach (var p in method.Parameters)
+                                        {
+                                            <span class="text-secondary">
+                                                @p.Type
+                                            </span>
+                                            <span class="text-dark">
+                                                @p.Name
+                                            </span>
+                                            <span>, </span>
+                                        }
+                                        <span>)</span>
                                     }
-                                    <span>)</span>
+                                    else
+                                    {
+                                        <span>()</span>
+                                    }
                                 </span>
                             </samp>
 
@@ -173,16 +185,18 @@
 
                         @if (method.Parameters.Any())
                         {
-                            <div class="lead">Parameters</div>
-                            @foreach (var parameter in method.Parameters)
-                            {
-                                <div>
-                                    @string.Join(' ', parameter.Modifiers) @parameter.Type @parameter.Name
-                                </div>
-                                <p>
-                                    <i>@parameter.DocComment</i>
-                                </p>
-                            }
+                            <h3 class="lead my-2">Parameters</h3>
+                            <div class="mx-2">
+                                @foreach (var parameter in method.Parameters)
+                                {
+                                    <samp>
+                                        @string.Join(' ', parameter.Modifiers) @parameter.Type @parameter.Name
+                                    </samp>
+                                    <p>
+                                        <i>@parameter.DocComment</i>
+                                    </p>
+                                }
+                            </div>
                         }
                     </div>
                 }
