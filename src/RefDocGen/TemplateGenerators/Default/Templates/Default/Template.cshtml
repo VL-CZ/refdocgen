@@ -139,6 +139,7 @@
         <h2 class="display-5">Methods</h2>
         <div class="row">
             <div class="col-md-12">
+
                 @foreach (var method in Model.Methods)
                 {
                     <div class="border p-2 mb-2">
@@ -153,19 +154,31 @@
                                 <span class="text-secondary">
                                     @if (method.Parameters.Any())
                                     {
-                                        <span class="text-dark">@method.Name<span class="text-secondary">(</span></span>
+                                        var lastParam = method.Parameters.Last();
+
+                                        <span class="text-dark">
+                                            @method.Name<span class="text-secondary">(</span>
+                                        </span>
 
                                         @foreach (var p in method.Parameters)
                                         {
                                             <span class="text-secondary">
                                                 @p.Type
                                             </span>
-                                            <span class="text-dark">
-                                                @p.Name
-                                            </span>
-                                            <span>, </span>
+
+                                            @if (p == lastParam)
+                                            {
+                                                <span class="text-dark">
+                                                    @p.Name<span class="text-secondary">)</span>
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-dark">
+                                                    @($"{p.Name},")
+                                                </span>
+                                            }
                                         }
-                                        <text>)</text>
                                     }
                                     else
                                     {
