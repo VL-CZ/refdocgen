@@ -41,8 +41,6 @@
             font-size: 1.5rem;
         }
     </style>
-
-
 </head>
 
 <body>
@@ -152,13 +150,11 @@
                                 <span class="text-secondary">
                                     @method.ReturnType
                                 </span>
-                                <span class="text-dark">
-                                    @method.Name
-                                </span>
                                 <span class="text-secondary">
                                     @if (method.Parameters.Any())
                                     {
-                                        <span>(</span>
+                                        <span class="text-dark">@method.Name<span class="text-secondary">(</span></span>
+
                                         @foreach (var p in method.Parameters)
                                         {
                                             <span class="text-secondary">
@@ -169,11 +165,11 @@
                                             </span>
                                             <span>, </span>
                                         }
-                                        <span>)</span>
+                                        <text>)</text>
                                     }
                                     else
                                     {
-                                        <span>()</span>
+                                        <span class="text-dark">@method.Name<span class="text-secondary">()</span></span>
                                     }
                                 </span>
                             </samp>
