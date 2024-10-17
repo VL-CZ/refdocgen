@@ -76,7 +76,7 @@ internal class DefaultTemplateModelBuilder
 
         return new MethodTemplateModel(methodData.Name,
             methodData.Parameters.Select(CreateMethodParameterModel).ToArray(),
-            methodData.ReturnType, methodData.DocComment.Value, modifiers);
+            methodData.ReturnType, methodData.DocComment.Value, methodData.ReturnsDocComment.Value, modifiers);
     }
 
     private static MethodParameterTemplateModel CreateMethodParameterModel(MethodParameterData parameterData)
