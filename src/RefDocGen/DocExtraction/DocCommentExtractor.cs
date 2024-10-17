@@ -72,6 +72,12 @@ internal class DocCommentExtractor
                             AddPropertyComment(type, memberName, memberNode);
                             break;
                         case "M":
+
+                            if (memberName.StartsWith("#ctor")) // TODO: add support for constructors
+                            {
+                                break;
+                            }
+
                             AddMethodComment(type, memberName, memberNode);
                             break;
                         default:
@@ -128,7 +134,7 @@ internal class DocCommentExtractor
                 var member = method.Parameters.Single(p => p.Name == paramName);
                 int paramIndex = Array.IndexOf(method.Parameters, member);
 
-                method.Parameters[index] = member with { DocComment = paramElement };
+                method.Parameters[paramIndex] = member with { DocComment = paramElement };
             }
         }
     }

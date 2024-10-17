@@ -39,7 +39,7 @@ internal class AssemblyTypeExtractor
     private Type[] GetDeclaredTypes()
     {
         var assembly = Assembly.LoadFrom(assemblyPath);
-        return assembly.GetTypes();
+        return assembly.GetTypes().Where(t => !t.IsCompilerGenerated()).ToArray();
     }
 
     /// <summary>
