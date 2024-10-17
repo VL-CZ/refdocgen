@@ -58,6 +58,86 @@
 
         <hr />
 
+        <h2 class="display-5">Constructors</h2>
+        <div class="row">
+            <div class="col-md-12">
+                @foreach (var constructor in Model.Constructors)
+                {
+                    <div class="border p-2 mb-2">
+                        <h6 class="mb-1">
+                            <samp>
+                                <span class="text-primary">
+                                    @string.Join(' ', constructor.Modifiers)
+                                </span>
+                                <span class="text-secondary">
+                                    @if (constructor.Parameters.Any())
+                                    {
+                                        var lastParam = constructor.Parameters.Last();
+
+                                        <span class="text-primary">
+                                            @Model.Name<span class="text-secondary">(</span>
+                                        </span>
+
+                                        @foreach (var p in constructor.Parameters)
+                                        {
+                                            <span class="text-secondary">
+                                                @p.Type
+                                            </span>
+
+                                            @if (p == lastParam)
+                                            {
+                                                <span class="text-dark">
+                                                    @p.Name<span class="text-secondary">)</span>
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-dark">
+                                                    @($"{p.Name},")
+                                                </span>
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="text-dark">@Model.Name<span class="text-secondary">()</span></span>
+                                    }
+                                </span>
+                            </samp>
+
+                        </h6>
+                        <p class="text-muted mb-0">
+                            <i>@constructor.DocComment</i>
+                        </p>
+
+                        @if (constructor.Parameters.Any())
+                        {
+                            <h3 class="lead my-2">Parameters</h3>
+                            <div class="mx-2">
+                                @foreach (var parameter in constructor.Parameters)
+                                {
+                                    <samp>
+                                        <span class="text-primary">
+                                            @string.Join(' ', parameter.Modifiers)
+                                        </span>
+                                        <span class="text-secondary">
+                                            @parameter.Type
+                                        </span>
+                                        <span class="text-dark">
+                                            @parameter.Name
+                                        </span>
+                                    </samp>
+                                    <p class="text-muted">
+                                        <i>@parameter.DocComment</i>
+                                    </p>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
         <h2 class="display-5">Fields</h2>
         <div class="row">
             <div class="col-md-12">

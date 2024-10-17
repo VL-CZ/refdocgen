@@ -22,7 +22,7 @@ public record MethodData : ICallableMemberData
     }
 
     /// <summary>
-    /// <see cref="System.Reflection.MethodInfo"/> object representing the field.
+    /// <see cref="System.Reflection.MethodInfo"/> object representing the method.
     /// </summary>
     public MethodInfo MethodInfo { get; }
 
