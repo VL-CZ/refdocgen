@@ -13,4 +13,6 @@ internal class DocCommentTools
     internal static XElement EmptySummaryNode => new("summary");
 
     internal static XElement EmptyParamNode => new("param");
+
+    internal static XElement EmptyReturnsNode => new("returns");
 }

@@ -1,5 +1,5 @@
 using RefDocGen.MemberData;
-using RefDocGen.MemberData.Interfaces;
+using RefDocGen.MemberData.Abstract;
 using RefDocGen.TemplateGenerators.Default.TemplateModels;
 using RefDocGen.TemplateGenerators.Default.Tools;
 using RefDocGen.TemplateGenerators.Default.Tools.Extensions;
@@ -10,11 +10,21 @@ internal class DefaultTemplateModelBuilder
 {
     public ClassTemplateModel CreateClassTemplateModel(ClassData classData)
     {
+        var constructors = classData.Constructors.Select(CreateConstructorTemplateModel).ToArray();
         var fields = classData.Fields.Select(CreateFieldTemplateModel).ToArray();
         var properties = classData.Properties.Select(CreatePropertyTemplateModel).ToArray();
         var methods = classData.Methods.Select(CreateMethodTemplateModel).ToArray();
 
-        return new ClassTemplateModel(classData.Name, classData.DocComment.Value, [classData.AccessModifier.GetKeywordString()], fields, properties, methods);
+        return new ClassTemplateModel(classData.Name, classData.DocComment.Value, [classData.AccessModifier.GetKeywordString()], constructors, fields, properties, methods);
+    }
+
+    private ConstructorTemplateModel CreateConstructorTemplateModel(ConstructorData constructorData)
+    {
+        List<string> modifiers = [constructorData.AccessModifier.GetKeywordString()];
+
+        modifiers.AddRange(GetCallableMemberModifiers(constructorData));
+
+        return new ConstructorTemplateModel(constructorData.Parameters.Select(CreateMethodParameterModel).ToArray(), constructorData.DocComment.Value, modifiers);
     }
 
     private FieldTemplateModel CreateFieldTemplateModel(FieldData fieldData)
@@ -66,10 +76,10 @@ internal class DefaultTemplateModelBuilder
 
         return new MethodTemplateModel(methodData.Name,
             methodData.Parameters.Select(CreateMethodParameterModel).ToArray(),
-            methodData.ReturnType, methodData.DocComment.Value, modifiers);
+            methodData.ReturnType, methodData.DocComment.Value, methodData.ReturnValueDocComment.Value, modifiers);
     }
 
-    private static MethodParameterTemplateModel CreateMethodParameterModel(MethodParameterData parameterData)
+    private static MethodParameterTemplateModel CreateMethodParameterModel(ParameterData parameterData)
     {
         var modifiers = new List<string>();
 

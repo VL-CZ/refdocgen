@@ -39,7 +39,7 @@ internal class AssemblyTypeExtractor
     private Type[] GetDeclaredTypes()
     {
         var assembly = Assembly.LoadFrom(assemblyPath);
-        return assembly.GetTypes();
+        return assembly.GetTypes().Where(t => !t.IsCompilerGenerated()).ToArray();
     }
 
     /// <summary>
@@ -51,15 +51,17 @@ internal class AssemblyTypeExtractor
     {
         var bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
 
+        var constructors = type.GetConstructors(bindingFlags).Where(f => !f.IsCompilerGenerated());
         var fields = type.GetFields(bindingFlags).Where(f => !f.IsCompilerGenerated());
         var properties = type.GetProperties(bindingFlags).Where(f => !f.IsCompilerGenerated());
         var methods = type.GetMethods(bindingFlags).Where(f => !f.IsCompilerGenerated());
 
         // construct *Data objects
+        var ctorModels = constructors.Select(f => new ConstructorData(f)).ToArray();
         var fieldModels = fields.Select(f => new FieldData(f)).ToArray();
         var propertyModels = properties.Select(p => new PropertyData(p)).ToArray();
         var methodModels = methods.Select(m => new MethodData(m)).ToArray();
 
-        return new ClassData(type.FullName ?? type.Name, AccessModifier.Public, fieldModels, propertyModels, methodModels);
+        return new ClassData(type.FullName ?? type.Name, AccessModifier.Public, ctorModels, fieldModels, propertyModels, methodModels);
     }
 }

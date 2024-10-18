@@ -5,10 +5,10 @@ using System.Xml.Linq;
 namespace RefDocGen.MemberData;
 
 /// <summary>
-/// Represents data of a method parameter
+/// Represents data of a method/constructor parameter.
 /// </summary>
-/// <param name="ParameterInfo"><see cref="System.Reflection.ParameterInfo"/> object representing the parameter</param>
-public record MethodParameterData(ParameterInfo ParameterInfo)
+/// <param name="ParameterInfo"><see cref="System.Reflection.ParameterInfo"/> object representing the parameter.</param>
+public record ParameterData(ParameterInfo ParameterInfo)
 {
     /// <summary>
     /// Name of the parameter.
@@ -32,22 +32,22 @@ public record MethodParameterData(ParameterInfo ParameterInfo)
     public bool IsOptional => ParameterInfo.IsOptional;
 
     /// <summary>
-    /// Checks if the parameter is an input parameter
+    /// Checks if the parameter is an input parameter.
     /// </summary>
     public bool IsInput => ParameterInfo.IsIn;
 
     /// <summary>
-    /// Checks if the parameter is an output parameter
+    /// Checks if the parameter is an output parameter.
     /// </summary>
     public bool IsOutput => ParameterInfo.IsOut;
 
     /// <summary>
-    /// Checks if the parameter is passed by reference
+    /// Checks if the parameter is passed by reference.
     /// </summary>
     public bool IsPassedByReference => ParameterInfo.ParameterType.IsByRef;
 
     /// <summary>
-    /// XML doc comment for the parameter
+    /// XML doc comment for the parameter.
     /// </summary>
     public XElement DocComment { get; init; } = DocCommentTools.EmptySummaryNode;
 }

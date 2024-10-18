@@ -58,167 +58,276 @@
 
         <hr />
 
-        <h2 class="display-5">Fields</h2>
-        <div class="row">
-            <div class="col-md-12">
-                @foreach (var field in Model.Fields)
-                {
-                    <div class="border p-2 mb-2">
-                        <h6 class="mb-1">
-                            <samp>
-                                <span class="text-primary">
-                                    @string.Join(' ', field.Modifiers)
-                                </span>
-                                <span class="text-secondary">
-                                    @field.Type
-                                </span>
-                                <span class="text-dark">
-                                    @field.Name
-                                </span>
-                            </samp>
-                        </h6>
-                        <p class="text-muted mb-0">
-                            <i>@field.DocComment</i>
-                        </p>
-                    </div>
-                }
-            </div>
-        </div>
-
-        <h2 class="display-5">Properties</h2>
-        <div class="row">
-            <div class="col-md-12">
-                @foreach (var property in Model.Properties)
-                {
-                    <div class="border p-2 mb-2">
-                        <h6 class="mb-1">
-                            <samp>
-                                <span class="text-primary">
-                                    @string.Join(' ', property.Modifiers)
-                                </span>
-                                <span class="text-secondary">
-                                    @property.Type
-                                </span>
-                                <span class="text-dark">
-                                    @property.Name
-                                </span>
-
-                                <span class="text-secondary">{ </span>
-
-                                @{
-                                    var getterWithModifiers = property.HasGetter ? $"{string.Join(' ', property.GetterModifiers)} get" : string.Empty;
-                                    var setterWithModifiers = property.HasSetter ? $"{string.Join(' ', property.SetterModifiers)} set" : string.Empty;
-                                }
-
-                                @if (property.HasGetter)
-                                {
+        @if (Model.Constructors.Any())
+        {
+            <h2 class="display-5">Constructors</h2>
+            <div class="row">
+                <div class="col-md-12">
+                    @foreach (var constructor in Model.Constructors)
+                    {
+                        <div class="border p-2 mb-2">
+                            <h6 class="mb-1">
+                                <samp>
                                     <span class="text-primary">
-                                        @getterWithModifiers<span class="text-secondary">;</span>
+                                        @string.Join(' ', constructor.Modifiers)
                                     </span>
-                                }
-                                @if (property.HasSetter)
-                                {
-                                    <span class="text-primary">
-                                        @setterWithModifiers<span class="text-secondary">;</span>
-                                    </span>
-                                }
-
-                                <span class="text-secondary">}</span>
-                            </samp>
-                        </h6>
-                        <p class="text-muted mb-0">
-                            <i>@property.DocComment</i>
-                        </p>
-                        <ul class="list-inline mb-0">
-                        </ul>
-                    </div>
-                }
-            </div>
-        </div>
-
-        <h2 class="display-5">Methods</h2>
-        <div class="row">
-            <div class="col-md-12">
-
-                @foreach (var method in Model.Methods)
-                {
-                    <div class="border p-2 mb-2">
-                        <h6 class="mb-1">
-                            <samp>
-                                <span class="text-primary">
-                                    @string.Join(' ', method.Modifiers)
-                                </span>
-                                <span class="text-secondary">
-                                    @method.ReturnType
-                                </span>
-                                <span class="text-secondary">
-                                    @if (method.Parameters.Any())
-                                    {
-                                        var lastParam = method.Parameters.Last();
-
-                                        <span class="text-dark">
-                                            @method.Name<span class="text-secondary">(</span>
-                                        </span>
-
-                                        @foreach (var p in method.Parameters)
+                                    <span class="text-secondary">
+                                        @if (constructor.Parameters.Any())
                                         {
-                                            <span class="text-secondary">
-                                                @p.Type
+                                            var lastParam = constructor.Parameters.Last();
+
+                                            <span class="text-dark">
+                                                @Model.Name<span class="text-secondary">(</span>
                                             </span>
 
-                                            @if (p == lastParam)
+                                            @foreach (var p in constructor.Parameters)
                                             {
-                                                <span class="text-dark">
-                                                    @p.Name<span class="text-secondary">)</span>
+                                                <span class="text-secondary">
+                                                    @p.Type
                                                 </span>
-                                            }
-                                            else
-                                            {
-                                                <span class="text-dark">
-                                                    @($"{p.Name},")
-                                                </span>
+
+                                                @if (p == lastParam)
+                                                {
+                                                    <span class="text-dark">
+                                                        @p.Name<span class="text-secondary">)</span>
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-dark">
+                                                        @($"{p.Name},")
+                                                    </span>
+                                                }
                                             }
                                         }
-                                    }
-                                    else
+                                        else
+                                        {
+                                            <span class="text-dark">@Model.Name<span class="text-secondary">()</span></span>
+                                        }
+                                    </span>
+                                </samp>
+
+                            </h6>
+                            <p class="text-muted mb-0">
+                                <i>@constructor.DocComment</i>
+                            </p>
+
+                            @if (constructor.Parameters.Any())
+                            {
+                                <h3 class="lead my-2">Parameters</h3>
+                                <div class="mx-2">
+                                    @foreach (var parameter in constructor.Parameters)
                                     {
-                                        <span class="text-dark">@method.Name<span class="text-secondary">()</span></span>
+                                        <samp>
+                                            <span class="text-primary">
+                                                @string.Join(' ', parameter.Modifiers)
+                                            </span>
+                                            <span class="text-secondary">
+                                                @parameter.Type
+                                            </span>
+                                            <span class="text-dark">
+                                                @parameter.Name
+                                            </span>
+                                        </samp>
+                                        <p class="text-muted">
+                                            <i>@parameter.DocComment</i>
+                                        </p>
                                     }
-                                </span>
-                            </samp>
-
-                        </h6>
-                        <p class="text-muted mb-0">
-                            <i>@method.DocComment</i>
-                        </p>
-
-                        @if (method.Parameters.Any())
-                        {
-                            <h3 class="lead my-2">Parameters</h3>
-                            <div class="mx-2">
-                                @foreach (var parameter in method.Parameters)
-                                {
-                                    <samp>
-                                        <span class="text-primary">
-                                            @string.Join(' ', parameter.Modifiers)
-                                        </span>
-                                        <span class="text-secondary">
-                                            @parameter.Type
-                                        </span>
-                                        <span class="text-dark">
-                                            @parameter.Name
-                                        </span>
-                                    </samp>
-                                    <p class="text-muted">
-                                        <i>@parameter.DocComment</i>
-                                    </p>
-                                }
-                            </div>
-                        }
-                    </div>
-                }
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
             </div>
-        </div>
+        }
+
+        @if (Model.Fields.Any())
+        {
+            <h2 class="display-5">Fields</h2>
+            <div class="row">
+                <div class="col-md-12">
+                    @foreach (var field in Model.Fields)
+                    {
+                        <div class="border p-2 mb-2">
+                            <h6 class="mb-1">
+                                <samp>
+                                    <span class="text-primary">
+                                        @string.Join(' ', field.Modifiers)
+                                    </span>
+                                    <span class="text-secondary">
+                                        @field.Type
+                                    </span>
+                                    <span class="text-dark">
+                                        @field.Name
+                                    </span>
+                                </samp>
+                            </h6>
+                            <p class="text-muted mb-0">
+                                <i>@field.DocComment</i>
+                            </p>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        @if (Model.Properties.Any())
+        {
+            <h2 class="display-5">Properties</h2>
+            <div class="row">
+                <div class="col-md-12">
+                    @foreach (var property in Model.Properties)
+                    {
+                        <div class="border p-2 mb-2">
+                            <h6 class="mb-1">
+                                <samp>
+                                    <span class="text-primary">
+                                        @string.Join(' ', property.Modifiers)
+                                    </span>
+                                    <span class="text-secondary">
+                                        @property.Type
+                                    </span>
+                                    <span class="text-dark">
+                                        @property.Name
+                                    </span>
+
+                                    <span class="text-secondary">{ </span>
+
+                                    @{
+                                        var getterWithModifiers = property.HasGetter ? $"{string.Join(' ', property.GetterModifiers)} get" : string.Empty;
+                                        var setterWithModifiers = property.HasSetter ? $"{string.Join(' ', property.SetterModifiers)} set" : string.Empty;
+                                    }
+
+                                    @if (property.HasGetter)
+                                    {
+                                        <span class="text-primary">
+                                            @getterWithModifiers<span class="text-secondary">;</span>
+                                        </span>
+                                    }
+                                    @if (property.HasSetter)
+                                    {
+                                        <span class="text-primary">
+                                            @setterWithModifiers<span class="text-secondary">;</span>
+                                        </span>
+                                    }
+
+                                    <span class="text-secondary">}</span>
+                                </samp>
+                            </h6>
+                            <p class="text-muted mb-0">
+                                <i>@property.DocComment</i>
+                            </p>
+                            <ul class="list-inline mb-0">
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        @if (Model.Methods.Any())
+        {
+            <h2 class="display-5">Methods</h2>
+            <div class="row">
+                <div class="col-md-12">
+
+                    @foreach (var method in Model.Methods)
+                    {
+                        <div class="border p-2 mb-2">
+                            <h6 class="mb-1">
+                                <samp>
+                                    <span class="text-primary">
+                                        @string.Join(' ', method.Modifiers)
+                                    </span>
+                                    <span class="text-secondary">
+                                        @method.ReturnType
+                                    </span>
+                                    <span class="text-secondary">
+                                        @if (method.Parameters.Any())
+                                        {
+                                            var lastParam = method.Parameters.Last();
+
+                                            <span class="text-dark">
+                                                @method.Name<span class="text-secondary">(</span>
+                                            </span>
+
+                                            @foreach (var p in method.Parameters)
+                                            {
+                                                <span class="text-primary">
+                                                    @string.Join(' ', p.Modifiers)
+                                                </span>
+                                                <span class="text-secondary">
+                                                    @p.Type
+                                                </span>
+
+                                                @if (p == lastParam)
+                                                {
+                                                    <span class="text-dark">
+                                                        @p.Name<span class="text-secondary">)</span>
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-dark">
+                                                        @($"{p.Name},")
+                                                    </span>
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="text-dark">@method.Name<span class="text-secondary">()</span></span>
+                                        }
+                                    </span>
+                                </samp>
+
+                            </h6>
+                            <p class="text-muted mb-0">
+                                <i>@method.DocComment</i>
+                            </p>
+
+                            @if (method.Parameters.Any())
+                            {
+                                <h3 class="lead my-2">Parameters</h3>
+                                <div class="mx-2">
+                                    @foreach (var parameter in method.Parameters)
+                                    {
+                                        <samp>
+                                            <span class="text-primary">
+                                                @string.Join(' ', parameter.Modifiers)
+                                            </span>
+                                            <span class="text-secondary">
+                                                @parameter.Type
+                                            </span>
+                                            <span class="text-dark">
+                                                @parameter.Name
+                                            </span>
+                                        </samp>
+                                        <p class="text-muted">
+                                            <i>@parameter.DocComment</i>
+                                        </p>
+                                    }
+                                </div>
+                            }
+
+                            <h3 class="lead my-2">Returns</h3>
+                            <div class="mx-2">
+
+                                <samp>
+                                    <span class="text-secondary">
+                                        @method.ReturnType
+                                    </span>
+                                </samp>
+                                <p class="text-muted">
+                                    <i>@method.ReturnsDocComment</i>
+                                </p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
     </div>
 
     <!-- Bootstrap JS -->

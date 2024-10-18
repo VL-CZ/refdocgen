@@ -1,6 +1,6 @@
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.MemberData;
-using RefDocGen.MemberData.Interfaces;
+using RefDocGen.MemberData.Abstract;
 using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction;
@@ -34,7 +34,7 @@ internal class DocCommentExtractor
     }
 
     /// <summary>
-    /// Extrac the XMl documentation comments and add them to the provided type data
+    /// Extrac the XML documentation comments and add them to the provided type data
     /// </summary>
     internal void AddComments()
     {
@@ -43,7 +43,7 @@ internal class DocCommentExtractor
         foreach (var memberNode in memberNodes)
         {
             var memberNameAttr = memberNode.Attribute("name");
-            // var summaryNode = memberNode.Element("summary");
+            var summaryNode = memberNode.Element("summary") ?? DocCommentTools.EmptySummaryNode;
 
             if (memberNameAttr is not null)
             {
@@ -56,7 +56,7 @@ internal class DocCommentExtractor
                 {
                     var templateNode = GetClassByItsName(fullMemberName);
                     int index = Array.IndexOf(classData, templateNode);
-                    classData[index] = templateNode with { DocComment = memberNode };
+                    classData[index] = templateNode with { DocComment = summaryNode };
                 }
                 else // Type member
                 {
@@ -66,12 +66,17 @@ internal class DocCommentExtractor
                     switch (memberIdentifier)
                     {
                         case "F":
-                            AddFieldComment(type, memberName, memberNode);
+                            AddFieldComment(type, memberName, summaryNode);
                             break;
                         case "P":
-                            AddPropertyComment(type, memberName, memberNode);
+                            AddPropertyComment(type, memberName, summaryNode);
                             break;
                         case "M":
+                            if (memberName.StartsWith("#ctor", StringComparison.InvariantCulture)) // TODO: add support for constructors
+                            {
+                                break;
+                            }
+
                             AddMethodComment(type, memberName, memberNode);
                             break;
                         default:
@@ -111,14 +116,17 @@ internal class DocCommentExtractor
     /// </summary>
     /// <param name="type">Type containing the method.</param>
     /// <param name="fieldName">Name of the method.</param>
-    /// <param name="commentNode">Doc comment for the method.</param>
-    private void AddMethodComment(ClassData type, string methodNode, XElement commentNode)
+    /// <param name="memberNode">Doc comment for the method.</param>
+    private void AddMethodComment(ClassData type, string methodNode, XElement memberNode)
     {
+        var summaryNode = memberNode.Element("summary") ?? DocCommentTools.EmptySummaryNode;
+        var returnsNode = memberNode.Element("returns") ?? DocCommentTools.EmptyReturnsNode;
+
         int index = GetTypeMemberIndex(type.Methods, methodNode);
         var method = type.Methods[index];
-        type.Methods[index] = method with { DocComment = commentNode };
+        type.Methods[index] = method with { DocComment = summaryNode, ReturnValueDocComment = returnsNode };
 
-        var paramElements = commentNode.Descendants("param");
+        var paramElements = memberNode.Descendants("param");
         foreach (var paramElement in paramElements)
         {
             var nameAttr = paramElement.Attribute("name");
@@ -128,7 +136,7 @@ internal class DocCommentExtractor
                 var member = method.Parameters.Single(p => p.Name == paramName);
                 int paramIndex = Array.IndexOf(method.Parameters, member);
 
-                method.Parameters[index] = member with { DocComment = paramElement };
+                method.Parameters[paramIndex] = member with { DocComment = paramElement };
             }
         }
     }
