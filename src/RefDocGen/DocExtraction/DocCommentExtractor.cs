@@ -72,7 +72,7 @@ internal class DocCommentExtractor
                             AddPropertyComment(type, memberName, summaryNode);
                             break;
                         case "M":
-                            if (memberName.StartsWith("#ctor")) // TODO: add support for constructors
+                            if (memberName.StartsWith("#ctor", StringComparison.InvariantCulture)) // TODO: add support for constructors
                             {
                                 break;
                             }
