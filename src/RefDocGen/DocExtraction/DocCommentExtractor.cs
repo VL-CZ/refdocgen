@@ -1,6 +1,6 @@
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.MemberData;
-using RefDocGen.MemberData.Interfaces;
+using RefDocGen.MemberData.Abstract;
 using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction;
@@ -34,7 +34,7 @@ internal class DocCommentExtractor
     }
 
     /// <summary>
-    /// Extrac the XMl documentation comments and add them to the provided type data
+    /// Extrac the XML documentation comments and add them to the provided type data
     /// </summary>
     internal void AddComments()
     {
@@ -124,7 +124,7 @@ internal class DocCommentExtractor
 
         int index = GetTypeMemberIndex(type.Methods, methodNode);
         var method = type.Methods[index];
-        type.Methods[index] = method with { DocComment = summaryNode, ReturnsDocComment = returnsNode };
+        type.Methods[index] = method with { DocComment = summaryNode, ReturnValueDocComment = returnsNode };
 
         var paramElements = memberNode.Descendants("param");
         foreach (var paramElement in paramElements)

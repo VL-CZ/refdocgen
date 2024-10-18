@@ -1,5 +1,5 @@
 using RefDocGen.MemberData;
-using RefDocGen.MemberData.Interfaces;
+using RefDocGen.MemberData.Abstract;
 using RefDocGen.TemplateGenerators.Default.TemplateModels;
 using RefDocGen.TemplateGenerators.Default.Tools;
 using RefDocGen.TemplateGenerators.Default.Tools.Extensions;
@@ -76,10 +76,10 @@ internal class DefaultTemplateModelBuilder
 
         return new MethodTemplateModel(methodData.Name,
             methodData.Parameters.Select(CreateMethodParameterModel).ToArray(),
-            methodData.ReturnType, methodData.DocComment.Value, methodData.ReturnsDocComment.Value, modifiers);
+            methodData.ReturnType, methodData.DocComment.Value, methodData.ReturnValueDocComment.Value, modifiers);
     }
 
-    private static MethodParameterTemplateModel CreateMethodParameterModel(MethodParameterData parameterData)
+    private static MethodParameterTemplateModel CreateMethodParameterModel(ParameterData parameterData)
     {
         var modifiers = new List<string>();
 

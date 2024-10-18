@@ -1,6 +1,6 @@
 using System.Xml.Linq;
 
-namespace RefDocGen.MemberData.Interfaces;
+namespace RefDocGen.MemberData.Abstract;
 
 /// <summary>
 /// Represents data of a type member (such as field, property or method).

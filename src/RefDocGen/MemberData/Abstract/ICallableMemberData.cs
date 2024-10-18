@@ -1,7 +1,7 @@
-namespace RefDocGen.MemberData.Interfaces;
+namespace RefDocGen.MemberData.Abstract;
 
 /// <summary>
-/// Represents data of a callable type member (such as a method or property)
+/// Represents data of a callable type member (such as a method, property or a constructor)
 /// </summary>
 public interface ICallableMemberData : IMemberData
 {

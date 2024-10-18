@@ -1,5 +1,5 @@
 using RefDocGen.DocExtraction;
-using RefDocGen.MemberData.Interfaces;
+using RefDocGen.MemberData.Abstract;
 using System.Reflection;
 using System.Xml.Linq;
 
