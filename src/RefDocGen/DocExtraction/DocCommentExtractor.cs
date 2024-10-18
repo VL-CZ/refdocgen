@@ -1,6 +1,6 @@
+using RefDocGen.DocExtraction.Parsers;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.MemberData;
-using RefDocGen.MemberData.Abstract;
 using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction;
@@ -20,6 +20,8 @@ internal class DocCommentExtractor
     /// </summary>
     private readonly XDocument xmlDocument;
 
+    private readonly Dictionary<string, MemberCommentParser> commentParsers;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
     /// </summary>
@@ -28,6 +30,13 @@ internal class DocCommentExtractor
     internal DocCommentExtractor(string docXmlPath, ClassData[] classData)
     {
         this.classData = classData;
+
+        commentParsers = new Dictionary<string, MemberCommentParser>
+        {
+            ["F"] = new FieldCommentParser(),
+            ["P"] = new PropertyCommentParser(),
+            ["M"] = new MethodCommentParser()
+        };
 
         // load the document
         xmlDocument = XDocument.Load(docXmlPath);
@@ -63,80 +72,22 @@ internal class DocCommentExtractor
                     (string typeName, string memberName) = MemberNameExtractor.GetTypeAndMemberName(fullMemberName);
                     var type = GetClassByItsName(typeName);
 
-                    switch (memberIdentifier)
+                    if (commentParsers.TryGetValue(memberIdentifier, out var parser))
                     {
-                        case "F":
-                            AddFieldComment(type, memberName, summaryNode);
-                            break;
-                        case "P":
-                            AddPropertyComment(type, memberName, summaryNode);
-                            break;
-                        case "M":
-                            if (memberName.StartsWith("#ctor", StringComparison.InvariantCulture)) // TODO: add support for constructors
-                            {
-                                break;
-                            }
-
-                            AddMethodComment(type, memberName, memberNode);
-                            break;
-                        default:
-                            throw new ArgumentException($"Unknown member identifier: {memberIdentifier}");
+                        if (memberIdentifier == "M" && memberName.StartsWith("#ctor", StringComparison.InvariantCulture)) // TODO: add support for constructors
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            parser.AddCommentTo(type, memberName, memberNode);
+                        }
+                    }
+                    else
+                    {
+                        // TODO: log unknown member
                     }
                 }
-            }
-        }
-    }
-
-    /// <summary>
-    /// Add doc comment to the given field.
-    /// </summary>
-    /// <param name="type">Type containing the field.</param>
-    /// <param name="fieldName">Name of the field.</param>
-    /// <param name="commentNode">Doc comment for the field.</param>
-    private void AddFieldComment(ClassData type, string fieldName, XElement commentNode)
-    {
-        int index = GetTypeMemberIndex(type.Fields, fieldName);
-        type.Fields[index] = type.Fields[index] with { DocComment = commentNode };
-    }
-
-    /// <summary>
-    /// Add doc comment to the given property.
-    /// </summary>
-    /// <param name="type">Type containing the propety.</param>
-    /// <param name="fieldName">Name of the property.</param>
-    /// <param name="commentNode">Doc comment for the property.</param>
-    private void AddPropertyComment(ClassData type, string propertyName, XElement commentNode)
-    {
-        int index = GetTypeMemberIndex(type.Properties, propertyName);
-        type.Properties[index] = type.Properties[index] with { DocComment = commentNode };
-    }
-
-    /// <summary>
-    /// Add doc comment to the given method.
-    /// </summary>
-    /// <param name="type">Type containing the method.</param>
-    /// <param name="fieldName">Name of the method.</param>
-    /// <param name="memberNode">Doc comment for the method.</param>
-    private void AddMethodComment(ClassData type, string methodNode, XElement memberNode)
-    {
-        var summaryNode = memberNode.Element("summary") ?? DocCommentTools.EmptySummaryNode;
-        var returnsNode = memberNode.Element("returns") ?? DocCommentTools.EmptyReturnsNode;
-
-        int index = GetTypeMemberIndex(type.Methods, methodNode);
-        var method = type.Methods[index];
-        type.Methods[index] = method with { DocComment = summaryNode, ReturnValueDocComment = returnsNode };
-
-        var paramElements = memberNode.Descendants("param");
-        foreach (var paramElement in paramElements)
-        {
-            var nameAttr = paramElement.Attribute("name");
-            if (nameAttr is not null)
-            {
-                string paramName = nameAttr.Value;
-                var member = method.Parameters.Single(p => p.Name == paramName);
-                int paramIndex = Array.IndexOf(method.Parameters, member);
-
-                method.Parameters[paramIndex] = member with { DocComment = paramElement };
             }
         }
     }
@@ -149,17 +100,5 @@ internal class DocCommentExtractor
     private ClassData GetClassByItsName(string className)
     {
         return classData.Single(m => m.Name == className);
-    }
-
-    /// <summary>
-    /// Get index of the given member in the collection.
-    /// </summary>
-    /// <param name="memberCollection">Collection containing member data.</param>
-    /// <param name="memberName">Name of the member to find.</param>
-    /// <returns>Index of the given member in the collection.</returns>
-    private int GetTypeMemberIndex(IMemberData[] memberCollection, string memberName)
-    {
-        var member = memberCollection.Single(m => m.Name == memberName);
-        return Array.IndexOf(memberCollection, member);
     }
 }
