@@ -1,4 +1,4 @@
-using RefDocGen.DocExtraction;
+using RefDocGen.DocExtraction.Tools;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
@@ -6,7 +6,7 @@ using System.Xml.Linq;
 namespace RefDocGen.MemberData.Abstract;
 
 /// <summary>
-/// Represents data of a invokable member (i.e. method or a constructor).
+/// Represents data of an invokable member (i.e. method or a constructor).
 /// </summary>
 public abstract record class InvokableMemberData : ICallableMemberData
 {
@@ -62,7 +62,7 @@ public abstract record class InvokableMemberData : ICallableMemberData
     public bool IsVirtual => methodBase.IsVirtual;
 
     /// <inheritdoc/>
-    public XElement DocComment { get; init; } = DocCommentTools.EmptySummaryNode;
+    public XElement DocComment { get; init; } = EmptyDocCommentNode.Summary;
 
     /// <summary>
     /// Array of method parameters, ordered by their position.

@@ -1,4 +1,4 @@
-using RefDocGen.DocExtraction;
+using RefDocGen.DocExtraction.Tools;
 using System.Xml.Linq;
 
 namespace RefDocGen.MemberData;
@@ -17,5 +17,5 @@ public record ClassData(string Name, AccessModifier AccessModifier, ConstructorD
     /// <summary>
     /// Documentation comment provided to the class.
     /// </summary>
-    public XElement DocComment { get; init; } = DocCommentTools.EmptySummaryNode;
+    public XElement DocComment { get; init; } = EmptyDocCommentNode.Summary;
 }

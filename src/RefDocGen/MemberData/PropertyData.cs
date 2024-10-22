@@ -1,4 +1,4 @@
-using RefDocGen.DocExtraction;
+using RefDocGen.DocExtraction.Tools;
 using RefDocGen.MemberData.Abstract;
 using System.Reflection;
 using System.Xml.Linq;
@@ -114,5 +114,5 @@ public record PropertyData : ICallableMemberData
     /// <summary>
     /// Gets the XMl doc comment for this property.
     /// </summary>
-    public XElement DocComment { get; init; } = DocCommentTools.EmptySummaryNode;
+    public XElement DocComment { get; init; } = EmptyDocCommentNode.Summary;
 }

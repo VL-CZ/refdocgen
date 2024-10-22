@@ -1,4 +1,4 @@
-using RefDocGen.DocExtraction;
+using RefDocGen.DocExtraction.Tools;
 using RefDocGen.MemberData.Abstract;
 using System.Reflection;
 using System.Xml.Linq;
@@ -22,7 +22,7 @@ public record MethodData(MethodInfo MethodInfo) : InvokableMemberData(MethodInfo
     /// <summary>
     /// Documentation comment for the method return value.
     /// </summary>
-    public XElement ReturnValueDocComment { get; init; } = DocCommentTools.EmptyReturnsNode;
+    public XElement ReturnValueDocComment { get; init; } = EmptyDocCommentNode.Returns;
 
     /// <inheritdoc/>
     public override bool OverridesAnotherMember => !MethodInfo.Equals(MethodInfo.GetBaseDefinition());

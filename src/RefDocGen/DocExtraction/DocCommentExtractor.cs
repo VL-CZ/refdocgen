@@ -43,7 +43,7 @@ internal class DocCommentExtractor
     }
 
     /// <summary>
-    /// Extrac the XML documentation comments and add them to the provided type data
+    /// Extract the XML documentation comments and add them to the provided type data.
     /// </summary>
     internal void AddComments()
     {
@@ -51,44 +51,58 @@ internal class DocCommentExtractor
 
         foreach (var memberNode in memberNodes)
         {
-            var memberNameAttr = memberNode.Attribute("name");
-            var summaryNode = memberNode.Element("summary") ?? DocCommentTools.EmptySummaryNode;
+            AddDocComment(memberNode);
+        }
+    }
 
-            if (memberNameAttr is not null)
+    private void AddDocComment(XElement docCommentNode)
+    {
+        if (docCommentNode.TryGetNameAttribute(out var memberNameAttr))
+        {
+            //string summaryText = summaryNode.Value.Trim();
+            string[] splitMemberName = memberNameAttr.Value.Split(':');
+            (string memberIdentifier, string fullMemberName) = (splitMemberName[0], splitMemberName[1]);
+
+            if (memberIdentifier == "T") // Type
             {
-                //string summaryText = summaryNode.Value.Trim();
-                string[] splitMemberName = memberNameAttr.Value.Split(':');
-
-                (string memberIdentifier, string fullMemberName) = (splitMemberName[0], splitMemberName[1]);
-
-                if (memberIdentifier == "T") // Type
-                {
-                    var templateNode = GetClassByItsName(fullMemberName);
-                    int index = Array.IndexOf(classData, templateNode);
-                    classData[index] = templateNode with { DocComment = summaryNode };
-                }
-                else // Type member
-                {
-                    (string typeName, string memberName) = MemberNameExtractor.GetTypeAndMemberName(fullMemberName);
-                    var type = GetClassByItsName(typeName);
-
-                    if (commentParsers.TryGetValue(memberIdentifier, out var parser))
-                    {
-                        if (memberIdentifier == "M" && memberName.StartsWith("#ctor", StringComparison.InvariantCulture)) // TODO: add support for constructors
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            parser.AddCommentTo(type, memberName, memberNode);
-                        }
-                    }
-                    else
-                    {
-                        // TODO: log unknown member
-                    }
-                }
+                AddTypeDocComment(fullMemberName, docCommentNode);
             }
+            else // Type member
+            {
+                AddMemberDocComment(memberIdentifier, fullMemberName, docCommentNode);
+            }
+        }
+    }
+
+    private void AddTypeDocComment(string fullTypeName, XElement docCommentNode)
+    {
+        if (docCommentNode.TryGetSummaryElement(out var summaryNode))
+        {
+            var templateNode = GetClassByItsName(fullTypeName);
+            int index = Array.IndexOf(classData, templateNode);
+            classData[index] = templateNode with { DocComment = summaryNode };
+        }
+    }
+
+    private void AddMemberDocComment(string memberIdentifier, string fullMemberName, XElement docCommentNode)
+    {
+        (string typeName, string memberName) = MemberNameExtractor.GetTypeAndMemberName(fullMemberName);
+        var type = GetClassByItsName(typeName);
+
+        if (commentParsers.TryGetValue(memberIdentifier, out var parser))
+        {
+            if (memberIdentifier == "M" && memberName.StartsWith("#ctor", StringComparison.InvariantCulture)) // TODO: add support for constructors
+            {
+                return;
+            }
+            else
+            {
+                parser.AddCommentTo(type, memberName, docCommentNode);
+            }
+        }
+        else
+        {
+            // TODO: log unknown member
         }
     }
 
