@@ -22,7 +22,7 @@ public record MethodData(MethodInfo MethodInfo) : InvokableMemberData(MethodInfo
     /// <summary>
     /// Documentation comment for the method return value.
     /// </summary>
-    public XElement ReturnValueDocComment { get; init; } = EmptyDocCommentNode.Returns;
+    public XElement ReturnValueDocComment { get; init; } = XmlDocElementFactory.EmptyReturns;
 
     /// <inheritdoc/>
     public override bool OverridesAnotherMember => !MethodInfo.Equals(MethodInfo.GetBaseDefinition());

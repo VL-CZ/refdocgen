@@ -6,6 +6,7 @@ namespace RefDocGen.DocExtraction.Parsers;
 
 internal class PropertyCommentParser : MemberCommentParser
 {
+    /// <inheritdoc/>
     internal override void AddCommentTo(ClassData type, string memberName, XElement docCommentNode)
     {
         if (docCommentNode.TryGetSummaryElement(out var summaryNode))

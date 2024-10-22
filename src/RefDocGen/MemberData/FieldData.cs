@@ -39,5 +39,5 @@ public record FieldData(FieldInfo FieldInfo) : IMemberData
     /// <summary>
     /// Gets the XMl doc comment for this field.
     /// </summary>
-    public XElement DocComment { get; init; } = EmptyDocCommentNode.Summary;
+    public XElement DocComment { get; init; } = XmlDocElementFactory.EmptySummary;
 }

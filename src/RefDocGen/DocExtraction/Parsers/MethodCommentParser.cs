@@ -6,6 +6,7 @@ namespace RefDocGen.DocExtraction.Parsers;
 
 internal class MethodCommentParser : MemberCommentParser
 {
+    /// <inheritdoc/>
     internal override void AddCommentTo(ClassData type, string memberName, XElement memberDocComment)
     {
         int index = GetTypeMemberIndex(type.Methods, memberName);
@@ -23,18 +24,29 @@ internal class MethodCommentParser : MemberCommentParser
         }
 
         var method = type.Methods[index];
+        var paramElements = memberDocComment.Descendants(XmlDocIdentifiers.Param);
 
-        var paramElements = memberDocComment.Descendants(MagicStrings.Param);
+        // add param doc comments
         foreach (var paramElement in paramElements)
         {
-            if (paramElement.TryGetNameAttribute(out var nameAttr))
-            {
-                string paramName = nameAttr.Value;
-                var member = method.Parameters.Single(p => p.Name == paramName);
-                int paramIndex = Array.IndexOf(method.Parameters, member);
+            AddParamComment(method, paramElement);
+        }
+    }
 
-                method.Parameters[paramIndex] = member with { DocComment = paramElement };
-            }
+    /// <summary>
+    /// Add parameter comment to the corresponding method parameter.
+    /// </summary>
+    /// <param name="method">Method containing the parameter.</param>
+    /// <param name="paramDocComment">Doc comment for the parameter. (i.e. 'param' element)</param>
+    private void AddParamComment(MethodData method, XElement paramDocComment)
+    {
+        if (paramDocComment.TryGetNameAttribute(out var nameAttr))
+        {
+            string paramName = nameAttr.Value;
+            var member = method.Parameters.Single(p => p.Name == paramName);
+            int paramIndex = Array.IndexOf(method.Parameters, member);
+
+            method.Parameters[paramIndex] = member with { DocComment = paramDocComment };
         }
     }
 }

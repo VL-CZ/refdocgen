@@ -20,7 +20,7 @@ internal class DocCommentExtractor
     /// </summary>
     private readonly XDocument xmlDocument;
 
-    private readonly Dictionary<string, MemberCommentParser> commentParsers;
+    private readonly Dictionary<string, MemberCommentParser> memberCommentParsers;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
@@ -31,7 +31,7 @@ internal class DocCommentExtractor
     {
         this.classData = classData;
 
-        commentParsers = new Dictionary<string, MemberCommentParser>
+        memberCommentParsers = new Dictionary<string, MemberCommentParser>
         {
             ["F"] = new FieldCommentParser(),
             ["P"] = new PropertyCommentParser(),
@@ -47,7 +47,7 @@ internal class DocCommentExtractor
     /// </summary>
     internal void AddComments()
     {
-        var memberNodes = xmlDocument.Descendants(MagicStrings.Member);
+        var memberNodes = xmlDocument.Descendants(XmlDocIdentifiers.Member);
 
         foreach (var memberNode in memberNodes)
         {
@@ -74,6 +74,7 @@ internal class DocCommentExtractor
         }
     }
 
+
     private void AddTypeDocComment(string fullTypeName, XElement docCommentNode)
     {
         if (docCommentNode.TryGetSummaryElement(out var summaryNode))
@@ -89,7 +90,7 @@ internal class DocCommentExtractor
         (string typeName, string memberName) = MemberNameExtractor.GetTypeAndMemberName(fullMemberName);
         var type = GetClassByItsName(typeName);
 
-        if (commentParsers.TryGetValue(memberIdentifier, out var parser))
+        if (memberCommentParsers.TryGetValue(memberIdentifier, out var parser))
         {
             if (memberIdentifier == "M" && memberName.StartsWith("#ctor", StringComparison.InvariantCulture)) // TODO: add support for constructors
             {

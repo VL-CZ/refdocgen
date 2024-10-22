@@ -62,7 +62,7 @@ public abstract record class InvokableMemberData : ICallableMemberData
     public bool IsVirtual => methodBase.IsVirtual;
 
     /// <inheritdoc/>
-    public XElement DocComment { get; init; } = EmptyDocCommentNode.Summary;
+    public XElement DocComment { get; init; } = XmlDocElementFactory.EmptySummary;
 
     /// <summary>
     /// Array of method parameters, ordered by their position.

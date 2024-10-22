@@ -17,5 +17,5 @@ public record ClassData(string Name, AccessModifier AccessModifier, ConstructorD
     /// <summary>
     /// Documentation comment provided to the class.
     /// </summary>
-    public XElement DocComment { get; init; } = EmptyDocCommentNode.Summary;
+    public XElement DocComment { get; init; } = XmlDocElementFactory.EmptySummary;
 }

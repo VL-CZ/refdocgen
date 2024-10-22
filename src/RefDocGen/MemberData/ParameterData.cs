@@ -16,7 +16,7 @@ public record ParameterData
     public ParameterData(ParameterInfo parameterInfo)
     {
         ParameterInfo = parameterInfo;
-        DocComment = EmptyDocCommentNode.ParamWithName(Name);
+        DocComment = XmlDocElementFactory.EmptyParamWithName(Name);
     }
 
     /// <summary>

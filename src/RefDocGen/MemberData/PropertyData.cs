@@ -114,5 +114,5 @@ public record PropertyData : ICallableMemberData
     /// <summary>
     /// Gets the XMl doc comment for this property.
     /// </summary>
-    public XElement DocComment { get; init; } = EmptyDocCommentNode.Summary;
+    public XElement DocComment { get; init; } = XmlDocElementFactory.EmptySummary;
 }
