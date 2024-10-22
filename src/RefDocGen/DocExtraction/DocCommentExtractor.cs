@@ -47,7 +47,7 @@ internal class DocCommentExtractor
     /// </summary>
     internal void AddComments()
     {
-        var memberNodes = xmlDocument.Descendants("member");
+        var memberNodes = xmlDocument.Descendants(MagicStrings.Member);
 
         foreach (var memberNode in memberNodes)
         {

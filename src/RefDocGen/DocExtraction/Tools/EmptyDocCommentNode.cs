@@ -10,12 +10,12 @@ internal static class EmptyDocCommentNode
     /// <summary>
     /// Get empty 'summary' <see cref="XElement"/>.
     /// </summary>
-    internal static XElement Summary => new("summary");
+    internal static XElement Summary => new(MagicStrings.Summary);
 
     /// <summary>
     /// Get empty 'returns' <see cref="XElement"/>.
     /// </summary>
-    internal static XElement Returns => new("returns");
+    internal static XElement Returns => new(MagicStrings.Returns);
 
     /// <summary>
     /// Get empty 'param' <see cref="XElement"/> with the given 'name' attribute.
@@ -24,6 +24,6 @@ internal static class EmptyDocCommentNode
     /// <returns>'param' <see cref="XElement"/> with the given 'name' attribute.</returns>
     internal static XElement ParamWithName(string name)
     {
-        return new XElement("param", new XAttribute("name", name));
+        return new XElement(MagicStrings.Param, new XAttribute(MagicStrings.Name, name));
     }
 }

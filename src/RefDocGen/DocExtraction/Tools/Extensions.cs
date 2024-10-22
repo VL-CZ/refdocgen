@@ -19,16 +19,16 @@ internal static class XElementExtensions
 
     internal static bool TryGetSummaryElement(this XElement element, [MaybeNullWhen(false)] out XElement summaryNode)
     {
-        return element.TryGetElement("summary", out summaryNode);
+        return element.TryGetElement(MagicStrings.Summary, out summaryNode);
     }
 
     internal static bool TryGetReturnsElement(this XElement element, [MaybeNullWhen(false)] out XElement returnsNode)
     {
-        return element.TryGetElement("returns", out returnsNode);
+        return element.TryGetElement(MagicStrings.Returns, out returnsNode);
     }
 
     internal static bool TryGetNameAttribute(this XElement element, [MaybeNullWhen(false)] out XAttribute attribute)
     {
-        return element.TryGetAttribute("name", out attribute);
+        return element.TryGetAttribute(MagicStrings.Name, out attribute);
     }
 }

@@ -24,7 +24,7 @@ internal class MethodCommentParser : MemberCommentParser
 
         var method = type.Methods[index];
 
-        var paramElements = memberDocComment.Descendants("param");
+        var paramElements = memberDocComment.Descendants(MagicStrings.Param);
         foreach (var paramElement in paramElements)
         {
             if (paramElement.TryGetNameAttribute(out var nameAttr))
