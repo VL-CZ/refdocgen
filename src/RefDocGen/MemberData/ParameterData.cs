@@ -1,4 +1,4 @@
-using RefDocGen.DocExtraction;
+using RefDocGen.DocExtraction.Tools;
 using System.Reflection;
 using System.Xml.Linq;
 
@@ -7,9 +7,23 @@ namespace RefDocGen.MemberData;
 /// <summary>
 /// Represents data of a method/constructor parameter.
 /// </summary>
-/// <param name="ParameterInfo"><see cref="System.Reflection.ParameterInfo"/> object representing the parameter.</param>
-public record ParameterData(ParameterInfo ParameterInfo)
+public record ParameterData
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ParameterData"/> class.
+    /// </summary>
+    /// <param name="parameterInfo"><see cref="System.Reflection.ParameterInfo"/> object representing the parameter.</param>
+    public ParameterData(ParameterInfo parameterInfo)
+    {
+        ParameterInfo = parameterInfo;
+        DocComment = XmlDocElementFactory.EmptyParamWithName(Name);
+    }
+
+    /// <summary>
+    /// <see cref="System.Reflection.ParameterInfo"/> object representing the parameter.
+    /// </summary>
+    public ParameterInfo ParameterInfo { get; }
+
     /// <summary>
     /// Name of the parameter.
     /// </summary>
@@ -49,5 +63,5 @@ public record ParameterData(ParameterInfo ParameterInfo)
     /// <summary>
     /// XML doc comment for the parameter.
     /// </summary>
-    public XElement DocComment { get; init; } = DocCommentTools.EmptySummaryNode;
+    public XElement DocComment { get; init; }
 }

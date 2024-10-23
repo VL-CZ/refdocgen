@@ -1,4 +1,4 @@
-using RefDocGen.DocExtraction;
+using RefDocGen.DocExtraction.Tools;
 using RefDocGen.MemberData.Abstract;
 using System.Reflection;
 using System.Xml.Linq;
@@ -39,5 +39,5 @@ public record FieldData(FieldInfo FieldInfo) : IMemberData
     /// <summary>
     /// Gets the XMl doc comment for this field.
     /// </summary>
-    public XElement DocComment { get; init; } = DocCommentTools.EmptySummaryNode;
+    public XElement DocComment { get; init; } = XmlDocElementFactory.EmptySummary;
 }
