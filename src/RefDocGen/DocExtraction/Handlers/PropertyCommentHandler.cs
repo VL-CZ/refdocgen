@@ -2,9 +2,12 @@ using RefDocGen.DocExtraction.Tools;
 using RefDocGen.MemberData;
 using System.Xml.Linq;
 
-namespace RefDocGen.DocExtraction.Parsers;
+namespace RefDocGen.DocExtraction.Handlers;
 
-internal class PropertyCommentParser : MemberCommentParser
+/// <summary>
+/// Class responsible for handling and adding XML doc comments to the corresponding properties.
+/// </summary>
+internal class PropertyCommentHandler : MemberCommentHandler
 {
     /// <inheritdoc/>
     internal override void AddCommentTo(ClassData type, string memberName, XElement docCommentNode)

@@ -1,4 +1,4 @@
-using RefDocGen.DocExtraction.Parsers;
+using RefDocGen.DocExtraction.Handlers;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.MemberData;
 using System.Xml.Linq;
@@ -11,31 +11,34 @@ namespace RefDocGen.DocExtraction;
 internal class DocCommentExtractor
 {
     /// <summary>
-    /// Array of class data to which the documentation comments will be added.
+    /// Array of type data to which the documentation comments will be added.
     /// </summary>
-    private readonly ClassData[] classData;
+    private readonly ClassData[] typeData;
 
     /// <summary>
-    /// XML document with the doc comments
+    /// XML document containing the documentation comments
     /// </summary>
     private readonly XDocument xmlDocument;
 
-    private readonly Dictionary<string, MemberCommentParser> memberCommentParsers;
+    /// <summary>
+    /// Dictionary of member comment handlers, identified by the member type identifiers
+    /// </summary>
+    private readonly Dictionary<string, MemberCommentHandler> memberCommentHandlers;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
     /// </summary>
     /// <param name="docXmlPath">Path to the XML documentation file.</param>
-    /// <param name="classData">Array of class data to which the documentation comments will be added.</param>
-    internal DocCommentExtractor(string docXmlPath, ClassData[] classData)
+    /// <param name="typeData">Array of class data to which the documentation comments will be added.</param>
+    internal DocCommentExtractor(string docXmlPath, ClassData[] typeData)
     {
-        this.classData = classData;
+        this.typeData = typeData;
 
-        memberCommentParsers = new Dictionary<string, MemberCommentParser>
+        memberCommentHandlers = new Dictionary<string, MemberCommentHandler>
         {
-            ["F"] = new FieldCommentParser(),
-            ["P"] = new PropertyCommentParser(),
-            ["M"] = new MethodCommentParser()
+            ["F"] = new FieldCommentHandler(),
+            ["P"] = new PropertyCommentHandler(),
+            ["M"] = new MethodCommentHandler()
         };
 
         // load the document
@@ -43,7 +46,7 @@ internal class DocCommentExtractor
     }
 
     /// <summary>
-    /// Extract the XML documentation comments and add them to the provided type data.
+    /// Extract the XML documentation comments and add them to the provided types and members.
     /// </summary>
     internal void AddComments()
     {
@@ -55,11 +58,15 @@ internal class DocCommentExtractor
         }
     }
 
+    /// <summary>
+    /// Add doc comment to the corresponding type or a type member.
+    /// </summary>
+    /// <param name="docCommentNode">Doc comment XML node.</param>
     private void AddDocComment(XElement docCommentNode)
     {
+        // try to get type / member name
         if (docCommentNode.TryGetNameAttribute(out var memberNameAttr))
         {
-            //string summaryText = summaryNode.Value.Trim();
             string[] splitMemberName = memberNameAttr.Value.Split(':');
             (string memberIdentifier, string fullMemberName) = (splitMemberName[0], splitMemberName[1]);
 
@@ -72,27 +79,41 @@ internal class DocCommentExtractor
                 AddMemberDocComment(memberIdentifier, fullMemberName, docCommentNode);
             }
         }
+        else
+        {
+            // TODO: log unknown member / type
+        }
     }
 
-
+    /// <summary>
+    /// Add doc comment to the given type.
+    /// </summary>
+    /// <param name="fullTypeName">Fully qualified type name.</param>
+    /// <param name="docCommentNode">Type doc comment XML node.</param>
     private void AddTypeDocComment(string fullTypeName, XElement docCommentNode)
     {
         if (docCommentNode.TryGetSummaryElement(out var summaryNode))
         {
             var templateNode = GetClassByItsName(fullTypeName);
-            int index = Array.IndexOf(classData, templateNode);
-            classData[index] = templateNode with { DocComment = summaryNode };
+            int index = Array.IndexOf(typeData, templateNode);
+            typeData[index] = templateNode with { DocComment = summaryNode };
         }
     }
 
-    private void AddMemberDocComment(string memberIdentifier, string fullMemberName, XElement docCommentNode)
+    /// <summary>
+    /// Add doc comment to the given type member.
+    /// </summary>
+    /// <param name="memberTypeIdentitifer">Identifier of the member type.</param>
+    /// <param name="fullMemberName">Fully qualified name of the member.</param>
+    /// <param name="docCommentNode">Member doc comment XML node.</param>
+    private void AddMemberDocComment(string memberTypeIdentitifer, string fullMemberName, XElement docCommentNode)
     {
         (string typeName, string memberName) = MemberNameExtractor.GetTypeAndMemberName(fullMemberName);
         var type = GetClassByItsName(typeName);
 
-        if (memberCommentParsers.TryGetValue(memberIdentifier, out var parser))
+        if (memberCommentHandlers.TryGetValue(memberTypeIdentitifer, out var parser))
         {
-            if (memberIdentifier == "M" && memberName.StartsWith("#ctor", StringComparison.InvariantCulture)) // TODO: add support for constructors
+            if (memberTypeIdentitifer == "M" && memberName.StartsWith("#ctor", StringComparison.InvariantCulture)) // TODO: add support for constructors
             {
                 return;
             }
@@ -114,6 +135,6 @@ internal class DocCommentExtractor
     /// <returns>Found <see cref="ClassData"/> object.</returns>
     private ClassData GetClassByItsName(string className)
     {
-        return classData.Single(m => m.Name == className);
+        return typeData.Single(m => m.Name == className);
     }
 }
