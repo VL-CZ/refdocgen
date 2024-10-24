@@ -13,6 +13,6 @@ public record ConstructorData(ConstructorInfo ConstructorInfo) : InvokableMember
     public override bool OverridesAnotherMember => false;
 
     /// <inheritdoc/>
-    public override string Name => string.Empty;
+    public override string Name => "#ctor";
 }
 
