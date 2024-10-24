@@ -16,9 +16,9 @@ internal class MethodCommentHandler : InvokableMemberCommentHandler
         return type.Methods;
     }
 
-    protected override void UpdateComment(ClassData type, int memberIndex, XElement docComment)
+    protected override void AddComments(ClassData type, int memberIndex, XElement docComment)
     {
-        base.UpdateComment(type, memberIndex, docComment);
+        base.AddComments(type, memberIndex, docComment);
 
         // add return value doc comment (if present)
         if (docComment.TryGetReturnsElement(out var returnsNode))

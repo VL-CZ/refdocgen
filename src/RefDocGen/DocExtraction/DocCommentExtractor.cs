@@ -118,11 +118,11 @@ internal class DocCommentExtractor
         {
             if (memberTypeIdentitifer == "M" && memberName.StartsWith("#ctor", StringComparison.InvariantCulture)) // TODO: add support for constructors
             {
-                memberCommentHandlers["C"].AddCommentTo(type, memberName, docCommentNode);
+                memberCommentHandlers["C"].AddDocumentation(type, memberName, docCommentNode);
             }
             else
             {
-                parser.AddCommentTo(type, memberName, docCommentNode);
+                parser.AddDocumentation(type, memberName, docCommentNode);
             }
         }
         else
@@ -152,7 +152,7 @@ internal class DocCommentExtractor
             // Get the parameters in the format: System.String, System.Int32, etc.
             string parameterList = string.Join(",",
                     memberData.Parameters.Select(
-                        p => p.ParameterInfo.ParameterType.FullName
+                        p => p.ParameterInfo.ParameterType.FullName?.Replace('&', '@')
                     )
                 );
 

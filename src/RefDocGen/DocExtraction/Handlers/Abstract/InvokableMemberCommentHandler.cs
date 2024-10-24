@@ -9,7 +9,7 @@ internal abstract class InvokableMemberCommentHandler : MemberCommentHandler
 {
     protected abstract InvokableMemberData[] GetMemberCollection(ClassData type);
 
-    protected virtual void UpdateComment(ClassData type, int memberIndex, XElement docComment)
+    protected virtual void AddComments(ClassData type, int memberIndex, XElement docComment)
     {
         var typeMembers = GetMemberCollection(type);
 
@@ -21,12 +21,14 @@ internal abstract class InvokableMemberCommentHandler : MemberCommentHandler
     }
 
     /// <inheritdoc/>
-    internal override void AddCommentTo(ClassData type, string memberName, XElement memberDocComment)
+    internal override void AddDocumentation(ClassData type, string memberName, XElement memberDocComment)
     {
         var typeMembers = GetMemberCollection(type);
 
         var invokable = typeMembers
-            .SingleOrDefault(method => DocCommentExtractor.GetMethodSignatureForXmlDoc(method) == memberName);
+            .SingleOrDefault(method =>
+                DocCommentExtractor.GetMethodSignatureForXmlDoc(method) == memberName
+            );
 
         if (invokable is null)
         {
@@ -35,7 +37,7 @@ internal abstract class InvokableMemberCommentHandler : MemberCommentHandler
 
         int index = Array.IndexOf(typeMembers, invokable);
 
-        UpdateComment(type, index, memberDocComment);
+        AddComments(type, index, memberDocComment);
 
         var paramElements = memberDocComment.Descendants(XmlDocIdentifiers.Param);
 
@@ -47,7 +49,7 @@ internal abstract class InvokableMemberCommentHandler : MemberCommentHandler
     }
 
     /// <summary>
-    /// Add parameter comment to the corresponding member parameter.
+    /// Add parameter doc comment to the corresponding member parameter.
     /// </summary>
     /// <param name="invokable">Method containing the parameter.</param>
     /// <param name="paramDocComment">Doc comment for the parameter. (i.e. 'param' element)</param>

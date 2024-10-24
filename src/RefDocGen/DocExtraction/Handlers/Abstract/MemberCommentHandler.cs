@@ -11,12 +11,12 @@ namespace RefDocGen.DocExtraction.Handlers.Abstract;
 internal abstract class MemberCommentHandler
 {
     /// <summary>
-    /// Add doc comment to the given member.
+    /// Adds documentation comment to the given member.
     /// </summary>
     /// <param name="type">Type containing the member.</param>
     /// <param name="memberName">Name of the member.</param>
     /// <param name="memberDocComment">Doc comment for the member.</param>
-    internal abstract void AddCommentTo(ClassData type, string memberName, XElement memberDocComment);
+    internal abstract void AddDocumentation(ClassData type, string memberName, XElement memberDocComment);
 
     /// <summary>
     /// Get index of the given member in the collection.
