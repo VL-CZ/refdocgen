@@ -2,7 +2,7 @@ using RefDocGen.MemberData;
 using RefDocGen.MemberData.Abstract;
 using System.Xml.Linq;
 
-namespace RefDocGen.DocExtraction.Handlers;
+namespace RefDocGen.DocExtraction.Handlers.Abstract;
 
 
 /// <summary>
