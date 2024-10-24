@@ -11,11 +11,11 @@ namespace RefDocGen.DocExtraction.Handlers;
 internal class FieldCommentHandler : MemberCommentHandler
 {
     /// <inheritdoc/>
-    internal override void AddDocumentation(ClassData type, string memberName, XElement docCommentNode)
+    internal override void AddDocumentation(ClassData type, string memberIdentifier, XElement docCommentNode)
     {
         if (docCommentNode.TryGetSummaryElement(out var summaryNode))
         {
-            int index = GetTypeMemberIndex(type.Fields, memberName);
+            int index = GetTypeMemberIndex(type.Fields, memberIdentifier);
             type.Fields[index] = type.Fields[index] with { DocComment = summaryNode };
         }
     }

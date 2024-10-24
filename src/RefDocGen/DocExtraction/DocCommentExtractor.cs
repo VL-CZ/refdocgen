@@ -19,12 +19,12 @@ internal class DocCommentExtractor
     private readonly ClassData[] typeData;
 
     /// <summary>
-    /// XML document containing the documentation comments
+    /// XML document containing the documentation comments.
     /// </summary>
     private readonly XDocument xmlDocument;
 
     /// <summary>
-    /// Dictionary of member comment handlers, identified by the member type identifiers
+    /// Dictionary of selected member comment handlers, identified by <see cref="MemberTypeId"/> identifiers.
     /// </summary>
     private readonly Dictionary<string, MemberCommentHandler> memberCommentHandlers = new()
     {
@@ -33,6 +33,9 @@ internal class DocCommentExtractor
         [MemberTypeId.Method] = new MethodCommentHandler(),
     };
 
+    /// <summary>
+    /// Handler for constructor doc comments.
+    /// </summary>
     private readonly ConstructorCommentHandler constructorCommentHandler = new();
 
     /// <summary>
@@ -119,19 +122,19 @@ internal class DocCommentExtractor
     /// <param name="docCommentNode">Member doc comment XML node.</param>
     private void AddMemberDocComment(string memberTypeIdentitifer, string fullMemberName, XElement docCommentNode)
     {
-        (string typeName, string memberName) = MemberNameExtractor.GetTypeAndMemberName(fullMemberName);
+        (string typeName, string memberName, string paramsString) = MemberStringExtractor.SplitFullMemberName(fullMemberName);
         var type = GetClassByItsName(typeName);
+        string memberIdentifier = memberName + paramsString;
 
         if (memberCommentHandlers.TryGetValue(memberTypeIdentitifer, out var parser))
         {
-            if (memberTypeIdentitifer == MemberTypeId.Method &&
-                memberName.StartsWith("#ctor", StringComparison.InvariantCulture)) // The comment should be assigned to a constructor.
+            if (memberTypeIdentitifer == MemberTypeId.Method && memberName == ConstructorData.DefaultName) // The method is a constructor.
             {
-                constructorCommentHandler.AddDocumentation(type, memberName, docCommentNode);
+                constructorCommentHandler.AddDocumentation(type, memberIdentifier, docCommentNode);
             }
             else
             {
-                parser.AddDocumentation(type, memberName, docCommentNode);
+                parser.AddDocumentation(type, memberIdentifier, docCommentNode);
             }
         }
         else

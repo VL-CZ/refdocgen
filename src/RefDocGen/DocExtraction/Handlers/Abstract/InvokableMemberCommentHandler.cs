@@ -42,13 +42,13 @@ internal abstract class InvokableMemberCommentHandler : MemberCommentHandler
     }
 
     /// <inheritdoc/>
-    internal override void AddDocumentation(ClassData type, string memberName, XElement memberDocComment)
+    internal override void AddDocumentation(ClassData type, string memberIdentifier, XElement memberDocComment)
     {
         var typeMembers = GetMemberCollection(type);
 
         var invokable = typeMembers
             .SingleOrDefault(method =>
-                method.GetXmlDocSignature() == memberName
+                method.GetXmlDocSignature() == memberIdentifier
             );
 
         if (invokable is null)

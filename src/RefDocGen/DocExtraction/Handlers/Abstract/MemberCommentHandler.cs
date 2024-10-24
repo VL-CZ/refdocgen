@@ -13,21 +13,21 @@ internal abstract class MemberCommentHandler
     /// Adds documentation to the given member.
     /// </summary>
     /// <param name="type">Type containing the member.</param>
-    /// <param name="memberName">Name of the member.</param>
+    /// <param name="memberIdentifier">Identifier of the member. Consists of the member name and parameters string (if the member has them - e.g. a method).</param>
     /// <param name="memberDocComment">Doc comment for the member.</param>
-    internal abstract void AddDocumentation(ClassData type, string memberName, XElement memberDocComment);
+    internal abstract void AddDocumentation(ClassData type, string memberIdentifier, XElement memberDocComment);
 
     /// <summary>
     /// Get index of the given member in the collection.
     /// </summary>
     /// <param name="memberCollection">Collection containing member data.</param>
-    /// <param name="memberName">Name of the member to find.</param>
+    /// <param name="memberIdentifier">Name of the member to find.</param>
     /// <returns>Index of the given member in the collection.</returns>
-    protected int GetTypeMemberIndex(IMemberData[] memberCollection, string memberName)
+    protected int GetTypeMemberIndex(IMemberData[] memberCollection, string memberIdentifier)
     {
         return memberCollection
             .Select((member, index) => (member, index))
-            .Single(item => item.member.Name == memberName)
+            .Single(item => item.member.Name == memberIdentifier)
             .index;
     }
 }
