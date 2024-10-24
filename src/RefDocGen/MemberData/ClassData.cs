@@ -1,4 +1,4 @@
-using RefDocGen.DocExtraction.Tools;
+using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 
 namespace RefDocGen.MemberData;

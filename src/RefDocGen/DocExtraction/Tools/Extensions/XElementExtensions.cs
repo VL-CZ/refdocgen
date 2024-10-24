@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
+using RefDocGen.Tools.Xml;
 
 namespace RefDocGen.DocExtraction.Tools.Extensions;
 

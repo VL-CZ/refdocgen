@@ -3,6 +3,7 @@ using RefDocGen.DocExtraction.Handlers.Abstract;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.DocExtraction.Tools.Extensions;
 using RefDocGen.MemberData;
+using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction;
@@ -33,8 +34,6 @@ internal class DocCommentExtractor
     };
 
     private readonly ConstructorCommentHandler constructorCommentHandler = new();
-
-    private const string typeIdentifier = "T";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
@@ -68,19 +67,27 @@ internal class DocCommentExtractor
     /// <param name="docCommentNode">Doc comment XML node.</param>
     private void AddDocComment(XElement docCommentNode)
     {
+        // identifiers, for further info, see https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/#id-strings
+        const string typeIdentifier = "T";
+        const string namespaceIdentifier = "N";
+
         // try to get type / member name
         if (docCommentNode.TryGetNameAttribute(out var memberNameAttr))
         {
             string[] splitMemberName = memberNameAttr.Value.Split(':');
-            (string memberIdentifier, string fullMemberName) = (splitMemberName[0], splitMemberName[1]);
+            (string objectIdentifier, string fullObjectName) = (splitMemberName[0], splitMemberName[1]);
 
-            if (memberIdentifier == typeIdentifier) // Type
+            if (objectIdentifier == typeIdentifier) // type
             {
-                AddTypeDocComment(fullMemberName, docCommentNode);
+                AddTypeDocComment(fullObjectName, docCommentNode);
+            }
+            else if (typeIdentifier == namespaceIdentifier) // namespace
+            {
+                // do nothing
             }
             else // Type member
             {
-                AddMemberDocComment(memberIdentifier, fullMemberName, docCommentNode);
+                AddMemberDocComment(objectIdentifier, fullObjectName, docCommentNode);
             }
         }
         else
