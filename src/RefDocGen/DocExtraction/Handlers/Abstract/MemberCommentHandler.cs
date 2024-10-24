@@ -4,14 +4,13 @@ using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction.Handlers.Abstract;
 
-
 /// <summary>
 /// Abstract base class responsible for handling and adding XML doc comments to the corresponding type members.
 /// </summary>
 internal abstract class MemberCommentHandler
 {
     /// <summary>
-    /// Adds documentation comment to the given member.
+    /// Adds documentation to the given member.
     /// </summary>
     /// <param name="type">Type containing the member.</param>
     /// <param name="memberName">Name of the member.</param>

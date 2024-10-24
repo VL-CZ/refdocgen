@@ -5,16 +5,36 @@ using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction.Handlers.Abstract;
 
+/// <summary>
+/// Abstract class responsible for handling and adding XML doc comments to the corresponding invokable type members.
+/// <para>
+/// See also <seealso cref="InvokableMemberData"/> class.
+/// </para>
+/// </summary>
 internal abstract class InvokableMemberCommentHandler : MemberCommentHandler
 {
+    /// <summary>
+    /// Get the specified invokable members of the given type.
+    /// </summary>
+    /// <param name="type">The type containing the members.</param>
+    /// <returns>An array containing the type's members.</returns>
     protected abstract InvokableMemberData[] GetMemberCollection(ClassData type);
 
-    protected virtual void AddComments(ClassData type, int memberIndex, XElement docComment)
+    /// <summary>
+    /// Assign doc comments to the given member.
+    /// <para>
+    /// Note: this method doesn't assign any parameter doc comments.
+    /// </para>
+    /// </summary>
+    /// <param name="type">The type containing the member.</param>
+    /// <param name="memberIndex">Index of the member in the type's corresponding member collection.</param>
+    /// <param name="memberDocComment">Doc comment for the member.</param>
+    protected virtual void AssignMemberComments(ClassData type, int memberIndex, XElement memberDocComment)
     {
         var typeMembers = GetMemberCollection(type);
 
         // add summary doc comment (if present)
-        if (docComment.TryGetSummaryElement(out var summaryNode))
+        if (memberDocComment.TryGetSummaryElement(out var summaryNode))
         {
             typeMembers[memberIndex] = typeMembers[memberIndex] with { DocComment = summaryNode };
         }
@@ -37,23 +57,23 @@ internal abstract class InvokableMemberCommentHandler : MemberCommentHandler
 
         int index = Array.IndexOf(typeMembers, invokable);
 
-        AddComments(type, index, memberDocComment);
+        AssignMemberComments(type, index, memberDocComment);
 
         var paramElements = memberDocComment.Descendants(XmlDocIdentifiers.Param);
 
         // add param doc comments
         foreach (var paramElement in paramElements)
         {
-            AddParamComment(invokable, paramElement);
+            AssignParamComment(invokable, paramElement);
         }
     }
 
     /// <summary>
-    /// Add parameter doc comment to the corresponding member parameter.
+    /// Assign parameter doc comment to the corresponding parameter.
     /// </summary>
-    /// <param name="invokable">Method containing the parameter.</param>
+    /// <param name="invokable">Invokable member (e.g. a method) containing the parameter.</param>
     /// <param name="paramDocComment">Doc comment for the parameter. (i.e. 'param' element)</param>
-    private void AddParamComment(InvokableMemberData invokable, XElement paramDocComment)
+    private void AssignParamComment(InvokableMemberData invokable, XElement paramDocComment)
     {
         if (paramDocComment.TryGetNameAttribute(out var nameAttr))
         {

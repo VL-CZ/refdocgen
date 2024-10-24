@@ -11,14 +11,16 @@ namespace RefDocGen.DocExtraction.Handlers;
 /// </summary>
 internal class MethodCommentHandler : InvokableMemberCommentHandler
 {
+    /// <inheritdoc/>
     protected override InvokableMemberData[] GetMemberCollection(ClassData type)
     {
         return type.Methods;
     }
 
-    protected override void AddComments(ClassData type, int memberIndex, XElement docComment)
+    /// <inheritdoc/>
+    protected override void AssignMemberComments(ClassData type, int memberIndex, XElement docComment)
     {
-        base.AddComments(type, memberIndex, docComment);
+        base.AssignMemberComments(type, memberIndex, docComment);
 
         // add return value doc comment (if present)
         if (docComment.TryGetReturnsElement(out var returnsNode))
