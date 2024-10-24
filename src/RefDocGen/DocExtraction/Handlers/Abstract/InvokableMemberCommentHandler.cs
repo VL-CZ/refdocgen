@@ -47,7 +47,7 @@ internal abstract class InvokableMemberCommentHandler : MemberCommentHandler
 
         var invokable = typeMembers
             .SingleOrDefault(method =>
-                DocCommentExtractor.GetMethodSignatureForXmlDoc(method) == memberName
+                method.GetXmlDocSignature() == memberName
             );
 
         if (invokable is null)
