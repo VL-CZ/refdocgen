@@ -1,6 +1,7 @@
 using RefDocGen.DocExtraction.Handlers;
 using RefDocGen.DocExtraction.Handlers.Abstract;
 using RefDocGen.DocExtraction.Tools;
+using RefDocGen.DocExtraction.Tools.Extensions;
 using RefDocGen.MemberData;
 using System.Xml.Linq;
 
@@ -24,7 +25,16 @@ internal class DocCommentExtractor
     /// <summary>
     /// Dictionary of member comment handlers, identified by the member type identifiers
     /// </summary>
-    private readonly Dictionary<string, MemberCommentHandler> memberCommentHandlers;
+    private readonly Dictionary<string, MemberCommentHandler> memberCommentHandlers = new()
+    {
+        [MemberTypeId.Field] = new FieldCommentHandler(),
+        [MemberTypeId.Property] = new PropertyCommentHandler(),
+        [MemberTypeId.Method] = new MethodCommentHandler(),
+    };
+
+    private readonly ConstructorCommentHandler constructorCommentHandler = new();
+
+    private const string typeIdentifier = "T";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
@@ -34,14 +44,6 @@ internal class DocCommentExtractor
     internal DocCommentExtractor(string docXmlPath, ClassData[] typeData)
     {
         this.typeData = typeData;
-
-        memberCommentHandlers = new Dictionary<string, MemberCommentHandler>
-        {
-            ["F"] = new FieldCommentHandler(),
-            ["P"] = new PropertyCommentHandler(),
-            ["M"] = new MethodCommentHandler(),
-            ["C"] = new ConstructorCommentHandler()
-        };
 
         // load the document
         xmlDocument = XDocument.Load(docXmlPath);
@@ -72,7 +74,7 @@ internal class DocCommentExtractor
             string[] splitMemberName = memberNameAttr.Value.Split(':');
             (string memberIdentifier, string fullMemberName) = (splitMemberName[0], splitMemberName[1]);
 
-            if (memberIdentifier == "T") // Type
+            if (memberIdentifier == typeIdentifier) // Type
             {
                 AddTypeDocComment(fullMemberName, docCommentNode);
             }
@@ -115,9 +117,10 @@ internal class DocCommentExtractor
 
         if (memberCommentHandlers.TryGetValue(memberTypeIdentitifer, out var parser))
         {
-            if (memberTypeIdentitifer == "M" && memberName.StartsWith("#ctor", StringComparison.InvariantCulture)) // The comments should be assigned to a constructor.
+            if (memberTypeIdentitifer == MemberTypeId.Method &&
+                memberName.StartsWith("#ctor", StringComparison.InvariantCulture)) // The comment should be assigned to a constructor.
             {
-                memberCommentHandlers["C"].AddDocumentation(type, memberName, docCommentNode);
+                constructorCommentHandler.AddDocumentation(type, memberName, docCommentNode);
             }
             else
             {

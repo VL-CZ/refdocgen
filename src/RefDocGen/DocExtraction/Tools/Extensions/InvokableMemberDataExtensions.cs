@@ -1,6 +1,6 @@
 using RefDocGen.MemberData.Abstract;
 
-namespace RefDocGen.DocExtraction.Tools;
+namespace RefDocGen.DocExtraction.Tools.Extensions;
 
 /// <summary>
 /// Static class containing extension methods for <see cref="InvokableMemberDataExtensions"/> class.

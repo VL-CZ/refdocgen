@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
 
-namespace RefDocGen.DocExtraction.Tools;
+namespace RefDocGen.DocExtraction.Tools.Extensions;
 
 /// <summary>
 /// Class containing extension methods for <see cref="XElement"/> class.
