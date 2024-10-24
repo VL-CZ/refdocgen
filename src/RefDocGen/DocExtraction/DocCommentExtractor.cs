@@ -1,6 +1,9 @@
 using RefDocGen.DocExtraction.Handlers;
+using RefDocGen.DocExtraction.Handlers.Abstract;
 using RefDocGen.DocExtraction.Tools;
+using RefDocGen.DocExtraction.Tools.Extensions;
 using RefDocGen.MemberData;
+using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction;
@@ -16,14 +19,24 @@ internal class DocCommentExtractor
     private readonly ClassData[] typeData;
 
     /// <summary>
-    /// XML document containing the documentation comments
+    /// XML document containing the documentation comments.
     /// </summary>
     private readonly XDocument xmlDocument;
 
     /// <summary>
-    /// Dictionary of member comment handlers, identified by the member type identifiers
+    /// Dictionary of selected member comment handlers, identified by <see cref="MemberTypeId"/> identifiers.
     /// </summary>
-    private readonly Dictionary<string, MemberCommentHandler> memberCommentHandlers;
+    private readonly Dictionary<string, MemberCommentHandler> memberCommentHandlers = new()
+    {
+        [MemberTypeId.Field] = new FieldCommentHandler(),
+        [MemberTypeId.Property] = new PropertyCommentHandler(),
+        [MemberTypeId.Method] = new MethodCommentHandler(),
+    };
+
+    /// <summary>
+    /// Handler for constructor doc comments.
+    /// </summary>
+    private readonly ConstructorCommentHandler constructorCommentHandler = new();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
@@ -33,13 +46,6 @@ internal class DocCommentExtractor
     internal DocCommentExtractor(string docXmlPath, ClassData[] typeData)
     {
         this.typeData = typeData;
-
-        memberCommentHandlers = new Dictionary<string, MemberCommentHandler>
-        {
-            ["F"] = new FieldCommentHandler(),
-            ["P"] = new PropertyCommentHandler(),
-            ["M"] = new MethodCommentHandler()
-        };
 
         // load the document
         xmlDocument = XDocument.Load(docXmlPath);
@@ -64,19 +70,27 @@ internal class DocCommentExtractor
     /// <param name="docCommentNode">Doc comment XML node.</param>
     private void AddDocComment(XElement docCommentNode)
     {
+        // identifiers, for further info, see https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/#id-strings
+        const string typeIdentifier = "T";
+        const string namespaceIdentifier = "N";
+
         // try to get type / member name
         if (docCommentNode.TryGetNameAttribute(out var memberNameAttr))
         {
             string[] splitMemberName = memberNameAttr.Value.Split(':');
-            (string memberIdentifier, string fullMemberName) = (splitMemberName[0], splitMemberName[1]);
+            (string objectIdentifier, string fullObjectName) = (splitMemberName[0], splitMemberName[1]);
 
-            if (memberIdentifier == "T") // Type
+            if (objectIdentifier == typeIdentifier) // type
             {
-                AddTypeDocComment(fullMemberName, docCommentNode);
+                AddTypeDocComment(fullObjectName, docCommentNode);
+            }
+            else if (typeIdentifier == namespaceIdentifier) // namespace
+            {
+                // do nothing
             }
             else // Type member
             {
-                AddMemberDocComment(memberIdentifier, fullMemberName, docCommentNode);
+                AddMemberDocComment(objectIdentifier, fullObjectName, docCommentNode);
             }
         }
         else
@@ -108,18 +122,19 @@ internal class DocCommentExtractor
     /// <param name="docCommentNode">Member doc comment XML node.</param>
     private void AddMemberDocComment(string memberTypeIdentitifer, string fullMemberName, XElement docCommentNode)
     {
-        (string typeName, string memberName) = MemberNameExtractor.GetTypeAndMemberName(fullMemberName);
+        (string typeName, string memberName, string paramsString) = MemberStringExtractor.SplitFullMemberName(fullMemberName);
         var type = GetClassByItsName(typeName);
+        string memberIdentifier = memberName + paramsString;
 
         if (memberCommentHandlers.TryGetValue(memberTypeIdentitifer, out var parser))
         {
-            if (memberTypeIdentitifer == "M" && memberName.StartsWith("#ctor", StringComparison.InvariantCulture)) // TODO: add support for constructors
+            if (memberTypeIdentitifer == MemberTypeId.Method && memberName == ConstructorData.DefaultName) // The method is a constructor.
             {
-                return;
+                constructorCommentHandler.AddDocumentation(type, memberIdentifier, docCommentNode);
             }
             else
             {
-                parser.AddCommentTo(type, memberName, docCommentNode);
+                parser.AddDocumentation(type, memberIdentifier, docCommentNode);
             }
         }
         else

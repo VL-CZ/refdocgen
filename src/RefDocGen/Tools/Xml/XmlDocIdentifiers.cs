@@ -1,4 +1,4 @@
-namespace RefDocGen.DocExtraction.Tools;
+namespace RefDocGen.Tools.Xml;
 
 /// <summary>
 /// Contains constants representing XML element and attribute names found in XML doc comments.

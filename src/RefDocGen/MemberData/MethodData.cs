@@ -1,5 +1,5 @@
-using RefDocGen.DocExtraction.Tools;
 using RefDocGen.MemberData.Abstract;
+using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Xml.Linq;
 
@@ -26,6 +26,4 @@ public record MethodData(MethodInfo MethodInfo) : InvokableMemberData(MethodInfo
 
     /// <inheritdoc/>
     public override bool OverridesAnotherMember => !MethodInfo.Equals(MethodInfo.GetBaseDefinition());
-
-
 }

@@ -1,4 +1,5 @@
-using RefDocGen.DocExtraction.Tools;
+using RefDocGen.DocExtraction.Handlers.Abstract;
+using RefDocGen.DocExtraction.Tools.Extensions;
 using RefDocGen.MemberData;
 using System.Xml.Linq;
 
@@ -10,11 +11,11 @@ namespace RefDocGen.DocExtraction.Handlers;
 internal class PropertyCommentHandler : MemberCommentHandler
 {
     /// <inheritdoc/>
-    internal override void AddCommentTo(ClassData type, string memberName, XElement docCommentNode)
+    internal override void AddDocumentation(ClassData type, string memberIdentifier, XElement docCommentNode)
     {
         if (docCommentNode.TryGetSummaryElement(out var summaryNode))
         {
-            int index = GetTypeMemberIndex(type.Properties, memberName);
+            int index = GetTypeMemberIndex(type.Properties, memberIdentifier);
             type.Properties[index] = type.Properties[index] with { DocComment = summaryNode };
         }
     }

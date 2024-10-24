@@ -1,6 +1,6 @@
 using System.Xml.Linq;
 
-namespace RefDocGen.DocExtraction.Tools;
+namespace RefDocGen.Tools.Xml;
 
 /// <summary>
 /// Factory for the selected XML doc comment nodes.
