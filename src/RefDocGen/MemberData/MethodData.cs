@@ -26,6 +26,4 @@ public record MethodData(MethodInfo MethodInfo) : InvokableMemberData(MethodInfo
 
     /// <inheritdoc/>
     public override bool OverridesAnotherMember => !MethodInfo.Equals(MethodInfo.GetBaseDefinition());
-
-
 }

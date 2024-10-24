@@ -1,6 +1,7 @@
 using RefDocGen.DocExtraction.Handlers;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.MemberData;
+using RefDocGen.MemberData.Abstract;
 using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction;
@@ -38,7 +39,8 @@ internal class DocCommentExtractor
         {
             ["F"] = new FieldCommentHandler(),
             ["P"] = new PropertyCommentHandler(),
-            ["M"] = new MethodCommentHandler()
+            ["M"] = new MethodCommentHandler(),
+            ["C"] = new ConstructorCommentHandler()
         };
 
         // load the document
@@ -115,7 +117,7 @@ internal class DocCommentExtractor
         {
             if (memberTypeIdentitifer == "M" && memberName.StartsWith("#ctor", StringComparison.InvariantCulture)) // TODO: add support for constructors
             {
-                return;
+                memberCommentHandlers["C"].AddCommentTo(type, memberName, docCommentNode);
             }
             else
             {
@@ -136,5 +138,24 @@ internal class DocCommentExtractor
     private ClassData GetClassByItsName(string className)
     {
         return typeData.Single(m => m.Name == className);
+    }
+
+    internal static string GetMethodSignatureForXmlDoc(InvokableMemberData memberData)
+    {
+        if (memberData.Parameters.Length == 0)
+        {
+            return memberData.Name;
+        }
+        else
+        {
+            // Get the parameters in the format: System.String, System.Int32, etc.
+            string parameterList = string.Join(",",
+                    memberData.Parameters.Select(
+                        p => p.ParameterInfo.ParameterType.FullName
+                    )
+                );
+
+            return memberData.Name + "(" + parameterList + ")";
+        }
     }
 }

@@ -32,7 +32,7 @@ public record ParameterData
     /// <summary>
     /// Type of the parameter.
     /// </summary>
-    public string Type => ParameterInfo.ParameterType.Name;
+    public string TypeName => ParameterInfo.ParameterType.Name;
 
     /// <summary>
     /// Checks if the parameter is a <c>params</c> collection.

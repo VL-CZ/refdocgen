@@ -12,7 +12,8 @@ internal class MemberNameExtractor
     /// <returns>Tuple containing type and member name.</returns>
     internal static (string typeName, string memberName) GetTypeAndMemberName(string fullMemberName)
     {
-        string memberNameWithoutParameters = fullMemberName.Split('(')[0]; // this is done because of methods
+        string[] splitValues = fullMemberName.Split('(');
+        string memberNameWithoutParameters = splitValues[0]; // this is done because of methods
 
         // TODO: method overloading, we need to distinguish between the overloaded methods
 
@@ -20,6 +21,14 @@ internal class MemberNameExtractor
         string memberName = nameParts[^1];
         string typeName = string.Join('.', nameParts, 0, nameParts.Length - 1);
 
-        return (typeName, memberName);
+        if (splitValues.Length > 1)
+        {
+            string paramsStrings = string.Join("", splitValues.Skip(1));
+            return (typeName, memberName + "(" + paramsStrings);
+        }
+        else
+        {
+            return (typeName, memberName);
+        }
     }
 }

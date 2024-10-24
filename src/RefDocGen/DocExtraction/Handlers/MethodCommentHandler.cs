@@ -12,7 +12,15 @@ internal class MethodCommentHandler : MemberCommentHandler
     /// <inheritdoc/>
     internal override void AddCommentTo(ClassData type, string memberName, XElement memberDocComment)
     {
-        int index = GetTypeMemberIndex(type.Methods, memberName);
+        var method = type.Methods
+            .SingleOrDefault(method => DocCommentExtractor.GetMethodSignatureForXmlDoc(method) == memberName);
+
+        if (method is null)
+        {
+            return; // TODO: log comment not found   
+        }
+
+        int index = Array.IndexOf(type.Methods, method);
 
         // add summary doc comment (if present)
         if (memberDocComment.TryGetSummaryElement(out var summaryNode))
@@ -26,7 +34,6 @@ internal class MethodCommentHandler : MemberCommentHandler
             type.Methods[index] = type.Methods[index] with { ReturnValueDocComment = returnsNode };
         }
 
-        var method = type.Methods[index];
         var paramElements = memberDocComment.Descendants(XmlDocIdentifiers.Param);
 
         // add param doc comments

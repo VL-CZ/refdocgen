@@ -104,7 +104,7 @@ internal class DefaultTemplateModelBuilder
             modifiers.Add("optional"); // TODO: add default value
         }
 
-        return new MethodParameterTemplateModel(parameterData.Name, parameterData.Type, parameterData.DocComment.Value, modifiers);
+        return new MethodParameterTemplateModel(parameterData.Name, parameterData.TypeName, parameterData.DocComment.Value, modifiers);
     }
 
     private List<string> GetCallableMemberModifiers(ICallableMemberData memberData)
