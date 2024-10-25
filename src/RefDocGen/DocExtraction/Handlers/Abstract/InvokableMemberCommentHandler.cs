@@ -29,7 +29,7 @@ internal abstract class InvokableMemberCommentHandler : IMemberCommentHandler
     /// </para>
     /// </summary>
     /// <param name="type">The type containing the member.</param>
-    /// <param name="memberId">Index of the member in the type's corresponding member collection.</param>
+    /// <param name="memberId">Id of the member in corresponding member collection.</param>
     /// <param name="memberDocComment">Doc comment for the member.</param>
     protected abstract void AssignMemberComments(ClassData type, string memberId, XElement memberDocComment);
 
@@ -58,17 +58,23 @@ internal abstract class InvokableMemberCommentHandler : IMemberCommentHandler
     /// <summary>
     /// Assign parameter doc comment to the corresponding parameter.
     /// </summary>
-    /// <param name="invokable">Invokable member (e.g. a method) containing the parameter.</param>
+    /// <param name="member">Invokable member (e.g. a method) containing the parameter.</param>
     /// <param name="paramDocComment">Doc comment for the parameter. (i.e. 'param' element)</param>
-    private void AssignParamComment(InvokableMemberData invokable, XElement paramDocComment)
+    private void AssignParamComment(InvokableMemberData member, XElement paramDocComment)
     {
         if (paramDocComment.TryGetNameAttribute(out var nameAttr))
         {
             string paramName = nameAttr.Value;
-            var parameter = invokable.Parameters.Single(p => p.Name == paramName);
-            int paramIndex = Array.IndexOf(invokable.Parameters, parameter);
+            var parameter = member.Parameters.FirstOrDefault(p => p.Name == paramName);
 
-            invokable.Parameters[paramIndex] = parameter with { DocComment = paramDocComment };
+            if (parameter is null)
+            {
+                // TODO: log parameter not found
+                return;
+            }
+
+            int paramIndex = Array.IndexOf(member.Parameters, parameter);
+            member.Parameters[paramIndex] = parameter with { DocComment = paramDocComment };
         }
     }
 }

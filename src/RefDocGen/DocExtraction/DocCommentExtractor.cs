@@ -117,24 +117,24 @@ internal class DocCommentExtractor
     /// <summary>
     /// Add doc comment to the given type member.
     /// </summary>
-    /// <param name="memberTypeIdentitifer">Identifier of the member type.</param>
+    /// <param name="memberTypeId">Identifier of the member type.</param>
     /// <param name="fullMemberName">Fully qualified name of the member.</param>
     /// <param name="docCommentNode">Member doc comment XML node.</param>
-    private void AddMemberDocComment(string memberTypeIdentitifer, string fullMemberName, XElement docCommentNode)
+    private void AddMemberDocComment(string memberTypeId, string fullMemberName, XElement docCommentNode)
     {
         (string typeName, string memberName, string paramsString) = MemberStringExtractor.SplitFullMemberName(fullMemberName);
         var type = GetClassByItsName(typeName);
-        string memberIdentifier = memberName + paramsString;
+        string memberId = memberName + paramsString;
 
-        if (memberCommentHandlers.TryGetValue(memberTypeIdentitifer, out var parser))
+        if (memberCommentHandlers.TryGetValue(memberTypeId, out var parser))
         {
-            if (memberTypeIdentitifer == MemberTypeId.Method && memberName == ConstructorData.DefaultName) // The method is a constructor.
+            if (memberTypeId == MemberTypeId.Method && memberName == ConstructorData.DefaultName) // The method is a constructor.
             {
-                constructorCommentHandler.AddDocumentation(type, memberIdentifier, docCommentNode);
+                constructorCommentHandler.AddDocumentation(type, memberId, docCommentNode);
             }
             else
             {
-                parser.AddDocumentation(type, memberIdentifier, docCommentNode);
+                parser.AddDocumentation(type, memberId, docCommentNode);
             }
         }
         else
