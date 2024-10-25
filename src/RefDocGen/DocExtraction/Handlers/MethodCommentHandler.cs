@@ -12,20 +12,29 @@ namespace RefDocGen.DocExtraction.Handlers;
 internal class MethodCommentHandler : InvokableMemberCommentHandler
 {
     /// <inheritdoc/>
-    protected override InvokableMemberData[] GetMemberCollection(ClassData type)
+    protected override InvokableMemberData? GetTypeMember(ClassData type, string memberId)
     {
-        return type.Methods;
+        return type.Methods.GetValueOrDefault(memberId);
     }
 
     /// <inheritdoc/>
-    protected override void AssignMemberComments(ClassData type, int memberIndex, XElement docComment)
+    protected override void AssignMemberComments(ClassData type, string memberId, XElement memberDocComment)
     {
-        base.AssignMemberComments(type, memberIndex, docComment);
-
-        // add return value doc comment (if present)
-        if (docComment.TryGetReturnsElement(out var returnsNode))
+#pragma warning disable CA1854
+        if (type.Methods.ContainsKey(memberId))
         {
-            type.Methods[memberIndex] = type.Methods[memberIndex] with { ReturnValueDocComment = returnsNode };
+            // add summary doc comment (if present)
+            if (memberDocComment.TryGetSummaryElement(out var summaryNode))
+            {
+                type.Methods[memberId] = type.Methods[memberId] with { DocComment = summaryNode };
+            }
+
+            // add return value doc comment (if present)
+            if (memberDocComment.TryGetReturnsElement(out var returnsNode))
+            {
+                type.Methods[memberId] = type.Methods[memberId] with { ReturnValueDocComment = returnsNode };
+            }
         }
+#pragma warning restore CA1854
     }
 }

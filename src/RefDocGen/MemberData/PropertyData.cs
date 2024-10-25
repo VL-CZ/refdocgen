@@ -39,6 +39,9 @@ public record PropertyData : ICallableMemberData
     public MethodData? Setter { get; }
 
     /// <inheritdoc/>
+    public string Id => Name;
+
+    /// <inheritdoc/>
     public string Name => PropertyInfo.Name;
 
     /// <summary>
@@ -115,4 +118,5 @@ public record PropertyData : ICallableMemberData
     /// Gets the XMl doc comment for this property.
     /// </summary>
     public XElement DocComment { get; init; } = XmlDocElementFactory.EmptySummary;
+
 }

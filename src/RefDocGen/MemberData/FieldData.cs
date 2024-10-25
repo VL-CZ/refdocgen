@@ -12,6 +12,9 @@ namespace RefDocGen.MemberData;
 public record FieldData(FieldInfo FieldInfo) : IMemberData
 {
     /// <inheritdoc/>
+    public string Id => Name;
+
+    /// <inheritdoc/>
     public string Name => FieldInfo.Name;
 
     /// <summary>

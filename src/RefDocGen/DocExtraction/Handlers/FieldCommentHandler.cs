@@ -8,15 +8,17 @@ namespace RefDocGen.DocExtraction.Handlers;
 /// <summary>
 /// Class responsible for handling and adding XML doc comments to the corresponding fields.
 /// </summary>
-internal class FieldCommentHandler : MemberCommentHandler
+internal class FieldCommentHandler : IMemberCommentHandler
 {
     /// <inheritdoc/>
-    internal override void AddDocumentation(ClassData type, string memberIdentifier, XElement docCommentNode)
+    public void AddDocumentation(ClassData type, string memberIdentifier, XElement docCommentNode)
     {
         if (docCommentNode.TryGetSummaryElement(out var summaryNode))
         {
-            int index = GetTypeMemberIndex(type.Fields, memberIdentifier);
-            type.Fields[index] = type.Fields[index] with { DocComment = summaryNode };
+            if (type.Fields.TryGetValue(memberIdentifier, out var field))
+            {
+                type.Fields[memberIdentifier] = field with { DocComment = summaryNode };
+            }
         }
     }
 }

@@ -8,11 +8,12 @@ namespace RefDocGen.MemberData;
 /// </summary>
 /// <param name="Name">Name of the class.</param>
 /// <param name="AccessModifier">Access modifier of the class.</param>
-/// <param name="Constructors">Array of constructors declared in the class.</param>
-/// <param name="Fields">Array of fields declared in the class.</param>
-/// <param name="Properties">Array of properties declared in the class.</param>
-/// <param name="Methods">Array of methods declared in the class.</param>
-public record ClassData(string Name, AccessModifier AccessModifier, ConstructorData[] Constructors, FieldData[] Fields, PropertyData[] Properties, MethodData[] Methods)
+/// <param name="Constructors">Dictionary of constructors declared in the class; keys are the corresponding constructor IDs</param>
+/// <param name="Fields">Dictionary of fields declared in the class; keys are the corresponding field IDs.</param>
+/// <param name="Properties">Dictionary of properties declared in the class; keys are the corresponding property IDs.</param>
+/// <param name="Methods">Dictionary of methods declared in the class; keys are the corresponding method IDs.</param>
+public record ClassData(string Name, AccessModifier AccessModifier, Dictionary<string, ConstructorData> Constructors,
+    Dictionary<string, FieldData> Fields, Dictionary<string, PropertyData> Properties, Dictionary<string, MethodData> Methods)
 {
     /// <summary>
     /// Documentation comment provided to the class.

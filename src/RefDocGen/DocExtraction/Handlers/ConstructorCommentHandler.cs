@@ -1,6 +1,8 @@
 using RefDocGen.DocExtraction.Handlers.Abstract;
+using RefDocGen.DocExtraction.Tools.Extensions;
 using RefDocGen.MemberData;
 using RefDocGen.MemberData.Abstract;
+using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction.Handlers;
 
@@ -10,8 +12,21 @@ namespace RefDocGen.DocExtraction.Handlers;
 internal class ConstructorCommentHandler : InvokableMemberCommentHandler
 {
     /// <inheritdoc/>
-    protected override InvokableMemberData[] GetMemberCollection(ClassData type)
+    protected override void AssignMemberComments(ClassData type, string memberId, XElement memberDocComment)
     {
-        return type.Constructors;
+        // add summary doc comment (if present)
+        if (memberDocComment.TryGetSummaryElement(out var summaryNode))
+        {
+            if (type.Constructors.TryGetValue(memberId, out var ctor))
+            {
+                type.Constructors[memberId] = ctor with { DocComment = summaryNode };
+            }
+        }
+    }
+
+    /// <inheritdoc/>
+    protected override InvokableMemberData? GetTypeMember(ClassData type, string memberId)
+    {
+        return type.Constructors.GetValueOrDefault(memberId);
     }
 }

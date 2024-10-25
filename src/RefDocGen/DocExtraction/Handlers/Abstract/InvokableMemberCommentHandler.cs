@@ -12,14 +12,15 @@ namespace RefDocGen.DocExtraction.Handlers.Abstract;
 /// See also <seealso cref="InvokableMemberData"/> class.
 /// </para>
 /// </summary>
-internal abstract class InvokableMemberCommentHandler : MemberCommentHandler
+internal abstract class InvokableMemberCommentHandler : IMemberCommentHandler
 {
     /// <summary>
-    /// Get the specified invokable members of the given type.
+    /// Get the member with the given <paramref name="memberId"/> contained in the given type.
     /// </summary>
-    /// <param name="type">The type containing the members.</param>
-    /// <returns>An array containing the type's members.</returns>
-    protected abstract InvokableMemberData[] GetMemberCollection(ClassData type);
+    /// <param name="type">The type containing the member.</param>
+    /// <param name="memberId">Id of the member to search.</param>
+    /// <returns>The member with the given Id contained in the given type. If such member doesn't exist, null is returned</returns>
+    protected abstract InvokableMemberData? GetTypeMember(ClassData type, string memberId);
 
     /// <summary>
     /// Assign doc comments to the given member.
@@ -28,61 +29,52 @@ internal abstract class InvokableMemberCommentHandler : MemberCommentHandler
     /// </para>
     /// </summary>
     /// <param name="type">The type containing the member.</param>
-    /// <param name="memberIndex">Index of the member in the type's corresponding member collection.</param>
+    /// <param name="memberId">Id of the member in corresponding member collection.</param>
     /// <param name="memberDocComment">Doc comment for the member.</param>
-    protected virtual void AssignMemberComments(ClassData type, int memberIndex, XElement memberDocComment)
-    {
-        var typeMembers = GetMemberCollection(type);
-
-        // add summary doc comment (if present)
-        if (memberDocComment.TryGetSummaryElement(out var summaryNode))
-        {
-            typeMembers[memberIndex] = typeMembers[memberIndex] with { DocComment = summaryNode };
-        }
-    }
+    protected abstract void AssignMemberComments(ClassData type, string memberId, XElement memberDocComment);
 
     /// <inheritdoc/>
-    internal override void AddDocumentation(ClassData type, string memberIdentifier, XElement memberDocComment)
+    public void AddDocumentation(ClassData type, string memberId, XElement memberDocComment)
     {
-        var typeMembers = GetMemberCollection(type);
+        var member = GetTypeMember(type, memberId);
 
-        var invokable = typeMembers
-            .SingleOrDefault(method =>
-                method.GetXmlDocSignature() == memberIdentifier
-            );
-
-        if (invokable is null)
+        if (member is null)
         {
             return; // TODO: log comment not found   
         }
 
-        int index = Array.IndexOf(typeMembers, invokable);
-
-        AssignMemberComments(type, index, memberDocComment);
+        // assign member (non-param) doc comments
+        AssignMemberComments(type, memberId, memberDocComment);
 
         var paramElements = memberDocComment.Descendants(XmlDocIdentifiers.Param);
 
-        // add param doc comments
+        // assign param doc comments
         foreach (var paramElement in paramElements)
         {
-            AssignParamComment(invokable, paramElement);
+            AssignParamComment(member, paramElement);
         }
     }
 
     /// <summary>
     /// Assign parameter doc comment to the corresponding parameter.
     /// </summary>
-    /// <param name="invokable">Invokable member (e.g. a method) containing the parameter.</param>
+    /// <param name="member">Invokable member (e.g. a method) containing the parameter.</param>
     /// <param name="paramDocComment">Doc comment for the parameter. (i.e. 'param' element)</param>
-    private void AssignParamComment(InvokableMemberData invokable, XElement paramDocComment)
+    private void AssignParamComment(InvokableMemberData member, XElement paramDocComment)
     {
         if (paramDocComment.TryGetNameAttribute(out var nameAttr))
         {
             string paramName = nameAttr.Value;
-            var parameter = invokable.Parameters.Single(p => p.Name == paramName);
-            int paramIndex = Array.IndexOf(invokable.Parameters, parameter);
+            var parameter = member.Parameters.FirstOrDefault(p => p.Name == paramName);
 
-            invokable.Parameters[paramIndex] = parameter with { DocComment = paramDocComment };
+            if (parameter is null)
+            {
+                // TODO: log parameter not found
+                return;
+            }
+
+            int paramIndex = Array.IndexOf(member.Parameters, parameter);
+            member.Parameters[paramIndex] = parameter with { DocComment = paramDocComment };
         }
     }
 }

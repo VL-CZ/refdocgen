@@ -57,10 +57,10 @@ internal class AssemblyTypeExtractor
         var methods = type.GetMethods(bindingFlags).Where(f => !f.IsCompilerGenerated());
 
         // construct *Data objects
-        var ctorModels = constructors.Select(f => new ConstructorData(f)).ToArray();
-        var fieldModels = fields.Select(f => new FieldData(f)).ToArray();
-        var propertyModels = properties.Select(p => new PropertyData(p)).ToArray();
-        var methodModels = methods.Select(m => new MethodData(m)).ToArray();
+        var ctorModels = constructors.Select(c => new ConstructorData(c)).ToDictionary(c => c.Id);
+        var fieldModels = fields.Select(f => new FieldData(f)).ToDictionary(f => f.Id);
+        var propertyModels = properties.Select(p => new PropertyData(p)).ToDictionary(p => p.Id);
+        var methodModels = methods.Select(m => new MethodData(m)).ToDictionary(m => m.Id);
 
         return new ClassData(type.FullName ?? type.Name, AccessModifier.Public, ctorModels, fieldModels, propertyModels, methodModels);
     }
