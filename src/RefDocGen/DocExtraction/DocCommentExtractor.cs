@@ -26,7 +26,7 @@ internal class DocCommentExtractor
     /// <summary>
     /// Dictionary of selected member comment handlers, identified by <see cref="MemberTypeId"/> identifiers.
     /// </summary>
-    private readonly Dictionary<string, MemberCommentHandler> memberCommentHandlers = new()
+    private readonly Dictionary<string, IMemberCommentHandler> memberCommentHandlers = new()
     {
         [MemberTypeId.Field] = new FieldCommentHandler(),
         [MemberTypeId.Property] = new PropertyCommentHandler(),

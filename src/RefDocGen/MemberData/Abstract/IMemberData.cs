@@ -8,6 +8,16 @@ namespace RefDocGen.MemberData.Abstract;
 public interface IMemberData
 {
     /// <summary>
+    /// Identifier of the member in the same format as in the XML documentation comments file.
+    ///
+    /// TODO: describe more
+    /// <para>
+    /// The format is described here: <seealso href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/#id-strings"/>
+    /// </para>
+    /// </summary>
+    string Id { get; }
+
+    /// <summary>
     /// Name of the member.
     /// </summary>
     string Name { get; }

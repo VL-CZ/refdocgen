@@ -10,10 +10,10 @@ internal class DefaultTemplateModelBuilder
 {
     public ClassTemplateModel CreateClassTemplateModel(ClassData classData)
     {
-        var constructors = classData.Constructors.Select(CreateConstructorTemplateModel).ToArray();
-        var fields = classData.Fields.Select(CreateFieldTemplateModel).ToArray();
-        var properties = classData.Properties.Select(CreatePropertyTemplateModel).ToArray();
-        var methods = classData.Methods.Select(CreateMethodTemplateModel).ToArray();
+        var constructors = classData.Constructors.Values.Select(CreateConstructorTemplateModel).ToArray();
+        var fields = classData.Fields.Values.Select(CreateFieldTemplateModel).ToArray();
+        var properties = classData.Properties.Values.Select(CreatePropertyTemplateModel).ToArray();
+        var methods = classData.Methods.Values.Select(CreateMethodTemplateModel).ToArray();
 
         return new ClassTemplateModel(classData.Name, classData.DocComment.Value, [classData.AccessModifier.GetKeywordString()], constructors, fields, properties, methods);
     }

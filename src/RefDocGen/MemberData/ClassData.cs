@@ -12,7 +12,8 @@ namespace RefDocGen.MemberData;
 /// <param name="Fields">Array of fields declared in the class.</param>
 /// <param name="Properties">Array of properties declared in the class.</param>
 /// <param name="Methods">Array of methods declared in the class.</param>
-public record ClassData(string Name, AccessModifier AccessModifier, ConstructorData[] Constructors, FieldData[] Fields, PropertyData[] Properties, MethodData[] Methods)
+public record ClassData(string Name, AccessModifier AccessModifier, Dictionary<string, ConstructorData> Constructors,
+    Dictionary<string, FieldData> Fields, Dictionary<string, PropertyData> Properties, Dictionary<string, MethodData> Methods)
 {
     /// <summary>
     /// Documentation comment provided to the class.

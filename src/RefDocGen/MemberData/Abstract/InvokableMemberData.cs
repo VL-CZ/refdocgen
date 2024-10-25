@@ -31,6 +31,28 @@ public abstract record class InvokableMemberData : ICallableMemberData
     }
 
     /// <inheritdoc/>
+    public string Id
+    {
+        get
+        {
+            if (Parameters.Length == 0) // no params -> return the Name
+            {
+                return Name;
+            }
+            else
+            {
+                // Get the parameters in the format: System.String, System.Int32, etc.
+                var parameterNames = Parameters.Select(
+                            p => p.ParameterInfo.ParameterType.FullName
+                                ?.Replace('&', '@') // denotes params passed by reference
+                        );
+
+                return Name + "(" + string.Join(",", parameterNames) + ")";
+            }
+        }
+    }
+
+    /// <inheritdoc/>
     public abstract string Name { get; }
 
     /// <inheritdoc/>
