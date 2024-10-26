@@ -1,15 +1,14 @@
-using RefDocGen.MemberData.Abstract;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Xml.Linq;
 
-namespace RefDocGen.MemberData;
+namespace RefDocGen.MemberData.Implementation;
 
 /// <summary>
 /// Represents data of a field.
 /// </summary>
 /// <param name="FieldInfo"><see cref="System.Reflection.FieldInfo"/> object representing the field.</param>
-public record FieldData(FieldInfo FieldInfo) : IMemberData
+internal record FieldData(FieldInfo FieldInfo) : IFieldData
 {
     /// <inheritdoc/>
     public string Id => Name;
@@ -17,9 +16,7 @@ public record FieldData(FieldInfo FieldInfo) : IMemberData
     /// <inheritdoc/>
     public string Name => FieldInfo.Name;
 
-    /// <summary>
-    /// Type of the field.
-    /// </summary>
+    /// <inheritdoc/>
     public string Type => FieldInfo.FieldType.Name;
 
     /// <inheritdoc/>
@@ -29,18 +26,12 @@ public record FieldData(FieldInfo FieldInfo) : IMemberData
     /// <inheritdoc/>
     public bool IsStatic => FieldInfo.IsStatic;
 
-    /// <summary>
-    /// Checks if the field is readonly.
-    /// </summary>
+    /// <inheritdoc/>
     public bool IsReadonly => FieldInfo.IsInitOnly;
 
-    /// <summary>
-    /// Checks if the field is constant.
-    /// </summary>
+    /// <inheritdoc/>
     public bool IsConstant => FieldInfo.IsLiteral;
 
-    /// <summary>
-    /// Gets the XMl doc comment for this field.
-    /// </summary>
-    public XElement DocComment { get; init; } = XmlDocElementFactory.EmptySummary;
+    /// <inheritdoc/>
+    public XElement DocComment { get; internal set; } = XmlDocElementFactory.EmptySummary;
 }

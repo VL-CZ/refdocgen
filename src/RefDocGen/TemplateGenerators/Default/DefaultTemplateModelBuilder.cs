@@ -8,17 +8,18 @@ namespace RefDocGen.TemplateGenerators.Default;
 
 internal class DefaultTemplateModelBuilder
 {
-    public ClassTemplateModel CreateClassTemplateModel(ClassData classData)
+    public ClassTemplateModel CreateClassTemplateModel(IClassData classData)
     {
-        var constructors = classData.Constructors.Values.Select(CreateConstructorTemplateModel).ToArray();
-        var fields = classData.Fields.Values.Select(CreateFieldTemplateModel).ToArray();
-        var properties = classData.Properties.Values.Select(CreatePropertyTemplateModel).ToArray();
-        var methods = classData.Methods.Values.Select(CreateMethodTemplateModel).ToArray();
+        var constructors = classData.Constructors.Select(CreateConstructorTemplateModel).ToArray();
+        var fields = classData.Fields.Select(CreateFieldTemplateModel).ToArray();
+        var properties = classData.Properties.Select(CreatePropertyTemplateModel).ToArray();
+        var methods = classData.Methods.Select(CreateMethodTemplateModel).ToArray();
 
-        return new ClassTemplateModel(classData.Name, classData.DocComment.Value, [classData.AccessModifier.GetKeywordString()], constructors, fields, properties, methods);
+        return new ClassTemplateModel(classData.Name, classData.DocComment.Value, [classData.AccessModifier.GetKeywordString()],
+            constructors, fields, properties, methods);
     }
 
-    private ConstructorTemplateModel CreateConstructorTemplateModel(ConstructorData constructorData)
+    private ConstructorTemplateModel CreateConstructorTemplateModel(IConstructorData constructorData)
     {
         List<string> modifiers = [constructorData.AccessModifier.GetKeywordString()];
 
@@ -27,7 +28,7 @@ internal class DefaultTemplateModelBuilder
         return new ConstructorTemplateModel(constructorData.Parameters.Select(CreateMethodParameterModel).ToArray(), constructorData.DocComment.Value, modifiers);
     }
 
-    private FieldTemplateModel CreateFieldTemplateModel(FieldData fieldData)
+    private FieldTemplateModel CreateFieldTemplateModel(IFieldData fieldData)
     {
         List<string> modifiers = [fieldData.AccessModifier.GetKeywordString()];
 
@@ -47,7 +48,7 @@ internal class DefaultTemplateModelBuilder
         return new FieldTemplateModel(fieldData.Name, fieldData.Type, fieldData.DocComment.Value, modifiers);
     }
 
-    private PropertyTemplateModel CreatePropertyTemplateModel(PropertyData propertyData)
+    private PropertyTemplateModel CreatePropertyTemplateModel(IPropertyData propertyData)
     {
         List<string> modifiers = [propertyData.AccessModifier.GetKeywordString()];
 
@@ -68,7 +69,7 @@ internal class DefaultTemplateModelBuilder
         return new PropertyTemplateModel(propertyData.Name, propertyData.Type, propertyData.DocComment.Value, modifiers, propertyData.Getter is not null, propertyData.Setter is not null, [.. getterModifiers], [.. setterModifiers]);
     }
 
-    private MethodTemplateModel CreateMethodTemplateModel(MethodData methodData)
+    private MethodTemplateModel CreateMethodTemplateModel(IMethodData methodData)
     {
         List<string> modifiers = [methodData.AccessModifier.GetKeywordString()];
 
@@ -79,7 +80,7 @@ internal class DefaultTemplateModelBuilder
             methodData.ReturnType, methodData.DocComment.Value, methodData.ReturnValueDocComment.Value, modifiers);
     }
 
-    private static MethodParameterTemplateModel CreateMethodParameterModel(ParameterData parameterData)
+    private static MethodParameterTemplateModel CreateMethodParameterModel(IParameterData parameterData)
     {
         var modifiers = new List<string>();
 

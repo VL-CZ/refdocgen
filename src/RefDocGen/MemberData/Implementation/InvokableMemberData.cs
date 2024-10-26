@@ -1,14 +1,15 @@
+using RefDocGen.MemberData.Abstract;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
-namespace RefDocGen.MemberData.Abstract;
+namespace RefDocGen.MemberData.Implementation;
 
 /// <summary>
 /// Represents data of an invokable member (i.e. method or a constructor).
 /// </summary>
-public abstract record class InvokableMemberData : ICallableMemberData
+internal abstract record class InvokableMemberData : IInvokableMemberData
 {
     /// <summary>
     /// <see cref="MethodBase"/> object representing the member.
@@ -84,10 +85,13 @@ public abstract record class InvokableMemberData : ICallableMemberData
     public bool IsVirtual => methodBase.IsVirtual;
 
     /// <inheritdoc/>
-    public XElement DocComment { get; init; } = XmlDocElementFactory.EmptySummary;
+    public XElement DocComment { get; internal set; } = XmlDocElementFactory.EmptySummary;
 
     /// <summary>
     /// Array of method parameters, ordered by their position.
     /// </summary>
     public ParameterData[] Parameters { get; }
+
+    /// <inheritdoc/>
+    IReadOnlyList<IParameterData> IInvokableMemberData.Parameters => Parameters;
 }

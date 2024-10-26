@@ -1,27 +1,22 @@
-using RefDocGen.MemberData.Abstract;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Xml.Linq;
 
-namespace RefDocGen.MemberData;
+namespace RefDocGen.MemberData.Implementation;
 
 /// <summary>
 /// Represents data of a method.
 /// </summary>
 /// <param name="MethodInfo"><see cref="System.Reflection.MethodInfo"/> object representing the method.</param>
-public record MethodData(MethodInfo MethodInfo) : InvokableMemberData(MethodInfo)
+internal record MethodData(MethodInfo MethodInfo) : InvokableMemberData(MethodInfo), IMethodData
 {
     /// <inheritdoc/>
     public override string Name => MethodInfo.Name;
 
-    /// <summary>
-    /// Return type of the method.
-    /// </summary>
+    /// <inheritdoc/>
     public string ReturnType => MethodInfo.ReturnType.Name;
 
-    /// <summary>
-    /// Documentation comment for the method return value.
-    /// </summary>
+    /// <inheritdoc/>
     public XElement ReturnValueDocComment { get; init; } = XmlDocElementFactory.EmptyReturns;
 
     /// <inheritdoc/>

@@ -1,7 +1,6 @@
 using RefDocGen.DocExtraction.Handlers.Abstract;
 using RefDocGen.DocExtraction.Tools.Extensions;
-using RefDocGen.MemberData;
-using RefDocGen.MemberData.Abstract;
+using RefDocGen.MemberData.Implementation;
 using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction.Handlers;
