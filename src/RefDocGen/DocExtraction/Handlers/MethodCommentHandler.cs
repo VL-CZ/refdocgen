@@ -19,21 +19,19 @@ internal class MethodCommentHandler : InvokableMemberCommentHandler
     /// <inheritdoc/>
     protected override void AssignMemberComments(ClassData type, string memberId, XElement memberDocComment)
     {
-#pragma warning disable CA1854
-        if (type.Methods.ContainsKey(memberId))
+        if (type.Methods.TryGetValue(memberId, out var method))
         {
             // add summary doc comment (if present)
             if (memberDocComment.TryGetSummaryElement(out var summaryNode))
             {
-                type.Methods[memberId] = type.Methods[memberId] with { DocComment = summaryNode };
+                method.DocComment = summaryNode;
             }
 
             // add return value doc comment (if present)
             if (memberDocComment.TryGetReturnsElement(out var returnsNode))
             {
-                type.Methods[memberId] = type.Methods[memberId] with { ReturnValueDocComment = returnsNode };
+                method.ReturnValueDocComment = returnsNode;
             }
         }
-#pragma warning restore CA1854
     }
 }

@@ -18,7 +18,7 @@ internal class ConstructorCommentHandler : InvokableMemberCommentHandler
         {
             if (type.Constructors.TryGetValue(memberId, out var ctor))
             {
-                type.Constructors[memberId] = ctor with { DocComment = summaryNode };
+                ctor.DocComment = summaryNode;
             }
         }
     }

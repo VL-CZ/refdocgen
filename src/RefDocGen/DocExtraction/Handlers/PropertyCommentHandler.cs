@@ -17,7 +17,7 @@ internal class PropertyCommentHandler : IMemberCommentHandler
         {
             if (type.Properties.TryGetValue(memberIdentifier, out var property))
             {
-                type.Properties[memberIdentifier] = property with { DocComment = summaryNode };
+                property.DocComment = summaryNode;
             }
         }
     }

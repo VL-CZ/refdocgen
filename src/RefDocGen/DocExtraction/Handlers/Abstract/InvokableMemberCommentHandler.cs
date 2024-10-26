@@ -72,8 +72,7 @@ internal abstract class InvokableMemberCommentHandler : IMemberCommentHandler
                 return;
             }
 
-            int paramIndex = Array.IndexOf(member.Parameters, parameter);
-            member.Parameters[paramIndex] = parameter with { DocComment = paramDocComment };
+            parameter.DocComment = paramDocComment;
         }
     }
 }

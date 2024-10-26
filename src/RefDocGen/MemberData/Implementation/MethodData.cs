@@ -17,7 +17,7 @@ internal record MethodData(MethodInfo MethodInfo) : InvokableMemberData(MethodIn
     public string ReturnType => MethodInfo.ReturnType.Name;
 
     /// <inheritdoc/>
-    public XElement ReturnValueDocComment { get; init; } = XmlDocElementFactory.EmptyReturns;
+    public XElement ReturnValueDocComment { get; internal set; } = XmlDocElementFactory.EmptyReturns;
 
     /// <inheritdoc/>
     public override bool OverridesAnotherMember => !MethodInfo.Equals(MethodInfo.GetBaseDefinition());
