@@ -1,6 +1,6 @@
 using RefDocGen.DocExtraction.Handlers.Abstract;
 using RefDocGen.DocExtraction.Tools.Extensions;
-using RefDocGen.MemberData;
+using RefDocGen.MemberData.Concrete;
 using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction.Handlers;
@@ -17,7 +17,7 @@ internal class FieldCommentHandler : IMemberCommentHandler
         {
             if (type.Fields.TryGetValue(memberIdentifier, out var field))
             {
-                type.Fields[memberIdentifier] = field with { DocComment = summaryNode };
+                field.DocComment = summaryNode;
             }
         }
     }

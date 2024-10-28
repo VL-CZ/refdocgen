@@ -1,14 +1,16 @@
+using RefDocGen.MemberData.Abstract;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
-namespace RefDocGen.MemberData.Abstract;
+namespace RefDocGen.MemberData.Concrete;
 
 /// <summary>
-/// Represents data of an invokable member (i.e. method or a constructor).
+/// Class representing data of an executable member (i.e. method or a constructor).
+/// Note that properties are excluded from this definition.
 /// </summary>
-public abstract record class InvokableMemberData : ICallableMemberData
+internal abstract class ExecutableMemberData : IExecutableMemberData
 {
     /// <summary>
     /// <see cref="MethodBase"/> object representing the member.
@@ -16,10 +18,10 @@ public abstract record class InvokableMemberData : ICallableMemberData
     private readonly MethodBase methodBase;
 
     /// <summary>
-    /// Create new <see cref="InvokableMemberData"/> instance.
+    /// Create new <see cref="ExecutableMemberData"/> instance.
     /// </summary>
     /// <param name="methodBase"><see cref="MethodBase"/> object representing the member.</param>
-    protected InvokableMemberData(MethodBase methodBase)
+    protected ExecutableMemberData(MethodBase methodBase)
     {
         this.methodBase = methodBase;
 
@@ -84,10 +86,13 @@ public abstract record class InvokableMemberData : ICallableMemberData
     public bool IsVirtual => methodBase.IsVirtual;
 
     /// <inheritdoc/>
-    public XElement DocComment { get; init; } = XmlDocElementFactory.EmptySummary;
+    public XElement DocComment { get; internal set; } = XmlDocElementFactory.EmptySummary;
 
     /// <summary>
     /// Array of method parameters, ordered by their position.
     /// </summary>
     public ParameterData[] Parameters { get; }
+
+    /// <inheritdoc/>
+    IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters;
 }

@@ -1,16 +1,16 @@
 using RazorLight;
-using RefDocGen.MemberData;
+using RefDocGen.MemberData.Abstract;
 
 namespace RefDocGen.TemplateGenerators;
 
 /// <summary>
 /// An abstract class used for generating any templates using the RazorLight library (for further info, see <see href="https://github.com/toddams/RazorLight"/>).
 /// <para>
-///     Template models are of a user-defined type, and constructed from <see cref="ClassData"/> objects
+///     Template models are of a user-defined type, and constructed from <see cref="IClassData"/> objects
 /// </para>
 /// </summary>
 /// <typeparam name="T">Type of the template model class</typeparam>
-public abstract class RazorLightTemplateGenerator<T> : ITemplateGenerator where T : INamedTemplateModel
+internal abstract class RazorLightTemplateGenerator<T> : ITemplateGenerator where T : INamedTemplateModel
 {
     /// <summary>
     /// Path to the Razor template file.
@@ -45,7 +45,7 @@ public abstract class RazorLightTemplateGenerator<T> : ITemplateGenerator where 
     }
 
     /// <inheritdoc/>
-    public void GenerateTemplates(ClassData[] classes)
+    public void GenerateTemplates(IReadOnlyList<IClassData> classes)
     {
         var templateModels = GetTemplateModels(classes);
 
@@ -64,7 +64,7 @@ public abstract class RazorLightTemplateGenerator<T> : ITemplateGenerator where 
     /// <summary>
     /// Convert the provided <paramref name="classes"/> data to a collection of template models that will be passed to the Razor templatess.
     /// </summary>
-    /// <param name="classes"><see cref="ClassData"/> objects to be converted into template models.</param>
+    /// <param name="classes"><see cref="IClassData"/> objects to be converted into template models.</param>
     /// <returns>A collection of template models that will be passed to the Razor templates.</returns>
-    protected abstract IEnumerable<T> GetTemplateModels(ClassData[] classes);
+    protected abstract IEnumerable<T> GetTemplateModels(IReadOnlyList<IClassData> classes);
 }

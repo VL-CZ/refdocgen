@@ -1,67 +1,56 @@
-using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Xml.Linq;
 
-namespace RefDocGen.MemberData;
+namespace RefDocGen.MemberData.Abstract;
 
 /// <summary>
 /// Represents data of a method/constructor parameter.
 /// </summary>
-public record ParameterData
+public interface IParameterData
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ParameterData"/> class.
-    /// </summary>
-    /// <param name="parameterInfo"><see cref="System.Reflection.ParameterInfo"/> object representing the parameter.</param>
-    public ParameterData(ParameterInfo parameterInfo)
-    {
-        ParameterInfo = parameterInfo;
-        DocComment = XmlDocElementFactory.EmptyParamWithName(Name);
-    }
-
     /// <summary>
     /// <see cref="System.Reflection.ParameterInfo"/> object representing the parameter.
     /// </summary>
-    public ParameterInfo ParameterInfo { get; }
+    ParameterInfo ParameterInfo { get; }
 
     /// <summary>
     /// Name of the parameter.
     /// </summary>
-    public string Name => ParameterInfo.Name ?? string.Empty;
+    string Name { get; }
 
     /// <summary>
     /// Type of the parameter.
     /// </summary>
-    public string TypeName => ParameterInfo.ParameterType.Name;
+    string TypeName { get; }
 
     /// <summary>
     /// Checks if the parameter is a <c>params</c> collection.
     /// <para>For further information, see <see href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/method-parameters#params-modifier"/></para>
     /// </summary>
-    public bool IsParamsCollection => ParameterInfo.GetCustomAttribute(typeof(ParamArrayAttribute)) != null;
+    bool IsParamsCollection { get; }
 
     /// <summary>
     /// Checks if the parameter is optional.
     /// </summary>
-    public bool IsOptional => ParameterInfo.IsOptional;
+    bool IsOptional { get; }
 
     /// <summary>
     /// Checks if the parameter is an input parameter.
     /// </summary>
-    public bool IsInput => ParameterInfo.IsIn;
+    bool IsInput { get; }
 
     /// <summary>
     /// Checks if the parameter is an output parameter.
     /// </summary>
-    public bool IsOutput => ParameterInfo.IsOut;
+    bool IsOutput { get; }
 
     /// <summary>
     /// Checks if the parameter is passed by reference.
     /// </summary>
-    public bool IsPassedByReference => ParameterInfo.ParameterType.IsByRef;
+    bool IsPassedByReference { get; }
 
     /// <summary>
     /// XML doc comment for the parameter.
     /// </summary>
-    public XElement DocComment { get; init; }
+    XElement DocComment { get; }
 }

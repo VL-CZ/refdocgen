@@ -1,7 +1,8 @@
+using RefDocGen.MemberData.Abstract;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 
-namespace RefDocGen.MemberData;
+namespace RefDocGen.MemberData.Concrete;
 
 /// <summary>
 /// Represents data of a class.
@@ -12,11 +13,21 @@ namespace RefDocGen.MemberData;
 /// <param name="Fields">Dictionary of fields declared in the class; keys are the corresponding field IDs.</param>
 /// <param name="Properties">Dictionary of properties declared in the class; keys are the corresponding property IDs.</param>
 /// <param name="Methods">Dictionary of methods declared in the class; keys are the corresponding method IDs.</param>
-public record ClassData(string Name, AccessModifier AccessModifier, Dictionary<string, ConstructorData> Constructors,
-    Dictionary<string, FieldData> Fields, Dictionary<string, PropertyData> Properties, Dictionary<string, MethodData> Methods)
+internal record ClassData(string Name, AccessModifier AccessModifier, Dictionary<string, ConstructorData> Constructors,
+    Dictionary<string, FieldData> Fields, Dictionary<string, PropertyData> Properties, Dictionary<string, MethodData> Methods) : IClassData
 {
-    /// <summary>
-    /// Documentation comment provided to the class.
-    /// </summary>
+    /// <inheritdoc/>
     public XElement DocComment { get; init; } = XmlDocElementFactory.EmptySummary;
+
+    /// <inheritdoc/>
+    IReadOnlyList<IConstructorData> IClassData.Constructors => Constructors.Values.ToList();
+
+    /// <inheritdoc/>
+    IReadOnlyList<IFieldData> IClassData.Fields => Fields.Values.ToList();
+
+    /// <inheritdoc/>
+    IReadOnlyList<IMethodData> IClassData.Methods => Methods.Values.ToList();
+
+    /// <inheritdoc/>
+    IReadOnlyList<IPropertyData> IClassData.Properties => Properties.Values.ToList();
 }

@@ -3,23 +3,32 @@ using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Xml.Linq;
 
-namespace RefDocGen.MemberData;
+namespace RefDocGen.MemberData.Concrete;
 
 /// <summary>
-/// Represents data of a field.
+/// Class representing data of a field.
 /// </summary>
-/// <param name="FieldInfo"><see cref="System.Reflection.FieldInfo"/> object representing the field.</param>
-public record FieldData(FieldInfo FieldInfo) : IMemberData
+internal class FieldData : IFieldData
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FieldData"/> class.
+    /// </summary>
+    /// <param name="fieldInfo"><see cref="System.Reflection.FieldInfo"/> object representing the field.</param>
+    public FieldData(FieldInfo fieldInfo)
+    {
+        FieldInfo = fieldInfo;
+    }
+
+    /// <inheritdoc/>
+    public FieldInfo FieldInfo { get; }
+
     /// <inheritdoc/>
     public string Id => Name;
 
     /// <inheritdoc/>
     public string Name => FieldInfo.Name;
 
-    /// <summary>
-    /// Type of the field.
-    /// </summary>
+    /// <inheritdoc/>
     public string Type => FieldInfo.FieldType.Name;
 
     /// <inheritdoc/>
@@ -29,18 +38,12 @@ public record FieldData(FieldInfo FieldInfo) : IMemberData
     /// <inheritdoc/>
     public bool IsStatic => FieldInfo.IsStatic;
 
-    /// <summary>
-    /// Checks if the field is readonly.
-    /// </summary>
+    /// <inheritdoc/>
     public bool IsReadonly => FieldInfo.IsInitOnly;
 
-    /// <summary>
-    /// Checks if the field is constant.
-    /// </summary>
+    /// <inheritdoc/>
     public bool IsConstant => FieldInfo.IsLiteral;
 
-    /// <summary>
-    /// Gets the XMl doc comment for this field.
-    /// </summary>
-    public XElement DocComment { get; init; } = XmlDocElementFactory.EmptySummary;
+    /// <inheritdoc/>
+    public XElement DocComment { get; internal set; } = XmlDocElementFactory.EmptySummary;
 }

@@ -3,7 +3,7 @@ using System.Xml.Linq;
 namespace RefDocGen.MemberData.Abstract;
 
 /// <summary>
-/// Represents data of a type member (such as field, property or method).
+/// Represents data of a type member (such as a field, property or a method).
 /// </summary>
 public interface IMemberData
 {
@@ -12,7 +12,7 @@ public interface IMemberData
     ///
     /// Consists of the member name (without namespace and type name) and parameters string (if the member has them - e.g. a method).
     /// <para>
-    /// The format is described here: <seealso href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/#id-strings"/>
+    /// The format is described here: <see href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/#id-strings"/>
     /// </para>
     /// </summary>
     string Id { get; }

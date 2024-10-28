@@ -1,4 +1,4 @@
-using RefDocGen.MemberData;
+using RefDocGen.MemberData.Abstract;
 using RefDocGen.TemplateGenerators.Default.TemplateModels;
 
 namespace RefDocGen.TemplateGenerators.Default;
@@ -6,7 +6,7 @@ namespace RefDocGen.TemplateGenerators.Default;
 /// <summary>
 /// A class used for generating RazorLight templates using the <see cref="ClassTemplateModel"/> as a template model
 /// </summary>
-public class DefaultTemplateGenerator : RazorLightTemplateGenerator<ClassTemplateModel>
+internal class DefaultTemplateGenerator : RazorLightTemplateGenerator<ClassTemplateModel>
 {
     /// <summary>
     /// The instance used for building template models.
@@ -24,7 +24,7 @@ public class DefaultTemplateGenerator : RazorLightTemplateGenerator<ClassTemplat
     }
 
     /// <inheritdoc/>
-    protected override IEnumerable<ClassTemplateModel> GetTemplateModels(ClassData[] classes)
+    protected override IEnumerable<ClassTemplateModel> GetTemplateModels(IReadOnlyList<IClassData> classes)
     {
         return classes.Select(templateModelBuilder.CreateClassTemplateModel);
     }

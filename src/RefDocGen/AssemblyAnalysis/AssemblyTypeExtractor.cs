@@ -1,4 +1,5 @@
 using RefDocGen.MemberData;
+using RefDocGen.MemberData.Concrete;
 using System.Reflection;
 
 namespace RefDocGen.AssemblyAnalysis;
