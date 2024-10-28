@@ -1,6 +1,6 @@
 using System.Xml.Linq;
 
-namespace RefDocGen.MemberData;
+namespace RefDocGen.MemberData.Abstract;
 public interface IClassData
 {
     /// <summary>

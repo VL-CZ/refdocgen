@@ -1,4 +1,3 @@
-using RefDocGen.MemberData;
 using RefDocGen.MemberData.Abstract;
 using RefDocGen.TemplateGenerators.Default.TemplateModels;
 using RefDocGen.TemplateGenerators.Default.Tools;

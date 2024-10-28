@@ -1,14 +1,15 @@
+using RefDocGen.MemberData.Abstract;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Xml.Linq;
 
-namespace RefDocGen.MemberData.Implementation;
+namespace RefDocGen.MemberData.Concrete;
 
 /// <summary>
 /// Represents data of a method.
 /// </summary>
 /// <param name="MethodInfo"><see cref="System.Reflection.MethodInfo"/> object representing the method.</param>
-internal record MethodData(MethodInfo MethodInfo) : InvokableMemberData(MethodInfo), IMethodData
+internal record MethodData(MethodInfo MethodInfo) : ExecutableMemberData(MethodInfo), IMethodData
 {
     /// <inheritdoc/>
     public override string Name => MethodInfo.Name;

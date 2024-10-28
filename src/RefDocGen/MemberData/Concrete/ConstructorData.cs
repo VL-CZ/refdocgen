@@ -1,12 +1,13 @@
 using System.Reflection;
+using RefDocGen.MemberData.Abstract;
 
-namespace RefDocGen.MemberData.Implementation;
+namespace RefDocGen.MemberData.Concrete;
 
 /// <summary>
 /// Represents data of a constructor.
 /// </summary>
 /// <param name="ConstructorInfo"><see cref="System.Reflection.ConstructorInfo"/> object representing the constructor.</param>
-public record ConstructorData(ConstructorInfo ConstructorInfo) : InvokableMemberData(ConstructorInfo), IConstructorData
+internal record ConstructorData(ConstructorInfo ConstructorInfo) : ExecutableMemberData(ConstructorInfo), IConstructorData
 {
     /// <summary>
     /// The default name for constructor method in the XML documentation files.

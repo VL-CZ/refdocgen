@@ -1,9 +1,8 @@
 using System.Reflection;
-using RefDocGen.MemberData.Abstract;
 
-namespace RefDocGen.MemberData;
+namespace RefDocGen.MemberData.Abstract;
 
-public interface IConstructorData : IInvokableMemberData
+public interface IConstructorData : IExecutableMemberData
 {
     /// <summary>
     /// <see cref="System.Reflection.ConstructorInfo"/> object representing the constructor.

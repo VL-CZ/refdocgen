@@ -4,12 +4,12 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
-namespace RefDocGen.MemberData.Implementation;
+namespace RefDocGen.MemberData.Concrete;
 
 /// <summary>
-/// Represents data of an invokable member (i.e. method or a constructor).
+/// Represents data of an executable member (i.e. method or a constructor).
 /// </summary>
-internal abstract record class InvokableMemberData : IInvokableMemberData
+internal abstract record class ExecutableMemberData : IExecutableMemberData
 {
     /// <summary>
     /// <see cref="MethodBase"/> object representing the member.
@@ -17,10 +17,10 @@ internal abstract record class InvokableMemberData : IInvokableMemberData
     private readonly MethodBase methodBase;
 
     /// <summary>
-    /// Create new <see cref="InvokableMemberData"/> instance.
+    /// Create new <see cref="ExecutableMemberData"/> instance.
     /// </summary>
     /// <param name="methodBase"><see cref="MethodBase"/> object representing the member.</param>
-    protected InvokableMemberData(MethodBase methodBase)
+    protected ExecutableMemberData(MethodBase methodBase)
     {
         this.methodBase = methodBase;
 
@@ -93,5 +93,5 @@ internal abstract record class InvokableMemberData : IInvokableMemberData
     public ParameterData[] Parameters { get; }
 
     /// <inheritdoc/>
-    IReadOnlyList<IParameterData> IInvokableMemberData.Parameters => Parameters;
+    IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters;
 }

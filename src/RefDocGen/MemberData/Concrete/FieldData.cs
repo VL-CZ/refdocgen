@@ -1,8 +1,9 @@
+using RefDocGen.MemberData.Abstract;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Xml.Linq;
 
-namespace RefDocGen.MemberData.Implementation;
+namespace RefDocGen.MemberData.Concrete;
 
 /// <summary>
 /// Represents data of a field.

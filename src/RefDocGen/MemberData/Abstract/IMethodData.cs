@@ -1,10 +1,9 @@
 using System.Reflection;
 using System.Xml.Linq;
-using RefDocGen.MemberData.Abstract;
 
-namespace RefDocGen.MemberData;
+namespace RefDocGen.MemberData.Abstract;
 
-public interface IMethodData : IInvokableMemberData
+public interface IMethodData : IExecutableMemberData
 {
     /// <summary>
     /// <see cref="System.Reflection.MethodInfo"/> object representing the method.

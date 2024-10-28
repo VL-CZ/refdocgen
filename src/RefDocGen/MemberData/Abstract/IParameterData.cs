@@ -1,7 +1,7 @@
 using System.Reflection;
 using System.Xml.Linq;
 
-namespace RefDocGen.MemberData;
+namespace RefDocGen.MemberData.Abstract;
 
 /// <summary>
 /// Represents data of a method/constructor parameter.

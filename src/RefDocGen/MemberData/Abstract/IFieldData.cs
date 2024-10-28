@@ -1,7 +1,6 @@
-using RefDocGen.MemberData.Abstract;
 using System.Reflection;
 
-namespace RefDocGen.MemberData;
+namespace RefDocGen.MemberData.Abstract;
 
 public interface IFieldData : IValueMemberData
 {

@@ -1,17 +1,18 @@
 using RefDocGen.DocExtraction.Tools.Extensions;
-using RefDocGen.MemberData.Implementation;
+using RefDocGen.MemberData.Concrete;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction.Handlers.Abstract;
 
 /// <summary>
-/// Abstract class responsible for handling and adding XML doc comments to the corresponding invokable type members.
+/// Abstract class responsible for handling and adding XML doc comments to the corresponding executable type members.
 /// <para>
-/// See also <seealso cref="InvokableMemberData"/> class.
+/// See also <seealso cref="ExecutableMemberData"/> class.
 /// </para>
 /// </summary>
-internal abstract class InvokableMemberCommentHandler : IMemberCommentHandler
+/// <typeparam name="T">TODO</typeparam>
+internal abstract class ExecutableMemberCommentHandler<T> : IMemberCommentHandler where T : ExecutableMemberData
 {
     /// <summary>
     /// Get the member with the given <paramref name="memberId"/> contained in the given type.
@@ -19,7 +20,7 @@ internal abstract class InvokableMemberCommentHandler : IMemberCommentHandler
     /// <param name="type">The type containing the member.</param>
     /// <param name="memberId">Id of the member to search.</param>
     /// <returns>The member with the given Id contained in the given type. If such member doesn't exist, null is returned</returns>
-    protected abstract InvokableMemberData? GetTypeMember(ClassData type, string memberId);
+    protected abstract T? GetTypeMember(ClassData type, string memberId);
 
     /// <summary>
     /// Assign doc comments to the given member.
@@ -27,10 +28,16 @@ internal abstract class InvokableMemberCommentHandler : IMemberCommentHandler
     /// Note: this method doesn't assign any parameter doc comments.
     /// </para>
     /// </summary>
-    /// <param name="type">The type containing the member.</param>
-    /// <param name="memberId">Id of the member in corresponding member collection.</param>
+    /// <param name="member">Member to which the comment is assigned.</param>
     /// <param name="memberDocComment">Doc comment for the member.</param>
-    protected abstract void AssignMemberComments(ClassData type, string memberId, XElement memberDocComment);
+    protected virtual void AssignMemberComments(T member, XElement memberDocComment)
+    {
+        // add summary doc comment (if present)
+        if (memberDocComment.TryGetSummaryElement(out var summaryNode))
+        {
+            member.DocComment = summaryNode;
+        }
+    }
 
     /// <inheritdoc/>
     public void AddDocumentation(ClassData type, string memberId, XElement memberDocComment)
@@ -39,11 +46,11 @@ internal abstract class InvokableMemberCommentHandler : IMemberCommentHandler
 
         if (member is null)
         {
-            return; // TODO: log comment not found   
+            return; // TODO: log comment not found
         }
 
         // assign member (non-param) doc comments
-        AssignMemberComments(type, memberId, memberDocComment);
+        AssignMemberComments(member, memberDocComment);
 
         var paramElements = memberDocComment.Descendants(XmlDocIdentifiers.Param);
 
@@ -57,9 +64,9 @@ internal abstract class InvokableMemberCommentHandler : IMemberCommentHandler
     /// <summary>
     /// Assign parameter doc comment to the corresponding parameter.
     /// </summary>
-    /// <param name="member">Invokable member (e.g. a method) containing the parameter.</param>
+    /// <param name="member">Executable member (e.g. a method) containing the parameter.</param>
     /// <param name="paramDocComment">Doc comment for the parameter. (i.e. 'param' element)</param>
-    private void AssignParamComment(InvokableMemberData member, XElement paramDocComment)
+    private void AssignParamComment(ExecutableMemberData member, XElement paramDocComment)
     {
         if (paramDocComment.TryGetNameAttribute(out var nameAttr))
         {
