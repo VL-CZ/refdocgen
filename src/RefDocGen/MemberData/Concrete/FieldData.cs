@@ -9,8 +9,20 @@ namespace RefDocGen.MemberData.Concrete;
 /// Represents data of a field.
 /// </summary>
 /// <param name="FieldInfo"><see cref="System.Reflection.FieldInfo"/> object representing the field.</param>
-internal record FieldData(FieldInfo FieldInfo) : IFieldData
+internal class FieldData : IFieldData
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FieldData"/> class.
+    /// </summary>
+    /// <param name="fieldInfo"><see cref="System.Reflection.FieldInfo"/> object representing the field.</param>
+    public FieldData(FieldInfo fieldInfo)
+    {
+        FieldInfo = fieldInfo;
+    }
+
+    /// <inheritdoc/>
+    public FieldInfo FieldInfo { get; }
+
     /// <inheritdoc/>
     public string Id => Name;
 

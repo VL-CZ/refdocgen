@@ -6,7 +6,7 @@ using System.Xml.Linq;
 namespace RefDocGen.MemberData.Concrete;
 
 /// <inheritdoc/>
-internal record ParameterData : IParameterData
+internal class ParameterData : IParameterData
 {
     /// <inheritdoc/>
     public ParameterData(ParameterInfo parameterInfo)

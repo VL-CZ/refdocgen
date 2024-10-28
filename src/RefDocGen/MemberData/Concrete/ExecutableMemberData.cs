@@ -9,7 +9,7 @@ namespace RefDocGen.MemberData.Concrete;
 /// <summary>
 /// Represents data of an executable member (i.e. method or a constructor).
 /// </summary>
-internal abstract record class ExecutableMemberData : IExecutableMemberData
+internal abstract class ExecutableMemberData : IExecutableMemberData
 {
     /// <summary>
     /// <see cref="MethodBase"/> object representing the member.

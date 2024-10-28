@@ -8,9 +8,20 @@ namespace RefDocGen.MemberData.Concrete;
 /// <summary>
 /// Represents data of a method.
 /// </summary>
-/// <param name="MethodInfo"><see cref="System.Reflection.MethodInfo"/> object representing the method.</param>
-internal record MethodData(MethodInfo MethodInfo) : ExecutableMemberData(MethodInfo), IMethodData
+internal class MethodData : ExecutableMemberData, IMethodData
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MethodData"/> class.
+    /// </summary>
+    /// <param name="methodInfo"><see cref="System.Reflection.MethodInfo"/> object representing the method.</param>
+    public MethodData(MethodInfo methodInfo) : base(methodInfo)
+    {
+        MethodInfo = methodInfo;
+    }
+
+    /// <inheritdoc/>
+    public MethodInfo MethodInfo { get; }
+
     /// <inheritdoc/>
     public override string Name => MethodInfo.Name;
 

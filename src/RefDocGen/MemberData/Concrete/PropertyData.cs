@@ -8,7 +8,7 @@ namespace RefDocGen.MemberData.Concrete;
 /// <summary>
 /// Represents data of a property.
 /// </summary>
-internal record PropertyData : IPropertyData
+internal class PropertyData : IPropertyData
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="PropertyData"/> class.
