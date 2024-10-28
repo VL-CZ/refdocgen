@@ -24,18 +24,16 @@ internal class MemberStringExtractor
         string[] splitValues = fullMemberName.Split('(');
         string memberNameWithoutParameters = splitValues[0]; // this is done because of methods
 
-        // TODO: method overloading, we need to distinguish between the overloaded methods
-
         string[] nameParts = memberNameWithoutParameters.Split('.');
         string memberName = nameParts[^1];
         string typeName = string.Join('.', nameParts, 0, nameParts.Length - 1);
 
-        if (splitValues.Length > 1)
+        if (splitValues.Length > 1) // we need to add params
         {
             string paramsStrings = '(' + string.Join("", splitValues.Skip(1));
             return (typeName, memberName, paramsStrings);
         }
-        else
+        else // no params
         {
             return (typeName, memberName, string.Empty);
         }

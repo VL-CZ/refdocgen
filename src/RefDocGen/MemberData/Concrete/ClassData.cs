@@ -19,11 +19,15 @@ internal record ClassData(string Name, AccessModifier AccessModifier, Dictionary
     /// <inheritdoc/>
     public XElement DocComment { get; init; } = XmlDocElementFactory.EmptySummary;
 
+    /// <inheritdoc/>
     IReadOnlyList<IConstructorData> IClassData.Constructors => Constructors.Values.ToList();
 
+    /// <inheritdoc/>
     IReadOnlyList<IFieldData> IClassData.Fields => Fields.Values.ToList();
 
+    /// <inheritdoc/>
     IReadOnlyList<IMethodData> IClassData.Methods => Methods.Values.ToList();
 
+    /// <inheritdoc/>
     IReadOnlyList<IPropertyData> IClassData.Properties => Properties.Values.ToList();
 }
