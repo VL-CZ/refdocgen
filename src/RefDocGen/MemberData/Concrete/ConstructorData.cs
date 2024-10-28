@@ -4,7 +4,7 @@ using RefDocGen.MemberData.Abstract;
 namespace RefDocGen.MemberData.Concrete;
 
 /// <summary>
-/// Represents data of a constructor.
+/// Class representing data of a constructor.
 /// </summary>
 internal class ConstructorData : ExecutableMemberData, IConstructorData
 {

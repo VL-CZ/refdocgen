@@ -2,6 +2,9 @@ using System.Reflection;
 
 namespace RefDocGen.MemberData.Abstract;
 
+/// <summary>
+/// Represents data of a constructor.
+/// </summary>
 public interface IConstructorData : IExecutableMemberData
 {
     /// <summary>

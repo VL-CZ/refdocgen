@@ -1,5 +1,8 @@
 namespace RefDocGen.MemberData.Abstract;
 
+/// <summary>
+/// Represents a type member storing a value; i.e. a field or a property.
+/// </summary>
 public interface IValueMemberData : IMemberData
 {
     /// <summary>

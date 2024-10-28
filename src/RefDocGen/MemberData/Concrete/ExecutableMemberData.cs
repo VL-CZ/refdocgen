@@ -7,7 +7,8 @@ using System.Xml.Linq;
 namespace RefDocGen.MemberData.Concrete;
 
 /// <summary>
-/// Represents data of an executable member (i.e. method or a constructor).
+/// Class representing data of an executable member (i.e. method or a constructor).
+/// Note that properties are excluded from this definition.
 /// </summary>
 internal abstract class ExecutableMemberData : IExecutableMemberData
 {

@@ -6,9 +6,8 @@ using System.Xml.Linq;
 namespace RefDocGen.MemberData.Concrete;
 
 /// <summary>
-/// Represents data of a field.
+/// Class representing data of a field.
 /// </summary>
-/// <param name="FieldInfo"><see cref="System.Reflection.FieldInfo"/> object representing the field.</param>
 internal class FieldData : IFieldData
 {
     /// <summary>

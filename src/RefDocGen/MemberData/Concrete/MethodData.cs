@@ -6,7 +6,7 @@ using System.Xml.Linq;
 namespace RefDocGen.MemberData.Concrete;
 
 /// <summary>
-/// Represents data of a method.
+/// Class representing data of a method.
 /// </summary>
 internal class MethodData : ExecutableMemberData, IMethodData
 {

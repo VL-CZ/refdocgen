@@ -6,7 +6,7 @@ using System.Xml.Linq;
 namespace RefDocGen.MemberData.Concrete;
 
 /// <summary>
-/// Represents data of a property.
+/// Class representing data of a property.
 /// </summary>
 internal class PropertyData : IPropertyData
 {

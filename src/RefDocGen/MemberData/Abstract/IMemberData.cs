@@ -3,7 +3,7 @@ using System.Xml.Linq;
 namespace RefDocGen.MemberData.Abstract;
 
 /// <summary>
-/// Represents data of a type member (such as field, property or method).
+/// Represents data of a type member (such as a field, property or a method).
 /// </summary>
 public interface IMemberData
 {

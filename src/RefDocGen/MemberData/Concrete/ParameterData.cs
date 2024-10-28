@@ -5,7 +5,9 @@ using System.Xml.Linq;
 
 namespace RefDocGen.MemberData.Concrete;
 
-/// <inheritdoc/>
+/// <summary>
+/// Class representing data of a method/constructor parameter.
+/// </summary>
 internal class ParameterData : IParameterData
 {
     /// <inheritdoc/>
