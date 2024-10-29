@@ -2,11 +2,19 @@ using RefDocGen.MemberData;
 
 namespace RefDocGen.TemplateGenerators.Default.Tools.Extensions;
 
+/// <summary>
+/// Class containing extension methods for <see cref="AccessModifier"/> enum.
+/// </summary>
 internal static class AccessModifierExtensions
 {
-    internal static string GetKeywordString(this AccessModifier accessModifier)
+    /// <summary>
+    /// Convert the <see cref="AccessModifier"/> into the corresponding <see cref="Keyword"/>.
+    /// </summary>
+    /// <param name="accessModifier">The provided access modifier</param>
+    /// <returns><see cref="Keyword"/> corresponding to the provided access modifier.</returns>
+    internal static Keyword ToKeyword(this AccessModifier accessModifier)
     {
-        var placeholder = accessModifier switch
+        return accessModifier switch
         {
             AccessModifier.Private => Keyword.Private,
             AccessModifier.Family => Keyword.Protected,
@@ -16,7 +24,15 @@ internal static class AccessModifierExtensions
             AccessModifier.Public => Keyword.Public,
             _ => throw new ArgumentException($"Invalid {nameof(AccessModifier)} enum value.")
         };
+    }
 
-        return placeholder.GetString();
+    /// <summary>
+    /// Get string representation of the access modifier.
+    /// </summary>
+    /// <param name="accessModifier">The provided access modifier.</param>
+    /// <returns>String representation (in C# style) of the access modifier.</returns>
+    internal static string GetKeywordString(this AccessModifier accessModifier)
+    {
+        return accessModifier.ToKeyword().GetString();
     }
 }

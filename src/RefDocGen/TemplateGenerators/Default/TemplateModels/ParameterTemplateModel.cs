@@ -7,4 +7,4 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels;
 /// <param name="Type">Type of the method parameter.</param>
 /// <param name="DocComment">Documentation comment for the method parameter.</param>
 /// <param name="Modifiers">Collection of the parameter modifiers (e.g. out, ref, etc.).</param>
-public record MethodParameterTemplateModel(string Name, string Type, string DocComment, IEnumerable<string> Modifiers);
+public record ParameterTemplateModel(string Name, string Type, string DocComment, IEnumerable<string> Modifiers, bool IsOptional);

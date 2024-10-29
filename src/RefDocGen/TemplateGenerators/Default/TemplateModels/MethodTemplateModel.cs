@@ -9,4 +9,4 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels;
 /// <param name="DocComment">Documentation comment for the method.</param>
 /// <param name="ReturnsDocComment">Documentation comment for the method's return value.</param>
 /// <param name="Modifiers">Collection of modifiers for the method (e.g. private, abstract, virtual, etc.)</param>
-public record MethodTemplateModel(string Name, IEnumerable<MethodParameterTemplateModel> Parameters, string ReturnType, string DocComment, string ReturnsDocComment, IEnumerable<string> Modifiers);
+public record MethodTemplateModel(string Name, IEnumerable<ParameterTemplateModel> Parameters, string ReturnType, string DocComment, string ReturnsDocComment, IEnumerable<string> Modifiers);

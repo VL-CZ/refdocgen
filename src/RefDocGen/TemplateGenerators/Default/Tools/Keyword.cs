@@ -5,10 +5,45 @@ namespace RefDocGen.TemplateGenerators.Default.Tools;
 /// </summary>
 internal enum Keyword
 {
-    Abstract, Async, Base, Class, Const, Default, Delegate, Enum, Event, Explicit, Extern, Implicit,
-    In, Interface, Internal, Namespace, New, Null, Object, Operator, Out, Override, Params,
-    Private, Protected, Public, Readonly, Record, Ref, Required, Sealed, Static, Struct, Virtual,
-    Void, Volatile, Where, PrivateProtected, ProtectedInternal
+    Abstract,
+    Async,
+    Base,
+    Class,
+    Const,
+    Default,
+    Delegate,
+    Enum,
+    Event,
+    Explicit,
+    Extern,
+    Implicit,
+    In,
+    Interface,
+    Internal,
+    Namespace,
+    New,
+    Null,
+    Object,
+    Operator,
+    Out,
+    Override,
+    Params,
+    Private,
+    Protected,
+    Public,
+    Readonly,
+    Record,
+    Ref,
+    Required,
+    Sealed,
+    Static,
+    Struct,
+    Virtual,
+    Void,
+    Volatile,
+    Where,
+    PrivateProtected,
+    ProtectedInternal
 }
 
 /// <summary>
@@ -17,10 +52,10 @@ internal enum Keyword
 internal static class KeywordExtensions
 {
     /// <summary>
-    /// Get string representation of the keyword
+    /// Get string representation of the keyword.
     /// </summary>
-    /// <param name="keyword">Keyword to convert to string</param>
-    /// <returns>string representation of the keyword that is used in C#</returns>
+    /// <param name="keyword">Keyword to convert.</param>
+    /// <returns>String representation (in C# style) of the keyword.</returns>
     internal static string GetString(this Keyword keyword)
     {
         return keyword switch
