@@ -6,4 +6,4 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels;
 /// <param name="Parameters">Collection of the constructor parameters.</param>
 /// <param name="DocComment">Documentation comment for the constructor.</param>
 /// <param name="Modifiers">Collection of the constructor modifiers (e.g. private, static, etc.)</param>
-public record ConstructorTemplateModel(IEnumerable<MethodParameterTemplateModel> Parameters, string DocComment, IEnumerable<string> Modifiers);
+public record ConstructorTemplateModel(IEnumerable<ParameterTemplateModel> Parameters, string DocComment, IEnumerable<string> Modifiers);

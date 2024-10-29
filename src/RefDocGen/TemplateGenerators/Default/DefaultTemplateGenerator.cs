@@ -9,11 +9,6 @@ namespace RefDocGen.TemplateGenerators.Default;
 internal class DefaultTemplateGenerator : RazorLightTemplateGenerator<ClassTemplateModel>
 {
     /// <summary>
-    /// The instance used for building template models.
-    /// </summary>
-    private readonly DefaultTemplateModelBuilder templateModelBuilder = new();
-
-    /// <summary>
     /// Create a new instance of <see cref="DefaultTemplateGenerator"/> class
     /// </summary>
     /// <param name="projectPath">Path to the project root directory.</param>
@@ -26,6 +21,6 @@ internal class DefaultTemplateGenerator : RazorLightTemplateGenerator<ClassTempl
     /// <inheritdoc/>
     protected override IEnumerable<ClassTemplateModel> GetTemplateModels(IReadOnlyList<IClassData> classes)
     {
-        return classes.Select(templateModelBuilder.CreateClassTemplateModel);
+        return classes.Select(DefaultTemplateModelCreator.TransformToTemplateModel);
     }
 }

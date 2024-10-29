@@ -33,7 +33,7 @@ internal abstract class RazorLightTemplateGenerator<T> : ITemplateGenerator wher
     /// <param name="projectPath">Path to the project root directory.</param>
     /// <param name="templatePath">Path to the Razor template file.</param>
     /// <param name="outputDir">RazorLight engine used for generating the templates.</param>
-    public RazorLightTemplateGenerator(string projectPath, string templatePath, string outputDir)
+    protected RazorLightTemplateGenerator(string projectPath, string templatePath, string outputDir)
     {
         this.templatePath = templatePath;
         this.outputDir = outputDir;
