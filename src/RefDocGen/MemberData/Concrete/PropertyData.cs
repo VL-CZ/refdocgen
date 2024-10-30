@@ -103,5 +103,7 @@ internal class PropertyData : IPropertyData
 
     /// <inheritdoc/>
     public XElement DocComment { get; internal set; } = XmlDocElementFactory.EmptySummary;
+
+    public Type PropertyType => PropertyInfo.PropertyType;
 }
 

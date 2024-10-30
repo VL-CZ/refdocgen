@@ -2,6 +2,7 @@ using RefDocGen.MemberData.Abstract;
 using RefDocGen.TemplateGenerators.Default.TemplateModels;
 using RefDocGen.TemplateGenerators.Default.Tools;
 using RefDocGen.TemplateGenerators.Default.Tools.Extensions;
+using RefDocGen.Tools;
 
 namespace RefDocGen.TemplateGenerators.Default;
 
@@ -89,7 +90,7 @@ internal static class DefaultTemplateModelCreator
             setterModifiers.Add(propertyData.Setter.AccessModifier.ToKeyword());
         }
 
-        return new PropertyTemplateModel(propertyData.Name, propertyData.Type, propertyData.DocComment.Value,
+        return new PropertyTemplateModel(propertyData.Name, TypeName.From(propertyData.PropertyType), propertyData.DocComment.Value,
             modifiers.GetStrings(), propertyData.Getter is not null, propertyData.Setter is not null, getterModifiers.GetStrings(), setterModifiers.GetStrings());
     }
 
