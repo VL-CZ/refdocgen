@@ -2,6 +2,7 @@ using RefDocGen.MemberData.Abstract;
 using RefDocGen.TemplateGenerators.Default.TemplateModels;
 using RefDocGen.TemplateGenerators.Default.Tools;
 using RefDocGen.TemplateGenerators.Default.Tools.Extensions;
+using RefDocGen.Tools;
 
 namespace RefDocGen.TemplateGenerators.Default;
 
@@ -64,7 +65,7 @@ internal static class DefaultTemplateModelCreator
             modifiers.Add(Keyword.Readonly);
         }
 
-        return new FieldTemplateModel(fieldData.Name, fieldData.Type, fieldData.DocComment.Value, modifiers.GetStrings());
+        return new FieldTemplateModel(fieldData.Name, TypeName.From(fieldData.Type), fieldData.DocComment.Value, modifiers.GetStrings());
     }
 
     /// <summary>
@@ -89,7 +90,7 @@ internal static class DefaultTemplateModelCreator
             setterModifiers.Add(propertyData.Setter.AccessModifier.ToKeyword());
         }
 
-        return new PropertyTemplateModel(propertyData.Name, propertyData.Type, propertyData.DocComment.Value,
+        return new PropertyTemplateModel(propertyData.Name, TypeName.From(propertyData.Type), propertyData.DocComment.Value,
             modifiers.GetStrings(), propertyData.Getter is not null, propertyData.Setter is not null, getterModifiers.GetStrings(), setterModifiers.GetStrings());
     }
 
@@ -102,9 +103,13 @@ internal static class DefaultTemplateModelCreator
     {
         var modifiers = GetCallableMemberModifiers(methodData);
 
-        return new MethodTemplateModel(methodData.Name,
+        return new MethodTemplateModel(
+            methodData.Name,
             methodData.Parameters.Select(TransformToTemplateModel).ToArray(),
-            methodData.ReturnType, methodData.DocComment.Value, methodData.ReturnValueDocComment.Value, modifiers.GetStrings());
+            TypeName.From(methodData.ReturnType),
+            methodData.DocComment.Value,
+            methodData.ReturnValueDocComment.Value,
+            modifiers.GetStrings());
     }
 
     /// <summary>
@@ -136,7 +141,7 @@ internal static class DefaultTemplateModelCreator
             modifiers.Add(Keyword.Params);
         }
 
-        return new ParameterTemplateModel(parameterData.Name, parameterData.TypeName, parameterData.DocComment.Value,
+        return new ParameterTemplateModel(parameterData.Name, TypeName.From(parameterData.Type), parameterData.DocComment.Value,
             modifiers.GetStrings(), parameterData.IsOptional);
     }
 

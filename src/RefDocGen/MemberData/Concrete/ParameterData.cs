@@ -14,6 +14,7 @@ internal class ParameterData : IParameterData
     public ParameterData(ParameterInfo parameterInfo)
     {
         ParameterInfo = parameterInfo;
+        Type = new TypeNameData(parameterInfo.ParameterType);
         DocComment = XmlDocElementFactory.EmptyParamWithName(Name);
     }
 
@@ -24,7 +25,7 @@ internal class ParameterData : IParameterData
     public string Name => ParameterInfo.Name ?? string.Empty;
 
     /// <inheritdoc/>
-    public string TypeName => ParameterInfo.ParameterType.Name;
+    public ITypeNameData Type { get; }
 
     /// <inheritdoc/>
     public bool IsParamsCollection => ParameterInfo.GetCustomAttribute(typeof(ParamArrayAttribute)) != null;
