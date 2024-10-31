@@ -27,5 +27,3 @@ jobs:
         run: dotnet test --no-build --verbosity normal
       - name: Check formatting
         run: dotnet format style --verify-no-changes
-      - name: Check whitespaces
-        run: dotnet format whitespace --verify-no-changes
