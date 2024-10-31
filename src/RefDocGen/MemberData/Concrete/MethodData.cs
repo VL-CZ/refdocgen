@@ -17,6 +17,7 @@ internal class MethodData : ExecutableMemberData, IMethodData
     public MethodData(MethodInfo methodInfo) : base(methodInfo)
     {
         MethodInfo = methodInfo;
+        ReturnType = new TypeNameData(methodInfo.ReturnType);
     }
 
     /// <inheritdoc/>
@@ -26,7 +27,7 @@ internal class MethodData : ExecutableMemberData, IMethodData
     public override string Name => MethodInfo.Name;
 
     /// <inheritdoc/>
-    public string ReturnType => MethodInfo.ReturnType.Name;
+    public ITypeNameData ReturnType { get; }
 
     /// <inheritdoc/>
     public XElement ReturnValueDocComment { get; internal set; } = XmlDocElementFactory.EmptyReturns;

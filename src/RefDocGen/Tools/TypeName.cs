@@ -1,24 +1,30 @@
+using RefDocGen.MemberData.Abstract;
 using System.Text;
 
 namespace RefDocGen.Tools;
 
 internal class TypeName
 {
-    public static string From(Type type)
+    public static string From(ITypeNameData type)
     {
-        var sb = new StringBuilder();
         string name = type.Name;
 
-        if (!type.IsGenericType)
+        if (type.IsGeneric)
+        {
+            int backTickIndex = name.IndexOf('`');
+            string nameWithoutGenericParams = name[..backTickIndex];
+
+            var sb = new StringBuilder(nameWithoutGenericParams);
+
+            return sb.Append('<')
+                .Append(string.Join(", ", type.GenericParameters.Select(From)))
+                .Append('>')
+                .ToString();
+        }
+        else
         {
             return name;
         }
-
-        sb.Append(name[..name.IndexOf('`')]);
-        sb.Append('<');
-        sb.Append(string.Join(", ", type.GetGenericArguments().Select(From)));
-        sb.Append('>');
-        return sb.ToString();
     }
 }
 

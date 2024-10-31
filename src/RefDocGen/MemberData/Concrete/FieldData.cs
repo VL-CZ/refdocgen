@@ -17,6 +17,7 @@ internal class FieldData : IFieldData
     public FieldData(FieldInfo fieldInfo)
     {
         FieldInfo = fieldInfo;
+        Type = new TypeNameData(fieldInfo.FieldType);
     }
 
     /// <inheritdoc/>
@@ -29,7 +30,7 @@ internal class FieldData : IFieldData
     public string Name => FieldInfo.Name;
 
     /// <inheritdoc/>
-    public string Type => FieldInfo.FieldType.Name;
+    public ITypeNameData Type { get; }
 
     /// <inheritdoc/>
     public AccessModifier AccessModifier => AccessModifierExtensions.GetAccessModifier(FieldInfo.IsPrivate, FieldInfo.IsFamily,

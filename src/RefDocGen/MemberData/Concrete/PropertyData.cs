@@ -17,6 +17,8 @@ internal class PropertyData : IPropertyData
     public PropertyData(PropertyInfo propertyInfo)
     {
         PropertyInfo = propertyInfo;
+        Type = new TypeNameData(propertyInfo.PropertyType);
+
         Getter = PropertyInfo.GetMethod is not null ? new MethodData(PropertyInfo.GetMethod) : null;
         Setter = PropertyInfo.SetMethod is not null ? new MethodData(PropertyInfo.SetMethod) : null;
     }
@@ -37,7 +39,7 @@ internal class PropertyData : IPropertyData
     public string Name => PropertyInfo.Name;
 
     /// <inheritdoc/>
-    public string Type => PropertyInfo.PropertyType.Name;
+    public ITypeNameData Type { get; }
 
     /// <inheritdoc/>
     public IEnumerable<IMethodData> Accessors
@@ -103,7 +105,5 @@ internal class PropertyData : IPropertyData
 
     /// <inheritdoc/>
     public XElement DocComment { get; internal set; } = XmlDocElementFactory.EmptySummary;
-
-    public Type PropertyType => PropertyInfo.PropertyType;
 }
 

@@ -21,7 +21,7 @@ public interface IParameterData
     /// <summary>
     /// Type of the parameter.
     /// </summary>
-    string TypeName { get; }
+    ITypeNameData Type { get; }
 
     /// <summary>
     /// Checks if the parameter is a <c>params</c> collection.

@@ -36,7 +36,4 @@ public interface IPropertyData : IValueMemberData, ICallableMemberData
     /// Gets the access modifier of the setter, or <c>null</c> if no setter exists.
     /// </summary>
     AccessModifier? SetterAccessModifier { get; }
-
-
-    Type PropertyType { get; }
 }

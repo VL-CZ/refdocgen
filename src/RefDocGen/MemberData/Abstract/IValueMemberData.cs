@@ -16,7 +16,7 @@ public interface IValueMemberData : IMemberData
     bool IsReadonly { get; }
 
     /// <summary>
-    /// Type of the field.
+    /// TODO: update
     /// </summary>
-    string Type { get; }
+    ITypeNameData Type { get; }
 }

@@ -16,7 +16,7 @@ public interface IMethodData : IExecutableMemberData
     /// <summary>
     /// Return type of the method.
     /// </summary>
-    string ReturnType { get; }
+    ITypeNameData ReturnType { get; }
 
     /// <summary>
     /// Documentation comment for the method return value.
