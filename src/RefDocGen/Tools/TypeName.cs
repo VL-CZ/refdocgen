@@ -7,7 +7,7 @@ internal class TypeName
 {
     public static string From(ITypeNameData type)
     {
-        string name = type.Name;
+        string name = type.ShortName;
 
         if (type.IsGeneric)
         {

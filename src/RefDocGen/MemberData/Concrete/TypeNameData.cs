@@ -12,15 +12,15 @@ internal class TypeNameData : ITypeNameData
 
     public Type Type { get; }
 
-    public string Name => Type.Name;
+    public string ShortName => Type.Name;
 
-    public string FullName => Type.FullName ?? Name;
+    public string FullName => Type.Namespace is not null ? $"{Type.Namespace}.{Type.Name}" : Type.Name;
 
     public string Id
     {
         get
         {
-            string name = $"{Type.Namespace}.{Name}";
+            string name = FullName;
 
             if (IsGeneric)
             {

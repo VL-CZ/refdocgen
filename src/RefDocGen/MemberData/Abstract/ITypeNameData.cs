@@ -6,7 +6,7 @@ public interface ITypeNameData
 
     string Id { get; }
 
-    string Name { get; }
+    string ShortName { get; }
 
     string FullName { get; }
 
