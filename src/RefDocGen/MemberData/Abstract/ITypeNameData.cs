@@ -10,6 +10,8 @@ public interface ITypeNameData
 
     string FullName { get; }
 
+    string? Namespace { get; }
+
     bool IsGeneric { get; }
 
     IReadOnlyList<ITypeNameData> GenericParameters { get; }

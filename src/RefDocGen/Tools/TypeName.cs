@@ -11,10 +11,7 @@ internal class TypeName
 
         if (type.IsGeneric)
         {
-            int backTickIndex = name.IndexOf('`');
-            string nameWithoutGenericParams = name[..backTickIndex];
-
-            var sb = new StringBuilder(nameWithoutGenericParams);
+            var sb = new StringBuilder(name);
 
             return sb.Append('<')
                 .Append(string.Join(", ", type.GenericParameters.Select(From)))

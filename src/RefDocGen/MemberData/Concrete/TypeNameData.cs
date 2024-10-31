@@ -1,5 +1,4 @@
 using RefDocGen.MemberData.Abstract;
-using System.Text;
 
 namespace RefDocGen.MemberData.Concrete;
 
@@ -12,9 +11,30 @@ internal class TypeNameData : ITypeNameData
 
     public Type Type { get; }
 
-    public string ShortName => Type.Name;
+    public string ShortName
+    {
+        get
+        {
+            string name = Type.Name;
 
-    public string FullName => Type.Namespace is not null ? $"{Type.Namespace}.{Type.Name}" : Type.Name;
+            // remove the backtick and number of generic arguments (if present)
+            int backTickIndex = name.IndexOf('`');
+            if (backTickIndex >= 0)
+            {
+                name = name[..backTickIndex];
+            }
+
+            // remove the reference suffix (if present)
+            if (name.EndsWith('&'))
+            {
+                name = name[..^1];
+            }
+
+            return name;
+        }
+    }
+
+    public string FullName => Type.Namespace is not null ? $"{Type.Namespace}.{ShortName}" : ShortName;
 
     public string Id
     {
@@ -24,25 +44,17 @@ internal class TypeNameData : ITypeNameData
 
             if (IsGeneric)
             {
-                int backTickIndex = name.IndexOf('`');
-                string nameWithoutGenericParams = name[..backTickIndex];
-
-                var sb = new StringBuilder(nameWithoutGenericParams);
-
-                return sb.Append('{')
-                    .Append(string.Join(", ", GenericParameters.Select(p => p.Id)))
-                    .Append('}')
-                    .Replace('&', '@')
-                    .ToString();
+                name = name + '{' + string.Join(",", GenericParameters.Select(p => p.Id)) + '}';
             }
-            else
-            {
-                return name.Replace('&', '@');
-            }
+
+            return name.Replace('&', '@');
         }
     }
 
     public bool IsGeneric => Type.IsGenericType;
 
+    public string? Namespace => Type.Namespace;
+
     public IReadOnlyList<ITypeNameData> GenericParameters => Type.GetGenericArguments().Select(t => new TypeNameData(t)).ToArray();
+
 }
