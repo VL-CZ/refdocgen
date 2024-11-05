@@ -1,4 +1,4 @@
-namespace RefDocGen.TemplateGenerators.Default.Tools;
+namespace RefDocGen.TemplateGenerators.Default.Tools.Keywords;
 
 /// <summary>
 /// Enum representing various C# keywords and modifiers

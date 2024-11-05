@@ -1,7 +1,7 @@
 using RefDocGen.MemberData.Abstract;
 using System.Text;
 
-namespace RefDocGen.Tools;
+namespace RefDocGen.TemplateGenerators.Default.Tools;
 
 internal class TypeName
 {

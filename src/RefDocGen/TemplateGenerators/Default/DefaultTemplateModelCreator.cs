@@ -2,7 +2,7 @@ using RefDocGen.MemberData.Abstract;
 using RefDocGen.TemplateGenerators.Default.TemplateModels;
 using RefDocGen.TemplateGenerators.Default.Tools;
 using RefDocGen.TemplateGenerators.Default.Tools.Extensions;
-using RefDocGen.Tools;
+using RefDocGen.TemplateGenerators.Default.Tools.Keywords;
 
 namespace RefDocGen.TemplateGenerators.Default;
 
