@@ -65,7 +65,7 @@ internal static class DefaultTemplateModelCreator
             modifiers.Add(Keyword.Readonly);
         }
 
-        return new FieldTemplateModel(fieldData.Name, TypeName.From(fieldData.Type), fieldData.DocComment.Value, modifiers.GetStrings());
+        return new FieldTemplateModel(fieldData.Name, CSharpTypeName.From(fieldData.Type), fieldData.DocComment.Value, modifiers.GetStrings());
     }
 
     /// <summary>
@@ -90,7 +90,7 @@ internal static class DefaultTemplateModelCreator
             setterModifiers.Add(propertyData.Setter.AccessModifier.ToKeyword());
         }
 
-        return new PropertyTemplateModel(propertyData.Name, TypeName.From(propertyData.Type), propertyData.DocComment.Value,
+        return new PropertyTemplateModel(propertyData.Name, CSharpTypeName.From(propertyData.Type), propertyData.DocComment.Value,
             modifiers.GetStrings(), propertyData.Getter is not null, propertyData.Setter is not null, getterModifiers.GetStrings(), setterModifiers.GetStrings());
     }
 
@@ -106,7 +106,7 @@ internal static class DefaultTemplateModelCreator
         return new MethodTemplateModel(
             methodData.Name,
             methodData.Parameters.Select(TransformToTemplateModel).ToArray(),
-            TypeName.From(methodData.ReturnType),
+            CSharpTypeName.From(methodData.ReturnType),
             methodData.DocComment.Value,
             methodData.ReturnValueDocComment.Value,
             modifiers.GetStrings());
@@ -141,7 +141,7 @@ internal static class DefaultTemplateModelCreator
             modifiers.Add(Keyword.Params);
         }
 
-        return new ParameterTemplateModel(parameterData.Name, TypeName.From(parameterData.Type), parameterData.DocComment.Value,
+        return new ParameterTemplateModel(parameterData.Name, CSharpTypeName.From(parameterData.Type), parameterData.DocComment.Value,
             modifiers.GetStrings(), parameterData.IsOptional);
     }
 
