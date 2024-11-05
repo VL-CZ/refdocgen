@@ -5,7 +5,7 @@ namespace RefDocGen.TemplateGenerators.Default.Tools;
 
 internal class CSharpTypeName
 {
-    public static string From(ITypeNameData type, string genericParamBegin = "<", string genericParamEnd = ">", string genericParamDelimiter = ", ")
+    public static string From(ITypeNameData type)
     {
         string name = BuiltInTypeName.Get(type);
 
@@ -13,9 +13,9 @@ internal class CSharpTypeName
         {
             var sb = new StringBuilder(name);
 
-            return sb.Append(genericParamBegin)
-                .Append(string.Join(genericParamDelimiter, type.GenericParameters.Select(p => From(p, genericParamBegin, genericParamEnd, genericParamDelimiter))))
-                .Append(genericParamEnd)
+            return sb.Append('<')
+                .Append(string.Join(", ", type.GenericParameters.Select(From)))
+                .Append('>')
                 .ToString();
         }
         else

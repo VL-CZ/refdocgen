@@ -76,4 +76,7 @@ internal class TypeNameData : ITypeNameData
 
     /// <inheritdoc/>
     public bool IsArray => TypeObject.IsArray;
+
+    /// <inheritdoc/>
+    public bool IsVoid => TypeObject == typeof(void);
 }

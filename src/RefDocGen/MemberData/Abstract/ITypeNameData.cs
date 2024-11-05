@@ -66,6 +66,11 @@ public interface ITypeNameData
     bool IsArray { get; }
 
     /// <summary>
+    /// Checks whether the type represents <seealso cref="void"/>.
+    /// </summary>
+    bool IsVoid { get; }
+
+    /// <summary>
     /// Generic parameters of the type. If the type doesn't have any, an empty collection is returned.
     /// </summary>
     IReadOnlyList<ITypeNameData> GenericParameters { get; }

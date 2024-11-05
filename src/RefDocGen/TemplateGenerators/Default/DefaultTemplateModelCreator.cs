@@ -107,6 +107,7 @@ internal static class DefaultTemplateModelCreator
             methodData.Name,
             methodData.Parameters.Select(TransformToTemplateModel).ToArray(),
             CSharpTypeName.From(methodData.ReturnType),
+            methodData.ReturnType.IsVoid,
             methodData.DocComment.Value,
             methodData.ReturnValueDocComment.Value,
             modifiers.GetStrings());
