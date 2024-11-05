@@ -15,7 +15,7 @@ internal static class DefaultTemplateModelCreator
     /// Transforms the provided <see cref="IClassData"/> instance into a corresponding <see cref="ClassTemplateModel"/>.
     /// </summary>
     /// <param name="classData">The <see cref="IClassData"/> instance representing the class.</param>
-    /// <returns>A <see cref="ClassTemplateModel"/> instance based on the provided <see cref="classData"/>.</returns>
+    /// <returns>A <see cref="ClassTemplateModel"/> instance based on the provided <paramref name="classData"/>.</returns>
     public static ClassTemplateModel TransformToTemplateModel(IClassData classData)
     {
         var constructors = classData.Constructors.Select(TransformToTemplateModel).ToArray();
@@ -32,7 +32,7 @@ internal static class DefaultTemplateModelCreator
     /// Transforms the provided <see cref="IConstructorData"/> instance into a corresponding <see cref="ConstructorTemplateModel"/>.
     /// </summary>
     /// <param name="constructorData">The <see cref="IConstructorData"/> instance representing the constructor.</param>
-    /// <returns>A <see cref="ConstructorTemplateModel"/> instance based on the provided <see cref="constructorData"/>.</returns>
+    /// <returns>A <see cref="ConstructorTemplateModel"/> instance based on the provided <paramref name="constructorData"/>.</returns>
     private static ConstructorTemplateModel TransformToTemplateModel(IConstructorData constructorData)
     {
         var modifiers = GetCallableMemberModifiers(constructorData);
@@ -45,7 +45,7 @@ internal static class DefaultTemplateModelCreator
     /// Transforms the provided <see cref="IFieldData"/> instance into a corresponding <see cref="FieldTemplateModel"/>.
     /// </summary>
     /// <param name="fieldData">The <see cref="IFieldData"/> instance representing the field.</param>
-    /// <returns>A <see cref="FieldTemplateModel"/> instance based on the provided <see cref="fieldData"/>.</returns>
+    /// <returns>A <see cref="FieldTemplateModel"/> instance based on the provided <paramref name="fieldData"/>.</returns>
     private static FieldTemplateModel TransformToTemplateModel(IFieldData fieldData)
     {
         List<Keyword> modifiers = [fieldData.AccessModifier.ToKeyword()];
@@ -72,7 +72,7 @@ internal static class DefaultTemplateModelCreator
     /// Transforms the provided <see cref="IPropertyData"/> instance into a corresponding <see cref="PropertyTemplateModel"/>.
     /// </summary>
     /// <param name="propertyData">The <see cref="IPropertyData"/> instance representing the property.</param>
-    /// <returns>A <see cref="PropertyTemplateModel"/> instance based on the provided <see cref="propertyData"/>.</returns>
+    /// <returns>A <see cref="PropertyTemplateModel"/> instance based on the provided <paramref name="propertyData"/>.</returns>
     private static PropertyTemplateModel TransformToTemplateModel(IPropertyData propertyData)
     {
         var modifiers = GetCallableMemberModifiers(propertyData);
@@ -98,7 +98,7 @@ internal static class DefaultTemplateModelCreator
     /// Transforms the provided <see cref="IMethodData"/> instance into a corresponding <see cref="MethodTemplateModel"/>.
     /// </summary>
     /// <param name="methodData">The <see cref="IMethodData"/> instance representing the method.</param>
-    /// <returns>A <see cref="MethodTemplateModel"/> instance based on the provided <see cref="methodData"/>.</returns>
+    /// <returns>A <see cref="MethodTemplateModel"/> instance based on the provided <paramref name="methodData"/>.</returns>
     private static MethodTemplateModel TransformToTemplateModel(IMethodData methodData)
     {
         var modifiers = GetCallableMemberModifiers(methodData);
@@ -116,7 +116,7 @@ internal static class DefaultTemplateModelCreator
     /// Transforms the provided <see cref="IParameterData"/> instance into a corresponding <see cref="ParameterTemplateModel"/>.
     /// </summary>
     /// <param name="parameterData">The <see cref="IParameterData"/> instance representing the parameter.</param>
-    /// <returns>A <see cref="ParameterTemplateModel"/> instance based on the provided <see cref="parameterData"/>.</returns>
+    /// <returns>A <see cref="ParameterTemplateModel"/> instance based on the provided <paramref name="parameterData"/>.</returns>
     private static ParameterTemplateModel TransformToTemplateModel(IParameterData parameterData)
     {
         List<Keyword> modifiers = [];

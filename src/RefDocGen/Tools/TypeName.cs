@@ -9,7 +9,7 @@ internal class TypeName
     {
         string name = type.ShortName;
 
-        if (type.IsGeneric)
+        if (type.HasGenericParameters)
         {
             var sb = new StringBuilder(name);
 
