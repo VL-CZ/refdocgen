@@ -61,6 +61,11 @@ public interface ITypeNameData
     bool HasGenericParameters { get; }
 
     /// <summary>
+    /// Checks whether the type represents an array.
+    /// </summary>
+    bool IsArray { get; }
+
+    /// <summary>
     /// Generic parameters of the type. If the type doesn't have any, an empty collection is returned.
     /// </summary>
     IReadOnlyList<ITypeNameData> GenericParameters { get; }

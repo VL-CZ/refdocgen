@@ -28,8 +28,19 @@ internal class BuiltInTypeName
 
     internal static string Get(ITypeNameData type)
     {
-        return builtInTypes.TryGetValue(type.TypeObject, out string? builtInName)
+        var t = type.TypeObject.GetElementType() ?? type.TypeObject;
+
+        string name = builtInTypes.TryGetValue(t, out string? builtInName)
             ? builtInName
             : type.ShortName;
+
+        if (type.IsArray)
+        {
+            int rank = type.TypeObject.GetArrayRank();
+
+            name += "[" + new string(',', rank - 1) + "]";
+        }
+
+        return name;
     }
 }
