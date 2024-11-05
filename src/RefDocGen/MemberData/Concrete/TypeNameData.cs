@@ -1,48 +1,77 @@
 using RefDocGen.MemberData.Abstract;
-using System.Text;
 
 namespace RefDocGen.MemberData.Concrete;
 
+/// <summary>
+/// Class representing name-related data of a type, including its name, namespace, and generic parameters (if present).
+/// <para>
+/// Doesn't include any type member data (such as fields, methods, etc.)
+/// </para>
+/// </summary>
 internal class TypeNameData : ITypeNameData
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TypeNameData"/> class.
+    /// </summary>
+    /// <param name="type"><see cref="Type"/> object representing the type.</param>
     public TypeNameData(Type type)
     {
-        Type = type;
+        TypeObject = type;
     }
 
-    public Type Type { get; }
+    /// <inheritdoc/>
+    public Type TypeObject { get; }
 
-    public string Name => Type.Name;
+    /// <inheritdoc/>
+    public string ShortName
+    {
+        get
+        {
+            string name = TypeObject.Name;
 
-    public string FullName => Type.FullName ?? Name;
+            // remove the backtick and number of generic arguments (if present)
+            int backTickIndex = name.IndexOf('`');
+            if (backTickIndex >= 0)
+            {
+                name = name[..backTickIndex];
+            }
 
+            // remove the reference suffix (if present)
+            if (name.EndsWith('&'))
+            {
+                name = name[..^1];
+            }
+
+            return name;
+        }
+    }
+
+    /// <inheritdoc/>
+    public string FullName => TypeObject.Namespace is not null ? $"{TypeObject.Namespace}.{ShortName}" : ShortName;
+
+    /// <inheritdoc/>
     public string Id
     {
         get
         {
-            string name = $"{Type.Namespace}.{Name}";
+            string name = FullName;
 
-            if (IsGeneric)
+            if (HasGenericParameters)
             {
-                int backTickIndex = name.IndexOf('`');
-                string nameWithoutGenericParams = name[..backTickIndex];
-
-                var sb = new StringBuilder(nameWithoutGenericParams);
-
-                return sb.Append('{')
-                    .Append(string.Join(", ", GenericParameters.Select(p => p.Id)))
-                    .Append('}')
-                    .Replace('&', '@')
-                    .ToString();
+                name = name + '{' + string.Join(",", GenericParameters.Select(p => p.Id)) + '}';
             }
-            else
-            {
-                return name.Replace('&', '@');
-            }
+
+            return name.Replace('&', '@');
         }
     }
 
-    public bool IsGeneric => Type.IsGenericType;
+    /// <inheritdoc/>
+    public bool HasGenericParameters => TypeObject.IsGenericType;
 
-    public IReadOnlyList<ITypeNameData> GenericParameters => Type.GetGenericArguments().Select(t => new TypeNameData(t)).ToArray();
+    /// <inheritdoc/>
+    public string? Namespace => TypeObject.Namespace;
+
+    /// <inheritdoc/>
+    public IReadOnlyList<ITypeNameData> GenericParameters => TypeObject.GetGenericArguments().Select(t => new TypeNameData(t)).ToArray();
+
 }

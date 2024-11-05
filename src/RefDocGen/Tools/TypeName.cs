@@ -7,14 +7,11 @@ internal class TypeName
 {
     public static string From(ITypeNameData type)
     {
-        string name = type.Name;
+        string name = type.ShortName;
 
-        if (type.IsGeneric)
+        if (type.HasGenericParameters)
         {
-            int backTickIndex = name.IndexOf('`');
-            string nameWithoutGenericParams = name[..backTickIndex];
-
-            var sb = new StringBuilder(nameWithoutGenericParams);
+            var sb = new StringBuilder(name);
 
             return sb.Append('<')
                 .Append(string.Join(", ", type.GenericParameters.Select(From)))

@@ -6,17 +6,17 @@ namespace RefDocGen.MemberData.Abstract;
 public interface IValueMemberData : IMemberData
 {
     /// <summary>
-    /// Checks if the member is constant.
+    /// Checks if the member is a compile-time constant.
     /// </summary>
     bool IsConstant { get; }
 
     /// <summary>
-    /// Checks if the member is readonly.
+    /// Checks if the member is readonly (i.e. can be set just inside a constructor)
     /// </summary>
     bool IsReadonly { get; }
 
     /// <summary>
-    /// TODO: update
+    /// Type of the value.
     /// </summary>
     ITypeNameData Type { get; }
 }

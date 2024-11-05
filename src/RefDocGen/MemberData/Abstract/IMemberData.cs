@@ -9,7 +9,6 @@ public interface IMemberData
 {
     /// <summary>
     /// Identifier of the member in the same format as in the XML documentation comments file.
-    ///
     /// Consists of the member name (without namespace and type name) and parameters string (if the member has them - e.g. a method).
     /// <para>
     /// The format is described here: <see href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/#id-strings"/>
