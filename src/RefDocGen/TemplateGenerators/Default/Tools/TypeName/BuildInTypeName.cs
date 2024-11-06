@@ -1,6 +1,6 @@
 using RefDocGen.MemberData.Abstract;
 
-namespace RefDocGen.TemplateGenerators.Default.Tools;
+namespace RefDocGen.TemplateGenerators.Default.Tools.TypeName;
 
 internal class BuiltInTypeName
 {
@@ -26,21 +26,32 @@ internal class BuiltInTypeName
         { typeof(void), "void" },
     };
 
+    private static Type GetBaseElementType(Type type)
+    {
+        var elementType = type.GetElementType();
+
+        return elementType is null ? type : GetBaseElementType(elementType);
+    }
+
     internal static string Get(ITypeNameData type)
     {
-        var t = type.TypeObject.GetElementType() ?? type.TypeObject;
+        var t = GetBaseElementType(type.TypeObject);
 
-        string name = builtInTypes.TryGetValue(t, out string? builtInName)
-            ? builtInName
-            : type.ShortName;
-
-        if (type.IsArray)
+        if (builtInTypes.TryGetValue(t, out string? builtInName))
         {
-            int rank = type.TypeObject.GetArrayRank();
-
-            name += "[" + new string(',', rank - 1) + "]";
+            if (type.IsArray)
+            {
+                int endOfTypeNameIndex = type.ShortName.IndexOf('[');
+                return builtInName + type.ShortName[endOfTypeNameIndex..];
+            }
+            else
+            {
+                return builtInName;
+            }
         }
-
-        return name;
+        else
+        {
+            return type.ShortName;
+        }
     }
 }

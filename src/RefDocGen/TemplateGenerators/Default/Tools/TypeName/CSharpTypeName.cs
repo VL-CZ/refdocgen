@@ -1,7 +1,7 @@
 using RefDocGen.MemberData.Abstract;
 using System.Text;
 
-namespace RefDocGen.TemplateGenerators.Default.Tools;
+namespace RefDocGen.TemplateGenerators.Default.Tools.TypeName;
 
 internal class CSharpTypeName
 {

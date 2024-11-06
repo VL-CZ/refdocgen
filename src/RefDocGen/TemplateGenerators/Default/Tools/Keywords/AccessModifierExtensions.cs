@@ -1,7 +1,6 @@
 using RefDocGen.MemberData;
-using RefDocGen.TemplateGenerators.Default.Tools.Keywords;
 
-namespace RefDocGen.TemplateGenerators.Default.Tools.Extensions;
+namespace RefDocGen.TemplateGenerators.Default.Tools.Keywords;
 
 /// <summary>
 /// Class containing extension methods for <see cref="AccessModifier"/> enum.
