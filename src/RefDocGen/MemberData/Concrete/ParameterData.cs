@@ -40,7 +40,7 @@ internal class ParameterData : IParameterData
     public bool IsOutput => ParameterInfo.IsOut;
 
     /// <inheritdoc/>
-    public bool IsPassedByReference => ParameterInfo.ParameterType.IsByRef;
+    public bool IsByRef => ParameterInfo.ParameterType.IsByRef;
 
     /// <inheritdoc/>
     public XElement DocComment { get; internal set; }

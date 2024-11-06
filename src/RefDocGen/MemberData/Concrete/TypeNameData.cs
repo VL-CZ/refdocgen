@@ -79,4 +79,7 @@ internal class TypeNameData : ITypeNameData
 
     /// <inheritdoc/>
     public bool IsVoid => TypeObject == typeof(void);
+
+    /// <inheritdoc/>
+    public bool IsPointer => TypeObject.IsPointer;
 }

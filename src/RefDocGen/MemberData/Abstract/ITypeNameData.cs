@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Components.Web;
+
 namespace RefDocGen.MemberData.Abstract;
 
 #pragma warning disable CA1716
@@ -74,6 +76,11 @@ public interface ITypeNameData
     /// Generic parameters of the type. If the type doesn't have any, an empty collection is returned.
     /// </summary>
     IReadOnlyList<ITypeNameData> GenericParameters { get; }
+
+    /// <summary>
+    /// Checks whether the type is a pointer.
+    /// </summary>
+    bool IsPointer { get; }
 }
 
 #pragma warning restore CA1716
