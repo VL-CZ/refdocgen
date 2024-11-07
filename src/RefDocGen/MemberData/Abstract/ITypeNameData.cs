@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Components.Web;
-
 namespace RefDocGen.MemberData.Abstract;
 
 #pragma warning disable CA1716
