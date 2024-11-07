@@ -74,4 +74,12 @@ internal class TypeNameData : ITypeNameData
     /// <inheritdoc/>
     public IReadOnlyList<ITypeNameData> GenericParameters => TypeObject.GetGenericArguments().Select(t => new TypeNameData(t)).ToArray();
 
+    /// <inheritdoc/>
+    public bool IsArray => TypeObject.IsArray;
+
+    /// <inheritdoc/>
+    public bool IsVoid => TypeObject == typeof(void);
+
+    /// <inheritdoc/>
+    public bool IsPointer => TypeObject.IsPointer;
 }

@@ -45,7 +45,7 @@ internal abstract class ExecutableMemberData : IExecutableMemberData
             {
                 // Get the parameters in the format: System.String, System.Int32, etc.
                 var parameterNames = Parameters.Select(
-                            p => p.IsPassedByReference ? p.Type.Id + "@" : p.Type.Id    // if the param is passed by reference, add '@' suffix
+                            p => p.IsByRef ? p.Type.Id + "@" : p.Type.Id    // if the param is passed by reference, add '@' suffix
                         );
 
                 return Name + "(" + string.Join(",", parameterNames) + ")";

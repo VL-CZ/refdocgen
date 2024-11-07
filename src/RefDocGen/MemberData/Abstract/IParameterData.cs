@@ -47,7 +47,7 @@ public interface IParameterData
     /// <summary>
     /// Checks if the parameter is passed by reference.
     /// </summary>
-    bool IsPassedByReference { get; }
+    bool IsByRef { get; }
 
     /// <summary>
     /// XML doc comment for the parameter.

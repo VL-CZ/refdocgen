@@ -1,4 +1,4 @@
-namespace RefDocGen.TemplateGenerators.Default.Tools.Extensions;
+namespace RefDocGen.TemplateGenerators.Default.Tools.Keywords;
 
 /// <summary>
 /// Class containing extension methods for <see cref="IEnumerable{T}"/> interface.

@@ -1,6 +1,6 @@
 using RefDocGen.MemberData.Abstract;
 
-namespace RefDocGen.TemplateGenerators.Default.Tools;
+namespace RefDocGen.TemplateGenerators.Default.Tools.Keywords;
 
 /// <summary>
 /// Static class containing additional methods related to the 'ref' keyword.
@@ -14,6 +14,6 @@ internal static class RefKeyword
     /// <returns>Boolean representing if the 'ref' keyword is present in the parameter signature.</returns>
     internal static bool IsPresentIn(IParameterData parameterData)
     {
-        return parameterData.IsPassedByReference && !parameterData.IsInput && !parameterData.IsOutput;
+        return parameterData.IsByRef && !parameterData.IsInput && !parameterData.IsOutput;
     }
 }
