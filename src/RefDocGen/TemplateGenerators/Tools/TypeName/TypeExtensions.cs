@@ -1,4 +1,4 @@
-namespace RefDocGen.TemplateGenerators.Default.Tools.TypeName;
+namespace RefDocGen.TemplateGenerators.Tools.TypeName;
 
 /// <summary>
 /// Class containing extension methods for the <see cref="Type"/> class.
