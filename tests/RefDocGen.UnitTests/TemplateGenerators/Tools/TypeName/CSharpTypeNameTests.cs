@@ -59,13 +59,7 @@ public class CSharpTypeNameTests
     [InlineData(typeof(byte[][]), "Byte[][]", "byte[][]", true)]
     public void Of_ReturnsCorrectName_ForNonGenericType(Type type, string shortName, string expectedName, bool isArray)
     {
-        var typeData = Substitute.For<ITypeNameData>();
-
-        typeData.TypeObject.Returns(type);
-        typeData.ShortName.Returns(shortName);
-        typeData.HasGenericParameters.Returns(false);
-        typeData.IsArray.Returns(isArray);
-        typeData.IsPointer.Returns(false);
+        var typeData = InitTypeData(type, shortName, [], isArray);
 
         string? typeName = CSharpTypeName.Of(typeData);
 
@@ -75,21 +69,8 @@ public class CSharpTypeNameTests
     [Fact]
     public void Of_ReturnsCorrectName_ForSimpleGenericType()
     {
-        var typeData = Substitute.For<ITypeNameData>();
-        var param = Substitute.For<ITypeNameData>();
-
-        typeData.TypeObject.Returns(typeof(List<int>));
-        typeData.ShortName.Returns("List");
-        typeData.HasGenericParameters.Returns(true);
-        typeData.GenericParameters.Returns([param]);
-        typeData.IsPointer.Returns(false);
-        typeData.IsArray.Returns(false);
-
-        param.TypeObject.Returns(typeof(int));
-        param.ShortName.Returns("Int32");
-        param.HasGenericParameters.Returns(false);
-        param.IsPointer.Returns(false);
-        param.IsArray.Returns(false);
+        var param = InitTypeData(typeof(int), "Int32", []);
+        var typeData = InitTypeData(typeof(List<int>), "List", [param]);
 
         string? typeName = CSharpTypeName.Of(typeData);
 
@@ -99,39 +80,27 @@ public class CSharpTypeNameTests
     [Fact]
     public void Of_ReturnsCorrectName_ForComplexGenericType()
     {
-        var typeData = Substitute.For<ITypeNameData>();
-        var param1 = Substitute.For<ITypeNameData>();
-        var param2 = Substitute.For<ITypeNameData>();
-        var param3 = Substitute.For<ITypeNameData>();
-
-        typeData.TypeObject.Returns(typeof(Dictionary<string, List<FileInfo>>));
-        typeData.ShortName.Returns("Dictionary");
-        typeData.HasGenericParameters.Returns(true);
-        typeData.GenericParameters.Returns([param1, param2]);
-        typeData.IsPointer.Returns(false);
-        typeData.IsArray.Returns(false);
-
-        param1.TypeObject.Returns(typeof(string));
-        param1.ShortName.Returns("String");
-        param1.HasGenericParameters.Returns(false);
-        param1.IsPointer.Returns(false);
-        param1.IsArray.Returns(false);
-
-        param2.TypeObject.Returns(typeof(List<FileInfo>));
-        param2.ShortName.Returns("List");
-        param2.HasGenericParameters.Returns(true);
-        param2.GenericParameters.Returns([param3]);
-        param2.IsPointer.Returns(false);
-        param2.IsArray.Returns(false);
-
-        param3.TypeObject.Returns(typeof(FileInfo));
-        param3.ShortName.Returns("FileInfo");
-        param3.HasGenericParameters.Returns(false);
-        param3.IsPointer.Returns(false);
-        param3.IsArray.Returns(false);
+        var innerInner = InitTypeData(typeof(FileInfo), "FileInfo", []);
+        var inner1 = InitTypeData(typeof(string), "String", []);
+        var inner2 = InitTypeData(typeof(List<FileInfo>), "List", [innerInner]);
+        var typeData = InitTypeData(typeof(Dictionary<string, List<FileInfo>>), "Dictionary", [inner1, inner2]);
 
         string? typeName = CSharpTypeName.Of(typeData);
 
         typeName.Should().Be("Dictionary<string, List<FileInfo>>");
+    }
+
+    private ITypeNameData InitTypeData(Type type, string shortName, IReadOnlyList<ITypeNameData> genericParams, bool isArray = false)
+    {
+        var typeData = Substitute.For<ITypeNameData>();
+
+        typeData.TypeObject.Returns(type);
+        typeData.ShortName.Returns(shortName);
+        typeData.HasGenericParameters.Returns(genericParams.Any());
+        typeData.GenericParameters.Returns(genericParams);
+        typeData.IsArray.Returns(isArray);
+        typeData.IsPointer.Returns(false);
+
+        return typeData;
     }
 }
