@@ -1,12 +1,12 @@
 namespace RefDocGen.DocExtraction.Tools;
 
 /// <summary>
-/// Class containing methods for extracting data from full member names.
+/// Class containing methods for parsing type member signatures.
 /// </summary>
-internal class MemberStringExtractor
+internal class MemberSignatureParser
 {
     /// <summary>
-    /// Extracts the type name, member name and its parameters from a fully qualified member name.
+    /// Parses the fully qualified member name and splits it into the type name, member name and its parameters.
     /// </summary>
     /// <param name="fullMemberName">Fully qualified name of the member, including the namespace and type.</param>
     /// <returns>Tuple containing
@@ -14,12 +14,12 @@ internal class MemberStringExtractor
     ///     <item>Type name</item>
     ///     <item>Member name (without parameters).</item>
     ///     <item>
-    ///     String containing comma-delimited member parameters (e.g. '(System.String,System.Double)' ).
+    ///     String containing comma-delimited member parameters wrapped in parentheses, e.g. '(System.String,System.Double)'.
     ///     Empty string if the member has no parameters.
     ///     </item>
     /// </list>
     /// </returns>
-    internal static (string typeName, string memberName, string paramsString) SplitFullMemberName(string fullMemberName)
+    internal static (string typeName, string memberName, string paramsString) Parse(string fullMemberName)
     {
         string[] splitValues = fullMemberName.Split('(');
         string memberNameWithoutParameters = splitValues[0]; // this is done because of methods

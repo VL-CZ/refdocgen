@@ -17,6 +17,10 @@ internal class TypeNameData : ITypeNameData
     public TypeNameData(Type type)
     {
         TypeObject = type;
+        GenericParameters = TypeObject
+            .GetGenericArguments()
+            .Select(t => new TypeNameData(t))
+            .ToArray();
     }
 
     /// <inheritdoc/>
@@ -72,7 +76,7 @@ internal class TypeNameData : ITypeNameData
     public string? Namespace => TypeObject.Namespace;
 
     /// <inheritdoc/>
-    public IReadOnlyList<ITypeNameData> GenericParameters => TypeObject.GetGenericArguments().Select(t => new TypeNameData(t)).ToArray();
+    public IReadOnlyList<ITypeNameData> GenericParameters { get; }
 
     /// <inheritdoc/>
     public bool IsArray => TypeObject.IsArray;

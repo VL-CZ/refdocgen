@@ -5,6 +5,9 @@ using RefDocGen.TemplateGenerators.Tools.TypeName;
 
 namespace RefDocGen.UnitTests.TemplateGenerators.Tools.TypeName;
 
+/// <summary>
+/// Class containing tests for <see cref="CSharpTypeName"/> class.
+/// </summary>
 public class CSharpTypeNameTests
 {
     [Theory]
@@ -59,7 +62,7 @@ public class CSharpTypeNameTests
     [InlineData(typeof(byte[][]), "Byte[][]", "byte[][]", true)]
     public void Of_ReturnsCorrectName_ForNonGenericType(Type type, string shortName, string expectedName, bool isArray)
     {
-        var typeData = InitTypeData(type, shortName, [], isArray);
+        var typeData = MockTypeData(type, shortName, [], isArray);
 
         string? typeName = CSharpTypeName.Of(typeData);
 
@@ -69,8 +72,8 @@ public class CSharpTypeNameTests
     [Fact]
     public void Of_ReturnsCorrectName_ForSimpleGenericType()
     {
-        var param = InitTypeData(typeof(int), "Int32", []);
-        var typeData = InitTypeData(typeof(List<int>), "List", [param]);
+        var param = MockTypeData(typeof(int), "Int32", []);
+        var typeData = MockTypeData(typeof(List<int>), "List", [param]);
 
         string? typeName = CSharpTypeName.Of(typeData);
 
@@ -80,17 +83,25 @@ public class CSharpTypeNameTests
     [Fact]
     public void Of_ReturnsCorrectName_ForComplexGenericType()
     {
-        var innerInner = InitTypeData(typeof(FileInfo), "FileInfo", []);
-        var inner1 = InitTypeData(typeof(string), "String", []);
-        var inner2 = InitTypeData(typeof(List<FileInfo>), "List", [innerInner]);
-        var typeData = InitTypeData(typeof(Dictionary<string, List<FileInfo>>), "Dictionary", [inner1, inner2]);
+        var innerInner = MockTypeData(typeof(FileInfo), "FileInfo", []);
+        var inner1 = MockTypeData(typeof(string), "String", []);
+        var inner2 = MockTypeData(typeof(List<FileInfo>), "List", [innerInner]);
+        var typeData = MockTypeData(typeof(Dictionary<string, List<FileInfo>>), "Dictionary", [inner1, inner2]);
 
         string? typeName = CSharpTypeName.Of(typeData);
 
         typeName.Should().Be("Dictionary<string, List<FileInfo>>");
     }
 
-    private ITypeNameData InitTypeData(Type type, string shortName, IReadOnlyList<ITypeNameData> genericParams, bool isArray = false)
+    /// <summary>
+    /// Mock <see cref="ITypeNameData"/> instance and initialize it with the provided data.
+    /// </summary>
+    /// <param name="type"><see cref="Type"/> object representing the type to create.</param>
+    /// <param name="shortName">Short name of the type (see <see cref="ITypeNameData.ShortName"/>).</param>
+    /// <param name="genericParams">Generic parameters of the type.</param>
+    /// <param name="isArray">Is the type an array?</param>
+    /// <returns>Mocked <see cref="ITypeNameData"/> instance.</returns>
+    private ITypeNameData MockTypeData(Type type, string shortName, IReadOnlyList<ITypeNameData> genericParams, bool isArray = false)
     {
         var typeData = Substitute.For<ITypeNameData>();
 

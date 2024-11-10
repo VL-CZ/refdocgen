@@ -121,7 +121,7 @@ internal class DocCommentExtractor
     /// <param name="docCommentNode">Member doc comment XML node.</param>
     private void AddMemberDocComment(string memberTypeId, string fullMemberName, XElement docCommentNode)
     {
-        (string typeName, string memberName, string paramsString) = MemberStringExtractor.SplitFullMemberName(fullMemberName);
+        (string typeName, string memberName, string paramsString) = MemberSignatureParser.Parse(fullMemberName);
         var type = GetClassByItsName(typeName);
         string memberId = memberName + paramsString;
 

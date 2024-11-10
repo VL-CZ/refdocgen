@@ -3,6 +3,9 @@ using TypeExtensions = RefDocGen.TemplateGenerators.Tools.TypeName.TypeExtension
 
 namespace RefDocGen.UnitTests.TemplateGenerators.Tools.TypeName;
 
+/// <summary>
+/// Class containing tests for <see cref="TypeExtensions"/> class.
+/// </summary>
 public class TypeExtensionsTests
 {
     [Theory]
