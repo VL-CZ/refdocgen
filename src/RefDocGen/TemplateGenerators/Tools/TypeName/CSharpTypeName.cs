@@ -1,6 +1,6 @@
 using RefDocGen.MemberData.Abstract;
 
-namespace RefDocGen.TemplateGenerators.Default.Tools.TypeName;
+namespace RefDocGen.TemplateGenerators.Tools.TypeName;
 
 /// <summary>
 /// Static class used for retrieving type names in C# format.

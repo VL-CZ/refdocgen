@@ -1,6 +1,6 @@
 using RefDocGen.MemberData.Abstract;
 
-namespace RefDocGen.TemplateGenerators.Default.Tools.Keywords;
+namespace RefDocGen.TemplateGenerators.Tools.Keywords;
 
 /// <summary>
 /// Static class containing additional methods related to the 'virtual' keyword.
