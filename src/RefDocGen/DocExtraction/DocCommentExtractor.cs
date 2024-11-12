@@ -108,8 +108,7 @@ internal class DocCommentExtractor
         if (docCommentNode.TryGetSummaryElement(out var summaryNode))
         {
             var templateNode = GetClassByItsName(fullTypeName);
-            int index = Array.IndexOf(typeData, templateNode);
-            typeData[index] = templateNode with { DocComment = summaryNode };
+            templateNode.DocComment = summaryNode;
         }
     }
 

@@ -17,7 +17,7 @@ internal record ClassData(string Name, AccessModifier AccessModifier, Dictionary
     Dictionary<string, FieldData> Fields, Dictionary<string, PropertyData> Properties, Dictionary<string, MethodData> Methods) : IClassData
 {
     /// <inheritdoc/>
-    public XElement DocComment { get; init; } = XmlDocElementFactory.EmptySummary;
+    public XElement DocComment { get; internal set; } = XmlDocElementFactory.EmptySummary;
 
     /// <inheritdoc/>
     IReadOnlyList<IConstructorData> IClassData.Constructors => Constructors.Values.ToList();
