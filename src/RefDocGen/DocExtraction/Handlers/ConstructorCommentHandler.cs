@@ -9,7 +9,7 @@ namespace RefDocGen.DocExtraction.Handlers;
 internal class ConstructorCommentHandler : ExecutableMemberCommentHandler<ConstructorData>
 {
     /// <inheritdoc/>
-    protected override ConstructorData? GetTypeMember(ClassData type, string memberId)
+    protected override ConstructorData? GetTypeMember(TypeData type, string memberId)
     {
         return type.Constructors.GetValueOrDefault(memberId);
     }

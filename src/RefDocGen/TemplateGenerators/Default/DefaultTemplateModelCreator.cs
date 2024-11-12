@@ -11,11 +11,11 @@ namespace RefDocGen.TemplateGenerators.Default;
 internal static class DefaultTemplateModelCreator
 {
     /// <summary>
-    /// Transforms the provided <see cref="IClassData"/> instance into a corresponding <see cref="ClassTemplateModel"/>.
+    /// Transforms the provided <see cref="ITypeData"/> instance into a corresponding <see cref="ClassTemplateModel"/>.
     /// </summary>
-    /// <param name="classData">The <see cref="IClassData"/> instance representing the class.</param>
+    /// <param name="classData">The <see cref="ITypeData"/> instance representing the class.</param>
     /// <returns>A <see cref="ClassTemplateModel"/> instance based on the provided <paramref name="classData"/>.</returns>
-    public static ClassTemplateModel TransformToTemplateModel(IClassData classData)
+    public static ClassTemplateModel TransformToTemplateModel(ITypeData classData)
     {
         var constructors = classData.Constructors.Select(TransformToTemplateModel).ToArray();
         var fields = classData.Fields.Select(TransformToTemplateModel).ToArray();

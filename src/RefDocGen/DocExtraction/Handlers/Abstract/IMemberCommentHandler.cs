@@ -17,5 +17,5 @@ internal interface IMemberCommentHandler
     /// Consists of the member name and parameters string (if the member has them - e.g. a method).
     /// </param>
     /// <param name="memberDocComment">Doc comment for the member.</param>
-    void AddDocumentation(ClassData type, string memberId, XElement memberDocComment);
+    void AddDocumentation(TypeData type, string memberId, XElement memberDocComment);
 }

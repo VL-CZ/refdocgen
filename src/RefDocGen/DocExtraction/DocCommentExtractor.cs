@@ -15,7 +15,7 @@ internal class DocCommentExtractor
     /// <summary>
     /// Array of type data to which the documentation comments will be added.
     /// </summary>
-    private readonly ClassData[] typeData;
+    private readonly TypeData[] typeData;
 
     /// <summary>
     /// XML document containing the documentation comments.
@@ -42,7 +42,7 @@ internal class DocCommentExtractor
     /// </summary>
     /// <param name="docXmlPath">Path to the XML documentation file.</param>
     /// <param name="typeData">Array of class data to which the documentation comments will be added.</param>
-    internal DocCommentExtractor(string docXmlPath, ClassData[] typeData)
+    internal DocCommentExtractor(string docXmlPath, TypeData[] typeData)
     {
         this.typeData = typeData;
 
@@ -142,11 +142,11 @@ internal class DocCommentExtractor
     }
 
     /// <summary>
-    /// Get <see cref="ClassData"/> object by its name.
+    /// Get <see cref="TypeData"/> object by its name.
     /// </summary>
     /// <param name="className">Name of the class to find.</param>
-    /// <returns>Found <see cref="ClassData"/> object.</returns>
-    private ClassData GetClassByItsName(string className)
+    /// <returns>Found <see cref="TypeData"/> object.</returns>
+    private TypeData GetClassByItsName(string className)
     {
         return typeData.Single(m => m.Name == className);
     }

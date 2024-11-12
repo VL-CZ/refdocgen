@@ -1,4 +1,3 @@
-using RefDocGen.MemberData;
 using RefDocGen.MemberData.Concrete;
 using System.Reflection;
 
@@ -24,10 +23,10 @@ internal class AssemblyTypeExtractor
     }
 
     /// <summary>
-    /// Get all the declared classes in the assembly and return them as <see cref="ClassData"/> objects.
+    /// Get all the declared classes in the assembly and return them as <see cref="TypeData"/> objects.
     /// </summary>
-    /// <returns>An array of <see cref="ClassData"/> objects representing the classes in the assembly.</returns>
-    internal ClassData[] GetDeclaredClasses()
+    /// <returns>An array of <see cref="TypeData"/> objects representing the classes in the assembly.</returns>
+    internal TypeData[] GetDeclaredClasses()
     {
         var types = GetDeclaredTypes();
         return types.Select(ConstructFromType).ToArray();
@@ -44,11 +43,11 @@ internal class AssemblyTypeExtractor
     }
 
     /// <summary>
-    /// Construct a <see cref="ClassData"/> object from a given <see cref="Type"/>.
+    /// Construct a <see cref="TypeData"/> object from a given <see cref="Type"/>.
     /// </summary>
     /// <param name="type">The type to construct the data model from.</param>
-    /// <returns><see cref="ClassData"/> object representing the type.</returns>
-    private ClassData ConstructFromType(Type type)
+    /// <returns><see cref="TypeData"/> object representing the type.</returns>
+    private TypeData ConstructFromType(Type type)
     {
         var bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
 
@@ -63,6 +62,6 @@ internal class AssemblyTypeExtractor
         var propertyModels = properties.Select(p => new PropertyData(p)).ToDictionary(p => p.Id);
         var methodModels = methods.Select(m => new MethodData(m)).ToDictionary(m => m.Id);
 
-        return new ClassData(type.FullName ?? type.Name, AccessModifier.Public, ctorModels, fieldModels, propertyModels, methodModels);
+        return new TypeData(type, ctorModels, fieldModels, propertyModels, methodModels);
     }
 }

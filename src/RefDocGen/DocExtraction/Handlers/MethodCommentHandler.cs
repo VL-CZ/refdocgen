@@ -11,7 +11,7 @@ namespace RefDocGen.DocExtraction.Handlers;
 internal class MethodCommentHandler : ExecutableMemberCommentHandler<MethodData>
 {
     /// <inheritdoc/>
-    protected override MethodData? GetTypeMember(ClassData type, string memberId)
+    protected override MethodData? GetTypeMember(TypeData type, string memberId)
     {
         return type.Methods.GetValueOrDefault(memberId);
     }
