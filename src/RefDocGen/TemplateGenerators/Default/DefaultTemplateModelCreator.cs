@@ -11,20 +11,38 @@ namespace RefDocGen.TemplateGenerators.Default;
 internal static class DefaultTemplateModelCreator
 {
     /// <summary>
-    /// Transforms the provided <see cref="ITypeData"/> instance into a corresponding <see cref="ClassTemplateModel"/>.
+    /// Transforms the provided <see cref="ITypeData"/> instance into a corresponding <see cref="TypeTemplateModel"/>.
     /// </summary>
     /// <param name="classData">The <see cref="ITypeData"/> instance representing the class.</param>
-    /// <returns>A <see cref="ClassTemplateModel"/> instance based on the provided <paramref name="classData"/>.</returns>
-    public static ClassTemplateModel TransformToTemplateModel(ITypeData classData)
+    /// <returns>A <see cref="TypeTemplateModel"/> instance based on the provided <paramref name="classData"/>.</returns>
+    public static TypeTemplateModel TransformToTemplateModel(ITypeData classData)
     {
         var constructors = classData.Constructors.Select(TransformToTemplateModel).ToArray();
         var fields = classData.Fields.Select(TransformToTemplateModel).ToArray();
         var properties = classData.Properties.Select(TransformToTemplateModel).ToArray();
         var methods = classData.Methods.Select(TransformToTemplateModel).ToArray();
 
-        return new ClassTemplateModel(classData.Name, classData.DocComment.Value,
-            [classData.AccessModifier.GetKeywordString()],
-            constructors, fields, properties, methods);
+        List<Keyword> modifiers = [classData.AccessModifier.ToKeyword()];
+
+        if (classData.IsSealed)
+        {
+            modifiers.Add(Keyword.Sealed);
+        }
+
+        if (classData.IsAbstract) // TODO: update
+        {
+            modifiers.Add(Keyword.Abstract);
+        }
+
+        return new TypeTemplateModel(
+            classData.Id,
+            CSharpTypeName.Of(classData),
+            classData.DocComment.Value,
+            modifiers.GetStrings(),
+            constructors,
+            fields,
+            properties,
+            methods);
     }
 
     /// <summary>

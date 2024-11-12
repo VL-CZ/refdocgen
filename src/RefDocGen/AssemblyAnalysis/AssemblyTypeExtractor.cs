@@ -23,23 +23,14 @@ internal class AssemblyTypeExtractor
     }
 
     /// <summary>
-    /// Get all the declared classes in the assembly and return them as <see cref="TypeData"/> objects.
+    /// Get all the declared types in the assembly and return them as <see cref="TypeData"/> objects.
     /// </summary>
-    /// <returns>An array of <see cref="TypeData"/> objects representing the classes in the assembly.</returns>
-    internal TypeData[] GetDeclaredClasses()
-    {
-        var types = GetDeclaredTypes();
-        return types.Select(ConstructFromType).ToArray();
-    }
-
-    /// <summary>
-    /// Get all declared types in the assembly.
-    /// </summary>
-    /// <returns>List of all declared types in the assembly.</returns>
-    private Type[] GetDeclaredTypes()
+    /// <returns>An array of <see cref="TypeData"/> objects representing the types in the assembly.</returns>
+    internal Dictionary<string, TypeData> GetDeclaredTypes()
     {
         var assembly = Assembly.LoadFrom(assemblyPath);
-        return assembly.GetTypes().Where(t => !t.IsCompilerGenerated()).ToArray();
+        var types = assembly.GetTypes().Where(t => !t.IsCompilerGenerated()).ToArray();
+        return types.Select(ConstructFromType).ToDictionary(t => t.Id);
     }
 
     /// <summary>

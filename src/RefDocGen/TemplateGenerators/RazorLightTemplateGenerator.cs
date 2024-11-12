@@ -10,7 +10,7 @@ namespace RefDocGen.TemplateGenerators;
 /// </para>
 /// </summary>
 /// <typeparam name="T">Type of the template model class</typeparam>
-internal abstract class RazorLightTemplateGenerator<T> : ITemplateGenerator where T : INamedTemplateModel
+internal abstract class RazorLightTemplateGenerator<T> : ITemplateGenerator where T : ITemplateModelWithId
 {
     /// <summary>
     /// Path to the Razor template file.
@@ -51,7 +51,7 @@ internal abstract class RazorLightTemplateGenerator<T> : ITemplateGenerator wher
 
         foreach (var model in templateModels)
         {
-            string outputFileName = Path.Join(outputDir, $"{model.Name}.html");
+            string outputFileName = Path.Join(outputDir, $"{model.Id}.html");
 
             var task = razorLightEngine.CompileRenderAsync(templatePath, model);
             //task.Wait(); // TODO: consider using Async
