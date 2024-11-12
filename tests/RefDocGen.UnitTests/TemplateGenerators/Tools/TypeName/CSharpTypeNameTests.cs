@@ -13,14 +13,14 @@ public class CSharpTypeNameTests
     [Theory]
     [InlineData(typeof(int), "int")]
     [InlineData(typeof(string), "string")]
-    public void GetBuiltInName_ReturnsBuiltInName_WhenPresent(Type type, string builtInName)
+    public void GetBuiltInName_ReturnsBuiltInName_WhenPresent(Type type, string expectedName)
     {
         var typeData = Substitute.For<ITypeNameData>();
         typeData.TypeObject.Returns(type);
 
         string? name = CSharpTypeName.GetBuiltInName(typeData);
 
-        name.Should().Be(builtInName);
+        name.Should().Be(expectedName);
     }
 
     [Theory]
@@ -83,10 +83,10 @@ public class CSharpTypeNameTests
     [Fact]
     public void Of_ReturnsCorrectName_ForComplexGenericType()
     {
-        var innerInner = MockTypeData(typeof(FileInfo), "FileInfo", []);
-        var inner1 = MockTypeData(typeof(string), "String", []);
-        var inner2 = MockTypeData(typeof(List<FileInfo>), "List", [innerInner]);
-        var typeData = MockTypeData(typeof(Dictionary<string, List<FileInfo>>), "Dictionary", [inner1, inner2]);
+        var innerInnerType = MockTypeData(typeof(FileInfo), "FileInfo", []);
+        var innerType1 = MockTypeData(typeof(string), "String", []);
+        var innerType2 = MockTypeData(typeof(List<FileInfo>), "List", [innerInnerType]);
+        var typeData = MockTypeData(typeof(Dictionary<string, List<FileInfo>>), "Dictionary", [innerType1, innerType2]);
 
         string? typeName = CSharpTypeName.Of(typeData);
 

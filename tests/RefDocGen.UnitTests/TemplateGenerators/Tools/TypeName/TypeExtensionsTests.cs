@@ -31,13 +31,13 @@ public class TypeExtensionsTests
         result.Should().Be(expectedResultType);
     }
 
-    [Fact]
-    public void GetBaseElementType_ReturnsBaseElementType_ForPointerType()
+    [Theory]
+    [InlineData(typeof(int*), typeof(int))]
+    [InlineData(typeof(double**), typeof(double))]
+    public void GetBaseElementType_ReturnsBaseElementType_ForPointerType(Type inputType, Type expectedResultType)
     {
-        var type = typeof(int*);
+        var result = TypeExtensions.GetBaseElementType(inputType);
 
-        var result = TypeExtensions.GetBaseElementType(type);
-
-        result.Should().Be(typeof(int));
+        result.Should().Be(expectedResultType);
     }
 }

@@ -10,93 +10,104 @@ namespace RefDocGen.UnitTests.MemberData.Concrete;
 public class TypeNameDataTests
 {
     [Fact]
-    public void ShortName_IsCorrect_ForNonGenericType()
+    public void ShortName_ReturnsCorrectData_ForNonGenericType()
     {
-        var mock = Substitute.For<Type>();
-        mock.Name.Returns("Person");
+        var mock = MockNonGenericType("MyApp.Entities", "Person");
 
-        var type = new TypeNameData(mock);
+        var typeData = new TypeNameData(mock);
 
-        type.ShortName.Should().Be("Person");
+        typeData.ShortName.Should().Be("Person");
     }
 
     [Fact]
-    public void ShortName_IsCorrect_ForGenericType()
+    public void ShortName_ReturnsCorrectData_ForGenericType()
     {
-        var mock = Substitute.For<Type>();
-        mock.Name.Returns("List`2");
+        var paramMock = MockNonGenericType("System", "Int32");
+        var typeMock = MockType("System.Collections.Generic", "List`1", [paramMock]);
 
-        var type = new TypeNameData(mock);
+        var typeData = new TypeNameData(typeMock);
 
-        type.ShortName.Should().Be("List");
+        typeData.ShortName.Should().Be("List");
     }
 
     [Fact]
-    public void FullName_IsCorrect_ForNonGenericType()
+    public void FullName_ReturnsCorrectData_ForNonGenericType()
     {
-        var mock = Substitute.For<Type>();
-        mock.Name.Returns("Person");
-        mock.Namespace.Returns("MyApp.Entities");
+        var mock = MockNonGenericType("MyApp.Entities", "Person");
 
-        var type = new TypeNameData(mock);
+        var typeData = new TypeNameData(mock);
 
-        type.FullName.Should().Be("MyApp.Entities.Person");
+        typeData.FullName.Should().Be("MyApp.Entities.Person");
     }
 
     [Fact]
-    public void FullName_IsCorrect_ForGenericType()
+    public void FullName_ReturnsCorrectData_ForGenericType()
     {
-        var mock = Substitute.For<Type>();
-        mock.Name.Returns("Dictionary`2");
-        mock.Namespace.Returns("System.Collections.Generic");
+        var param1Mock = MockNonGenericType("System", "Int32");
+        var param2Mock = MockNonGenericType("System", "String");
 
-        var type = new TypeNameData(mock);
+        var typeMock = MockType("System.Collections.Generic", "Dictionary`2", [param1Mock, param2Mock]);
 
-        type.FullName.Should().Be("System.Collections.Generic.Dictionary");
+        var typeData = new TypeNameData(typeMock);
+
+        typeData.FullName.Should().Be("System.Collections.Generic.Dictionary");
     }
 
     [Theory]
     [InlineData("MyApp.Entities", "Person", "MyApp.Entities.Person")]
     [InlineData("MyApp.Entities", "Person[]", "MyApp.Entities.Person[]")]
-    public void Id_IsCorrect_ForNonGenericType(string typeNamespace, string typeShortName, string expectedId)
+    public void Id_ReturnsCorrectData_ForNonGenericType(string typeNamespace, string typeShortName, string expectedId)
     {
-        var mock = Substitute.For<Type>();
-        mock.Name.Returns(typeShortName);
-        mock.Namespace.Returns(typeNamespace);
-        mock.IsGenericType.Returns(false);
+        var typeMock = MockNonGenericType(typeNamespace, typeShortName);
 
-        var type = new TypeNameData(mock);
+        var type = new TypeNameData(typeMock);
 
         type.Id.Should().Be(expectedId);
     }
 
     [Fact]
-    public void Id_IsCorrect_ForGenericType()
+    public void Id_ReturnsCorrectData_ForGenericType()
     {
+        var innerInnerTypeMock = MockNonGenericType("MyApp.Entities", "Person");
+
+        var innerType2Mock = MockType("System.Collections.Generic", "List`1", [innerInnerTypeMock]);
+        var innerType1Mock = MockNonGenericType("System", "String");
+
+        var typeMock = MockType("System.Collection.Generic", "Dictionary`2", [innerType1Mock, innerType2Mock]);
+
+        var typeData = new TypeNameData(typeMock);
         string expectedId = "System.Collection.Generic.Dictionary{System.String,System.Collections.Generic.List{MyApp.Entities.Person}}";
 
-        var type3 = Substitute.For<Type>();
-        type3.Namespace.Returns("MyApp.Entities");
-        type3.Name.Returns("Person");
+        typeData.Id.Should().Be(expectedId);
+    }
 
-        var type2 = Substitute.For<Type>();
-        type2.Namespace.Returns("System.Collections.Generic");
-        type2.Name.Returns("List`1");
-        type2.IsGenericType.Returns(true);
-        type2.GetGenericArguments().Returns([type3]);
+    /// <summary>
+    /// Mock <see cref="Type"/> instance and initialize it with the provided data.
+    /// </summary>
+    /// <param name="typeNamespace">Namespace containing the type.</param>
+    /// <param name="typeName">Name of the type.</param>
+    /// <param name="genericParameters">Generic parameters of the type.</param>
+    /// <returns>Mocked <see cref="Type"/> instance.</returns>
+    private Type MockType(string typeNamespace, string typeName, Type[] genericParameters)
+    {
+        var type = Substitute.For<Type>();
 
-        var type1 = Substitute.For<Type>();
-        type1.Namespace.Returns("System");
-        type1.Name.Returns("String");
+        type.Name.Returns(typeName);
+        type.Namespace.Returns(typeNamespace);
+        type.GetGenericArguments().Returns(genericParameters);
+        type.IsGenericType.Returns(genericParameters.Length > 0);
 
-        var mock = Substitute.For<Type>();
-        mock.Name.Returns("Dictionary`2");
-        mock.Namespace.Returns("System.Collection.Generic");
-        mock.IsGenericType.Returns(true);
-        mock.GetGenericArguments().Returns([type1, type2]);
+        return type;
+    }
 
-        var type = new TypeNameData(mock);
-
-        type.Id.Should().Be(expectedId);
+    /// <summary>
+    /// Mock non-generic <see cref="Type"/> instance and initialize it with the provided data.
+    /// </summary>
+    /// <param name="typeNamespace">Namespace of the type</param>
+    /// <param name="typeName">Name of the type.</param>
+    /// <returns>Mocked <see cref="Type"/> instance.</returns>
+    private Type MockNonGenericType(string typeNamespace, string typeName)
+    {
+        return MockType(typeNamespace, typeName, []);
     }
 }
