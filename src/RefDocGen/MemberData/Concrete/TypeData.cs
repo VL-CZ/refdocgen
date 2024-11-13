@@ -11,8 +11,12 @@ namespace RefDocGen.MemberData.Concrete;
 /// <param name="Fields">Dictionary of fields declared in the class; keys are the corresponding field IDs.</param>
 /// <param name="Properties">Dictionary of properties declared in the class; keys are the corresponding property IDs.</param>
 /// <param name="Methods">Dictionary of methods declared in the class; keys are the corresponding method IDs.</param>
-internal record TypeData(Type Type, Dictionary<string, ConstructorData> Constructors,
-    Dictionary<string, FieldData> Fields, Dictionary<string, PropertyData> Properties, Dictionary<string, MethodData> Methods) : TypeNameData(Type), ITypeData
+internal record TypeData(
+    Type Type,
+    IReadOnlyDictionary<string, ConstructorData> Constructors,
+    IReadOnlyDictionary<string, FieldData> Fields,
+    IReadOnlyDictionary<string, PropertyData> Properties,
+    IReadOnlyDictionary<string, MethodData> Methods) : TypeNameData(Type), ITypeData
 {
     /// <inheritdoc/>
     public XElement DocComment { get; internal set; } = XmlDocElementFactory.EmptySummary;
@@ -21,15 +25,17 @@ internal record TypeData(Type Type, Dictionary<string, ConstructorData> Construc
     public AccessModifier AccessModifier => AccessModifierExtensions.GetAccessModifier(Type.IsNestedPrivate, Type.IsNestedFamily,
         Type.IsNestedAssembly || Type.IsNotPublic, Type.IsPublic || Type.IsNestedPublic, Type.IsNestedFamANDAssem, Type.IsNestedFamORAssem);
 
+    /// <inheritdoc/>
     public bool IsAbstract => Type.IsAbstract;
 
-    public bool IsInterface => Type.IsInterface;
-
-    public bool IsValueType => Type.IsValueType;
-
+    /// <inheritdoc/>
     public bool IsSealed => Type.IsSealed;
 
+    /// <inheritdoc/>
     public bool IsStatic => IsAbstract && IsSealed;
+
+    /// <inheritdoc/>
+    public TypeKind Kind => Type.IsInterface ? TypeKind.Interface : Type.IsValueType ? TypeKind.ValueType : TypeKind.Class;
 
     /// <inheritdoc/>
     IReadOnlyList<IConstructorData> ITypeData.Constructors => Constructors.Values.ToList();

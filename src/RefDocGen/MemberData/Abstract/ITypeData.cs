@@ -18,13 +18,12 @@ public interface ITypeData : ITypeNameData
     XElement DocComment { get; }
 
     /// <summary>
-    /// Checks if the type is abstract. True for abstract classes and interfaces.
+    /// Checks if the type is abstract.
+    /// True for abstract classes and interfaces.
     /// </summary>
     bool IsAbstract { get; }
 
-    bool IsInterface { get; }
-
-    bool IsValueType { get; }
+    TypeKind Kind { get; }
 
     bool IsStatic { get; }
 
