@@ -37,7 +37,7 @@ internal abstract class ExecutableMemberData : IExecutableMemberData
     {
         get
         {
-            if (Parameters.Length == 0) // no params -> return the Name
+            if (Parameters.Count == 0) // no params -> return the Name
             {
                 return Name;
             }
@@ -90,7 +90,7 @@ internal abstract class ExecutableMemberData : IExecutableMemberData
     /// <summary>
     /// Array of method parameters, ordered by their position.
     /// </summary>
-    public ParameterData[] Parameters { get; }
+    public IReadOnlyList<ParameterData> Parameters { get; }
 
     /// <inheritdoc/>
     IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters;

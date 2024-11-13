@@ -69,21 +69,17 @@ internal class DocCommentExtractor
     /// <param name="docCommentNode">Doc comment XML node.</param>
     private void AddDocComment(XElement docCommentNode)
     {
-        // identifiers, for further info, see https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/#id-strings
-        const string typeIdentifier = "T";
-        const string namespaceIdentifier = "N";
-
         // try to get type / member name
         if (docCommentNode.TryGetNameAttribute(out var memberNameAttr))
         {
             string[] splitMemberName = memberNameAttr.Value.Split(':');
             (string objectIdentifier, string fullObjectName) = (splitMemberName[0], splitMemberName[1]);
 
-            if (objectIdentifier == typeIdentifier) // type
+            if (objectIdentifier == MemberTypeId.Type) // type
             {
                 AddTypeDocComment(fullObjectName, docCommentNode);
             }
-            else if (typeIdentifier == namespaceIdentifier) // namespace
+            else if (objectIdentifier == MemberTypeId.Namespace) // namespace
             {
                 // do nothing
             }
@@ -126,7 +122,6 @@ internal class DocCommentExtractor
 
         if (typeData.TryGetValue(typeName, out var type))
         {
-
             string memberId = memberName + paramsString;
 
             if (memberCommentHandlers.TryGetValue(memberTypeId, out var parser))

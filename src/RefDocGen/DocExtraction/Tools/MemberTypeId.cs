@@ -27,5 +27,15 @@ internal class MemberTypeId
     /// Event identifier.
     /// </summary>
     internal const string Event = "E";
+
+    /// <summary>
+    /// Type identifier.
+    /// </summary>
+    internal const string Type = "T";
+
+    /// <summary>
+    /// Namespace identifier.
+    /// </summary>
+    internal const string Namespace = "N";
 }
 
