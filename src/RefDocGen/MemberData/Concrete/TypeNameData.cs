@@ -54,7 +54,7 @@ internal record TypeNameData : ITypeNameData
     public string FullName => TypeObject.Namespace is not null ? $"{TypeObject.Namespace}.{ShortName}" : ShortName;
 
     /// <inheritdoc/>
-    public string Id
+    public virtual string Id
     {
         get
         {

@@ -19,6 +19,22 @@ internal record TypeData(
     IReadOnlyDictionary<string, MethodData> Methods) : TypeNameData(Type), ITypeData
 {
     /// <inheritdoc/>
+    public override string Id
+    {
+        get
+        {
+            string name = FullName;
+
+            if (HasGenericParameters)
+            {
+                name = name + '`' + GenericParameters.Count;
+            }
+
+            return name.Replace('&', '@');
+        }
+    }
+
+    /// <inheritdoc/>
     public XElement DocComment { get; internal set; } = XmlDocElementFactory.EmptySummary;
 
     /// <inheritdoc/>
