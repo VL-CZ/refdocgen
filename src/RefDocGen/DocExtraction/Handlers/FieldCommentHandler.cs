@@ -11,7 +11,7 @@ namespace RefDocGen.DocExtraction.Handlers;
 internal class FieldCommentHandler : IMemberCommentHandler
 {
     /// <inheritdoc/>
-    public void AddDocumentation(ClassData type, string memberIdentifier, XElement docCommentNode)
+    public void AddDocumentation(TypeData type, string memberIdentifier, XElement docCommentNode)
     {
         if (docCommentNode.TryGetSummaryElement(out var summaryNode))
         {

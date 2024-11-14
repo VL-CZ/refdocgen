@@ -1,4 +1,3 @@
-using RefDocGen.MemberData;
 using RefDocGen.MemberData.Concrete;
 using System.Reflection;
 
@@ -24,38 +23,29 @@ internal class AssemblyTypeExtractor
     }
 
     /// <summary>
-    /// Get all the declared classes in the assembly and return them as <see cref="ClassData"/> objects.
+    /// Get all the declared types in the assembly and return them as <see cref="TypeData"/> objects.
     /// </summary>
-    /// <returns>An array of <see cref="ClassData"/> objects representing the classes in the assembly.</returns>
-    internal ClassData[] GetDeclaredClasses()
-    {
-        var types = GetDeclaredTypes();
-        return types.Select(ConstructFromType).ToArray();
-    }
-
-    /// <summary>
-    /// Get all declared types in the assembly.
-    /// </summary>
-    /// <returns>List of all declared types in the assembly.</returns>
-    private Type[] GetDeclaredTypes()
+    /// <returns>An array of <see cref="TypeData"/> objects representing the types in the assembly.</returns>
+    internal Dictionary<string, TypeData> GetDeclaredTypes()
     {
         var assembly = Assembly.LoadFrom(assemblyPath);
-        return assembly.GetTypes().Where(t => !t.IsCompilerGenerated()).ToArray();
+        var types = assembly.GetTypes().Where(t => !t.IsCompilerGenerated()).ToArray();
+        return types.Select(ConstructFromType).ToDictionary(t => t.Id);
     }
 
     /// <summary>
-    /// Construct a <see cref="ClassData"/> object from a given <see cref="Type"/>.
+    /// Construct a <see cref="TypeData"/> object from a given <see cref="Type"/>.
     /// </summary>
     /// <param name="type">The type to construct the data model from.</param>
-    /// <returns><see cref="ClassData"/> object representing the type.</returns>
-    private ClassData ConstructFromType(Type type)
+    /// <returns><see cref="TypeData"/> object representing the type.</returns>
+    private TypeData ConstructFromType(Type type)
     {
         var bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
 
-        var constructors = type.GetConstructors(bindingFlags).Where(f => !f.IsCompilerGenerated());
+        var constructors = type.GetConstructors(bindingFlags).Where(c => !c.IsCompilerGenerated());
         var fields = type.GetFields(bindingFlags).Where(f => !f.IsCompilerGenerated());
-        var properties = type.GetProperties(bindingFlags).Where(f => !f.IsCompilerGenerated());
-        var methods = type.GetMethods(bindingFlags).Where(f => !f.IsCompilerGenerated());
+        var properties = type.GetProperties(bindingFlags).Where(p => !p.IsCompilerGenerated());
+        var methods = type.GetMethods(bindingFlags).Where(m => !m.IsCompilerGenerated());
 
         // construct *Data objects
         var ctorModels = constructors.Select(c => new ConstructorData(c)).ToDictionary(c => c.Id);
@@ -63,6 +53,6 @@ internal class AssemblyTypeExtractor
         var propertyModels = properties.Select(p => new PropertyData(p)).ToDictionary(p => p.Id);
         var methodModels = methods.Select(m => new MethodData(m)).ToDictionary(m => m.Id);
 
-        return new ClassData(type.FullName ?? type.Name, AccessModifier.Public, ctorModels, fieldModels, propertyModels, methodModels);
+        return new TypeData(type, ctorModels, fieldModels, propertyModels, methodModels);
     }
 }

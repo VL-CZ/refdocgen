@@ -8,7 +8,7 @@ namespace RefDocGen.MemberData.Concrete;
 /// Doesn't include any type member data (such as fields, methods, etc.)
 /// </para>
 /// </summary>
-internal class TypeNameData : ITypeNameData
+internal record TypeNameData : ITypeNameData
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="TypeNameData"/> class.
@@ -54,7 +54,7 @@ internal class TypeNameData : ITypeNameData
     public string FullName => TypeObject.Namespace is not null ? $"{TypeObject.Namespace}.{ShortName}" : ShortName;
 
     /// <inheritdoc/>
-    public string Id
+    public virtual string Id
     {
         get
         {

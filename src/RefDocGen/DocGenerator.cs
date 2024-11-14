@@ -43,11 +43,11 @@ public class DocGenerator
     public void GenerateDoc()
     {
         var assemblyAnalyzer = new AssemblyTypeExtractor(assemblyPath);
-        var types = assemblyAnalyzer.GetDeclaredClasses();
+        var types = assemblyAnalyzer.GetDeclaredTypes();
 
         var docCommentExtractor = new DocCommentExtractor(docXmlPath, types);
         docCommentExtractor.AddComments();
 
-        templateGenerator.GenerateTemplates(types);
+        templateGenerator.GenerateTemplates([.. types.Values]);
     }
 }

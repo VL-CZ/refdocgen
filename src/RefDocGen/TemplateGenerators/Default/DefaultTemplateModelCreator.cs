@@ -1,5 +1,6 @@
 using RefDocGen.MemberData.Abstract;
 using RefDocGen.TemplateGenerators.Default.TemplateModels;
+using RefDocGen.TemplateGenerators.Tools;
 using RefDocGen.TemplateGenerators.Tools.Keywords;
 using RefDocGen.TemplateGenerators.Tools.TypeName;
 
@@ -11,20 +12,39 @@ namespace RefDocGen.TemplateGenerators.Default;
 internal static class DefaultTemplateModelCreator
 {
     /// <summary>
-    /// Transforms the provided <see cref="IClassData"/> instance into a corresponding <see cref="ClassTemplateModel"/>.
+    /// Transforms the provided <see cref="ITypeData"/> instance into a corresponding <see cref="TypeTemplateModel"/>.
     /// </summary>
-    /// <param name="classData">The <see cref="IClassData"/> instance representing the class.</param>
-    /// <returns>A <see cref="ClassTemplateModel"/> instance based on the provided <paramref name="classData"/>.</returns>
-    public static ClassTemplateModel TransformToTemplateModel(IClassData classData)
+    /// <param name="typeData">The <see cref="ITypeData"/> instance representing the class.</param>
+    /// <returns>A <see cref="TypeTemplateModel"/> instance based on the provided <paramref name="typeData"/>.</returns>
+    public static TypeTemplateModel TransformToTemplateModel(ITypeData typeData)
     {
-        var constructors = classData.Constructors.Select(TransformToTemplateModel).ToArray();
-        var fields = classData.Fields.Select(TransformToTemplateModel).ToArray();
-        var properties = classData.Properties.Select(TransformToTemplateModel).ToArray();
-        var methods = classData.Methods.Select(TransformToTemplateModel).ToArray();
+        var constructors = typeData.Constructors.Select(TransformToTemplateModel).ToArray();
+        var fields = typeData.Fields.Select(TransformToTemplateModel).ToArray();
+        var properties = typeData.Properties.Select(TransformToTemplateModel).ToArray();
+        var methods = typeData.Methods.Select(TransformToTemplateModel).ToArray();
 
-        return new ClassTemplateModel(classData.Name, classData.DocComment.Value,
-            [classData.AccessModifier.GetKeywordString()],
-            constructors, fields, properties, methods);
+        List<Keyword> modifiers = [typeData.AccessModifier.ToKeyword()];
+
+        if (SealedKeyword.IsPresentIn(typeData))
+        {
+            modifiers.Add(Keyword.Sealed);
+        }
+
+        if (AbstractKeyword.IsPresentIn(typeData))
+        {
+            modifiers.Add(Keyword.Abstract);
+        }
+
+        return new TypeTemplateModel(
+            typeData.Id,
+            CSharpTypeName.Of(typeData),
+            typeData.DocComment.Value,
+            typeData.Kind.GetName(),
+            modifiers.GetStrings(),
+            constructors,
+            fields,
+            properties,
+            methods);
     }
 
     /// <summary>
