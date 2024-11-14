@@ -23,10 +23,14 @@ public interface ITypeData : ITypeNameData
     /// </summary>
     bool IsAbstract { get; }
 
+    /// <summary>
+    /// Kind of the type.
+    /// </summary>
     TypeKind Kind { get; }
 
-    bool IsStatic { get; }
-
+    /// <summary>
+    /// Checks if the type is sealed (i.e. cannot be inherited)
+    /// </summary>
     bool IsSealed { get; }
 
     /// <summary>

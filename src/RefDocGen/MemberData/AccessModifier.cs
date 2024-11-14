@@ -1,7 +1,7 @@
 namespace RefDocGen.MemberData;
 
 /// <summary>
-/// Represents access modifiers for class members
+/// Represents access modifier of a member.
 /// <para>Note that the values are sorted from the most restrictive to the least restrictive.</para>
 /// </summary>
 public enum AccessModifier

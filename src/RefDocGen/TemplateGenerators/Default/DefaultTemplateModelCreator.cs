@@ -25,12 +25,12 @@ internal static class DefaultTemplateModelCreator
 
         List<Keyword> modifiers = [typeData.AccessModifier.ToKeyword()];
 
-        if (typeData.IsSealed)
+        if (SealedKeyword.IsPresentIn(typeData))
         {
             modifiers.Add(Keyword.Sealed);
         }
 
-        if (typeData.IsAbstract) // TODO: update
+        if (AbstractKeyword.IsPresentIn(typeData))
         {
             modifiers.Add(Keyword.Abstract);
         }

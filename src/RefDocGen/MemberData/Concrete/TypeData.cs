@@ -7,6 +7,7 @@ namespace RefDocGen.MemberData.Concrete;
 /// <summary>
 /// Represents data of a class.
 /// </summary>
+/// <param name="Type"><see cref="System.Type"/> object representing the type.</param>
 /// <param name="Constructors">Dictionary of constructors declared in the class; keys are the corresponding constructor IDs</param>
 /// <param name="Fields">Dictionary of fields declared in the class; keys are the corresponding field IDs.</param>
 /// <param name="Properties">Dictionary of properties declared in the class; keys are the corresponding property IDs.</param>
@@ -46,9 +47,6 @@ internal record TypeData(
 
     /// <inheritdoc/>
     public bool IsSealed => Type.IsSealed;
-
-    /// <inheritdoc/>
-    public bool IsStatic => IsAbstract && IsSealed;
 
     /// <inheritdoc/>
     public TypeKind Kind => Type.IsInterface ? TypeKind.Interface : Type.IsValueType ? TypeKind.ValueType : TypeKind.Class;

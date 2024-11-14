@@ -42,10 +42,10 @@ internal class AssemblyTypeExtractor
     {
         var bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
 
-        var constructors = type.GetConstructors(bindingFlags).Where(f => !f.IsCompilerGenerated());
+        var constructors = type.GetConstructors(bindingFlags).Where(c => !c.IsCompilerGenerated());
         var fields = type.GetFields(bindingFlags).Where(f => !f.IsCompilerGenerated());
-        var properties = type.GetProperties(bindingFlags).Where(f => !f.IsCompilerGenerated());
-        var methods = type.GetMethods(bindingFlags).Where(f => !f.IsCompilerGenerated());
+        var properties = type.GetProperties(bindingFlags).Where(p => !p.IsCompilerGenerated());
+        var methods = type.GetMethods(bindingFlags).Where(m => !m.IsCompilerGenerated());
 
         // construct *Data objects
         var ctorModels = constructors.Select(c => new ConstructorData(c)).ToDictionary(c => c.Id);
