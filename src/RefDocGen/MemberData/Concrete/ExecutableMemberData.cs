@@ -43,6 +43,11 @@ internal abstract class ExecutableMemberData : IExecutableMemberData
             }
             else
             {
+                if (Name == "Add")
+                {
+                    Console.WriteLine();
+                }
+
                 // Get the parameters in the format: System.String, System.Int32, etc.
                 var parameterNames = Parameters.Select(
                             p => p.IsByRef ? p.Type.Id + "@" : p.Type.Id    // if the param is passed by reference, add '@' suffix

@@ -14,7 +14,7 @@ internal class ParameterData : IParameterData
     public ParameterData(ParameterInfo parameterInfo)
     {
         ParameterInfo = parameterInfo;
-        Type = new TypeNameData(parameterInfo.ParameterType);
+        Type = parameterInfo.ParameterType.ToITypeNameData();
         DocComment = XmlDocElementFactory.EmptyParamWithName(Name);
     }
 

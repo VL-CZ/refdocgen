@@ -5,7 +5,6 @@ namespace RefDocGen.MemberData;
 /// </summary>
 public enum TypeKind
 {
-
     /// <summary>
     /// Represents value type.
     /// </summary>
