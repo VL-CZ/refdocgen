@@ -1,4 +1,5 @@
 using RefDocGen.MemberData.Abstract;
+using RefDocGen.Tools;
 using System;
 
 namespace RefDocGen.MemberData.Concrete;
@@ -67,24 +68,23 @@ internal record TypeNameData : ITypeNameData
         {
             if (TypeObject.IsGenericParameter)
             {
-                if (IsArray)
+                if (declaredTypeParameters.Any(p => p.Name == ShortName))
                 {
-                    string typeName = ShortName;
-                    int i = typeName.IndexOf('[');
-
-                    if (declaredTypeParameters.Any(p => p.Name == typeName[..i]))
-                    {
-                        return "`" + declaredTypeParameters.First(p => p.Name == typeName[..i]).Order + typeName[i..];
-                    }
-                }
-                else
-                {
-                    if (declaredTypeParameters.Any(p => p.Name == ShortName))
-                    {
-                        return "`" + declaredTypeParameters.First(p => p.Name == ShortName).Order;
-                    }
+                    return "`" + declaredTypeParameters.First(p => p.Name == ShortName).Order;
                 }
             }
+            else if (IsArray && TypeObject.GetBaseElementType().IsGenericParameter)
+            {
+                string typeName = ShortName;
+                int i = typeName.IndexOf('[');
+
+                if (declaredTypeParameters.Any(p => p.Name == typeName[..i]))
+                {
+                    return "`" + declaredTypeParameters.First(p => p.Name == typeName[..i]).Order + typeName[i..];
+                }
+
+            }
+
 
             string name = FullName;
 

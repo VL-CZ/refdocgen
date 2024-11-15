@@ -1,7 +1,7 @@
 using FluentAssertions;
-using TypeExtensions = RefDocGen.TemplateGenerators.Tools.TypeName.TypeExtensions;
+using TypeExtensions = RefDocGen.Tools.TypeExtensions;
 
-namespace RefDocGen.UnitTests.TemplateGenerators.Tools.TypeName;
+namespace RefDocGen.UnitTests.Tools;
 
 /// <summary>
 /// Class containing tests for <see cref="TypeExtensions"/> class.
