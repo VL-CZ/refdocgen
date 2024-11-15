@@ -1,6 +1,6 @@
 using FluentAssertions;
 using NSubstitute;
-using RefDocGen.MemberData.Abstract;
+using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.TemplateGenerators.Tools.TypeName;
 
 namespace RefDocGen.UnitTests.TemplateGenerators.Tools.TypeName;

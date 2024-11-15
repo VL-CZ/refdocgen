@@ -1,4 +1,4 @@
-using RefDocGen.MemberData.Abstract;
+using RefDocGen.CodeElements.Abstract.Types;
 
 namespace RefDocGen.TemplateGenerators;
 

@@ -1,5 +1,6 @@
-using RefDocGen.MemberData.Concrete;
+using RefDocGen.CodeElements.Concrete.Types;
 using System.Reflection;
+using RefDocGen.CodeElements.Concrete.Members;
 
 namespace RefDocGen.AssemblyAnalysis;
 
