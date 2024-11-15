@@ -17,7 +17,8 @@ internal record TypeData(
     IReadOnlyDictionary<string, ConstructorData> Constructors,
     IReadOnlyDictionary<string, FieldData> Fields,
     IReadOnlyDictionary<string, PropertyData> Properties,
-    IReadOnlyDictionary<string, MethodData> Methods) : TypeNameData(Type), ITypeData
+    IReadOnlyDictionary<string, MethodData> Methods,
+    IReadOnlyList<TypeParameterDeclaration> TypeParameterDeclarations) : TypeNameData(Type, TypeParameterDeclarations), ITypeData
 {
     /// <inheritdoc/>
     public override string Id

@@ -19,8 +19,8 @@ internal class PropertyData : IPropertyData
         PropertyInfo = propertyInfo;
         Type = new TypeNameData(propertyInfo.PropertyType);
 
-        Getter = PropertyInfo.GetMethod is not null ? new MethodData(PropertyInfo.GetMethod) : null;
-        Setter = PropertyInfo.SetMethod is not null ? new MethodData(PropertyInfo.SetMethod) : null;
+        Getter = PropertyInfo.GetMethod is not null ? new MethodData(PropertyInfo.GetMethod, []) : null; // TODO: add type parameters
+        Setter = PropertyInfo.SetMethod is not null ? new MethodData(PropertyInfo.SetMethod, []) : null;
     }
 
     /// <inheritdoc/>

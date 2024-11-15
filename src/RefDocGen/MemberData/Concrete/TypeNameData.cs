@@ -1,4 +1,5 @@
 using RefDocGen.MemberData.Abstract;
+using System;
 
 namespace RefDocGen.MemberData.Concrete;
 
@@ -10,19 +11,24 @@ namespace RefDocGen.MemberData.Concrete;
 /// </summary>
 internal record TypeNameData : ITypeNameData
 {
+    private IReadOnlyList<TypeParameterDeclaration> declaredTypeParameters;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="TypeNameData"/> class.
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
-    public TypeNameData(Type type)
+    public TypeNameData(Type type, IReadOnlyList<TypeParameterDeclaration> declaredTypeParameters)
     {
+        this.declaredTypeParameters = declaredTypeParameters;
         TypeObject = type;
 
         GenericParameters = TypeObject
             .GetGenericArguments()
-            .Select((t, i) => t.ToITypeNameData(i))
+            .Select(t => new TypeNameData(t, declaredTypeParameters))
             .ToArray();
     }
+
+    public TypeNameData(Type type) : this(type, []) { }
 
     /// <inheritdoc/>
     public Type TypeObject { get; }
@@ -59,6 +65,27 @@ internal record TypeNameData : ITypeNameData
     {
         get
         {
+            if (TypeObject.IsGenericParameter)
+            {
+                if (IsArray)
+                {
+                    string typeName = ShortName;
+                    int i = typeName.IndexOf('[');
+
+                    if (declaredTypeParameters.Any(p => p.Name == typeName[..i]))
+                    {
+                        return "`" + declaredTypeParameters.First(p => p.Name == typeName[..i]).Order + typeName[i..];
+                    }
+                }
+                else
+                {
+                    if (declaredTypeParameters.Any(p => p.Name == ShortName))
+                    {
+                        return "`" + declaredTypeParameters.First(p => p.Name == ShortName).Order;
+                    }
+                }
+            }
+
             string name = FullName;
 
             if (HasGenericParameters)

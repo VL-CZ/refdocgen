@@ -12,7 +12,7 @@ internal class ConstructorData : ExecutableMemberData, IConstructorData
     /// Initializes a new instance of the <see cref="ConstructorData"/> class.
     /// </summary>
     /// <param name="constructorInfo"><see cref="System.Reflection.ConstructorInfo"/> object representing the constructor.</param>
-    public ConstructorData(ConstructorInfo constructorInfo) : base(constructorInfo)
+    public ConstructorData(ConstructorInfo constructorInfo, IReadOnlyList<TypeParameterDeclaration> declaredTypeParameters) : base(constructorInfo, declaredTypeParameters)
     {
         ConstructorInfo = constructorInfo;
     }

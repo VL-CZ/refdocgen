@@ -10,11 +10,13 @@ namespace RefDocGen.MemberData.Concrete;
 /// </summary>
 internal class MethodData : ExecutableMemberData, IMethodData
 {
+
+
     /// <summary>
     /// Initializes a new instance of the <see cref="MethodData"/> class.
     /// </summary>
     /// <param name="methodInfo"><see cref="System.Reflection.MethodInfo"/> object representing the method.</param>
-    public MethodData(MethodInfo methodInfo) : base(methodInfo)
+    public MethodData(MethodInfo methodInfo, IReadOnlyList<TypeParameterDeclaration> declaredTypeParameters) : base(methodInfo, declaredTypeParameters)
     {
         MethodInfo = methodInfo;
         ReturnType = new TypeNameData(methodInfo.ReturnType);

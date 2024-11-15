@@ -14,7 +14,7 @@ public class ExecutableMemberDataTests
     public void Id_IsSameAsMemberName_WhenNoParameters()
     {
         var methodInfo = MockMethodInfo("Execute", typeof(void), []);
-        ExecutableMemberData memberData = new MethodData(methodInfo);
+        ExecutableMemberData memberData = new MethodData(methodInfo, []);
 
         memberData.Id.Should().Be("Execute");
     }
@@ -25,7 +25,7 @@ public class ExecutableMemberDataTests
         var param = MockParameterInfo(typeof(string));
         var methodInfo = MockMethodInfo("Execute", typeof(void), [param]);
 
-        ExecutableMemberData memberData = new MethodData(methodInfo);
+        ExecutableMemberData memberData = new MethodData(methodInfo, []);
 
         memberData.Id.Should().Be("Execute(System.String)");
     }
@@ -39,7 +39,7 @@ public class ExecutableMemberDataTests
         var param4 = MockParameterInfo(typeof(double).MakeArrayType());
         var methodInfo = MockMethodInfo("Execute", typeof(void), [param1, param2, param3, param4]);
 
-        ExecutableMemberData memberData = new MethodData(methodInfo);
+        ExecutableMemberData memberData = new MethodData(methodInfo, []);
 
         string expectedId = "Execute(System.String,System.Type,System.Int32@,System.Double[])";
 

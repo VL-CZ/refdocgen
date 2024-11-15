@@ -21,14 +21,14 @@ internal abstract class ExecutableMemberData : IExecutableMemberData
     /// Create new <see cref="ExecutableMemberData"/> instance.
     /// </summary>
     /// <param name="methodBase"><see cref="MethodBase"/> object representing the member.</param>
-    protected ExecutableMemberData(MethodBase methodBase)
+    protected ExecutableMemberData(MethodBase methodBase, IReadOnlyList<TypeParameterDeclaration> declaredTypeParameters)
     {
         this.methodBase = methodBase;
 
         // add parameters
         Parameters = methodBase.GetParameters()
             .OrderBy(p => p.Position)
-            .Select(p => new ParameterData(p))
+            .Select(p => new ParameterData(p, declaredTypeParameters))
             .ToArray();
     }
 
@@ -43,11 +43,6 @@ internal abstract class ExecutableMemberData : IExecutableMemberData
             }
             else
             {
-                if (Name == "Add")
-                {
-                    Console.WriteLine();
-                }
-
                 // Get the parameters in the format: System.String, System.Int32, etc.
                 var parameterNames = Parameters.Select(
                             p => p.IsByRef ? p.Type.Id + "@" : p.Type.Id    // if the param is passed by reference, add '@' suffix

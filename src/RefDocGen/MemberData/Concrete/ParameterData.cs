@@ -11,10 +11,10 @@ namespace RefDocGen.MemberData.Concrete;
 internal class ParameterData : IParameterData
 {
     /// <inheritdoc/>
-    public ParameterData(ParameterInfo parameterInfo)
+    public ParameterData(ParameterInfo parameterInfo, IReadOnlyList<TypeParameterDeclaration> declaredTypeParameters)
     {
         ParameterInfo = parameterInfo;
-        Type = parameterInfo.ParameterType.ToITypeNameData();
+        Type = new TypeNameData(parameterInfo.ParameterType, declaredTypeParameters);
         DocComment = XmlDocElementFactory.EmptyParamWithName(Name);
     }
 
