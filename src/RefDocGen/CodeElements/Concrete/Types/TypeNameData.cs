@@ -11,7 +11,7 @@ namespace RefDocGen.CodeElements.Concrete.Types;
 /// Note: this class doesn't represent generic type parameters (see <see cref="GenericTypeParameterNameData"/>).
 /// </para>
 /// </summary>
-internal record TypeNameData : ITypeNameData
+internal class TypeNameData : ITypeNameData
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="TypeNameData"/> class.

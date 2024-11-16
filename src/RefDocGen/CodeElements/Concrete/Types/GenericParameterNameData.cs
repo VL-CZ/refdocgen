@@ -41,7 +41,7 @@ internal record GenericTypeParameterNameData : ITypeNameData
             string paramName = ShortName;
             string idSuffix = "";
 
-            if (IsArray) // Array -> We need to split the type name into 2 parts: parameter name and brackets
+            if (IsArray) // Array -> We need to split the type name into 2 parts: type parameter name and brackets
             {
                 if (paramName.TryGetIndex('[', out int i))
                 {
