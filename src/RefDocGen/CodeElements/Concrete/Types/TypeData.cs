@@ -7,7 +7,7 @@ using System.Xml.Linq;
 namespace RefDocGen.CodeElements.Concrete.Types;
 
 /// <summary>
-/// Represents data of a class.
+/// Represents data of a type.
 /// </summary>
 /// <param name="Type"><see cref="System.Type"/> object representing the type.</param>
 /// <param name="Constructors">Dictionary of constructors declared in the class; keys are the corresponding constructor IDs</param>
@@ -35,7 +35,7 @@ internal record TypeData(
                 name = name + '`' + TypeParameters.Count;
             }
 
-            return name.Replace('&', '@');
+            return name;
         }
     }
 

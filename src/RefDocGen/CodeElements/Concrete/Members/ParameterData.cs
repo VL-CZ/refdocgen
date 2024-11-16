@@ -20,7 +20,7 @@ internal class ParameterData : IParameterData
     public ParameterData(ParameterInfo parameterInfo, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
     {
         ParameterInfo = parameterInfo;
-        Type = parameterInfo.ParameterType.ToITypeNameData(declaredTypeParameters);
+        Type = parameterInfo.ParameterType.GetNameData(declaredTypeParameters);
         DocComment = XmlDocElementFactory.EmptyParamWithName(Name);
     }
 

@@ -7,6 +7,9 @@ namespace RefDocGen.CodeElements.Concrete.Types;
 /// <para>
 /// Doesn't include any type member data (such as fields, methods, etc.)
 /// </para>
+/// <para>
+/// Note: this class doesn't represent generic type parameters (see <see cref="GenericTypeParameterNameData"/>).
+/// </para>
 /// </summary>
 internal record TypeNameData : ITypeNameData
 {
@@ -21,7 +24,7 @@ internal record TypeNameData : ITypeNameData
 
         TypeParameters = TypeObject
             .GetGenericArguments()
-            .Select(t => t.ToITypeNameData(declaredTypeParameters))
+            .Select(t => t.GetNameData(declaredTypeParameters))
             .ToArray();
     }
 

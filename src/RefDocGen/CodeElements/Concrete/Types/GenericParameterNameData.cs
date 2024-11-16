@@ -1,12 +1,10 @@
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.Tools;
 
 namespace RefDocGen.CodeElements.Concrete.Types;
 
 /// <summary>
-/// Class representing name-related data of a type, including its name, namespace, and generic parameters (if present).
-/// <para>
-/// Doesn't include any type member data (such as fields, methods, etc.)
-/// </para>
+/// Class representing name-related data of a generic parameter.
 /// </summary>
 internal record GenericTypeParameterNameData : ITypeNameData
 {
@@ -16,11 +14,11 @@ internal record GenericTypeParameterNameData : ITypeNameData
     private readonly IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="TypeNameData"/> class.
+    /// Initializes a new instance of the <see cref="GenericTypeParameterNameData"/> class.
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
     /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    public GenericTypeParameterNameData(Type type, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
+    internal GenericTypeParameterNameData(Type type, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
     {
         this.declaredTypeParameters = declaredTypeParameters;
         TypeObject = type;
@@ -40,35 +38,29 @@ internal record GenericTypeParameterNameData : ITypeNameData
     {
         get
         {
-            if (IsArray)
-            {
-                string typeName = ShortName;
-                int i = typeName.IndexOf('[');
+            string paramName = ShortName;
+            string idSuffix = "";
 
-                if (declaredTypeParameters.TryGetValue(typeName[..i], out var typeParameter))
-                {
-                    return "`" + typeParameter.Order + typeName[i..];
-                }
-                else
-                {
-                    return typeParameter.Name;
-                }
-
-            }
-            else
+            if (IsArray) // Array -> We need to split the type name into 2 parts: parameter name and brackets
             {
-                if (declaredTypeParameters.TryGetValue(ShortName, out var typeParameter))
+                if (paramName.TryGetIndex('[', out int i))
                 {
-                    return "`" + typeParameter.Order;
-                }
-                else
-                {
-                    return typeParameter.Name;
+                    (paramName, idSuffix) = (paramName[..i], paramName[i..]);
                 }
             }
+            else if (IsPointer) // Pointer -> equivalent to Array type
+            {
+                if (paramName.TryGetIndex('*', out int i))
+                {
+                    (paramName, idSuffix) = (paramName[..i], paramName[i..]);
+                }
+            }
+
+            return declaredTypeParameters.TryGetValue(paramName, out var typeParameter)
+                ? "`" + typeParameter.Order + idSuffix // type found -> use its Order
+                : "`" + typeParameter.Name + idSuffix; // type not found -> use arbitrary value (e.g. Name)
         }
     }
-
 
     /// <inheritdoc/>
     public string? Namespace => null;
