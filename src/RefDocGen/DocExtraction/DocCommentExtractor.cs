@@ -1,9 +1,10 @@
+using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.DocExtraction.Handlers;
 using RefDocGen.DocExtraction.Handlers.Abstract;
 using RefDocGen.DocExtraction.Tools;
-using RefDocGen.MemberData.Concrete;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
+using RefDocGen.CodeElements.Concrete.Members;
 
 namespace RefDocGen.DocExtraction;
 

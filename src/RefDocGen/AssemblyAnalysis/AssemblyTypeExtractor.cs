@@ -1,5 +1,6 @@
-using RefDocGen.MemberData.Concrete;
+using RefDocGen.CodeElements.Concrete.Types;
 using System.Reflection;
+using RefDocGen.CodeElements.Concrete.Members;
 
 namespace RefDocGen.AssemblyAnalysis;
 
@@ -46,13 +47,25 @@ internal class AssemblyTypeExtractor
         var fields = type.GetFields(bindingFlags).Where(f => !f.IsCompilerGenerated());
         var properties = type.GetProperties(bindingFlags).Where(p => !p.IsCompilerGenerated());
         var methods = type.GetMethods(bindingFlags).Where(m => !m.IsCompilerGenerated());
+        var typeParameters = type.GetGenericArguments().Select((ga, i) => new TypeParameterDeclaration(ga.Name, i)).ToDictionary(t => t.Name);
 
         // construct *Data objects
-        var ctorModels = constructors.Select(c => new ConstructorData(c)).ToDictionary(c => c.Id);
-        var fieldModels = fields.Select(f => new FieldData(f)).ToDictionary(f => f.Id);
-        var propertyModels = properties.Select(p => new PropertyData(p)).ToDictionary(p => p.Id);
-        var methodModels = methods.Select(m => new MethodData(m)).ToDictionary(m => m.Id);
+        var ctorModels = constructors
+            .Select(c => new ConstructorData(c, typeParameters))
+            .ToDictionary(c => c.Id);
 
-        return new TypeData(type, ctorModels, fieldModels, propertyModels, methodModels);
+        var fieldModels = fields
+            .Select(f => new FieldData(f, typeParameters))
+            .ToDictionary(f => f.Id);
+
+        var propertyModels = properties
+            .Select(p => new PropertyData(p, typeParameters))
+            .ToDictionary(p => p.Id);
+
+        var methodModels = methods
+            .Select(m => new MethodData(m, typeParameters))
+            .ToDictionary(m => m.Id);
+
+        return new TypeData(type, ctorModels, fieldModels, propertyModels, methodModels, typeParameters);
     }
 }

@@ -80,3 +80,4 @@ dotnet_code_quality.CA1716.analyzed_symbol_kinds = NamedType, Method, Property, 
 # Suppressed rules
 dotnet_diagnostic.IDE0072.severity = none # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0072
 dotnet_diagnostic.CA1822.severity = none # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1822 TODO: maybe allow afterwards?
+dotnet_diagnostic.CA1852.severity = none # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1852

@@ -1,4 +1,5 @@
-using RefDocGen.MemberData.Abstract;
+using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.Tools;
 
 namespace RefDocGen.TemplateGenerators.Tools.TypeName;
 
@@ -63,9 +64,9 @@ internal static class CSharpTypeName
     {
         string typeName = GetBuiltInName(type) ?? type.ShortName;
 
-        if (type.HasGenericParameters)
+        if (type.HasTypeParameters)
         {
-            string genericParamsString = string.Join(", ", type.GenericParameters.Select(Of));
+            string genericParamsString = string.Join(", ", type.TypeParameters.Select(Of));
             typeName += '<' + genericParamsString + '>'; // add generic params to the type name
         }
 

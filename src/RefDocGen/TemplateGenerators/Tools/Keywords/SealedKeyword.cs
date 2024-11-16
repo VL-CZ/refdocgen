@@ -1,5 +1,5 @@
-using RefDocGen.MemberData;
-using RefDocGen.MemberData.Abstract;
+using RefDocGen.CodeElements;
+using RefDocGen.CodeElements.Abstract.Types;
 
 namespace RefDocGen.TemplateGenerators.Tools.Keywords;
 

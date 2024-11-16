@@ -1,6 +1,6 @@
 using FluentAssertions;
 using NSubstitute;
-using RefDocGen.MemberData.Abstract;
+using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.TemplateGenerators.Tools.TypeName;
 
 namespace RefDocGen.UnitTests.TemplateGenerators.Tools.TypeName;
@@ -107,8 +107,8 @@ public class CSharpTypeNameTests
 
         typeData.TypeObject.Returns(type);
         typeData.ShortName.Returns(shortName);
-        typeData.HasGenericParameters.Returns(genericParams.Any());
-        typeData.GenericParameters.Returns(genericParams);
+        typeData.HasTypeParameters.Returns(genericParams.Any());
+        typeData.TypeParameters.Returns(genericParams);
         typeData.IsArray.Returns(isArray);
         typeData.IsPointer.Returns(false);
 
