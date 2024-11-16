@@ -1,14 +1,16 @@
-//using RefDocGen.MemberData.Abstract;
-//using RefDocGen.MemberData.Concrete;
 
-//namespace RefDocGen.MemberData;
+using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.Tools;
 
-//internal static class TypeExtensions
-//{
-//    internal static ITypeNameData ToITypeNameData(this Type type)
-//    {
-//        return type.IsGenericTypeParameter
-//            ? new TypeParameterNameData(type)
-//            : new TypeNameData(type);
-//    }
-//}
+namespace RefDocGen.CodeElements;
+
+internal static class TypeExtensions
+{
+    internal static ITypeNameData ToITypeNameData(this Type type, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
+    {
+        return type.IsGenericParameter || type.GetBaseElementType().IsGenericParameter
+            ? new GenericTypeParameterNameData(type, declaredTypeParameters)
+            : new TypeNameData(type, declaredTypeParameters);
+    }
+}

@@ -1,5 +1,4 @@
 using RefDocGen.CodeElements.Abstract.Types;
-using RefDocGen.Tools;
 
 namespace RefDocGen.CodeElements.Concrete.Types;
 
@@ -12,23 +11,17 @@ namespace RefDocGen.CodeElements.Concrete.Types;
 internal record TypeNameData : ITypeNameData
 {
     /// <summary>
-    /// Dictionary of type parameters declared in the containing type; the keys represent type parameter names.
-    /// </summary>
-    private readonly IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters;
-
-    /// <summary>
     /// Initializes a new instance of the <see cref="TypeNameData"/> class.
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
     /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    public TypeNameData(Type type, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
+    internal TypeNameData(Type type, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
     {
-        this.declaredTypeParameters = declaredTypeParameters;
         TypeObject = type;
 
         TypeParameters = TypeObject
             .GetGenericArguments()
-            .Select(t => new TypeNameData(t, declaredTypeParameters))
+            .Select(t => t.ToITypeNameData(declaredTypeParameters))
             .ToArray();
     }
 
@@ -36,7 +29,7 @@ internal record TypeNameData : ITypeNameData
     /// Initializes a new instance of the <see cref="TypeNameData"/> class.
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
-    public TypeNameData(Type type) : this(type, new Dictionary<string, TypeParameterDeclaration>())
+    internal TypeNameData(Type type) : this(type, new Dictionary<string, TypeParameterDeclaration>())
     { }
 
     /// <inheritdoc/>
@@ -74,26 +67,6 @@ internal record TypeNameData : ITypeNameData
     {
         get
         {
-            if (IsGenericParameter)
-            {
-                if (declaredTypeParameters.TryGetValue(ShortName, out var typeParameter))
-                {
-                    return "`" + typeParameter.Order;
-                }
-            }
-            else if (IsArray && TypeObject.GetBaseElementType().IsGenericParameter)
-            {
-                string typeName = ShortName;
-                int i = typeName.IndexOf('[');
-
-                if (declaredTypeParameters.TryGetValue(typeName[..i], out var typeParameter))
-                {
-                    return "`" + typeParameter.Order + typeName[i..];
-                }
-
-            }
-
-
             string name = FullName;
 
             if (HasTypeParameters)
@@ -124,5 +97,5 @@ internal record TypeNameData : ITypeNameData
     public bool IsPointer => TypeObject.IsPointer;
 
     /// <inheritdoc/>
-    public bool IsGenericParameter => TypeObject.IsGenericParameter;
+    public bool IsGenericParameter => false;
 }

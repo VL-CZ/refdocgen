@@ -21,7 +21,7 @@ internal class MethodData : ExecutableMemberData, IMethodData
         : base(methodInfo, declaredTypeParameters)
     {
         MethodInfo = methodInfo;
-        ReturnType = new TypeNameData(methodInfo.ReturnType);
+        ReturnType = methodInfo.ReturnType.ToITypeNameData(declaredTypeParameters);
     }
 
     /// <summary>

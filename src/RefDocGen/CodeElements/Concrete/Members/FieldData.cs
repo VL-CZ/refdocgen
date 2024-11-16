@@ -16,11 +16,11 @@ internal class FieldData : IFieldData
     /// Initializes a new instance of the <see cref="FieldData"/> class.
     /// </summary>
     /// <param name="fieldInfo"><see cref="System.Reflection.FieldInfo"/> object representing the field.</param>
-    /// /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
+    /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
     internal FieldData(FieldInfo fieldInfo, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
     {
         FieldInfo = fieldInfo;
-        Type = new TypeNameData(fieldInfo.FieldType, declaredTypeParameters);
+        Type = fieldInfo.FieldType.ToITypeNameData(declaredTypeParameters);
     }
 
     /// <inheritdoc/>

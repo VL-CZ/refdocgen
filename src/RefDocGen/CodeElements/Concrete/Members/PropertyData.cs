@@ -20,7 +20,7 @@ internal class PropertyData : IPropertyData
     internal PropertyData(PropertyInfo propertyInfo, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
     {
         PropertyInfo = propertyInfo;
-        Type = new TypeNameData(propertyInfo.PropertyType);
+        Type = propertyInfo.PropertyType.ToITypeNameData(declaredTypeParameters);
 
         Getter = PropertyInfo.GetMethod is not null
             ? new MethodData(PropertyInfo.GetMethod, declaredTypeParameters)
