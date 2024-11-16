@@ -56,8 +56,11 @@ internal record GenericTypeParameterNameData : ITypeNameData
                 }
             }
 
+            // We need to get the index of the generic parameter, for further info see:
+            // https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/documentation-comments#d42-id-string-format
+
             return declaredTypeParameters.TryGetValue(paramName, out var typeParameter)
-                ? "`" + typeParameter.Order + idSuffix // type found -> use its Order
+                ? "`" + typeParameter.Index + idSuffix // type found -> use its Order
                 : "`" + typeParameter.Name + idSuffix; // type not found -> use arbitrary value (e.g. Name)
         }
     }
