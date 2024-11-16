@@ -7,22 +7,69 @@ using System.Xml.Linq;
 namespace RefDocGen.CodeElements.Concrete.Types;
 
 /// <summary>
-/// Represents data of a type.
+/// Class representing data of a type, including its members.
+/// <para>
+/// Typically, only the types declared in the assemblies we analyze, are represented by this class.
+/// </para>
 /// </summary>
-/// <param name="Type"><see cref="System.Type"/> object representing the type.</param>
-/// <param name="Constructors">Dictionary of constructors declared in the class; keys are the corresponding constructor IDs</param>
-/// <param name="Fields">Dictionary of fields declared in the class; keys are the corresponding field IDs.</param>
-/// <param name="Properties">Dictionary of properties declared in the class; keys are the corresponding property IDs.</param>
-/// <param name="Methods">Dictionary of methods declared in the class; keys are the corresponding method IDs.</param>
-/// <param name="TypeParameterDeclarations">Collection of type parameters declared in this type; the keys represent type parameter names.</param>
-internal record TypeData(
-    Type Type,
-    IReadOnlyDictionary<string, ConstructorData> Constructors,
-    IReadOnlyDictionary<string, FieldData> Fields,
-    IReadOnlyDictionary<string, PropertyData> Properties,
-    IReadOnlyDictionary<string, MethodData> Methods,
-    IReadOnlyDictionary<string, TypeParameterDeclaration> TypeParameterDeclarations) : TypeNameData(Type, TypeParameterDeclarations), ITypeData
+internal class TypeData : TypeNameData, ITypeData
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TypeData"/> class.
+    /// </summary>
+    /// <param name="type"><see cref="System.Type"/> object representing the type.</param>
+    /// <param name="constructors">Dictionary of constructors declared in the class; keys are the corresponding constructor IDs</param>
+    /// <param name="fields">Dictionary of fields declared in the class; keys are the corresponding field IDs.</param>
+    /// <param name="properties">Dictionary of properties declared in the class; keys are the corresponding property IDs.</param>
+    /// <param name="methods">Dictionary of methods declared in the class; keys are the corresponding method IDs.</param>
+    /// <param name="typeParameterDeclarations">Collection of type parameters declared in this type; the keys represent type parameter names.</param>
+    public TypeData(
+        Type type,
+        IReadOnlyDictionary<string, ConstructorData> constructors,
+        IReadOnlyDictionary<string, FieldData> fields,
+        IReadOnlyDictionary<string, PropertyData> properties,
+        IReadOnlyDictionary<string, MethodData> methods,
+        IReadOnlyDictionary<string, TypeParameterDeclaration> typeParameterDeclarations)
+        : base(type, typeParameterDeclarations)
+    {
+        Type = type;
+        Constructors = constructors;
+        Fields = fields;
+        Properties = properties;
+        Methods = methods;
+        TypeParameterDeclarations = typeParameterDeclarations;
+    }
+
+    /// <summary>
+    /// <see cref="System.Type"/> object representing the type.
+    /// </summary>
+    public Type Type { get; }
+
+    /// <summary>
+    /// Dictionary of constructors declared in the class; keys are the corresponding constructor IDs.
+    /// </summary>
+    public IReadOnlyDictionary<string, ConstructorData> Constructors { get; }
+
+    /// <summary>
+    /// Dictionary of fields declared in the class; keys are the corresponding field IDs.
+    /// </summary>
+    public IReadOnlyDictionary<string, FieldData> Fields { get; }
+
+    /// <summary>
+    /// Dictionary of properties declared in the class; keys are the corresponding property IDs.
+    /// </summary>
+    public IReadOnlyDictionary<string, PropertyData> Properties { get; }
+
+    /// <summary>
+    /// Dictionary of methods declared in the class; keys are the corresponding method IDs.
+    /// </summary>
+    public IReadOnlyDictionary<string, MethodData> Methods { get; }
+
+    /// <summary>
+    /// Collection of type parameters declared in this type; the keys represent type parameter names.
+    /// </summary>
+    public IReadOnlyDictionary<string, TypeParameterDeclaration> TypeParameterDeclarations { get; }
+
     /// <inheritdoc/>
     public override string Id
     {

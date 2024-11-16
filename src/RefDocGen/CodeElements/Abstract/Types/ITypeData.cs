@@ -4,7 +4,7 @@ using RefDocGen.CodeElements.Abstract.Members;
 namespace RefDocGen.CodeElements.Abstract.Types;
 
 /// <summary>
-/// Represents data of a type.
+/// Represents data of a type, including its members.
 /// </summary>
 public interface ITypeData : ITypeNameData
 {
