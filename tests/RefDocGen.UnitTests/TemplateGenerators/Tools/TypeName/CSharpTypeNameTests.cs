@@ -107,8 +107,8 @@ public class CSharpTypeNameTests
 
         typeData.TypeObject.Returns(type);
         typeData.ShortName.Returns(shortName);
-        typeData.HasGenericParameters.Returns(genericParams.Any());
-        typeData.GenericParameters.Returns(genericParams);
+        typeData.HasTypeParameters.Returns(genericParams.Any());
+        typeData.TypeParameters.Returns(genericParams);
         typeData.IsArray.Returns(isArray);
         typeData.IsPointer.Returns(false);
 

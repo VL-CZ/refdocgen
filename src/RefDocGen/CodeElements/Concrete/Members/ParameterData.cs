@@ -13,7 +13,7 @@ namespace RefDocGen.CodeElements.Concrete.Members;
 internal class ParameterData : IParameterData
 {
     /// <inheritdoc/>
-    public ParameterData(ParameterInfo parameterInfo, IReadOnlyList<TypeParameterDeclaration> declaredTypeParameters)
+    public ParameterData(ParameterInfo parameterInfo, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
     {
         ParameterInfo = parameterInfo;
         Type = new TypeNameData(parameterInfo.ParameterType, declaredTypeParameters);

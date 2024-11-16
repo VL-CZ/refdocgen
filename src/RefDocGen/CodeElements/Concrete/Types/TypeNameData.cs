@@ -11,24 +11,25 @@ namespace RefDocGen.CodeElements.Concrete.Types;
 /// </summary>
 internal record TypeNameData : ITypeNameData
 {
-    private IReadOnlyList<TypeParameterDeclaration> declaredTypeParameters;
+    private readonly IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TypeNameData"/> class.
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
-    public TypeNameData(Type type, IReadOnlyList<TypeParameterDeclaration> declaredTypeParameters)
+    public TypeNameData(Type type, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
     {
         this.declaredTypeParameters = declaredTypeParameters;
         TypeObject = type;
 
-        GenericParameters = TypeObject
+        TypeParameters = TypeObject
             .GetGenericArguments()
             .Select(t => new TypeNameData(t, declaredTypeParameters))
             .ToArray();
     }
 
-    public TypeNameData(Type type) : this(type, []) { }
+    public TypeNameData(Type type) : this(type, new Dictionary<string, TypeParameterDeclaration>())
+    { }
 
     /// <inheritdoc/>
     public Type TypeObject { get; }
@@ -65,11 +66,11 @@ internal record TypeNameData : ITypeNameData
     {
         get
         {
-            if (TypeObject.IsGenericParameter)
+            if (IsGenericParameter)
             {
-                if (declaredTypeParameters.Any(p => p.Name == ShortName))
+                if (declaredTypeParameters.TryGetValue(ShortName, out var typeParameter))
                 {
-                    return "`" + declaredTypeParameters.First(p => p.Name == ShortName).Order;
+                    return "`" + typeParameter.Order;
                 }
             }
             else if (IsArray && TypeObject.GetBaseElementType().IsGenericParameter)
@@ -77,9 +78,9 @@ internal record TypeNameData : ITypeNameData
                 string typeName = ShortName;
                 int i = typeName.IndexOf('[');
 
-                if (declaredTypeParameters.Any(p => p.Name == typeName[..i]))
+                if (declaredTypeParameters.TryGetValue(typeName[..i], out var typeParameter))
                 {
-                    return "`" + declaredTypeParameters.First(p => p.Name == typeName[..i]).Order + typeName[i..];
+                    return "`" + typeParameter.Order + typeName[i..];
                 }
 
             }
@@ -87,9 +88,9 @@ internal record TypeNameData : ITypeNameData
 
             string name = FullName;
 
-            if (HasGenericParameters)
+            if (HasTypeParameters)
             {
-                name = name + '{' + string.Join(",", GenericParameters.Select(p => p.Id)) + '}';
+                name = name + '{' + string.Join(",", TypeParameters.Select(p => p.Id)) + '}';
             }
 
             return name;
@@ -97,13 +98,13 @@ internal record TypeNameData : ITypeNameData
     }
 
     /// <inheritdoc/>
-    public bool HasGenericParameters => TypeObject.IsGenericType;
+    public bool HasTypeParameters => TypeObject.IsGenericType;
 
     /// <inheritdoc/>
     public string? Namespace => TypeObject.Namespace;
 
     /// <inheritdoc/>
-    public IReadOnlyList<ITypeNameData> GenericParameters { get; }
+    public IReadOnlyList<ITypeNameData> TypeParameters { get; }
 
     /// <inheritdoc/>
     public bool IsArray => TypeObject.IsArray;
@@ -113,4 +114,7 @@ internal record TypeNameData : ITypeNameData
 
     /// <inheritdoc/>
     public bool IsPointer => TypeObject.IsPointer;
+
+    /// <inheritdoc/>
+    public bool IsGenericParameter => TypeObject.IsGenericParameter;
 }

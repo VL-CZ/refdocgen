@@ -16,13 +16,18 @@ internal class PropertyData : IPropertyData
     /// Initializes a new instance of the <see cref="PropertyData"/> class.
     /// </summary>
     /// <param name="propertyInfo"><see cref="System.Reflection.PropertyInfo"/> object representing the property.</param>
-    public PropertyData(PropertyInfo propertyInfo)
+    public PropertyData(PropertyInfo propertyInfo, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
     {
         PropertyInfo = propertyInfo;
         Type = new TypeNameData(propertyInfo.PropertyType);
 
-        Getter = PropertyInfo.GetMethod is not null ? new MethodData(PropertyInfo.GetMethod, []) : null; // TODO: add type parameters
-        Setter = PropertyInfo.SetMethod is not null ? new MethodData(PropertyInfo.SetMethod, []) : null;
+        Getter = PropertyInfo.GetMethod is not null
+            ? new MethodData(PropertyInfo.GetMethod, declaredTypeParameters)
+            : null;
+
+        Setter = PropertyInfo.SetMethod is not null
+            ? new MethodData(PropertyInfo.SetMethod, declaredTypeParameters)
+            : null;
     }
 
     /// <inheritdoc/>

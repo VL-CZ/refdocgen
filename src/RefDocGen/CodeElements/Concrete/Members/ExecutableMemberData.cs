@@ -22,7 +22,7 @@ internal abstract class ExecutableMemberData : IExecutableMemberData
     /// Create new <see cref="ExecutableMemberData"/> instance.
     /// </summary>
     /// <param name="methodBase"><see cref="MethodBase"/> object representing the member.</param>
-    protected ExecutableMemberData(MethodBase methodBase, IReadOnlyList<TypeParameterDeclaration> declaredTypeParameters)
+    protected ExecutableMemberData(MethodBase methodBase, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
     {
         this.methodBase = methodBase;
 

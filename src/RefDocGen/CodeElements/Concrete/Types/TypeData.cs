@@ -20,7 +20,7 @@ internal record TypeData(
     IReadOnlyDictionary<string, FieldData> Fields,
     IReadOnlyDictionary<string, PropertyData> Properties,
     IReadOnlyDictionary<string, MethodData> Methods,
-    IReadOnlyList<TypeParameterDeclaration> TypeParameterDeclarations) : TypeNameData(Type, TypeParameterDeclarations), ITypeData
+    IReadOnlyDictionary<string, TypeParameterDeclaration> TypeParameterDeclarations) : TypeNameData(Type, TypeParameterDeclarations), ITypeData
 {
     /// <inheritdoc/>
     public override string Id
@@ -29,9 +29,9 @@ internal record TypeData(
         {
             string name = FullName;
 
-            if (HasGenericParameters)
+            if (HasTypeParameters)
             {
-                name = name + '`' + GenericParameters.Count;
+                name = name + '`' + TypeParameters.Count;
             }
 
             return name.Replace('&', '@');
@@ -52,7 +52,11 @@ internal record TypeData(
     public bool IsSealed => Type.IsSealed;
 
     /// <inheritdoc/>
-    public TypeKind Kind => Type.IsInterface ? TypeKind.Interface : Type.IsValueType ? TypeKind.ValueType : TypeKind.Class;
+    public TypeKind Kind => Type.IsInterface
+        ? TypeKind.Interface
+        : Type.IsValueType
+            ? TypeKind.ValueType
+            : TypeKind.Class;
 
     /// <inheritdoc/>
     IReadOnlyList<IConstructorData> ITypeData.Constructors => Constructors.Values.ToList();

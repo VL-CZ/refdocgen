@@ -56,9 +56,14 @@ public interface ITypeNameData
     string? Namespace { get; }
 
     /// <summary>
-    /// Checks whether the type has any generic parameters.
+    /// Checks whether the type has any type parameters.
     /// </summary>
-    bool HasGenericParameters { get; }
+    bool HasTypeParameters { get; }
+
+    /// <summary>
+    /// Checks whether the type is a generic type parameter.
+    /// </summary>
+    bool IsGenericParameter { get; }
 
     /// <summary>
     /// Checks whether the type represents an array.
@@ -71,9 +76,9 @@ public interface ITypeNameData
     bool IsVoid { get; }
 
     /// <summary>
-    /// Generic parameters of the type. If the type doesn't have any, an empty collection is returned.
+    /// Get all type parameters of the type (both generic and non-generic). If the type doesn't have any parameters, an empty collection is returned.
     /// </summary>
-    IReadOnlyList<ITypeNameData> GenericParameters { get; }
+    IReadOnlyList<ITypeNameData> TypeParameters { get; }
 
     /// <summary>
     /// Checks whether the type is a pointer.
