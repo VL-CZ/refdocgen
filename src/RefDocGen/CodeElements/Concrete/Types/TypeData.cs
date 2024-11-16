@@ -14,6 +14,7 @@ namespace RefDocGen.CodeElements.Concrete.Types;
 /// <param name="Fields">Dictionary of fields declared in the class; keys are the corresponding field IDs.</param>
 /// <param name="Properties">Dictionary of properties declared in the class; keys are the corresponding property IDs.</param>
 /// <param name="Methods">Dictionary of methods declared in the class; keys are the corresponding method IDs.</param>
+/// <param name="TypeParameterDeclarations">Collection of type parameters declared in this type; the keys represent type parameter names.</param>
 internal record TypeData(
     Type Type,
     IReadOnlyDictionary<string, ConstructorData> Constructors,
@@ -42,8 +43,14 @@ internal record TypeData(
     public XElement DocComment { get; internal set; } = XmlDocElementFactory.EmptySummary;
 
     /// <inheritdoc/>
-    public AccessModifier AccessModifier => AccessModifierExtensions.GetAccessModifier(Type.IsNestedPrivate, Type.IsNestedFamily,
-        Type.IsNestedAssembly || Type.IsNotPublic, Type.IsPublic || Type.IsNestedPublic, Type.IsNestedFamANDAssem, Type.IsNestedFamORAssem);
+    public AccessModifier AccessModifier =>
+        AccessModifierExtensions.GetAccessModifier(
+            Type.IsNestedPrivate,
+            Type.IsNestedFamily,
+            Type.IsNestedAssembly || Type.IsNotPublic,
+            Type.IsPublic || Type.IsNestedPublic,
+            Type.IsNestedFamANDAssem,
+            Type.IsNestedFamORAssem);
 
     /// <inheritdoc/>
     public bool IsAbstract => Type.IsAbstract;

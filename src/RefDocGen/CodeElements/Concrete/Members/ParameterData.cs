@@ -12,7 +12,11 @@ namespace RefDocGen.CodeElements.Concrete.Members;
 /// </summary>
 internal class ParameterData : IParameterData
 {
-    /// <inheritdoc/>
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ParameterData"/> class.
+    /// </summary>
+    /// <param name="parameterInfo"><see cref="System.Reflection.ParameterInfo"/> object representing the parameter.</param>
+    /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
     public ParameterData(ParameterInfo parameterInfo, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
     {
         ParameterInfo = parameterInfo;

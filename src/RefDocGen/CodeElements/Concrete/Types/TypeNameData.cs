@@ -11,12 +11,16 @@ namespace RefDocGen.CodeElements.Concrete.Types;
 /// </summary>
 internal record TypeNameData : ITypeNameData
 {
+    /// <summary>
+    /// Dictionary of type parameters declared in the containing type; the keys represent type parameter names.
+    /// </summary>
     private readonly IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TypeNameData"/> class.
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
+    /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
     public TypeNameData(Type type, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
     {
         this.declaredTypeParameters = declaredTypeParameters;
@@ -28,6 +32,10 @@ internal record TypeNameData : ITypeNameData
             .ToArray();
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TypeNameData"/> class.
+    /// </summary>
+    /// <param name="type"><see cref="Type"/> object representing the type.</param>
     public TypeNameData(Type type) : this(type, new Dictionary<string, TypeParameterDeclaration>())
     { }
 

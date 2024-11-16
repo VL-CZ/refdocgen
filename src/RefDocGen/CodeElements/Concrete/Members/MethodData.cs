@@ -16,6 +16,7 @@ internal class MethodData : ExecutableMemberData, IMethodData
     /// Initializes a new instance of the <see cref="MethodData"/> class.
     /// </summary>
     /// <param name="methodInfo"><see cref="System.Reflection.MethodInfo"/> object representing the method.</param>
+    /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
     internal MethodData(MethodInfo methodInfo, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
         : base(methodInfo, declaredTypeParameters)
     {
@@ -23,6 +24,10 @@ internal class MethodData : ExecutableMemberData, IMethodData
         ReturnType = new TypeNameData(methodInfo.ReturnType);
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MethodData"/> class.
+    /// </summary>
+    /// <param name="methodInfo"><see cref="System.Reflection.MethodInfo"/> object representing the method.</param>
     internal MethodData(MethodInfo methodInfo) : this(methodInfo, new Dictionary<string, TypeParameterDeclaration>())
     { }
 

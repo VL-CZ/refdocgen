@@ -16,7 +16,8 @@ internal class PropertyData : IPropertyData
     /// Initializes a new instance of the <see cref="PropertyData"/> class.
     /// </summary>
     /// <param name="propertyInfo"><see cref="System.Reflection.PropertyInfo"/> object representing the property.</param>
-    public PropertyData(PropertyInfo propertyInfo, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
+    /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
+    internal PropertyData(PropertyInfo propertyInfo, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
     {
         PropertyInfo = propertyInfo;
         Type = new TypeNameData(propertyInfo.PropertyType);
