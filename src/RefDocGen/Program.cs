@@ -17,7 +17,7 @@ public static class Program
         string docPath = Path.Join(rootPath, "demo-lib", "MyLibrary.xml");
 
         string projectPath = Path.Join(rootPath, "src", "RefDocGen");
-        string templatePath = "TemplateGenerators/Default/Templates/Default/Template.cshtml";
+        string templatePath = "TemplateGenerators/Default/Templates/Default";
         string outputDir = Path.Combine(projectPath, "out");
 
         var templateGenerator = new DefaultTemplateGenerator(projectPath, templatePath, outputDir);
