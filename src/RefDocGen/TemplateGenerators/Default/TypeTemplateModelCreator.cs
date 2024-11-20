@@ -49,7 +49,7 @@ internal static class TypeTemplateModelCreator
     }
 
     /// <summary>
-    /// Transforms the provided <see cref="IConstructorData"/> instance into a corresponding <see cref="ConstructorTemplateModel"/>.
+    /// Creates a <see cref="ConstructorTemplateModel"/> instance based on the provided <see cref="IConstructorData"/> object.
     /// </summary>
     /// <param name="constructorData">The <see cref="IConstructorData"/> instance representing the constructor.</param>
     /// <returns>A <see cref="ConstructorTemplateModel"/> instance based on the provided <paramref name="constructorData"/>.</returns>
@@ -62,7 +62,7 @@ internal static class TypeTemplateModelCreator
     }
 
     /// <summary>
-    /// Transforms the provided <see cref="IFieldData"/> instance into a corresponding <see cref="FieldTemplateModel"/>.
+    /// Creates a <see cref="FieldTemplateModel"/> instance based on the provided <see cref="IFieldData"/> object.
     /// </summary>
     /// <param name="fieldData">The <see cref="IFieldData"/> instance representing the field.</param>
     /// <returns>A <see cref="FieldTemplateModel"/> instance based on the provided <paramref name="fieldData"/>.</returns>
@@ -89,7 +89,7 @@ internal static class TypeTemplateModelCreator
     }
 
     /// <summary>
-    /// Transforms the provided <see cref="IPropertyData"/> instance into a corresponding <see cref="PropertyTemplateModel"/>.
+    /// Creates a <see cref="PropertyTemplateModel"/> instance based on the provided <see cref="IPropertyData"/> object.
     /// </summary>
     /// <param name="propertyData">The <see cref="IPropertyData"/> instance representing the property.</param>
     /// <returns>A <see cref="PropertyTemplateModel"/> instance based on the provided <paramref name="propertyData"/>.</returns>
@@ -115,7 +115,7 @@ internal static class TypeTemplateModelCreator
     }
 
     /// <summary>
-    /// Transforms the provided <see cref="IMethodData"/> instance into a corresponding <see cref="MethodTemplateModel"/>.
+    /// Creates a <see cref="MethodTemplateModel"/> instance based on the provided <see cref="IMethodData"/> object.
     /// </summary>
     /// <param name="methodData">The <see cref="IMethodData"/> instance representing the method.</param>
     /// <returns>A <see cref="MethodTemplateModel"/> instance based on the provided <paramref name="methodData"/>.</returns>
@@ -134,7 +134,7 @@ internal static class TypeTemplateModelCreator
     }
 
     /// <summary>
-    /// Transforms the provided <see cref="IParameterData"/> instance into a corresponding <see cref="ParameterTemplateModel"/>.
+    /// Creates a <see cref="ParameterTemplateModel"/> instance based on the provided <see cref="IParameterData"/> object.
     /// </summary>
     /// <param name="parameterData">The <see cref="IParameterData"/> instance representing the parameter.</param>
     /// <returns>A <see cref="ParameterTemplateModel"/> instance based on the provided <paramref name="parameterData"/>.</returns>
@@ -167,10 +167,10 @@ internal static class TypeTemplateModelCreator
     }
 
     /// <summary>
-    /// Get modifiers for the provided <paramref name="memberData"/> object.
+    /// Gets the list of modifiers for the provided <paramref name="memberData"/> object.
     /// </summary>
     /// <param name="memberData">Member, whose modifiers we get.</param>
-    /// <returns>List of modifiers for the provided member.</returns>
+    /// <returns>A list of modifiers for the provided member.</returns>
     private static List<Keyword> GetCallableMemberModifiers(ICallableMemberData memberData)
     {
         List<Keyword> modifiers = [memberData.AccessModifier.ToKeyword()];
@@ -207,4 +207,5 @@ internal static class TypeTemplateModelCreator
 
         return modifiers;
     }
+
 }
