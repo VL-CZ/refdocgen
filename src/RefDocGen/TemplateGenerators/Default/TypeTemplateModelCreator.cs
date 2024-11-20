@@ -8,9 +8,9 @@ using RefDocGen.TemplateGenerators.Tools.TypeName;
 namespace RefDocGen.TemplateGenerators.Default;
 
 /// <summary>
-/// Class responsible for creating template models for the default template generator.
+/// Class responsible for creating template models representing the individual types.
 /// </summary>
-internal static class DefaultTemplateModelCreator
+internal static class TypeTemplateModelCreator
 {
     /// <summary>
     /// Transforms the provided <see cref="ITypeData"/> instance into a corresponding <see cref="TypeTemplateModel"/>.
@@ -46,29 +46,6 @@ internal static class DefaultTemplateModelCreator
             fields,
             properties,
             methods);
-    }
-
-    public static IEnumerable<NamespaceTemplateModel> TransformToNamespaceModels(IReadOnlyList<ITypeData> typeData)
-    {
-        var grouped = typeData.GroupBy(typeData => typeData.Namespace);
-
-        var models = new List<NamespaceTemplateModel>();
-
-        foreach (var group in grouped)
-        {
-            if (group.Key is not null)
-            {
-                var types = group.Select(t => new TypeRow(
-                    t.Id,
-                    t.Kind.GetName(),
-                    CSharpTypeName.Of(t),
-                    t.DocComment.Value));
-
-                models.Add(new NamespaceTemplateModel(group.Key, types));
-            }
-        }
-
-        return models;
     }
 
     /// <summary>

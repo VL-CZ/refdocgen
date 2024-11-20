@@ -1,7 +1,5 @@
 using RazorLight;
 using RefDocGen.CodeElements.Abstract.Types;
-using RefDocGen.TemplateGenerators.Default;
-using System.Reflection;
 
 namespace RefDocGen.TemplateGenerators;
 
@@ -11,13 +9,34 @@ namespace RefDocGen.TemplateGenerators;
 ///     Template models are of a user-defined type, and constructed from <see cref="ITypeData"/> objects
 /// </para>
 /// </summary>
-/// <typeparam name="T">Type of the template model class</typeparam>
-internal abstract class RazorLightTemplateGenerator<T> : ITemplateGenerator where T : ITemplateModelWithId
+/// <typeparam name="TTypeTM">Type of the template model class</typeparam>
+/// <typeparam name="TNamespaceListTM">Type of the template model class</typeparam>
+internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceListTM> : ITemplateGenerator where TTypeTM : ITemplateModelWithId
 {
     /// <summary>
-    /// Path to the Razor template file.
+    /// Default path to the Razor template representing a type, relative to <see cref="templatesFolderPath"/>.
     /// </summary>
-    private readonly string templatePath;
+    internal const string typeTemplateDefaultPath = "Template.cshtml";
+
+    /// <summary>
+    /// Default path to the Razor template representing a namespace list, relative to <see cref="templatesFolderPath"/>.
+    /// </summary>
+    internal const string namespaceListTemplateDefaultPath = "TemplateNamespace.cshtml";
+
+    /// <summary>
+    /// Path to the folder containing Razor templates.
+    /// </summary>
+    private readonly string templatesFolderPath;
+
+    /// <summary>
+    /// Path to the Razor template representing a type, relative to <see cref="templatesFolderPath"/>.
+    /// </summary>
+    private readonly string typeTemplatePath;
+
+    /// <summary>
+    /// Path to the Razor template representing a namespace list, relative to <see cref="templatesFolderPath"/>.
+    /// </summary>
+    private readonly string namespaceListTemplatePath;
 
     /// <summary>
     /// Directory, where the generated output will be stored.
@@ -30,15 +49,21 @@ internal abstract class RazorLightTemplateGenerator<T> : ITemplateGenerator wher
     private readonly RazorLightEngine razorLightEngine;
 
     /// <summary>
-    /// Initialize a new instance of <see cref="RazorLightTemplateGenerator{T}"/> class.
+    /// Initialize a new instance of <see cref="RazorLightTemplateGenerator{T, T2}"/> class.
     /// </summary>
     /// <param name="projectPath">Path to the project root directory.</param>
-    /// <param name="templatePath">Path to the Razor template file.</param>
+    /// <param name="templatesFolderPath">Path to the folder containing Razor templates.</param>
     /// <param name="outputDir">RazorLight engine used for generating the templates.</param>
-    protected RazorLightTemplateGenerator(string projectPath, string templatePath, string outputDir)
+    /// <param name="typeTemplatePath">Path to the Razor template representing a type, relative to <paramref name="templatesFolderPath"/>.</param>
+    /// <param name="namespaceListTemplatePath">Path to the Razor template representing a namespace list, relative to <paramref name="templatesFolderPath"/></param>
+    protected RazorLightTemplateGenerator(string projectPath, string templatesFolderPath, string outputDir,
+        string typeTemplatePath = typeTemplateDefaultPath, string namespaceListTemplatePath = namespaceListTemplateDefaultPath)
     {
-        this.templatePath = templatePath;
+        this.templatesFolderPath = templatesFolderPath;
         this.outputDir = outputDir;
+
+        this.typeTemplatePath = typeTemplatePath;
+        this.namespaceListTemplatePath = namespaceListTemplatePath;
 
         razorLightEngine = new RazorLightEngineBuilder()
             .UseFileSystemProject(projectPath)
@@ -49,11 +74,18 @@ internal abstract class RazorLightTemplateGenerator<T> : ITemplateGenerator wher
     /// <inheritdoc/>
     public void GenerateTemplates(IReadOnlyList<ITypeData> types)
     {
-        var templateModels = GetTemplateModels(types);
+        GenerateTypeTemplates(types);
+        GenerateNamespaceListTemplate(types);
+    }
 
-        foreach (var model in templateModels)
+    protected virtual void GenerateTypeTemplates(IReadOnlyList<ITypeData> types)
+    {
+        var typeTemplateModels = GetTypeTemplateModels(types);
+
+        foreach (var model in typeTemplateModels)
         {
             string outputFileName = Path.Join(outputDir, $"{model.Id}.html");
+            string templatePath = Path.Join(templatesFolderPath, typeTemplatePath);
 
             var task = razorLightEngine.CompileRenderAsync(templatePath, model);
             //task.Wait(); // TODO: consider using Async
@@ -61,23 +93,33 @@ internal abstract class RazorLightTemplateGenerator<T> : ITemplateGenerator wher
 
             File.WriteAllText(outputFileName, result);
         }
+    }
 
-        // TODO: code quality
-        var namespaceModels = DefaultTemplateModelCreator.TransformToNamespaceModels(types);
-        string path = templatePath.Replace(".cshtml", "Namespace.cshtml");
-        var task2 = razorLightEngine.CompileRenderAsync(path, namespaceModels);
-        string result2 = task2.Result;
+    protected virtual void GenerateNamespaceListTemplate(IReadOnlyList<ITypeData> types)
+    {
+        var namespaceModels = GetNamespaceListTemplateModel(types);
 
-        string outputFileName2 = Path.Join(outputDir, $"index.html");
+        string outputFileName = Path.Join(outputDir, $"index.html");
+        string templatePath = Path.Join(templatesFolderPath, namespaceListTemplatePath);
 
-        File.WriteAllText(outputFileName2, result2);
+        var task = razorLightEngine.CompileRenderAsync(templatePath, namespaceModels);
+        string result = task.Result;
 
+        File.WriteAllText(outputFileName, result);
     }
 
     /// <summary>
-    /// Convert the provided <paramref name="classes"/> data to a collection of template models that will be passed to the Razor templatess.
+    /// Convert the provided <paramref name="types"/> data to a collection of template models, representing the individual types,
+    /// that will be passed to the Razor templatess.
     /// </summary>
-    /// <param name="classes"><see cref="ITypeData"/> objects to be converted into template models.</param>
-    /// <returns>A collection of template models that will be passed to the Razor templates.</returns>
-    protected abstract IEnumerable<T> GetTemplateModels(IReadOnlyList<ITypeData> classes);
+    /// <param name="types"><see cref="ITypeData"/> objects to be converted into template models.</param>
+    /// <returns>A collection of template models, representing the types, that will be passed to the Razor templates.</returns>
+    protected abstract IEnumerable<TTypeTM> GetTypeTemplateModels(IReadOnlyList<ITypeData> types);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="types"></param>
+    /// <returns></returns>
+    protected abstract IEnumerable<TNamespaceListTM> GetNamespaceListTemplateModel(IReadOnlyList<ITypeData> types);
 }

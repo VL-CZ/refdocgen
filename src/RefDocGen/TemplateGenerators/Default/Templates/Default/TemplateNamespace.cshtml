@@ -52,6 +52,8 @@
                 </samp>
             </h1>
 
+            <hr />
+
             <table class="table">
                 <tbody>
                     @foreach (var type in ns.Types)
@@ -60,7 +62,14 @@
 
                         <tr>
                             <td class="w-50">
-                                <a href="@typeUrl">@type.Kind @type.Name</a>
+                                <samp>
+                                    <a href="@typeUrl" class="link-primary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">
+                                        @type.Kind
+                                        <span class="text-dark">
+                                            @type.Name
+                                        </span>
+                                    </a>
+                                </samp>
                             </td>
                             <td class="text-muted">
                                 <i>@type.DocComment</i>
