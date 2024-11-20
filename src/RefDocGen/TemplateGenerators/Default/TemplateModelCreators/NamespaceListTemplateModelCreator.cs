@@ -26,11 +26,13 @@ internal class NamespaceListTemplateModelCreator
             string? namespaceName = typeGroup.Key;
             if (namespaceName is not null)
             {
-                var types = typeGroup.Select(t => new TypeNameTemplateModel(
-                    t.Id,
-                    t.Kind.GetName(),
-                    CSharpTypeName.Of(t),
-                    t.DocComment.Value));
+                var types = typeGroup
+                    .Select(t => new TypeNameTemplateModel(
+                        t.Id,
+                        t.Kind.GetName(),
+                        CSharpTypeName.Of(t),
+                        t.DocComment.Value))
+                    .OrderBy(t => t.Name);
 
                 namespaceTemplateModels.Add(new NamespaceTemplateModel(namespaceName, types));
             }

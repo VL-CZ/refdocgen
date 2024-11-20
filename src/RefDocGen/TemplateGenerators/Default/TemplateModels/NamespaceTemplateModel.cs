@@ -4,7 +4,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels;
 /// Represents the template model for a namespace.
 /// </summary>
 /// <param name="Name">The name of the namespace.</param>
-/// <param name="Types">Types contained in the namespace.</param>
+/// <param name="Types">Types contained in the namespace, ordered by their name.</param>
 public record NamespaceTemplateModel(string Name, IEnumerable<TypeNameTemplateModel> Types);
 
 /// <summary>

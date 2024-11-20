@@ -16,12 +16,12 @@ internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceTM> : ITe
     /// <summary>
     /// Default path to the Razor template representing a type, relative to <see cref="templatesFolderPath"/>.
     /// </summary>
-    internal const string typeTemplateDefaultPath = "Template.cshtml";
+    internal const string typeTemplateDefaultPath = "TypeTemplate.cshtml";
 
     /// <summary>
     /// Default path to the Razor template representing a namespace list, relative to <see cref="templatesFolderPath"/>.
     /// </summary>
-    internal const string namespaceListTemplateDefaultPath = "TemplateNamespace.cshtml";
+    internal const string namespaceListTemplateDefaultPath = "NamespaceListTemplate.cshtml";
 
     /// <summary>
     /// Path to the folder containing Razor templates.
