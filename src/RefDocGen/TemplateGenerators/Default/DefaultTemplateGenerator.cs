@@ -27,6 +27,6 @@ internal class DefaultTemplateGenerator : RazorLightTemplateGenerator<TypeTempla
     /// <inheritdoc/>
     protected override IEnumerable<TypeTemplateModel> GetTypeTemplateModels(IReadOnlyList<ITypeData> types)
     {
-        return types.Select(TypeTemplateModelCreator.TransformToTemplateModel);
+        return types.Select(TypeTemplateModelCreator.GetFrom);
     }
 }

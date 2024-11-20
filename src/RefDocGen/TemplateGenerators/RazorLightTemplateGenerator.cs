@@ -9,9 +9,9 @@ namespace RefDocGen.TemplateGenerators;
 ///     Template models are of a user-defined type, and constructed from <see cref="ITypeData"/> objects
 /// </para>
 /// </summary>
-/// <typeparam name="TTypeTM">Type of the template model class</typeparam>
-/// <typeparam name="TNamespaceListTM">Type of the template model class</typeparam>
-internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceListTM> : ITemplateGenerator where TTypeTM : ITemplateModelWithId
+/// <typeparam name="TTypeTM">Type of the template model representing a type.</typeparam>
+/// <typeparam name="TNamespaceTM">Type of the template model representing a namespace.</typeparam>
+internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceTM> : ITemplateGenerator where TTypeTM : ITemplateModelWithId
 {
     /// <summary>
     /// Default path to the Razor template representing a type, relative to <see cref="templatesFolderPath"/>.
@@ -78,7 +78,11 @@ internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceListTM> :
         GenerateNamespaceListTemplate(types);
     }
 
-    protected virtual void GenerateTypeTemplates(IReadOnlyList<ITypeData> types)
+    /// <summary>
+    /// Generate the templates representing the individual types.
+    /// </summary>
+    /// <param name="types">The type data to be used in the templates.</param>
+    protected void GenerateTypeTemplates(IReadOnlyList<ITypeData> types)
     {
         var typeTemplateModels = GetTypeTemplateModels(types);
 
@@ -95,7 +99,11 @@ internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceListTM> :
         }
     }
 
-    protected virtual void GenerateNamespaceListTemplate(IReadOnlyList<ITypeData> types)
+    /// <summary>
+    /// Generate the template containing the list of namespaces of a program.
+    /// </summary>
+    /// <param name="types">The type data to be used in the templates.</param>
+    protected void GenerateNamespaceListTemplate(IReadOnlyList<ITypeData> types)
     {
         var namespaceModels = GetNamespaceListTemplateModel(types);
 
@@ -120,6 +128,6 @@ internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceListTM> :
     /// 
     /// </summary>
     /// <param name="types"></param>
-    /// <returns></returns>
-    protected abstract IEnumerable<TNamespaceListTM> GetNamespaceListTemplateModel(IReadOnlyList<ITypeData> types);
+    /// <returns>A collection of template models, representing the namespaces, that will be passed to the Razor templates.</returns>
+    protected abstract IEnumerable<TNamespaceTM> GetNamespaceListTemplateModel(IReadOnlyList<ITypeData> types);
 }

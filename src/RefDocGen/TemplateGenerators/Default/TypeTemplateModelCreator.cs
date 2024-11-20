@@ -13,16 +13,16 @@ namespace RefDocGen.TemplateGenerators.Default;
 internal static class TypeTemplateModelCreator
 {
     /// <summary>
-    /// Transforms the provided <see cref="ITypeData"/> instance into a corresponding <see cref="TypeTemplateModel"/>.
+    /// Creates a <see cref="TypeTemplateModel"/> instance based on the provided <see cref="ITypeData"/> object.
     /// </summary>
-    /// <param name="typeData">The <see cref="ITypeData"/> instance representing the class.</param>
+    /// <param name="typeData">The <see cref="ITypeData"/> instance representing the type.</param>
     /// <returns>A <see cref="TypeTemplateModel"/> instance based on the provided <paramref name="typeData"/>.</returns>
-    public static TypeTemplateModel TransformToTemplateModel(ITypeData typeData)
+    public static TypeTemplateModel GetFrom(ITypeData typeData)
     {
-        var constructors = typeData.Constructors.Select(TransformToTemplateModel).ToArray();
-        var fields = typeData.Fields.Select(TransformToTemplateModel).ToArray();
-        var properties = typeData.Properties.Select(TransformToTemplateModel).ToArray();
-        var methods = typeData.Methods.Select(TransformToTemplateModel).ToArray();
+        var constructors = typeData.Constructors.Select(GetFrom).ToArray();
+        var fields = typeData.Fields.Select(GetFrom).ToArray();
+        var properties = typeData.Properties.Select(GetFrom).ToArray();
+        var methods = typeData.Methods.Select(GetFrom).ToArray();
 
         List<Keyword> modifiers = [typeData.AccessModifier.ToKeyword()];
 
@@ -53,11 +53,11 @@ internal static class TypeTemplateModelCreator
     /// </summary>
     /// <param name="constructorData">The <see cref="IConstructorData"/> instance representing the constructor.</param>
     /// <returns>A <see cref="ConstructorTemplateModel"/> instance based on the provided <paramref name="constructorData"/>.</returns>
-    private static ConstructorTemplateModel TransformToTemplateModel(IConstructorData constructorData)
+    private static ConstructorTemplateModel GetFrom(IConstructorData constructorData)
     {
         var modifiers = GetCallableMemberModifiers(constructorData);
 
-        return new ConstructorTemplateModel(constructorData.Parameters.Select(TransformToTemplateModel).ToArray(),
+        return new ConstructorTemplateModel(constructorData.Parameters.Select(GetFrom).ToArray(),
             constructorData.DocComment.Value, modifiers.GetStrings());
     }
 
@@ -66,7 +66,7 @@ internal static class TypeTemplateModelCreator
     /// </summary>
     /// <param name="fieldData">The <see cref="IFieldData"/> instance representing the field.</param>
     /// <returns>A <see cref="FieldTemplateModel"/> instance based on the provided <paramref name="fieldData"/>.</returns>
-    private static FieldTemplateModel TransformToTemplateModel(IFieldData fieldData)
+    private static FieldTemplateModel GetFrom(IFieldData fieldData)
     {
         List<Keyword> modifiers = [fieldData.AccessModifier.ToKeyword()];
 
@@ -93,7 +93,7 @@ internal static class TypeTemplateModelCreator
     /// </summary>
     /// <param name="propertyData">The <see cref="IPropertyData"/> instance representing the property.</param>
     /// <returns>A <see cref="PropertyTemplateModel"/> instance based on the provided <paramref name="propertyData"/>.</returns>
-    private static PropertyTemplateModel TransformToTemplateModel(IPropertyData propertyData)
+    private static PropertyTemplateModel GetFrom(IPropertyData propertyData)
     {
         var modifiers = GetCallableMemberModifiers(propertyData);
 
@@ -119,13 +119,13 @@ internal static class TypeTemplateModelCreator
     /// </summary>
     /// <param name="methodData">The <see cref="IMethodData"/> instance representing the method.</param>
     /// <returns>A <see cref="MethodTemplateModel"/> instance based on the provided <paramref name="methodData"/>.</returns>
-    private static MethodTemplateModel TransformToTemplateModel(IMethodData methodData)
+    private static MethodTemplateModel GetFrom(IMethodData methodData)
     {
         var modifiers = GetCallableMemberModifiers(methodData);
 
         return new MethodTemplateModel(
             methodData.Name,
-            methodData.Parameters.Select(TransformToTemplateModel).ToArray(),
+            methodData.Parameters.Select(GetFrom).ToArray(),
             CSharpTypeName.Of(methodData.ReturnType),
             methodData.ReturnType.IsVoid,
             methodData.DocComment.Value,
@@ -138,7 +138,7 @@ internal static class TypeTemplateModelCreator
     /// </summary>
     /// <param name="parameterData">The <see cref="IParameterData"/> instance representing the parameter.</param>
     /// <returns>A <see cref="ParameterTemplateModel"/> instance based on the provided <paramref name="parameterData"/>.</returns>
-    private static ParameterTemplateModel TransformToTemplateModel(IParameterData parameterData)
+    private static ParameterTemplateModel GetFrom(IParameterData parameterData)
     {
         List<Keyword> modifiers = [];
 
