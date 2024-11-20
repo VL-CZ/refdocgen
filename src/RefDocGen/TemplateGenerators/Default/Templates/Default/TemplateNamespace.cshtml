@@ -45,7 +45,12 @@
     <div class="container my-4">
         @foreach (var ns in Model)
         {
-            <h1 class="display-3">@ns.Namespace</h1>
+            <h1 class="display-5">
+                <samp>
+                    <span class="text-primary">namespace</span>
+                    <span class="text-dark">@ns.Namespace</span>
+                </samp>
+            </h1>
 
             <table class="table">
                 <tbody>
@@ -54,7 +59,7 @@
                         var typeUrl = $"./{type.Id}.html";
 
                         <tr>
-                            <td>
+                            <td class="w-50">
                                 <a href="@typeUrl">@type.Kind @type.Name</a>
                             </td>
                             <td class="text-muted">
