@@ -39,7 +39,7 @@ internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceTM> : ITe
     private readonly string namespaceListTemplatePath;
 
     /// <summary>
-    /// Directory, where the generated output will be stored.
+    /// The directory, where the generated output will be stored.
     /// </summary>
     private readonly string outputDir;
 
@@ -105,7 +105,7 @@ internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceTM> : ITe
     /// <param name="types">The type data to be used in the templates.</param>
     protected void GenerateNamespaceListTemplate(IReadOnlyList<ITypeData> types)
     {
-        var namespaceModels = GetNamespaceListTemplateModel(types);
+        var namespaceModels = GetNamespaceTemplateModels(types);
 
         string outputFileName = Path.Join(outputDir, $"index.html");
         string templatePath = Path.Join(templatesFolderPath, namespaceListTemplatePath);
@@ -117,17 +117,22 @@ internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceTM> : ITe
     }
 
     /// <summary>
-    /// Convert the provided <paramref name="types"/> data to a collection of template models, representing the individual types,
-    /// that will be passed to the Razor templatess.
+    /// Get template models representing the types based on the provided provided <paramref name="types"/>.
+    /// <para>
+    /// These template models are intended to be passed to the Razor templatess.
+    /// </para>
     /// </summary>
-    /// <param name="types"><see cref="ITypeData"/> objects to be converted into template models.</param>
+    /// <param name="types"><see cref="ITypeData"/> objects representing the types.</param>
     /// <returns>A collection of template models, representing the types, that will be passed to the Razor templates.</returns>
     protected abstract IEnumerable<TTypeTM> GetTypeTemplateModels(IReadOnlyList<ITypeData> types);
 
     /// <summary>
-    /// 
+    /// Get template models representing the namespaces based on the provided provided <paramref name="types"/>.
+    /// <para>
+    /// These template models are intended to be passed to the Razor templatess.
+    /// </para>
     /// </summary>
-    /// <param name="types"></param>
+    /// <param name="types"><see cref="ITypeData"/> objects representing the types.</param>
     /// <returns>A collection of template models, representing the namespaces, that will be passed to the Razor templates.</returns>
-    protected abstract IEnumerable<TNamespaceTM> GetNamespaceListTemplateModel(IReadOnlyList<ITypeData> types);
+    protected abstract IEnumerable<TNamespaceTM> GetNamespaceTemplateModels(IReadOnlyList<ITypeData> types);
 }

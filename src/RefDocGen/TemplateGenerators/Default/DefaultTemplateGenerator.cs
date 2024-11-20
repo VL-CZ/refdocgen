@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 using RefDocGen.TemplateGenerators.Default.TemplateModels;
 
 namespace RefDocGen.TemplateGenerators.Default;
@@ -19,9 +20,9 @@ internal class DefaultTemplateGenerator : RazorLightTemplateGenerator<TypeTempla
     }
 
     /// <inheritdoc/>
-    protected override IEnumerable<NamespaceTemplateModel> GetNamespaceListTemplateModel(IReadOnlyList<ITypeData> types)
+    protected override IEnumerable<NamespaceTemplateModel> GetNamespaceTemplateModels(IReadOnlyList<ITypeData> types)
     {
-        return NamespaceListTemplateModelCreator.TransformToNamespaceModels(types);
+        return NamespaceListTemplateModelCreator.GetFrom(types);
     }
 
     /// <inheritdoc/>

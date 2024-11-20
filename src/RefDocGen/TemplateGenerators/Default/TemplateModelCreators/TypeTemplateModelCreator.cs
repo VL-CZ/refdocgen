@@ -5,7 +5,7 @@ using RefDocGen.TemplateGenerators.Tools;
 using RefDocGen.TemplateGenerators.Tools.Keywords;
 using RefDocGen.TemplateGenerators.Tools.TypeName;
 
-namespace RefDocGen.TemplateGenerators.Default;
+namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 
 /// <summary>
 /// Class responsible for creating template models representing the individual types.
