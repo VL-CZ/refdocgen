@@ -1,5 +1,7 @@
 using RazorLight;
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.TemplateGenerators.Default;
+using System.Reflection;
 
 namespace RefDocGen.TemplateGenerators;
 
@@ -45,9 +47,9 @@ internal abstract class RazorLightTemplateGenerator<T> : ITemplateGenerator wher
     }
 
     /// <inheritdoc/>
-    public void GenerateTemplates(IReadOnlyList<ITypeData> classes)
+    public void GenerateTemplates(IReadOnlyList<ITypeData> types)
     {
-        var templateModels = GetTemplateModels(classes);
+        var templateModels = GetTemplateModels(types);
 
         foreach (var model in templateModels)
         {
@@ -59,6 +61,17 @@ internal abstract class RazorLightTemplateGenerator<T> : ITemplateGenerator wher
 
             File.WriteAllText(outputFileName, result);
         }
+
+        // TODO: code quality
+        var namespaceModels = DefaultTemplateModelCreator.TransformToNamespaceModels(types);
+        string path = templatePath.Replace(".cshtml", "Namespace.cshtml");
+        var task2 = razorLightEngine.CompileRenderAsync(path, namespaceModels);
+        string result2 = task2.Result;
+
+        string outputFileName2 = Path.Join(outputDir, $"index.html");
+
+        File.WriteAllText(outputFileName2, result2);
+
     }
 
     /// <summary>

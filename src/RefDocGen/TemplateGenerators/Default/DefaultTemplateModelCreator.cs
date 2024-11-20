@@ -48,6 +48,29 @@ internal static class DefaultTemplateModelCreator
             methods);
     }
 
+    public static IEnumerable<NamespaceTemplateModel> TransformToNamespaceModels(IReadOnlyList<ITypeData> typeData)
+    {
+        var grouped = typeData.GroupBy(typeData => typeData.Namespace);
+
+        var models = new List<NamespaceTemplateModel>();
+
+        foreach (var group in grouped)
+        {
+            if (group.Key is not null)
+            {
+                var types = group.Select(t => new TypeRow(
+                    t.Id,
+                    t.Kind.GetName(),
+                    CSharpTypeName.Of(t),
+                    t.DocComment.Value));
+
+                models.Add(new NamespaceTemplateModel(group.Key, types));
+            }
+        }
+
+        return models;
+    }
+
     /// <summary>
     /// Transforms the provided <see cref="IConstructorData"/> instance into a corresponding <see cref="ConstructorTemplateModel"/>.
     /// </summary>
