@@ -43,6 +43,14 @@
 
 <body>
     <div class="container my-4">
+
+        <h1 class="display-3">
+            <samp>
+                <span class="text-dark">Namespace list</span>
+            </samp>
+        </h1>
+        <hr />
+
         @foreach (var ns in Model)
         {
             var namespaceUrl = $"./{ns.Id}.html";
