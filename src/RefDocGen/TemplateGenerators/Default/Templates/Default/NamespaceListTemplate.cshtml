@@ -1,4 +1,4 @@
-@model IEnumerable<RefDocGen.TemplateGenerators.Default.TemplateModels.NamespaceTM>
+@model IEnumerable<RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces.NamespaceTM>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -57,7 +57,7 @@
 
             <table class="table">
                 <tbody>
-                    @foreach (var type in ns.Types)
+                    @foreach (var type in ns.AllTypes)
                     {
                         var typeUrl = $"./{type.Id}.html";
 
@@ -66,7 +66,7 @@
                                 <samp>
                                     <a href="@typeUrl" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
                                         <span class="text-primary">
-                                            @type.Kind
+                                            @type.TypeKindName
                                         </span>
                                         @type.Name
                                     </a>

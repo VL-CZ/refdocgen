@@ -1,4 +1,4 @@
-namespace RefDocGen.TemplateGenerators.Default.TemplateModels;
+namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 
 /// <summary>
 /// Represents the template model of a constructor.

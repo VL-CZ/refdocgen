@@ -1,6 +1,7 @@
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
-using RefDocGen.TemplateGenerators.Default.TemplateModels;
+using RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces;
+using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 
 namespace RefDocGen.TemplateGenerators.Default;
 

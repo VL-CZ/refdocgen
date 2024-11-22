@@ -1,4 +1,4 @@
-@model RefDocGen.TemplateGenerators.Default.TemplateModels.NamespaceDetailsTM
+@model RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces.NamespaceTM
 
 <!DOCTYPE html>
 <html lang="en">
@@ -44,7 +44,7 @@
 <body>
     <div class="container my-4">
 
-        <h1 class="display-6">
+        <h1 class="display-3">
             <samp>
                 <span class="text-primary">namespace</span>
                 <span class="text-dark">@Model.Name</span>
@@ -53,20 +53,20 @@
 
         <hr />
 
-        <table class="table">
-            <tbody>
 
+        @foreach (var type in Model.Classes)
+        {
+            var typeUrl = $"./{type.Id}.html";
 
-                @foreach (var type in Model.Classes)
-                {
-                    var typeUrl = $"./{type.Id}.html";
-
+            <h2 class="display-5">Classes</h2>
+            <table class="table">
+                <tbody>
                     <tr>
                         <td class="w-50">
                             <samp>
                                 <a href="@typeUrl" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
                                     <span class="text-primary">
-                                        @type.Kind
+                                        @type.TypeKindName
                                     </span>
                                     @type.Name
                                 </a>
@@ -76,9 +76,62 @@
                             <i>@type.DocComment</i>
                         </td>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        }
+
+        @foreach (var type in Model.ValueTypes)
+        {
+            var typeUrl = $"./{type.Id}.html";
+
+            <h2 class="display-5">Structs</h2>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td class="w-50">
+                            <samp>
+                                <a href="@typeUrl" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
+                                    <span class="text-primary">
+                                        @type.TypeKindName
+                                    </span>
+                                    @type.Name
+                                </a>
+                            </samp>
+                        </td>
+                        <td class="text-muted">
+                            <i>@type.DocComment</i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+
+        @foreach (var type in Model.Interfaces)
+        {
+            var typeUrl = $"./{type.Id}.html";
+
+            <h2 class="display-5">Interfaces</h2>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td class="w-50">
+                            <samp>
+                                <a href="@typeUrl" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
+                                    <span class="text-primary">
+                                        @type.TypeKindName
+                                    </span>
+                                    @type.Name
+                                </a>
+                            </samp>
+                        </td>
+                        <td class="text-muted">
+                            <i>@type.DocComment</i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+
     </div>
 
     <!-- Bootstrap JS -->
