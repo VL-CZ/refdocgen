@@ -5,9 +5,9 @@ using RefDocGen.TemplateGenerators.Default.TemplateModels;
 namespace RefDocGen.TemplateGenerators.Default;
 
 /// <summary>
-/// Class used for generating RazorLight templates using the <see cref="TypeTemplateModel"/> as a type template model and <see cref="NamespaceTemplateModel"/>.
+/// Class used for generating RazorLight templates using the <see cref="TypeTM"/> as a type template model and <see cref="NamespaceTM"/>.
 /// </summary>
-internal class DefaultTemplateGenerator : RazorLightTemplateGenerator<TypeTemplateModel, NamespaceTemplateModel>
+internal class DefaultTemplateGenerator : RazorLightTemplateGenerator<TypeTM, NamespaceTM>
 {
     /// <summary>
     /// Create a new instance of <see cref="DefaultTemplateGenerator"/> class
@@ -20,14 +20,14 @@ internal class DefaultTemplateGenerator : RazorLightTemplateGenerator<TypeTempla
     }
 
     /// <inheritdoc/>
-    protected override IEnumerable<NamespaceTemplateModel> GetNamespaceTemplateModels(IReadOnlyList<ITypeData> types)
+    protected override IEnumerable<NamespaceTM> GetNamespaceTemplateModels(IReadOnlyList<ITypeData> types)
     {
-        return NamespaceListTemplateModelCreator.GetFrom(types);
+        return NamespaceListTMCreator.GetFrom(types);
     }
 
     /// <inheritdoc/>
-    protected override IEnumerable<TypeTemplateModel> GetTypeTemplateModels(IReadOnlyList<ITypeData> types)
+    protected override IEnumerable<TypeTM> GetTypeTemplateModels(IReadOnlyList<ITypeData> types)
     {
-        return types.Select(TypeTemplateModelCreator.GetFrom);
+        return types.Select(TypeTMCreator.GetFrom);
     }
 }

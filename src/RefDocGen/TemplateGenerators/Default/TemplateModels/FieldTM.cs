@@ -7,4 +7,4 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels;
 /// <param name="Type">Type of the field.</param>
 /// <param name="DocComment">Documentation comment for the field.</param>
 /// <param name="Modifiers">Collection of modifiers for the field (e.g. public, static, etc.)</param>
-public record FieldTemplateModel(string Name, string Type, string DocComment, IEnumerable<string> Modifiers);
+public record FieldTM(string Name, string Type, string DocComment, IEnumerable<string> Modifiers);

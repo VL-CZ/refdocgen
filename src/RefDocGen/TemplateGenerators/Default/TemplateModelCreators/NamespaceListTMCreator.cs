@@ -8,18 +8,18 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 /// <summary>
 /// Class responsible for creating template models representing the namespaces of a program.
 /// </summary>
-internal class NamespaceListTemplateModelCreator
+internal class NamespaceListTMCreator
 {
     /// <summary>
-    /// Creates an enumerable of <see cref="NamespaceTemplateModel"/> instances based on the provided <see cref="ITypeData"/>.
+    /// Creates an enumerable of <see cref="NamespaceTM"/> instances based on the provided <see cref="ITypeData"/>.
     /// </summary>
     /// <param name="typeData">The <see cref="ITypeData"/> instance representing the types.</param>
-    /// <returns>An enumerable of <see cref="NamespaceTemplateModel"/> instances based on the provided <paramref name="typeData"/>.</returns>
-    internal static IEnumerable<NamespaceTemplateModel> GetFrom(IReadOnlyList<ITypeData> typeData)
+    /// <returns>An enumerable of <see cref="NamespaceTM"/> instances based on the provided <paramref name="typeData"/>.</returns>
+    internal static IEnumerable<NamespaceTM> GetFrom(IReadOnlyList<ITypeData> typeData)
     {
         var groupedTypes = typeData.GroupBy(typeData => typeData.Namespace);
 
-        var namespaceTemplateModels = new List<NamespaceTemplateModel>();
+        var namespaceTemplateModels = new List<NamespaceTM>();
 
         foreach (var typeGroup in groupedTypes)
         {
@@ -34,7 +34,7 @@ internal class NamespaceListTemplateModelCreator
                         t.DocComment.Value))
                     .OrderBy(t => t.Name);
 
-                namespaceTemplateModels.Add(new NamespaceTemplateModel(namespaceName, types));
+                namespaceTemplateModels.Add(new NamespaceTM(namespaceName, types));
             }
         }
 
