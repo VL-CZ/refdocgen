@@ -11,7 +11,9 @@ namespace RefDocGen.TemplateGenerators;
 /// </summary>
 /// <typeparam name="TTypeTM">Type of the template model representing a type.</typeparam>
 /// <typeparam name="TNamespaceTM">Type of the template model representing a namespace.</typeparam>
-internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceTM> : ITemplateGenerator where TTypeTM : ITemplateModelWithId
+internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceTM> : ITemplateGenerator
+    where TTypeTM : ITemplateModelWithId
+    where TNamespaceTM : ITemplateModelWithId
 {
     /// <summary>
     /// Default path to the Razor template representing a type, relative to <see cref="templatesFolderPath"/>.
@@ -22,6 +24,11 @@ internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceTM> : ITe
     /// Default path to the Razor template representing a namespace list, relative to <see cref="templatesFolderPath"/>.
     /// </summary>
     internal const string namespaceListTemplateDefaultPath = "NamespaceListTemplate.cshtml";
+
+    /// <summary>
+    /// Default path to the Razor template representing a namespace detail, relative to <see cref="templatesFolderPath"/>.
+    /// </summary>
+    internal const string namespaceDetailTemplateDefaultPath = "NamespaceDetailTemplate.cshtml";
 
     /// <summary>
     /// Path to the folder containing Razor templates.
@@ -37,6 +44,11 @@ internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceTM> : ITe
     /// Path to the Razor template representing a namespace list, relative to <see cref="templatesFolderPath"/>.
     /// </summary>
     private readonly string namespaceListTemplatePath;
+
+    /// <summary>
+    /// Path to the Razor template representing a namespace detail, relative to <see cref="templatesFolderPath"/>.
+    /// </summary>
+    private readonly string namespaceDetailTemplatePath;
 
     /// <summary>
     /// The directory, where the generated output will be stored.
@@ -55,15 +67,22 @@ internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceTM> : ITe
     /// <param name="templatesFolderPath">Path to the folder containing Razor templates.</param>
     /// <param name="outputDir">RazorLight engine used for generating the templates.</param>
     /// <param name="typeTemplatePath">Path to the Razor template representing a type, relative to <paramref name="templatesFolderPath"/>.</param>
-    /// <param name="namespaceListTemplatePath">Path to the Razor template representing a namespace list, relative to <paramref name="templatesFolderPath"/></param>
-    protected RazorLightTemplateGenerator(string projectPath, string templatesFolderPath, string outputDir,
-        string typeTemplatePath = typeTemplateDefaultPath, string namespaceListTemplatePath = namespaceListTemplateDefaultPath)
+    /// <param name="namespaceListTemplatePath">Path to the Razor template representing a namespace list, relative to <paramref name="templatesFolderPath"/>.</param>
+    /// <param name="namespaceDetailTemplatePath">Path to the Razor template representing a namespace detail, relative to <paramref name="templatesFolderPath"/>.</param>
+    protected RazorLightTemplateGenerator(
+        string projectPath,
+        string templatesFolderPath,
+        string outputDir,
+        string typeTemplatePath = typeTemplateDefaultPath,
+        string namespaceListTemplatePath = namespaceListTemplateDefaultPath,
+        string namespaceDetailTemplatePath = namespaceDetailTemplateDefaultPath)
     {
         this.templatesFolderPath = templatesFolderPath;
         this.outputDir = outputDir;
 
         this.typeTemplatePath = typeTemplatePath;
         this.namespaceListTemplatePath = namespaceListTemplatePath;
+        this.namespaceDetailTemplatePath = namespaceDetailTemplatePath;
 
         razorLightEngine = new RazorLightEngineBuilder()
             .UseFileSystemProject(projectPath)
@@ -75,14 +94,14 @@ internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceTM> : ITe
     public void GenerateTemplates(IReadOnlyList<ITypeData> types)
     {
         GenerateTypeTemplates(types);
-        GenerateNamespaceListTemplate(types);
+        GenerateNamespaceTemplates(types);
     }
 
     /// <summary>
     /// Generate the templates representing the individual types.
     /// </summary>
     /// <param name="types">The type data to be used in the templates.</param>
-    protected void GenerateTypeTemplates(IReadOnlyList<ITypeData> types)
+    private void GenerateTypeTemplates(IReadOnlyList<ITypeData> types)
     {
         var typeTemplateModels = GetTypeTemplateModels(types);
 
@@ -99,18 +118,39 @@ internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceTM> : ITe
         }
     }
 
+    private void GenerateNamespaceTemplates(IReadOnlyList<ITypeData> types)
+    {
+        var namespaceTMs = GetNamespaceTemplateModels(types);
+
+        GenerateNamespaceListTemplate(namespaceTMs);
+
+        foreach (var namespaceTM in namespaceTMs)
+        {
+            GenerateNamespaceDetailTemplate(namespaceTM);
+        }
+    }
+
     /// <summary>
     /// Generate the template containing the list of namespaces of a program.
     /// </summary>
-    /// <param name="types">The type data to be used in the templates.</param>
-    protected void GenerateNamespaceListTemplate(IReadOnlyList<ITypeData> types)
+    /// <param name="namespaceTMs">The namespace template models to be used in the template.</param>
+    private void GenerateNamespaceListTemplate(IEnumerable<TNamespaceTM> namespaceTMs)
     {
-        var namespaceModels = GetNamespaceTemplateModels(types);
-
-        string outputFileName = Path.Join(outputDir, $"index.html");
+        string outputFileName = Path.Join(outputDir, "index.html");
         string templatePath = Path.Join(templatesFolderPath, namespaceListTemplatePath);
 
-        var task = razorLightEngine.CompileRenderAsync(templatePath, namespaceModels);
+        var task = razorLightEngine.CompileRenderAsync(templatePath, namespaceTMs);
+        string result = task.Result;
+
+        File.WriteAllText(outputFileName, result);
+    }
+
+    private void GenerateNamespaceDetailTemplate(TNamespaceTM namespaceTM)
+    {
+        string outputFileName = Path.Join(outputDir, $"{namespaceTM.Id}.html");
+        string templatePath = Path.Join(templatesFolderPath, namespaceDetailTemplatePath);
+
+        var task = razorLightEngine.CompileRenderAsync(templatePath, namespaceTM);
         string result = task.Result;
 
         File.WriteAllText(outputFileName, result);

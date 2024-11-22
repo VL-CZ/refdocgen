@@ -53,14 +53,12 @@
 
         <hr />
 
-
-        @foreach (var type in Model.Classes)
-        {
-            var typeUrl = $"./{type.Id}.html";
-
-            <h2 class="display-5">Classes</h2>
-            <table class="table">
-                <tbody>
+        <h2 class="display-5">Classes</h2>
+        <table class="table">
+            <tbody>
+                @foreach (var type in Model.Classes)
+                {
+                    var typeUrl = $"./{type.Id}.html";
                     <tr>
                         <td class="w-50">
                             <samp>
@@ -76,17 +74,19 @@
                             <i>@type.DocComment</i>
                         </td>
                     </tr>
-                </tbody>
-            </table>
-        }
 
-        @foreach (var type in Model.ValueTypes)
-        {
-            var typeUrl = $"./{type.Id}.html";
+                }
+            </tbody>
+        </table>
 
-            <h2 class="display-5">Structs</h2>
-            <table class="table">
-                <tbody>
+        <h2 class="display-5">Structs</h2>
+        <table class="table">
+            <tbody>
+                @foreach (var type in Model.ValueTypes)
+                {
+                    var typeUrl = $"./{type.Id}.html";
+
+
                     <tr>
                         <td class="w-50">
                             <samp>
@@ -102,17 +102,17 @@
                             <i>@type.DocComment</i>
                         </td>
                     </tr>
-                </tbody>
-            </table>
-        }
 
-        @foreach (var type in Model.Interfaces)
-        {
-            var typeUrl = $"./{type.Id}.html";
+                }
+            </tbody>
+        </table>
 
-            <h2 class="display-5">Interfaces</h2>
-            <table class="table">
-                <tbody>
+        <h2 class="display-5">Interfaces</h2>
+        <table class="table">
+            <tbody>
+                @foreach (var type in Model.Interfaces)
+                {
+                    var typeUrl = $"./{type.Id}.html";
                     <tr>
                         <td class="w-50">
                             <samp>
@@ -128,9 +128,10 @@
                             <i>@type.DocComment</i>
                         </td>
                     </tr>
-                </tbody>
-            </table>
-        }
+
+                }
+            </tbody>
+        </table>
 
     </div>
 
