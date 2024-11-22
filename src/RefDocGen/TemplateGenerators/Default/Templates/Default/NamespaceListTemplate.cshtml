@@ -45,11 +45,14 @@
     <div class="container my-4">
         @foreach (var ns in Model)
         {
+            var namespaceUrl = $"./{ns.Id}.html";
 
             <h1 class="display-6">
                 <samp>
-                    <span class="text-primary">namespace</span>
-                    <span class="text-dark">@ns.Name</span>
+                    <a href="@namespaceUrl" class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
+                        <span class="text-primary">namespace</span>
+                        <span class="text-dark">@ns.Name</span>
+                    </a>
                 </samp>
             </h1>
 

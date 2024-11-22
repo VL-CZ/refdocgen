@@ -50,88 +50,99 @@
                 <span class="text-dark">@Model.Name</span>
             </samp>
         </h1>
-
         <hr />
 
-        <h2 class="display-5">Classes</h2>
-        <table class="table">
-            <tbody>
-                @foreach (var type in Model.Classes)
-                {
-                    var typeUrl = $"./{type.Id}.html";
-                    <tr>
-                        <td class="w-50">
-                            <samp>
-                                <a href="@typeUrl" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
-                                    <span class="text-primary">
-                                        @type.TypeKindName
-                                    </span>
-                                    @type.Name
-                                </a>
-                            </samp>
-                        </td>
-                        <td class="text-muted">
-                            <i>@type.DocComment</i>
-                        </td>
-                    </tr>
+        <!-- Classes -->
+        @if (Model.Classes.Any())
+        {
+            <h2 class="display-5">Classes</h2>
+            <table class="table">
+                <tbody>
+                    @foreach (var type in Model.Classes)
+                    {
+                        var typeUrl = $"./{type.Id}.html";
+                        <tr>
+                            <td class="w-50">
+                                <samp>
+                                    <a href="@typeUrl" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
+                                        <span class="text-primary">
+                                            @type.TypeKindName
+                                        </span>
+                                        @type.Name
+                                    </a>
+                                </samp>
+                            </td>
+                            <td class="text-muted">
+                                <i>@type.DocComment</i>
+                            </td>
+                        </tr>
 
-                }
-            </tbody>
-        </table>
+                    }
+                </tbody>
+            </table>
+        }
 
-        <h2 class="display-5">Structs</h2>
-        <table class="table">
-            <tbody>
-                @foreach (var type in Model.ValueTypes)
-                {
-                    var typeUrl = $"./{type.Id}.html";
+        <!-- Structures -->
+        @if (Model.ValueTypes.Any())
+        {
+            <h2 class="display-5">Structs</h2>
+            <table class="table">
+                <tbody>
+                    @foreach (var type in Model.ValueTypes)
+                    {
+                        var typeUrl = $"./{type.Id}.html";
 
 
-                    <tr>
-                        <td class="w-50">
-                            <samp>
-                                <a href="@typeUrl" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
-                                    <span class="text-primary">
-                                        @type.TypeKindName
-                                    </span>
-                                    @type.Name
-                                </a>
-                            </samp>
-                        </td>
-                        <td class="text-muted">
-                            <i>@type.DocComment</i>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td class="w-50">
+                                <samp>
+                                    <a href="@typeUrl" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
+                                        <span class="text-primary">
+                                            @type.TypeKindName
+                                        </span>
+                                        @type.Name
+                                    </a>
+                                </samp>
+                            </td>
+                            <td class="text-muted">
+                                <i>@type.DocComment</i>
+                            </td>
+                        </tr>
 
-                }
-            </tbody>
-        </table>
+                    }
+                </tbody>
+            </table>
+        }
 
-        <h2 class="display-5">Interfaces</h2>
-        <table class="table">
-            <tbody>
-                @foreach (var type in Model.Interfaces)
-                {
-                    var typeUrl = $"./{type.Id}.html";
-                    <tr>
-                        <td class="w-50">
-                            <samp>
-                                <a href="@typeUrl" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
-                                    <span class="text-primary">
-                                        @type.TypeKindName
-                                    </span>
-                                    @type.Name
-                                </a>
-                            </samp>
-                        </td>
-                        <td class="text-muted">
-                            <i>@type.DocComment</i>
-                        </td>
-                    </tr>
+        <!-- Interfaces -->
+        @if (Model.Interfaces.Any())
+        {
+            <h2 class="display-5">Interfaces</h2>
+            <table class="table">
+                <tbody>
+                    @foreach (var type in Model.Interfaces)
+                    {
+                        var typeUrl = $"./{type.Id}.html";
+                        <tr>
+                            <td class="w-50">
+                                <samp>
+                                    <a href="@typeUrl" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
+                                        <span class="text-primary">
+                                            @type.TypeKindName
+                                        </span>
+                                        @type.Name
+                                    </a>
+                                </samp>
+                            </td>
+                            <td class="text-muted">
+                                <i>@type.DocComment</i>
+                            </td>
+                        </tr>
 
-                }
-            </tbody>
-        </table>
+                    }
+                </tbody>
+            </table>
+        }
 
     </div>
 

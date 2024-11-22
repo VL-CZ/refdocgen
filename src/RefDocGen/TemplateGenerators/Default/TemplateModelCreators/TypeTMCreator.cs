@@ -40,6 +40,7 @@ internal static class TypeTMCreator
         return new TypeTM(
             typeData.Id,
             CSharpTypeName.Of(typeData),
+            typeData.Namespace ?? string.Empty,
             typeData.DocComment.Value,
             typeData.Kind.GetName(),
             modifiers.GetStrings(),

@@ -52,6 +52,19 @@
             </samp>
         </h1>
 
+        @{
+            var namespaceUrl = $"{Model.Namespace}.html";
+        }
+
+        <h6>
+            <samp>
+                <a href="@namespaceUrl" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
+                    <span class="text-primary">namespace</span>
+                    <span class="text-secondary">@Model.Namespace</span>
+                </a>
+            </samp>
+        </h6>
+
         <p class="text-muted">
             <i>@Model.DocComment</i>
         </p>
@@ -60,7 +73,7 @@
 
         @if (Model.Constructors.Any())
         {
-            <h2 class="display-5">Constructors</h2>
+            <h2 class="display-5 mt-2">Constructors</h2>
             <div class="row">
                 <div class="col-md-12">
                     @foreach (var constructor in Model.Constructors)
@@ -143,7 +156,7 @@
 
         @if (Model.Fields.Any())
         {
-            <h2 class="display-5">Fields</h2>
+            <h2 class="display-5 mt-2">Fields</h2>
             <div class="row">
                 <div class="col-md-12">
                     @foreach (var field in Model.Fields)
@@ -173,7 +186,7 @@
 
         @if (Model.Properties.Any())
         {
-            <h2 class="display-5">Properties</h2>
+            <h2 class="display-5 mt-2">Properties</h2>
             <div class="row">
                 <div class="col-md-12">
                     @foreach (var property in Model.Properties)
@@ -227,7 +240,7 @@
 
         @if (Model.Methods.Any())
         {
-            <h2 class="display-5">Methods</h2>
+            <h2 class="display-5 mt-2">Methods</h2>
             <div class="row">
                 <div class="col-md-12">
 
