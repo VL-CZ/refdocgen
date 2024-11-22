@@ -1,4 +1,4 @@
-@model IEnumerable<RefDocGen.TemplateGenerators.Default.TemplateModels.NamespaceTemplateModel>
+@model IEnumerable<RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces.NamespaceTM>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -43,12 +43,24 @@
 
 <body>
     <div class="container my-4">
+
+        <h1 class="display-3">
+            <samp>
+                <span class="text-dark">Namespace list</span>
+            </samp>
+        </h1>
+        <hr />
+
         @foreach (var ns in Model)
         {
+            var namespaceUrl = $"./{ns.Id}.html";
+
             <h1 class="display-6">
                 <samp>
-                    <span class="text-primary">namespace</span>
-                    <span class="text-dark">@ns.Name</span>
+                    <a href="@namespaceUrl" class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
+                        <span class="text-primary">namespace</span>
+                        <span class="text-dark">@ns.Name</span>
+                    </a>
                 </samp>
             </h1>
 
@@ -56,7 +68,7 @@
 
             <table class="table">
                 <tbody>
-                    @foreach (var type in ns.Types)
+                    @foreach (var type in ns.AllTypes)
                     {
                         var typeUrl = $"./{type.Id}.html";
 
@@ -65,7 +77,7 @@
                                 <samp>
                                     <a href="@typeUrl" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
                                         <span class="text-primary">
-                                            @type.Kind
+                                            @type.TypeKindName
                                         </span>
                                         @type.Name
                                     </a>

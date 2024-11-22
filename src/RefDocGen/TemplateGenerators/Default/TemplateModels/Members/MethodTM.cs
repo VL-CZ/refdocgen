@@ -1,4 +1,4 @@
-namespace RefDocGen.TemplateGenerators.Default.TemplateModels;
+namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 
 /// <summary>
 /// Represents the template model for a method.
@@ -10,4 +10,4 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels;
 /// <param name="DocComment">Documentation comment for the method.</param>
 /// <param name="ReturnsDocComment">Documentation comment for the method's return value.</param>
 /// <param name="Modifiers">Collection of modifiers for the method (e.g. private, abstract, virtual, etc.)</param>
-public record MethodTemplateModel(string Name, IEnumerable<ParameterTemplateModel> Parameters, string ReturnType, bool ReturnsVoid, string DocComment, string ReturnsDocComment, IEnumerable<string> Modifiers);
+public record MethodTM(string Name, IEnumerable<ParameterTM> Parameters, string ReturnType, bool ReturnsVoid, string DocComment, string ReturnsDocComment, IEnumerable<string> Modifiers);

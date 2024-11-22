@@ -1,6 +1,7 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
-using RefDocGen.TemplateGenerators.Default.TemplateModels;
+using RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
+using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Tools;
 using RefDocGen.TemplateGenerators.Tools.Keywords;
 using RefDocGen.TemplateGenerators.Tools.TypeName;
@@ -10,14 +11,14 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 /// <summary>
 /// Class responsible for creating template models representing the individual types.
 /// </summary>
-internal static class TypeTemplateModelCreator
+internal static class TypeTMCreator
 {
     /// <summary>
-    /// Creates a <see cref="TypeTemplateModel"/> instance based on the provided <see cref="ITypeData"/> object.
+    /// Creates a <see cref="TypeTM"/> instance based on the provided <see cref="ITypeData"/> object.
     /// </summary>
     /// <param name="typeData">The <see cref="ITypeData"/> instance representing the type.</param>
-    /// <returns>A <see cref="TypeTemplateModel"/> instance based on the provided <paramref name="typeData"/>.</returns>
-    public static TypeTemplateModel GetFrom(ITypeData typeData)
+    /// <returns>A <see cref="TypeTM"/> instance based on the provided <paramref name="typeData"/>.</returns>
+    public static TypeTM GetFrom(ITypeData typeData)
     {
         var constructors = typeData.Constructors.Select(GetFrom).ToArray();
         var fields = typeData.Fields.Select(GetFrom).ToArray();
@@ -36,9 +37,10 @@ internal static class TypeTemplateModelCreator
             modifiers.Add(Keyword.Abstract);
         }
 
-        return new TypeTemplateModel(
+        return new TypeTM(
             typeData.Id,
             CSharpTypeName.Of(typeData),
+            typeData.Namespace ?? string.Empty,
             typeData.DocComment.Value,
             typeData.Kind.GetName(),
             modifiers.GetStrings(),
@@ -49,24 +51,24 @@ internal static class TypeTemplateModelCreator
     }
 
     /// <summary>
-    /// Creates a <see cref="ConstructorTemplateModel"/> instance based on the provided <see cref="IConstructorData"/> object.
+    /// Creates a <see cref="ConstructorTM"/> instance based on the provided <see cref="IConstructorData"/> object.
     /// </summary>
     /// <param name="constructorData">The <see cref="IConstructorData"/> instance representing the constructor.</param>
-    /// <returns>A <see cref="ConstructorTemplateModel"/> instance based on the provided <paramref name="constructorData"/>.</returns>
-    private static ConstructorTemplateModel GetFrom(IConstructorData constructorData)
+    /// <returns>A <see cref="ConstructorTM"/> instance based on the provided <paramref name="constructorData"/>.</returns>
+    private static ConstructorTM GetFrom(IConstructorData constructorData)
     {
         var modifiers = GetCallableMemberModifiers(constructorData);
 
-        return new ConstructorTemplateModel(constructorData.Parameters.Select(GetFrom).ToArray(),
+        return new ConstructorTM(constructorData.Parameters.Select(GetFrom).ToArray(),
             constructorData.DocComment.Value, modifiers.GetStrings());
     }
 
     /// <summary>
-    /// Creates a <see cref="FieldTemplateModel"/> instance based on the provided <see cref="IFieldData"/> object.
+    /// Creates a <see cref="FieldTM"/> instance based on the provided <see cref="IFieldData"/> object.
     /// </summary>
     /// <param name="fieldData">The <see cref="IFieldData"/> instance representing the field.</param>
-    /// <returns>A <see cref="FieldTemplateModel"/> instance based on the provided <paramref name="fieldData"/>.</returns>
-    private static FieldTemplateModel GetFrom(IFieldData fieldData)
+    /// <returns>A <see cref="FieldTM"/> instance based on the provided <paramref name="fieldData"/>.</returns>
+    private static FieldTM GetFrom(IFieldData fieldData)
     {
         List<Keyword> modifiers = [fieldData.AccessModifier.ToKeyword()];
 
@@ -85,15 +87,15 @@ internal static class TypeTemplateModelCreator
             modifiers.Add(Keyword.Readonly);
         }
 
-        return new FieldTemplateModel(fieldData.Name, CSharpTypeName.Of(fieldData.Type), fieldData.DocComment.Value, modifiers.GetStrings());
+        return new FieldTM(fieldData.Name, CSharpTypeName.Of(fieldData.Type), fieldData.DocComment.Value, modifiers.GetStrings());
     }
 
     /// <summary>
-    /// Creates a <see cref="PropertyTemplateModel"/> instance based on the provided <see cref="IPropertyData"/> object.
+    /// Creates a <see cref="PropertyTM"/> instance based on the provided <see cref="IPropertyData"/> object.
     /// </summary>
     /// <param name="propertyData">The <see cref="IPropertyData"/> instance representing the property.</param>
-    /// <returns>A <see cref="PropertyTemplateModel"/> instance based on the provided <paramref name="propertyData"/>.</returns>
-    private static PropertyTemplateModel GetFrom(IPropertyData propertyData)
+    /// <returns>A <see cref="PropertyTM"/> instance based on the provided <paramref name="propertyData"/>.</returns>
+    private static PropertyTM GetFrom(IPropertyData propertyData)
     {
         var modifiers = GetCallableMemberModifiers(propertyData);
 
@@ -110,20 +112,20 @@ internal static class TypeTemplateModelCreator
             setterModifiers.Add(propertyData.Setter.AccessModifier.ToKeyword());
         }
 
-        return new PropertyTemplateModel(propertyData.Name, CSharpTypeName.Of(propertyData.Type), propertyData.DocComment.Value,
+        return new PropertyTM(propertyData.Name, CSharpTypeName.Of(propertyData.Type), propertyData.DocComment.Value,
             modifiers.GetStrings(), propertyData.Getter is not null, propertyData.Setter is not null, getterModifiers.GetStrings(), setterModifiers.GetStrings());
     }
 
     /// <summary>
-    /// Creates a <see cref="MethodTemplateModel"/> instance based on the provided <see cref="IMethodData"/> object.
+    /// Creates a <see cref="MethodTM"/> instance based on the provided <see cref="IMethodData"/> object.
     /// </summary>
     /// <param name="methodData">The <see cref="IMethodData"/> instance representing the method.</param>
-    /// <returns>A <see cref="MethodTemplateModel"/> instance based on the provided <paramref name="methodData"/>.</returns>
-    private static MethodTemplateModel GetFrom(IMethodData methodData)
+    /// <returns>A <see cref="MethodTM"/> instance based on the provided <paramref name="methodData"/>.</returns>
+    private static MethodTM GetFrom(IMethodData methodData)
     {
         var modifiers = GetCallableMemberModifiers(methodData);
 
-        return new MethodTemplateModel(
+        return new MethodTM(
             methodData.Name,
             methodData.Parameters.Select(GetFrom).ToArray(),
             CSharpTypeName.Of(methodData.ReturnType),
@@ -134,11 +136,11 @@ internal static class TypeTemplateModelCreator
     }
 
     /// <summary>
-    /// Creates a <see cref="ParameterTemplateModel"/> instance based on the provided <see cref="IParameterData"/> object.
+    /// Creates a <see cref="ParameterTM"/> instance based on the provided <see cref="IParameterData"/> object.
     /// </summary>
     /// <param name="parameterData">The <see cref="IParameterData"/> instance representing the parameter.</param>
-    /// <returns>A <see cref="ParameterTemplateModel"/> instance based on the provided <paramref name="parameterData"/>.</returns>
-    private static ParameterTemplateModel GetFrom(IParameterData parameterData)
+    /// <returns>A <see cref="ParameterTM"/> instance based on the provided <paramref name="parameterData"/>.</returns>
+    private static ParameterTM GetFrom(IParameterData parameterData)
     {
         List<Keyword> modifiers = [];
 
@@ -162,7 +164,7 @@ internal static class TypeTemplateModelCreator
             modifiers.Add(Keyword.Params);
         }
 
-        return new ParameterTemplateModel(parameterData.Name, CSharpTypeName.Of(parameterData.Type), parameterData.DocComment.Value,
+        return new ParameterTM(parameterData.Name, CSharpTypeName.Of(parameterData.Type), parameterData.DocComment.Value,
             modifiers.GetStrings(), parameterData.IsOptional);
     }
 

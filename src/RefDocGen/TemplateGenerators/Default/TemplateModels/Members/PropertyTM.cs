@@ -1,4 +1,4 @@
-namespace RefDocGen.TemplateGenerators.Default.TemplateModels;
+namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 
 /// <summary>
 /// Represents the template model for a property.
@@ -11,5 +11,5 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels;
 /// <param name="HasSetter">Checks if the property has setter.</param>
 /// <param name="GetterModifiers">Collection of the getter modifiers (possibly empty).</param>
 /// <param name="SetterModifiers">Collection of the setter modifiers (possibly empty).</param>
-public record PropertyTemplateModel(string Name, string Type, string DocComment, IEnumerable<string> Modifiers, bool HasGetter, bool HasSetter,
+public record PropertyTM(string Name, string Type, string DocComment, IEnumerable<string> Modifiers, bool HasGetter, bool HasSetter,
     IEnumerable<string> GetterModifiers, IEnumerable<string> SetterModifiers);
