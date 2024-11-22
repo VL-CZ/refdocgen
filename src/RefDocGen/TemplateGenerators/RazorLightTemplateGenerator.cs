@@ -118,6 +118,10 @@ internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceTM> : ITe
         }
     }
 
+    /// <summary>
+    /// Generate the templates for the namespaces (both namespace list and individual namespace details pages).
+    /// </summary>
+    /// <param name="types">The type data to be used in the templates.</param>
     private void GenerateNamespaceTemplates(IReadOnlyList<ITypeData> types)
     {
         var namespaceTMs = GetNamespaceTemplateModels(types);
@@ -145,6 +149,10 @@ internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceTM> : ITe
         File.WriteAllText(outputFileName, result);
     }
 
+    /// <summary>
+    /// Generate the template containing the given namespace detail.
+    /// </summary>
+    /// <param name="namespaceTM">Template model of the given namespace.</param>
     private void GenerateNamespaceDetailTemplate(TNamespaceTM namespaceTM)
     {
         string outputFileName = Path.Join(outputDir, $"{namespaceTM.Id}.html");
