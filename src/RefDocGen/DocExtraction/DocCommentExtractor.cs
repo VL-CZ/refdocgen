@@ -16,7 +16,7 @@ internal class DocCommentExtractor
     /// <summary>
     /// Dictionary of type data to which the documentation comments will be added. Keys are the type IDs (see <see cref="TypeNameData.Id"/>.
     /// </summary>
-    private readonly IReadOnlyDictionary<string, TypeData> typeData;
+    private readonly TypeDeclarations typeData;
 
     /// <summary>
     /// XML document containing the documentation comments.
@@ -43,7 +43,7 @@ internal class DocCommentExtractor
     /// </summary>
     /// <param name="docXmlPath">Path to the XML documentation file.</param>
     /// <param name="typeData">Array of type data to which the documentation comments will be added.</param>
-    internal DocCommentExtractor(string docXmlPath, IReadOnlyDictionary<string, TypeData> typeData)
+    internal DocCommentExtractor(string docXmlPath, TypeDeclarations typeData)
     {
         this.typeData = typeData;
 
@@ -104,9 +104,13 @@ internal class DocCommentExtractor
     {
         if (docCommentNode.TryGetSummaryElement(out var summaryNode))
         {
-            if (typeData.TryGetValue(typeId, out var type))
+            if (typeData.Types.TryGetValue(typeId, out var type))
             {
                 type.DocComment = summaryNode;
+            }
+            else if (typeData.Enums.TryGetValue(typeId, out var e))
+            {
+                e.DocComment = summaryNode;
             }
         }
     }
@@ -121,10 +125,10 @@ internal class DocCommentExtractor
     {
         (string typeName, string memberName, string paramsString) = MemberSignatureParser.Parse(fullMemberName);
 
-        if (typeData.TryGetValue(typeName, out var type))
-        {
-            string memberId = memberName + paramsString;
+        string memberId = memberName + paramsString;
 
+        if (typeData.Types.TryGetValue(typeName, out var type))
+        {
             if (memberCommentHandlers.TryGetValue(memberTypeId, out var parser))
             {
                 if (memberTypeId == MemberTypeId.Method && memberName == ConstructorData.DefaultName) // The method is a constructor.
@@ -140,6 +144,11 @@ internal class DocCommentExtractor
             {
                 // TODO: log unknown member
             }
+        }
+        else if (typeData.Enums.TryGetValue(typeName, out var e))
+        {
+            var h = new EnumValueCommentHandler();
+            h.AddDocumentation(e, memberId, docCommentNode);
         }
     }
 }

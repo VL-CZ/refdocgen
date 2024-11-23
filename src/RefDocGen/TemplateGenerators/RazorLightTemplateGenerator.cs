@@ -1,5 +1,6 @@
 using RazorLight;
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 
 namespace RefDocGen.TemplateGenerators;
 
@@ -91,9 +92,10 @@ internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceTM> : ITe
     }
 
     /// <inheritdoc/>
-    public void GenerateTemplates(IReadOnlyList<ITypeData> types)
+    public void GenerateTemplates(IReadOnlyList<ITypeData> types, IReadOnlyList<IEnumData> enums)
     {
         GenerateTypeTemplates(types);
+        GenerateEnumTemplates(enums);
         GenerateNamespaceTemplates(types);
     }
 
@@ -109,6 +111,30 @@ internal abstract class RazorLightTemplateGenerator<TTypeTM, TNamespaceTM> : ITe
         {
             string outputFileName = Path.Join(outputDir, $"{model.Id}.html");
             string templatePath = Path.Join(templatesFolderPath, typeTemplatePath);
+
+            var task = razorLightEngine.CompileRenderAsync(templatePath, model);
+            //task.Wait(); // TODO: consider using Async
+            string result = task.Result;
+
+            File.WriteAllText(outputFileName, result);
+        }
+    }
+
+    private void GenerateEnumTemplates(IReadOnlyList<IEnumData> enums)
+    {
+        var typeTemplateModels = enums.Select(
+            e => new EnumTM(
+                e.Id, e.ShortName, e.Namespace, e.DocComment.Value, [],
+                e.Values.Select(
+                    x => new EnumValueTM(x.Name, x.DocComment.Value)
+                    )
+                )
+            );
+
+        foreach (var model in typeTemplateModels)
+        {
+            string outputFileName = Path.Join(outputDir, $"{model.Id}.html");
+            string templatePath = Path.Join(templatesFolderPath, typeTemplatePath).Replace("Type", "Enum");
 
             var task = razorLightEngine.CompileRenderAsync(templatePath, model);
             //task.Wait(); // TODO: consider using Async

@@ -27,11 +27,23 @@ internal class AssemblyTypeExtractor
     /// Get all the declared types in the assembly and return them as <see cref="TypeData"/> objects.
     /// </summary>
     /// <returns>An array of <see cref="TypeData"/> objects representing the types in the assembly.</returns>
-    internal Dictionary<string, TypeData> GetDeclaredTypes()
+    internal TypeDeclarations GetDeclaredTypes()
     {
         var assembly = Assembly.LoadFrom(assemblyPath);
-        var types = assembly.GetTypes().Where(t => !t.IsCompilerGenerated()).ToArray();
-        return types.Select(ConstructFromType).ToDictionary(t => t.Id);
+
+        var types = assembly
+            .GetTypes()
+            .Where(t => !t.IsCompilerGenerated() && !t.IsEnum)
+            .Select(ConstructFromType)
+            .ToDictionary(t => t.Id);
+
+        var enums = assembly
+            .GetTypes()
+            .Where(t => !t.IsCompilerGenerated() && t.IsEnum)
+            .Select(t => new EnumData(t))
+            .ToDictionary(t => t.Id);
+
+        return new TypeDeclarations(types, enums);
     }
 
     /// <summary>
