@@ -10,14 +10,10 @@ internal class EnumValueCommentHandler
     {
         if (memberDocComment.TryGetSummaryElement(out var summaryNode))
         {
-            var enumValue = e.Values.FirstOrDefault(x => x.Name == memberId);
-
-            if (enumValue == null)
+            if (e.Values.TryGetValue(memberId, out var enumValue))
             {
-                return;
+                enumValue.DocComment = summaryNode;
             }
-
-            enumValue.DocComment = summaryNode;
         }
     }
 }

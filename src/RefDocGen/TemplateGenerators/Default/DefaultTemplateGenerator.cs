@@ -59,18 +59,18 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     }
 
     /// <inheritdoc/>
-    public void GenerateTemplates(IReadOnlyList<ITypeData> types, IReadOnlyList<IEnumData> enums)
+    public void GenerateTemplates(ITypeDeclarations typeDeclarations)
     {
-        GenerateTypeTemplates(types);
-        GenerateEnumTemplates(enums);
-        GenerateNamespaceTemplates(types);
+        GenerateTypeTemplates(typeDeclarations.Types);
+        GenerateEnumTemplates(typeDeclarations.Enums);
+        GenerateNamespaceTemplates(typeDeclarations);
     }
 
     /// <summary>
     /// Generate the templates representing the individual types.
     /// </summary>
     /// <param name="types">The type data to be used in the templates.</param>
-    private void GenerateTypeTemplates(IReadOnlyList<ITypeData> types)
+    private void GenerateTypeTemplates(IEnumerable<ITypeData> types)
     {
         var typeTemplateModels = types.Select(TypeTMCreator.GetFrom);
 
@@ -87,7 +87,7 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
         }
     }
 
-    private void GenerateEnumTemplates(IReadOnlyList<IEnumData> enums)
+    private void GenerateEnumTemplates(IEnumerable<IEnumData> enums)
     {
         var typeTemplateModels = enums.Select(EnumTMCreator.GetFrom);
 
@@ -108,7 +108,7 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     /// Generate the templates for the namespaces (both namespace list and individual namespace details pages).
     /// </summary>
     /// <param name="types">The type data to be used in the templates.</param>
-    private void GenerateNamespaceTemplates(IReadOnlyList<ITypeData> types)
+    private void GenerateNamespaceTemplates(ITypeDeclarations types)
     {
         var namespaceTMs = NamespaceListTMCreator.GetFrom(types);
 

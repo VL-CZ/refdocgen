@@ -40,10 +40,22 @@ internal class AssemblyTypeExtractor
         var enums = assembly
             .GetTypes()
             .Where(t => !t.IsCompilerGenerated() && t.IsEnum)
-            .Select(t => new EnumData(t))
+            .Select(ConstructFromEnum)
             .ToDictionary(t => t.Id);
 
         return new TypeDeclarations(types, enums);
+    }
+
+    private EnumData ConstructFromEnum(Type type)
+    {
+        var bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+        var values = type.GetFields(bindingFlags).Where(f => !f.IsCompilerGenerated() && !f.IsSpecialName);
+
+        var valueModels = values
+            .Select(f => new EnumValueData(f))
+            .ToDictionary(v => v.Id);
+
+        return new EnumData(type, valueModels);
     }
 
     /// <summary>

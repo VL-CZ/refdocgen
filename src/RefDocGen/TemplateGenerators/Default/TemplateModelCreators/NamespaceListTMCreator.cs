@@ -17,9 +17,10 @@ internal class NamespaceListTMCreator
     /// </summary>
     /// <param name="typeData">The <see cref="ITypeData"/> instance representing the types.</param>
     /// <returns>An enumerable of <see cref="NamespaceTM"/> instances based on the provided <paramref name="typeData"/>.</returns>
-    internal static IEnumerable<NamespaceTM> GetFrom(IReadOnlyList<ITypeData> typeData)
+    internal static IEnumerable<NamespaceTM> GetFrom(ITypeDeclarations typeData)
     {
-        var groupedTypes = typeData.GroupBy(typeData => typeData.Namespace);
+        var groupedTypes = typeData.Types.GroupBy(t => t.Namespace);
+        var groupedEnums = typeData.Enums.GroupBy(e => e.Namespace);
 
         var namespaceTemplateModels = new List<NamespaceTM>();
 
@@ -44,8 +45,20 @@ internal class NamespaceListTMCreator
                         .OrderBy(t => t.Name);
                 }
 
+                // TODO: better performance
+                var namespaceEnums = typeData.Enums
+                    .Where(e => e.Namespace == namespaceName)
+                    .Select(GetFrom)
+                    .OrderBy(e => e.Name);
+
                 namespaceTemplateModels.Add(
-                    new NamespaceTM(namespaceName, namespaceTypes[TypeKind.Class], namespaceTypes[TypeKind.ValueType], namespaceTypes[TypeKind.Interface])
+                    new NamespaceTM(
+                        namespaceName,
+                        namespaceTypes[TypeKind.Class],
+                        namespaceTypes[TypeKind.ValueType],
+                        namespaceTypes[TypeKind.Interface],
+                        namespaceEnums
+                        )
                 );
             }
         }
@@ -61,5 +74,10 @@ internal class NamespaceListTMCreator
     private static TypeNameTM GetFrom(ITypeData type)
     {
         return new TypeNameTM(type.Id, type.Kind.GetName(), CSharpTypeName.Of(type), type.DocComment.Value);
+    }
+
+    private static TypeNameTM GetFrom(IEnumData enumData)
+    {
+        return new TypeNameTM(enumData.Id, "enum", enumData.ShortName, enumData.DocComment.Value);
     }
 }

@@ -9,14 +9,10 @@ namespace RefDocGen.CodeElements.Concrete.Types;
 
 internal class EnumData : IEnumData
 {
-    public EnumData(Type typeObject)
+    public EnumData(Type typeObject, IReadOnlyDictionary<string, EnumValueData> values)
     {
         TypeObject = typeObject;
-
-        Values = typeObject
-            .GetFields()
-            .Select(f => new EnumValueData(f))
-            .ToList();
+        Values = values;
     }
 
     /// <inheritdoc/>
@@ -37,9 +33,8 @@ internal class EnumData : IEnumData
     /// <inheritdoc/>
     public XElement DocComment { get; internal set; } = XmlDocElementFactory.EmptySummary;
 
-
-    public IReadOnlyList<EnumValueData> Values { get; }
+    public IReadOnlyDictionary<string, EnumValueData> Values { get; }
 
     /// <inheritdoc/>
-    IReadOnlyList<IEnumValueData> IEnumData.Values => Values;
+    IReadOnlyList<IEnumValueData> IEnumData.Values => Values.Values.ToList();
 }
