@@ -5,6 +5,9 @@ using RefDocGen.DocExtraction.Tools;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 using RefDocGen.CodeElements.Concrete.Members;
+using RefDocGen.DocExtraction.Handlers.Concrete;
+using RefDocGen.DocExtraction.Handlers.Concrete.Enum;
+using RefDocGen.CodeElements;
 
 namespace RefDocGen.DocExtraction;
 
@@ -37,6 +40,11 @@ internal class DocCommentExtractor
     /// Handler for constructor doc comments.
     /// </summary>
     private readonly ConstructorCommentHandler constructorCommentHandler = new();
+
+    /// <summary>
+    /// Handler for enum member doc comments.
+    /// </summary>
+    private readonly EnumMemberCommentHandler enumMemberCommentHandler = new();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
@@ -104,11 +112,11 @@ internal class DocCommentExtractor
     {
         if (docCommentNode.TryGetSummaryElement(out var summaryNode))
         {
-            if (typeData.Types.TryGetValue(typeId, out var type))
+            if (typeData.Types.TryGetValue(typeId, out var type)) // the type is a value, reference or interface type
             {
                 type.DocComment = summaryNode;
             }
-            else if (typeData.Enums.TryGetValue(typeId, out var e))
+            else if (typeData.Enums.TryGetValue(typeId, out var e)) // the type is an enum
             {
                 e.DocComment = summaryNode;
             }
@@ -127,7 +135,7 @@ internal class DocCommentExtractor
 
         string memberId = memberName + paramsString;
 
-        if (typeData.Types.TryGetValue(typeName, out var type))
+        if (typeData.Types.TryGetValue(typeName, out var type)) // member of a value, reference or interface type
         {
             if (memberCommentHandlers.TryGetValue(memberTypeId, out var parser))
             {
@@ -145,10 +153,9 @@ internal class DocCommentExtractor
                 // TODO: log unknown member
             }
         }
-        else if (typeData.Enums.TryGetValue(typeName, out var e))
+        else if (typeData.Enums.TryGetValue(typeName, out var e)) // member of an enum
         {
-            var h = new EnumValueCommentHandler();
-            h.AddDocumentation(e, memberId, docCommentNode);
+            enumMemberCommentHandler.AddDocumentation(e, memberId, docCommentNode);
         }
     }
 }

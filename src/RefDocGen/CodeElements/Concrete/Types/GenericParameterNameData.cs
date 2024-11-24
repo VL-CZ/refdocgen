@@ -6,7 +6,7 @@ namespace RefDocGen.CodeElements.Concrete.Types;
 /// <summary>
 /// Class representing name-related data of a generic parameter.
 /// </summary>
-internal record GenericTypeParameterNameData : ITypeNameData
+internal class GenericTypeParameterNameData : ITypeNameData
 {
     /// <summary>
     /// Dictionary of type parameters declared in the containing type; the keys represent type parameter names.
@@ -66,7 +66,7 @@ internal record GenericTypeParameterNameData : ITypeNameData
     }
 
     /// <inheritdoc/>
-    public string? Namespace => null;
+    public string Namespace => string.Empty;
 
     /// <inheritdoc/>
     public bool IsArray => TypeObject.IsArray;

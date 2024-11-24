@@ -41,7 +41,7 @@ internal class MethodData : ExecutableMemberData, IMethodData
     public ITypeNameData ReturnType { get; }
 
     /// <inheritdoc/>
-    public XElement ReturnValueDocComment { get; internal set; } = XmlDocElementFactory.EmptyReturns;
+    public XElement ReturnValueDocComment { get; internal set; } = XmlDocElements.EmptyReturns;
 
     /// <inheritdoc/>
     public override bool OverridesAnotherMember => !MethodInfo.Equals(MethodInfo.GetBaseDefinition());

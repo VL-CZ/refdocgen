@@ -1,12 +1,16 @@
-using System.Xml.Linq;
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types.Enum;
+using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Abstract.Types;
 
 /// <summary>
-/// Represents data of a type, including its members.
+/// Represents data of a value, reference or interface type; including its members.
+/// <para>
+/// Note: This interface doesn't represent enum types - see <see cref="IEnumTypeData"/>.
+/// </para>
 /// </summary>
-public interface ITypeData : ITypeNameData
+public interface IObjectTypeData : ITypeNameData
 {
     /// <summary>
     /// Access modifier of the type.

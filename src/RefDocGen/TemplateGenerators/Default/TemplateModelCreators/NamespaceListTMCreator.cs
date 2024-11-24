@@ -1,5 +1,6 @@
 using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.Enum;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Tools;
@@ -13,9 +14,9 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 internal class NamespaceListTMCreator
 {
     /// <summary>
-    /// Creates an enumerable of <see cref="NamespaceTM"/> instances based on the provided <see cref="ITypeData"/>.
+    /// Creates an enumerable of <see cref="NamespaceTM"/> instances based on the provided <see cref="IObjectTypeData"/>.
     /// </summary>
-    /// <param name="typeData">The <see cref="ITypeData"/> instance representing the types.</param>
+    /// <param name="typeData">The <see cref="IObjectTypeData"/> instance representing the types.</param>
     /// <returns>An enumerable of <see cref="NamespaceTM"/> instances based on the provided <paramref name="typeData"/>.</returns>
     internal static IEnumerable<NamespaceTM> GetFrom(ITypeDeclarations typeData)
     {
@@ -67,16 +68,16 @@ internal class NamespaceListTMCreator
     }
 
     /// <summary>
-    /// Creates a <see cref="TypeNameTM"/> instance based on the provided <see cref="ITypeData"/> object.
+    /// Creates a <see cref="TypeNameTM"/> instance based on the provided <see cref="IObjectTypeData"/> object.
     /// </summary>
-    /// <param name="type">The <see cref="ITypeData"/> instance representing the type.</param>
+    /// <param name="type">The <see cref="IObjectTypeData"/> instance representing the type.</param>
     /// <returns>A <see cref="TypeNameTM"/> instance based on the provided <paramref name="type"/>.</returns>
-    private static TypeNameTM GetFrom(ITypeData type)
+    private static TypeNameTM GetFrom(IObjectTypeData type)
     {
         return new TypeNameTM(type.Id, type.Kind.GetName(), CSharpTypeName.Of(type), type.DocComment.Value);
     }
 
-    private static TypeNameTM GetFrom(IEnumData enumData)
+    private static TypeNameTM GetFrom(IEnumTypeData enumData)
     {
         return new TypeNameTM(enumData.Id, "enum", enumData.ShortName, enumData.DocComment.Value);
     }

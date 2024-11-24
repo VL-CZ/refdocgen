@@ -13,7 +13,7 @@ internal static class AbstractKeyword
     /// </summary>
     /// <param name="typeData">Type that we check for 'abstract' keyword.</param>
     /// <returns>Boolean representing if the 'abstract' keyword is present in the type definition.</returns>
-    internal static bool IsPresentIn(ITypeData typeData)
+    internal static bool IsPresentIn(IObjectTypeData typeData)
     {
         return typeData.IsAbstract && typeData.Kind == TypeKind.Class;
     }

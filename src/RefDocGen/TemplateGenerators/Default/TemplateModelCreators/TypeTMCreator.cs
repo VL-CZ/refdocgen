@@ -14,11 +14,11 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 internal static class TypeTMCreator
 {
     /// <summary>
-    /// Creates a <see cref="TypeTM"/> instance based on the provided <see cref="ITypeData"/> object.
+    /// Creates a <see cref="TypeTM"/> instance based on the provided <see cref="IObjectTypeData"/> object.
     /// </summary>
-    /// <param name="typeData">The <see cref="ITypeData"/> instance representing the type.</param>
+    /// <param name="typeData">The <see cref="IObjectTypeData"/> instance representing the type.</param>
     /// <returns>A <see cref="TypeTM"/> instance based on the provided <paramref name="typeData"/>.</returns>
-    public static TypeTM GetFrom(ITypeData typeData)
+    public static TypeTM GetFrom(IObjectTypeData typeData)
     {
         var constructors = typeData.Constructors.Select(GetFrom).ToArray();
         var fields = typeData.Fields.Select(GetFrom).ToArray();
@@ -40,7 +40,7 @@ internal static class TypeTMCreator
         return new TypeTM(
             typeData.Id,
             CSharpTypeName.Of(typeData),
-            typeData.Namespace ?? string.Empty,
+            typeData.Namespace,
             typeData.DocComment.Value,
             typeData.Kind.GetName(),
             modifiers.GetStrings(),

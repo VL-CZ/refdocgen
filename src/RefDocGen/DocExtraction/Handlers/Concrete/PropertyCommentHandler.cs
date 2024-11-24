@@ -3,7 +3,7 @@ using RefDocGen.DocExtraction.Handlers.Abstract;
 using RefDocGen.DocExtraction.Tools;
 using System.Xml.Linq;
 
-namespace RefDocGen.DocExtraction.Handlers;
+namespace RefDocGen.DocExtraction.Handlers.Concrete;
 
 /// <summary>
 /// Class responsible for handling and adding XML doc comments to the corresponding properties.
@@ -11,7 +11,7 @@ namespace RefDocGen.DocExtraction.Handlers;
 internal class PropertyCommentHandler : IMemberCommentHandler
 {
     /// <inheritdoc/>
-    public void AddDocumentation(TypeData type, string memberIdentifier, XElement docCommentNode)
+    public void AddDocumentation(ObjectTypeData type, string memberIdentifier, XElement docCommentNode)
     {
         if (docCommentNode.TryGetSummaryElement(out var summaryNode))
         {

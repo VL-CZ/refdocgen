@@ -3,9 +3,9 @@ using System.Xml.Linq;
 namespace RefDocGen.Tools.Xml;
 
 /// <summary>
-/// Factory for the selected XML doc comment nodes.
+/// Provides the selected XML doc comment nodes.
 /// </summary>
-internal static class XmlDocElementFactory
+internal static class XmlDocElements
 {
     /// <summary>
     /// Create new empty 'summary' <see cref="XElement"/>.

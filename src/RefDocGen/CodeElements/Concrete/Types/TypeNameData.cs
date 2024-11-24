@@ -85,7 +85,7 @@ internal class TypeNameData : ITypeNameData
     public bool HasTypeParameters => TypeObject.IsGenericType;
 
     /// <inheritdoc/>
-    public string? Namespace => TypeObject.Namespace;
+    public string Namespace => TypeObject.Namespace ?? string.Empty;
 
     /// <inheritdoc/>
     public IReadOnlyList<ITypeNameData> TypeParameters { get; }

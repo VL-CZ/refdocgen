@@ -1,5 +1,7 @@
 using RazorLight;
+using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.Enum;
 using RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
@@ -12,9 +14,14 @@ namespace RefDocGen.TemplateGenerators.Default;
 internal class DefaultTemplateGenerator : ITemplateGenerator
 {
     /// <summary>
-    /// Path to the Razor template representing a type, relative to <see cref="templatesFolderPath"/>.
+    /// Path to the Razor template representing an object type, relative to <see cref="templatesFolderPath"/>.
     /// </summary>
-    private const string typeTemplatePath = "TypeTemplate.cshtml";
+    private const string typeTemplatePath = "ObjectTypeTemplate.cshtml";
+
+    /// <summary>
+    /// Path to the Razor template representing an enum type, relative to <see cref="templatesFolderPath"/>.
+    /// </summary>
+    private const string enumTypeTemplatePath = "EnumTypeTemplate.cshtml";
 
     /// <summary>
     /// Path to the Razor template representing a namespace list, relative to <see cref="templatesFolderPath"/>.
@@ -67,10 +74,10 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     }
 
     /// <summary>
-    /// Generate the templates representing the individual types.
+    /// Generate the templates representing the individual object types.
     /// </summary>
     /// <param name="types">The type data to be used in the templates.</param>
-    private void GenerateTypeTemplates(IEnumerable<ITypeData> types)
+    private void GenerateTypeTemplates(IEnumerable<IObjectTypeData> types)
     {
         var typeTemplateModels = types.Select(TypeTMCreator.GetFrom);
 
@@ -87,14 +94,18 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
         }
     }
 
-    private void GenerateEnumTemplates(IEnumerable<IEnumData> enums)
+    /// <summary>
+    /// Generate the templates representing the individual enum types.
+    /// </summary>
+    /// <param name="enums">The enum data to be used in the templates.</param>
+    private void GenerateEnumTemplates(IEnumerable<IEnumTypeData> enums)
     {
-        var typeTemplateModels = enums.Select(EnumTMCreator.GetFrom);
+        var enumTMs = enums.Select(EnumTMCreator.GetFrom);
 
-        foreach (var model in typeTemplateModels)
+        foreach (var model in enumTMs)
         {
             string outputFileName = Path.Join(outputDir, $"{model.Id}.html");
-            string templatePath = Path.Join(templatesFolderPath, typeTemplatePath).Replace("Type", "Enum");
+            string templatePath = Path.Join(templatesFolderPath, enumTypeTemplatePath);
 
             var task = razorLightEngine.CompileRenderAsync(templatePath, model);
             //task.Wait(); // TODO: consider using Async

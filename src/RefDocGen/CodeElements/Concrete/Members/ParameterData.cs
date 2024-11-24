@@ -21,7 +21,7 @@ internal class ParameterData : IParameterData
     {
         ParameterInfo = parameterInfo;
         Type = parameterInfo.ParameterType.GetNameData(declaredTypeParameters);
-        DocComment = XmlDocElementFactory.EmptyParamWithName(Name);
+        DocComment = XmlDocElements.EmptyParamWithName(Name);
     }
 
     /// <inheritdoc/>

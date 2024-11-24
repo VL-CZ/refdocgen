@@ -1,29 +1,33 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Concrete.Members;
+using RefDocGen.CodeElements.Concrete.Types.Enum;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Concrete.Types;
 
 /// <summary>
-/// Class representing data of a type, including its members.
+/// Class representing data of a value, reference or interface type, including its members.
 /// <para>
 /// Typically, only the types declared in the assemblies we analyze, are represented by this class.
 /// </para>
+/// <para>
+/// Note: This class doesn't represent enum types - see <see cref="EnumTypeData"/>.
+/// </para>
 /// </summary>
-internal class TypeData : TypeNameData, ITypeData
+internal class ObjectTypeData : TypeNameData, IObjectTypeData
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="TypeData"/> class.
+    /// Initializes a new instance of the <see cref="ObjectTypeData"/> class.
     /// </summary>
-    /// <param name="type"><see cref="System.Type"/> object representing the type.</param>
+    /// <param name="type"><see cref="Type"/> object representing the type.</param>
     /// <param name="constructors">Dictionary of constructors declared in the class; keys are the corresponding constructor IDs</param>
     /// <param name="fields">Dictionary of fields declared in the class; keys are the corresponding field IDs.</param>
     /// <param name="properties">Dictionary of properties declared in the class; keys are the corresponding property IDs.</param>
     /// <param name="methods">Dictionary of methods declared in the class; keys are the corresponding method IDs.</param>
     /// <param name="typeParameterDeclarations">Collection of type parameters declared in this type; the keys represent type parameter names.</param>
-    public TypeData(
+    public ObjectTypeData(
         Type type,
         IReadOnlyDictionary<string, ConstructorData> constructors,
         IReadOnlyDictionary<string, FieldData> fields,
@@ -32,18 +36,12 @@ internal class TypeData : TypeNameData, ITypeData
         IReadOnlyDictionary<string, TypeParameterDeclaration> typeParameterDeclarations)
         : base(type, typeParameterDeclarations)
     {
-        Type = type;
         Constructors = constructors;
         Fields = fields;
         Properties = properties;
         Methods = methods;
         TypeParameterDeclarations = typeParameterDeclarations;
     }
-
-    /// <summary>
-    /// <see cref="System.Type"/> object representing the type.
-    /// </summary>
-    public Type Type { get; }
 
     /// <summary>
     /// Dictionary of constructors declared in the class; keys are the corresponding constructor IDs.
@@ -87,40 +85,40 @@ internal class TypeData : TypeNameData, ITypeData
     }
 
     /// <inheritdoc/>
-    public XElement DocComment { get; internal set; } = XmlDocElementFactory.EmptySummary;
+    public XElement DocComment { get; internal set; } = XmlDocElements.EmptySummary;
 
     /// <inheritdoc/>
     public AccessModifier AccessModifier =>
         AccessModifierExtensions.GetAccessModifier(
-            Type.IsNestedPrivate,
-            Type.IsNestedFamily,
-            Type.IsNestedAssembly || Type.IsNotPublic,
-            Type.IsPublic || Type.IsNestedPublic,
-            Type.IsNestedFamANDAssem,
-            Type.IsNestedFamORAssem);
+            TypeObject.IsNestedPrivate,
+            TypeObject.IsNestedFamily,
+            TypeObject.IsNestedAssembly || TypeObject.IsNotPublic,
+            TypeObject.IsPublic || TypeObject.IsNestedPublic,
+            TypeObject.IsNestedFamANDAssem,
+            TypeObject.IsNestedFamORAssem);
 
     /// <inheritdoc/>
-    public bool IsAbstract => Type.IsAbstract;
+    public bool IsAbstract => TypeObject.IsAbstract;
 
     /// <inheritdoc/>
-    public bool IsSealed => Type.IsSealed;
+    public bool IsSealed => TypeObject.IsSealed;
 
     /// <inheritdoc/>
-    public TypeKind Kind => Type.IsInterface
+    public TypeKind Kind => TypeObject.IsInterface
         ? TypeKind.Interface
-        : Type.IsValueType
+        : TypeObject.IsValueType
             ? TypeKind.ValueType
             : TypeKind.Class;
 
     /// <inheritdoc/>
-    IReadOnlyList<IConstructorData> ITypeData.Constructors => Constructors.Values.ToList();
+    IReadOnlyList<IConstructorData> IObjectTypeData.Constructors => Constructors.Values.ToList();
 
     /// <inheritdoc/>
-    IReadOnlyList<IFieldData> ITypeData.Fields => Fields.Values.ToList();
+    IReadOnlyList<IFieldData> IObjectTypeData.Fields => Fields.Values.ToList();
 
     /// <inheritdoc/>
-    IReadOnlyList<IMethodData> ITypeData.Methods => Methods.Values.ToList();
+    IReadOnlyList<IMethodData> IObjectTypeData.Methods => Methods.Values.ToList();
 
     /// <inheritdoc/>
-    IReadOnlyList<IPropertyData> ITypeData.Properties => Properties.Values.ToList();
+    IReadOnlyList<IPropertyData> IObjectTypeData.Properties => Properties.Values.ToList();
 }

@@ -13,7 +13,7 @@ internal static class SealedKeyword
     /// </summary>
     /// <param name="typeData">Type that we check for 'sealed' keyword.</param>
     /// <returns>Boolean representing if the 'sealed' keyword is present in the type definition.</returns>
-    internal static bool IsPresentIn(ITypeData typeData)
+    internal static bool IsPresentIn(IObjectTypeData typeData)
     {
         return typeData.IsSealed && typeData.Kind == TypeKind.Class;
     }

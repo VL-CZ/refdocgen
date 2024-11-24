@@ -49,5 +49,5 @@ internal class FieldData : IFieldData
     public bool IsConstant => FieldInfo.IsLiteral;
 
     /// <inheritdoc/>
-    public XElement DocComment { get; internal set; } = XmlDocElementFactory.EmptySummary;
+    public XElement DocComment { get; internal set; } = XmlDocElements.EmptySummary;
 }
