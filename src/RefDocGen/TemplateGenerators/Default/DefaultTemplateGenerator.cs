@@ -9,7 +9,7 @@ using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 namespace RefDocGen.TemplateGenerators.Default;
 
 /// <summary>
-/// Class used for generating RazorLight templates using the <see cref="TypeTM"/> as a type template model and <see cref="NamespaceTM"/> as a namespace template model.
+/// Class used for generating RazorLight templates using the <see cref="ObjectTypeTM"/> as a type template model and <see cref="NamespaceTM"/> as a namespace template model.
 /// </summary>
 internal class DefaultTemplateGenerator : ITemplateGenerator
 {
@@ -66,11 +66,11 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     }
 
     /// <inheritdoc/>
-    public void GenerateTemplates(ITypeDeclarations typeDeclarations)
+    public void GenerateTemplates(ITypeRegistry typeRegistry)
     {
-        GenerateTypeTemplates(typeDeclarations.Types);
-        GenerateEnumTemplates(typeDeclarations.Enums);
-        GenerateNamespaceTemplates(typeDeclarations);
+        GenerateTypeTemplates(typeRegistry.ObjectTypes);
+        GenerateEnumTemplates(typeRegistry.Enums);
+        GenerateNamespaceTemplates(typeRegistry);
     }
 
     /// <summary>
@@ -79,7 +79,7 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     /// <param name="types">The type data to be used in the templates.</param>
     private void GenerateTypeTemplates(IEnumerable<IObjectTypeData> types)
     {
-        var typeTemplateModels = types.Select(TypeTMCreator.GetFrom);
+        var typeTemplateModels = types.Select(ObjectTypeTMCreator.GetFrom);
 
         foreach (var model in typeTemplateModels)
         {
@@ -119,7 +119,7 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     /// Generate the templates for the namespaces (both namespace list and individual namespace details pages).
     /// </summary>
     /// <param name="types">The type data to be used in the templates.</param>
-    private void GenerateNamespaceTemplates(ITypeDeclarations types)
+    private void GenerateNamespaceTemplates(ITypeRegistry types)
     {
         var namespaceTMs = NamespaceListTMCreator.GetFrom(types);
 

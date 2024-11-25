@@ -18,10 +18,10 @@ internal class NamespaceListTMCreator
     /// </summary>
     /// <param name="typeData">The <see cref="IObjectTypeData"/> instance representing the types.</param>
     /// <returns>An enumerable of <see cref="NamespaceTM"/> instances based on the provided <paramref name="typeData"/>.</returns>
-    internal static IEnumerable<NamespaceTM> GetFrom(ITypeDeclarations typeData)
+    internal static IEnumerable<NamespaceTM> GetFrom(ITypeRegistry typeData)
     {
-        var groupedTypes = typeData.Types.GroupBy(t => t.Namespace);
-        var groupedEnums = typeData.Enums.GroupBy(e => e.Namespace);
+        var groupedTypes = typeData.ObjectTypes.ToLookup(t => t.Namespace);
+        var groupedEnums = typeData.Enums.ToLookup(e => e.Namespace);
 
         var namespaceTemplateModels = new List<NamespaceTM>();
 
@@ -38,6 +38,7 @@ internal class NamespaceListTMCreator
                     [TypeKind.Interface] = [],
                 };
 
+                // get namespace classes, value types and interfaces
                 foreach (var typeKind in namespaceTypes.Keys)
                 {
                     namespaceTypes[typeKind] = typeGroup // select the types of the given kind, ordered by their name
@@ -46,9 +47,8 @@ internal class NamespaceListTMCreator
                         .OrderBy(t => t.Name);
                 }
 
-                // TODO: better performance
-                var namespaceEnums = typeData.Enums
-                    .Where(e => e.Namespace == namespaceName)
+                // get namespace enums
+                var namespaceEnums = groupedEnums[namespaceName]
                     .Select(GetFrom)
                     .OrderBy(e => e.Name);
 

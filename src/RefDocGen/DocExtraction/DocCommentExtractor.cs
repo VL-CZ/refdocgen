@@ -1,5 +1,4 @@
 using RefDocGen.CodeElements.Concrete.Types;
-using RefDocGen.DocExtraction.Handlers;
 using RefDocGen.DocExtraction.Handlers.Abstract;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.Tools.Xml;
@@ -19,7 +18,7 @@ internal class DocCommentExtractor
     /// <summary>
     /// Dictionary of type data to which the documentation comments will be added. Keys are the type IDs (see <see cref="TypeNameData.Id"/>.
     /// </summary>
-    private readonly TypeDeclarations typeData;
+    private readonly TypeRegistry typeData;
 
     /// <summary>
     /// XML document containing the documentation comments.
@@ -51,7 +50,7 @@ internal class DocCommentExtractor
     /// </summary>
     /// <param name="docXmlPath">Path to the XML documentation file.</param>
     /// <param name="typeData">Array of type data to which the documentation comments will be added.</param>
-    internal DocCommentExtractor(string docXmlPath, TypeDeclarations typeData)
+    internal DocCommentExtractor(string docXmlPath, TypeRegistry typeData)
     {
         this.typeData = typeData;
 
@@ -112,7 +111,7 @@ internal class DocCommentExtractor
     {
         if (docCommentNode.TryGetSummaryElement(out var summaryNode))
         {
-            if (typeData.Types.TryGetValue(typeId, out var type)) // the type is a value, reference or interface type
+            if (typeData.ObjectTypes.TryGetValue(typeId, out var type)) // the type is a value, reference or interface type
             {
                 type.DocComment = summaryNode;
             }
@@ -135,7 +134,7 @@ internal class DocCommentExtractor
 
         string memberId = memberName + paramsString;
 
-        if (typeData.Types.TryGetValue(typeName, out var type)) // member of a value, reference or interface type
+        if (typeData.ObjectTypes.TryGetValue(typeName, out var type)) // member of a value, reference or interface type
         {
             if (memberCommentHandlers.TryGetValue(memberTypeId, out var parser))
             {

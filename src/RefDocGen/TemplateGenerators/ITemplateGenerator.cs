@@ -1,16 +1,15 @@
 using RefDocGen.CodeElements;
-using RefDocGen.CodeElements.Abstract.Types;
 
 namespace RefDocGen.TemplateGenerators;
 
 /// <summary>
-/// Defines methods for generating templates using the <see cref="IObjectTypeData"/> objects.
+/// Defines methods for generating templates using the <see cref="ITypeRegistry"/> data.
 /// </summary>
 public interface ITemplateGenerator
 {
     /// <summary>
     /// Generate the templates and populate them using the provided type data.
     /// </summary>
-    /// <param name="types">A readonly list of <see cref="IObjectTypeData"/> objects containing the data to be used in the templates.</param>
-    void GenerateTemplates(ITypeDeclarations typeDeclarations);
+    /// <param name="typeRegistry">A registry of declared types to be used in the templates.</param>
+    void GenerateTemplates(ITypeRegistry typeRegistry);
 }

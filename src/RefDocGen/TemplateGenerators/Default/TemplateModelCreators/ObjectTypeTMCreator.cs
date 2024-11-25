@@ -9,16 +9,16 @@ using RefDocGen.TemplateGenerators.Tools.TypeName;
 namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 
 /// <summary>
-/// Class responsible for creating template models representing the individual types.
+/// Class responsible for creating template models representing the individual object types.
 /// </summary>
-internal static class TypeTMCreator
+internal static class ObjectTypeTMCreator
 {
     /// <summary>
-    /// Creates a <see cref="TypeTM"/> instance based on the provided <see cref="IObjectTypeData"/> object.
+    /// Creates a <see cref="ObjectTypeTM"/> instance based on the provided <see cref="IObjectTypeData"/> object.
     /// </summary>
     /// <param name="typeData">The <see cref="IObjectTypeData"/> instance representing the type.</param>
-    /// <returns>A <see cref="TypeTM"/> instance based on the provided <paramref name="typeData"/>.</returns>
-    public static TypeTM GetFrom(IObjectTypeData typeData)
+    /// <returns>A <see cref="ObjectTypeTM"/> instance based on the provided <paramref name="typeData"/>.</returns>
+    public static ObjectTypeTM GetFrom(IObjectTypeData typeData)
     {
         var constructors = typeData.Constructors.Select(GetFrom).ToArray();
         var fields = typeData.Fields.Select(GetFrom).ToArray();
@@ -37,7 +37,7 @@ internal static class TypeTMCreator
             modifiers.Add(Keyword.Abstract);
         }
 
-        return new TypeTM(
+        return new ObjectTypeTM(
             typeData.Id,
             CSharpTypeName.Of(typeData),
             typeData.Namespace,

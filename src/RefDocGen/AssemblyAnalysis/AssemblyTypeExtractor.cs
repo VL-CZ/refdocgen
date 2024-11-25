@@ -35,7 +35,7 @@ internal class AssemblyTypeExtractor
     /// Get all the declared types in the assembly and return them as <see cref="ObjectTypeData"/> objects.
     /// </summary>
     /// <returns>An array of <see cref="ObjectTypeData"/> objects representing the types in the assembly.</returns>
-    internal TypeDeclarations GetDeclaredTypes()
+    internal TypeRegistry GetDeclaredTypes()
     {
         var assembly = Assembly.LoadFrom(assemblyPath);
 
@@ -51,7 +51,7 @@ internal class AssemblyTypeExtractor
             .Select(ConstructFromEnum)
             .ToDictionary(t => t.Id);
 
-        return new TypeDeclarations(types, enums);
+        return new TypeRegistry(types, enums);
     }
 
     /// <summary>
