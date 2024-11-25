@@ -87,7 +87,7 @@ internal abstract class ExecutableMemberData : IExecutableMemberData
     public bool IsVirtual => methodBase.IsVirtual;
 
     /// <inheritdoc/>
-    public XElement DocComment { get; internal set; } = XmlDocElementFactory.EmptySummary;
+    public XElement DocComment { get; internal set; } = XmlDocElements.EmptySummary;
 
     /// <summary>
     /// Array of method parameters, ordered by their position.

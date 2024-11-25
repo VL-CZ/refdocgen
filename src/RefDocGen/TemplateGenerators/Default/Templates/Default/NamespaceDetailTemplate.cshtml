@@ -144,6 +144,36 @@
             </table>
         }
 
+        <!-- Enums -->
+        @if (Model.Enums.Any())
+        {
+            <h2 class="display-5">Enums</h2>
+            <table class="table">
+                <tbody>
+                    @foreach (var type in Model.Enums)
+                    {
+                        var typeUrl = $"./{type.Id}.html";
+                        <tr>
+                            <td class="w-50">
+                                <samp>
+                                    <a href="@typeUrl" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
+                                        <span class="text-primary">
+                                            @type.TypeKindName
+                                        </span>
+                                        @type.Name
+                                    </a>
+                                </samp>
+                            </td>
+                            <td class="text-muted">
+                                <i>@type.DocComment</i>
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+        }
+
         <div class="d-grid gap-2">
             <a class="btn btn-light" href="./index.html" role="button">Home</a>
         </div>

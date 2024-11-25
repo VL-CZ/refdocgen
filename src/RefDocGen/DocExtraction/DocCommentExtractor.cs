@@ -1,10 +1,12 @@
 using RefDocGen.CodeElements.Concrete.Types;
-using RefDocGen.DocExtraction.Handlers;
 using RefDocGen.DocExtraction.Handlers.Abstract;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 using RefDocGen.CodeElements.Concrete.Members;
+using RefDocGen.DocExtraction.Handlers.Concrete;
+using RefDocGen.DocExtraction.Handlers.Concrete.Enum;
+using RefDocGen.CodeElements;
 
 namespace RefDocGen.DocExtraction;
 
@@ -16,7 +18,7 @@ internal class DocCommentExtractor
     /// <summary>
     /// Dictionary of type data to which the documentation comments will be added. Keys are the type IDs (see <see cref="TypeNameData.Id"/>.
     /// </summary>
-    private readonly IReadOnlyDictionary<string, TypeData> typeData;
+    private readonly TypeRegistry typeData;
 
     /// <summary>
     /// XML document containing the documentation comments.
@@ -39,11 +41,16 @@ internal class DocCommentExtractor
     private readonly ConstructorCommentHandler constructorCommentHandler = new();
 
     /// <summary>
+    /// Handler for enum member doc comments.
+    /// </summary>
+    private readonly EnumMemberCommentHandler enumMemberCommentHandler = new();
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
     /// </summary>
     /// <param name="docXmlPath">Path to the XML documentation file.</param>
     /// <param name="typeData">Array of type data to which the documentation comments will be added.</param>
-    internal DocCommentExtractor(string docXmlPath, IReadOnlyDictionary<string, TypeData> typeData)
+    internal DocCommentExtractor(string docXmlPath, TypeRegistry typeData)
     {
         this.typeData = typeData;
 
@@ -104,9 +111,13 @@ internal class DocCommentExtractor
     {
         if (docCommentNode.TryGetSummaryElement(out var summaryNode))
         {
-            if (typeData.TryGetValue(typeId, out var type))
+            if (typeData.ObjectTypes.TryGetValue(typeId, out var type)) // the type is a value, reference or interface type
             {
                 type.DocComment = summaryNode;
+            }
+            else if (typeData.Enums.TryGetValue(typeId, out var e)) // the type is an enum
+            {
+                e.DocComment = summaryNode;
             }
         }
     }
@@ -121,10 +132,10 @@ internal class DocCommentExtractor
     {
         (string typeName, string memberName, string paramsString) = MemberSignatureParser.Parse(fullMemberName);
 
-        if (typeData.TryGetValue(typeName, out var type))
-        {
-            string memberId = memberName + paramsString;
+        string memberId = memberName + paramsString;
 
+        if (typeData.ObjectTypes.TryGetValue(typeName, out var type)) // member of a value, reference or interface type
+        {
             if (memberCommentHandlers.TryGetValue(memberTypeId, out var parser))
             {
                 if (memberTypeId == MemberTypeId.Method && memberName == ConstructorData.DefaultName) // The method is a constructor.
@@ -140,6 +151,10 @@ internal class DocCommentExtractor
             {
                 // TODO: log unknown member
             }
+        }
+        else if (typeData.Enums.TryGetValue(typeName, out var e)) // member of an enum
+        {
+            enumMemberCommentHandler.AddDocumentation(e, memberId, docCommentNode);
         }
     }
 }

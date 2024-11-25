@@ -15,5 +15,5 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 /// <param name="Fields">Template models of the fields declared in the type.</param>
 /// <param name="Properties">Template models of the properties declared in the type.</param>
 /// <param name="Methods">Template models of the methods declared in the type.</param>
-public record TypeTM(string Id, string Name, string Namespace, string DocComment, string TypeKindName, IEnumerable<string> Modifiers, ConstructorTM[] Constructors,
+public record ObjectTypeTM(string Id, string Name, string Namespace, string DocComment, string TypeKindName, IEnumerable<string> Modifiers, ConstructorTM[] Constructors,
     FieldTM[] Fields, PropertyTM[] Properties, MethodTM[] Methods) : ITemplateModelWithId;

@@ -21,7 +21,7 @@ internal abstract class ExecutableMemberCommentHandler<T> : IMemberCommentHandle
     /// <param name="type">The type containing the member.</param>
     /// <param name="memberId">Id of the member to search.</param>
     /// <returns>The member with the given Id contained in the given type. If such member doesn't exist, null is returned</returns>
-    protected abstract T? GetTypeMember(TypeData type, string memberId);
+    protected abstract T? GetTypeMember(ObjectTypeData type, string memberId);
 
     /// <summary>
     /// Assign doc comments to the given member.
@@ -41,7 +41,7 @@ internal abstract class ExecutableMemberCommentHandler<T> : IMemberCommentHandle
     }
 
     /// <inheritdoc/>
-    public void AddDocumentation(TypeData type, string memberId, XElement memberDocComment)
+    public void AddDocumentation(ObjectTypeData type, string memberId, XElement memberDocComment)
     {
         var member = GetTypeMember(type, memberId);
 

@@ -48,6 +48,6 @@ public class DocGenerator
         var docCommentExtractor = new DocCommentExtractor(docXmlPath, types);
         docCommentExtractor.AddComments();
 
-        templateGenerator.GenerateTemplates([.. types.Values]);
+        templateGenerator.GenerateTemplates(types);
     }
 }

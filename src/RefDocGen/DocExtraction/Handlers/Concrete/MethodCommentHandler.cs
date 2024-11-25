@@ -4,7 +4,7 @@ using RefDocGen.DocExtraction.Tools;
 using System.Xml.Linq;
 using RefDocGen.CodeElements.Concrete.Members;
 
-namespace RefDocGen.DocExtraction.Handlers;
+namespace RefDocGen.DocExtraction.Handlers.Concrete;
 
 /// <summary>
 /// Class responsible for handling and adding XML doc comments to the corresponding methods.
@@ -12,7 +12,7 @@ namespace RefDocGen.DocExtraction.Handlers;
 internal class MethodCommentHandler : ExecutableMemberCommentHandler<MethodData>
 {
     /// <inheritdoc/>
-    protected override MethodData? GetTypeMember(TypeData type, string memberId)
+    protected override MethodData? GetTypeMember(ObjectTypeData type, string memberId)
     {
         return type.Methods.GetValueOrDefault(memberId);
     }
