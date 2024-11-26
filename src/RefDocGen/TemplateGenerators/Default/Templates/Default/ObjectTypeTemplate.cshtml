@@ -65,6 +65,28 @@
             </samp>
         </h6>
 
+        @if (Model.BaseTypeName is not null)
+        {
+            <div>
+                <i>Base type:</i>
+                <samp class="text-secondary">
+                    @Model.BaseTypeName
+                </samp>
+            </div>
+        }
+
+        @if (Model.ImplementedInterfaces.Any())
+        {
+            <div>
+                <i>Implements:</i>
+                <samp class="text-secondary">
+                    @string.Join(", ", Model.ImplementedInterfaces)
+                </samp>
+            </div>
+        }
+
+        <hr />
+
         <p class="text-muted">
             <i>@Model.DocComment</i>
         </p>

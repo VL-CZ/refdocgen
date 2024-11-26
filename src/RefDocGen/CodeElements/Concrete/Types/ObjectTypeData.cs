@@ -41,6 +41,14 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
         Properties = properties;
         Methods = methods;
         TypeParameterDeclarations = typeParameterDeclarations;
+
+        BaseType = type.BaseType is not null
+            ? new TypeNameData(type.BaseType)
+            : null;
+
+        Interfaces = type.GetInterfaces()
+            .Select(i => new TypeNameData(i))
+            .ToArray();
     }
 
     /// <summary>
@@ -109,6 +117,12 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
         : TypeObject.IsValueType
             ? TypeKind.ValueType
             : TypeKind.Class;
+
+    /// <inheritdoc/>
+    public ITypeNameData? BaseType { get; }
+
+    /// <inheritdoc/>
+    public IReadOnlyList<ITypeNameData> Interfaces { get; }
 
     /// <inheritdoc/>
     IReadOnlyList<IConstructorData> IObjectTypeData.Constructors => Constructors.Values.ToList();

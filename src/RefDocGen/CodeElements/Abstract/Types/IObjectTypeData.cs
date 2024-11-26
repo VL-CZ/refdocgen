@@ -57,4 +57,14 @@ public interface IObjectTypeData : ITypeNameData
     /// Collection of properties declared in the type.
     /// </summary>
     IReadOnlyList<IPropertyData> Properties { get; }
+
+    /// <summary>
+    /// Base type of the type. Returns null, if the type has no base type (i.e. it's an interface or <see cref="object"/> type).
+    /// </summary>
+    ITypeNameData? BaseType { get; }
+
+    /// <summary>
+    /// Interfaces implemented by the current type.
+    /// </summary>
+    IReadOnlyList<ITypeNameData> Interfaces { get; }
 }
