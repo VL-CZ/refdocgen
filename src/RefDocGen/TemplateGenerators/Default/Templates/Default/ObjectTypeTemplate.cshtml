@@ -89,36 +89,32 @@
 
         <p class="text-muted">
             <i>@Model.DocComment</i>
+
+            @if (Model.TypeParameters.Any())
+            {
+                <!-- <h3 class="lead my-2">Type parameters</h3> -->
+
+                <div class="mx-2">
+                    @foreach (var typeParam in Model.TypeParameters)
+                    {
+                        <samp>
+                            <span class="text-primary">
+                                @string.Join(' ', typeParam.Modifiers)
+                            </span>
+                            <span class="text-dark">
+                                @typeParam.Name
+                            </span>
+                        </samp>
+                        <p class="text-muted">
+                            <i>@typeParam.DocComment</i>
+                        </p>
+                    }
+                </div>
+            }
+
         </p>
 
         <hr />
-
-        @if (Model.TypeParameters.Any())
-        {
-            <h2 class="display-5 mt-2">Type parameters</h2>
-            <div class="row">
-                <div class="col-md-12">
-                    @foreach (var typeParam in Model.TypeParameters)
-                    {
-                        <div class="border p-2 mb-2">
-                            <h6 class="mb-1">
-                                <samp>
-                                    <span class="text-primary">
-                                        @string.Join(' ', typeParam.Modifiers)
-                                    </span>
-                                    <span class="text-dark">
-                                        @typeParam.Name
-                                    </span>
-                                </samp>
-                            </h6>
-                            <p class="text-muted mb-0">
-                                <i>@typeParam.DocComment</i>
-                            </p>
-                        </div>
-                    }
-                </div>
-            </div>
-        }
 
         @if (Model.Constructors.Any())
         {
