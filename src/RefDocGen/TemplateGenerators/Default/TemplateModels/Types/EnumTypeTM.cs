@@ -11,4 +11,4 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 /// <param name="DocComment">Documentation comment for the enum.</param>
 /// <param name="Modifiers">Collection of modifiers for the type (e.g., public, abstract).</param>
 /// <param name="Members">Template models of the enum members.</param>
-public record EnumTM(string Id, string Name, string Namespace, string DocComment, IEnumerable<string> Modifiers, IEnumerable<EnumMemberTM> Members) : ITemplateModelWithId;
+public record EnumTypeTM(string Id, string Name, string Namespace, string DocComment, IEnumerable<string> Modifiers, IEnumerable<EnumMemberTM> Members) : ITemplateModelWithId;

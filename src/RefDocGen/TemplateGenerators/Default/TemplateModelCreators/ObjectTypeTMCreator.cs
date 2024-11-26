@@ -25,6 +25,12 @@ internal static class ObjectTypeTMCreator
         var properties = typeData.Properties.Select(GetFrom).ToArray();
         var methods = typeData.Methods.Select(GetFrom).ToArray();
 
+        string? baseType = typeData.BaseType is not null
+            ? CSharpTypeName.Of(typeData.BaseType)
+            : null;
+
+        var interfaces = typeData.Interfaces.Select(CSharpTypeName.Of);
+
         List<Keyword> modifiers = [typeData.AccessModifier.ToKeyword()];
 
         if (SealedKeyword.IsPresentIn(typeData))
@@ -47,7 +53,10 @@ internal static class ObjectTypeTMCreator
             constructors,
             fields,
             properties,
-            methods);
+            methods,
+            baseType,
+            interfaces
+            );
     }
 
     /// <summary>

@@ -57,4 +57,14 @@ public interface IObjectTypeData : ITypeNameData
     /// Collection of properties declared in the type.
     /// </summary>
     IReadOnlyList<IPropertyData> Properties { get; }
+
+    /// <summary>
+    /// Base class of the current class
+    /// </summary>
+    ITypeNameData? BaseType { get; }
+
+    /// <summary>
+    /// Interfaces implemented by the current type.
+    /// </summary>
+    IReadOnlyList<ITypeNameData> Interfaces { get; }
 }

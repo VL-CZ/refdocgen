@@ -5,6 +5,9 @@ namespace RefDocGen.CodeElements.Abstract.Types;
 /// <para>
 /// Doesn't include any type member data (such as fields, methods, etc.)
 /// </para>
+/// <para>
+/// Note that this interface can represent also 'void', even though it's technically not a type.
+/// </para>
 /// </summary>
 public interface ITypeNameData : ITypeNameBaseData
 {

@@ -77,6 +77,11 @@ internal class NamespaceListTMCreator
         return new TypeNameTM(type.Id, type.Kind.GetName(), CSharpTypeName.Of(type), type.DocComment.Value);
     }
 
+    /// <summary>
+    /// Creates a <see cref="TypeNameTM"/> instance based on the provided <see cref="IEnumTypeData"/> object.
+    /// </summary>
+    /// <param name="enumData">The <see cref="IEnumTypeData"/> instance representing the enum.</param>
+    /// <returns>A <see cref="TypeNameTM"/> instance based on the provided <paramref name="enumData"/>.</returns>
     private static TypeNameTM GetFrom(IEnumTypeData enumData)
     {
         return new TypeNameTM(enumData.Id, "enum", enumData.ShortName, enumData.DocComment.Value);

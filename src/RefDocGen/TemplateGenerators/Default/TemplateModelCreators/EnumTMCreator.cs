@@ -12,16 +12,16 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 internal static class EnumTMCreator
 {
     /// <summary>
-    /// Creates a <see cref="EnumTM"/> instance based on the provided <see cref="IEnumTypeData"/> object.
+    /// Creates a <see cref="EnumTypeTM"/> instance based on the provided <see cref="IEnumTypeData"/> object.
     /// </summary>
     /// <param name="enumData">The <see cref="IEnumTypeData"/> instance representing the enum.</param>
-    /// <returns>A <see cref="EnumTM"/> instance based on the provided <paramref name="enumData"/>.</returns>
-    internal static EnumTM GetFrom(IEnumTypeData enumData)
+    /// <returns>A <see cref="EnumTypeTM"/> instance based on the provided <paramref name="enumData"/>.</returns>
+    internal static EnumTypeTM GetFrom(IEnumTypeData enumData)
     {
         var enumMemberTMs = enumData.Members.Select(GetFrom);
         List<Keyword> modifiers = [enumData.AccessModifier.ToKeyword()];
 
-        return new EnumTM(enumData.Id, enumData.ShortName, enumData.Namespace, enumData.DocComment.Value, modifiers.GetStrings(), enumMemberTMs);
+        return new EnumTypeTM(enumData.Id, enumData.ShortName, enumData.Namespace, enumData.DocComment.Value, modifiers.GetStrings(), enumMemberTMs);
     }
 
     /// <summary>
