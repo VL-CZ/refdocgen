@@ -3,7 +3,6 @@ using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types.Enum;
 using RefDocGen.Tools.Xml;
-using System.Reflection;
 using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Concrete.Types;

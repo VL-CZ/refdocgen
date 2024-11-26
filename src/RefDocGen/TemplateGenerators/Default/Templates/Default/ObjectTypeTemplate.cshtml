@@ -68,7 +68,7 @@
         @if (Model.BaseTypeName is not null)
         {
             <div>
-                Base type:
+                <i>Base type:</i>
                 <samp class="text-secondary">
                     @Model.BaseTypeName
                 </samp>
@@ -78,12 +78,14 @@
         @if (Model.ImplementedInterfaces.Any())
         {
             <div>
-                Implements:
+                <i>Implements:</i>
                 <samp class="text-secondary">
                     @string.Join(", ", Model.ImplementedInterfaces)
                 </samp>
             </div>
         }
+
+        <hr />
 
         <p class="text-muted">
             <i>@Model.DocComment</i>

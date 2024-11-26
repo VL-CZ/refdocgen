@@ -59,7 +59,7 @@ public interface IObjectTypeData : ITypeNameData
     IReadOnlyList<IPropertyData> Properties { get; }
 
     /// <summary>
-    /// Base class of the current class
+    /// Base type of the type. Returns null, if the type has no base type (i.e. it's an interface or <see cref="object"/> type).
     /// </summary>
     ITypeNameData? BaseType { get; }
 
