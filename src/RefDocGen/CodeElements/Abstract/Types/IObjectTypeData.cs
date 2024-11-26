@@ -59,6 +59,11 @@ public interface IObjectTypeData : ITypeNameData
     IReadOnlyList<IPropertyData> Properties { get; }
 
     /// <summary>
+    /// Collection of generic type parameters declared in the type, ordered by their index.
+    /// </summary>
+    IReadOnlyList<ITypeParameterDeclaration> TypeParameterDeclarations { get; }
+
+    /// <summary>
     /// Base type of the type. Returns null, if the type has no base type (i.e. it's an interface or <see cref="object"/> type).
     /// </summary>
     ITypeNameData? BaseType { get; }

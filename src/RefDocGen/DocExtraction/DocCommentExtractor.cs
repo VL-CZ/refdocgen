@@ -114,6 +114,22 @@ internal class DocCommentExtractor
             if (typeData.ObjectTypes.TryGetValue(typeId, out var type)) // the type is a value, reference or interface type
             {
                 type.DocComment = summaryNode;
+
+                // add type params, TODO: code quality
+                var paramElements = docCommentNode.Descendants(XmlDocIdentifiers.TypeParam);
+
+                foreach (var paramDocComment in paramElements)
+                {
+                    if (paramDocComment.TryGetNameAttribute(out var nameAttr))
+                    {
+                        string typeParamName = nameAttr.Value;
+
+                        if (type.TypeParameterDeclarations.TryGetValue(typeParamName, out var tp))
+                        {
+                            tp.DocComment = paramDocComment;
+                        }
+                    }
+                }
             }
             else if (typeData.Enums.TryGetValue(typeId, out var e)) // the type is an enum
             {
