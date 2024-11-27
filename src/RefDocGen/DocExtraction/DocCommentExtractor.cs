@@ -143,16 +143,13 @@ internal class DocCommentExtractor
 
         if (typeRegistry.ObjectTypes.TryGetValue(typeName, out var type)) // member of a value, reference or interface type
         {
-            if (memberDocHandlers.TryGetValue(memberTypeId, out var handler))
+            if (memberTypeId == MemberTypeId.Method && memberName == ConstructorData.DefaultName) // The method is a constructor.
             {
-                if (memberTypeId == MemberTypeId.Method && memberName == ConstructorData.DefaultName) // The method is a constructor.
-                {
-                    constructorDocHandler.AddDocumentation(type, memberId, docCommentNode);
-                }
-                else
-                {
-                    handler.AddDocumentation(type, memberId, docCommentNode);
-                }
+                constructorDocHandler.AddDocumentation(type, memberId, docCommentNode);
+            }
+            else if (memberDocHandlers.TryGetValue(memberTypeId, out var handler))
+            {
+                handler.AddDocumentation(type, memberId, docCommentNode);
             }
             else
             {
