@@ -1,12 +1,12 @@
 using RefDocGen.CodeElements.Concrete.Types;
 using System.Xml.Linq;
 
-namespace RefDocGen.DocExtraction.Handlers.Abstract;
+namespace RefDocGen.DocExtraction.Handlers.Members;
 
 /// <summary>
 /// Interface used for handling and adding XML doc comments to the corresponding type members.
 /// </summary>
-internal interface IMemberCommentHandler
+internal interface IMemberDocumentationHandler
 {
     /// <summary>
     /// Adds documentation to the given member.

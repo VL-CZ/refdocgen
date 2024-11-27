@@ -2,12 +2,12 @@ using RefDocGen.CodeElements.Concrete.Types.Enum;
 using RefDocGen.DocExtraction.Tools;
 using System.Xml.Linq;
 
-namespace RefDocGen.DocExtraction.Handlers.Concrete.Enum;
+namespace RefDocGen.DocExtraction.Handlers.Members.Enum;
 
 /// <summary>
-/// Class responsible for handling and adding XML doc comments to the corresponding constructors.
+/// Class responsible for handling and adding XML doc comments to the corresponding enum members.
 /// </summary>
-internal class EnumMemberCommentHandler
+internal class EnumMemberDocumentationHandler
 {
     /// <summary>
     /// Add documentation to the given enum member.

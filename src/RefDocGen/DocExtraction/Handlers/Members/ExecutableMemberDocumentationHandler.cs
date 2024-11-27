@@ -4,7 +4,7 @@ using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 using RefDocGen.CodeElements.Concrete.Members;
 
-namespace RefDocGen.DocExtraction.Handlers.Abstract;
+namespace RefDocGen.DocExtraction.Handlers.Members;
 
 /// <summary>
 /// Abstract class responsible for handling and adding XML doc comments to the corresponding executable type members.
@@ -13,7 +13,7 @@ namespace RefDocGen.DocExtraction.Handlers.Abstract;
 /// </para>
 /// </summary>
 /// <typeparam name="T">TODO</typeparam>
-internal abstract class ExecutableMemberCommentHandler<T> : IMemberCommentHandler where T : ExecutableMemberData
+internal abstract class ExecutableMemberDocumentationHandler<T> : IMemberDocumentationHandler where T : ExecutableMemberData
 {
     /// <summary>
     /// Get the member with the given <paramref name="memberId"/> contained in the given type.
