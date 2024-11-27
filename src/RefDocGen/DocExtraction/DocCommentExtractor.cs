@@ -6,6 +6,7 @@ using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.DocExtraction.Handlers.Concrete;
 using RefDocGen.DocExtraction.Handlers.Concrete.Enum;
 using RefDocGen.CodeElements;
+using RefDocGen.CodeElements.Concrete.Types;
 
 namespace RefDocGen.DocExtraction;
 
@@ -114,20 +115,11 @@ internal class DocCommentExtractor
             {
                 type.DocComment = summaryNode;
 
-                // add type params, TODO: code quality
                 var paramElements = docCommentNode.Descendants(XmlDocIdentifiers.TypeParam);
 
-                foreach (var paramDocComment in paramElements)
+                foreach (var paramDocComment in paramElements) // add type param doc comments
                 {
-                    if (paramDocComment.TryGetNameAttribute(out var nameAttr))
-                    {
-                        string typeParamName = nameAttr.Value;
-
-                        if (type.TypeParameterDeclarations.TryGetValue(typeParamName, out var tp))
-                        {
-                            tp.DocComment = paramDocComment;
-                        }
-                    }
+                    AddTypeParamComment(type, paramDocComment);
                 }
             }
             else if (typeRegistry.Enums.TryGetValue(typeId, out var e)) // the type is an enum
@@ -138,7 +130,7 @@ internal class DocCommentExtractor
     }
 
     /// <summary>
-    /// Add doc comment to the given type member.
+    /// Add the doc comment to the corresponding type member.
     /// </summary>
     /// <param name="memberTypeId">Identifier of the member type.</param>
     /// <param name="fullMemberName">Fully qualified name of the member.</param>
@@ -170,6 +162,24 @@ internal class DocCommentExtractor
         else if (typeRegistry.Enums.TryGetValue(typeName, out var e)) // member of an enum
         {
             enumMemberCommentHandler.AddDocumentation(e, memberId, docCommentNode);
+        }
+    }
+
+    /// <summary>
+    /// Add the doc comment to the corresponding type parameter.
+    /// </summary>
+    /// <param name="type">The type containing the parameter.</param>
+    /// <param name="docComment">XML node of the doc comment for the given type parameter.</param>
+    private void AddTypeParamComment(ObjectTypeData type, XElement docComment)
+    {
+        if (docComment.TryGetNameAttribute(out var nameAttr))
+        {
+            string typeParamName = nameAttr.Value;
+
+            if (type.TypeParameterDeclarations.TryGetValue(typeParamName, out var typeParam))
+            {
+                typeParam.DocComment = docComment;
+            }
         }
     }
 }
