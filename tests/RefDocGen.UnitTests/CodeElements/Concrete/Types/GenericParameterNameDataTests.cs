@@ -26,10 +26,16 @@ public class GenericTypeParameterNameDataTests
 
     public GenericTypeParameterNameDataTests()
     {
+        var tKeyMock = Substitute.For<Type>();
+        tKeyMock.Name.Returns("TKey");
+
+        var tValueMock = Substitute.For<Type>();
+        tValueMock.Name.Returns("TValue");
+
         declaredTypeParameters = new Dictionary<string, TypeParameterDeclaration>()
         {
-            ["TKey"] = new TypeParameterDeclaration("TKey", 0),
-            ["TValue"] = new TypeParameterDeclaration("TValue", 1)
+            ["TKey"] = new TypeParameterDeclaration(tKeyMock, 0),
+            ["TValue"] = new TypeParameterDeclaration(tValueMock, 1)
         };
     }
 

@@ -1,4 +1,3 @@
-using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.DocExtraction.Handlers.Abstract;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.Tools.Xml;
@@ -7,6 +6,7 @@ using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.DocExtraction.Handlers.Concrete;
 using RefDocGen.DocExtraction.Handlers.Concrete.Enum;
 using RefDocGen.CodeElements;
+using RefDocGen.CodeElements.Concrete.Types;
 
 namespace RefDocGen.DocExtraction;
 
@@ -16,9 +16,9 @@ namespace RefDocGen.DocExtraction;
 internal class DocCommentExtractor
 {
     /// <summary>
-    /// Dictionary of type data to which the documentation comments will be added. Keys are the type IDs (see <see cref="TypeNameData.Id"/>.
+    /// Registry of the declared types, to which the documentation comments will be added.
     /// </summary>
-    private readonly TypeRegistry typeData;
+    private readonly TypeRegistry typeRegistry;
 
     /// <summary>
     /// XML document containing the documentation comments.
@@ -49,10 +49,10 @@ internal class DocCommentExtractor
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
     /// </summary>
     /// <param name="docXmlPath">Path to the XML documentation file.</param>
-    /// <param name="typeData">Array of type data to which the documentation comments will be added.</param>
-    internal DocCommentExtractor(string docXmlPath, TypeRegistry typeData)
+    /// <param name="typeRegistry">Registry of the declared types, to which the documentation comments will be added.</param>
+    internal DocCommentExtractor(string docXmlPath, TypeRegistry typeRegistry)
     {
-        this.typeData = typeData;
+        this.typeRegistry = typeRegistry;
 
         // load the document
         xmlDocument = XDocument.Load(docXmlPath);
@@ -111,11 +111,18 @@ internal class DocCommentExtractor
     {
         if (docCommentNode.TryGetSummaryElement(out var summaryNode))
         {
-            if (typeData.ObjectTypes.TryGetValue(typeId, out var type)) // the type is a value, reference or interface type
+            if (typeRegistry.ObjectTypes.TryGetValue(typeId, out var type)) // the type is a value, reference or interface type
             {
                 type.DocComment = summaryNode;
+
+                var paramElements = docCommentNode.Descendants(XmlDocIdentifiers.TypeParam);
+
+                foreach (var paramDocComment in paramElements) // add type param doc comments
+                {
+                    AddTypeParamComment(type, paramDocComment);
+                }
             }
-            else if (typeData.Enums.TryGetValue(typeId, out var e)) // the type is an enum
+            else if (typeRegistry.Enums.TryGetValue(typeId, out var e)) // the type is an enum
             {
                 e.DocComment = summaryNode;
             }
@@ -123,7 +130,7 @@ internal class DocCommentExtractor
     }
 
     /// <summary>
-    /// Add doc comment to the given type member.
+    /// Add the doc comment to the corresponding type member.
     /// </summary>
     /// <param name="memberTypeId">Identifier of the member type.</param>
     /// <param name="fullMemberName">Fully qualified name of the member.</param>
@@ -134,9 +141,9 @@ internal class DocCommentExtractor
 
         string memberId = memberName + paramsString;
 
-        if (typeData.ObjectTypes.TryGetValue(typeName, out var type)) // member of a value, reference or interface type
+        if (typeRegistry.ObjectTypes.TryGetValue(typeName, out var type)) // member of a value, reference or interface type
         {
-            if (memberCommentHandlers.TryGetValue(memberTypeId, out var parser))
+            if (memberCommentHandlers.TryGetValue(memberTypeId, out var handler))
             {
                 if (memberTypeId == MemberTypeId.Method && memberName == ConstructorData.DefaultName) // The method is a constructor.
                 {
@@ -144,7 +151,7 @@ internal class DocCommentExtractor
                 }
                 else
                 {
-                    parser.AddDocumentation(type, memberId, docCommentNode);
+                    handler.AddDocumentation(type, memberId, docCommentNode);
                 }
             }
             else
@@ -152,9 +159,27 @@ internal class DocCommentExtractor
                 // TODO: log unknown member
             }
         }
-        else if (typeData.Enums.TryGetValue(typeName, out var e)) // member of an enum
+        else if (typeRegistry.Enums.TryGetValue(typeName, out var e)) // member of an enum
         {
             enumMemberCommentHandler.AddDocumentation(e, memberId, docCommentNode);
+        }
+    }
+
+    /// <summary>
+    /// Add the doc comment to the corresponding type parameter.
+    /// </summary>
+    /// <param name="type">The type containing the parameter.</param>
+    /// <param name="docComment">XML node of the doc comment for the given type parameter.</param>
+    private void AddTypeParamComment(ObjectTypeData type, XElement docComment)
+    {
+        if (docComment.TryGetNameAttribute(out var nameAttr))
+        {
+            string typeParamName = nameAttr.Value;
+
+            if (type.TypeParameterDeclarations.TryGetValue(typeParamName, out var typeParam))
+            {
+                typeParam.DocComment = docComment;
+            }
         }
     }
 }

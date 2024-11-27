@@ -26,6 +26,11 @@ internal static class XmlDocIdentifiers
     public const string Param = "param";
 
     /// <summary>
+    /// Represents the 'typeparam' identifier.
+    /// </summary>
+    public const string TypeParam = "typeparam";
+
+    /// <summary>
     /// Represents the 'returns' identifier.
     /// </summary>
     public const string Returns = "returns";

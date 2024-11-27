@@ -61,7 +61,7 @@ internal class GenericTypeParameterNameData : ITypeNameData
 
             return declaredTypeParameters.TryGetValue(paramName, out var typeParameter)
                 ? "`" + typeParameter.Index + idSuffix // type found -> use its Order
-                : "`" + typeParameter.Name + idSuffix; // type not found -> use arbitrary value (e.g. Name)
+                : "`" + idSuffix; // type not found -> use arbitrary value
         }
     }
 

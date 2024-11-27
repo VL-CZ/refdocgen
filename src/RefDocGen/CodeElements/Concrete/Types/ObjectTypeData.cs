@@ -135,4 +135,8 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
 
     /// <inheritdoc/>
     IReadOnlyList<IPropertyData> IObjectTypeData.Properties => Properties.Values.ToList();
+
+    /// <inheritdoc/>
+    IReadOnlyList<ITypeParameterDeclaration> IObjectTypeData.TypeParameterDeclarations =>
+        TypeParameterDeclarations.Values.OrderBy(t => t.Index).ToList();
 }

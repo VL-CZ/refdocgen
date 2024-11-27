@@ -81,7 +81,11 @@ internal class AssemblyTypeExtractor
         var fields = type.GetFields(bindingFlags).Where(f => !f.IsCompilerGenerated());
         var properties = type.GetProperties(bindingFlags).Where(p => !p.IsCompilerGenerated());
         var methods = type.GetMethods(bindingFlags).Where(m => !m.IsCompilerGenerated());
-        var typeParameters = type.GetGenericArguments().Select((ga, i) => new TypeParameterDeclaration(ga.Name, i)).ToDictionary(t => t.Name);
+
+        var typeParameters = type
+            .GetGenericArguments()
+            .Select((ga, i) => new TypeParameterDeclaration(ga, i))
+            .ToDictionary(t => t.Name);
 
         // construct *Data objects
         var ctorModels = constructors

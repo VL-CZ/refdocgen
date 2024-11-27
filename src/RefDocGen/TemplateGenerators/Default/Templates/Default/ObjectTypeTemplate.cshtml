@@ -89,6 +89,29 @@
 
         <p class="text-muted">
             <i>@Model.DocComment</i>
+
+            @if (Model.TypeParameters.Any())
+            {
+                <!-- <h3 class="lead my-2">Type parameters</h3> -->
+
+                <div class="mx-2">
+                    @foreach (var typeParam in Model.TypeParameters)
+                    {
+                        <samp>
+                            <span class="text-primary">
+                                @string.Join(' ', typeParam.Modifiers)
+                            </span>
+                            <span class="text-dark">
+                                @typeParam.Name
+                            </span>
+                        </samp>
+                        <p class="text-muted">
+                            <i>@typeParam.DocComment</i>
+                        </p>
+                    }
+                </div>
+            }
+
         </p>
 
         <hr />

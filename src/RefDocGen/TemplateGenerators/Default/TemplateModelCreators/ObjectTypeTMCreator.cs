@@ -24,6 +24,7 @@ internal static class ObjectTypeTMCreator
         var fields = typeData.Fields.Select(GetFrom).ToArray();
         var properties = typeData.Properties.Select(GetFrom).ToArray();
         var methods = typeData.Methods.Select(GetFrom).ToArray();
+        var typeParameterDeclarations = typeData.TypeParameterDeclarations.Select(GetFrom).ToArray();
 
         string? baseType = typeData.BaseType is not null
             ? CSharpTypeName.Of(typeData.BaseType)
@@ -54,6 +55,7 @@ internal static class ObjectTypeTMCreator
             fields,
             properties,
             methods,
+            typeParameterDeclarations,
             baseType,
             interfaces
             );
@@ -175,6 +177,27 @@ internal static class ObjectTypeTMCreator
 
         return new ParameterTM(parameterData.Name, CSharpTypeName.Of(parameterData.Type), parameterData.DocComment.Value,
             modifiers.GetStrings(), parameterData.IsOptional);
+    }
+
+    /// <summary>
+    /// Creates a <see cref="TypeParameterTM"/> instance based on the provided <see cref="ITypeParameterDeclaration"/> object.
+    /// </summary>
+    /// <param name="typeParameter">The <see cref="ITypeParameterDeclaration"/> instance representing the type parameter.</param>
+    /// <returns>A <see cref="TypeParameterTM"/> instance based on the provided <paramref name="typeParameter"/>.</returns>
+    private static TypeParameterTM GetFrom(ITypeParameterDeclaration typeParameter)
+    {
+        List<Keyword> modifiers = [];
+
+        if (typeParameter.IsCovariant)
+        {
+            modifiers.Add(Keyword.Out);
+        }
+        if (typeParameter.IsContravariant)
+        {
+            modifiers.Add(Keyword.In);
+        }
+
+        return new TypeParameterTM(typeParameter.Name, typeParameter.DocComment.Value, modifiers.GetStrings());
     }
 
     /// <summary>

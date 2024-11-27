@@ -29,4 +29,17 @@ internal static class XmlDocElements
                 new XAttribute(XmlDocIdentifiers.Name, name)
             );
     }
+
+    /// <summary>
+    /// Create new 'typeparam' <see cref="XElement"/> with the given 'name' attribute and no children.
+    /// </summary>
+    /// <param name="name">Name attribute value.</param>
+    /// <returns>'typeparam' <see cref="XElement"/> with the given 'name' attribute.</returns>
+    internal static XElement EmptyTypeParamWithName(string name)
+    {
+        return new XElement(
+                XmlDocIdentifiers.TypeParam,
+                new XAttribute(XmlDocIdentifiers.Name, name)
+            );
+    }
 }
