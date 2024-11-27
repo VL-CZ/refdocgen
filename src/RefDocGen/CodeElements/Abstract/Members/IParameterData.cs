@@ -15,6 +15,11 @@ public interface IParameterData
     ParameterInfo ParameterInfo { get; }
 
     /// <summary>
+    /// Position of the parameter in the parameter list (zero based).
+    /// </summary>
+    int Position { get; }
+
+    /// <summary>
     /// Name of the parameter.
     /// </summary>
     string Name { get; }

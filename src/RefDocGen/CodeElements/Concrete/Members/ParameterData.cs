@@ -50,5 +50,8 @@ internal class ParameterData : IParameterData
 
     /// <inheritdoc/>
     public XElement DocComment { get; internal set; }
+
+    /// <inheritdoc/>
+    public int Position => ParameterInfo.Position;
 }
 

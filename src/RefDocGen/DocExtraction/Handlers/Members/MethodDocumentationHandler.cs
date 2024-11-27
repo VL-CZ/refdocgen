@@ -1,15 +1,14 @@
 using RefDocGen.CodeElements.Concrete.Types;
-using RefDocGen.DocExtraction.Handlers.Abstract;
 using RefDocGen.DocExtraction.Tools;
 using System.Xml.Linq;
 using RefDocGen.CodeElements.Concrete.Members;
 
-namespace RefDocGen.DocExtraction.Handlers.Concrete;
+namespace RefDocGen.DocExtraction.Handlers.Members;
 
 /// <summary>
 /// Class responsible for handling and adding XML doc comments to the corresponding methods.
 /// </summary>
-internal class MethodCommentHandler : ExecutableMemberCommentHandler<MethodData>
+internal class MethodDocumentationHandler : ExecutableMemberDocumentationHandler<MethodData>
 {
     /// <inheritdoc/>
     protected override MethodData? GetTypeMember(ObjectTypeData type, string memberId)
