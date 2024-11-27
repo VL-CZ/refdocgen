@@ -8,6 +8,11 @@ namespace RefDocGen.CodeElements.Abstract.Types;
 public interface ITypeParameterDeclaration
 {
     /// <summary>
+    /// <see cref="Type"/> object representing the type.
+    /// </summary>
+    Type TypeObject { get; }
+
+    /// <summary>
     /// Index of the parameter in the declaring type's parameter collection.
     /// </summary>
     int Index { get; }
@@ -21,4 +26,14 @@ public interface ITypeParameterDeclaration
     /// Doc comment for the type parameter.
     /// </summary>
     XElement DocComment { get; }
+
+    /// <summary>
+    /// Check whether the type parameter is covariant.
+    /// </summary>
+    bool IsCovariant { get; }
+
+    /// <summary>
+    /// Check whether the type parameter is contravariant.
+    /// </summary>
+    bool IsContravariant { get; }
 }

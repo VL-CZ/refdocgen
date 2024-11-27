@@ -188,6 +188,15 @@ internal static class ObjectTypeTMCreator
     {
         List<Keyword> modifiers = [];
 
+        if (typeParameter.IsCovariant)
+        {
+            modifiers.Add(Keyword.Out);
+        }
+        if (typeParameter.IsContravariant)
+        {
+            modifiers.Add(Keyword.In);
+        }
+
         return new TypeParameterTM(typeParameter.Name, typeParameter.DocComment.Value, modifiers.GetStrings());
     }
 
