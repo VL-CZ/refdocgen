@@ -5,6 +5,7 @@ using RefDocGen.CodeElements.Abstract.Types.Enum;
 using RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
+using RefDocGen.TemplateGenerators.Default.Templates;
 
 namespace RefDocGen.TemplateGenerators.Default;
 
@@ -13,26 +14,6 @@ namespace RefDocGen.TemplateGenerators.Default;
 /// </summary>
 internal class DefaultTemplateGenerator : ITemplateGenerator
 {
-    /// <summary>
-    /// Path to the Razor template representing an object type, relative to <see cref="templatesFolderPath"/>.
-    /// </summary>
-    private const string typeTemplatePath = "ObjectTypeTemplate.cshtml";
-
-    /// <summary>
-    /// Path to the Razor template representing an enum type, relative to <see cref="templatesFolderPath"/>.
-    /// </summary>
-    private const string enumTypeTemplatePath = "EnumTypeTemplate.cshtml";
-
-    /// <summary>
-    /// Path to the Razor template representing a namespace list, relative to <see cref="templatesFolderPath"/>.
-    /// </summary>
-    private const string namespaceListTemplatePath = "NamespaceListTemplate.cshtml";
-
-    /// <summary>
-    /// Path to the Razor template representing a namespace detail, relative to <see cref="templatesFolderPath"/>.
-    /// </summary>
-    private const string namespaceDetailTemplatePath = "NamespaceDetailTemplate.cshtml";
-
     /// <summary>
     /// Path to the folder containing Razor templates.
     /// </summary>
@@ -68,7 +49,7 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     /// <inheritdoc/>
     public void GenerateTemplates(ITypeRegistry typeRegistry)
     {
-        GenerateTypeTemplates(typeRegistry.ObjectTypes);
+        GenerateObjectTypeTemplates(typeRegistry.ObjectTypes);
         GenerateEnumTemplates(typeRegistry.Enums);
         GenerateNamespaceTemplates(typeRegistry);
     }
@@ -77,14 +58,14 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     /// Generate the templates representing the individual object types.
     /// </summary>
     /// <param name="types">The type data to be used in the templates.</param>
-    private void GenerateTypeTemplates(IEnumerable<IObjectTypeData> types)
+    private void GenerateObjectTypeTemplates(IEnumerable<IObjectTypeData> types)
     {
         var typeTemplateModels = types.Select(ObjectTypeTMCreator.GetFrom);
 
         foreach (var model in typeTemplateModels)
         {
             string outputFileName = Path.Join(outputDir, $"{model.Id}.html");
-            string templatePath = Path.Join(templatesFolderPath, typeTemplatePath);
+            string templatePath = Path.Join(templatesFolderPath, TemplateKind.ObjectType.GetFileName());
 
             var task = razorLightEngine.CompileRenderAsync(templatePath, model);
             //task.Wait(); // TODO: consider using Async
@@ -105,7 +86,7 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
         foreach (var model in enumTMs)
         {
             string outputFileName = Path.Join(outputDir, $"{model.Id}.html");
-            string templatePath = Path.Join(templatesFolderPath, enumTypeTemplatePath);
+            string templatePath = Path.Join(templatesFolderPath, TemplateKind.EnumType.GetFileName());
 
             var task = razorLightEngine.CompileRenderAsync(templatePath, model);
             //task.Wait(); // TODO: consider using Async
@@ -138,7 +119,7 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     private void GenerateNamespaceListTemplate(IEnumerable<NamespaceTM> namespaceTMs)
     {
         string outputFileName = Path.Join(outputDir, "index.html");
-        string templatePath = Path.Join(templatesFolderPath, namespaceListTemplatePath);
+        string templatePath = Path.Join(templatesFolderPath, TemplateKind.NamespaceList.GetFileName());
 
         var task = razorLightEngine.CompileRenderAsync(templatePath, namespaceTMs);
         string result = task.Result;
@@ -153,7 +134,7 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     private void GenerateNamespaceDetailTemplate(NamespaceTM namespaceTM)
     {
         string outputFileName = Path.Join(outputDir, $"{namespaceTM.Id}.html");
-        string templatePath = Path.Join(templatesFolderPath, namespaceDetailTemplatePath);
+        string templatePath = Path.Join(templatesFolderPath, TemplateKind.NamespaceDetail.GetFileName());
 
         var task = razorLightEngine.CompileRenderAsync(templatePath, namespaceTM);
         string result = task.Result;
