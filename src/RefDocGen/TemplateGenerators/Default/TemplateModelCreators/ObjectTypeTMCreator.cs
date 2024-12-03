@@ -24,6 +24,7 @@ internal static class ObjectTypeTMCreator
         var fields = typeData.Fields.Select(GetFrom).ToArray();
         var properties = typeData.Properties.Select(GetFrom).ToArray();
         var methods = typeData.Methods.Select(GetFrom).ToArray();
+        var operators = typeData.Operators.Select(GetFrom).ToArray();
         var typeParameterDeclarations = typeData.TypeParameterDeclarations.Select(GetFrom).ToArray();
 
         string? baseType = typeData.BaseType is not null
@@ -55,6 +56,7 @@ internal static class ObjectTypeTMCreator
             fields,
             properties,
             methods,
+            operators,
             typeParameterDeclarations,
             baseType,
             interfaces
@@ -143,6 +145,25 @@ internal static class ObjectTypeTMCreator
             methodData.ReturnType.IsVoid,
             methodData.DocComment.Value,
             methodData.ReturnValueDocComment.Value,
+            modifiers.GetStrings());
+    }
+
+    /// <summary>
+    /// Creates a <see cref="OperatorTM"/> instance based on the provided <see cref="IOperatorData"/> object.
+    /// </summary>
+    /// <param name="operatorData">The <see cref="IOperatorData"/> instance representing the method.</param>
+    /// <returns>A <see cref="OperatorTM"/> instance based on the provided <paramref name="operatorData"/>.</returns>
+    private static OperatorTM GetFrom(IOperatorData operatorData)
+    {
+        var modifiers = GetCallableMemberModifiers(operatorData);
+
+        return new OperatorTM(
+            operatorData.Kind.ToOperatorString(),
+            operatorData.Parameters.Select(GetFrom).ToArray(),
+            CSharpTypeName.Of(operatorData.ReturnType),
+            operatorData.ReturnType.IsVoid,
+            operatorData.DocComment.Value,
+            operatorData.ReturnValueDocComment.Value,
             modifiers.GetStrings());
     }
 

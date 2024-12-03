@@ -104,6 +104,9 @@ internal class AssemblyTypeExtractor
             .Select(m => new MethodData(m, typeParameters))
             .ToDictionary(m => m.Id);
 
-        return new ObjectTypeData(type, ctorModels, fieldModels, propertyModels, methodModels, typeParameters);
+        // TODO
+        Dictionary<string, OperatorData> operatorModels = [];
+
+        return new ObjectTypeData(type, ctorModels, fieldModels, propertyModels, methodModels, operatorModels, typeParameters);
     }
 }

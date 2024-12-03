@@ -26,6 +26,7 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
     /// <param name="fields">Dictionary of fields declared in the class; keys are the corresponding field IDs.</param>
     /// <param name="properties">Dictionary of properties declared in the class; keys are the corresponding property IDs.</param>
     /// <param name="methods">Dictionary of methods declared in the class; keys are the corresponding method IDs.</param>
+    /// <param name="operators">Dictionary of operators declared in the class; keys are the corresponding operator IDs.</param>
     /// <param name="typeParameterDeclarations">Collection of type parameters declared in this type; the keys represent type parameter names.</param>
     public ObjectTypeData(
         Type type,
@@ -33,6 +34,7 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
         IReadOnlyDictionary<string, FieldData> fields,
         IReadOnlyDictionary<string, PropertyData> properties,
         IReadOnlyDictionary<string, MethodData> methods,
+        IReadOnlyDictionary<string, OperatorData> operators,
         IReadOnlyDictionary<string, TypeParameterDeclaration> typeParameterDeclarations)
         : base(type, typeParameterDeclarations)
     {
@@ -40,6 +42,7 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
         Fields = fields;
         Properties = properties;
         Methods = methods;
+        Operators = operators;
         TypeParameterDeclarations = typeParameterDeclarations;
 
         BaseType = type.BaseType is not null
@@ -52,29 +55,35 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
     }
 
     /// <summary>
-    /// Dictionary of constructors declared in the class; keys are the corresponding constructor IDs.
+    /// Dictionary of constructors declared in the type; keys are the corresponding constructor IDs.
     /// </summary>
     public IReadOnlyDictionary<string, ConstructorData> Constructors { get; }
 
     /// <summary>
-    /// Dictionary of fields declared in the class; keys are the corresponding field IDs.
+    /// Dictionary of fields declared in the type; keys are the corresponding field IDs.
     /// </summary>
     public IReadOnlyDictionary<string, FieldData> Fields { get; }
 
     /// <summary>
-    /// Dictionary of properties declared in the class; keys are the corresponding property IDs.
+    /// Dictionary of properties declared in the type; keys are the corresponding property IDs.
     /// </summary>
     public IReadOnlyDictionary<string, PropertyData> Properties { get; }
 
     /// <summary>
-    /// Dictionary of methods declared in the class; keys are the corresponding method IDs.
+    /// Dictionary of methods declared in the type; keys are the corresponding method IDs.
     /// </summary>
     public IReadOnlyDictionary<string, MethodData> Methods { get; }
+
+    /// <summary>
+    /// Collection of operators declared in the type; keys are the corresponding operator IDs.
+    /// </summary>
+    public IReadOnlyDictionary<string, OperatorData> Operators { get; }
 
     /// <summary>
     /// Collection of type parameters declared in this type; the keys represent type parameter names.
     /// </summary>
     public IReadOnlyDictionary<string, TypeParameterDeclaration> TypeParameterDeclarations { get; }
+
 
     /// <inheritdoc/>
     public override string Id
@@ -124,6 +133,8 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
     /// <inheritdoc/>
     public IReadOnlyList<ITypeNameData> Interfaces { get; }
 
+
+
     /// <inheritdoc/>
     IReadOnlyList<IConstructorData> IObjectTypeData.Constructors => Constructors.Values.ToList();
 
@@ -135,6 +146,9 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
 
     /// <inheritdoc/>
     IReadOnlyList<IPropertyData> IObjectTypeData.Properties => Properties.Values.ToList();
+
+    /// <inheritdoc/>
+    IReadOnlyList<IOperatorData> IObjectTypeData.Operators => Operators.Values.ToList();
 
     /// <inheritdoc/>
     IReadOnlyList<ITypeParameterDeclaration> IObjectTypeData.TypeParameterDeclarations =>
