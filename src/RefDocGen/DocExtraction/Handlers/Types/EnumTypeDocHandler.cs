@@ -7,7 +7,7 @@ namespace RefDocGen.DocExtraction.Handlers.Types;
 /// <summary>
 /// Class responsible for handling and adding XML doc comments to the corresponding enum types.
 /// </summary>
-internal class EnumTypeDocumentationHandler
+internal class EnumTypeDocHandler
 {
     /// <summary>
     /// Adds documentation to the given enum type.

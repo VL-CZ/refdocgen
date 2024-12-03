@@ -15,6 +15,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 /// <param name="Fields">Template models of the fields declared in the type.</param>
 /// <param name="Properties">Template models of the properties declared in the type.</param>
 /// <param name="Methods">Template models of the methods declared in the type.</param>
+/// <param name="Operators">Template models of the operators declared in the type.</param>
 /// <param name="TypeParameters">Template models of the generic type parameters declared in the type.</param>
 /// <param name="BaseTypeName">Name of the base type, null if the type doesn't have any base type.</param>
 /// <param name="ImplementedInterfaces">Collection of interfaces implemented by the type.</param>
@@ -29,6 +30,7 @@ public record ObjectTypeTM(
     FieldTM[] Fields,
     PropertyTM[] Properties,
     MethodTM[] Methods,
+    MethodTM[] Operators,
     TypeParameterTM[] TypeParameters,
     string? BaseTypeName,
     IEnumerable<string> ImplementedInterfaces) : ITemplateModelWithId;

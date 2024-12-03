@@ -5,18 +5,18 @@ using System.Xml.Linq;
 namespace RefDocGen.DocExtraction.Handlers.Members;
 
 /// <summary>
-/// Class responsible for handling and adding XML doc comments to the corresponding properties.
+/// Class responsible for handling and adding XML doc comments to the corresponding fields.
 /// </summary>
-internal class PropertyDocumentationHandler : IMemberDocumentationHandler
+internal class FieldDocHandler : IMemberDocHandler
 {
     /// <inheritdoc/>
     public void AddDocumentation(ObjectTypeData type, string memberId, XElement memberDocComment)
     {
         if (memberDocComment.TryGetSummaryElement(out var summaryNode))
         {
-            if (type.Properties.TryGetValue(memberId, out var property))
+            if (type.Fields.TryGetValue(memberId, out var field))
             {
-                property.DocComment = summaryNode;
+                field.DocComment = summaryNode;
             }
         }
     }

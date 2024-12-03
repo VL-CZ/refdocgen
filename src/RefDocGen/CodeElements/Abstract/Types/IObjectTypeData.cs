@@ -59,6 +59,11 @@ public interface IObjectTypeData : ITypeNameData
     IReadOnlyList<IPropertyData> Properties { get; }
 
     /// <summary>
+    /// Collection of operators declared in the type.
+    /// </summary>
+    IReadOnlyList<IOperatorData> Operators { get; }
+
+    /// <summary>
     /// Collection of generic type parameters declared in the type, ordered by their index.
     /// </summary>
     IReadOnlyList<ITypeParameterDeclaration> TypeParameterDeclarations { get; }

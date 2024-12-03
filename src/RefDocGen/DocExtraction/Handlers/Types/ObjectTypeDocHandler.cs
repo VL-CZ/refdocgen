@@ -8,7 +8,7 @@ namespace RefDocGen.DocExtraction.Handlers.Types;
 /// <summary>
 /// Class responsible for handling and adding XML doc comments to the corresponding value, reference and interface types.
 /// </summary>
-internal class ObjectTypeDocumentationHandler
+internal class ObjectTypeDocHandler
 {
     /// <summary>
     /// Adds documentation to the given object type.

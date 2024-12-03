@@ -6,7 +6,7 @@ namespace RefDocGen.DocExtraction.Handlers.Members;
 /// <summary>
 /// Interface used for handling and adding XML doc comments to the corresponding type members.
 /// </summary>
-internal interface IMemberDocumentationHandler
+internal interface IMemberDocHandler
 {
     /// <summary>
     /// Adds documentation to the given member.

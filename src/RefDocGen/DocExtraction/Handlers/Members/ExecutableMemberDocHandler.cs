@@ -13,7 +13,7 @@ namespace RefDocGen.DocExtraction.Handlers.Members;
 /// </para>
 /// </summary>
 /// <typeparam name="T">TODO</typeparam>
-internal abstract class ExecutableMemberDocumentationHandler<T> : IMemberDocumentationHandler where T : ExecutableMemberData
+internal abstract class ExecutableMemberDocHandler<T> : IMemberDocHandler where T : ExecutableMemberData
 {
     /// <summary>
     /// Get the member with the given <paramref name="memberId"/> contained in the given type.

@@ -27,32 +27,37 @@ internal class DocCommentExtractor
     /// <summary>
     /// Dictionary of selected member documentation handlers, identified by <see cref="MemberTypeId"/> identifiers.
     /// </summary>
-    private readonly Dictionary<string, IMemberDocumentationHandler> memberDocHandlers = new()
+    private readonly Dictionary<string, IMemberDocHandler> memberDocHandlers = new()
     {
-        [MemberTypeId.Field] = new FieldDocumentationHandler(),
-        [MemberTypeId.Property] = new PropertyDocumentationHandler(),
-        [MemberTypeId.Method] = new MethodDocumentationHandler(),
+        [MemberTypeId.Field] = new FieldDocHandler(),
+        [MemberTypeId.Property] = new PropertyDocHandler(),
+        [MemberTypeId.Method] = new MethodDocHandler(),
     };
 
     /// <summary>
     /// Handler for the constructor doc comments.
     /// </summary>
-    private readonly ConstructorDocumentationHandler constructorDocHandler = new();
+    private readonly ConstructorDocHandler constructorDocHandler = new();
+
+    /// <summary>
+    /// Handler for the operator doc comments.
+    /// </summary>
+    private readonly OperatorDocHandler operatorDocHandler = new();
 
     /// <summary>
     /// Handler for the enum member doc comments.
     /// </summary>
-    private readonly EnumMemberDocumentationHandler enumMemberDocHandler = new();
+    private readonly EnumMemberDocHandler enumMemberDocHandler = new();
 
     /// <summary>
     /// Handler for the object type doc comments.
     /// </summary>
-    private readonly ObjectTypeDocumentationHandler objectTypeDocHandler = new();
+    private readonly ObjectTypeDocHandler objectTypeDocHandler = new();
 
     /// <summary>
     /// Handler for the enum type doc comments.
     /// </summary>
-    private readonly EnumTypeDocumentationHandler enumTypeDocHandler = new();
+    private readonly EnumTypeDocHandler enumTypeDocHandler = new();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
@@ -126,7 +131,6 @@ internal class DocCommentExtractor
         {
             enumTypeDocHandler.AddDocumentation(e, docCommentNode);
         }
-
     }
 
     /// <summary>
@@ -143,9 +147,13 @@ internal class DocCommentExtractor
 
         if (typeRegistry.ObjectTypes.TryGetValue(typeName, out var type)) // member of a value, reference or interface type
         {
-            if (memberTypeId == MemberTypeId.Method && memberName == ConstructorData.DefaultName) // The method is a constructor.
+            if (memberTypeId == MemberTypeId.Method && memberName == ConstructorData.DefaultName) // handle constructors
             {
                 constructorDocHandler.AddDocumentation(type, memberId, docCommentNode);
+            }
+            if (memberTypeId == MemberTypeId.Method && OperatorData.MethodNames.Contains(memberName)) // handle operators
+            {
+                operatorDocHandler.AddDocumentation(type, memberId, docCommentNode);
             }
             else if (memberDocHandlers.TryGetValue(memberTypeId, out var handler))
             {
