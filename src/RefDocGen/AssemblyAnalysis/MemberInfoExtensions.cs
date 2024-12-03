@@ -17,4 +17,9 @@ internal static class MemberInfoExtensions
     {
         return memberInfo.GetCustomAttribute<CompilerGeneratedAttribute>() is not null;
     }
+
+    internal static bool IsOperator(this MethodInfo methodInfo)
+    {
+        return methodInfo.IsSpecialName && methodInfo.Name.StartsWith("op_", StringComparison.InvariantCulture);
+    }
 }

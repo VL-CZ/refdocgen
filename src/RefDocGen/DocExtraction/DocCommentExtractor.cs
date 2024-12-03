@@ -40,6 +40,11 @@ internal class DocCommentExtractor
     private readonly ConstructorDocumentationHandler constructorDocHandler = new();
 
     /// <summary>
+    /// Handler for the operator doc comments.
+    /// </summary>
+    private readonly OperatorDocumentationHandler operatorDocHandler = new();
+
+    /// <summary>
     /// Handler for the enum member doc comments.
     /// </summary>
     private readonly EnumMemberDocumentationHandler enumMemberDocHandler = new();
@@ -146,6 +151,10 @@ internal class DocCommentExtractor
             if (memberTypeId == MemberTypeId.Method && memberName == ConstructorData.DefaultName) // The method is a constructor.
             {
                 constructorDocHandler.AddDocumentation(type, memberId, docCommentNode);
+            }
+            if (memberTypeId == MemberTypeId.Method && OperatorData.AllowedOperatorNames.Contains(memberName)) // The method is an operator.
+            {
+                operatorDocHandler.AddDocumentation(type, memberId, docCommentNode);
             }
             else if (memberDocHandlers.TryGetValue(memberTypeId, out var handler))
             {

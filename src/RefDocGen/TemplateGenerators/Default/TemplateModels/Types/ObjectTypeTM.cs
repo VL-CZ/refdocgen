@@ -30,7 +30,7 @@ public record ObjectTypeTM(
     FieldTM[] Fields,
     PropertyTM[] Properties,
     MethodTM[] Methods,
-    OperatorTM[] Operators,
+    MethodTM[] Operators,
     TypeParameterTM[] TypeParameters,
     string? BaseTypeName,
     IEnumerable<string> ImplementedInterfaces) : ITemplateModelWithId;

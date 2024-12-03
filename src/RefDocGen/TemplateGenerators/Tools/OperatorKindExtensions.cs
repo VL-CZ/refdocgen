@@ -8,13 +8,13 @@ namespace RefDocGen.TemplateGenerators.Tools;
 public static class OperatorKindExtensions
 {
     /// <summary>
-    /// Get the string representation of the operator kind.
+    /// Get name of the operator kind (e.g. 'operator +')
     /// </summary>
     /// <param name="operatorKind">The kind of operator, whose name we obtain.</param>
-    /// <returns>The string representing the operator kind.</returns>
-    public static string ToOperatorString(this OperatorKind operatorKind)
+    /// <returns>The name of the operator kind (e.g. 'operator +')</returns>
+    public static string GetName(this OperatorKind operatorKind)
     {
-        return operatorKind switch
+        string opName = operatorKind switch
         {
             OperatorKind.UnaryPlus => "+",
             OperatorKind.UnaryMinus => "-",
@@ -45,6 +45,8 @@ public static class OperatorKindExtensions
             OperatorKind.GreaterThanOrEqual => ">=",
             _ => throw new ArgumentOutOfRangeException(nameof(operatorKind), operatorKind, "Unknown operator kind"),
         };
+
+        return $"operator {opName}";
     }
 }
 

@@ -149,16 +149,16 @@ internal static class ObjectTypeTMCreator
     }
 
     /// <summary>
-    /// Creates a <see cref="OperatorTM"/> instance based on the provided <see cref="IOperatorData"/> object.
+    /// Creates a <see cref="MethodTM"/> instance based on the provided <see cref="IOperatorData"/> object.
     /// </summary>
     /// <param name="operatorData">The <see cref="IOperatorData"/> instance representing the method.</param>
-    /// <returns>A <see cref="OperatorTM"/> instance based on the provided <paramref name="operatorData"/>.</returns>
-    private static OperatorTM GetFrom(IOperatorData operatorData)
+    /// <returns>A <see cref="MethodTM"/> instance based on the provided <paramref name="operatorData"/>.</returns>
+    private static MethodTM GetFrom(IOperatorData operatorData)
     {
         var modifiers = GetCallableMemberModifiers(operatorData);
 
-        return new OperatorTM(
-            operatorData.Kind.ToOperatorString(),
+        return new MethodTM(
+            operatorData.Kind.GetName(),
             operatorData.Parameters.Select(GetFrom).ToArray(),
             CSharpTypeName.Of(operatorData.ReturnType),
             operatorData.ReturnType.IsVoid,
