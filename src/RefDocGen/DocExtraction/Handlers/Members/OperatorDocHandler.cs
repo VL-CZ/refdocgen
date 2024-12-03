@@ -1,23 +1,23 @@
+using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.DocExtraction.Tools;
 using System.Xml.Linq;
-using RefDocGen.CodeElements.Concrete.Members;
 
 namespace RefDocGen.DocExtraction.Handlers.Members;
 
 /// <summary>
-/// Class responsible for handling and adding XML doc comments to the corresponding methods.
+/// Class responsible for handling and adding XML doc comments to the corresponding operators.
 /// </summary>
-internal class MethodDocumentationHandler : ExecutableMemberDocumentationHandler<MethodData>
+internal class OperatorDocHandler : ExecutableMemberDocHandler<OperatorData>
 {
     /// <inheritdoc/>
-    protected override MethodData? GetTypeMember(ObjectTypeData type, string memberId)
+    protected override OperatorData? GetTypeMember(ObjectTypeData type, string memberId)
     {
-        return type.Methods.GetValueOrDefault(memberId);
+        return type.Operators.GetValueOrDefault(memberId);
     }
 
     /// <inheritdoc/>
-    protected override void AssignMemberComments(MethodData member, XElement memberDocComment)
+    protected override void AssignMemberComments(OperatorData member, XElement memberDocComment)
     {
         base.AssignMemberComments(member, memberDocComment);
 

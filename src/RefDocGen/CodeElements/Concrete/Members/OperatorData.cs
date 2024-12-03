@@ -4,21 +4,29 @@ using System.Reflection;
 
 namespace RefDocGen.CodeElements.Concrete.Members;
 
+/// <summary>
+/// Class representing data of an operator.
+/// </summary>
 internal class OperatorData : MethodData, IOperatorData
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="OperatorData"/> class.
+    /// </summary>
+    /// <param name="methodInfo"><see cref="MethodInfo"/> object representing the operator.</param>
+    /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
     internal OperatorData(MethodInfo methodInfo, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
         : base(methodInfo, declaredTypeParameters)
     {
-        Kind = nameToOperatorKind[methodInfo.Name];
+        Kind = methodNameToOperatorKind[methodInfo.Name];
     }
 
     /// <inheritdoc/>
     public OperatorKind Kind { get; }
 
     /// <summary>
-    /// 
+    /// Dictionary containing key-value pairs of the operator mehod name and the corresponding operator kind.
     /// </summary>
-    private static readonly IReadOnlyDictionary<string, OperatorKind> nameToOperatorKind = new Dictionary<string, OperatorKind>
+    private static readonly IReadOnlyDictionary<string, OperatorKind> methodNameToOperatorKind = new Dictionary<string, OperatorKind>
     {
         ["op_UnaryPlus"] = OperatorKind.UnaryPlus,
         ["op_UnaryNegation"] = OperatorKind.UnaryMinus,
@@ -50,7 +58,7 @@ internal class OperatorData : MethodData, IOperatorData
     };
 
     /// <summary>
-    /// A collection of allowed operator names.
+    /// A collection of all corresponding operator method names.
     /// </summary>
-    public static IEnumerable<string> AllowedOperatorNames => nameToOperatorKind.Keys;
+    public static IEnumerable<string> MethodNames => methodNameToOperatorKind.Keys;
 }

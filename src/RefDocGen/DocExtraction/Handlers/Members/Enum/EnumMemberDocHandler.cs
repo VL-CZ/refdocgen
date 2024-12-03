@@ -7,7 +7,7 @@ namespace RefDocGen.DocExtraction.Handlers.Members.Enum;
 /// <summary>
 /// Class responsible for handling and adding XML doc comments to the corresponding enum members.
 /// </summary>
-internal class EnumMemberDocumentationHandler
+internal class EnumMemberDocHandler
 {
     /// <summary>
     /// Add documentation to the given enum member.
