@@ -5,7 +5,7 @@ namespace RefDocGen.CodeElements.Abstract.Types;
 /// <summary>
 /// Represents name-related data of any type, including its name, namespace.
 /// <para>
-/// Doesn't include any type member data (such as fields, methods, etc.)
+/// Doesn't include any type parameters nor member data (such as fields, methods, etc.)
 /// </para>
 /// </summary>
 public interface ITypeNameBaseData
