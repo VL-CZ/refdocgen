@@ -81,8 +81,35 @@
             </samp>
         </h6>
 
+        <hr />
+
         <p class="text-muted">
             <i>@Model.DocComment</i>
+
+            @if (Model.TypeParameters.Any())
+            {
+                <!-- <h3 class="lead my-2">Type parameters</h3> -->
+
+                <div class="mx-3">
+                    @foreach (var typeParam in Model.TypeParameters)
+                    {
+                        if (!string.IsNullOrEmpty(typeParam.DocComment))
+                        {
+                            <samp>
+                                <span class="text-primary">
+                                    @string.Join(' ', typeParam.Modifiers)
+                                </span>
+                                <span class="text-dark">
+                                    @typeParam.Name
+                                </span>
+                            </samp>
+                            <p class="text-muted">
+                                <i>@typeParam.DocComment</i>
+                            </p>
+                        }
+                    }
+                </div>
+            }
         </p>
 
         <hr />
@@ -144,8 +171,7 @@
 
                     @if (Model.Parameters.Any())
                     {
-                        <h3 class="lead my-2">Parameters</h3>
-                        <div class="mx-2">
+                        <div class="m-2">
                             @foreach (var parameter in Model.Parameters)
                             {
                                 <samp>
@@ -168,9 +194,9 @@
 
                     @if (!Model.ReturnsVoid)
                     {
-                        <h3 class="lead my-2">Returns</h3>
-                        <div class="mx-2">
 
+                        <div class="m-2">
+                            Returns
                             <samp>
                                 <span class="text-secondary">
                                     @Model.ReturnType

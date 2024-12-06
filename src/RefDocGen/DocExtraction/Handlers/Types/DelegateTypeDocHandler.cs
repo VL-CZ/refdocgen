@@ -27,6 +27,7 @@ internal class DelegateTypeDocHandler
             d.ReturnValueDocComment = returnsNode;
         }
 
+        // add param doc comments
         var paramElements = docComment.Descendants(XmlDocIdentifiers.Param);
 
         foreach (var paramElement in paramElements)
@@ -43,6 +44,22 @@ internal class DelegateTypeDocHandler
                 }
 
                 parameter.DocComment = paramElement;
+            }
+        }
+
+        // add type param doc comments
+        var typeParamElements = docComment.Descendants(XmlDocIdentifiers.TypeParam);
+
+        foreach (var typeParamDocComment in typeParamElements)
+        {
+            if (typeParamDocComment.TryGetNameAttribute(out var nameAttr))
+            {
+                string typeParamName = nameAttr.Value;
+
+                if (d.TypeParameterDeclarations.TryGetValue(typeParamName, out var typeParam))
+                {
+                    typeParam.DocComment = typeParamDocComment;
+                }
             }
         }
     }

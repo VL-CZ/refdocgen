@@ -164,4 +164,6 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
 
         File.WriteAllText(outputFileName, result);
     }
+
+    
 }
