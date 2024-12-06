@@ -7,6 +7,7 @@ using RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Default.Templates;
+using System.Reflection;
 
 namespace RefDocGen.TemplateGenerators.Default;
 
@@ -64,17 +65,7 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     {
         var typeTemplateModels = types.Select(ObjectTypeTMCreator.GetFrom);
 
-        foreach (var model in typeTemplateModels)
-        {
-            string outputFileName = Path.Join(outputDir, $"{model.Id}.html");
-            string templatePath = Path.Join(templatesFolderPath, TemplateKind.ObjectType.GetFileName());
-
-            var task = razorLightEngine.CompileRenderAsync(templatePath, model);
-            //task.Wait(); // TODO: consider using Async
-            string result = task.Result;
-
-            File.WriteAllText(outputFileName, result);
-        }
+        GenerateTemplates(typeTemplateModels, TemplateKind.ObjectType);
     }
 
     /// <summary>
@@ -85,17 +76,7 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     {
         var enumTMs = enums.Select(EnumTMCreator.GetFrom);
 
-        foreach (var model in enumTMs)
-        {
-            string outputFileName = Path.Join(outputDir, $"{model.Id}.html");
-            string templatePath = Path.Join(templatesFolderPath, TemplateKind.EnumType.GetFileName());
-
-            var task = razorLightEngine.CompileRenderAsync(templatePath, model);
-            //task.Wait(); // TODO: consider using Async
-            string result = task.Result;
-
-            File.WriteAllText(outputFileName, result);
-        }
+        GenerateTemplates(enumTMs, TemplateKind.EnumType);
     }
 
     /// <summary>
@@ -106,17 +87,7 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     {
         var delegateTMs = delegates.Select(DelegateTMCreator.GetFrom);
 
-        foreach (var model in delegateTMs)
-        {
-            string outputFileName = Path.Join(outputDir, $"{model.Id}.html");
-            string templatePath = Path.Join(templatesFolderPath, TemplateKind.DelegateType.GetFileName());
-
-            var task = razorLightEngine.CompileRenderAsync(templatePath, model);
-            //task.Wait(); // TODO: consider using Async
-            string result = task.Result;
-
-            File.WriteAllText(outputFileName, result);
-        }
+        GenerateTemplates(delegateTMs, TemplateKind.DelegateType);
     }
 
     /// <summary>
@@ -129,10 +100,7 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
 
         GenerateNamespaceListTemplate(namespaceTMs);
 
-        foreach (var namespaceTM in namespaceTMs)
-        {
-            GenerateNamespaceDetailTemplate(namespaceTM);
-        }
+        GenerateTemplates(namespaceTMs, TemplateKind.NamespaceDetail);
     }
 
     /// <summary>
@@ -151,19 +119,23 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     }
 
     /// <summary>
-    /// Generate the template containing the given namespace detail.
+    /// Generate the templates (of the selected kind) using the provided template models.
     /// </summary>
-    /// <param name="namespaceTM">Template model of the given namespace.</param>
-    private void GenerateNamespaceDetailTemplate(NamespaceTM namespaceTM)
+    /// <param name="templateModels">Template models used for the templates generation.</param>
+    /// <param name="templateKind">Kind of the template to generate.</param>
+    private void GenerateTemplates<T>(IEnumerable<T> templateModels, TemplateKind templateKind) where T : ITemplateModelWithId
     {
-        string outputFileName = Path.Join(outputDir, $"{namespaceTM.Id}.html");
-        string templatePath = Path.Join(templatesFolderPath, TemplateKind.NamespaceDetail.GetFileName());
+        foreach (var tm in templateModels)
+        {
+            string outputFileName = Path.Join(outputDir, $"{tm.Id}.html");
+            string templatePath = Path.Join(templatesFolderPath, templateKind.GetFileName());
 
-        var task = razorLightEngine.CompileRenderAsync(templatePath, namespaceTM);
-        string result = task.Result;
+            var task = razorLightEngine.CompileRenderAsync(templatePath, tm);
+            //task.Wait(); // TODO: consider using Async
 
-        File.WriteAllText(outputFileName, result);
+            string result = task.Result;
+
+            File.WriteAllText(outputFileName, result);
+        }
     }
-
-    
 }
