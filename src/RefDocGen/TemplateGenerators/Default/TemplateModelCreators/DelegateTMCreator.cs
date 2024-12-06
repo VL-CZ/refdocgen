@@ -24,7 +24,7 @@ internal static class DelegateTMCreator
 
         return new DelegateTypeTM(
             delegateTypeData.Id,
-            delegateTypeData.ShortName,
+            CSharpTypeName.Of(delegateTypeData),
             delegateTypeData.Namespace,
             delegateTypeData.DocComment.Value,
             modifiers.GetStrings(),

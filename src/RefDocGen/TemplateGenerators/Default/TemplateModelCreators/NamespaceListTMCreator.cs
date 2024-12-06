@@ -1,6 +1,7 @@
 using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Abstract;
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.Delegate;
 using RefDocGen.CodeElements.Abstract.Types.Enum;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
@@ -23,6 +24,7 @@ internal class NamespaceListTMCreator
     {
         var groupedTypes = typeData.ObjectTypes.ToLookup(t => t.Namespace);
         var groupedEnums = typeData.Enums.ToLookup(e => e.Namespace);
+        var groupedDelegates = typeData.Delegates.ToLookup(e => e.Namespace);
 
         var namespaceTemplateModels = new List<NamespaceTM>();
 
@@ -53,13 +55,19 @@ internal class NamespaceListTMCreator
                     .Select(GetFrom)
                     .OrderBy(e => e.Name);
 
+                // get namespace delegates
+                var namespaceDelegates = groupedDelegates[namespaceName]
+                    .Select(GetFrom)
+                    .OrderBy(d => d.Name);
+
                 namespaceTemplateModels.Add(
                     new NamespaceTM(
                         namespaceName,
                         namespaceTypes[TypeKind.Class],
                         namespaceTypes[TypeKind.ValueType],
                         namespaceTypes[TypeKind.Interface],
-                        namespaceEnums
+                        namespaceEnums,
+                        namespaceDelegates
                         )
                 );
             }
@@ -86,5 +94,15 @@ internal class NamespaceListTMCreator
     private static TypeNameTM GetFrom(IEnumTypeData enumData)
     {
         return new TypeNameTM(enumData.Id, "enum", enumData.ShortName, enumData.DocComment.Value);
+    }
+
+    /// <summary>
+    /// Creates a <see cref="TypeNameTM"/> instance based on the provided <see cref="IDelegateTypeData"/> object.
+    /// </summary>
+    /// <param name="delegateData">The <see cref="IDelegateTypeData"/> instance representing the delegate.</param>
+    /// <returns>A <see cref="TypeNameTM"/> instance based on the provided <paramref name="delegateData"/>.</returns>
+    private static TypeNameTM GetFrom(IDelegateTypeData delegateData)
+    {
+        return new TypeNameTM(delegateData.Id, "delegate", CSharpTypeName.Of(delegateData), delegateData.DocComment.Value);
     }
 }

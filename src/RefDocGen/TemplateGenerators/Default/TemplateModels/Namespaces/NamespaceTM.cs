@@ -10,12 +10,14 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces;
 /// <param name="ValueTypes">Value types contained in the namespace, ordered alphabetically by their name.</param>
 /// <param name="Interfaces">Interfaces contained in the namespace, ordered alphabetically by their name.</param>
 /// <param name="Enums">Enums contained in the namespace, ordered alphabetically by their name.</param>
+/// <param name="Delegates">Delegates contained in the namespace, ordered alphabetically by their name.</param>
 public record NamespaceTM(
     string Name,
     IEnumerable<TypeNameTM> Classes,
     IEnumerable<TypeNameTM> ValueTypes,
     IEnumerable<TypeNameTM> Interfaces,
-    IEnumerable<TypeNameTM> Enums
+    IEnumerable<TypeNameTM> Enums,
+    IEnumerable<TypeNameTM> Delegates
     ) : ITemplateModelWithId
 {
     /// <summary>
@@ -25,6 +27,7 @@ public record NamespaceTM(
         .Concat(ValueTypes)
         .Concat(Interfaces)
         .Concat(Enums)
+        .Concat(Delegates)
         .OrderBy(t => t.Name);
 
     /// <inheritdoc/>

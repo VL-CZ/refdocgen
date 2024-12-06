@@ -190,6 +190,36 @@
             </table>
         }
 
+        <!-- Delegates -->
+        @if (Model.Delegates.Any())
+        {
+            <h2 class="display-5">Delegates</h2>
+            <table class="table">
+                <tbody>
+                    @foreach (var type in Model.Delegates)
+                    {
+                        var typeUrl = $"./{type.Id}.html";
+                        <tr>
+                            <td class="w-50">
+                                <samp>
+                                    <a href="@typeUrl" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
+                                        <span class="text-primary">
+                                            @type.TypeKindName
+                                        </span>
+                                        @type.Name
+                                    </a>
+                                </samp>
+                            </td>
+                            <td class="text-muted">
+                                <i>@type.DocComment</i>
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+        }
+
     </div>
 
     <!-- Bootstrap JS -->
