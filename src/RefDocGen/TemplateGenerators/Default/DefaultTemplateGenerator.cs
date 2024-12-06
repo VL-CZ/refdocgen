@@ -7,7 +7,6 @@ using RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Default.Templates;
-using System.Reflection;
 
 namespace RefDocGen.TemplateGenerators.Default;
 
@@ -64,7 +63,6 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     private void GenerateObjectTypeTemplates(IEnumerable<IObjectTypeData> types)
     {
         var typeTemplateModels = types.Select(ObjectTypeTMCreator.GetFrom);
-
         GenerateTemplates(typeTemplateModels, TemplateKind.ObjectType);
     }
 
@@ -75,7 +73,6 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     private void GenerateEnumTemplates(IEnumerable<IEnumTypeData> enums)
     {
         var enumTMs = enums.Select(EnumTMCreator.GetFrom);
-
         GenerateTemplates(enumTMs, TemplateKind.EnumType);
     }
 
@@ -86,7 +83,6 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     private void GenerateDelegateTemplates(IEnumerable<IDelegateTypeData> delegates)
     {
         var delegateTMs = delegates.Select(DelegateTMCreator.GetFrom);
-
         GenerateTemplates(delegateTMs, TemplateKind.DelegateType);
     }
 
@@ -98,44 +94,43 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     {
         var namespaceTMs = NamespaceListTMCreator.GetFrom(types);
 
-        GenerateNamespaceListTemplate(namespaceTMs);
+        // namespace list template
+        GenerateTemplate(namespaceTMs, TemplateKind.NamespaceList, "index");
 
+        // namespace detail templates
         GenerateTemplates(namespaceTMs, TemplateKind.NamespaceDetail);
     }
 
     /// <summary>
-    /// Generate the template containing the list of namespaces of a program.
-    /// </summary>
-    /// <param name="namespaceTMs">The namespace template models to be used in the template.</param>
-    private void GenerateNamespaceListTemplate(IEnumerable<NamespaceTM> namespaceTMs)
-    {
-        string outputFileName = Path.Join(outputDir, "index.html");
-        string templatePath = Path.Join(templatesFolderPath, TemplateKind.NamespaceList.GetFileName());
-
-        var task = razorLightEngine.CompileRenderAsync(templatePath, namespaceTMs);
-        string result = task.Result;
-
-        File.WriteAllText(outputFileName, result);
-    }
-
-    /// <summary>
-    /// Generate the templates (of the selected kind) using the provided template models.
+    /// Generate the templates of the selected kind, using the provided template models.
     /// </summary>
     /// <param name="templateModels">Template models used for the templates generation.</param>
-    /// <param name="templateKind">Kind of the template to generate.</param>
+    /// <param name="templateKind">Kind of the templates to generate.</param>
     private void GenerateTemplates<T>(IEnumerable<T> templateModels, TemplateKind templateKind) where T : ITemplateModelWithId
     {
         foreach (var tm in templateModels)
         {
-            string outputFileName = Path.Join(outputDir, $"{tm.Id}.html");
-            string templatePath = Path.Join(templatesFolderPath, templateKind.GetFileName());
-
-            var task = razorLightEngine.CompileRenderAsync(templatePath, tm);
-            //task.Wait(); // TODO: consider using Async
-
-            string result = task.Result;
-
-            File.WriteAllText(outputFileName, result);
+            GenerateTemplate(tm, templateKind, tm.Id);
         }
+    }
+
+    /// <summary>
+    /// Generate the template of the selected kind, using the provided template model.
+    /// </summary>
+    /// <param name="templateModel">Template model used for the template generation.</param>
+    /// <param name="templateKind">Kind of the template to generate.</param>
+    /// <param name="templateId">Id of the template to generate</param>
+    private void GenerateTemplate<T>(T templateModel, TemplateKind templateKind, string templateId)
+    {
+        string outputFileName = Path.Join(outputDir, $"{templateId}.html");
+        string templatePath = Path.Join(templatesFolderPath, templateKind.GetFileName());
+
+        var task = razorLightEngine.CompileRenderAsync(templatePath, templateModel);
+        //task.Wait(); // TODO: consider using Async
+
+        string result = task.Result;
+
+        File.WriteAllText(outputFileName, result);
+
     }
 }
