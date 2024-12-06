@@ -2,38 +2,51 @@ using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.Delegate;
 using RefDocGen.Tools.Xml;
+using System.Reflection;
 using System.Xml.Linq;
+using RefDocGen.CodeElements.Concrete.Members;
 
 namespace RefDocGen.CodeElements.Concrete.Types.Delegate;
 
 /// <summary>
 /// Class representing data of a delegate.
 /// </summary>
-internal class DelegateTypeData : IDelegateTypeData
+internal class DelegateTypeData : TypeNameData, IDelegateTypeData
 {
+    /// <summary>
+    /// The method used for delegate invocation (i.e. <c>Invoke</c>).
+    /// </summary>
+    private readonly IMethodData invokeMethod;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="DelegateTypeData"/> class.
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the delegate.</param>
-    public DelegateTypeData(Type type)
+    /// <param name="invokeMethod"><c>Invoke</c> method of the delegate.</param>
+    /// <param name="typeParameterDeclarations">Collection of the type parameters declared in this delegate; the keys represent type parameter names.</param>
+    public DelegateTypeData(Type type, MethodInfo invokeMethod, IReadOnlyDictionary<string, TypeParameterDeclaration> typeParameterDeclarations)
+        : base(type, typeParameterDeclarations)
     {
-        TypeObject = type;
+        TypeParameterDeclarations = typeParameterDeclarations;
+
+        this.invokeMethod = new MethodData(invokeMethod, typeParameterDeclarations);
     }
 
     /// <inheritdoc/>
-    public Type TypeObject { get; }
+    public override string Id
+    {
+        get
+        {
+            string name = FullName;
 
-    /// <inheritdoc/>
-    public string Id => FullName;
+            if (HasTypeParameters)
+            {
+                name = name + '`' + TypeParameters.Count;
+            }
 
-    /// <inheritdoc/>
-    public string ShortName => TypeObject.Name;
-
-    /// <inheritdoc/>
-    public string FullName => TypeObject.Namespace is not null ? $"{TypeObject.Namespace}.{ShortName}" : ShortName;
-
-    /// <inheritdoc/>
-    public string Namespace => TypeObject.Namespace ?? string.Empty;
+            return name;
+        }
+    }
 
     /// <inheritdoc/>
     public XElement DocComment { get; internal set; } = XmlDocElements.EmptySummary;
@@ -50,21 +63,17 @@ internal class DelegateTypeData : IDelegateTypeData
             TypeObject.IsNestedFamANDAssem,
             TypeObject.IsNestedFamORAssem);
 
-    public ITypeNameData ReturnType => throw new NotImplementedException();
-
+    /// <inheritdoc/>
     public XElement ReturnValueDocComment { get; internal set; } = XmlDocElements.EmptySummary;
 
-    public IReadOnlyList<IParameterData> Parameters => throw new NotImplementedException();
+    /// <summary>
+    /// Collection of type parameters declared in the delegate; the keys represent type parameter names.
+    /// </summary>
+    public IReadOnlyDictionary<string, TypeParameterDeclaration> TypeParameterDeclarations { get; }
 
-    public bool HasTypeParameters => throw new NotImplementedException();
+    /// <inheritdoc/>
+    public ITypeNameData ReturnType => invokeMethod.ReturnType;
 
-    public bool IsGenericParameter => throw new NotImplementedException();
-
-    public bool IsArray => false;
-
-    public bool IsVoid => false;
-
-    public IReadOnlyList<ITypeNameData> TypeParameters => throw new NotImplementedException();
-
-    public bool IsPointer => false;
+    /// <inheritdoc/>
+    public IReadOnlyList<IParameterData> Parameters => invokeMethod.Parameters;
 }

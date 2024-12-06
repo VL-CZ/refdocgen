@@ -1,11 +1,11 @@
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
-using RefDocGen.CodeElements.Concrete.Members;
-using RefDocGen.CodeElements;
 using RefDocGen.DocExtraction.Handlers.Members;
 using RefDocGen.DocExtraction.Handlers.Members.Enum;
 using RefDocGen.DocExtraction.Handlers.Types;
+using RefDocGen.CodeElements.Concrete.Members;
+using RefDocGen.CodeElements.Concrete;
 
 namespace RefDocGen.DocExtraction;
 

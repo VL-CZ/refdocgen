@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements;
+using RefDocGen.CodeElements.Abstract;
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.Enum;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces;

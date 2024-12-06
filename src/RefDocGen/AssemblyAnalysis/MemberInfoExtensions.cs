@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 namespace RefDocGen.AssemblyAnalysis;
 
 /// <summary>
-/// Class containing extension methods for <see cref="MemberInfo"/> class.
+/// Class containing extension methods for <see cref="MemberInfo"/> class and its subclasses.
 /// </summary>
 internal static class MemberInfoExtensions
 {
@@ -26,5 +26,15 @@ internal static class MemberInfoExtensions
     internal static bool IsOperator(this MethodInfo methodInfo)
     {
         return methodInfo.IsSpecialName && methodInfo.Name.StartsWith("op_", StringComparison.InvariantCulture);
+    }
+
+    /// <summary>
+    /// Checks whether the given <see cref="Type"/> represents an delegate or not.
+    /// </summary>
+    /// <param name="type">The <see cref="Type"/> to check.</param>
+    /// <returns><c>true</c> if the <see cref="Type"/> represents an delegate; <c>false</c> otherwise.</returns>
+    internal static bool IsDelegate(this Type type)
+    {
+        return typeof(MulticastDelegate).IsAssignableFrom(type) && type != typeof(MulticastDelegate);
     }
 }
