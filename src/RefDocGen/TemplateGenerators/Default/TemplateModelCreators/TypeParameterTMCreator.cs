@@ -1,0 +1,32 @@
+using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
+using RefDocGen.TemplateGenerators.Tools.Keywords;
+
+namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
+
+/// <summary>
+/// Class responsible for creating template models representing the individual generic type parameter declarations.
+/// </summary>
+internal class TypeParameterTMCreator
+{
+    /// <summary>
+    /// Creates a <see cref="TypeParameterTM"/> instance based on the provided <see cref="ITypeParameterDeclaration"/> object.
+    /// </summary>
+    /// <param name="typeParameter">The <see cref="ITypeParameterDeclaration"/> instance representing the type parameter.</param>
+    /// <returns>A <see cref="TypeParameterTM"/> instance based on the provided <paramref name="typeParameter"/>.</returns>
+    internal static TypeParameterTM GetFrom(ITypeParameterDeclaration typeParameter)
+    {
+        List<Keyword> modifiers = [];
+
+        if (typeParameter.IsCovariant)
+        {
+            modifiers.Add(Keyword.Out);
+        }
+        if (typeParameter.IsContravariant)
+        {
+            modifiers.Add(Keyword.In);
+        }
+
+        return new TypeParameterTM(typeParameter.Name, typeParameter.DocComment.Value, modifiers.GetStrings());
+    }
+}

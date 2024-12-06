@@ -16,7 +16,7 @@ internal class DelegateTypeData : TypeNameData, IDelegateTypeData
     /// <summary>
     /// The method used for delegate invocation (i.e. <c>Invoke</c>).
     /// </summary>
-    private readonly IMethodData invokeMethod;
+    private readonly MethodData invokeMethod;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DelegateTypeData"/> class.
@@ -74,6 +74,15 @@ internal class DelegateTypeData : TypeNameData, IDelegateTypeData
     /// <inheritdoc/>
     public ITypeNameData ReturnType => invokeMethod.ReturnType;
 
+    /// <summary>
+    /// List of delegate method parameters, indexed by their position.
+    /// </summary>
+    public IReadOnlyList<ParameterData> Parameters => invokeMethod.Parameters;
+
     /// <inheritdoc/>
-    public IReadOnlyList<IParameterData> Parameters => invokeMethod.Parameters;
+    IReadOnlyList<IParameterData> IDelegateTypeData.Parameters => Parameters;
+
+    /// <inheritdoc/>
+    IReadOnlyList<ITypeParameterDeclaration> IDelegateTypeData.TypeParameterDeclarations =>
+        TypeParameterDeclarations.Values.OrderBy(t => t.Index).ToList();
 }

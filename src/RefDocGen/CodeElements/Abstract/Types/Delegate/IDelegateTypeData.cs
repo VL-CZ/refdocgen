@@ -32,4 +32,9 @@ public interface IDelegateTypeData : ITypeNameData
     /// Readonly list of the delegate parameters, indexed by their position.
     /// </summary>
     IReadOnlyList<IParameterData> Parameters { get; }
+
+    /// <summary>
+    /// Collection of generic type parameters declared in the delegate, ordered by their index.
+    /// </summary>
+    IReadOnlyList<ITypeParameterDeclaration> TypeParameterDeclarations { get; }
 }
