@@ -1,6 +1,7 @@
 using RazorLight;
 using RefDocGen.CodeElements.Abstract;
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.Delegate;
 using RefDocGen.CodeElements.Abstract.Types.Enum;
 using RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces;
@@ -51,6 +52,7 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     {
         GenerateObjectTypeTemplates(typeRegistry.ObjectTypes);
         GenerateEnumTemplates(typeRegistry.Enums);
+        GenerateDelegateTemplates(typeRegistry.Delegates);
         GenerateNamespaceTemplates(typeRegistry);
     }
 
@@ -87,6 +89,27 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
         {
             string outputFileName = Path.Join(outputDir, $"{model.Id}.html");
             string templatePath = Path.Join(templatesFolderPath, TemplateKind.EnumType.GetFileName());
+
+            var task = razorLightEngine.CompileRenderAsync(templatePath, model);
+            //task.Wait(); // TODO: consider using Async
+            string result = task.Result;
+
+            File.WriteAllText(outputFileName, result);
+        }
+    }
+
+    /// <summary>
+    /// Generate the templates representing the individual delegate types.
+    /// </summary>
+    /// <param name="delegates">The delegate data to be used in the templates.</param>
+    private void GenerateDelegateTemplates(IEnumerable<IDelegateTypeData> delegates)
+    {
+        var delegateTMs = delegates.Select(DelegateTMCreator.GetFrom);
+
+        foreach (var model in delegateTMs)
+        {
+            string outputFileName = Path.Join(outputDir, $"{model.Id}.html");
+            string templatePath = Path.Join(templatesFolderPath, TemplateKind.DelegateType.GetFileName());
 
             var task = razorLightEngine.CompileRenderAsync(templatePath, model);
             //task.Wait(); // TODO: consider using Async

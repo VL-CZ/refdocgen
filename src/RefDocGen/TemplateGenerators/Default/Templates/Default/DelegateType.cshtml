@@ -1,4 +1,4 @@
-@model RefDocGen.TemplateGenerators.Default.TemplateModels.Members.MethodTM
+@model RefDocGen.TemplateGenerators.Default.TemplateModels.Types.DelegateTypeTM
 
 <!DOCTYPE html>
 <html lang="en">
@@ -63,7 +63,7 @@
     <div class="container my-4">
         <h1 class="display-4">
             <samp>
-                <span class="text-primary">@string.Join(' ', Model.Modifiers) enum</span>
+                <span class="text-primary">@string.Join(' ', Model.Modifiers) delegate</span>
                 <span class="text-dark">@Model.Name</span>
             </samp>
         </h1>
@@ -90,21 +90,99 @@
         <h2 class="display-5 mt-2">Members</h2>
         <div class="row">
             <div class="col-md-12">
-                @foreach (var enumMember in Model.Members)
-                {
-                    <div class="border p-2 mb-2">
-                        <h6 class="mb-1">
+                <div class="border p-2 mb-2">
+                    <h6 class="mb-1">
+                        <samp>
+                            <span class="text-primary">
+                                @string.Join(' ', Model.Modifiers)
+                            </span>
+                            <span class="text-secondary">
+                                @Model.ReturnType
+                            </span>
+                            <span class="text-secondary">
+                                @if (Model.Parameters.Any())
+                                {
+                                    var lastParam = Model.Parameters.Last();
+
+                                    <span class="text-dark">
+                                        @Model.Name<span class="text-secondary">(</span>
+                                    </span>
+
+                                    @foreach (var p in Model.Parameters)
+                                    {
+                                        <span class="text-primary">
+                                            @string.Join(' ', p.Modifiers)
+                                        </span>
+                                        <span class="text-secondary">
+                                            @p.Type
+                                        </span>
+
+                                        @if (p == lastParam)
+                                        {
+                                            <span class="text-dark">
+                                                @p.Name<span class="text-secondary">)</span>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-dark">
+                                                @($"{p.Name},")
+                                            </span>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="text-dark">@Model.Name<span class="text-secondary">()</span></span>
+                                }
+                            </span>
+                        </samp>
+
+                    </h6>
+                    <p class="text-muted mb-0">
+                        <i>@Model.DocComment</i>
+                    </p>
+
+                    @if (Model.Parameters.Any())
+                    {
+                        <h3 class="lead my-2">Parameters</h3>
+                        <div class="mx-2">
+                            @foreach (var parameter in Model.Parameters)
+                            {
+                                <samp>
+                                    <span class="text-primary">
+                                        @string.Join(' ', parameter.Modifiers)
+                                    </span>
+                                    <span class="text-secondary">
+                                        @parameter.Type
+                                    </span>
+                                    <span class="text-dark">
+                                        @parameter.Name
+                                    </span>
+                                </samp>
+                                <p class="text-muted">
+                                    <i>@parameter.DocComment</i>
+                                </p>
+                            }
+                        </div>
+                    }
+
+                    @if (!Model.ReturnsVoid)
+                    {
+                        <h3 class="lead my-2">Returns</h3>
+                        <div class="mx-2">
+
                             <samp>
-                                <span class="text-dark">
-                                    @enumMember.Name
+                                <span class="text-secondary">
+                                    @Model.ReturnType
                                 </span>
                             </samp>
-                        </h6>
-                        <p class="text-muted mb-0">
-                            <i>@enumMember.DocComment</i>
-                        </p>
-                    </div>
-                }
+                            <p class="text-muted">
+                                <i>@Model.ReturnsDocComment</i>
+                            </p>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     </div>

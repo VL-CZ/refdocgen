@@ -1,4 +1,4 @@
-using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Concrete.Types;
 using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction.Handlers.Members;

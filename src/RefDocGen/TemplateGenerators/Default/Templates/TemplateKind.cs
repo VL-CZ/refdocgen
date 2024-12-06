@@ -16,6 +16,11 @@ internal enum TemplateKind
     EnumType,
 
     /// <summary>
+    /// Razor template representing a delegate type.
+    /// </summary>
+    DelegateType,
+
+    /// <summary>
     /// Razor template representing a namespace list.
     /// </summary>
     NamespaceList,
@@ -42,6 +47,7 @@ internal static class TemplateKindExtensions
         {
             TemplateKind.ObjectType => "ObjectType.cshtml",
             TemplateKind.EnumType => "EnumType.cshtml",
+            TemplateKind.DelegateType => "DelegateType.cshtml",
             TemplateKind.NamespaceList => "NamespaceList.cshtml",
             TemplateKind.NamespaceDetail => "NamespaceDetail.cshtml",
             _ => throw new ArgumentException("Illegal argument passed.")

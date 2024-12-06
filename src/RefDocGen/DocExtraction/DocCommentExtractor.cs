@@ -60,6 +60,11 @@ internal class DocCommentExtractor
     private readonly EnumTypeDocHandler enumTypeDocHandler = new();
 
     /// <summary>
+    /// Handler for the delegate type doc comments.
+    /// </summary>
+    private readonly DelegateTypeDocHandler delegateTypeDocHandler = new();
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
     /// </summary>
     /// <param name="docXmlPath">Path to the XML documentation file.</param>
@@ -127,9 +132,13 @@ internal class DocCommentExtractor
         {
             objectTypeDocHandler.AddDocumentation(type, docCommentNode);
         }
-        else if (typeRegistry.Enums.TryGetValue(typeId, out var e)) // the type is an enum
+        else if (typeRegistry.Enums.TryGetValue(typeId, out var e)) // an enum type
         {
             enumTypeDocHandler.AddDocumentation(e, docCommentNode);
+        }
+        else if (typeRegistry.Delegates.TryGetValue(typeId, out var d)) // an delegate type
+        {
+            delegateTypeDocHandler.AddDocumentation(d, docCommentNode);
         }
     }
 

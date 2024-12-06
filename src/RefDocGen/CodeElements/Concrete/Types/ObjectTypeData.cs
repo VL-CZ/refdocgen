@@ -5,7 +5,7 @@ using System.Xml.Linq;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types.Enum;
 
-namespace RefDocGen.CodeElements.Abstract.Types;
+namespace RefDocGen.CodeElements.Concrete.Types;
 
 /// <summary>
 /// Class representing data of a value, reference or interface type, including its members.
