@@ -1,4 +1,4 @@
-namespace RefDocGen.TemplateGenerators.Default.Templates;
+namespace RefDocGen.TemplateGenerators.Tools;
 
 /// <summary>
 /// Represents different kinds of Razor templates.

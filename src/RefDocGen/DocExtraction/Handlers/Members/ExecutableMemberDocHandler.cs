@@ -12,7 +12,7 @@ namespace RefDocGen.DocExtraction.Handlers.Members;
 /// See also <seealso cref="ExecutableMemberData"/> class.
 /// </para>
 /// </summary>
-/// <typeparam name="T">TODO</typeparam>
+/// <typeparam name="T">Type of the member to which the doc is assigned.</typeparam>
 internal abstract class ExecutableMemberDocHandler<T> : IMemberDocHandler where T : ExecutableMemberData
 {
     /// <summary>

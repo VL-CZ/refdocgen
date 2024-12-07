@@ -19,8 +19,13 @@ internal static class DelegateTMCreator
     {
         List<Keyword> modifiers = [delegateTypeData.AccessModifier.ToKeyword()];
 
-        var parameters = delegateTypeData.Parameters.Select(ParameterTMCreator.GetFrom).ToArray();
-        var typeParameterDeclarations = delegateTypeData.TypeParameterDeclarations.Select(TypeParameterTMCreator.GetFrom).ToArray();
+        var parameters = delegateTypeData.Parameters
+            .Select(ParameterTMCreator.GetFrom)
+            .ToArray();
+
+        var typeParameterDeclarations = delegateTypeData.TypeParameterDeclarations
+            .Select(TypeParameterTMCreator.GetFrom)
+            .ToArray();
 
         return new DelegateTypeTM(
             delegateTypeData.Id,
