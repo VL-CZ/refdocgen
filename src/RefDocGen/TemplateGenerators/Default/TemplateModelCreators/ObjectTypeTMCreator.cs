@@ -25,7 +25,7 @@ internal static class ObjectTypeTMCreator
         var properties = typeData.Properties.Select(GetFrom).ToArray();
         var methods = typeData.Methods.Select(GetFrom).ToArray();
         var operators = typeData.Operators.Select(GetFrom).ToArray();
-        var typeParameterDeclarations = typeData.TypeParameterDeclarations.Select(GetFrom).ToArray();
+        var typeParameterDeclarations = typeData.TypeParameterDeclarations.Select(TypeParameterTMCreator.GetFrom).ToArray();
 
         string? baseType = typeData.BaseType is not null
             ? CSharpTypeName.Of(typeData.BaseType)
@@ -72,8 +72,10 @@ internal static class ObjectTypeTMCreator
     {
         var modifiers = GetCallableMemberModifiers(constructorData);
 
-        return new ConstructorTM(constructorData.Parameters.Select(GetFrom).ToArray(),
-            constructorData.DocComment.Value, modifiers.GetStrings());
+        return new ConstructorTM(
+            constructorData.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
+            constructorData.DocComment.Value,
+            modifiers.GetStrings());
     }
 
     /// <summary>
@@ -140,7 +142,7 @@ internal static class ObjectTypeTMCreator
 
         return new MethodTM(
             methodData.Name,
-            methodData.Parameters.Select(GetFrom).ToArray(),
+            methodData.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
             CSharpTypeName.Of(methodData.ReturnType),
             methodData.ReturnType.IsVoid,
             methodData.DocComment.Value,
@@ -159,66 +161,12 @@ internal static class ObjectTypeTMCreator
 
         return new MethodTM(
             operatorData.Kind.GetName(),
-            operatorData.Parameters.Select(GetFrom).ToArray(),
+            operatorData.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
             CSharpTypeName.Of(operatorData.ReturnType),
             operatorData.ReturnType.IsVoid,
             operatorData.DocComment.Value,
             operatorData.ReturnValueDocComment.Value,
             modifiers.GetStrings());
-    }
-
-    /// <summary>
-    /// Creates a <see cref="ParameterTM"/> instance based on the provided <see cref="IParameterData"/> object.
-    /// </summary>
-    /// <param name="parameterData">The <see cref="IParameterData"/> instance representing the parameter.</param>
-    /// <returns>A <see cref="ParameterTM"/> instance based on the provided <paramref name="parameterData"/>.</returns>
-    private static ParameterTM GetFrom(IParameterData parameterData)
-    {
-        List<Keyword> modifiers = [];
-
-        if (parameterData.IsInput)
-        {
-            modifiers.Add(Keyword.In);
-        }
-
-        if (parameterData.IsOutput)
-        {
-            modifiers.Add(Keyword.Out);
-        }
-
-        if (RefKeyword.IsPresentIn(parameterData))
-        {
-            modifiers.Add(Keyword.Ref);
-        }
-
-        if (parameterData.IsParamsCollection)
-        {
-            modifiers.Add(Keyword.Params);
-        }
-
-        return new ParameterTM(parameterData.Name, CSharpTypeName.Of(parameterData.Type), parameterData.DocComment.Value,
-            modifiers.GetStrings(), parameterData.IsOptional);
-    }
-
-    /// <summary>
-    /// Creates a <see cref="TypeParameterTM"/> instance based on the provided <see cref="ITypeParameterDeclaration"/> object.
-    /// </summary>
-    /// <param name="typeParameter">The <see cref="ITypeParameterDeclaration"/> instance representing the type parameter.</param>
-    /// <returns>A <see cref="TypeParameterTM"/> instance based on the provided <paramref name="typeParameter"/>.</returns>
-    private static TypeParameterTM GetFrom(ITypeParameterDeclaration typeParameter)
-    {
-        List<Keyword> modifiers = [];
-
-        if (typeParameter.IsCovariant)
-        {
-            modifiers.Add(Keyword.Out);
-        }
-        if (typeParameter.IsContravariant)
-        {
-            modifiers.Add(Keyword.In);
-        }
-
-        return new TypeParameterTM(typeParameter.Name, typeParameter.DocComment.Value, modifiers.GetStrings());
     }
 
     /// <summary>

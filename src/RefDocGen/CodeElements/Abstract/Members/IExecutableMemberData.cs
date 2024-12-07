@@ -7,7 +7,7 @@ namespace RefDocGen.CodeElements.Abstract.Members;
 public interface IExecutableMemberData : ICallableMemberData
 {
     /// <summary>
-    /// Readonly list of method parameters, indexed by their position.
+    /// Readonly list of the member parameters, indexed by their position.
     /// </summary>
     IReadOnlyList<IParameterData> Parameters { get; }
 }

@@ -1,8 +1,8 @@
-using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 using RefDocGen.CodeElements.Concrete.Members;
+using RefDocGen.CodeElements.Concrete.Types;
 
 namespace RefDocGen.DocExtraction.Handlers.Members;
 
@@ -12,7 +12,7 @@ namespace RefDocGen.DocExtraction.Handlers.Members;
 /// See also <seealso cref="ExecutableMemberData"/> class.
 /// </para>
 /// </summary>
-/// <typeparam name="T">TODO</typeparam>
+/// <typeparam name="T">Type of the member to which the doc is assigned.</typeparam>
 internal abstract class ExecutableMemberDocHandler<T> : IMemberDocHandler where T : ExecutableMemberData
 {
     /// <summary>

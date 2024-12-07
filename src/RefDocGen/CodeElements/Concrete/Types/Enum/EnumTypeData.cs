@@ -1,41 +1,28 @@
 using RefDocGen.CodeElements.Abstract.Members.Enum;
 using RefDocGen.CodeElements.Abstract.Types.Enum;
-using RefDocGen.CodeElements.Concrete.Members.Enum;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
+using RefDocGen.CodeElements.Concrete.Members.Enum;
 
 namespace RefDocGen.CodeElements.Concrete.Types.Enum;
 
 /// <summary>
 /// Class representing data of an enum, including its members.
 /// </summary>
-internal class EnumTypeData : IEnumTypeData
+internal class EnumTypeData : TypeNameBaseData, IEnumTypeData
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="EnumTypeData"/> class.
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
-    /// <param name="values">Dictionary containing the enum members; keys are the corresponding member IDs.</param>
-    public EnumTypeData(Type type, IReadOnlyDictionary<string, EnumMemberData> values)
+    /// <param name="members">Dictionary containing the enum members; keys are the corresponding member IDs.</param>
+    public EnumTypeData(Type type, IReadOnlyDictionary<string, EnumMemberData> members) : base(type)
     {
-        TypeObject = type;
-        Members = values;
+        Members = members;
     }
 
     /// <inheritdoc/>
-    public Type TypeObject { get; }
-
-    /// <inheritdoc/>
-    public string Id => FullName;
-
-    /// <inheritdoc/>
-    public string ShortName => TypeObject.Name;
-
-    /// <inheritdoc/>
-    public string FullName => TypeObject.Namespace is not null ? $"{TypeObject.Namespace}.{ShortName}" : ShortName;
-
-    /// <inheritdoc/>
-    public string Namespace => TypeObject.Namespace ?? string.Empty;
+    public override string Id => FullName;
 
     /// <inheritdoc/>
     public XElement DocComment { get; internal set; } = XmlDocElements.EmptySummary;

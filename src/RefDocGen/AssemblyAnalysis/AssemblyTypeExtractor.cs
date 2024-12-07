@@ -1,9 +1,10 @@
-using RefDocGen.CodeElements.Concrete.Types;
 using System.Reflection;
-using RefDocGen.CodeElements.Concrete.Members;
-using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Concrete.Types.Enum;
+using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Concrete;
+using RefDocGen.CodeElements.Concrete.Types.Delegate;
 using RefDocGen.CodeElements.Concrete.Members.Enum;
+using RefDocGen.CodeElements.Concrete.Members;
 
 namespace RefDocGen.AssemblyAnalysis;
 
@@ -39,35 +40,34 @@ internal class AssemblyTypeExtractor
     {
         var assembly = Assembly.LoadFrom(assemblyPath);
 
-        var types = assembly
-            .GetTypes()
-            .Where(t => !t.IsCompilerGenerated() && !t.IsEnum)
-            .Select(ConstructFromType)
-            .ToDictionary(t => t.Id);
-
         var enums = assembly
             .GetTypes()
-            .Where(t => !t.IsCompilerGenerated() && t.IsEnum)
-            .Select(ConstructFromEnum)
+            .Where(t => !t.IsCompilerGenerated() && t.IsEnum);
+
+        var delegates = assembly
+            .GetTypes()
+            .Where(t => !t.IsCompilerGenerated() && t.IsDelegate());
+
+        var types = assembly
+            .GetTypes()
+            .Where(t => !t.IsCompilerGenerated())
+            .Except(enums)
+            .Except(delegates);
+
+        // construct *Data objects
+        var enumData = enums
+            .Select(ConstructEnum)
             .ToDictionary(t => t.Id);
 
-        return new TypeRegistry(types, enums);
-    }
+        var delegateData = delegates
+            .Select(ConstructDelegate)
+            .ToDictionary(t => t.Id);
 
-    /// <summary>
-    /// Construct an <see cref="EnumTypeData"/> object from the given <see cref="Type"/>.
-    /// </summary>
-    /// <param name="type">The type to construct the enum data model from.</param>
-    /// <returns><see cref="EnumTypeData"/> object representing the enum.</returns>
-    private EnumTypeData ConstructFromEnum(Type type)
-    {
-        var enumValues = type
-            .GetFields(bindingFlags)
-            .Where(f => !f.IsCompilerGenerated() && !f.IsSpecialName) // exclude '_value' field.
-            .Select(f => new EnumMemberData(f))
-            .ToDictionary(v => v.Id);
+        var objectTypeData = types
+            .Select(ConstructObjectType)
+            .ToDictionary(t => t.Id);
 
-        return new EnumTypeData(type, enumValues);
+        return new TypeRegistry(objectTypeData, enumData, delegateData);
     }
 
     /// <summary>
@@ -75,7 +75,7 @@ internal class AssemblyTypeExtractor
     /// </summary>
     /// <param name="type">The type to construct the data model from.</param>
     /// <returns><see cref="ObjectTypeData"/> object representing the type.</returns>
-    private ObjectTypeData ConstructFromType(Type type)
+    private ObjectTypeData ConstructObjectType(Type type)
     {
         var constructors = type.GetConstructors(bindingFlags).Where(c => !c.IsCompilerGenerated());
         var fields = type.GetFields(bindingFlags).Where(f => !f.IsCompilerGenerated());
@@ -117,5 +117,39 @@ internal class AssemblyTypeExtractor
             .ToDictionary(m => m.Id);
 
         return new ObjectTypeData(type, ctorModels, fieldModels, propertyModels, methodModels, operatorModels, typeParameters);
+    }
+
+    /// <summary>
+    /// Construct an <see cref="EnumTypeData"/> object from the given <see cref="Type"/>.
+    /// </summary>
+    /// <param name="type">The type to construct the enum data model from.</param>
+    /// <returns><see cref="EnumTypeData"/> object representing the enum.</returns>
+    private EnumTypeData ConstructEnum(Type type)
+    {
+        var enumValues = type
+            .GetFields(bindingFlags)
+            .Where(f => !f.IsCompilerGenerated()
+                && !f.IsSpecialName) // exclude '_value' field.
+            .Select(f => new EnumMemberData(f))
+            .ToDictionary(v => v.Id);
+
+        return new EnumTypeData(type, enumValues);
+    }
+
+    /// <summary>
+    /// Construct a <see cref="DelegateTypeData"/> object from the given <see cref="Type"/>.
+    /// </summary>
+    /// <param name="type">The type to construct the delegate data model from.</param>
+    /// <returns><see cref="DelegateTypeData"/> object representing the enum.</returns>
+    private DelegateTypeData ConstructDelegate(Type type)
+    {
+        var typeParameters = type
+            .GetGenericArguments()
+            .Select((ga, i) => new TypeParameterDeclaration(ga, i))
+            .ToDictionary(t => t.Name);
+
+        var invokeMethod = type.GetMethod("Invoke") ?? throw new ArgumentException("TODO");
+
+        return new DelegateTypeData(type, invokeMethod, typeParameters);
     }
 }

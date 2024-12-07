@@ -1,4 +1,4 @@
-namespace RefDocGen.TemplateGenerators.Default.Templates;
+namespace RefDocGen.TemplateGenerators.Tools;
 
 /// <summary>
 /// Represents different kinds of Razor templates.
@@ -14,6 +14,11 @@ internal enum TemplateKind
     /// Razor template representing an enum type.
     /// </summary>
     EnumType,
+
+    /// <summary>
+    /// Razor template representing a delegate type.
+    /// </summary>
+    DelegateType,
 
     /// <summary>
     /// Razor template representing a namespace list.
@@ -42,6 +47,7 @@ internal static class TemplateKindExtensions
         {
             TemplateKind.ObjectType => "ObjectType.cshtml",
             TemplateKind.EnumType => "EnumType.cshtml",
+            TemplateKind.DelegateType => "DelegateType.cshtml",
             TemplateKind.NamespaceList => "NamespaceList.cshtml",
             TemplateKind.NamespaceDetail => "NamespaceDetail.cshtml",
             _ => throw new ArgumentException("Illegal argument passed.")

@@ -1,9 +1,9 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
-using RefDocGen.CodeElements.Concrete.Members;
-using RefDocGen.CodeElements.Concrete.Types.Enum;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
+using RefDocGen.CodeElements.Concrete.Members;
+using RefDocGen.CodeElements.Concrete.Types.Enum;
 
 namespace RefDocGen.CodeElements.Concrete.Types;
 
@@ -84,7 +84,6 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
     /// </summary>
     public IReadOnlyDictionary<string, TypeParameterDeclaration> TypeParameterDeclarations { get; }
 
-
     /// <inheritdoc/>
     public override string Id
     {
@@ -132,8 +131,6 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
 
     /// <inheritdoc/>
     public IReadOnlyList<ITypeNameData> Interfaces { get; }
-
-
 
     /// <inheritdoc/>
     IReadOnlyList<IConstructorData> IObjectTypeData.Constructors => Constructors.Values.ToList();

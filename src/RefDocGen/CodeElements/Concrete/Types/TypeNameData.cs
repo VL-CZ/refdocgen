@@ -11,17 +11,15 @@ namespace RefDocGen.CodeElements.Concrete.Types;
 /// Note: this class doesn't represent generic type parameters (see <see cref="GenericTypeParameterNameData"/>).
 /// </para>
 /// </summary>
-internal class TypeNameData : ITypeNameData
+internal class TypeNameData : TypeNameBaseData, ITypeNameData
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="TypeNameData"/> class.
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
     /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    internal TypeNameData(Type type, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
+    internal TypeNameData(Type type, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters) : base(type)
     {
-        TypeObject = type;
-
         TypeParameters = TypeObject
             .GetGenericArguments()
             .Select(t => t.GetNameData(declaredTypeParameters))
@@ -36,10 +34,7 @@ internal class TypeNameData : ITypeNameData
     { }
 
     /// <inheritdoc/>
-    public Type TypeObject { get; }
-
-    /// <inheritdoc/>
-    public string ShortName
+    public override string ShortName
     {
         get
         {
@@ -63,10 +58,7 @@ internal class TypeNameData : ITypeNameData
     }
 
     /// <inheritdoc/>
-    public string FullName => TypeObject.Namespace is not null ? $"{TypeObject.Namespace}.{ShortName}" : ShortName;
-
-    /// <inheritdoc/>
-    public virtual string Id
+    public override string Id
     {
         get
         {
@@ -83,9 +75,6 @@ internal class TypeNameData : ITypeNameData
 
     /// <inheritdoc/>
     public bool HasTypeParameters => TypeObject.IsGenericType;
-
-    /// <inheritdoc/>
-    public string Namespace => TypeObject.Namespace ?? string.Empty;
 
     /// <inheritdoc/>
     public IReadOnlyList<ITypeNameData> TypeParameters { get; }
