@@ -4,14 +4,27 @@ namespace RefDocGen.TemplateGenerators.Tools;
 
 internal class HtmlCommentParser
 {
-    private readonly IReadOnlyDictionary<string, string> tags =
-        new Dictionary<string, string>
-        {
-            ["summary"] = "div",
-            ["para"] = "p",
-            ["c"] = "kbd",
-            ["code"] = "kbd",
-        };
+    private readonly Dictionary<string, string> tags = new()
+    {
+        ["summary"] = "div",
+        ["para"] = "p",
+        ["c"] = "kbd",
+        //["example"] = "div",
+        //["exception"] = "div",
+        ["item"] = "li",
+        //["description"] = "p",
+        //["term"] = "strong",
+        //["remarks"] = "div",
+        ["returns"] = "div",
+        //["see"] = "a",
+        //["seealso"] = "a",
+        ["param"] = "div",
+        ["typeparam"] = "div",
+        //["value"] = "div",
+        //["include"] = "div",
+        //["inheritdoc"] = "div",
+        //["permission"] = "div",
+    };
 
     internal string Parse(XElement docComment)
     {
@@ -21,7 +34,15 @@ internal class HtmlCommentParser
 
     private void ParseElement(XElement element)
     {
-        if (tags.TryGetValue(element.Name.ToString(), out string? htmlName))
+        if (element.Name == "list")
+        {
+            HandleListElement(element);
+        }
+        else if (element.Name == "code")
+        {
+            HandleCodeElement(element);
+        }
+        else if (tags.TryGetValue(element.Name.ToString(), out string? htmlName))
         {
             element.Name = htmlName;
         }
@@ -30,5 +51,41 @@ internal class HtmlCommentParser
         {
             ParseElement(child);
         }
+    }
+
+    private void HandleListElement(XElement element)
+    {
+        string listType = element.Attribute("type")?.Value ?? "bullet";
+
+        var types = new Dictionary<string, string>()
+        {
+            ["bullet"] = "ul",
+            ["number"] = "ol",
+            ["table"] = "ul", // TODO: add 
+        };
+
+        if (types.TryGetValue(listType, out string? newName))
+        {
+            element.Name = newName;
+            element.RemoveAttributes();
+        }
+
+    }
+
+    private void HandleCodeElement(XElement element)
+    {
+        if (element.Attribute("skip") is not null)
+        {
+            return;
+        }
+
+        element.Name = "pre";
+        var children = element.Nodes();
+
+        var codeElement = new XElement("code", new XAttribute("skip", true));
+        codeElement.Add(children);
+
+        element.RemoveNodes();
+        element.Add(codeElement);
     }
 }
