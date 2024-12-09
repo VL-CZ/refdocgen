@@ -4,18 +4,31 @@ namespace RefDocGen.TemplateGenerators.Tools;
 
 internal class HtmlCommentParser
 {
-    internal static XElement Parse(XElement docComment)
-    {
-        docComment.Name = "div";
-
-        foreach (var item in docComment.Elements())
+    private readonly IReadOnlyDictionary<string, string> tags =
+        new Dictionary<string, string>
         {
-            if (item.Name == "para")
-            {
-                item.Name = "p";
-            }
+            ["summary"] = "div",
+            ["para"] = "p",
+            ["c"] = "kbd",
+            ["code"] = "kbd",
+        };
+
+    internal string Parse(XElement docComment)
+    {
+        ParseElement(docComment);
+        return docComment.ToString();
+    }
+
+    private void ParseElement(XElement element)
+    {
+        if (tags.TryGetValue(element.Name.ToString(), out string? htmlName))
+        {
+            element.Name = htmlName;
         }
 
-        return docComment;
+        foreach (var child in element.Elements())
+        {
+            ParseElement(child);
+        }
     }
 }
