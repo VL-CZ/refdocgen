@@ -1,3 +1,4 @@
+using RefDocGen.DocExtraction.Tools;
 using System.Xml.Linq;
 
 namespace RefDocGen.TemplateGenerators.Tools;
@@ -16,7 +17,6 @@ internal class HtmlCommentParser
         //["term"] = "strong",
         //["remarks"] = "div",
         ["returns"] = "div",
-        //["see"] = "a",
         //["seealso"] = "a",
         ["param"] = "div",
         ["typeparam"] = "div",
@@ -41,6 +41,10 @@ internal class HtmlCommentParser
         else if (element.Name == "code")
         {
             HandleCodeElement(element);
+        }
+        else if (element.Name == "see")
+        {
+            HandleSeeElement(element);
         }
         else if (tags.TryGetValue(element.Name.ToString(), out string? htmlName))
         {
@@ -87,5 +91,26 @@ internal class HtmlCommentParser
 
         element.RemoveNodes();
         element.Add(codeElement);
+    }
+
+    private void HandleSeeElement(XElement element)
+    {
+        element.Name = "a";
+
+        if (element.Attribute("href") is not null)
+        {
+            return;
+        }
+        else if (element.TryGetAttribute("langword", out var attr))
+        {
+            var codeElement = new XElement("code", new XAttribute("skip", true), new XText(attr.Value));
+
+            element.Add(codeElement);
+            element.RemoveAttributes();
+        }
+        //else if (element.Attribute("cref") is not null) // TODO: handle cref
+        //{
+
+        //}
     }
 }
