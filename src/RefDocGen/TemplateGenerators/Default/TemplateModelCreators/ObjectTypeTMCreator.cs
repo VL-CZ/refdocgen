@@ -102,7 +102,10 @@ internal static class ObjectTypeTMCreator
             modifiers.Add(Keyword.Readonly);
         }
 
-        return new FieldTM(fieldData.Name, CSharpTypeName.Of(fieldData.Type), fieldData.DocComment.Value, modifiers.GetStrings());
+        var commentParser = new HtmlCommentParser();
+        string docComment = commentParser.Parse(fieldData.DocComment);
+
+        return new FieldTM(fieldData.Name, CSharpTypeName.Of(fieldData.Type), docComment, modifiers.GetStrings());
     }
 
     /// <summary>
