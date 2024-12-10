@@ -10,6 +10,11 @@ namespace RefDocGen.CodeElements.Abstract.Types.Delegate;
 public interface IDelegateTypeData : ITypeDeclaration
 {
     /// <summary>
+    /// The method used for delegate invocation (i.e. <c>Invoke</c>).
+    /// </summary>
+    IMethodData InvokeMethod { get; }
+
+    /// <summary>
     /// Return type of the delegate.
     /// </summary>
     ITypeNameData ReturnType { get; }

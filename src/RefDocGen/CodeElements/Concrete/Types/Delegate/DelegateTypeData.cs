@@ -38,6 +38,20 @@ internal class DelegateTypeData : TypeDeclaration, IDelegateTypeData
     /// <inheritdoc/>
     public ITypeNameData ReturnType => invokeMethod.ReturnType;
 
+    /// <inheritdoc/>
+    public IMethodData InvokeMethod
+    {
+        get
+        {
+            // copy doc comments to the method
+            // (no need to copy param comments, because they're shared)
+            invokeMethod.DocComment = DocComment;
+            invokeMethod.ReturnValueDocComment = ReturnValueDocComment;
+
+            return invokeMethod;
+        }
+    }
+
     /// <summary>
     /// List of delegate method parameters, indexed by their position.
     /// </summary>
