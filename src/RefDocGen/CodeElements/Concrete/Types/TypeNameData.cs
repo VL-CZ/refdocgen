@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Tools;
 
 namespace RefDocGen.CodeElements.Concrete.Types;
 

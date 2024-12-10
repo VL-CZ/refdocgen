@@ -1,5 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Tools;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -35,25 +36,7 @@ internal abstract class ExecutableMemberData : IExecutableMemberData
     }
 
     /// <inheritdoc/>
-    public string Id
-    {
-        get
-        {
-            if (Parameters.Count == 0) // no params -> return the Name
-            {
-                return Name;
-            }
-            else
-            {
-                // Get the parameters in the format: System.String, System.Int32, etc.
-                var parameterNames = Parameters.Select(
-                            p => p.IsByRef ? p.Type.Id + "@" : p.Type.Id    // if the param is passed by reference, add '@' suffix
-                        );
-
-                return Name + "(" + string.Join(",", parameterNames) + ")";
-            }
-        }
-    }
+    public string Id => MemberId.Of(this);
 
     /// <inheritdoc/>
     public abstract string Name { get; }

@@ -95,7 +95,7 @@ internal class AssemblyTypeExtractor
 
         var methods = type
             .GetMethods(bindingFlags)
-            .Where(m => !m.IsCompilerGenerated())
+            .Where(m => !m.IsCompilerGenerated() && !m.IsSpecialName)
             .Except(operators);
 
         var typeParameters = type

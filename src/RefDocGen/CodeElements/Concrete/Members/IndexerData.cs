@@ -1,5 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Tools;
 using System.Reflection;
 
 namespace RefDocGen.CodeElements.Concrete.Members;
@@ -17,18 +18,7 @@ internal class IndexerData : PropertyData, IIndexerData
     }
 
     /// <inheritdoc/>
-    public override string Id
-    {
-        get
-        {
-            // Get the parameters in the format: System.String, System.Int32, etc.
-            var parameterNames = Parameters.Select(
-                        p => p.IsByRef ? p.Type.Id + "@" : p.Type.Id    // if the param is passed by reference, add '@' suffix
-                    );
-
-            return Name + "(" + string.Join(",", parameterNames) + ")";
-        }
-    }
+    public override string Id => MemberId.Of(this);
 
     /// <summary>
     /// Array of index parameters, ordered by their position.
@@ -36,5 +26,5 @@ internal class IndexerData : PropertyData, IIndexerData
     public IReadOnlyList<ParameterData> Parameters { get; }
 
     /// <inheritdoc/>
-    IReadOnlyList<IParameterData> IIndexerData.Parameters => Parameters;
+    IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters;
 }

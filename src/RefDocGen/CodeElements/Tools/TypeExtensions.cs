@@ -2,7 +2,7 @@ using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.Tools;
 
-namespace RefDocGen.CodeElements;
+namespace RefDocGen.CodeElements.Tools;
 
 /// <summary>
 /// Class containing extension methods for <see cref="Type"/> class.
