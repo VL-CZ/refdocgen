@@ -1,7 +1,7 @@
 namespace RefDocGen.CodeElements.Abstract.Members;
 
 /// <summary>
-/// Represents data of an executable type member, i.e. method or a constructor.
+/// Represents data of an executable type member, i.e. method, constructor or an indexer.
 /// Note that properties are excluded from this definition.
 /// </summary>
 public interface IExecutableMemberData : ICallableMemberData

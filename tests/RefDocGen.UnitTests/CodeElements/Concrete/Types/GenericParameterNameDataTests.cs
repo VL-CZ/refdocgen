@@ -1,6 +1,7 @@
 using FluentAssertions;
 using NSubstitute;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Concrete.Types.TypeName;
 
 namespace RefDocGen.UnitTests.CodeElements.Concrete.Types;
 
@@ -22,7 +23,7 @@ public class GenericTypeParameterNameDataTests
     /// These data should be passed to <see cref="GenericTypeParameterNameData"/> constructor.
     /// </para>
     /// </summary>
-    private readonly IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters;
+    private readonly IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters;
 
     public GenericTypeParameterNameDataTests()
     {
@@ -32,10 +33,10 @@ public class GenericTypeParameterNameDataTests
         var tValueMock = Substitute.For<Type>();
         tValueMock.Name.Returns("TValue");
 
-        declaredTypeParameters = new Dictionary<string, TypeParameterDeclaration>()
+        declaredTypeParameters = new Dictionary<string, TypeParameterData>()
         {
-            ["TKey"] = new TypeParameterDeclaration(tKeyMock, 0),
-            ["TValue"] = new TypeParameterDeclaration(tValueMock, 1)
+            ["TKey"] = new TypeParameterData(tKeyMock, 0),
+            ["TValue"] = new TypeParameterData(tValueMock, 1)
         };
     }
 

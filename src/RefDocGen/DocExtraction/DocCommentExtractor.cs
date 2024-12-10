@@ -45,19 +45,19 @@ internal class DocCommentExtractor
     private readonly OperatorDocHandler operatorDocHandler = new();
 
     /// <summary>
+    /// Handler for the indexer doc comments.
+    /// </summary>
+    private readonly IndexerDocHandler indexerDocHandler = new();
+
+    /// <summary>
     /// Handler for the enum member doc comments.
     /// </summary>
     private readonly EnumMemberDocHandler enumMemberDocHandler = new();
 
     /// <summary>
-    /// Handler for the object type doc comments.
+    /// Handler for the type doc comments.
     /// </summary>
-    private readonly ObjectTypeDocHandler objectTypeDocHandler = new();
-
-    /// <summary>
-    /// Handler for the enum type doc comments.
-    /// </summary>
-    private readonly EnumTypeDocHandler enumTypeDocHandler = new();
+    private readonly TypeDocHandler typeDocHandler = new();
 
     /// <summary>
     /// Handler for the delegate type doc comments.
@@ -130,13 +130,13 @@ internal class DocCommentExtractor
     {
         if (typeRegistry.ObjectTypes.TryGetValue(typeId, out var type)) // the type is an 'object' type
         {
-            objectTypeDocHandler.AddDocumentation(type, docCommentNode);
+            typeDocHandler.AddDocumentation(type, docCommentNode);
         }
         else if (typeRegistry.Enums.TryGetValue(typeId, out var e)) // an enum type
         {
-            enumTypeDocHandler.AddDocumentation(e, docCommentNode);
+            typeDocHandler.AddDocumentation(e, docCommentNode);
         }
-        else if (typeRegistry.Delegates.TryGetValue(typeId, out var d)) // an delegate type
+        else if (typeRegistry.Delegates.TryGetValue(typeId, out var d)) // a delegate type
         {
             delegateTypeDocHandler.AddDocumentation(d, docCommentNode);
         }
@@ -156,13 +156,17 @@ internal class DocCommentExtractor
 
         if (typeRegistry.ObjectTypes.TryGetValue(typeName, out var type)) // member of a value, reference or interface type
         {
-            if (memberTypeId == MemberTypeId.Method && memberName == ConstructorData.DefaultName) // handle constructors
+            if (memberTypeId == MemberTypeId.Method && memberName == ConstructorData.DefaultName) // the member is a constructor
             {
                 constructorDocHandler.AddDocumentation(type, memberId, docCommentNode);
             }
-            if (memberTypeId == MemberTypeId.Method && OperatorData.MethodNames.Contains(memberName)) // handle operators
+            if (memberTypeId == MemberTypeId.Method && OperatorData.MethodNames.Contains(memberName)) // an operator
             {
                 operatorDocHandler.AddDocumentation(type, memberId, docCommentNode);
+            }
+            if (memberTypeId == MemberTypeId.Property && type.Indexers.ContainsKey(memberId)) // an indexer
+            {
+                indexerDocHandler.AddDocumentation(type, memberId, docCommentNode);
             }
             else if (memberDocHandlers.TryGetValue(memberTypeId, out var handler))
             {

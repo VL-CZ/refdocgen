@@ -1,6 +1,6 @@
-using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 
-namespace RefDocGen.CodeElements.Concrete.Types;
+namespace RefDocGen.CodeElements.Concrete.Types.TypeName;
 
 /// <summary>
 /// Class representing name-related data of any type, including its name, namespace.
@@ -26,7 +26,28 @@ internal abstract class TypeNameBaseData : ITypeNameBaseData
     public abstract string Id { get; }
 
     /// <inheritdoc/>
-    public virtual string ShortName => TypeObject.Name;
+    public string ShortName
+    {
+        get
+        {
+            string name = TypeObject.Name;
+
+            // remove the backtick and number of generic arguments (if present)
+            int backTickIndex = name.IndexOf('`');
+            if (backTickIndex >= 0)
+            {
+                name = name[..backTickIndex];
+            }
+
+            // remove the reference suffix (if present)
+            if (name.EndsWith('&'))
+            {
+                name = name[..^1];
+            }
+
+            return name;
+        }
+    }
 
     /// <inheritdoc/>
     public string FullName => TypeObject.Namespace is not null

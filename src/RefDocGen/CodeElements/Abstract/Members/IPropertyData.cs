@@ -5,7 +5,7 @@ namespace RefDocGen.CodeElements.Abstract.Members;
 /// <summary>
 /// Represents data of a property.
 /// </summary>
-public interface IPropertyData : IVariableMemberData, ICallableMemberData
+public interface IPropertyData : IValueMemberData, ICallableMemberData
 {
     /// <summary>
     /// Gets the <see cref="System.Reflection.PropertyInfo"/> object representing the property.

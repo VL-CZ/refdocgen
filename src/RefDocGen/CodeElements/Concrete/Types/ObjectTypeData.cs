@@ -1,7 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
-using RefDocGen.Tools.Xml;
-using System.Xml.Linq;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types.Enum;
 
@@ -16,7 +14,7 @@ namespace RefDocGen.CodeElements.Concrete.Types;
 /// Note: This class doesn't represent enum types - see <see cref="EnumTypeData"/>.
 /// </para>
 /// </summary>
-internal class ObjectTypeData : TypeNameData, IObjectTypeData
+internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="ObjectTypeData"/> class.
@@ -27,6 +25,7 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
     /// <param name="properties">Dictionary of properties declared in the class; keys are the corresponding property IDs.</param>
     /// <param name="methods">Dictionary of methods declared in the class; keys are the corresponding method IDs.</param>
     /// <param name="operators">Dictionary of operators declared in the class; keys are the corresponding operator IDs.</param>
+    /// <param name="indexers">Dictionary of indexers declared in the class; keys are the corresponding operator IDs.</param>
     /// <param name="typeParameterDeclarations">Collection of type parameters declared in this type; the keys represent type parameter names.</param>
     public ObjectTypeData(
         Type type,
@@ -35,7 +34,8 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
         IReadOnlyDictionary<string, PropertyData> properties,
         IReadOnlyDictionary<string, MethodData> methods,
         IReadOnlyDictionary<string, OperatorData> operators,
-        IReadOnlyDictionary<string, TypeParameterDeclaration> typeParameterDeclarations)
+        IReadOnlyDictionary<string, IndexerData> indexers,
+        IReadOnlyDictionary<string, TypeParameterData> typeParameterDeclarations)
         : base(type, typeParameterDeclarations)
     {
         Constructors = constructors;
@@ -43,15 +43,7 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
         Properties = properties;
         Methods = methods;
         Operators = operators;
-        TypeParameterDeclarations = typeParameterDeclarations;
-
-        BaseType = type.BaseType is not null
-            ? new TypeNameData(type.BaseType)
-            : null;
-
-        Interfaces = type.GetInterfaces()
-            .Select(i => new TypeNameData(i))
-            .ToArray();
+        Indexers = indexers;
     }
 
     /// <summary>
@@ -80,38 +72,9 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
     public IReadOnlyDictionary<string, OperatorData> Operators { get; }
 
     /// <summary>
-    /// Collection of type parameters declared in this type; the keys represent type parameter names.
+    /// Collection of indexers declared in the type; keys are the corresponding operator IDs.
     /// </summary>
-    public IReadOnlyDictionary<string, TypeParameterDeclaration> TypeParameterDeclarations { get; }
-
-    /// <inheritdoc/>
-    public override string Id
-    {
-        get
-        {
-            string name = FullName;
-
-            if (HasTypeParameters)
-            {
-                name = name + '`' + TypeParameters.Count;
-            }
-
-            return name;
-        }
-    }
-
-    /// <inheritdoc/>
-    public XElement DocComment { get; internal set; } = XmlDocElements.EmptySummary;
-
-    /// <inheritdoc/>
-    public AccessModifier AccessModifier =>
-        AccessModifierExtensions.GetAccessModifier(
-            TypeObject.IsNestedPrivate,
-            TypeObject.IsNestedFamily,
-            TypeObject.IsNestedAssembly || TypeObject.IsNotPublic,
-            TypeObject.IsPublic || TypeObject.IsNestedPublic,
-            TypeObject.IsNestedFamANDAssem,
-            TypeObject.IsNestedFamORAssem);
+    public IReadOnlyDictionary<string, IndexerData> Indexers { get; }
 
     /// <inheritdoc/>
     public bool IsAbstract => TypeObject.IsAbstract;
@@ -125,12 +88,6 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
         : TypeObject.IsValueType
             ? TypeKind.ValueType
             : TypeKind.Class;
-
-    /// <inheritdoc/>
-    public ITypeNameData? BaseType { get; }
-
-    /// <inheritdoc/>
-    public IReadOnlyList<ITypeNameData> Interfaces { get; }
 
     /// <inheritdoc/>
     IReadOnlyList<IConstructorData> IObjectTypeData.Constructors => Constructors.Values.ToList();
@@ -148,6 +105,5 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
     IReadOnlyList<IOperatorData> IObjectTypeData.Operators => Operators.Values.ToList();
 
     /// <inheritdoc/>
-    IReadOnlyList<ITypeParameterDeclaration> IObjectTypeData.TypeParameterDeclarations =>
-        TypeParameterDeclarations.Values.OrderBy(t => t.Index).ToList();
+    IReadOnlyList<IIndexerData> IObjectTypeData.Indexers => Indexers.Values.ToList();
 }

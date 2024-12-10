@@ -1,6 +1,7 @@
 using RefDocGen.CodeElements.Abstract.Members;
-using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Tools;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Xml.Linq;
@@ -17,7 +18,7 @@ internal class ParameterData : IParameterData
     /// </summary>
     /// <param name="parameterInfo"><see cref="System.Reflection.ParameterInfo"/> object representing the parameter.</param>
     /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    public ParameterData(ParameterInfo parameterInfo, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
+    public ParameterData(ParameterInfo parameterInfo, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters)
     {
         ParameterInfo = parameterInfo;
         Type = parameterInfo.ParameterType.GetNameData(declaredTypeParameters);

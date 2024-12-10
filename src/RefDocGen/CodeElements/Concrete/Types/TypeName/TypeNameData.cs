@@ -1,6 +1,7 @@
-using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
+using RefDocGen.CodeElements.Tools;
 
-namespace RefDocGen.CodeElements.Concrete.Types;
+namespace RefDocGen.CodeElements.Concrete.Types.TypeName;
 
 /// <summary>
 /// Class representing name-related data of a type, including its name, namespace, and generic parameters (if present).
@@ -18,7 +19,7 @@ internal class TypeNameData : TypeNameBaseData, ITypeNameData
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
     /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    internal TypeNameData(Type type, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters) : base(type)
+    internal TypeNameData(Type type, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters) : base(type)
     {
         TypeParameters = TypeObject
             .GetGenericArguments()
@@ -30,32 +31,8 @@ internal class TypeNameData : TypeNameBaseData, ITypeNameData
     /// Initializes a new instance of the <see cref="TypeNameData"/> class.
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
-    internal TypeNameData(Type type) : this(type, new Dictionary<string, TypeParameterDeclaration>())
+    internal TypeNameData(Type type) : this(type, new Dictionary<string, TypeParameterData>())
     { }
-
-    /// <inheritdoc/>
-    public override string ShortName
-    {
-        get
-        {
-            string name = TypeObject.Name;
-
-            // remove the backtick and number of generic arguments (if present)
-            int backTickIndex = name.IndexOf('`');
-            if (backTickIndex >= 0)
-            {
-                name = name[..backTickIndex];
-            }
-
-            // remove the reference suffix (if present)
-            if (name.EndsWith('&'))
-            {
-                name = name[..^1];
-            }
-
-            return name;
-        }
-    }
 
     /// <inheritdoc/>
     public override string Id

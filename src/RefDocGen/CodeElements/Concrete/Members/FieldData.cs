@@ -1,6 +1,7 @@
 using RefDocGen.CodeElements.Abstract.Members;
-using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Tools;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Xml.Linq;
@@ -17,7 +18,7 @@ internal class FieldData : IFieldData
     /// </summary>
     /// <param name="fieldInfo"><see cref="System.Reflection.FieldInfo"/> object representing the field.</param>
     /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    internal FieldData(FieldInfo fieldInfo, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
+    internal FieldData(FieldInfo fieldInfo, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters)
     {
         FieldInfo = fieldInfo;
         Type = fieldInfo.FieldType.GetNameData(declaredTypeParameters);

@@ -1,11 +1,11 @@
-using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 
 namespace RefDocGen.CodeElements.Abstract.Members;
 
 /// <summary>
 /// Represents a type member storing a value; i.e. a field or a property.
 /// </summary>
-public interface IVariableMemberData : IMemberData
+public interface IValueMemberData : IMemberData
 {
     /// <summary>
     /// Checks if the member is a compile-time constant.

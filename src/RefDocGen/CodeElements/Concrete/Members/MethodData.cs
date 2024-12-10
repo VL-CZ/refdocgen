@@ -1,6 +1,7 @@
 using RefDocGen.CodeElements.Abstract.Members;
-using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Tools;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Xml.Linq;
@@ -17,7 +18,7 @@ internal class MethodData : ExecutableMemberData, IMethodData
     /// </summary>
     /// <param name="methodInfo"><see cref="System.Reflection.MethodInfo"/> object representing the method.</param>
     /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    internal MethodData(MethodInfo methodInfo, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
+    internal MethodData(MethodInfo methodInfo, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters)
         : base(methodInfo, declaredTypeParameters)
     {
         MethodInfo = methodInfo;
@@ -28,7 +29,7 @@ internal class MethodData : ExecutableMemberData, IMethodData
     /// Initializes a new instance of the <see cref="MethodData"/> class.
     /// </summary>
     /// <param name="methodInfo"><see cref="System.Reflection.MethodInfo"/> object representing the method.</param>
-    internal MethodData(MethodInfo methodInfo) : this(methodInfo, new Dictionary<string, TypeParameterDeclaration>())
+    internal MethodData(MethodInfo methodInfo) : this(methodInfo, new Dictionary<string, TypeParameterData>())
     { }
 
     /// <inheritdoc/>

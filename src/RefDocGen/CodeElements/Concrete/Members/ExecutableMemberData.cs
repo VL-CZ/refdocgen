@@ -1,5 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Tools;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -23,7 +24,7 @@ internal abstract class ExecutableMemberData : IExecutableMemberData
     /// </summary>
     /// <param name="methodBase"><see cref="MethodBase"/> object representing the member.</param>
     /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; keys represent type parameter names.</param>
-    protected ExecutableMemberData(MethodBase methodBase, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
+    protected ExecutableMemberData(MethodBase methodBase, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters)
     {
         this.methodBase = methodBase;
 
@@ -35,25 +36,7 @@ internal abstract class ExecutableMemberData : IExecutableMemberData
     }
 
     /// <inheritdoc/>
-    public string Id
-    {
-        get
-        {
-            if (Parameters.Count == 0) // no params -> return the Name
-            {
-                return Name;
-            }
-            else
-            {
-                // Get the parameters in the format: System.String, System.Int32, etc.
-                var parameterNames = Parameters.Select(
-                            p => p.IsByRef ? p.Type.Id + "@" : p.Type.Id    // if the param is passed by reference, add '@' suffix
-                        );
-
-                return Name + "(" + string.Join(",", parameterNames) + ")";
-            }
-        }
-    }
+    public string Id => MemberId.Of(this);
 
     /// <inheritdoc/>
     public abstract string Name { get; }

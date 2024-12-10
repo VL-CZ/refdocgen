@@ -301,6 +301,111 @@
             </div>
         }
 
+        @if (Model.Indexers.Any())
+        {
+            <h2 class="display-5 mt-2">Indexers</h2>
+            <div class="row">
+                <div class="col-md-12">
+                    @foreach (var indexer in Model.Indexers)
+                    {
+                        <div class="border p-2 mb-2">
+                            <h6 class="mb-1">
+                                <samp>
+                                    <span class="text-primary">
+                                        @string.Join(' ', indexer.Modifiers)
+                                    </span>
+                                    <span class="text-secondary">
+                                        @indexer.Type
+                                    </span>
+
+                                    @if (indexer.Parameters.Any())
+                                    {
+                                        var lastParam = indexer.Parameters.Last();
+
+                                        <span class="text-dark">
+                                            this<span class="text-secondary">[</span>
+                                        </span>
+
+                                        @foreach (var p in indexer.Parameters)
+                                        {
+                                            <span class="text-primary">
+                                                @string.Join(' ', p.Modifiers)
+                                            </span>
+                                            <span class="text-secondary">
+                                                @p.Type
+                                            </span>
+
+                                            @if (p == lastParam)
+                                            {
+                                                <span class="text-dark">
+                                                    @p.Name<span class="text-secondary">]</span>
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-dark">
+                                                    @($"{p.Name},")
+                                                </span>
+                                            }
+                                        }
+                                    }
+
+                                    <span class="text-secondary">{ </span>
+
+                                    @{
+                                        var getterWithModifiers = indexer.HasGetter ? $"{string.Join(' ', indexer.GetterModifiers)} get" : string.Empty;
+                                        var setterWithModifiers = indexer.HasSetter ? $"{string.Join(' ', indexer.SetterModifiers)} set" : string.Empty;
+                                    }
+
+                                    @if (indexer.HasGetter)
+                                    {
+                                        <span class="text-primary">
+                                            @getterWithModifiers<span class="text-secondary">;</span>
+                                        </span>
+                                    }
+                                    @if (indexer.HasSetter)
+                                    {
+                                        <span class="text-primary">
+                                            @setterWithModifiers<span class="text-secondary">;</span>
+                                        </span>
+                                    }
+
+                                    <span class="text-secondary">}</span>
+                                </samp>
+                            </h6>
+                            <p class="text-muted mb-0">
+                                <i>@indexer.DocComment</i>
+                            </p>
+
+                            @if (indexer.Parameters.Any())
+                            {
+                                <div class="m-3">
+                                    @foreach (var parameter in indexer.Parameters)
+                                    {
+                                        <samp>
+                                            <span class="text-primary">
+                                                @string.Join(' ', parameter.Modifiers)
+                                            </span>
+                                            <span class="text-secondary">
+                                                @parameter.Type
+                                            </span>
+                                            <span class="text-dark">
+                                                @parameter.Name
+                                            </span>
+                                        </samp>
+                                        <p class="text-muted">
+                                            <i>@parameter.DocComment</i>
+                                        </p>
+                                    }
+                                </div>
+                            }
+
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
         @if (Model.Methods.Any())
         {
             <h2 class="display-5 mt-2">Methods</h2>

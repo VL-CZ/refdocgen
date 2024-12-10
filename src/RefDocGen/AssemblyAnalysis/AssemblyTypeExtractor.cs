@@ -79,7 +79,15 @@ internal class AssemblyTypeExtractor
     {
         var constructors = type.GetConstructors(bindingFlags).Where(c => !c.IsCompilerGenerated());
         var fields = type.GetFields(bindingFlags).Where(f => !f.IsCompilerGenerated());
-        var properties = type.GetProperties(bindingFlags).Where(p => !p.IsCompilerGenerated());
+
+        var indexers = type
+            .GetProperties(bindingFlags)
+            .Where(p => !p.IsCompilerGenerated() && p.IsIndexer());
+
+        var properties = type
+            .GetProperties(bindingFlags)
+            .Where(p => !p.IsCompilerGenerated())
+            .Except(indexers);
 
         var operators = type
             .GetMethods(bindingFlags)
@@ -87,12 +95,12 @@ internal class AssemblyTypeExtractor
 
         var methods = type
             .GetMethods(bindingFlags)
-            .Where(m => !m.IsCompilerGenerated())
+            .Where(m => !m.IsCompilerGenerated() && !m.IsSpecialName)
             .Except(operators);
 
         var typeParameters = type
             .GetGenericArguments()
-            .Select((ga, i) => new TypeParameterDeclaration(ga, i))
+            .Select((ga, i) => new TypeParameterData(ga, i))
             .ToDictionary(t => t.Name);
 
         // construct *Data objects
@@ -116,7 +124,11 @@ internal class AssemblyTypeExtractor
             .Select(m => new OperatorData(m, typeParameters))
             .ToDictionary(m => m.Id);
 
-        return new ObjectTypeData(type, ctorModels, fieldModels, propertyModels, methodModels, operatorModels, typeParameters);
+        var indexerModels = indexers
+            .Select(m => new IndexerData(m, typeParameters))
+            .ToDictionary(m => m.Id);
+
+        return new ObjectTypeData(type, ctorModels, fieldModels, propertyModels, methodModels, operatorModels, indexerModels, typeParameters);
     }
 
     /// <summary>
@@ -145,7 +157,7 @@ internal class AssemblyTypeExtractor
     {
         var typeParameters = type
             .GetGenericArguments()
-            .Select((ga, i) => new TypeParameterDeclaration(ga, i))
+            .Select((ga, i) => new TypeParameterData(ga, i))
             .ToDictionary(t => t.Name);
 
         var invokeMethod = type.GetMethod("Invoke") ?? throw new ArgumentException("TODO");

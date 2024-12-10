@@ -10,11 +10,11 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 internal class TypeParameterTMCreator
 {
     /// <summary>
-    /// Creates a <see cref="TypeParameterTM"/> instance based on the provided <see cref="ITypeParameterDeclaration"/> object.
+    /// Creates a <see cref="TypeParameterTM"/> instance based on the provided <see cref="ITypeParameterData"/> object.
     /// </summary>
-    /// <param name="typeParameter">The <see cref="ITypeParameterDeclaration"/> instance representing the type parameter.</param>
+    /// <param name="typeParameter">The <see cref="ITypeParameterData"/> instance representing the type parameter.</param>
     /// <returns>A <see cref="TypeParameterTM"/> instance based on the provided <paramref name="typeParameter"/>.</returns>
-    internal static TypeParameterTM GetFrom(ITypeParameterDeclaration typeParameter)
+    internal static TypeParameterTM GetFrom(ITypeParameterData typeParameter)
     {
         List<Keyword> modifiers = [];
 

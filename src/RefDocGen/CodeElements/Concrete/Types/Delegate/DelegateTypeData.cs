@@ -5,13 +5,14 @@ using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Xml.Linq;
 using RefDocGen.CodeElements.Concrete.Members;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 
 namespace RefDocGen.CodeElements.Concrete.Types.Delegate;
 
 /// <summary>
 /// Class representing data of a delegate.
 /// </summary>
-internal class DelegateTypeData : TypeNameData, IDelegateTypeData
+internal class DelegateTypeData : TypeDeclaration, IDelegateTypeData
 {
     /// <summary>
     /// The method used for delegate invocation (i.e. <c>Invoke</c>).
@@ -24,55 +25,32 @@ internal class DelegateTypeData : TypeNameData, IDelegateTypeData
     /// <param name="type"><see cref="Type"/> object representing the delegate.</param>
     /// <param name="invokeMethod"><c>Invoke</c> method of the delegate.</param>
     /// <param name="typeParameterDeclarations">Collection of the type parameters declared in this delegate; the keys represent type parameter names.</param>
-    public DelegateTypeData(Type type, MethodInfo invokeMethod, IReadOnlyDictionary<string, TypeParameterDeclaration> typeParameterDeclarations)
+    public DelegateTypeData(Type type, MethodInfo invokeMethod, IReadOnlyDictionary<string, TypeParameterData> typeParameterDeclarations)
         : base(type, typeParameterDeclarations)
     {
-        TypeParameterDeclarations = typeParameterDeclarations;
 
         this.invokeMethod = new MethodData(invokeMethod, typeParameterDeclarations);
     }
 
     /// <inheritdoc/>
-    public override string Id
-    {
-        get
-        {
-            string name = FullName;
-
-            if (HasTypeParameters)
-            {
-                name = name + '`' + TypeParameters.Count;
-            }
-
-            return name;
-        }
-    }
-
-    /// <inheritdoc/>
-    public XElement DocComment { get; internal set; } = XmlDocElements.EmptySummary;
-
-    /// <summary>
-    /// Access modifier of the enum.
-    /// </summary>
-    public AccessModifier AccessModifier =>
-        AccessModifierExtensions.GetAccessModifier(
-            TypeObject.IsNestedPrivate,
-            TypeObject.IsNestedFamily,
-            TypeObject.IsNestedAssembly || TypeObject.IsNotPublic,
-            TypeObject.IsPublic || TypeObject.IsNestedPublic,
-            TypeObject.IsNestedFamANDAssem,
-            TypeObject.IsNestedFamORAssem);
-
-    /// <inheritdoc/>
     public XElement ReturnValueDocComment { get; internal set; } = XmlDocElements.EmptySummary;
-
-    /// <summary>
-    /// Collection of type parameters declared in the delegate; the keys represent type parameter names.
-    /// </summary>
-    public IReadOnlyDictionary<string, TypeParameterDeclaration> TypeParameterDeclarations { get; }
 
     /// <inheritdoc/>
     public ITypeNameData ReturnType => invokeMethod.ReturnType;
+
+    /// <inheritdoc/>
+    public IMethodData InvokeMethod
+    {
+        get
+        {
+            // copy doc comments to the method
+            // (no need to copy param comments, because they're shared)
+            invokeMethod.DocComment = DocComment;
+            invokeMethod.ReturnValueDocComment = ReturnValueDocComment;
+
+            return invokeMethod;
+        }
+    }
 
     /// <summary>
     /// List of delegate method parameters, indexed by their position.
@@ -83,6 +61,6 @@ internal class DelegateTypeData : TypeNameData, IDelegateTypeData
     IReadOnlyList<IParameterData> IDelegateTypeData.Parameters => Parameters;
 
     /// <inheritdoc/>
-    IReadOnlyList<ITypeParameterDeclaration> IDelegateTypeData.TypeParameterDeclarations =>
+    IReadOnlyList<ITypeParameterData> ITypeDeclaration.TypeParameterDeclarations =>
         TypeParameterDeclarations.Values.OrderBy(t => t.Index).ToList();
 }

@@ -5,18 +5,17 @@ using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Concrete.Types;
 
-
 /// <summary>
 /// Class representing the declaration of a generic type parameter.
 /// </summary>
-internal class TypeParameterDeclaration : ITypeParameterDeclaration
+internal class TypeParameterData : ITypeParameterData
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="TypeParameterDeclaration"/> class.
+    /// Initializes a new instance of the <see cref="TypeParameterData"/> class.
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type parameter.</param>
     /// <param name="index">Index of the parameter in the declaring type's parameter collection.</param>
-    public TypeParameterDeclaration(Type type, int index)
+    public TypeParameterData(Type type, int index)
     {
         TypeObject = type;
         Index = index;

@@ -19,7 +19,7 @@ internal class ConstructorData : ExecutableMemberData, IConstructorData
     /// </summary>
     /// <param name="constructorInfo"><see cref="System.Reflection.ConstructorInfo"/> object representing the constructor.</param>
     /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    internal ConstructorData(ConstructorInfo constructorInfo, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
+    internal ConstructorData(ConstructorInfo constructorInfo, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters)
         : base(constructorInfo, declaredTypeParameters)
     {
         ConstructorInfo = constructorInfo;
