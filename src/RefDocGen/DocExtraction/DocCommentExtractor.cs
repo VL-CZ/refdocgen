@@ -55,14 +55,9 @@ internal class DocCommentExtractor
     private readonly EnumMemberDocHandler enumMemberDocHandler = new();
 
     /// <summary>
-    /// Handler for the object type doc comments.
+    /// Handler for the type doc comments.
     /// </summary>
-    private readonly ObjectTypeDocHandler objectTypeDocHandler = new();
-
-    /// <summary>
-    /// Handler for the enum type doc comments.
-    /// </summary>
-    private readonly EnumTypeDocHandler enumTypeDocHandler = new();
+    private readonly TypeDocHandler typeDocHandler = new();
 
     /// <summary>
     /// Handler for the delegate type doc comments.
@@ -135,11 +130,11 @@ internal class DocCommentExtractor
     {
         if (typeRegistry.ObjectTypes.TryGetValue(typeId, out var type)) // the type is an 'object' type
         {
-            objectTypeDocHandler.AddDocumentation(type, docCommentNode);
+            typeDocHandler.AddDocumentation(type, docCommentNode);
         }
         else if (typeRegistry.Enums.TryGetValue(typeId, out var e)) // an enum type
         {
-            enumTypeDocHandler.AddDocumentation(e, docCommentNode);
+            typeDocHandler.AddDocumentation(e, docCommentNode);
         }
         else if (typeRegistry.Delegates.TryGetValue(typeId, out var d)) // a delegate type
         {

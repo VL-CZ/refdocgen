@@ -6,16 +6,16 @@ using System.Xml.Linq;
 namespace RefDocGen.DocExtraction.Handlers.Types;
 
 /// <summary>
-/// Class responsible for handling and adding XML doc comments to the corresponding value, reference and interface types.
+/// Class responsible for handling and adding XML doc comments to the corresponding types.
 /// </summary>
-internal class ObjectTypeDocHandler
+internal class TypeDocHandler
 {
     /// <summary>
-    /// Adds documentation to the given object type.
+    /// Adds documentation to the given type.
     /// </summary>
-    /// <param name="type">Object type to which the documentation is added.</param>
+    /// <param name="type">Type to which the documentation is added.</param>
     /// <param name="docComment">Doc comment for the type.</param>
-    internal void AddDocumentation(ObjectTypeData type, XElement docComment)
+    internal virtual void AddDocumentation(TypeDeclaration type, XElement docComment)
     {
         // add summary doc comment
         if (docComment.TryGetSummaryElement(out var summaryNode))
@@ -37,7 +37,7 @@ internal class ObjectTypeDocHandler
     /// </summary>
     /// <param name="type">The type containing the parameter.</param>
     /// <param name="docComment">XML node of the doc comment for the given type parameter.</param>
-    private void AddTypeParamDocumentation(ObjectTypeData type, XElement docComment)
+    private void AddTypeParamDocumentation(TypeDeclaration type, XElement docComment)
     {
         if (docComment.TryGetNameAttribute(out var nameAttr))
         {
