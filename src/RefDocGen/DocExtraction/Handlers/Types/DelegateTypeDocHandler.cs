@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Concrete.Types.Delegate;
+using RefDocGen.DocExtraction.Handlers.Tools;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
@@ -19,34 +20,15 @@ internal class DelegateTypeDocHandler : TypeDocHandler
     {
         base.AddDocumentation(d, docComment);
 
+        // add 'returns' doc comment (if present)
+        if (docComment.TryGetReturnsElement(out var returnsNode))
+        {
+            d.ReturnValueDocComment = returnsNode;
+        }
+
         // add param doc comments
         var paramElements = docComment.Descendants(XmlDocIdentifiers.Param);
 
-        foreach (var paramElement in paramElements)
-        {
-            AddParamDocumentation(d, paramElement);
-        }
-    }
-
-    /// <summary>
-    /// Add the doc comment to the corresponding delegate method parameter.
-    /// </summary>
-    /// <param name="d">The delegate containing the parameter.</param>
-    /// <param name="docComment">XML node of the doc comment for the given delegate method parameter.</param>
-    private void AddParamDocumentation(DelegateTypeData d, XElement docComment)
-    {
-        if (docComment.TryGetNameAttribute(out var nameAttr))
-        {
-            string paramName = nameAttr.Value;
-            var parameter = d.Parameters.FirstOrDefault(p => p.Name == paramName);
-
-            if (parameter is null)
-            {
-                // TODO: log parameter not found
-                return;
-            }
-
-            parameter.DocComment = docComment;
-        }
+        ParameterDocHelper.Add(paramElements, d.Parameters);
     }
 }
