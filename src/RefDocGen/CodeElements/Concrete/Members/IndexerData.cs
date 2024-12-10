@@ -17,7 +17,18 @@ internal class IndexerData : PropertyData, IIndexerData
     }
 
     /// <inheritdoc/>
-    public override string Id => base.Id;
+    public override string Id
+    {
+        get
+        {
+            // Get the parameters in the format: System.String, System.Int32, etc.
+            var parameterNames = Parameters.Select(
+                        p => p.IsByRef ? p.Type.Id + "@" : p.Type.Id    // if the param is passed by reference, add '@' suffix
+                    );
+
+            return Name + "(" + string.Join(",", parameterNames) + ")";
+        }
+    }
 
     /// <summary>
     /// Array of index parameters, ordered by their position.
