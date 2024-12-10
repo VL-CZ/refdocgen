@@ -1,5 +1,5 @@
-using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.DocExtraction.Handlers.Tools;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
@@ -23,33 +23,8 @@ internal class IndexerDocHandler : IMemberDocHandler
 
             var paramElements = memberDocComment.Descendants(XmlDocIdentifiers.Param);
 
-            // assign param doc comments
-            foreach (var paramElement in paramElements)
-            {
-                AssignParamComment(indexer, paramElement);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Assign parameter doc comment to the corresponding parameter.
-    /// </summary>
-    /// <param name="indexer">Executable member (e.g. a method) containing the parameter.</param>
-    /// <param name="paramDocComment">Doc comment for the parameter. (i.e. 'param' element)</param>
-    private void AssignParamComment(IndexerData indexer, XElement paramDocComment)
-    {
-        if (paramDocComment.TryGetNameAttribute(out var nameAttr))
-        {
-            string paramName = nameAttr.Value;
-            var parameter = indexer.Parameters.FirstOrDefault(p => p.Name == paramName);
-
-            if (parameter is null)
-            {
-                // TODO: log parameter not found
-                return;
-            }
-
-            parameter.DocComment = paramDocComment;
+            // add parameter doc comments
+            ParameterDocHelper.Add(paramElements, indexer.Parameters);
         }
     }
 }

@@ -3,6 +3,7 @@ using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.DocExtraction.Handlers.Tools;
 
 namespace RefDocGen.DocExtraction.Handlers.Members;
 
@@ -55,33 +56,8 @@ internal abstract class ExecutableMemberDocHandler<T> : IMemberDocHandler where 
 
         var paramElements = memberDocComment.Descendants(XmlDocIdentifiers.Param);
 
-        // assign param doc comments
-        foreach (var paramElement in paramElements)
-        {
-            AssignParamComment(member, paramElement);
-        }
-    }
-
-    /// <summary>
-    /// Assign parameter doc comment to the corresponding parameter.
-    /// </summary>
-    /// <param name="member">Executable member (e.g. a method) containing the parameter.</param>
-    /// <param name="paramDocComment">Doc comment for the parameter. (i.e. 'param' element)</param>
-    private void AssignParamComment(ExecutableMemberData member, XElement paramDocComment)
-    {
-        if (paramDocComment.TryGetNameAttribute(out var nameAttr))
-        {
-            string paramName = nameAttr.Value;
-            var parameter = member.Parameters.FirstOrDefault(p => p.Name == paramName);
-
-            if (parameter is null)
-            {
-                // TODO: log parameter not found
-                return;
-            }
-
-            parameter.DocComment = paramDocComment;
-        }
+        // add parameter doc comments
+        ParameterDocHelper.Add(paramElements, member.Parameters);
     }
 }
 
