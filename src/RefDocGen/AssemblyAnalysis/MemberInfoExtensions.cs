@@ -37,4 +37,14 @@ internal static class MemberInfoExtensions
     {
         return typeof(MulticastDelegate).IsAssignableFrom(type) && type != typeof(MulticastDelegate);
     }
+
+    /// <summary>
+    /// Checks whether the given <see cref="PropertyInfo"/> represents an indexer or not.
+    /// </summary>
+    /// <param name="property">The <see cref="PropertyInfo"/> to check.</param>
+    /// <returns><c>true</c> if the <see cref="PropertyInfo"/> represents an indexer; <c>false</c> otherwise.</returns>
+    internal static bool IsIndexer(this PropertyInfo property)
+    {
+        return property.GetIndexParameters().Length > 0;
+    }
 }

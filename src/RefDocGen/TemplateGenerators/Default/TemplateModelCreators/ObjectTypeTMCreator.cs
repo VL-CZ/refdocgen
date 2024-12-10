@@ -25,6 +25,7 @@ internal static class ObjectTypeTMCreator
         var properties = typeData.Properties.Select(GetFrom).ToArray();
         var methods = typeData.Methods.Select(GetFrom).ToArray();
         var operators = typeData.Operators.Select(GetFrom).ToArray();
+        var indexers = typeData.Indexers.Select(GetFrom).ToArray();
         var typeParameterDeclarations = typeData.TypeParameterDeclarations.Select(TypeParameterTMCreator.GetFrom).ToArray();
 
         string? baseType = typeData.BaseType is not null
@@ -57,6 +58,7 @@ internal static class ObjectTypeTMCreator
             properties,
             methods,
             operators,
+            indexers,
             typeParameterDeclarations,
             baseType,
             interfaces
@@ -132,6 +134,39 @@ internal static class ObjectTypeTMCreator
 
         return new PropertyTM(propertyData.Name, CSharpTypeName.Of(propertyData.Type), propertyData.DocComment.Value,
             modifiers.GetStrings(), propertyData.Getter is not null, propertyData.Setter is not null, getterModifiers.GetStrings(), setterModifiers.GetStrings());
+    }
+
+    /// <summary>
+    /// Creates an <see cref="IndexerTM"/> instance based on the provided <see cref="IIndexerData"/> object.
+    /// </summary>
+    /// <param name="indexer">The <see cref="IIndexerData"/> instance representing the indexer.</param>
+    /// <returns>An <see cref="IndexerTM"/> instance based on the provided <paramref name="indexer"/>.</returns>
+    private static IndexerTM GetFrom(IIndexerData indexer)
+    {
+        var modifiers = GetCallableMemberModifiers(indexer);
+
+        List<Keyword> getterModifiers = [];
+        List<Keyword> setterModifiers = [];
+
+        if (indexer.Getter is not null && indexer.Getter.AccessModifier != indexer.AccessModifier)
+        {
+            getterModifiers.Add(indexer.Getter.AccessModifier.ToKeyword());
+        }
+
+        if (indexer.Setter is not null && indexer.Setter.AccessModifier != indexer.AccessModifier)
+        {
+            setterModifiers.Add(indexer.Setter.AccessModifier.ToKeyword());
+        }
+
+        return new IndexerTM(
+            indexer.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
+            CSharpTypeName.Of(indexer.Type),
+            indexer.DocComment.Value,
+            modifiers.GetStrings(),
+            indexer.Getter is not null,
+            indexer.Setter is not null,
+            getterModifiers.GetStrings(),
+            setterModifiers.GetStrings());
     }
 
     /// <summary>

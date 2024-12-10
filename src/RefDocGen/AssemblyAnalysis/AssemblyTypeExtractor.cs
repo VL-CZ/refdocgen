@@ -79,7 +79,15 @@ internal class AssemblyTypeExtractor
     {
         var constructors = type.GetConstructors(bindingFlags).Where(c => !c.IsCompilerGenerated());
         var fields = type.GetFields(bindingFlags).Where(f => !f.IsCompilerGenerated());
-        var properties = type.GetProperties(bindingFlags).Where(p => !p.IsCompilerGenerated());
+
+        var indexers = type
+            .GetProperties(bindingFlags)
+            .Where(p => !p.IsCompilerGenerated() && p.IsIndexer());
+
+        var properties = type
+            .GetProperties(bindingFlags)
+            .Where(p => !p.IsCompilerGenerated())
+            .Except(indexers);
 
         var operators = type
             .GetMethods(bindingFlags)
@@ -116,7 +124,11 @@ internal class AssemblyTypeExtractor
             .Select(m => new OperatorData(m, typeParameters))
             .ToDictionary(m => m.Id);
 
-        return new ObjectTypeData(type, ctorModels, fieldModels, propertyModels, methodModels, operatorModels, typeParameters);
+        var indexerModels = indexers
+            .Select(m => new IndexerData(m, typeParameters))
+            .ToDictionary(m => m.Id);
+
+        return new ObjectTypeData(type, ctorModels, fieldModels, propertyModels, methodModels, operatorModels, indexerModels, typeParameters);
     }
 
     /// <summary>

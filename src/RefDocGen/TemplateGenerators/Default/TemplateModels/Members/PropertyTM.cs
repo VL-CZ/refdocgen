@@ -5,7 +5,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// </summary>
 /// <param name="Name">Name of the property.</param>
 /// <param name="Type">Type of the property.</param>
-/// <param name="DocComment">Documentation comments for the property.</param>
+/// <param name="DocComment">Documentation comment for the property.</param>
 /// <param name="Modifiers">Collection of property modifiers (e.g. public, static, etc.)</param>
 /// <param name="HasGetter">Checks if the property has getter.</param>
 /// <param name="HasSetter">Checks if the property has setter.</param>
