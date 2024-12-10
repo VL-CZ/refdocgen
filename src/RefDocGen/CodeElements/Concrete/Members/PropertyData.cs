@@ -41,7 +41,7 @@ internal class PropertyData : IPropertyData
     public IMethodData? Setter { get; }
 
     /// <inheritdoc/>
-    public string Id => Name;
+    public virtual string Id => Name;
 
     /// <inheritdoc/>
     public string Name => PropertyInfo.Name;

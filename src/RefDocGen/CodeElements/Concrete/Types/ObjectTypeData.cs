@@ -27,6 +27,7 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
     /// <param name="properties">Dictionary of properties declared in the class; keys are the corresponding property IDs.</param>
     /// <param name="methods">Dictionary of methods declared in the class; keys are the corresponding method IDs.</param>
     /// <param name="operators">Dictionary of operators declared in the class; keys are the corresponding operator IDs.</param>
+    /// <param name="indexers">Dictionary of indexers declared in the class; keys are the corresponding operator IDs.</param>
     /// <param name="typeParameterDeclarations">Collection of type parameters declared in this type; the keys represent type parameter names.</param>
     public ObjectTypeData(
         Type type,
@@ -35,6 +36,7 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
         IReadOnlyDictionary<string, PropertyData> properties,
         IReadOnlyDictionary<string, MethodData> methods,
         IReadOnlyDictionary<string, OperatorData> operators,
+        IReadOnlyDictionary<string, IndexerData> indexers,
         IReadOnlyDictionary<string, TypeParameterDeclaration> typeParameterDeclarations)
         : base(type, typeParameterDeclarations)
     {
@@ -43,6 +45,7 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
         Properties = properties;
         Methods = methods;
         Operators = operators;
+        Indexers = indexers;
         TypeParameterDeclarations = typeParameterDeclarations;
 
         BaseType = type.BaseType is not null
@@ -78,6 +81,11 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
     /// Collection of operators declared in the type; keys are the corresponding operator IDs.
     /// </summary>
     public IReadOnlyDictionary<string, OperatorData> Operators { get; }
+
+    /// <summary>
+    /// Collection of indexers declared in the type; keys are the corresponding operator IDs.
+    /// </summary>
+    public IReadOnlyDictionary<string, IndexerData> Indexers { get; }
 
     /// <summary>
     /// Collection of type parameters declared in this type; the keys represent type parameter names.
@@ -146,6 +154,9 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
 
     /// <inheritdoc/>
     IReadOnlyList<IOperatorData> IObjectTypeData.Operators => Operators.Values.ToList();
+
+    /// <inheritdoc/>
+    IReadOnlyList<IIndexerData> IObjectTypeData.Indexers => Indexers.Values.ToList();
 
     /// <inheritdoc/>
     IReadOnlyList<ITypeParameterDeclaration> IObjectTypeData.TypeParameterDeclarations =>
