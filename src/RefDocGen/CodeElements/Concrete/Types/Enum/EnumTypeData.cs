@@ -3,6 +3,8 @@ using RefDocGen.CodeElements.Abstract.Types.Enum;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 using RefDocGen.CodeElements.Concrete.Members.Enum;
+using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Tools;
 
 namespace RefDocGen.CodeElements.Concrete.Types.Enum;
 
@@ -22,7 +24,7 @@ internal class EnumTypeData : TypeNameBaseData, IEnumTypeData
     }
 
     /// <inheritdoc/>
-    public override string Id => FullName;
+    public override string Id => TypeId.Of(this);
 
     /// <inheritdoc/>
     public XElement DocComment { get; internal set; } = XmlDocElements.EmptySummary;
@@ -46,4 +48,10 @@ internal class EnumTypeData : TypeNameBaseData, IEnumTypeData
 
     /// <inheritdoc/>
     IReadOnlyList<IEnumMemberData> IEnumTypeData.Members => Members.Values.ToList();
+
+    /// <inheritdoc/>
+    bool ITypeDeclaration.HasTypeParameters => false;
+
+    /// <inheritdoc/>
+    IReadOnlyList<ITypeParameterDeclaration> ITypeDeclaration.TypeParameterDeclarations => [];
 }

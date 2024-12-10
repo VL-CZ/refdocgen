@@ -4,6 +4,7 @@ using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types.Enum;
+using RefDocGen.CodeElements.Tools;
 
 namespace RefDocGen.CodeElements.Concrete.Types;
 
@@ -93,20 +94,7 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
     public IReadOnlyDictionary<string, TypeParameterDeclaration> TypeParameterDeclarations { get; }
 
     /// <inheritdoc/>
-    public override string Id
-    {
-        get
-        {
-            string name = FullName;
-
-            if (HasTypeParameters)
-            {
-                name = name + '`' + TypeParameters.Count;
-            }
-
-            return name;
-        }
-    }
+    public override string Id => TypeId.Of(this);
 
     /// <inheritdoc/>
     public XElement DocComment { get; internal set; } = XmlDocElements.EmptySummary;
@@ -159,6 +147,6 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
     IReadOnlyList<IIndexerData> IObjectTypeData.Indexers => Indexers.Values.ToList();
 
     /// <inheritdoc/>
-    IReadOnlyList<ITypeParameterDeclaration> IObjectTypeData.TypeParameterDeclarations =>
+    IReadOnlyList<ITypeParameterDeclaration> ITypeDeclaration.TypeParameterDeclarations =>
         TypeParameterDeclarations.Values.OrderBy(t => t.Index).ToList();
 }

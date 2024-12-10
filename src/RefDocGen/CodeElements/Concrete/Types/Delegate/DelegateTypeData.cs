@@ -5,6 +5,7 @@ using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Xml.Linq;
 using RefDocGen.CodeElements.Concrete.Members;
+using RefDocGen.CodeElements.Tools;
 
 namespace RefDocGen.CodeElements.Concrete.Types.Delegate;
 
@@ -33,20 +34,7 @@ internal class DelegateTypeData : TypeNameData, IDelegateTypeData
     }
 
     /// <inheritdoc/>
-    public override string Id
-    {
-        get
-        {
-            string name = FullName;
-
-            if (HasTypeParameters)
-            {
-                name = name + '`' + TypeParameters.Count;
-            }
-
-            return name;
-        }
-    }
+    public override string Id => TypeId.Of(this);
 
     /// <inheritdoc/>
     public XElement DocComment { get; internal set; } = XmlDocElements.EmptySummary;
@@ -83,6 +71,6 @@ internal class DelegateTypeData : TypeNameData, IDelegateTypeData
     IReadOnlyList<IParameterData> IDelegateTypeData.Parameters => Parameters;
 
     /// <inheritdoc/>
-    IReadOnlyList<ITypeParameterDeclaration> IDelegateTypeData.TypeParameterDeclarations =>
+    IReadOnlyList<ITypeParameterDeclaration> ITypeDeclaration.TypeParameterDeclarations =>
         TypeParameterDeclarations.Values.OrderBy(t => t.Index).ToList();
 }
