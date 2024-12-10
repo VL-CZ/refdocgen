@@ -35,30 +35,6 @@ internal class TypeNameData : TypeNameBaseData, ITypeNameData
     { }
 
     /// <inheritdoc/>
-    public override string ShortName
-    {
-        get
-        {
-            string name = TypeObject.Name;
-
-            // remove the backtick and number of generic arguments (if present)
-            int backTickIndex = name.IndexOf('`');
-            if (backTickIndex >= 0)
-            {
-                name = name[..backTickIndex];
-            }
-
-            // remove the reference suffix (if present)
-            if (name.EndsWith('&'))
-            {
-                name = name[..^1];
-            }
-
-            return name;
-        }
-    }
-
-    /// <inheritdoc/>
     public override string Id
     {
         get
