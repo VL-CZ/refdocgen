@@ -1,4 +1,4 @@
-namespace RefDocGen.CodeElements.Abstract.Types;
+namespace RefDocGen.CodeElements.Abstract.Types.TypeName;
 
 #pragma warning disable CA1716
 

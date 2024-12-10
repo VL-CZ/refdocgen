@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Abstract.Types.Delegate;

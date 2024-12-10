@@ -100,7 +100,7 @@ internal class AssemblyTypeExtractor
 
         var typeParameters = type
             .GetGenericArguments()
-            .Select((ga, i) => new TypeParameterDeclaration(ga, i))
+            .Select((ga, i) => new TypeParameterData(ga, i))
             .ToDictionary(t => t.Name);
 
         // construct *Data objects
@@ -157,7 +157,7 @@ internal class AssemblyTypeExtractor
     {
         var typeParameters = type
             .GetGenericArguments()
-            .Select((ga, i) => new TypeParameterDeclaration(ga, i))
+            .Select((ga, i) => new TypeParameterData(ga, i))
             .ToDictionary(t => t.Name);
 
         var invokeMethod = type.GetMethod("Invoke") ?? throw new ArgumentException("TODO");

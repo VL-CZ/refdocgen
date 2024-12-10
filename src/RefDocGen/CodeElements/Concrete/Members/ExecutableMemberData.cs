@@ -24,7 +24,7 @@ internal abstract class ExecutableMemberData : IExecutableMemberData
     /// </summary>
     /// <param name="methodBase"><see cref="MethodBase"/> object representing the member.</param>
     /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; keys represent type parameter names.</param>
-    protected ExecutableMemberData(MethodBase methodBase, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
+    protected ExecutableMemberData(MethodBase methodBase, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters)
     {
         this.methodBase = methodBase;
 

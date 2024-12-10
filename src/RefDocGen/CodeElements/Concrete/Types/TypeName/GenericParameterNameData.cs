@@ -1,4 +1,4 @@
-using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.Tools;
 
 namespace RefDocGen.CodeElements.Concrete.Types.TypeName;
@@ -11,14 +11,14 @@ internal class GenericTypeParameterNameData : ITypeNameData
     /// <summary>
     /// Dictionary of type parameters declared in the containing type; the keys represent type parameter names.
     /// </summary>
-    private readonly IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters;
+    private readonly IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GenericTypeParameterNameData"/> class.
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
     /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    internal GenericTypeParameterNameData(Type type, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters)
+    internal GenericTypeParameterNameData(Type type, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters)
     {
         this.declaredTypeParameters = declaredTypeParameters;
         TypeObject = type;

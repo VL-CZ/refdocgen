@@ -5,7 +5,7 @@ namespace RefDocGen.CodeElements.Abstract.Types;
 /// <summary>
 /// Represents declaration of a generic type parameter.
 /// </summary>
-public interface ITypeParameterDeclaration
+public interface ITypeParameterData
 {
     /// <summary>
     /// <see cref="Type"/> object representing the type.

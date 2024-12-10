@@ -1,4 +1,4 @@
-namespace RefDocGen.CodeElements.Abstract.Types;
+namespace RefDocGen.CodeElements.Abstract.Types.TypeName;
 
 /// <summary>
 /// Represents name-related data of any type, including its name, namespace, and generic parameters (if present).

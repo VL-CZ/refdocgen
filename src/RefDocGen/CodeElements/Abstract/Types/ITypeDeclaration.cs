@@ -1,3 +1,4 @@
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Abstract.Types;
@@ -30,5 +31,5 @@ public interface ITypeDeclaration : ITypeNameData
     /// <summary>
     /// Collection of generic type parameters declared in the delegate, ordered by their index.
     /// </summary>
-    IReadOnlyList<ITypeParameterDeclaration> TypeParameterDeclarations { get; }
+    IReadOnlyList<ITypeParameterData> TypeParameterDeclarations { get; }
 }

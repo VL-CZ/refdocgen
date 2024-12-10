@@ -35,7 +35,7 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
         IReadOnlyDictionary<string, MethodData> methods,
         IReadOnlyDictionary<string, OperatorData> operators,
         IReadOnlyDictionary<string, IndexerData> indexers,
-        IReadOnlyDictionary<string, TypeParameterDeclaration> typeParameterDeclarations)
+        IReadOnlyDictionary<string, TypeParameterData> typeParameterDeclarations)
         : base(type, typeParameterDeclarations)
     {
         Constructors = constructors;

@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types.TypeName;
 using RefDocGen.CodeElements.Tools;
 using RefDocGen.Tools.Xml;
@@ -13,7 +14,7 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
     /// <param name="typeParameterDeclarations">Collection of the type parameters declared in the type; the keys represent type parameter names.</param>
-    protected TypeDeclaration(Type type, IReadOnlyDictionary<string, TypeParameterDeclaration> typeParameterDeclarations) : base(type)
+    protected TypeDeclaration(Type type, IReadOnlyDictionary<string, TypeParameterData> typeParameterDeclarations) : base(type)
     {
         TypeParameterDeclarations = typeParameterDeclarations;
 
@@ -31,7 +32,7 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
     protected TypeDeclaration(Type type)
-        : this(type, new Dictionary<string, TypeParameterDeclaration>())
+        : this(type, new Dictionary<string, TypeParameterData>())
     {
     }
 
@@ -63,10 +64,10 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     /// <summary>
     /// Collection of type parameters declared in this type; the keys represent type parameter names.
     /// </summary>
-    public IReadOnlyDictionary<string, TypeParameterDeclaration> TypeParameterDeclarations { get; }
+    public IReadOnlyDictionary<string, TypeParameterData> TypeParameterDeclarations { get; }
 
     /// <inheritdoc/>
-    IReadOnlyList<ITypeParameterDeclaration> ITypeDeclaration.TypeParameterDeclarations =>
+    IReadOnlyList<ITypeParameterData> ITypeDeclaration.TypeParameterDeclarations =>
         TypeParameterDeclarations.Values.OrderBy(t => t.Index).ToList();
 
     /// <inheritdoc/>

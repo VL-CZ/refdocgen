@@ -5,6 +5,7 @@ using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Xml.Linq;
 using RefDocGen.CodeElements.Concrete.Members;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 
 namespace RefDocGen.CodeElements.Concrete.Types.Delegate;
 
@@ -24,7 +25,7 @@ internal class DelegateTypeData : TypeDeclaration, IDelegateTypeData
     /// <param name="type"><see cref="Type"/> object representing the delegate.</param>
     /// <param name="invokeMethod"><c>Invoke</c> method of the delegate.</param>
     /// <param name="typeParameterDeclarations">Collection of the type parameters declared in this delegate; the keys represent type parameter names.</param>
-    public DelegateTypeData(Type type, MethodInfo invokeMethod, IReadOnlyDictionary<string, TypeParameterDeclaration> typeParameterDeclarations)
+    public DelegateTypeData(Type type, MethodInfo invokeMethod, IReadOnlyDictionary<string, TypeParameterData> typeParameterDeclarations)
         : base(type, typeParameterDeclarations)
     {
 
@@ -46,6 +47,6 @@ internal class DelegateTypeData : TypeDeclaration, IDelegateTypeData
     IReadOnlyList<IParameterData> IDelegateTypeData.Parameters => Parameters;
 
     /// <inheritdoc/>
-    IReadOnlyList<ITypeParameterDeclaration> ITypeDeclaration.TypeParameterDeclarations =>
+    IReadOnlyList<ITypeParameterData> ITypeDeclaration.TypeParameterDeclarations =>
         TypeParameterDeclarations.Values.OrderBy(t => t.Index).ToList();
 }

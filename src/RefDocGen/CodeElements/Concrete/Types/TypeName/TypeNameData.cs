@@ -1,4 +1,4 @@
-using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Tools;
 
 namespace RefDocGen.CodeElements.Concrete.Types.TypeName;
@@ -19,7 +19,7 @@ internal class TypeNameData : TypeNameBaseData, ITypeNameData
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
     /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    internal TypeNameData(Type type, IReadOnlyDictionary<string, TypeParameterDeclaration> declaredTypeParameters) : base(type)
+    internal TypeNameData(Type type, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters) : base(type)
     {
         TypeParameters = TypeObject
             .GetGenericArguments()
@@ -31,7 +31,7 @@ internal class TypeNameData : TypeNameBaseData, ITypeNameData
     /// Initializes a new instance of the <see cref="TypeNameData"/> class.
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
-    internal TypeNameData(Type type) : this(type, new Dictionary<string, TypeParameterDeclaration>())
+    internal TypeNameData(Type type) : this(type, new Dictionary<string, TypeParameterData>())
     { }
 
     /// <inheritdoc/>
