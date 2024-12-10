@@ -1,6 +1,7 @@
 using FluentAssertions;
 using NSubstitute;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Concrete.Types.TypeName;
 
 namespace RefDocGen.UnitTests.CodeElements.Concrete.Types;
 

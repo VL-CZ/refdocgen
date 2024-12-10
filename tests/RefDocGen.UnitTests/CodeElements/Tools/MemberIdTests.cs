@@ -1,10 +1,8 @@
 using FluentAssertions;
 using NSubstitute;
 using RefDocGen.CodeElements.Abstract.Members;
-using RefDocGen.CodeElements.Concrete.Members;
-using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Concrete.Types.TypeName;
 using RefDocGen.CodeElements.Tools;
-using System.Reflection;
 
 namespace RefDocGen.UnitTests.CodeElements.Tools;
 

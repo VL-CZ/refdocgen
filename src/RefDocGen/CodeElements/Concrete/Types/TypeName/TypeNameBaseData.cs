@@ -1,6 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Types;
 
-namespace RefDocGen.CodeElements.Concrete.Types;
+namespace RefDocGen.CodeElements.Concrete.Types.TypeName;
 
 /// <summary>
 /// Class representing name-related data of any type, including its name, namespace.

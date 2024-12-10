@@ -6,7 +6,7 @@ namespace RefDocGen.CodeElements.Abstract.Types.Delegate;
 /// <summary>
 /// Represents data of a delegate.
 /// </summary>
-public interface IDelegateTypeData : ITypeNameData, ITypeDeclaration
+public interface IDelegateTypeData : ITypeDeclaration
 {
     /// <summary>
     /// Return type of the delegate.

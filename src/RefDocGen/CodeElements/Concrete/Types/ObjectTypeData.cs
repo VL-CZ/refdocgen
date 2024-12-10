@@ -1,10 +1,7 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
-using RefDocGen.Tools.Xml;
-using System.Xml.Linq;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types.Enum;
-using RefDocGen.CodeElements.Tools;
 
 namespace RefDocGen.CodeElements.Concrete.Types;
 
@@ -17,7 +14,7 @@ namespace RefDocGen.CodeElements.Concrete.Types;
 /// Note: This class doesn't represent enum types - see <see cref="EnumTypeData"/>.
 /// </para>
 /// </summary>
-internal class ObjectTypeData : TypeNameData, IObjectTypeData
+internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="ObjectTypeData"/> class.
@@ -47,15 +44,6 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
         Methods = methods;
         Operators = operators;
         Indexers = indexers;
-        TypeParameterDeclarations = typeParameterDeclarations;
-
-        BaseType = type.BaseType is not null
-            ? new TypeNameData(type.BaseType)
-            : null;
-
-        Interfaces = type.GetInterfaces()
-            .Select(i => new TypeNameData(i))
-            .ToArray();
     }
 
     /// <summary>
@@ -88,27 +76,6 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
     /// </summary>
     public IReadOnlyDictionary<string, IndexerData> Indexers { get; }
 
-    /// <summary>
-    /// Collection of type parameters declared in this type; the keys represent type parameter names.
-    /// </summary>
-    public IReadOnlyDictionary<string, TypeParameterDeclaration> TypeParameterDeclarations { get; }
-
-    /// <inheritdoc/>
-    public override string Id => TypeId.Of(this);
-
-    /// <inheritdoc/>
-    public XElement DocComment { get; internal set; } = XmlDocElements.EmptySummary;
-
-    /// <inheritdoc/>
-    public AccessModifier AccessModifier =>
-        AccessModifierExtensions.GetAccessModifier(
-            TypeObject.IsNestedPrivate,
-            TypeObject.IsNestedFamily,
-            TypeObject.IsNestedAssembly || TypeObject.IsNotPublic,
-            TypeObject.IsPublic || TypeObject.IsNestedPublic,
-            TypeObject.IsNestedFamANDAssem,
-            TypeObject.IsNestedFamORAssem);
-
     /// <inheritdoc/>
     public bool IsAbstract => TypeObject.IsAbstract;
 
@@ -121,12 +88,6 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
         : TypeObject.IsValueType
             ? TypeKind.ValueType
             : TypeKind.Class;
-
-    /// <inheritdoc/>
-    public ITypeNameData? BaseType { get; }
-
-    /// <inheritdoc/>
-    public IReadOnlyList<ITypeNameData> Interfaces { get; }
 
     /// <inheritdoc/>
     IReadOnlyList<IConstructorData> IObjectTypeData.Constructors => Constructors.Values.ToList();
@@ -145,8 +106,4 @@ internal class ObjectTypeData : TypeNameData, IObjectTypeData
 
     /// <inheritdoc/>
     IReadOnlyList<IIndexerData> IObjectTypeData.Indexers => Indexers.Values.ToList();
-
-    /// <inheritdoc/>
-    IReadOnlyList<ITypeParameterDeclaration> ITypeDeclaration.TypeParameterDeclarations =>
-        TypeParameterDeclarations.Values.OrderBy(t => t.Index).ToList();
 }

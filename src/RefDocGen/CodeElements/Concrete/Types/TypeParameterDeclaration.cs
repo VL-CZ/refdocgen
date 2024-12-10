@@ -5,7 +5,6 @@ using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Concrete.Types;
 
-
 /// <summary>
 /// Class representing the declaration of a generic type parameter.
 /// </summary>

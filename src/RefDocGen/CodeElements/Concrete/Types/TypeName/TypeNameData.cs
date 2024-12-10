@@ -1,7 +1,7 @@
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Tools;
 
-namespace RefDocGen.CodeElements.Concrete.Types;
+namespace RefDocGen.CodeElements.Concrete.Types.TypeName;
 
 /// <summary>
 /// Class representing name-related data of a type, including its name, namespace, and generic parameters (if present).
