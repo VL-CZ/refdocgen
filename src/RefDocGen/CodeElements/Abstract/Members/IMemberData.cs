@@ -35,4 +35,9 @@ public interface IMemberData
     /// 'summary' doc comment for the member.
     /// </summary>
     XElement SummaryDocComment { get; }
+
+    /// <summary>
+    /// 'remarks' doc comment for the member.
+    /// </summary>
+    XElement RemarksDocComment { get; }
 }

@@ -39,4 +39,9 @@ internal static class XmlDocIdentifiers
     /// Represents the 'value' identifier.
     /// </summary>
     public const string Value = "value";
+
+    /// <summary>
+    /// Represents the 'remarks' identifier.
+    /// </summary>
+    public const string Remarks = "remarks";
 }

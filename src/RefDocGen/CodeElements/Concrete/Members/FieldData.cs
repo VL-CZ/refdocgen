@@ -51,4 +51,7 @@ internal class FieldData : IFieldData
 
     /// <inheritdoc/>
     public XElement SummaryDocComment { get; internal set; } = XmlDocElements.EmptySummary;
+
+    /// <inheritdoc/>
+    public XElement RemarksDocComment { get; internal set; } = XmlDocElements.EmptyRemarks;
 }

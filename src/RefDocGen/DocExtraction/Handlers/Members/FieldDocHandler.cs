@@ -12,11 +12,16 @@ internal class FieldDocHandler : IMemberDocHandler
     /// <inheritdoc/>
     public void AddDocumentation(ObjectTypeData type, string memberId, XElement memberDocComment)
     {
-        if (memberDocComment.TryGetSummaryElement(out var summaryNode))
+        if (type.Fields.TryGetValue(memberId, out var field))
         {
-            if (type.Fields.TryGetValue(memberId, out var field))
+            if (memberDocComment.TryGetSummaryElement(out var summaryNode))
             {
                 field.SummaryDocComment = summaryNode;
+            }
+
+            if (memberDocComment.TryGetRemarksElement(out var remarksNode))
+            {
+                field.RemarksDocComment = remarksNode;
             }
         }
     }

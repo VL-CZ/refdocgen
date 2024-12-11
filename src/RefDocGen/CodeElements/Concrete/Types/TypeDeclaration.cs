@@ -50,7 +50,10 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     public override string Id => TypeId.Of(this);
 
     /// <inheritdoc/>
-    public XElement DocComment { get; internal set; } = XmlDocElements.EmptySummary;
+    public XElement SummaryDocComment { get; internal set; } = XmlDocElements.EmptySummary;
+
+    /// <inheritdoc/>
+    public XElement RemarksDocComment { get; internal set; } = XmlDocElements.EmptyRemarks;
 
     /// <inheritdoc/>
     public bool HasTypeParameters => TypeParameterDeclarations.Count > 0;

@@ -39,6 +39,12 @@ internal abstract class ExecutableMemberDocHandler<T> : IMemberDocHandler where 
         {
             member.SummaryDocComment = summaryNode;
         }
+
+        // add remarks doc comment (if present)
+        if (memberDocComment.TryGetRemarksElement(out var remarksNode))
+        {
+            member.RemarksDocComment = remarksNode;
+        }
     }
 
     /// <inheritdoc/>

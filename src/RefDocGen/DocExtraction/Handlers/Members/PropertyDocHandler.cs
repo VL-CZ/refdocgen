@@ -23,6 +23,11 @@ internal class PropertyDocHandler : IMemberDocHandler
             {
                 property.ValueDocComment = valueNode;
             }
+
+            if (memberDocComment.TryGetRemarksElement(out var remarksNode))
+            {
+                property.RemarksDocComment = remarksNode;
+            }
         }
     }
 }

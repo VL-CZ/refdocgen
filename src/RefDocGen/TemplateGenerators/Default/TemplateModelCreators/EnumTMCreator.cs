@@ -21,7 +21,7 @@ internal static class EnumTMCreator
         var enumMemberTMs = enumData.Members.Select(GetFrom);
         List<Keyword> modifiers = [enumData.AccessModifier.ToKeyword()];
 
-        return new EnumTypeTM(enumData.Id, enumData.ShortName, enumData.Namespace, enumData.DocComment.Value, modifiers.GetStrings(), enumMemberTMs);
+        return new EnumTypeTM(enumData.Id, enumData.ShortName, enumData.Namespace, enumData.SummaryDocComment.Value, modifiers.GetStrings(), enumMemberTMs);
     }
 
     /// <summary>

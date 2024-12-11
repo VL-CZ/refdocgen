@@ -83,7 +83,7 @@ internal class NamespaceListTMCreator
     /// <returns>A <see cref="TypeNameTM"/> instance based on the provided <paramref name="type"/>.</returns>
     private static TypeNameTM GetFrom(IObjectTypeData type)
     {
-        return new TypeNameTM(type.Id, type.Kind.GetName(), CSharpTypeName.Of(type), type.DocComment.Value);
+        return new TypeNameTM(type.Id, type.Kind.GetName(), CSharpTypeName.Of(type), type.SummaryDocComment.Value);
     }
 
     /// <summary>
@@ -93,7 +93,7 @@ internal class NamespaceListTMCreator
     /// <returns>A <see cref="TypeNameTM"/> instance based on the provided <paramref name="enumData"/>.</returns>
     private static TypeNameTM GetFrom(IEnumTypeData enumData)
     {
-        return new TypeNameTM(enumData.Id, "enum", enumData.ShortName, enumData.DocComment.Value);
+        return new TypeNameTM(enumData.Id, "enum", enumData.ShortName, enumData.SummaryDocComment.Value);
     }
 
     /// <summary>
@@ -103,6 +103,6 @@ internal class NamespaceListTMCreator
     /// <returns>A <see cref="TypeNameTM"/> instance based on the provided <paramref name="delegateData"/>.</returns>
     private static TypeNameTM GetFrom(IDelegateTypeData delegateData)
     {
-        return new TypeNameTM(delegateData.Id, "delegate", CSharpTypeName.Of(delegateData), delegateData.DocComment.Value);
+        return new TypeNameTM(delegateData.Id, "delegate", CSharpTypeName.Of(delegateData), delegateData.SummaryDocComment.Value);
     }
 }

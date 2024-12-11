@@ -14,9 +14,14 @@ public interface ITypeDeclaration : ITypeNameData
     AccessModifier AccessModifier { get; }
 
     /// <summary>
-    /// Documentation comment provided to the type.
+    /// 'summary' documentation comment provided to the type.
     /// </summary>
-    XElement DocComment { get; }
+    XElement SummaryDocComment { get; }
+
+    /// <summary>
+    /// 'remarks' doc comment provided to the type.
+    /// </summary>
+    XElement RemarksDocComment { get; }
 
     /// <summary>
     /// Base type of the type. Returns null, if the type has no base type (i.e. it's an interface or <see cref="object"/> type).

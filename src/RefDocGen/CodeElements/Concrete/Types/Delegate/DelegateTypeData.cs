@@ -45,7 +45,7 @@ internal class DelegateTypeData : TypeDeclaration, IDelegateTypeData
         {
             // copy doc comments to the method
             // (no need to copy param comments, because they're shared)
-            invokeMethod.SummaryDocComment = DocComment;
+            invokeMethod.SummaryDocComment = SummaryDocComment;
             invokeMethod.ReturnValueDocComment = ReturnValueDocComment;
 
             return invokeMethod;

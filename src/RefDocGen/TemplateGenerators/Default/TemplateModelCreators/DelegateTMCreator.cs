@@ -31,7 +31,7 @@ internal static class DelegateTMCreator
             delegateTypeData.Id,
             CSharpTypeName.Of(delegateTypeData),
             delegateTypeData.Namespace,
-            delegateTypeData.DocComment.Value,
+            delegateTypeData.SummaryDocComment.Value,
             modifiers.GetStrings(),
             delegateTypeData.ReturnValueDocComment.Value,
             CSharpTypeName.Of(delegateTypeData.ReturnType),

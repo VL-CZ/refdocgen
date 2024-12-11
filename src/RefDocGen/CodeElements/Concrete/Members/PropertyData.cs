@@ -117,5 +117,8 @@ internal class PropertyData : IPropertyData
 
     /// <inheritdoc/>
     public XElement ValueDocComment { get; internal set; } = XmlDocElements.EmptySummary;
+
+    /// <inheritdoc/>
+    public XElement RemarksDocComment { get; internal set; } = XmlDocElements.EmptyRemarks;
 }
 

@@ -26,6 +26,11 @@ internal class IndexerDocHandler : IMemberDocHandler
                 indexer.ValueDocComment = valueNode;
             }
 
+            if (memberDocComment.TryGetRemarksElement(out var remarksNode))
+            {
+                indexer.RemarksDocComment = remarksNode;
+            }
+
             var paramElements = memberDocComment.Descendants(XmlDocIdentifiers.Param);
 
             // add parameter doc comments

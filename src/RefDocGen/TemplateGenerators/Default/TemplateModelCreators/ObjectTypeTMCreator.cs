@@ -50,7 +50,7 @@ internal static class ObjectTypeTMCreator
             typeData.Id,
             CSharpTypeName.Of(typeData),
             typeData.Namespace,
-            typeData.DocComment.Value,
+            typeData.SummaryDocComment.Value,
             typeData.Kind.GetName(),
             modifiers.GetStrings(),
             constructors,
@@ -107,7 +107,7 @@ internal static class ObjectTypeTMCreator
         var commentParser = new HtmlCommentParser();
         string docComment = commentParser.Parse(fieldData.SummaryDocComment);
 
-        return new FieldTM(fieldData.Name, CSharpTypeName.Of(fieldData.Type), docComment, modifiers.GetStrings());
+        return new FieldTM(fieldData.Name, CSharpTypeName.Of(fieldData.Type), docComment, fieldData.RemarksDocComment.Value, modifiers.GetStrings());
     }
 
     /// <summary>

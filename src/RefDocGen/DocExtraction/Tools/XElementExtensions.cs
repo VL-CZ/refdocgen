@@ -58,6 +58,17 @@ internal static class XElementExtensions
     }
 
     /// <summary>
+    /// Tries to get the 'remarks' child element.
+    /// </summary>
+    /// <param name="element">The current <see cref="XElement"/> to search within.</param>
+    /// <param name="remarksNode">The found 'remarks' <see cref="XElement"/>, or <see langword="null"/> if not found.</param>
+    /// <returns><see langword="true"/> if the 'remarks' element is found; otherwise, <see langword="false"/>.</returns>
+    internal static bool TryGetRemarksElement(this XElement element, [MaybeNullWhen(false)] out XElement remarksNode)
+    {
+        return element.TryGetElement(XmlDocIdentifiers.Remarks, out remarksNode);
+    }
+
+    /// <summary>
     /// Tries to get the 'returns' child element.
     /// </summary>
     /// <param name="element">The current <see cref="XElement"/> to search within.</param>
