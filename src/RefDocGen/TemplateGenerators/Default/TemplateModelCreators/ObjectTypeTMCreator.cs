@@ -51,6 +51,7 @@ internal static class ObjectTypeTMCreator
             CSharpTypeName.Of(typeData),
             typeData.Namespace,
             typeData.SummaryDocComment.Value,
+            typeData.RemarksDocComment.Value,
             typeData.Kind.GetName(),
             modifiers.GetStrings(),
             constructors,

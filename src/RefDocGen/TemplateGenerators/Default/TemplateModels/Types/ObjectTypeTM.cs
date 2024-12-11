@@ -8,9 +8,10 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 /// <param name="Id">Unique identifier of the type.</param>
 /// <param name="Name">The name of the type.</param>
 /// <param name="Namespace">The namespace containing the type.</param>
-/// <param name="DocComment">Documentation comment for the type.</param>
 /// <param name="TypeKindName">Name of the type kind.</param>
 /// <param name="Modifiers">Collection of modifiers for the type (e.g., public, abstract).</param>
+/// <param name="SummaryDocComment">'summary' documentation comment for the type.</param>
+/// <param name="RemarksDocComment">'remarks' documentation comment for the type.</param>
 /// <param name="Constructors">Template models of the type constructors.</param>
 /// <param name="Fields">Template models of the fields declared in the type.</param>
 /// <param name="Properties">Template models of the properties declared in the type.</param>
@@ -24,7 +25,8 @@ public record ObjectTypeTM(
     string Id,
     string Name,
     string Namespace,
-    string DocComment,
+    string SummaryDocComment,
+    string RemarksDocComment,
     string TypeKindName,
     IEnumerable<string> Modifiers,
     ConstructorTM[] Constructors,
