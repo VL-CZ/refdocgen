@@ -45,5 +45,12 @@ public interface ICallableMemberData : IMemberData
     /// </summary>
     bool IsVirtual { get; }
 
-    IEnumerable<IExceptionData> Exceptions { get; }
+    /// <summary>
+    /// Represents a collection of exceptions documented for the member.
+    /// </summary>
+    /// <remarks>
+    /// This collection includes only the exceptions explicitly documented using the <c>exception</c> XML tag. 
+    /// It does not include all possible exceptions that might occur during execution.
+    /// </remarks>
+    IReadOnlyList<IExceptionData> Exceptions { get; }
 }

@@ -31,9 +31,10 @@ internal class PropertyDocHandler : IMemberDocHandler
                 property.RemarksDocComment = remarksNode;
             }
 
-            var exceptionsDocComments = memberDocComment.Descendants(XmlDocIdentifiers.Exception);
 
-            property.Exceptions = ExceptionDocHelper.Add(exceptionsDocComments);
+            // add exception doc comments
+            var exceptionsDocComments = memberDocComment.Descendants(XmlDocIdentifiers.Exception);
+            property.Exceptions = ExceptionDocHelper.GetFrom(exceptionsDocComments);
         }
     }
 }

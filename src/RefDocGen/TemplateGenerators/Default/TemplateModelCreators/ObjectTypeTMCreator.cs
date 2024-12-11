@@ -1,5 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Tools;
@@ -74,12 +75,14 @@ internal static class ObjectTypeTMCreator
     private static ConstructorTM GetFrom(IConstructorData constructorData)
     {
         var modifiers = GetCallableMemberModifiers(constructorData);
+        var exceptionTMs = constructorData.Exceptions.Select(ExceptionTMCreator.GetFrom);
 
         return new ConstructorTM(
             constructorData.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
             constructorData.SummaryDocComment.Value,
             constructorData.RemarksDocComment.Value,
-            modifiers.GetStrings());
+            modifiers.GetStrings(),
+            exceptionTMs);
     }
 
     /// <summary>
@@ -134,8 +137,7 @@ internal static class ObjectTypeTMCreator
             setterModifiers.Add(propertyData.Setter.AccessModifier.ToKeyword());
         }
 
-        // TODO: update
-        var exceptions = propertyData.Exceptions.Select(e => new ExceptionTM(e.Name, e.DocComment.Value)).ToArray();
+        var exceptionTMs = propertyData.Exceptions.Select(ExceptionTMCreator.GetFrom);
 
         return new PropertyTM(
             propertyData.Name,
@@ -148,7 +150,7 @@ internal static class ObjectTypeTMCreator
             propertyData.Setter is not null,
             getterModifiers.GetStrings(),
             setterModifiers.GetStrings(),
-            exceptions);
+            exceptionTMs);
     }
 
     /// <summary>
@@ -173,6 +175,8 @@ internal static class ObjectTypeTMCreator
             setterModifiers.Add(indexer.Setter.AccessModifier.ToKeyword());
         }
 
+        var exceptionTMs = indexer.Exceptions.Select(ExceptionTMCreator.GetFrom);
+
         return new IndexerTM(
             indexer.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
             CSharpTypeName.Of(indexer.Type),
@@ -183,7 +187,8 @@ internal static class ObjectTypeTMCreator
             indexer.Getter is not null,
             indexer.Setter is not null,
             getterModifiers.GetStrings(),
-            setterModifiers.GetStrings());
+            setterModifiers.GetStrings(),
+            exceptionTMs);
     }
 
     /// <summary>
@@ -194,6 +199,7 @@ internal static class ObjectTypeTMCreator
     private static MethodTM GetFrom(IMethodData methodData)
     {
         var modifiers = GetCallableMemberModifiers(methodData);
+        var exceptionTMs = methodData.Exceptions.Select(ExceptionTMCreator.GetFrom);
 
         return new MethodTM(
             methodData.Name,
@@ -203,7 +209,8 @@ internal static class ObjectTypeTMCreator
             methodData.SummaryDocComment.Value,
             methodData.RemarksDocComment.Value,
             methodData.ReturnValueDocComment.Value,
-            modifiers.GetStrings());
+            modifiers.GetStrings(),
+            exceptionTMs);
     }
 
     /// <summary>
@@ -214,6 +221,7 @@ internal static class ObjectTypeTMCreator
     private static MethodTM GetFrom(IOperatorData operatorData)
     {
         var modifiers = GetCallableMemberModifiers(operatorData);
+        var exceptionTMs = operatorData.Exceptions.Select(ExceptionTMCreator.GetFrom);
 
         return new MethodTM(
             operatorData.Kind.GetName(),
@@ -223,7 +231,8 @@ internal static class ObjectTypeTMCreator
             operatorData.SummaryDocComment.Value,
             operatorData.RemarksDocComment.Value,
             operatorData.ReturnValueDocComment.Value,
-            modifiers.GetStrings());
+            modifiers.GetStrings(),
+            exceptionTMs);
     }
 
     /// <summary>

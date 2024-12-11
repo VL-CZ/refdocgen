@@ -13,6 +13,9 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <param name="HasSetter">Checks if the property has setter.</param>
 /// <param name="GetterModifiers">Collection of the getter modifiers (possibly empty).</param>
 /// <param name="SetterModifiers">Collection of the setter modifiers (possibly empty).</param>
+/// <param name="Exceptions">
+/// A collection of user-documented exceptions (using the 'exception' XML tag) that the property might throw.
+/// </param>
 public record PropertyTM(
     string Name,
     string Type,
@@ -24,4 +27,4 @@ public record PropertyTM(
     bool HasSetter,
     IEnumerable<string> GetterModifiers,
     IEnumerable<string> SetterModifiers,
-    IReadOnlyList<ExceptionTM> Exceptions);
+    IEnumerable<ExceptionTM> Exceptions);

@@ -16,6 +16,9 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 /// <param name="ReturnsDocComment">Documentation comment for the delegate method's return value.</param>
 /// <param name="Parameters">Collection of the delegate method parameters.</param>
 /// <param name="TypeParameters">Template models of the generic type parameters declared in the delegate.</param>
+/// <param name="Exceptions">
+/// A collection of user-documented exceptions (using the 'exception' XML tag) that the delegate might throw.
+/// </param>
 public record DelegateTypeTM(
     string Id,
     string Name,
@@ -27,4 +30,5 @@ public record DelegateTypeTM(
     string ReturnType,
     bool ReturnsVoid,
     ParameterTM[] Parameters,
-    TypeParameterTM[] TypeParameters) : ITemplateModelWithId;
+    TypeParameterTM[] TypeParameters,
+    IEnumerable<ExceptionTM> Exceptions) : ITemplateModelWithId;

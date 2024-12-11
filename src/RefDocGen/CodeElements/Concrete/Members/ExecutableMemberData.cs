@@ -84,5 +84,5 @@ internal abstract class ExecutableMemberData : IExecutableMemberData
     IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters;
 
     /// <inheritdoc/>
-    public IEnumerable<IExceptionData> Exceptions { get; internal set; } = [];
+    public IReadOnlyList<IExceptionData> Exceptions { get; internal set; } = [];
 }

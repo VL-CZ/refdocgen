@@ -31,10 +31,13 @@ internal class IndexerDocHandler : IMemberDocHandler
                 indexer.RemarksDocComment = remarksNode;
             }
 
-            var paramElements = memberDocComment.Descendants(XmlDocIdentifiers.Param);
-
             // add parameter doc comments
+            var paramElements = memberDocComment.Descendants(XmlDocIdentifiers.Param);
             ParameterDocHelper.Add(paramElements, indexer.Parameters);
+
+            // add exception doc comments
+            var exceptionsDocComments = memberDocComment.Descendants(XmlDocIdentifiers.Exception);
+            indexer.Exceptions = ExceptionDocHelper.GetFrom(exceptionsDocComments);
         }
     }
 }

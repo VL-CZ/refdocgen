@@ -45,6 +45,10 @@ internal abstract class ExecutableMemberDocHandler<T> : IMemberDocHandler where 
         {
             member.RemarksDocComment = remarksNode;
         }
+
+        // add exception doc comments (if present)
+        var exceptionsDocComments = memberDocComment.Descendants(XmlDocIdentifiers.Exception);
+        member.Exceptions = ExceptionDocHelper.GetFrom(exceptionsDocComments);
     }
 
     /// <inheritdoc/>

@@ -215,6 +215,20 @@
                             </p>
                         </div>
                     }
+
+                    @if (Model.Exceptions.Any())
+                    {
+                        <div class="mt-3">
+                            <div class="lead">Exceptions</div>
+                            @foreach (var exception in Model.Exceptions)
+                            {
+                                <div>
+                                    <span>@exception.Name</span>
+                                    <i>@exception.DocComment</i>
+                                </div>
+                            }
+                        </div>
+                    }
                 </div>
             </div>
         </div>

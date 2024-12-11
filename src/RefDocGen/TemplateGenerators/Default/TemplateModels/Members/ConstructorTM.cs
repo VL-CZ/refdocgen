@@ -7,8 +7,12 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <param name="SummaryDocComment">'summary' documentation comment for the constructor.</param>
 /// <param name="RemarksDocComment">'remarks' documentation comment for the constructor.</param>
 /// <param name="Modifiers">Collection of the constructor modifiers (e.g. private, static, etc.)</param>
+/// <param name="Exceptions">
+/// A collection of user-documented exceptions (using the 'exception' XML tag) that the constructor might throw.
+/// </param>
 public record ConstructorTM(
     IEnumerable<ParameterTM> Parameters,
     string SummaryDocComment,
     string RemarksDocComment,
-    IEnumerable<string> Modifiers);
+    IEnumerable<string> Modifiers,
+    IEnumerable<ExceptionTM> Exceptions);

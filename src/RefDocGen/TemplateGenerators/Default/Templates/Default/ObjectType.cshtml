@@ -225,6 +225,20 @@
                                     <i>@constructor.RemarksDocComment</i>
                                 </div>
                             }
+
+                            @if (constructor.Exceptions.Any())
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Exceptions</div>
+                                    @foreach (var exception in constructor.Exceptions)
+                                    {
+                                        <div>
+                                            <span>@exception.Name</span>
+                                            <i>@exception.DocComment</i>
+                                        </div>
+                                    }
+                                </div>
+                            }
                         </div>
                     }
                 </div>
@@ -333,7 +347,7 @@
                                 </div>
                             }
 
-                            @if (property.Exceptions.Count > 0)
+                            @if (property.Exceptions.Any())
                             {
                                 <div class="mt-3">
                                     <div class="lead">Exceptions</div>
@@ -467,6 +481,20 @@
                                 </div>
                             }
 
+                            @if (indexer.Exceptions.Any())
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Exceptions</div>
+                                    @foreach (var exception in indexer.Exceptions)
+                                    {
+                                        <div>
+                                            <span>@exception.Name</span>
+                                            <i>@exception.DocComment</i>
+                                        </div>
+                                    }
+                                </div>
+                            }
+
                         </div>
                     }
                 </div>
@@ -581,6 +609,20 @@
                                     <i>@method.RemarksDocComment</i>
                                 </div>
                             }
+
+                            @if (method.Exceptions.Any())
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Exceptions</div>
+                                    @foreach (var exception in method.Exceptions)
+                                    {
+                                        <div>
+                                            <span>@exception.Name</span>
+                                            <i>@exception.DocComment</i>
+                                        </div>
+                                    }
+                                </div>
+                            }
                         </div>
                     }
                 </div>
@@ -693,6 +735,20 @@
                                 <div class="mt-3">
                                     <div class="lead">Remarks</div>
                                     <i>@method.RemarksDocComment</i>
+                                </div>
+                            }
+
+                            @if (method.Exceptions.Any())
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Exceptions</div>
+                                    @foreach (var exception in method.Exceptions)
+                                    {
+                                        <div>
+                                            <span>@exception.Name</span>
+                                            <i>@exception.DocComment</i>
+                                        </div>
+                                    }
                                 </div>
                             }
                         </div>

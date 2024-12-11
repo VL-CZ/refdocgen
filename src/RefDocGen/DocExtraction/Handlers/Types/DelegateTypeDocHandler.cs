@@ -28,7 +28,10 @@ internal class DelegateTypeDocHandler : TypeDocHandler
 
         // add param doc comments
         var paramElements = docComment.Descendants(XmlDocIdentifiers.Param);
-
         ParameterDocHelper.Add(paramElements, d.Parameters);
+
+        // add exception doc comments
+        var exceptionsDocComments = docComment.Descendants(XmlDocIdentifiers.Exception);
+        d.Exceptions = ExceptionDocHelper.GetFrom(exceptionsDocComments);
     }
 }

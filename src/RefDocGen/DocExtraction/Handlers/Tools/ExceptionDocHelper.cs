@@ -7,7 +7,7 @@ namespace RefDocGen.DocExtraction.Handlers.Tools;
 
 internal class ExceptionDocHelper
 {
-    internal static IReadOnlyList<IExceptionData> Add(IEnumerable<XElement> elements)
+    internal static IReadOnlyList<IExceptionData> GetFrom(IEnumerable<XElement> elements)
     {
         var exceptions = new List<IExceptionData>();
 
@@ -15,8 +15,11 @@ internal class ExceptionDocHelper
         {
             if (e.TryGetCrefAttribute(out var exceptionName))
             {
+                string[] splitMemberName = exceptionName.Value.Split(':');
+                (_, string fullExceptionName) = (splitMemberName[0], splitMemberName[1]);
+
                 exceptions.Add(
-                    new ExceptionData(exceptionName.Value, e)
+                    new ExceptionData(fullExceptionName, e)
                     );
             }
         }

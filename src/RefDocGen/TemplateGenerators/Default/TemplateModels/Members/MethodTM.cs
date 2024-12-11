@@ -11,6 +11,9 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <param name="RemarksDocComment">'remarks' documentation comment for the method.</param>
 /// <param name="ReturnsDocComment">Documentation comment for the method's return value.</param>
 /// <param name="Modifiers">Collection of modifiers for the method (e.g. private, abstract, virtual, etc.)</param>
+/// <param name="Exceptions">
+/// A collection of user-documented exceptions (using the 'exception' XML tag) that the method might throw.
+/// </param>
 public record MethodTM(
     string Name,
     IEnumerable<ParameterTM> Parameters,
@@ -19,4 +22,5 @@ public record MethodTM(
     string SummaryDocComment,
     string RemarksDocComment,
     string ReturnsDocComment,
-    IEnumerable<string> Modifiers);
+    IEnumerable<string> Modifiers,
+    IEnumerable<ExceptionTM> Exceptions);

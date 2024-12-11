@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Types.Delegate;
+using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Tools.Keywords;
 using RefDocGen.TemplateGenerators.Tools.TypeName;
@@ -27,6 +28,8 @@ internal static class DelegateTMCreator
             .Select(TypeParameterTMCreator.GetFrom)
             .ToArray();
 
+        var exceptionTMs = delegateTypeData.Exceptions.Select(ExceptionTMCreator.GetFrom);
+
         return new DelegateTypeTM(
             delegateTypeData.Id,
             CSharpTypeName.Of(delegateTypeData),
@@ -38,6 +41,7 @@ internal static class DelegateTMCreator
             CSharpTypeName.Of(delegateTypeData.ReturnType),
             delegateTypeData.ReturnType.IsVoid,
             parameters,
-            typeParameterDeclarations);
+            typeParameterDeclarations,
+            exceptionTMs);
     }
 }
