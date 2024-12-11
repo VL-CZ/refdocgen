@@ -76,7 +76,7 @@ internal static class ObjectTypeTMCreator
 
         return new ConstructorTM(
             constructorData.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
-            constructorData.DocComment.Value,
+            constructorData.SummaryDocComment.Value,
             modifiers.GetStrings());
     }
 
@@ -105,7 +105,7 @@ internal static class ObjectTypeTMCreator
         }
 
         var commentParser = new HtmlCommentParser();
-        string docComment = commentParser.Parse(fieldData.DocComment);
+        string docComment = commentParser.Parse(fieldData.SummaryDocComment);
 
         return new FieldTM(fieldData.Name, CSharpTypeName.Of(fieldData.Type), docComment, modifiers.GetStrings());
     }
@@ -132,8 +132,16 @@ internal static class ObjectTypeTMCreator
             setterModifiers.Add(propertyData.Setter.AccessModifier.ToKeyword());
         }
 
-        return new PropertyTM(propertyData.Name, CSharpTypeName.Of(propertyData.Type), propertyData.DocComment.Value,
-            modifiers.GetStrings(), propertyData.Getter is not null, propertyData.Setter is not null, getterModifiers.GetStrings(), setterModifiers.GetStrings());
+        return new PropertyTM(
+            propertyData.Name,
+            CSharpTypeName.Of(propertyData.Type),
+            propertyData.SummaryDocComment.Value,
+            propertyData.ValueDocComment.Value,
+            modifiers.GetStrings(),
+            propertyData.Getter is not null,
+            propertyData.Setter is not null,
+            getterModifiers.GetStrings(),
+            setterModifiers.GetStrings());
     }
 
     /// <summary>
@@ -161,7 +169,8 @@ internal static class ObjectTypeTMCreator
         return new IndexerTM(
             indexer.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
             CSharpTypeName.Of(indexer.Type),
-            indexer.DocComment.Value,
+            indexer.SummaryDocComment.Value,
+            indexer.ValueDocComment.Value,
             modifiers.GetStrings(),
             indexer.Getter is not null,
             indexer.Setter is not null,
@@ -183,7 +192,7 @@ internal static class ObjectTypeTMCreator
             methodData.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
             CSharpTypeName.Of(methodData.ReturnType),
             methodData.ReturnType.IsVoid,
-            methodData.DocComment.Value,
+            methodData.SummaryDocComment.Value,
             methodData.ReturnValueDocComment.Value,
             modifiers.GetStrings());
     }
@@ -202,7 +211,7 @@ internal static class ObjectTypeTMCreator
             operatorData.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
             CSharpTypeName.Of(operatorData.ReturnType),
             operatorData.ReturnType.IsVoid,
-            operatorData.DocComment.Value,
+            operatorData.SummaryDocComment.Value,
             operatorData.ReturnValueDocComment.Value,
             modifiers.GetStrings());
     }

@@ -31,6 +31,6 @@ internal static class EnumTMCreator
     /// <returns>A <see cref="EnumMemberTM"/> instance based on the provided <paramref name="enumMember"/>.</returns>
     internal static EnumMemberTM GetFrom(IEnumMemberData enumMember)
     {
-        return new EnumMemberTM(enumMember.Name, enumMember.DocComment.Value);
+        return new EnumMemberTM(enumMember.Name, enumMember.SummaryDocComment.Value);
     }
 }

@@ -18,7 +18,12 @@ internal class IndexerDocHandler : IMemberDocHandler
         {
             if (memberDocComment.TryGetSummaryElement(out var summaryNode))
             {
-                indexer.DocComment = summaryNode;
+                indexer.SummaryDocComment = summaryNode;
+            }
+
+            if (memberDocComment.TryGetValueElement(out var valueNode))
+            {
+                indexer.ValueDocComment = valueNode;
             }
 
             var paramElements = memberDocComment.Descendants(XmlDocIdentifiers.Param);

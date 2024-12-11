@@ -47,6 +47,17 @@ internal static class XElementExtensions
     }
 
     /// <summary>
+    /// Tries to get the 'value' child element.
+    /// </summary>
+    /// <param name="element">The current <see cref="XElement"/> to search within.</param>
+    /// <param name="valueNode">The found 'value' <see cref="XElement"/>, or <see langword="null"/> if not found.</param>
+    /// <returns><see langword="true"/> if the 'value' element is found; otherwise, <see langword="false"/>.</returns>
+    internal static bool TryGetValueElement(this XElement element, [MaybeNullWhen(false)] out XElement valueNode)
+    {
+        return element.TryGetElement(XmlDocIdentifiers.Value, out valueNode);
+    }
+
+    /// <summary>
     /// Tries to get the 'returns' child element.
     /// </summary>
     /// <param name="element">The current <see cref="XElement"/> to search within.</param>

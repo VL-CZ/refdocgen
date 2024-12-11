@@ -3,12 +3,12 @@ using RefDocGen.CodeElements.Abstract.Types;
 namespace RefDocGen.CodeElements.Tools;
 
 /// <summary>
-/// Class providing methods for getting IDs of the selected types.
+/// Class providing methods for getting IDs of the declared types.
 /// </summary>
 internal class TypeId
 {
     /// <summary>
-    /// Get the ID of the given <paramref name="type"/>
+    /// Get the ID of the given <paramref name="type"/>.
     /// </summary>
     /// <param name="type">The type, whose ID is returned.</param>
     /// <returns>The ID of the given <paramref name="type"/></returns>

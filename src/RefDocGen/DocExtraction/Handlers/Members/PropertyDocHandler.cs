@@ -12,11 +12,16 @@ internal class PropertyDocHandler : IMemberDocHandler
     /// <inheritdoc/>
     public void AddDocumentation(ObjectTypeData type, string memberId, XElement memberDocComment)
     {
-        if (memberDocComment.TryGetSummaryElement(out var summaryNode))
+        if (type.Properties.TryGetValue(memberId, out var property))
         {
-            if (type.Properties.TryGetValue(memberId, out var property))
+            if (memberDocComment.TryGetSummaryElement(out var summaryNode))
             {
-                property.DocComment = summaryNode;
+                property.SummaryDocComment = summaryNode;
+            }
+
+            if (memberDocComment.TryGetValueElement(out var valueNode))
+            {
+                property.ValueDocComment = valueNode;
             }
         }
     }

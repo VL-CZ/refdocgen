@@ -16,7 +16,7 @@ internal class FieldDocHandler : IMemberDocHandler
         {
             if (type.Fields.TryGetValue(memberId, out var field))
             {
-                field.DocComment = summaryNode;
+                field.SummaryDocComment = summaryNode;
             }
         }
     }

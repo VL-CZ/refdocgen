@@ -37,7 +37,7 @@ internal abstract class ExecutableMemberDocHandler<T> : IMemberDocHandler where 
         // add summary doc comment (if present)
         if (memberDocComment.TryGetSummaryElement(out var summaryNode))
         {
-            member.DocComment = summaryNode;
+            member.SummaryDocComment = summaryNode;
         }
     }
 

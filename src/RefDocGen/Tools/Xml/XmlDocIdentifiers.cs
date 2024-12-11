@@ -34,4 +34,9 @@ internal static class XmlDocIdentifiers
     /// Represents the 'returns' identifier.
     /// </summary>
     public const string Returns = "returns";
+
+    /// <summary>
+    /// Represents the 'value' identifier.
+    /// </summary>
+    public const string Value = "value";
 }

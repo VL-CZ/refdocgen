@@ -29,5 +29,5 @@ internal class EnumMemberData : IEnumMemberData
     public string Name => FieldInfo.Name;
 
     /// <inheritdoc/>
-    public XElement DocComment { get; internal set; } = XmlDocElements.EmptySummary;
+    public XElement SummaryDocComment { get; internal set; } = XmlDocElements.EmptySummary;
 }

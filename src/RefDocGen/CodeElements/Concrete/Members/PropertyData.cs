@@ -113,6 +113,9 @@ internal class PropertyData : IPropertyData
     public bool IsReadonly => Setter is null;
 
     /// <inheritdoc/>
-    public XElement DocComment { get; internal set; } = XmlDocElements.EmptySummary;
+    public XElement SummaryDocComment { get; internal set; } = XmlDocElements.EmptySummary;
+
+    /// <inheritdoc/>
+    public XElement ValueDocComment { get; internal set; } = XmlDocElements.EmptySummary;
 }
 

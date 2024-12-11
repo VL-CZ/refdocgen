@@ -291,10 +291,17 @@
                                 </samp>
                             </h6>
                             <p class="text-muted mb-0">
-                                <i>@property.DocComment</i>
+                                <i>@property.SummaryDocComment</i>
                             </p>
-                            <ul class="list-inline mb-0">
-                            </ul>
+
+                            @if (property.ValueDocComment.Length > 0)
+                            {
+                                <p class="text-muted mt-2">
+                                    <div class="lead">Value</div>
+                                    <i>@property.ValueDocComment</i>
+                                </p>
+                            }
+
                         </div>
                     }
                 </div>
@@ -374,7 +381,7 @@
                                 </samp>
                             </h6>
                             <p class="text-muted mb-0">
-                                <i>@indexer.DocComment</i>
+                                <i>@indexer.SummaryDocComment</i>
                             </p>
 
                             @if (indexer.Parameters.Any())
@@ -398,6 +405,14 @@
                                         </p>
                                     }
                                 </div>
+                            }
+
+                            @if (indexer.ValueDocComment.Length > 0)
+                            {
+                                <p class="text-muted mt-2">
+                                    <div class="lead">Value</div>
+                                    <i>@indexer.ValueDocComment</i>
+                                </p>
                             }
 
                         </div>

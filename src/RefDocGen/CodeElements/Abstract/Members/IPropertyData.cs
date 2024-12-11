@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Abstract.Members;
 
@@ -36,4 +37,9 @@ public interface IPropertyData : IValueMemberData, ICallableMemberData
     /// Gets the access modifier of the setter, or <c>null</c> if no setter exists.
     /// </summary>
     AccessModifier? SetterAccessModifier { get; }
+
+    /// <summary>
+    /// 'value' doc comment for the property.
+    /// </summary>
+    XElement ValueDocComment { get; }
 }
