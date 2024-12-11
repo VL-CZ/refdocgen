@@ -183,7 +183,7 @@
 
                             </h6>
                             <p class="text-muted mb-0">
-                                <i>@constructor.DocComment</i>
+                                <i>@constructor.SummaryDocComment</i>
                             </p>
 
                             @if (constructor.Parameters.Any())
@@ -207,6 +207,14 @@
                                             <i>@parameter.DocComment</i>
                                         </p>
                                     }
+                                </div>
+                            }
+
+                            @if (constructor.RemarksDocComment.Length > 0)
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Remarks</div>
+                                    <i>@constructor.RemarksDocComment</i>
                                 </div>
                             }
                         </div>
@@ -307,6 +315,14 @@
                                     <div class="lead">Value</div>
                                     <i>@property.ValueDocComment</i>
                                 </p>
+                            }
+
+                            @if (property.RemarksDocComment.Length > 0)
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Remarks</div>
+                                    <i>@property.RemarksDocComment</i>
+                                </div>
                             }
 
                         </div>
@@ -422,6 +438,14 @@
                                 </p>
                             }
 
+                            @if (indexer.RemarksDocComment.Length > 0)
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Remarks</div>
+                                    <i>@indexer.RemarksDocComment</i>
+                                </div>
+                            }
+
                         </div>
                     }
                 </div>
@@ -486,7 +510,7 @@
 
                             </h6>
                             <p class="text-muted mb-0">
-                                <i>@method.DocComment</i>
+                                <i>@method.SummaryDocComment</i>
                             </p>
 
                             @if (method.Parameters.Any())
@@ -526,6 +550,14 @@
                                     <p class="text-muted">
                                         <i>@method.ReturnsDocComment</i>
                                     </p>
+                                </div>
+                            }
+
+                            @if (method.RemarksDocComment.Length > 0)
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Remarks</div>
+                                    <i>@method.RemarksDocComment</i>
                                 </div>
                             }
                         </div>
@@ -592,7 +624,7 @@
 
                             </h6>
                             <p class="text-muted mb-0">
-                                <i>@method.DocComment</i>
+                                <i>@method.SummaryDocComment</i>
                             </p>
 
                             @if (method.Parameters.Any())
@@ -632,6 +664,14 @@
                                     <p class="text-muted">
                                         <i>@method.ReturnsDocComment</i>
                                     </p>
+                                </div>
+                            }
+
+                            @if (method.RemarksDocComment.Length > 0)
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Remarks</div>
+                                    <i>@method.RemarksDocComment</i>
                                 </div>
                             }
                         </div>

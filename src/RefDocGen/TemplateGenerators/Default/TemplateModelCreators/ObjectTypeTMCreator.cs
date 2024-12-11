@@ -77,6 +77,7 @@ internal static class ObjectTypeTMCreator
         return new ConstructorTM(
             constructorData.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
             constructorData.SummaryDocComment.Value,
+            constructorData.RemarksDocComment.Value,
             modifiers.GetStrings());
     }
 
@@ -136,6 +137,7 @@ internal static class ObjectTypeTMCreator
             propertyData.Name,
             CSharpTypeName.Of(propertyData.Type),
             propertyData.SummaryDocComment.Value,
+            propertyData.RemarksDocComment.Value,
             propertyData.ValueDocComment.Value,
             modifiers.GetStrings(),
             propertyData.Getter is not null,
@@ -170,6 +172,7 @@ internal static class ObjectTypeTMCreator
             indexer.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
             CSharpTypeName.Of(indexer.Type),
             indexer.SummaryDocComment.Value,
+            indexer.RemarksDocComment.Value,
             indexer.ValueDocComment.Value,
             modifiers.GetStrings(),
             indexer.Getter is not null,
@@ -193,6 +196,7 @@ internal static class ObjectTypeTMCreator
             CSharpTypeName.Of(methodData.ReturnType),
             methodData.ReturnType.IsVoid,
             methodData.SummaryDocComment.Value,
+            methodData.RemarksDocComment.Value,
             methodData.ReturnValueDocComment.Value,
             modifiers.GetStrings());
     }
@@ -212,6 +216,7 @@ internal static class ObjectTypeTMCreator
             CSharpTypeName.Of(operatorData.ReturnType),
             operatorData.ReturnType.IsVoid,
             operatorData.SummaryDocComment.Value,
+            operatorData.RemarksDocComment.Value,
             operatorData.ReturnValueDocComment.Value,
             modifiers.GetStrings());
     }

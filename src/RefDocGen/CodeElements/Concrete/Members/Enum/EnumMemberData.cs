@@ -30,4 +30,7 @@ internal class EnumMemberData : IEnumMemberData
 
     /// <inheritdoc/>
     public XElement SummaryDocComment { get; internal set; } = XmlDocElements.EmptySummary;
+
+    /// <inheritdoc/>
+    public XElement RemarksDocComment { get; internal set; } = XmlDocElements.EmptySummary;
 }

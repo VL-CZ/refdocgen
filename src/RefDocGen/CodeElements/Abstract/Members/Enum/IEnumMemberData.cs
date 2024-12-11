@@ -27,4 +27,9 @@ public interface IEnumMemberData
     /// 'summary' doc comment for the enum member.
     /// </summary>
     XElement SummaryDocComment { get; }
+
+    /// <summary>
+    /// 'remarks' doc comment for the enum member.
+    /// </summary>
+    XElement RemarksDocComment { get; }
 }
