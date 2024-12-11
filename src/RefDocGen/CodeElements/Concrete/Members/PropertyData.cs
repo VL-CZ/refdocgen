@@ -120,5 +120,8 @@ internal class PropertyData : IPropertyData
 
     /// <inheritdoc/>
     public XElement RemarksDocComment { get; internal set; } = XmlDocElements.EmptyRemarks;
+
+    /// <inheritdoc/>
+    public IEnumerable<IExceptionData> Exceptions { get; internal set; } = [];
 }
 

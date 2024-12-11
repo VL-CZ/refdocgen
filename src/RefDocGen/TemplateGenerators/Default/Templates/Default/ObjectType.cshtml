@@ -333,6 +333,19 @@
                                 </div>
                             }
 
+                            @if (property.Exceptions.Count > 0)
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Exceptions</div>
+                                    @foreach (var exception in property.Exceptions)
+                                    {
+                                        <div>
+                                            <span>@exception.Name</span>
+                                            <i>@exception.DocComment</i>
+                                        </div>
+                                    }
+                                </div>
+                            }
                         </div>
                     }
                 </div>

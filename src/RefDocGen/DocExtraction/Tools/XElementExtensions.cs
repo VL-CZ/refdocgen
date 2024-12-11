@@ -89,4 +89,15 @@ internal static class XElementExtensions
     {
         return element.TryGetAttribute(XmlDocIdentifiers.Name, out attribute);
     }
+
+    /// <summary>
+    /// Tries to get the 'cref' attribute.
+    /// </summary>
+    /// <param name="element">The current <see cref="XElement"/> to search within.</param>
+    /// <param name="attribute">The found 'cref' <see cref="XAttribute"/>, or <see langword="null"/> if not found.</param>
+    /// <returns><see langword="true"/> if the 'cref' attribute is found; otherwise, <see langword="false"/>.</returns>
+    internal static bool TryGetCrefAttribute(this XElement element, [MaybeNullWhen(false)] out XAttribute attribute)
+    {
+        return element.TryGetAttribute(XmlDocIdentifiers.Cref, out attribute);
+    }
 }

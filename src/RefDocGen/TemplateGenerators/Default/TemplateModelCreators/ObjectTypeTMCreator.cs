@@ -134,6 +134,9 @@ internal static class ObjectTypeTMCreator
             setterModifiers.Add(propertyData.Setter.AccessModifier.ToKeyword());
         }
 
+        // TODO: update
+        var exceptions = propertyData.Exceptions.Select(e => new ExceptionTM(e.Name, e.DocComment.Value)).ToArray();
+
         return new PropertyTM(
             propertyData.Name,
             CSharpTypeName.Of(propertyData.Type),
@@ -144,7 +147,8 @@ internal static class ObjectTypeTMCreator
             propertyData.Getter is not null,
             propertyData.Setter is not null,
             getterModifiers.GetStrings(),
-            setterModifiers.GetStrings());
+            setterModifiers.GetStrings(),
+            exceptions);
     }
 
     /// <summary>

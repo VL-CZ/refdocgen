@@ -23,4 +23,5 @@ public record PropertyTM(
     bool HasGetter,
     bool HasSetter,
     IEnumerable<string> GetterModifiers,
-    IEnumerable<string> SetterModifiers);
+    IEnumerable<string> SetterModifiers,
+    IReadOnlyList<ExceptionTM> Exceptions);

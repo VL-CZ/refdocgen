@@ -44,4 +44,6 @@ public interface ICallableMemberData : IMemberData
     /// <para>True for virtual and abstract members.</para>
     /// </summary>
     bool IsVirtual { get; }
+
+    IEnumerable<IExceptionData> Exceptions { get; }
 }

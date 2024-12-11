@@ -1,5 +1,7 @@
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.DocExtraction.Handlers.Tools;
 using RefDocGen.DocExtraction.Tools;
+using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction.Handlers.Members;
@@ -28,6 +30,10 @@ internal class PropertyDocHandler : IMemberDocHandler
             {
                 property.RemarksDocComment = remarksNode;
             }
+
+            var exceptionsDocComments = memberDocComment.Descendants(XmlDocIdentifiers.Exception);
+
+            property.Exceptions = ExceptionDocHelper.Add(exceptionsDocComments);
         }
     }
 }
