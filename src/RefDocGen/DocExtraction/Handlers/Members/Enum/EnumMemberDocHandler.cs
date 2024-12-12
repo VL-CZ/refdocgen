@@ -17,11 +17,15 @@ internal class EnumMemberDocHandler
     /// <param name="memberDocComment">Doc comment for the member.</param>
     public void AddDocumentation(EnumTypeData e, string memberId, XElement memberDocComment)
     {
-        if (memberDocComment.TryGetSummaryElement(out var summaryNode))
+        if (e.Members.TryGetValue(memberId, out var enumValue))
         {
-            if (e.Members.TryGetValue(memberId, out var enumValue))
+            if (memberDocComment.TryGetSummaryElement(out var summaryNode))
             {
                 enumValue.SummaryDocComment = summaryNode;
+            }
+            if (memberDocComment.TryGetRemarksElement(out var remarksNode))
+            {
+                enumValue.RemarksDocComment = remarksNode;
             }
         }
     }

@@ -5,10 +5,20 @@ using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Concrete.Members;
 
+/// <summary>
+/// Class representing data of a type member.
+/// </summary>
 internal abstract class MemberData : IMemberData
 {
+    /// <summary>
+    /// <see cref="MemberInfo"/> object representing the member.
+    /// </summary>
     private readonly MemberInfo memberInfo;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MemberData"/> class.
+    /// </summary>
+    /// <param name="memberInfo"><see cref="MemberInfo"/> object representing the member.</param>
     protected MemberData(MemberInfo memberInfo)
     {
         this.memberInfo = memberInfo;
