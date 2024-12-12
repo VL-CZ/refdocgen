@@ -64,9 +64,8 @@ internal abstract class ExecutableMemberDocHandler<T> : IMemberDocHandler where 
         // assign member (non-param) doc comments
         AssignMemberComments(member, memberDocComment);
 
-        var paramElements = memberDocComment.Descendants(XmlDocIdentifiers.Param);
-
         // add parameter doc comments
+        var paramElements = memberDocComment.Descendants(XmlDocIdentifiers.Param);
         ParameterDocHelper.Add(paramElements, member.Parameters);
     }
 }

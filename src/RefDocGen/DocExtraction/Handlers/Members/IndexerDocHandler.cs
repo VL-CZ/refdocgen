@@ -1,3 +1,4 @@
+using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.DocExtraction.Handlers.Tools;
 using RefDocGen.DocExtraction.Tools;
@@ -9,35 +10,29 @@ namespace RefDocGen.DocExtraction.Handlers.Members;
 /// <summary>
 /// Class responsible for handling and adding XML doc comments to the corresponding indexers.
 /// </summary>
-internal class IndexerDocHandler : IMemberDocHandler
+internal class IndexerDocHandler : MemberDocHandler<IndexerData>, IMemberDocHandler
 {
     /// <inheritdoc/>
-    public void AddDocumentation(ObjectTypeData type, string memberId, XElement memberDocComment)
+    protected override void AddRemainingComments(IndexerData member, XElement memberDocComment)
     {
-        if (type.Indexers.TryGetValue(memberId, out var indexer))
+        // add 'value' doc comment
+        if (memberDocComment.TryGetValueElement(out var valueNode))
         {
-            if (memberDocComment.TryGetSummaryElement(out var summaryNode))
-            {
-                indexer.SummaryDocComment = summaryNode;
-            }
-
-            if (memberDocComment.TryGetValueElement(out var valueNode))
-            {
-                indexer.ValueDocComment = valueNode;
-            }
-
-            if (memberDocComment.TryGetRemarksElement(out var remarksNode))
-            {
-                indexer.RemarksDocComment = remarksNode;
-            }
-
-            // add parameter doc comments
-            var paramElements = memberDocComment.Descendants(XmlDocIdentifiers.Param);
-            ParameterDocHelper.Add(paramElements, indexer.Parameters);
-
-            // add exception doc comments
-            var exceptionsDocComments = memberDocComment.Descendants(XmlDocIdentifiers.Exception);
-            indexer.Exceptions = ExceptionDocHelper.Parse(exceptionsDocComments);
+            member.ValueDocComment = valueNode;
         }
+
+        // add 'param' doc comments
+        var paramElements = memberDocComment.Descendants(XmlDocIdentifiers.Param);
+        ParameterDocHelper.Add(paramElements, member.Parameters);
+
+        // add 'exception' doc comments
+        var exceptionsDocComments = memberDocComment.Descendants(XmlDocIdentifiers.Exception);
+        member.Exceptions = ExceptionDocHelper.Parse(exceptionsDocComments);
+    }
+
+    /// <inheritdoc/>
+    protected override IReadOnlyDictionary<string, IndexerData> GetMembers(ObjectTypeData type)
+    {
+        return type.Indexers;
     }
 }

@@ -1,3 +1,4 @@
+using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.DocExtraction.Handlers.Tools;
 using RefDocGen.DocExtraction.Tools;
@@ -9,32 +10,25 @@ namespace RefDocGen.DocExtraction.Handlers.Members;
 /// <summary>
 /// Class responsible for handling and adding XML doc comments to the corresponding properties.
 /// </summary>
-internal class PropertyDocHandler : IMemberDocHandler
+internal class PropertyDocHandler : MemberDocHandler<PropertyData>
 {
     /// <inheritdoc/>
-    public void AddDocumentation(ObjectTypeData type, string memberId, XElement memberDocComment)
+    protected override void AddRemainingComments(PropertyData member, XElement memberDocComment)
     {
-        if (type.Properties.TryGetValue(memberId, out var property))
+        // add 'value' doc comment
+        if (memberDocComment.TryGetValueElement(out var valueNode))
         {
-            if (memberDocComment.TryGetSummaryElement(out var summaryNode))
-            {
-                property.SummaryDocComment = summaryNode;
-            }
-
-            if (memberDocComment.TryGetValueElement(out var valueNode))
-            {
-                property.ValueDocComment = valueNode;
-            }
-
-            if (memberDocComment.TryGetRemarksElement(out var remarksNode))
-            {
-                property.RemarksDocComment = remarksNode;
-            }
-
-
-            // add exception doc comments
-            var exceptionsDocComments = memberDocComment.Descendants(XmlDocIdentifiers.Exception);
-            property.Exceptions = ExceptionDocHelper.Parse(exceptionsDocComments);
+            member.ValueDocComment = valueNode;
         }
+
+        // add 'exception' doc comments
+        var exceptionsDocComments = memberDocComment.Descendants(XmlDocIdentifiers.Exception);
+        member.Exceptions = ExceptionDocHelper.Parse(exceptionsDocComments);
+    }
+
+    /// <inheritdoc/>
+    protected override IReadOnlyDictionary<string, PropertyData> GetMembers(ObjectTypeData type)
+    {
+        return type.Properties;
     }
 }
