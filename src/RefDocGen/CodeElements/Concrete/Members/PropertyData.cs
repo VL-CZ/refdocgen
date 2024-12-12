@@ -12,14 +12,14 @@ namespace RefDocGen.CodeElements.Concrete.Members;
 /// <summary>
 /// Class representing data of a property.
 /// </summary>
-internal class PropertyData : IPropertyData
+internal class PropertyData : MemberData, IPropertyData
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="PropertyData"/> class.
     /// </summary>
     /// <param name="propertyInfo"><see cref="System.Reflection.PropertyInfo"/> object representing the property.</param>
     /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    internal PropertyData(PropertyInfo propertyInfo, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters)
+    internal PropertyData(PropertyInfo propertyInfo, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters) : base(propertyInfo)
     {
         PropertyInfo = propertyInfo;
         Type = propertyInfo.PropertyType.GetNameData(declaredTypeParameters);
@@ -43,12 +43,6 @@ internal class PropertyData : IPropertyData
     public IMethodData? Setter { get; }
 
     /// <inheritdoc/>
-    public virtual string Id => Name;
-
-    /// <inheritdoc/>
-    public string Name => PropertyInfo.Name;
-
-    /// <inheritdoc/>
     public ITypeNameData Type { get; }
 
     /// <inheritdoc/>
@@ -68,7 +62,7 @@ internal class PropertyData : IPropertyData
     }
 
     /// <inheritdoc/>
-    public bool IsStatic => Accessors.All(a => a.IsStatic);
+    public override bool IsStatic => Accessors.All(a => a.IsStatic);
 
     /// <inheritdoc/>
     public bool IsOverridable => Accessors.All(a => a.IsOverridable);
@@ -98,7 +92,7 @@ internal class PropertyData : IPropertyData
     public AccessModifier? SetterAccessModifier => Setter?.AccessModifier;
 
     /// <inheritdoc/>
-    public AccessModifier AccessModifier
+    public override AccessModifier AccessModifier
     {
         get
         {
@@ -114,13 +108,7 @@ internal class PropertyData : IPropertyData
     public bool IsReadonly => Setter is null;
 
     /// <inheritdoc/>
-    public XElement SummaryDocComment { get; internal set; } = XmlDocElements.EmptySummary;
-
-    /// <inheritdoc/>
     public XElement ValueDocComment { get; internal set; } = XmlDocElements.EmptySummary;
-
-    /// <inheritdoc/>
-    public XElement RemarksDocComment { get; internal set; } = XmlDocElements.EmptyRemarks;
 
     /// <inheritdoc/>
     public IReadOnlyList<IExceptionDocumentation> Exceptions { get; internal set; } = [];
