@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types.Exception;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
 using RefDocGen.Tools.Xml;
@@ -84,5 +85,5 @@ internal abstract class ExecutableMemberData : IExecutableMemberData
     IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters;
 
     /// <inheritdoc/>
-    public IReadOnlyList<IExceptionData> Exceptions { get; internal set; } = [];
+    public IReadOnlyList<IExceptionDocumentation> Exceptions { get; internal set; } = [];
 }

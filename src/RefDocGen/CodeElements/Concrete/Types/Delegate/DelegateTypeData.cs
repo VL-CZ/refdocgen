@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Xml.Linq;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
+using RefDocGen.CodeElements.Abstract.Types.Exception;
 
 namespace RefDocGen.CodeElements.Concrete.Types.Delegate;
 
@@ -65,5 +66,5 @@ internal class DelegateTypeData : TypeDeclaration, IDelegateTypeData
         TypeParameterDeclarations.Values.OrderBy(t => t.Index).ToList();
 
     /// <inheritdoc/>
-    public IReadOnlyList<IExceptionData> Exceptions { get; internal set; } = [];
+    public IReadOnlyList<IExceptionDocumentation> Exceptions { get; internal set; } = [];
 }

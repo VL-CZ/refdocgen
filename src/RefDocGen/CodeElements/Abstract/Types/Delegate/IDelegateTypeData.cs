@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types.Exception;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using System.Xml.Linq;
 
@@ -36,5 +37,5 @@ public interface IDelegateTypeData : ITypeDeclaration
     /// This collection includes only the exceptions explicitly documented using the <c>exception</c> XML tag. 
     /// It does not include all possible exceptions that might occur during execution.
     /// </remarks>
-    IReadOnlyList<IExceptionData> Exceptions { get; }
+    IReadOnlyList<IExceptionDocumentation> Exceptions { get; }
 }

@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types.Exception;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
@@ -122,6 +123,6 @@ internal class PropertyData : IPropertyData
     public XElement RemarksDocComment { get; internal set; } = XmlDocElements.EmptyRemarks;
 
     /// <inheritdoc/>
-    public IReadOnlyList<IExceptionData> Exceptions { get; internal set; } = [];
+    public IReadOnlyList<IExceptionDocumentation> Exceptions { get; internal set; } = [];
 }
 

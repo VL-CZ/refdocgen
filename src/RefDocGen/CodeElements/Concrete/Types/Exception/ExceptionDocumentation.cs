@@ -1,26 +1,26 @@
-using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types.Exception;
 using System.Xml.Linq;
 
-namespace RefDocGen.CodeElements.Concrete.Members;
+namespace RefDocGen.CodeElements.Concrete.Types.Exception;
 
 /// <summary>
 /// Class representing a user-documented exception (using the 'exception' tag) that can be thrown by a member.
 /// </summary>
-internal class ExceptionData : IExceptionData
+internal class ExceptionDocumentation : IExceptionDocumentation
 {
     /// <summary>
-    /// Initialize a new instance of <see cref="ExceptionData"/> class.
+    /// Initialize a new instance of <see cref="ExceptionDocumentation"/> class.
     /// </summary>
     /// <param name="name">Fully qualified name of the exception.</param>
     /// <param name="docComment">Doc comment provided to the exception.</param>
-    public ExceptionData(string name, XElement docComment)
+    public ExceptionDocumentation(string name, XElement docComment)
     {
-        Name = name;
+        TypeName = name;
         DocComment = docComment;
     }
 
     /// <inheritdoc/>
-    public string Name { get; }
+    public string TypeName { get; }
 
     /// <inheritdoc/>
     public XElement DocComment { get; }

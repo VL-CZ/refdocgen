@@ -1,5 +1,5 @@
-using RefDocGen.CodeElements.Abstract.Members;
-using RefDocGen.CodeElements.Concrete.Members;
+using RefDocGen.CodeElements.Abstract.Types.Exception;
+using RefDocGen.CodeElements.Concrete.Types.Exception;
 using RefDocGen.DocExtraction.Tools;
 using System.Xml.Linq;
 
@@ -11,13 +11,13 @@ namespace RefDocGen.DocExtraction.Handlers.Tools;
 internal class ExceptionDocHelper
 {
     /// <summary>
-    /// Parses the provided XML exception doc comments to a collection of <see cref="IExceptionData"/>.
+    /// Parses the provided XML exception doc comments to a collection of <see cref="IExceptionDocumentation"/>.
     /// </summary>
     /// <param name="elements">A collection of XML doc comments documenting the exceptions.</param>
     /// <returns>A collection of exception data corresponding to the provided XML doc comments.</returns>
-    internal static IReadOnlyList<IExceptionData> Parse(IEnumerable<XElement> elements)
+    internal static IReadOnlyList<IExceptionDocumentation> Parse(IEnumerable<XElement> elements)
     {
-        var exceptions = new List<IExceptionData>();
+        var exceptions = new List<IExceptionDocumentation>();
 
         foreach (var e in elements)
         {
@@ -27,7 +27,7 @@ internal class ExceptionDocHelper
                 (_, string fullExceptionName) = (splitMemberName[0], splitMemberName[1]);
 
                 exceptions.Add(
-                    new ExceptionData(fullExceptionName, e)
+                    new ExceptionDocumentation(fullExceptionName, e)
                     );
             }
         }
