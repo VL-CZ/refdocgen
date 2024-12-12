@@ -1,5 +1,4 @@
 using RefDocGen.CodeElements.Abstract.Types.Delegate;
-using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Tools.Keywords;
 using RefDocGen.TemplateGenerators.Tools.TypeName;
