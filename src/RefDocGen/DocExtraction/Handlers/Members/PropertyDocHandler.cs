@@ -34,7 +34,7 @@ internal class PropertyDocHandler : IMemberDocHandler
 
             // add exception doc comments
             var exceptionsDocComments = memberDocComment.Descendants(XmlDocIdentifiers.Exception);
-            property.Exceptions = ExceptionDocHelper.GetFrom(exceptionsDocComments);
+            property.Exceptions = ExceptionDocHelper.Parse(exceptionsDocComments);
         }
     }
 }

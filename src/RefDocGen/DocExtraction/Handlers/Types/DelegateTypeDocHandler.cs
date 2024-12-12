@@ -32,6 +32,6 @@ internal class DelegateTypeDocHandler : TypeDocHandler
 
         // add exception doc comments
         var exceptionsDocComments = docComment.Descendants(XmlDocIdentifiers.Exception);
-        d.Exceptions = ExceptionDocHelper.GetFrom(exceptionsDocComments);
+        d.Exceptions = ExceptionDocHelper.Parse(exceptionsDocComments);
     }
 }
