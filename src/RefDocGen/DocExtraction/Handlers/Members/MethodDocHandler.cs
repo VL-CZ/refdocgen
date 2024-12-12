@@ -11,15 +11,15 @@ namespace RefDocGen.DocExtraction.Handlers.Members;
 internal class MethodDocHandler : ExecutableMemberDocHandler<MethodData>
 {
     /// <inheritdoc/>
-    protected override MethodData? GetTypeMember(ObjectTypeData type, string memberId)
+    protected override IReadOnlyDictionary<string, MethodData> GetMembers(ObjectTypeData type)
     {
-        return type.Methods.GetValueOrDefault(memberId);
+        return type.Methods;
     }
 
     /// <inheritdoc/>
-    protected override void AssignMemberComments(MethodData member, XElement memberDocComment)
+    protected override void AddRemainingComments(MethodData member, XElement memberDocComment)
     {
-        base.AssignMemberComments(member, memberDocComment);
+        base.AddRemainingComments(member, memberDocComment);
 
         // add return value doc comment (if present)
         if (memberDocComment.TryGetReturnsElement(out var returnsNode))
