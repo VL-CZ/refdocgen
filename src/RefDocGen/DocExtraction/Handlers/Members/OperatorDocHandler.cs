@@ -11,20 +11,20 @@ namespace RefDocGen.DocExtraction.Handlers.Members;
 internal class OperatorDocHandler : ExecutableMemberDocHandler<OperatorData>
 {
     /// <inheritdoc/>
-    protected override OperatorData? GetTypeMember(ObjectTypeData type, string memberId)
+    protected override void AddRemainingComments(OperatorData member, XElement memberDocComment)
     {
-        return type.Operators.GetValueOrDefault(memberId);
-    }
-
-    /// <inheritdoc/>
-    protected override void AssignMemberComments(OperatorData member, XElement memberDocComment)
-    {
-        base.AssignMemberComments(member, memberDocComment);
+        base.AddRemainingComments(member, memberDocComment);
 
         // add return value doc comment (if present)
         if (memberDocComment.TryGetReturnsElement(out var returnsNode))
         {
             member.ReturnValueDocComment = returnsNode;
         }
+    }
+
+    /// <inheritdoc/>
+    protected override IReadOnlyDictionary<string, OperatorData> GetMembers(ObjectTypeData type)
+    {
+        return type.Operators;
     }
 }

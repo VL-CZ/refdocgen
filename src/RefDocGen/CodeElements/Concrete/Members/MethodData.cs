@@ -36,9 +36,6 @@ internal class MethodData : ExecutableMemberData, IMethodData
     public MethodInfo MethodInfo { get; }
 
     /// <inheritdoc/>
-    public override string Name => MethodInfo.Name;
-
-    /// <inheritdoc/>
     public ITypeNameData ReturnType { get; }
 
     /// <inheritdoc/>

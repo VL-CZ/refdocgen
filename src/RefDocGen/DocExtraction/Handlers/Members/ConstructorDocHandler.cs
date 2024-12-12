@@ -9,8 +9,8 @@ namespace RefDocGen.DocExtraction.Handlers.Members;
 internal class ConstructorDocHandler : ExecutableMemberDocHandler<ConstructorData>
 {
     /// <inheritdoc/>
-    protected override ConstructorData? GetTypeMember(ObjectTypeData type, string memberId)
+    protected override IReadOnlyDictionary<string, ConstructorData> GetMembers(ObjectTypeData type)
     {
-        return type.Constructors.GetValueOrDefault(memberId);
+        return type.Constructors;
     }
 }

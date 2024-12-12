@@ -2,10 +2,8 @@ using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types.Exception;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
-using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Concrete.Members;
 
@@ -13,7 +11,7 @@ namespace RefDocGen.CodeElements.Concrete.Members;
 /// Class representing data of an executable member (i.e. method or a constructor).
 /// Note that properties are excluded from this definition.
 /// </summary>
-internal abstract class ExecutableMemberData : IExecutableMemberData
+internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
 {
     /// <summary>
     /// <see cref="MethodBase"/> object representing the member.
@@ -25,7 +23,7 @@ internal abstract class ExecutableMemberData : IExecutableMemberData
     /// </summary>
     /// <param name="methodBase"><see cref="MethodBase"/> object representing the member.</param>
     /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; keys represent type parameter names.</param>
-    protected ExecutableMemberData(MethodBase methodBase, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters)
+    protected ExecutableMemberData(MethodBase methodBase, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters) : base(methodBase)
     {
         this.methodBase = methodBase;
 
@@ -37,20 +35,17 @@ internal abstract class ExecutableMemberData : IExecutableMemberData
     }
 
     /// <inheritdoc/>
-    public string Id => MemberId.Of(this);
-
-    /// <inheritdoc/>
-    public abstract string Name { get; }
+    public override string Id => MemberId.Of(this);
 
     /// <inheritdoc/>
     public abstract bool OverridesAnotherMember { get; }
 
     /// <inheritdoc/>
-    public AccessModifier AccessModifier => AccessModifierExtensions.GetAccessModifier(methodBase.IsPrivate, methodBase.IsFamily,
+    public override AccessModifier AccessModifier => AccessModifierExtensions.GetAccessModifier(methodBase.IsPrivate, methodBase.IsFamily,
         methodBase.IsAssembly, methodBase.IsPublic, methodBase.IsFamilyAndAssembly, methodBase.IsFamilyOrAssembly);
 
     /// <inheritdoc/>
-    public bool IsStatic => methodBase.IsStatic;
+    public override bool IsStatic => methodBase.IsStatic;
 
     /// <inheritdoc/>
     public bool IsOverridable => methodBase.IsVirtual && !methodBase.IsFinal;
@@ -69,12 +64,6 @@ internal abstract class ExecutableMemberData : IExecutableMemberData
 
     /// <inheritdoc/>
     public bool IsVirtual => methodBase.IsVirtual;
-
-    /// <inheritdoc/>
-    public XElement SummaryDocComment { get; internal set; } = XmlDocElements.EmptySummary;
-
-    /// <inheritdoc/>
-    public XElement RemarksDocComment { get; internal set; } = XmlDocElements.EmptyRemarks;
 
     /// <summary>
     /// Array of method parameters, ordered by their position.
