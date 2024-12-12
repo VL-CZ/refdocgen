@@ -104,7 +104,7 @@
         <hr />
 
         <p class="text-muted">
-            <i>@Model.DocComment</i>
+            <i>@Model.SummaryDocComment</i>
 
             @if (Model.TypeParameters.Any())
             {
@@ -125,6 +125,14 @@
                             <i>@typeParam.DocComment</i>
                         </p>
                     }
+                </div>
+            }
+
+            @if (Model.RemarksDocComment.Length > 0)
+            {
+                <div class="mt-3">
+                    <div class="lead">Remarks</div>
+                    <i>@Model.RemarksDocComment</i>
                 </div>
             }
 
@@ -183,7 +191,7 @@
 
                             </h6>
                             <p class="text-muted mb-0">
-                                <i>@constructor.DocComment</i>
+                                <i>@constructor.SummaryDocComment</i>
                             </p>
 
                             @if (constructor.Parameters.Any())
@@ -206,6 +214,28 @@
                                         <p class="text-muted">
                                             <i>@parameter.DocComment</i>
                                         </p>
+                                    }
+                                </div>
+                            }
+
+                            @if (constructor.RemarksDocComment.Length > 0)
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Remarks</div>
+                                    <i>@constructor.RemarksDocComment</i>
+                                </div>
+                            }
+
+                            @if (constructor.Exceptions.Any())
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Exceptions</div>
+                                    @foreach (var exception in constructor.Exceptions)
+                                    {
+                                        <div>
+                                            <span>@exception.Name</span>
+                                            <i>@exception.DocComment</i>
+                                        </div>
                                     }
                                 </div>
                             }
@@ -238,9 +268,16 @@
                             </h6>
                             <div class="text-muted mb-0">
                                 <i>
-                                    @Raw(field.DocComment)
+                                    @Raw(field.SummaryDocComment)
                                 </i>
                             </div>
+                            @if (field.RemarksDocComment.Length > 0)
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Remarks</div>
+                                    <i>@field.RemarksDocComment</i>
+                                </div>
+                            }
                         </div>
                     }
                 </div>
@@ -291,10 +328,38 @@
                                 </samp>
                             </h6>
                             <p class="text-muted mb-0">
-                                <i>@property.DocComment</i>
+                                <i>@property.SummaryDocComment</i>
                             </p>
-                            <ul class="list-inline mb-0">
-                            </ul>
+
+                            @if (property.ValueDocComment.Length > 0)
+                            {
+                                <p class="text-muted mt-2">
+                                    <div class="lead">Value</div>
+                                    <i>@property.ValueDocComment</i>
+                                </p>
+                            }
+
+                            @if (property.RemarksDocComment.Length > 0)
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Remarks</div>
+                                    <i>@property.RemarksDocComment</i>
+                                </div>
+                            }
+
+                            @if (property.Exceptions.Any())
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Exceptions</div>
+                                    @foreach (var exception in property.Exceptions)
+                                    {
+                                        <div>
+                                            <span>@exception.Name</span>
+                                            <i>@exception.DocComment</i>
+                                        </div>
+                                    }
+                                </div>
+                            }
                         </div>
                     }
                 </div>
@@ -374,7 +439,7 @@
                                 </samp>
                             </h6>
                             <p class="text-muted mb-0">
-                                <i>@indexer.DocComment</i>
+                                <i>@indexer.SummaryDocComment</i>
                             </p>
 
                             @if (indexer.Parameters.Any())
@@ -396,6 +461,36 @@
                                         <p class="text-muted">
                                             <i>@parameter.DocComment</i>
                                         </p>
+                                    }
+                                </div>
+                            }
+
+                            @if (indexer.ValueDocComment.Length > 0)
+                            {
+                                <p class="text-muted mt-2">
+                                    <div class="lead">Value</div>
+                                    <i>@indexer.ValueDocComment</i>
+                                </p>
+                            }
+
+                            @if (indexer.RemarksDocComment.Length > 0)
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Remarks</div>
+                                    <i>@indexer.RemarksDocComment</i>
+                                </div>
+                            }
+
+                            @if (indexer.Exceptions.Any())
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Exceptions</div>
+                                    @foreach (var exception in indexer.Exceptions)
+                                    {
+                                        <div>
+                                            <span>@exception.Name</span>
+                                            <i>@exception.DocComment</i>
+                                        </div>
                                     }
                                 </div>
                             }
@@ -464,7 +559,7 @@
 
                             </h6>
                             <p class="text-muted mb-0">
-                                <i>@method.DocComment</i>
+                                <i>@method.SummaryDocComment</i>
                             </p>
 
                             @if (method.Parameters.Any())
@@ -504,6 +599,28 @@
                                     <p class="text-muted">
                                         <i>@method.ReturnsDocComment</i>
                                     </p>
+                                </div>
+                            }
+
+                            @if (method.RemarksDocComment.Length > 0)
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Remarks</div>
+                                    <i>@method.RemarksDocComment</i>
+                                </div>
+                            }
+
+                            @if (method.Exceptions.Any())
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Exceptions</div>
+                                    @foreach (var exception in method.Exceptions)
+                                    {
+                                        <div>
+                                            <span>@exception.Name</span>
+                                            <i>@exception.DocComment</i>
+                                        </div>
+                                    }
                                 </div>
                             }
                         </div>
@@ -570,7 +687,7 @@
 
                             </h6>
                             <p class="text-muted mb-0">
-                                <i>@method.DocComment</i>
+                                <i>@method.SummaryDocComment</i>
                             </p>
 
                             @if (method.Parameters.Any())
@@ -610,6 +727,28 @@
                                     <p class="text-muted">
                                         <i>@method.ReturnsDocComment</i>
                                     </p>
+                                </div>
+                            }
+
+                            @if (method.RemarksDocComment.Length > 0)
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Remarks</div>
+                                    <i>@method.RemarksDocComment</i>
+                                </div>
+                            }
+
+                            @if (method.Exceptions.Any())
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">Exceptions</div>
+                                    @foreach (var exception in method.Exceptions)
+                                    {
+                                        <div>
+                                            <span>@exception.Name</span>
+                                            <i>@exception.DocComment</i>
+                                        </div>
+                                    }
                                 </div>
                             }
                         </div>

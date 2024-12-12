@@ -21,7 +21,7 @@ internal class EnumMemberDocHandler
         {
             if (e.Members.TryGetValue(memberId, out var enumValue))
             {
-                enumValue.DocComment = summaryNode;
+                enumValue.SummaryDocComment = summaryNode;
             }
         }
     }

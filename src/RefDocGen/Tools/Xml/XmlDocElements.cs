@@ -18,6 +18,16 @@ internal static class XmlDocElements
     internal static XElement EmptyReturns => new(XmlDocIdentifiers.Returns);
 
     /// <summary>
+    /// Create new empty 'value' <see cref="XElement"/>.
+    /// </summary>
+    internal static XElement EmptyValue => new(XmlDocIdentifiers.Value);
+
+    /// <summary>
+    /// Create new empty 'remarks' <see cref="XElement"/>.
+    /// </summary>
+    internal static XElement EmptyRemarks => new(XmlDocIdentifiers.Remarks);
+
+    /// <summary>
     /// Create new 'param' <see cref="XElement"/> with the given 'name' attribute and no children.
     /// </summary>
     /// <param name="name">Name attribute value.</param>

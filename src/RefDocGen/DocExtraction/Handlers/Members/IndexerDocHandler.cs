@@ -18,13 +18,26 @@ internal class IndexerDocHandler : IMemberDocHandler
         {
             if (memberDocComment.TryGetSummaryElement(out var summaryNode))
             {
-                indexer.DocComment = summaryNode;
+                indexer.SummaryDocComment = summaryNode;
             }
 
-            var paramElements = memberDocComment.Descendants(XmlDocIdentifiers.Param);
+            if (memberDocComment.TryGetValueElement(out var valueNode))
+            {
+                indexer.ValueDocComment = valueNode;
+            }
+
+            if (memberDocComment.TryGetRemarksElement(out var remarksNode))
+            {
+                indexer.RemarksDocComment = remarksNode;
+            }
 
             // add parameter doc comments
+            var paramElements = memberDocComment.Descendants(XmlDocIdentifiers.Param);
             ParameterDocHelper.Add(paramElements, indexer.Parameters);
+
+            // add exception doc comments
+            var exceptionsDocComments = memberDocComment.Descendants(XmlDocIdentifiers.Exception);
+            indexer.Exceptions = ExceptionDocHelper.Parse(exceptionsDocComments);
         }
     }
 }

@@ -50,7 +50,8 @@ internal static class ObjectTypeTMCreator
             typeData.Id,
             CSharpTypeName.Of(typeData),
             typeData.Namespace,
-            typeData.DocComment.Value,
+            typeData.SummaryDocComment.Value,
+            typeData.RemarksDocComment.Value,
             typeData.Kind.GetName(),
             modifiers.GetStrings(),
             constructors,
@@ -73,11 +74,14 @@ internal static class ObjectTypeTMCreator
     private static ConstructorTM GetFrom(IConstructorData constructorData)
     {
         var modifiers = GetCallableMemberModifiers(constructorData);
+        var exceptionTMs = constructorData.Exceptions.Select(ExceptionTMCreator.GetFrom);
 
         return new ConstructorTM(
             constructorData.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
-            constructorData.DocComment.Value,
-            modifiers.GetStrings());
+            constructorData.SummaryDocComment.Value,
+            constructorData.RemarksDocComment.Value,
+            modifiers.GetStrings(),
+            exceptionTMs);
     }
 
     /// <summary>
@@ -105,9 +109,9 @@ internal static class ObjectTypeTMCreator
         }
 
         var commentParser = new HtmlCommentParser();
-        string docComment = commentParser.Parse(fieldData.DocComment);
+        string docComment = commentParser.Parse(fieldData.SummaryDocComment);
 
-        return new FieldTM(fieldData.Name, CSharpTypeName.Of(fieldData.Type), docComment, modifiers.GetStrings());
+        return new FieldTM(fieldData.Name, CSharpTypeName.Of(fieldData.Type), docComment, fieldData.RemarksDocComment.Value, modifiers.GetStrings());
     }
 
     /// <summary>
@@ -132,8 +136,20 @@ internal static class ObjectTypeTMCreator
             setterModifiers.Add(propertyData.Setter.AccessModifier.ToKeyword());
         }
 
-        return new PropertyTM(propertyData.Name, CSharpTypeName.Of(propertyData.Type), propertyData.DocComment.Value,
-            modifiers.GetStrings(), propertyData.Getter is not null, propertyData.Setter is not null, getterModifiers.GetStrings(), setterModifiers.GetStrings());
+        var exceptionTMs = propertyData.Exceptions.Select(ExceptionTMCreator.GetFrom);
+
+        return new PropertyTM(
+            propertyData.Name,
+            CSharpTypeName.Of(propertyData.Type),
+            propertyData.SummaryDocComment.Value,
+            propertyData.RemarksDocComment.Value,
+            propertyData.ValueDocComment.Value,
+            modifiers.GetStrings(),
+            propertyData.Getter is not null,
+            propertyData.Setter is not null,
+            getterModifiers.GetStrings(),
+            setterModifiers.GetStrings(),
+            exceptionTMs);
     }
 
     /// <summary>
@@ -158,15 +174,20 @@ internal static class ObjectTypeTMCreator
             setterModifiers.Add(indexer.Setter.AccessModifier.ToKeyword());
         }
 
+        var exceptionTMs = indexer.Exceptions.Select(ExceptionTMCreator.GetFrom);
+
         return new IndexerTM(
             indexer.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
             CSharpTypeName.Of(indexer.Type),
-            indexer.DocComment.Value,
+            indexer.SummaryDocComment.Value,
+            indexer.RemarksDocComment.Value,
+            indexer.ValueDocComment.Value,
             modifiers.GetStrings(),
             indexer.Getter is not null,
             indexer.Setter is not null,
             getterModifiers.GetStrings(),
-            setterModifiers.GetStrings());
+            setterModifiers.GetStrings(),
+            exceptionTMs);
     }
 
     /// <summary>
@@ -177,15 +198,18 @@ internal static class ObjectTypeTMCreator
     private static MethodTM GetFrom(IMethodData methodData)
     {
         var modifiers = GetCallableMemberModifiers(methodData);
+        var exceptionTMs = methodData.Exceptions.Select(ExceptionTMCreator.GetFrom);
 
         return new MethodTM(
             methodData.Name,
             methodData.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
             CSharpTypeName.Of(methodData.ReturnType),
             methodData.ReturnType.IsVoid,
-            methodData.DocComment.Value,
+            methodData.SummaryDocComment.Value,
+            methodData.RemarksDocComment.Value,
             methodData.ReturnValueDocComment.Value,
-            modifiers.GetStrings());
+            modifiers.GetStrings(),
+            exceptionTMs);
     }
 
     /// <summary>
@@ -196,15 +220,18 @@ internal static class ObjectTypeTMCreator
     private static MethodTM GetFrom(IOperatorData operatorData)
     {
         var modifiers = GetCallableMemberModifiers(operatorData);
+        var exceptionTMs = operatorData.Exceptions.Select(ExceptionTMCreator.GetFrom);
 
         return new MethodTM(
             operatorData.Kind.GetName(),
             operatorData.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
             CSharpTypeName.Of(operatorData.ReturnType),
             operatorData.ReturnType.IsVoid,
-            operatorData.DocComment.Value,
+            operatorData.SummaryDocComment.Value,
+            operatorData.RemarksDocComment.Value,
             operatorData.ReturnValueDocComment.Value,
-            modifiers.GetStrings());
+            modifiers.GetStrings(),
+            exceptionTMs);
     }
 
     /// <summary>

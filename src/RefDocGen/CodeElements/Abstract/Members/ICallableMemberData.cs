@@ -1,3 +1,5 @@
+using RefDocGen.CodeElements.Abstract.Types.Exception;
+
 namespace RefDocGen.CodeElements.Abstract.Members;
 
 /// <summary>
@@ -44,4 +46,13 @@ public interface ICallableMemberData : IMemberData
     /// <para>True for virtual and abstract members.</para>
     /// </summary>
     bool IsVirtual { get; }
+
+    /// <summary>
+    /// Represents a collection of exceptions documented for the member.
+    /// </summary>
+    /// <remarks>
+    /// This collection includes only the exceptions explicitly documented using the <c>exception</c> XML tag. 
+    /// It does not include all possible exceptions that might occur during execution.
+    /// </remarks>
+    IReadOnlyList<IExceptionDocumentation> Exceptions { get; }
 }

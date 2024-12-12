@@ -27,16 +27,20 @@ internal static class DelegateTMCreator
             .Select(TypeParameterTMCreator.GetFrom)
             .ToArray();
 
+        var exceptionTMs = delegateTypeData.Exceptions.Select(ExceptionTMCreator.GetFrom);
+
         return new DelegateTypeTM(
             delegateTypeData.Id,
             CSharpTypeName.Of(delegateTypeData),
             delegateTypeData.Namespace,
-            delegateTypeData.DocComment.Value,
+            delegateTypeData.SummaryDocComment.Value,
+            delegateTypeData.RemarksDocComment.Value,
             modifiers.GetStrings(),
             delegateTypeData.ReturnValueDocComment.Value,
             CSharpTypeName.Of(delegateTypeData.ReturnType),
             delegateTypeData.ReturnType.IsVoid,
             parameters,
-            typeParameterDeclarations);
+            typeParameterDeclarations,
+            exceptionTMs);
     }
 }

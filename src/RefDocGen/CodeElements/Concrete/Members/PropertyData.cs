@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types.Exception;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
@@ -113,6 +114,15 @@ internal class PropertyData : IPropertyData
     public bool IsReadonly => Setter is null;
 
     /// <inheritdoc/>
-    public XElement DocComment { get; internal set; } = XmlDocElements.EmptySummary;
+    public XElement SummaryDocComment { get; internal set; } = XmlDocElements.EmptySummary;
+
+    /// <inheritdoc/>
+    public XElement ValueDocComment { get; internal set; } = XmlDocElements.EmptySummary;
+
+    /// <inheritdoc/>
+    public XElement RemarksDocComment { get; internal set; } = XmlDocElements.EmptyRemarks;
+
+    /// <inheritdoc/>
+    public IReadOnlyList<IExceptionDocumentation> Exceptions { get; internal set; } = [];
 }
 

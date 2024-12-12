@@ -32,7 +32,12 @@ public interface IMemberData
     bool IsStatic { get; }
 
     /// <summary>
-    /// Doc comment for the member.
+    /// 'summary' doc comment for the member.
     /// </summary>
-    XElement DocComment { get; }
+    XElement SummaryDocComment { get; }
+
+    /// <summary>
+    /// 'remarks' doc comment for the member.
+    /// </summary>
+    XElement RemarksDocComment { get; }
 }

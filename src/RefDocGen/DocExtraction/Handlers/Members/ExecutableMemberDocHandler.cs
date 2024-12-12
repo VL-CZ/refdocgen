@@ -37,8 +37,18 @@ internal abstract class ExecutableMemberDocHandler<T> : IMemberDocHandler where 
         // add summary doc comment (if present)
         if (memberDocComment.TryGetSummaryElement(out var summaryNode))
         {
-            member.DocComment = summaryNode;
+            member.SummaryDocComment = summaryNode;
         }
+
+        // add remarks doc comment (if present)
+        if (memberDocComment.TryGetRemarksElement(out var remarksNode))
+        {
+            member.RemarksDocComment = remarksNode;
+        }
+
+        // add exception doc comments (if present)
+        var exceptionsDocComments = memberDocComment.Descendants(XmlDocIdentifiers.Exception);
+        member.Exceptions = ExceptionDocHelper.Parse(exceptionsDocComments);
     }
 
     /// <inheritdoc/>

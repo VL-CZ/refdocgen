@@ -47,6 +47,28 @@ internal static class XElementExtensions
     }
 
     /// <summary>
+    /// Tries to get the 'value' child element.
+    /// </summary>
+    /// <param name="element">The current <see cref="XElement"/> to search within.</param>
+    /// <param name="valueNode">The found 'value' <see cref="XElement"/>, or <see langword="null"/> if not found.</param>
+    /// <returns><see langword="true"/> if the 'value' element is found; otherwise, <see langword="false"/>.</returns>
+    internal static bool TryGetValueElement(this XElement element, [MaybeNullWhen(false)] out XElement valueNode)
+    {
+        return element.TryGetElement(XmlDocIdentifiers.Value, out valueNode);
+    }
+
+    /// <summary>
+    /// Tries to get the 'remarks' child element.
+    /// </summary>
+    /// <param name="element">The current <see cref="XElement"/> to search within.</param>
+    /// <param name="remarksNode">The found 'remarks' <see cref="XElement"/>, or <see langword="null"/> if not found.</param>
+    /// <returns><see langword="true"/> if the 'remarks' element is found; otherwise, <see langword="false"/>.</returns>
+    internal static bool TryGetRemarksElement(this XElement element, [MaybeNullWhen(false)] out XElement remarksNode)
+    {
+        return element.TryGetElement(XmlDocIdentifiers.Remarks, out remarksNode);
+    }
+
+    /// <summary>
     /// Tries to get the 'returns' child element.
     /// </summary>
     /// <param name="element">The current <see cref="XElement"/> to search within.</param>
@@ -66,5 +88,16 @@ internal static class XElementExtensions
     internal static bool TryGetNameAttribute(this XElement element, [MaybeNullWhen(false)] out XAttribute attribute)
     {
         return element.TryGetAttribute(XmlDocIdentifiers.Name, out attribute);
+    }
+
+    /// <summary>
+    /// Tries to get the 'cref' attribute.
+    /// </summary>
+    /// <param name="element">The current <see cref="XElement"/> to search within.</param>
+    /// <param name="attribute">The found 'cref' <see cref="XAttribute"/>, or <see langword="null"/> if not found.</param>
+    /// <returns><see langword="true"/> if the 'cref' attribute is found; otherwise, <see langword="false"/>.</returns>
+    internal static bool TryGetCrefAttribute(this XElement element, [MaybeNullWhen(false)] out XAttribute attribute)
+    {
+        return element.TryGetAttribute(XmlDocIdentifiers.Cref, out attribute);
     }
 }

@@ -24,7 +24,12 @@ public interface IEnumMemberData
     string Name { get; }
 
     /// <summary>
-    /// Doc comment for the enum member.
+    /// 'summary' doc comment for the enum member.
     /// </summary>
-    XElement DocComment { get; }
+    XElement SummaryDocComment { get; }
+
+    /// <summary>
+    /// 'remarks' doc comment for the enum member.
+    /// </summary>
+    XElement RemarksDocComment { get; }
 }

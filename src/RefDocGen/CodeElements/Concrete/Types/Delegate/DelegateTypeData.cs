@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Xml.Linq;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
+using RefDocGen.CodeElements.Abstract.Types.Exception;
 
 namespace RefDocGen.CodeElements.Concrete.Types.Delegate;
 
@@ -45,7 +46,7 @@ internal class DelegateTypeData : TypeDeclaration, IDelegateTypeData
         {
             // copy doc comments to the method
             // (no need to copy param comments, because they're shared)
-            invokeMethod.DocComment = DocComment;
+            invokeMethod.SummaryDocComment = SummaryDocComment;
             invokeMethod.ReturnValueDocComment = ReturnValueDocComment;
 
             return invokeMethod;
@@ -63,4 +64,7 @@ internal class DelegateTypeData : TypeDeclaration, IDelegateTypeData
     /// <inheritdoc/>
     IReadOnlyList<ITypeParameterData> ITypeDeclaration.TypeParameterDeclarations =>
         TypeParameterDeclarations.Values.OrderBy(t => t.Index).ToList();
+
+    /// <inheritdoc/>
+    public IReadOnlyList<IExceptionDocumentation> Exceptions { get; internal set; } = [];
 }

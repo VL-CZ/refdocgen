@@ -34,4 +34,24 @@ internal static class XmlDocIdentifiers
     /// Represents the 'returns' identifier.
     /// </summary>
     public const string Returns = "returns";
+
+    /// <summary>
+    /// Represents the 'value' identifier.
+    /// </summary>
+    public const string Value = "value";
+
+    /// <summary>
+    /// Represents the 'remarks' identifier.
+    /// </summary>
+    public const string Remarks = "remarks";
+
+    /// <summary>
+    /// Represents the 'exception' identifier.
+    /// </summary>
+    public const string Exception = "exception";
+
+    /// <summary>
+    /// Represents the 'cref' identifier.
+    /// </summary>
+    public const string Cref = "cref";
 }

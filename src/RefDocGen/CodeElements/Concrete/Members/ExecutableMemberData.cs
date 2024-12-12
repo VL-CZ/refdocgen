@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types.Exception;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
 using RefDocGen.Tools.Xml;
@@ -70,7 +71,10 @@ internal abstract class ExecutableMemberData : IExecutableMemberData
     public bool IsVirtual => methodBase.IsVirtual;
 
     /// <inheritdoc/>
-    public XElement DocComment { get; internal set; } = XmlDocElements.EmptySummary;
+    public XElement SummaryDocComment { get; internal set; } = XmlDocElements.EmptySummary;
+
+    /// <inheritdoc/>
+    public XElement RemarksDocComment { get; internal set; } = XmlDocElements.EmptyRemarks;
 
     /// <summary>
     /// Array of method parameters, ordered by their position.
@@ -79,4 +83,7 @@ internal abstract class ExecutableMemberData : IExecutableMemberData
 
     /// <inheritdoc/>
     IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters;
+
+    /// <inheritdoc/>
+    public IReadOnlyList<IExceptionDocumentation> Exceptions { get; internal set; } = [];
 }

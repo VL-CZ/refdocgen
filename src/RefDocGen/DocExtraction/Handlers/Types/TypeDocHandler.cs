@@ -17,10 +17,16 @@ internal class TypeDocHandler
     /// <param name="docComment">Doc comment for the type.</param>
     internal virtual void AddDocumentation(TypeDeclaration type, XElement docComment)
     {
-        // add summary doc comment
+        // add 'summary' doc comment
         if (docComment.TryGetSummaryElement(out var summaryNode))
         {
-            type.DocComment = summaryNode;
+            type.SummaryDocComment = summaryNode;
+        }
+
+        // add 'remarks' doc comment
+        if (docComment.TryGetRemarksElement(out var remarksNode))
+        {
+            type.RemarksDocComment = remarksNode;
         }
 
         var typeParamElements = docComment.Descendants(XmlDocIdentifiers.TypeParam);
