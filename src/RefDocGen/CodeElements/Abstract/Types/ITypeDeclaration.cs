@@ -37,4 +37,5 @@ public interface ITypeDeclaration : ITypeNameData
     /// Collection of generic type parameters declared in the delegate, ordered by their index.
     /// </summary>
     IReadOnlyList<ITypeParameterData> TypeParameterDeclarations { get; }
+
 }

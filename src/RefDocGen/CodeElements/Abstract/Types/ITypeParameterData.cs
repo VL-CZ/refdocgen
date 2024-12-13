@@ -1,3 +1,4 @@
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Abstract.Types;
@@ -36,4 +37,14 @@ public interface ITypeParameterData
     /// Check whether the type parameter is contravariant.
     /// </summary>
     bool IsContravariant { get; }
+
+    /// <summary>
+    /// Constraints of the generic parameter.
+    /// </summary>
+    IEnumerable<ITypeNameData> Constraints { get; }
+
+    /// <summary>
+    /// Constraints of the generic parameter.
+    /// </summary>
+    IEnumerable<string> SpecialConstraints { get; }
 }

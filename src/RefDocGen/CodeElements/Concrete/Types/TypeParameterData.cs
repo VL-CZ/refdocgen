@@ -1,4 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
+using RefDocGen.CodeElements.Tools;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Xml.Linq;
@@ -39,4 +41,32 @@ internal class TypeParameterData : ITypeParameterData
 
     /// <inheritdoc/>
     public bool IsContravariant => TypeObject.GenericParameterAttributes.HasFlag(GenericParameterAttributes.Contravariant);
+
+    /// <inheritdoc/>
+    public IEnumerable<ITypeNameData> Constraints => TypeObject.GetGenericParameterConstraints().Select(p => p.GetNameData());
+
+    /// <inheritdoc/>
+    public IEnumerable<string> SpecialConstraints
+    {
+        get
+        {
+            List<SpecialConstraint> values = [];
+            if (TypeObject.GenericParameterAttributes.HasFlag(GenericParameterAttributes.ReferenceTypeConstraint))
+            {
+                values.Add(SpecialConstraint.Class);
+            }
+            if (TypeObject.GenericParameterAttributes.HasFlag(GenericParameterAttributes.NotNullableValueTypeConstraint))
+            {
+                values.Add(SpecialConstraint.Struct);
+            }
+            if (TypeObject.GenericParameterAttributes.HasFlag(GenericParameterAttributes.DefaultConstructorConstraint))
+            {
+                values.Add(SpecialConstraint.New);
+            }
+
+            return values.Select(v => v.ToString());
+        }
+    }
 }
+
+enum SpecialConstraint { Class, Struct, New }
