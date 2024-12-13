@@ -1,5 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Tools;
@@ -46,11 +47,14 @@ internal static class ObjectTypeTMCreator
             modifiers.Add(Keyword.Abstract);
         }
 
+        var commentParser = new HtmlCommentParser();
+        string summaryDocComment = commentParser.Parse(typeData.SummaryDocComment);
+
         return new ObjectTypeTM(
             typeData.Id,
             CSharpTypeName.Of(typeData),
             typeData.Namespace,
-            typeData.SummaryDocComment.Value,
+            summaryDocComment,
             typeData.RemarksDocComment.Value,
             typeData.Kind.GetName(),
             modifiers.GetStrings(),
@@ -76,9 +80,12 @@ internal static class ObjectTypeTMCreator
         var modifiers = GetCallableMemberModifiers(constructorData);
         var exceptionTMs = constructorData.Exceptions.Select(ExceptionTMCreator.GetFrom);
 
+        var commentParser = new HtmlCommentParser();
+        string summaryDocComment = commentParser.Parse(constructorData.SummaryDocComment);
+
         return new ConstructorTM(
             constructorData.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
-            constructorData.SummaryDocComment.Value,
+            summaryDocComment,
             constructorData.RemarksDocComment.Value,
             modifiers.GetStrings(),
             exceptionTMs);
