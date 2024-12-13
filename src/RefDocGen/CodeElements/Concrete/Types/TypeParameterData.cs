@@ -43,7 +43,10 @@ internal class TypeParameterData : ITypeParameterData
     public bool IsContravariant => TypeObject.GenericParameterAttributes.HasFlag(GenericParameterAttributes.Contravariant);
 
     /// <inheritdoc/>
-    public IEnumerable<ITypeNameData> Constraints => TypeObject.GetGenericParameterConstraints().Select(p => p.GetNameData());
+    public IEnumerable<ITypeNameData> Constraints => TypeObject
+        .GetGenericParameterConstraints()
+        .Except([typeof(ValueType)])
+        .Select(p => p.GetNameData());
 
     /// <inheritdoc/>
     public IEnumerable<SpecialConstraint> SpecialConstraints
@@ -59,7 +62,8 @@ internal class TypeParameterData : ITypeParameterData
             {
                 values.Add(SpecialConstraint.NotNullableValueType);
             }
-            if (TypeObject.GenericParameterAttributes.HasFlag(GenericParameterAttributes.DefaultConstructorConstraint))
+            if (TypeObject.GenericParameterAttributes.HasFlag(GenericParameterAttributes.DefaultConstructorConstraint)
+                && !values.Contains(SpecialConstraint.NotNullableValueType))
             {
                 values.Add(SpecialConstraint.DefaultConstructor);
             }
