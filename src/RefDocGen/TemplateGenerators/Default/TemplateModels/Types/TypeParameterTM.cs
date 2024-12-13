@@ -1,3 +1,5 @@
+using RefDocGen.CodeElements;
+
 namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 
 /// <summary>
@@ -6,4 +8,4 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 /// <param name="Name">Name of the type parameter.</param>
 /// <param name="DocComment">Documentation comment for the type parameter.</param>
 /// <param name="Modifiers">Collection of the type parameter modifiers (e.g. in, out, etc.).</param>
-public record TypeParameterTM(string Name, string DocComment, IEnumerable<string> Modifiers, IEnumerable<string> Constraints);
+public record TypeParameterTM(string Name, string DocComment, IEnumerable<string> Modifiers, IEnumerable<string> Constraints, IEnumerable<string> SpecialConstraints);

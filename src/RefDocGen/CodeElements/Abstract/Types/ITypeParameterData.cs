@@ -46,5 +46,5 @@ public interface ITypeParameterData
     /// <summary>
     /// Constraints of the generic parameter.
     /// </summary>
-    IEnumerable<string> SpecialConstraints { get; }
+    IEnumerable<SpecialConstraint> SpecialConstraints { get; }
 }

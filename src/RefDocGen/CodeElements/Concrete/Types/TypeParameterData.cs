@@ -46,27 +46,25 @@ internal class TypeParameterData : ITypeParameterData
     public IEnumerable<ITypeNameData> Constraints => TypeObject.GetGenericParameterConstraints().Select(p => p.GetNameData());
 
     /// <inheritdoc/>
-    public IEnumerable<string> SpecialConstraints
+    public IEnumerable<SpecialConstraint> SpecialConstraints
     {
         get
         {
             List<SpecialConstraint> values = [];
             if (TypeObject.GenericParameterAttributes.HasFlag(GenericParameterAttributes.ReferenceTypeConstraint))
             {
-                values.Add(SpecialConstraint.Class);
+                values.Add(SpecialConstraint.ReferenceType);
             }
             if (TypeObject.GenericParameterAttributes.HasFlag(GenericParameterAttributes.NotNullableValueTypeConstraint))
             {
-                values.Add(SpecialConstraint.Struct);
+                values.Add(SpecialConstraint.NotNullableValueType);
             }
             if (TypeObject.GenericParameterAttributes.HasFlag(GenericParameterAttributes.DefaultConstructorConstraint))
             {
-                values.Add(SpecialConstraint.New);
+                values.Add(SpecialConstraint.DefaultConstructor);
             }
 
-            return values.Select(v => v.ToString());
+            return values;
         }
     }
 }
-
-enum SpecialConstraint { Class, Struct, New }

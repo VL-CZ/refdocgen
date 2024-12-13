@@ -76,7 +76,10 @@
                     <samp>
                         <span class="text-primary">where</span>
                         <span class="text-secondary">@tp.Name : </span>
-                        @string.Join(", ", tp.Constraints)
+                        <span class="text-primary">@string.Join(", ", tp.SpecialConstraints),</span>
+                        <span class="text-secondary">
+                            @string.Join(", ", tp.Constraints)
+                        </span>
                     </samp>
                 </h6>
             }
