@@ -10,15 +10,15 @@ internal class HtmlCommentParser
         ["summary"] = "div",
         ["remarks"] = "div",
 
-        ["param"] = "div",
         ["returns"] = "div",
+        ["param"] = "div",
         ["value"] = "div",
-
-        ["typeparam"] = "div",
 
         ["para"] = "p",
         ["c"] = "code",
         ["item"] = "li",
+
+        ["typeparam"] = "div",
 
         //["example"] = "div",
         //["description"] = "p",
