@@ -103,8 +103,10 @@
 
         <hr />
 
-        <p class="text-muted">
-            <i>@Model.SummaryDocComment</i>
+        <div class="text-muted">
+            <i>
+                @Raw(Model.SummaryDocComment)
+            </i>
 
             @if (Model.TypeParameters.Any())
             {
@@ -136,7 +138,7 @@
                 </div>
             }
 
-        </p>
+        </div>
 
         <hr />
 
@@ -190,9 +192,11 @@
                                 </samp>
 
                             </h6>
-                            <p class="text-muted mb-0">
-                                <i>@constructor.SummaryDocComment</i>
-                            </p>
+                            <div class="text-muted mb-0">
+                                <i>
+                                    @Raw(constructor.SummaryDocComment)
+                                </i>
+                            </div>
 
                             @if (constructor.Parameters.Any())
                             {

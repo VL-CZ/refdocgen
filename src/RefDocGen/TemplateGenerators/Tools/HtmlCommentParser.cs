@@ -8,20 +8,22 @@ internal class HtmlCommentParser
     private readonly Dictionary<string, string> tags = new()
     {
         ["summary"] = "div",
+        ["remarks"] = "div",
+
+        ["returns"] = "div",
+        ["param"] = "div",
+        ["value"] = "div",
+
         ["para"] = "p",
-        ["c"] = "kbd",
-        //["example"] = "div",
-        //["exception"] = "div",
+        ["c"] = "code",
         ["item"] = "li",
+
+        ["typeparam"] = "div",
+
+        //["example"] = "div",
         //["description"] = "p",
         //["term"] = "strong",
-        //["remarks"] = "div",
-        ["returns"] = "div",
         //["seealso"] = "a",
-        ["param"] = "div",
-        ["typeparam"] = "div",
-        //["value"] = "div",
-        //["include"] = "div",
         //["inheritdoc"] = "div",
         //["permission"] = "div",
     };
@@ -45,6 +47,14 @@ internal class HtmlCommentParser
         else if (element.Name == "see")
         {
             HandleSeeElement(element);
+        }
+        else if (element.Name == "paramref")
+        {
+            HandleParamRefElement(element);
+        }
+        else if (element.Name == "typeparamref")
+        {
+            HandleTypeParamRefElement(element);
         }
         else if (tags.TryGetValue(element.Name.ToString(), out string? htmlName))
         {
@@ -112,5 +122,33 @@ internal class HtmlCommentParser
         //{
 
         //}
+    }
+
+    private void HandleParamRefElement(XElement element)
+    {
+        string? name = element.Attribute("name")?.Value;
+
+        if (name is null)
+        {
+            return;
+        }
+
+        element.Name = "code";
+        element.RemoveAttributes();
+        element.Add(new XText(name));
+    }
+
+    private void HandleTypeParamRefElement(XElement element)
+    {
+        string? name = element.Attribute("name")?.Value;
+
+        if (name is null)
+        {
+            return;
+        }
+
+        element.Name = "code";
+        element.RemoveAttributes();
+        element.Add(new XText(name));
     }
 }
