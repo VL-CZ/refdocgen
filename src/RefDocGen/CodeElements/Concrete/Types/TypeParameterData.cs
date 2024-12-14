@@ -43,29 +43,30 @@ internal class TypeParameterData : ITypeParameterData
     public bool IsContravariant => TypeObject.GenericParameterAttributes.HasFlag(GenericParameterAttributes.Contravariant);
 
     /// <inheritdoc/>
-    public IEnumerable<ITypeNameData> Constraints => TypeObject
+    public IEnumerable<ITypeNameData> TypeConstraints => TypeObject
         .GetGenericParameterConstraints()
-        .Except([typeof(ValueType)])
+        .Except([typeof(ValueType)]) // exclude `NotNullableValueType` constraint
         .Select(p => p.GetNameData());
 
     /// <inheritdoc/>
-    public IEnumerable<SpecialConstraint> SpecialConstraints
+    public IEnumerable<SpecialTypeConstraint> SpecialConstraints
     {
         get
         {
-            List<SpecialConstraint> values = [];
+            List<SpecialTypeConstraint> values = [];
+
             if (TypeObject.GenericParameterAttributes.HasFlag(GenericParameterAttributes.ReferenceTypeConstraint))
             {
-                values.Add(SpecialConstraint.ReferenceType);
+                values.Add(SpecialTypeConstraint.ReferenceType);
             }
             if (TypeObject.GenericParameterAttributes.HasFlag(GenericParameterAttributes.NotNullableValueTypeConstraint))
             {
-                values.Add(SpecialConstraint.NotNullableValueType);
+                values.Add(SpecialTypeConstraint.NotNullableValueType);
             }
             if (TypeObject.GenericParameterAttributes.HasFlag(GenericParameterAttributes.DefaultConstructorConstraint)
-                && !values.Contains(SpecialConstraint.NotNullableValueType))
+                && !values.Contains(SpecialTypeConstraint.NotNullableValueType))
             {
-                values.Add(SpecialConstraint.DefaultConstructor);
+                values.Add(SpecialTypeConstraint.DefaultConstructor);
             }
 
             return values;

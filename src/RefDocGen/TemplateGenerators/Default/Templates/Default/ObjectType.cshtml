@@ -70,7 +70,9 @@
 
         @foreach (var tp in Model.TypeParameters)
         {
-            if (tp.Constraints.Any())
+            var allConstraints = tp.TypeConstraints.Concat(tp.SpecialConstraints);
+
+            if (allConstraints.Any())
             {
                 <h6 class="mx-3">
                     <samp>
@@ -78,12 +80,14 @@
                         <span class="text-secondary">@tp.Name : </span>
                         <span class="text-primary">@string.Join(", ", tp.SpecialConstraints),</span>
                         <span class="text-secondary">
-                            @string.Join(", ", tp.Constraints)
+                            @string.Join(", ", tp.TypeConstraints)
                         </span>
                     </samp>
                 </h6>
             }
         }
+
+        <div class="my-3" />
 
         @{
             var namespaceUrl = $"{Model.Namespace}.html";

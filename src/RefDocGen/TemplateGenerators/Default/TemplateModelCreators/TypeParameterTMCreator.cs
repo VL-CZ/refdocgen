@@ -29,9 +29,10 @@ internal class TypeParameterTMCreator
             modifiers.Add(Keyword.In);
         }
 
-        var constraints = typeParameter.Constraints.Select(CSharpTypeName.Of);
+        // get constraints
+        var typeConstraints = typeParameter.TypeConstraints.Select(CSharpTypeName.Of);
         var specialConstraints = typeParameter.SpecialConstraints.Select(c => c.GetName());
 
-        return new TypeParameterTM(typeParameter.Name, typeParameter.DocComment.Value, modifiers.GetStrings(), constraints, specialConstraints);
+        return new TypeParameterTM(typeParameter.Name, typeParameter.DocComment.Value, modifiers.GetStrings(), typeConstraints, specialConstraints);
     }
 }
