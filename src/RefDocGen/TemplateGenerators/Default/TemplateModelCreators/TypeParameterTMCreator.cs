@@ -1,6 +1,8 @@
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
+using RefDocGen.TemplateGenerators.Tools;
 using RefDocGen.TemplateGenerators.Tools.Keywords;
+using RefDocGen.TemplateGenerators.Tools.TypeName;
 
 namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 
@@ -27,6 +29,10 @@ internal class TypeParameterTMCreator
             modifiers.Add(Keyword.In);
         }
 
-        return new TypeParameterTM(typeParameter.Name, typeParameter.DocComment.Value, modifiers.GetStrings());
+        // get constraints
+        var typeConstraints = typeParameter.TypeConstraints.Select(CSharpTypeName.Of);
+        var specialConstraints = typeParameter.SpecialConstraints.Select(c => c.GetName());
+
+        return new TypeParameterTM(typeParameter.Name, typeParameter.DocComment.Value, modifiers.GetStrings(), typeConstraints, specialConstraints);
     }
 }

@@ -1,4 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
+using RefDocGen.CodeElements.Tools;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Xml.Linq;
@@ -39,4 +41,35 @@ internal class TypeParameterData : ITypeParameterData
 
     /// <inheritdoc/>
     public bool IsContravariant => TypeObject.GenericParameterAttributes.HasFlag(GenericParameterAttributes.Contravariant);
+
+    /// <inheritdoc/>
+    public IEnumerable<ITypeNameData> TypeConstraints => TypeObject
+        .GetGenericParameterConstraints()
+        .Except([typeof(ValueType)]) // exclude `NotNullableValueType` constraint
+        .Select(p => p.GetNameData());
+
+    /// <inheritdoc/>
+    public IEnumerable<SpecialTypeConstraint> SpecialConstraints
+    {
+        get
+        {
+            List<SpecialTypeConstraint> values = [];
+
+            if (TypeObject.GenericParameterAttributes.HasFlag(GenericParameterAttributes.ReferenceTypeConstraint))
+            {
+                values.Add(SpecialTypeConstraint.ReferenceType);
+            }
+            if (TypeObject.GenericParameterAttributes.HasFlag(GenericParameterAttributes.NotNullableValueTypeConstraint))
+            {
+                values.Add(SpecialTypeConstraint.NotNullableValueType);
+            }
+            if (TypeObject.GenericParameterAttributes.HasFlag(GenericParameterAttributes.DefaultConstructorConstraint)
+                && !values.Contains(SpecialTypeConstraint.NotNullableValueType))
+            {
+                values.Add(SpecialTypeConstraint.DefaultConstructor);
+            }
+
+            return values;
+        }
+    }
 }

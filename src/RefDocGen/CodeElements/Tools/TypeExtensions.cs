@@ -22,4 +22,18 @@ internal static class TypeExtensions
             ? new GenericTypeParameterNameData(type, declaredTypeParameters)
             : new TypeNameData(type, declaredTypeParameters);
     }
+
+    /// <summary>
+    /// Transform the <see cref="Type"/> instance into the corresponding <see cref="ITypeNameData"/> object.
+    /// </summary>
+    /// <param name="type">Type to transform.</param>
+    /// <returns><see cref="ITypeNameData"/> instance corresponding to the given type.</returns>
+    internal static ITypeNameData GetNameData(this Type type)
+    {
+        var emptyTypeParameters = new Dictionary<string, TypeParameterData>();
+
+        return type.IsGenericParameter || type.GetBaseElementType().IsGenericParameter
+            ? new GenericTypeParameterNameData(type, emptyTypeParameters)
+            : new TypeNameData(type, emptyTypeParameters);
+    }
 }
