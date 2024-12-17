@@ -64,6 +64,8 @@ internal class DocCommentExtractor
     /// </summary>
     private readonly DelegateTypeDocHandler delegateTypeDocHandler = new();
 
+    internal static InheritDocHandler inheritDocHandler; // TODO: huge code smell, update
+
     /// <summary>
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
     /// </summary>
@@ -72,6 +74,8 @@ internal class DocCommentExtractor
     internal DocCommentExtractor(string docXmlPath, TypeRegistry typeRegistry)
     {
         this.typeRegistry = typeRegistry;
+
+        inheritDocHandler = new InheritDocHandler(typeRegistry);
 
         // load the document
         xmlDocument = XDocument.Load(docXmlPath);
