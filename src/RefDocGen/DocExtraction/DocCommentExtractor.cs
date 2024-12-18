@@ -6,6 +6,7 @@ using RefDocGen.DocExtraction.Handlers.Members.Enum;
 using RefDocGen.DocExtraction.Handlers.Types;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete;
+using RefDocGen.DocExtraction.Handlers;
 
 namespace RefDocGen.DocExtraction;
 
@@ -64,7 +65,9 @@ internal class DocCommentExtractor
     /// </summary>
     private readonly DelegateTypeDocHandler delegateTypeDocHandler = new();
 
-    internal static InheritDocHandler inheritDocHandler; // TODO: huge code smell, update
+    private readonly InheritDocHandler inheritDocHandler;
+
+    private readonly List<MemberRecord> inheritdocs = [];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
@@ -91,6 +94,13 @@ internal class DocCommentExtractor
         foreach (var memberNode in memberNodes)
         {
             AddDocComment(memberNode);
+        }
+
+        var loadedComments = inheritDocHandler.Handle(inheritdocs);
+
+        foreach (var item in loadedComments)
+        {
+            AddDocComment(item);
         }
     }
 
@@ -160,6 +170,13 @@ internal class DocCommentExtractor
 
         if (typeRegistry.ObjectTypes.TryGetValue(typeName, out var type)) // member of a value, reference or interface type
         {
+            // inheritdoc - TODO: update
+            if (docCommentNode.TryGetElement("inheritdoc", out var _))
+            {
+                inheritdocs.Add(new(type, memberId, docCommentNode));
+                return;
+            }
+
             if (memberTypeId == MemberTypeId.Method && memberName == ConstructorData.DefaultName) // the member is a constructor
             {
                 constructorDocHandler.AddDocumentation(type, memberId, docCommentNode);

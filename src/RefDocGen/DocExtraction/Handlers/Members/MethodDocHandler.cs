@@ -10,12 +10,9 @@ namespace RefDocGen.DocExtraction.Handlers.Members;
 /// </summary>
 internal class MethodDocHandler : ExecutableMemberDocHandler<MethodData>
 {
-    private ObjectTypeData typeData = null!; // TODO: huge code smell
-
     /// <inheritdoc/>
     protected override IReadOnlyDictionary<string, MethodData> GetMembers(ObjectTypeData type)
     {
-        typeData = type;
         return type.Methods;
     }
 
@@ -28,14 +25,6 @@ internal class MethodDocHandler : ExecutableMemberDocHandler<MethodData>
         if (memberDocComment.TryGetReturnsElement(out var returnsNode))
         {
             member.ReturnValueDocComment = returnsNode;
-        }
-
-        // inheritdoc - TODO: update
-        if (memberDocComment.TryGetElement("inheritdoc", out var _))
-        {
-            var ih = DocCommentExtractor.inheritDocHandler;
-
-            ih.AddFromParent(typeData, member);
         }
     }
 }

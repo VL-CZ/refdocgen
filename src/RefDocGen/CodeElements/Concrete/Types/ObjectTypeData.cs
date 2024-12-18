@@ -106,4 +106,13 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
 
     /// <inheritdoc/>
     IReadOnlyList<IIndexerData> IObjectTypeData.Indexers => Indexers.Values.ToList();
+
+    // TODO: performance
+    internal IReadOnlyDictionary<string, MemberData> AllMembers => ((IEnumerable<MemberData>)Constructors.Values)
+        .Concat(Fields.Values)
+        .Concat(Methods.Values)
+        .Concat(Properties.Values)
+        .Concat(Operators.Values)
+        .Concat(Indexers.Values)
+        .ToDictionary(m => m.Id);
 }

@@ -18,12 +18,10 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     {
         TypeParameterDeclarations = typeParameterDeclarations;
 
-        BaseType = type.BaseType is not null
-            ? new TypeNameData(type.BaseType)
-            : null;
+        BaseType = type.BaseType?.GetNameData(typeParameterDeclarations);
 
         Interfaces = type.GetInterfaces()
-            .Select(i => new TypeNameData(i))
+            .Select(i => i.GetNameData(typeParameterDeclarations))
             .ToArray();
     }
 
