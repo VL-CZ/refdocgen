@@ -5,24 +5,28 @@ using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction.Handlers;
 
-record MemberRecord(ObjectTypeData Type, string MemberId, XElement DocComment);
-
-record Node(ObjectTypeData Type, string MemberId);
+internal record MemberRecord(ObjectTypeData Type, string MemberId, XElement DocComment);
 
 internal class InheritDocHandler
 {
+    private record Node(ObjectTypeData Type, string MemberId);
+
     /// <summary>
     /// Registry of the declared types, to which the documentation comments will be added.
     /// </summary>
     private readonly TypeRegistry typeRegistry;
     private List<XElement> toReturn = [];
 
-    public InheritDocHandler(TypeRegistry typeRegistry)
+    private readonly Dictionary<Node, XElement> done = [];
+    private List<MemberRecord> inheritDocs;
+
+    public InheritDocHandler(TypeRegistry typeRegistry, List<MemberRecord> inheritDocs)
     {
         this.typeRegistry = typeRegistry;
+        this.inheritDocs = inheritDocs;
     }
 
-    internal IEnumerable<XElement> Handle(List<MemberRecord> inheritDocs)
+    internal IEnumerable<XElement> Handle()
     {
         foreach (var inheritDoc in inheritDocs)
         {
@@ -35,7 +39,7 @@ internal class InheritDocHandler
     private void Handle(MemberRecord memberRecord)
     {
         var node = new Node(memberRecord.Type, memberRecord.MemberId);
-        var docComment = Handle(node);
+        var docComment = LoadComment(node);
 
         if (docComment is null)
         {
@@ -48,9 +52,57 @@ internal class InheritDocHandler
         toReturn.Add(memberRecord.DocComment);
     }
 
-    private XElement? Handle(Node node)
+    private XElement? LoadComment(Node node)
     {
-        var parentTypes = GetParentTypes(node.Type);
+        // the member is not contained in the type -> return null
+        if (!node.Type.AllMembers.TryGetValue(node.MemberId, out var member))
+        {
+            return null;
+        }
+
+        // the member is documented.
+        if (member.RawDocComment is not null)
+        {
+            return member.RawDocComment;
+        }
+
+        // the member documentation is stored in the cache.
+        if (done.TryGetValue(node, out var cached))
+        {
+            return cached;
+        }
+
+        // get the documentation.
+        var parentNodes = GetParentNodes(node);
+
+        foreach (var parentNode in parentNodes)
+        {
+            var parentDocComment = LoadComment(parentNode);
+
+            if (parentDocComment is not null)
+            {
+                done[node] = parentDocComment;
+                return parentDocComment;
+            }
+        }
+
+        return null;
+    }
+
+    private List<Node> GetParentNodes(Node node)
+    {
+        var parentTypes = new List<ITypeNameData>();
+
+        var baseType = node.Type.BaseType;
+
+        if (baseType is not null)
+        {
+            parentTypes.Add(baseType);
+        }
+
+        parentTypes.AddRange(node.Type.Interfaces);
+
+        List<Node> returnValues = [];
 
         foreach (var parentType in parentTypes)
         {
@@ -58,46 +110,14 @@ internal class InheritDocHandler
                 ? $"{parentType.FullName}`{parentType.TypeParameters.Count}"
                 : parentType.Id;
 
-            if (node.Type.AllMembers.TryGetValue(node.MemberId, out var member)
-                && typeRegistry.ObjectTypes.TryGetValue(parentId, out var parent))
+            if (typeRegistry.ObjectTypes.TryGetValue(parentId, out var parent))
             {
-                // desired member found
-                if (parent.AllMembers.TryGetValue(node.MemberId, out var parentMember))
-                {
-                    if (parentMember.RawDocComment is null)
-                    {
-                        var parentNode = new Node(parent, node.MemberId);
-                        var parentDocComment = Handle(parentNode);
-
-                        if (parentDocComment is not null)
-                        {
-                            return parentDocComment;
-                        }
-                    }
-                    else
-                    {
-                        return parentMember.RawDocComment;
-                    }
-                }
+                returnValues.Add(
+                    new Node(parent, node.MemberId)
+                    );
             }
         }
 
-        return null;
-    }
-
-    private IEnumerable<ITypeNameData> GetParentTypes(ObjectTypeData type)
-    {
-        var parentTypes = new List<ITypeNameData>();
-
-        var baseType = type.BaseType;
-
-        if (baseType is not null)
-        {
-            parentTypes.Add(baseType);
-        }
-
-        parentTypes.AddRange(type.Interfaces);
-
-        return parentTypes;
+        return returnValues;
     }
 }

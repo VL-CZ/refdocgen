@@ -65,8 +65,6 @@ internal class DocCommentExtractor
     /// </summary>
     private readonly DelegateTypeDocHandler delegateTypeDocHandler = new();
 
-    private readonly InheritDocHandler inheritDocHandler;
-
     private readonly List<MemberRecord> inheritdocs = [];
 
     /// <summary>
@@ -77,8 +75,6 @@ internal class DocCommentExtractor
     internal DocCommentExtractor(string docXmlPath, TypeRegistry typeRegistry)
     {
         this.typeRegistry = typeRegistry;
-
-        inheritDocHandler = new InheritDocHandler(typeRegistry);
 
         // load the document
         xmlDocument = XDocument.Load(docXmlPath);
@@ -96,7 +92,9 @@ internal class DocCommentExtractor
             AddDocComment(memberNode);
         }
 
-        var loadedComments = inheritDocHandler.Handle(inheritdocs);
+        var inheritDocHandler = new InheritDocHandler(typeRegistry, inheritdocs);
+
+        var loadedComments = inheritDocHandler.Handle();
 
         foreach (var item in loadedComments)
         {

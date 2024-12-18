@@ -5,6 +5,7 @@ using RefDocGen.CodeElements.Abstract;
 using RefDocGen.CodeElements.Concrete.Types.Enum;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Concrete.Types.Delegate;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 
 namespace RefDocGen.CodeElements.Concrete;
 
