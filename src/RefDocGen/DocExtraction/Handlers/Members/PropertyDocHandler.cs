@@ -10,7 +10,7 @@ namespace RefDocGen.DocExtraction.Handlers.Members;
 /// <summary>
 /// Class responsible for handling and adding XML doc comments to the corresponding properties.
 /// </summary>
-internal class PropertyDocHandler : MemberDocHandler<PropertyData>
+internal class PropertyDocHandler : MemberDocHandler<ObjectTypeData, PropertyData>
 {
     /// <inheritdoc/>
     protected override void AddRemainingComments(PropertyData member, XElement memberDocComment)

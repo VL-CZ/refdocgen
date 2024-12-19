@@ -40,4 +40,9 @@ public interface IMemberData
     /// 'remarks' doc comment for the member.
     /// </summary>
     XElement RemarksDocComment { get; }
+
+    /// <summary>
+    /// Collection of 'seealso' doc comments for the member.
+    /// </summary>
+    IEnumerable<XElement> SeeAlsoDocComments { get; }
 }

@@ -8,18 +8,21 @@ namespace RefDocGen.DocExtraction.Handlers.Members;
 /// <summary>
 /// Abstract class responsible for handling and adding XML doc comments to the corresponding type members.
 /// </summary>
-/// <typeparam name="T">Type of the member to which the documentation is added.</typeparam>
-internal abstract class MemberDocHandler<T> : IMemberDocHandler where T : MemberData
+/// <typeparam name="TType">Type of the type containing the member</typeparam>
+/// <typeparam name="TMember">Type of the member to which the documentation is added.</typeparam>
+internal abstract class MemberDocHandler<TType, TMember> : IMemberDocHandler<TType>
+    where TMember : MemberData
+    where TType : TypeDeclaration
 {
     /// <summary>
     /// Get a dictionary of the given members (indexed by their IDs) contained in the specified type.
     /// </summary>
     /// <param name="type">The type containing the members.</param>
     /// <returns>A dictionary of the given members (indexed by their IDs) contained in the specified type.</returns>
-    protected abstract IReadOnlyDictionary<string, T> GetMembers(ObjectTypeData type);
+    protected abstract IReadOnlyDictionary<string, TMember> GetMembers(TType type);
 
     /// <inheritdoc/>
-    public void AddDocumentation(ObjectTypeData type, string memberId, XElement memberDocComment)
+    public void AddDocumentation(TType type, string memberId, XElement memberDocComment)
     {
         var member = GetMembers(type).GetValueOrDefault(memberId);
 
@@ -51,9 +54,9 @@ internal abstract class MemberDocHandler<T> : IMemberDocHandler where T : Member
     /// Add doc comments other than 'summary' and 'remarks' to the given member.
     /// </summary>
     /// <remarks>
-    /// Note that 'summary' and 'remarks' doc comments are already added automatically in the <see cref="AddDocumentation(ObjectTypeData, string, XElement)"/> method.
+    /// Note that 'summary' and 'remarks' doc comments are already added automatically in the <see cref="AddDocumentation(TType, string, XElement)"/> method.
     /// </remarks>
     /// <param name="member">Member to which the documentation are added.</param>
     /// <param name="memberDocComment">Doc comment for the given member.</param>
-    protected virtual void AddRemainingComments(T member, XElement memberDocComment) { }
+    protected virtual void AddRemainingComments(TMember member, XElement memberDocComment) { }
 }

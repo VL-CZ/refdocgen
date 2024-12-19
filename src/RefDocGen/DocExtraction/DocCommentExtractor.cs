@@ -35,9 +35,9 @@ internal class DocCommentExtractor
     private readonly XDocument xmlDocument;
 
     /// <summary>
-    /// Dictionary of selected member documentation handlers, identified by <see cref="MemberTypeId"/> identifiers.
+    /// Dictionary of the selected member documentation handlers, identified by <see cref="MemberTypeId"/> identifiers.
     /// </summary>
-    private readonly Dictionary<string, IMemberDocHandler> memberDocHandlers = new()
+    private readonly Dictionary<string, IMemberDocHandler<ObjectTypeData>> memberDocHandlers = new()
     {
         [MemberTypeId.Field] = new FieldDocHandler(),
         [MemberTypeId.Property] = new PropertyDocHandler(),

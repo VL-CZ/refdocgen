@@ -2,6 +2,7 @@ using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.DocExtraction.Handlers.Tools;
+using RefDocGen.CodeElements.Concrete.Types;
 
 namespace RefDocGen.DocExtraction.Handlers.Members;
 
@@ -12,7 +13,8 @@ namespace RefDocGen.DocExtraction.Handlers.Members;
 /// </para>
 /// </summary>
 /// <typeparam name="T">Type of the member to which the doc is assigned.</typeparam>
-internal abstract class ExecutableMemberDocHandler<T> : MemberDocHandler<T> where T : ExecutableMemberData
+internal abstract class ExecutableMemberDocHandler<T> : MemberDocHandler<ObjectTypeData, T>
+    where T : ExecutableMemberData
 {
     /// <inheritdoc/>
     protected override void AddRemainingComments(T member, XElement memberDocComment)

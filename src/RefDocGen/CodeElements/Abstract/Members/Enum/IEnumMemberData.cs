@@ -6,30 +6,10 @@ namespace RefDocGen.CodeElements.Abstract.Members.Enum;
 /// <summary>
 /// Represents data of an enum member.
 /// </summary>
-public interface IEnumMemberData
+public interface IEnumMemberData : IMemberData
 {
     /// <summary>
     /// <see cref="System.Reflection.FieldInfo"/> object representing the enum member.
     /// </summary>
     FieldInfo FieldInfo { get; }
-
-    /// <summary>
-    /// Id of the enum member.
-    /// </summary>
-    string Id { get; }
-
-    /// <summary>
-    /// Name of the enum member.
-    /// </summary>
-    string Name { get; }
-
-    /// <summary>
-    /// 'summary' doc comment for the enum member.
-    /// </summary>
-    XElement SummaryDocComment { get; }
-
-    /// <summary>
-    /// 'remarks' doc comment for the enum member.
-    /// </summary>
-    XElement RemarksDocComment { get; }
 }
