@@ -25,5 +25,5 @@ internal class EnumTypeData : TypeDeclaration, IEnumTypeData
     public IReadOnlyDictionary<string, EnumMemberData> Members { get; }
 
     /// <inheritdoc/>
-    IReadOnlyList<IEnumMemberData> IEnumTypeData.Members => Members.Values.ToList();
+    IEnumerable<IEnumMemberData> IEnumTypeData.Members => Members.Values;
 }

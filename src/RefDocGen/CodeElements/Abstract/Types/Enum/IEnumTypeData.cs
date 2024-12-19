@@ -10,5 +10,5 @@ public interface IEnumTypeData : ITypeDeclaration
     /// <summary>
     /// Collection of declared enum members.
     /// </summary>
-    IReadOnlyList<IEnumMemberData> Members { get; }
+    IEnumerable<IEnumMemberData> Members { get; }
 }

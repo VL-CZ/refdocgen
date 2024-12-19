@@ -111,6 +111,6 @@ internal class PropertyData : MemberData, IPropertyData
     public XElement ValueDocComment { get; internal set; } = XmlDocElements.EmptySummary;
 
     /// <inheritdoc/>
-    public IReadOnlyList<IExceptionDocumentation> Exceptions { get; internal set; } = [];
+    public IEnumerable<IExceptionDocumentation> Exceptions { get; internal set; } = [];
 }
 

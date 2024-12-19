@@ -44,6 +44,14 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
         Methods = methods;
         Operators = operators;
         Indexers = indexers;
+
+        AllMembers = ((IEnumerable<MemberData>)Constructors.Values)
+            .Concat(Fields.Values)
+            .Concat(Methods.Values)
+            .Concat(Properties.Values)
+            .Concat(Operators.Values)
+            .Concat(Indexers.Values)
+            .ToDictionary(m => m.Id);
     }
 
     /// <summary>
@@ -67,12 +75,12 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
     public IReadOnlyDictionary<string, MethodData> Methods { get; }
 
     /// <summary>
-    /// Collection of operators declared in the type; keys are the corresponding operator IDs.
+    /// Dictionary of operators declared in the type; keys are the corresponding operator IDs.
     /// </summary>
     public IReadOnlyDictionary<string, OperatorData> Operators { get; }
 
     /// <summary>
-    /// Collection of indexers declared in the type; keys are the corresponding operator IDs.
+    /// Dictionary of indexers declared in the type; keys are the corresponding operator IDs.
     /// </summary>
     public IReadOnlyDictionary<string, IndexerData> Indexers { get; }
 
@@ -90,30 +98,25 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
             : TypeKind.Class;
 
     /// <inheritdoc/>
-    IReadOnlyList<IConstructorData> IObjectTypeData.Constructors => Constructors.Values.ToList();
+    IEnumerable<IConstructorData> IObjectTypeData.Constructors => Constructors.Values;
 
     /// <inheritdoc/>
-    IReadOnlyList<IFieldData> IObjectTypeData.Fields => Fields.Values.ToList();
+    IEnumerable<IFieldData> IObjectTypeData.Fields => Fields.Values;
 
     /// <inheritdoc/>
-    IReadOnlyList<IMethodData> IObjectTypeData.Methods => Methods.Values.ToList();
+    IEnumerable<IMethodData> IObjectTypeData.Methods => Methods.Values;
 
     /// <inheritdoc/>
-    IReadOnlyList<IPropertyData> IObjectTypeData.Properties => Properties.Values.ToList();
+    IEnumerable<IPropertyData> IObjectTypeData.Properties => Properties.Values;
 
     /// <inheritdoc/>
-    IReadOnlyList<IOperatorData> IObjectTypeData.Operators => Operators.Values.ToList();
+    IEnumerable<IOperatorData> IObjectTypeData.Operators => Operators.Values;
 
     /// <inheritdoc/>
-    IReadOnlyList<IIndexerData> IObjectTypeData.Indexers => Indexers.Values.ToList();
+    IEnumerable<IIndexerData> IObjectTypeData.Indexers => Indexers.Values;
 
-    // TODO: performance
-    /// <inheritdoc/>
-    internal IReadOnlyDictionary<string, MemberData> AllMembers => ((IEnumerable<MemberData>)Constructors.Values)
-        .Concat(Fields.Values)
-        .Concat(Methods.Values)
-        .Concat(Properties.Values)
-        .Concat(Operators.Values)
-        .Concat(Indexers.Values)
-        .ToDictionary(m => m.Id);
+    /// <summary>
+    /// Dictionary of all members declared in the type; keys are the corresponding member IDs.
+    /// </summary>
+    internal IReadOnlyDictionary<string, MemberData> AllMembers { get; }
 }

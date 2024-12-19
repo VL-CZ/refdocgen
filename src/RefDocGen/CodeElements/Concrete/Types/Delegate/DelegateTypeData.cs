@@ -66,5 +66,5 @@ internal class DelegateTypeData : TypeDeclaration, IDelegateTypeData
         TypeParameterDeclarations.Values.OrderBy(t => t.Index).ToList();
 
     /// <inheritdoc/>
-    public IReadOnlyList<IExceptionDocumentation> Exceptions { get; internal set; } = [];
+    public IEnumerable<IExceptionDocumentation> Exceptions { get; internal set; } = [];
 }
