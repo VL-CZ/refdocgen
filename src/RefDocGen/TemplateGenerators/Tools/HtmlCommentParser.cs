@@ -105,23 +105,45 @@ internal class HtmlCommentParser
 
     private void HandleSeeElement(XElement element)
     {
-        element.Name = "a";
-
         if (element.Attribute("href") is not null)
         {
+            element.Name = "a";
             return;
         }
         else if (element.TryGetAttribute("langword", out var attr))
         {
-            var codeElement = new XElement("code", new XAttribute("skip", true), new XText(attr.Value));
-
-            element.Add(codeElement);
             element.RemoveAttributes();
-        }
-        //else if (element.Attribute("cref") is not null) // TODO: handle cref
-        //{
 
-        //}
+            var codeElement = new XElement("code", new XAttribute("skip", true), new XText(attr.Value));
+            element.Add(codeElement);
+        }
+        else if (element.TryGetCrefAttribute(out var codeRefAttr)) // TODO: handle cref
+        {
+            element.Name = "a";
+            element.RemoveAttributes();
+
+            string[] splitMemberName = codeRefAttr.Value.Split(':');
+            (string objectIdentifier, string fullObjectName) = (splitMemberName[0], splitMemberName[1]);
+
+            string target = ".html";
+
+            if (objectIdentifier == MemberTypeId.Type) // type
+            {
+                target = fullObjectName + target;
+            }
+            else // member
+            {
+                (string typeName, string memberName, string paramsString) = MemberSignatureParser.Parse(fullObjectName);
+                string memberId = memberName + paramsString;
+
+                target = typeName + target + '#' + memberId;
+            }
+
+            element.Add(
+                new XAttribute("href", target),
+                new XText(target)
+                );
+        }
     }
 
     private void HandleParamRefElement(XElement element)
