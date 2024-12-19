@@ -40,6 +40,9 @@ internal abstract class MemberDocHandler<T> : IMemberDocHandler where T : Member
             member.RemarksDocComment = remarksNode;
         }
 
+        // add raw doc comment
+        member.RawDocComment = memberDocComment;
+
         // add other doc comments
         AddRemainingComments(member, memberDocComment);
     }

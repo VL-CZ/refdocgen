@@ -41,4 +41,13 @@ internal abstract class MemberData : IMemberData
 
     /// <inheritdoc/>
     public XElement RemarksDocComment { get; internal set; } = XmlDocElements.EmptyRemarks;
+
+    /// <summary>
+    /// Raw doc comment provided to the member.
+    ///
+    /// <para>
+    /// <see langword="null"/> if the member isn't documented.
+    /// </para>
+    /// </summary>
+    internal XElement? RawDocComment { get; set; }
 }

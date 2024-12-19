@@ -11,7 +11,7 @@ internal interface IMemberDocHandler
     /// <summary>
     /// Adds documentation to the given member.
     /// </summary>
-    /// <param name="type">Type containing the member.</param>
+    /// <param name="type">The type containing the member.</param>
     /// <param name="memberId">
     /// Identifier of the member extracted from the XML doc comment.
     /// Consists of the member name and parameters string (if the member has them - e.g. a method).

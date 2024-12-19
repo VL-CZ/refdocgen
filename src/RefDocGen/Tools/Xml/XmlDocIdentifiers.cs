@@ -54,4 +54,9 @@ internal static class XmlDocIdentifiers
     /// Represents the 'cref' identifier.
     /// </summary>
     public const string Cref = "cref";
+
+    /// <summary>
+    /// Represents the 'inheritdoc' identifier.
+    /// </summary>
+    public const string Inheritdoc = "inheritdoc";
 }
