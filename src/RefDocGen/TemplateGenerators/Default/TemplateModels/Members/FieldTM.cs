@@ -8,4 +8,5 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <param name="SummaryDocComment">'summary' documentation comment for the field.</param>
 /// <param name="RemarksDocComment">'remarks' documentation comment for the field.</param>
 /// <param name="Modifiers">Collection of modifiers for the field (e.g. public, static, etc.)</param>
-public record FieldTM(string Name, string Type, string SummaryDocComment, string RemarksDocComment, IEnumerable<string> Modifiers);
+/// <param name="SeeAlsoDocComments">Collection of 'seealso' documentation comments for the field.</param>
+public record FieldTM(string Name, string Type, string SummaryDocComment, string RemarksDocComment, IEnumerable<string> Modifiers, IEnumerable<string> SeeAlsoDocComments);

@@ -117,7 +117,15 @@ internal static class ObjectTypeTMCreator
         var commentParser = new HtmlCommentParser();
         string docComment = commentParser.Parse(fieldData.SummaryDocComment);
 
-        return new FieldTM(fieldData.Name, CSharpTypeName.Of(fieldData.Type), docComment, fieldData.RemarksDocComment.Value, modifiers.GetStrings());
+        string[] seeAlsoDocComments = fieldData.SeeAlsoDocComments.Select(commentParser.Parse).ToArray();
+
+        return new FieldTM(
+            fieldData.Name,
+            CSharpTypeName.Of(fieldData.Type),
+            docComment,
+            fieldData.RemarksDocComment.Value,
+            modifiers.GetStrings(),
+            seeAlsoDocComments);
     }
 
     /// <summary>

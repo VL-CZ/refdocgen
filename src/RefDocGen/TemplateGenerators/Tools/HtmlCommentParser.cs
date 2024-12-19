@@ -23,7 +23,6 @@ internal class HtmlCommentParser
         //["example"] = "div",
         //["description"] = "p",
         //["term"] = "strong",
-        //["seealso"] = "a",
         //["inheritdoc"] = "div",
         //["permission"] = "div",
     };
@@ -45,6 +44,10 @@ internal class HtmlCommentParser
             HandleCodeElement(element);
         }
         else if (element.Name == "see")
+        {
+            HandleSeeElement(element);
+        }
+        else if (element.Name == "seealso")
         {
             HandleSeeElement(element);
         }
@@ -105,9 +108,15 @@ internal class HtmlCommentParser
 
     private void HandleSeeElement(XElement element)
     {
-        if (element.Attribute("href") is not null)
+        if (element.Attribute("href") is XAttribute hrefAttr)
         {
             element.Name = "a";
+
+            if (!element.Nodes().Any())
+            {
+                element.Add(new XText(hrefAttr.Value));
+            }
+
             return;
         }
         else if (element.TryGetAttribute("langword", out var attr))
@@ -117,7 +126,7 @@ internal class HtmlCommentParser
             var codeElement = new XElement("code", new XAttribute("skip", true), new XText(attr.Value));
             element.Add(codeElement);
         }
-        else if (element.TryGetCrefAttribute(out var codeRefAttr)) // TODO: handle cref
+        else if (element.TryGetCrefAttribute(out var codeRefAttr))
         {
             element.Name = "a";
             element.RemoveAttributes();
@@ -140,9 +149,14 @@ internal class HtmlCommentParser
             }
 
             element.Add(
-                new XAttribute("href", target),
-                new XText(target)
+                new XAttribute("href", target)
                 );
+
+            // no child nodes -> add cref 
+            if (!element.Nodes().Any())
+            {
+                element.Add(new XText(target));
+            }
         }
     }
 

@@ -1,5 +1,4 @@
 using System.Reflection;
-using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Abstract.Members.Enum;
 
