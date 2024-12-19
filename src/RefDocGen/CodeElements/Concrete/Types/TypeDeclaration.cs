@@ -54,6 +54,9 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     public XElement RemarksDocComment { get; internal set; } = XmlDocElements.EmptyRemarks;
 
     /// <inheritdoc/>
+    public IEnumerable<XElement> SeeAlsoDocComments { get; internal set; } = [];
+
+    /// <inheritdoc/>
     public bool HasTypeParameters => TypeParameterDeclarations.Count > 0;
 
     /// <inheritdoc/>

@@ -58,5 +58,10 @@ internal static class XmlDocIdentifiers
     /// <summary>
     /// Represents the 'inheritdoc' identifier.
     /// </summary>
-    public const string Inheritdoc = "inheritdoc";
+    public const string InheritDoc = "inheritdoc";
+
+    /// <summary>
+    /// Represents the 'seealso' identifier.
+    /// </summary>
+    public const string SeeAlso = "seealso";
 }

@@ -201,7 +201,7 @@ internal class DocCommentExtractor
         if (typeRegistry.ObjectTypes.TryGetValue(typeName, out var type)) // member of a value, reference or interface type
         {
             // inheritdoc - TODO: update
-            if (docCommentNode.TryGetElement(XmlDocIdentifiers.Inheritdoc, out var _))
+            if (docCommentNode.TryGetElement(XmlDocIdentifiers.InheritDoc, out var _))
             {
                 inheritDocMembers.Add(new(type, memberId, docCommentNode));
                 return;

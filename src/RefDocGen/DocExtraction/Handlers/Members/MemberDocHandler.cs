@@ -1,6 +1,7 @@
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.DocExtraction.Tools;
+using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction.Handlers.Members;
@@ -42,6 +43,9 @@ internal abstract class MemberDocHandler<TType, TMember> : IMemberDocHandler<TTy
         {
             member.RemarksDocComment = remarksNode;
         }
+
+        // add 'seealso' doc comments
+        member.SeeAlsoDocComments = memberDocComment.Elements(XmlDocIdentifiers.SeeAlso);
 
         // add raw doc comment
         member.RawDocComment = memberDocComment;
