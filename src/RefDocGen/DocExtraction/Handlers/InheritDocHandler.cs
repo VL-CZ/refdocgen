@@ -5,62 +5,66 @@ using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction.Handlers;
 
-internal record MemberRecord(ObjectTypeData Type, string MemberId, XElement DocComment);
-
+/// <summary>
+/// Class responsible for handling the 'inheritdoc' comments and replacing them with the actual documentation.
+/// </summary>
 internal class InheritDocHandler
 {
     private record MemberNode(ObjectTypeData Type, string MemberId);
 
     /// <summary>
-    /// Registry of the declared types.
+    /// The registry of the declared types.
     /// </summary>
     private readonly TypeRegistry typeRegistry;
-    private List<XElement> toReturn = [];
 
     /// <summary>
     /// Cache of the already resolved nodes and its corresponding doc comments.
     /// </summary>
     private readonly Dictionary<MemberNode, XElement> cache = [];
-    private List<MemberRecord> inheritDocs;
 
-    public InheritDocHandler(TypeRegistry typeRegistry, List<MemberRecord> inheritDocs)
+    /// <summary>
+    /// Initializes a new instance of <see cref="InheritDocHandler"/> class.
+    /// </summary>
+    /// <param name="typeRegistry">The registry of the declared types.</param>
+    public InheritDocHandler(TypeRegistry typeRegistry)
     {
         this.typeRegistry = typeRegistry;
-        this.inheritDocs = inheritDocs;
-    }
-
-    internal IEnumerable<XElement> Handle()
-    {
-        foreach (var inheritDoc in inheritDocs)
-        {
-            Handle(inheritDoc);
-        }
-
-        return toReturn;
-    }
-
-    private void Handle(MemberRecord memberRecord)
-    {
-        var node = new MemberNode(memberRecord.Type, memberRecord.MemberId);
-        var docComment = DfsForDocumentation(node);
-
-        if (docComment is null)
-        {
-            return;
-        }
-
-        memberRecord.DocComment.RemoveNodes();
-        memberRecord.DocComment.Add(docComment.Nodes());
-
-        toReturn.Add(memberRecord.DocComment);
     }
 
     /// <summary>
-    /// Perform depth-first search for the documentation comment.
+    /// Resolve the documentation for the selected member.
     /// </summary>
-    /// <param name="node"></param>
-    /// <returns></returns>
-    private XElement? DfsForDocumentation(MemberNode node)
+    /// <param name="type">The type containing the member.</param>
+    /// <param name="memberId">Id of the member, whose documentation is to be resolved.</param>
+    /// <returns>
+    /// Enumerable of resolved documentation comments.
+    /// <para>
+    /// These comments are intended to replace the 'inheritdoc' element.
+    /// </para>
+    /// <para>
+    /// If there are no suitable comments found, an empty enumerable is returned.
+    /// </para>
+    /// </returns>
+    /// <remarks>
+    /// The resolvement is done recursively using DFS, firstly we try to resolve the base class member (if existing),
+    /// then we resolve the interface members one-by-one.
+    /// </remarks>
+    internal IEnumerable<XNode> Resolve(ObjectTypeData type, string memberId)
+    {
+        var node = new MemberNode(type, memberId);
+        var docComment = DfsResolve(node);
+
+        return docComment?.Nodes() ?? [];
+    }
+
+    /// <summary>
+    /// Perform depth-first search resolvment of the documentation comment.
+    /// </summary>
+    /// <param name="node">Node, whose docummetation is to be resolved.</param>
+    /// <returns>
+    /// Raw doc comment of the parent member if found, <see langword="null"/> otherwise.
+    /// </returns>
+    private XElement? DfsResolve(MemberNode node)
     {
         // the member is not contained in the type -> return null
         if (!node.Type.AllMembers.TryGetValue(node.MemberId, out var member))
@@ -80,12 +84,12 @@ internal class InheritDocHandler
             return cached;
         }
 
-        // get the documentation.
+        // get the documentation from parent.
         var parentNodes = GetParentMemberNodes(node);
 
         foreach (var parentNode in parentNodes)
         {
-            var parentDocComment = DfsForDocumentation(parentNode);
+            var parentDocComment = DfsResolve(parentNode);
 
             if (parentDocComment is not null)
             {

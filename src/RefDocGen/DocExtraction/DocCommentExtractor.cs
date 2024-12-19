@@ -7,6 +7,7 @@ using RefDocGen.DocExtraction.Handlers.Types;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete;
 using RefDocGen.DocExtraction.Handlers;
+using RefDocGen.CodeElements.Concrete.Types;
 
 namespace RefDocGen.DocExtraction;
 
@@ -15,6 +16,14 @@ namespace RefDocGen.DocExtraction;
 /// </summary>
 internal class DocCommentExtractor
 {
+    /// <summary>
+    /// Represents a triple containing a type, member ID and doc comment.
+    /// </summary>
+    /// <param name="Type">The type containing the member.</param>
+    /// <param name="MemberId">Id of the member.</param>
+    /// <param name="DocComment">Doc comment for the member.</param>
+    private record MemberWithDocComment(ObjectTypeData Type, string MemberId, XElement DocComment);
+
     /// <summary>
     /// Registry of the declared types, to which the documentation comments will be added.
     /// </summary>
@@ -66,9 +75,14 @@ internal class DocCommentExtractor
     private readonly DelegateTypeDocHandler delegateTypeDocHandler = new();
 
     /// <summary>
+    /// Handler for the 'inheritdoc' doc comments.
+    /// </summary>
+    private readonly InheritDocHandler inheritDocHandler;
+
+    /// <summary>
     /// List of member records, that have 'inheritdoc' documentation.
     /// </summary>
-    private readonly List<MemberRecord> inheritDocMembers = [];
+    private readonly List<MemberWithDocComment> inheritDocMembers = [];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
@@ -78,6 +92,7 @@ internal class DocCommentExtractor
     internal DocCommentExtractor(string docXmlPath, TypeRegistry typeRegistry)
     {
         this.typeRegistry = typeRegistry;
+        inheritDocHandler = new(typeRegistry);
 
         // load the document
         xmlDocument = XDocument.Load(docXmlPath);
@@ -95,14 +110,28 @@ internal class DocCommentExtractor
             AddDocComment(memberNode);
         }
 
-        var inheritDocHandler = new InheritDocHandler(typeRegistry, inheritDocMembers);
-
-        var loadedComments = inheritDocHandler.Handle();
-
-        foreach (var item in loadedComments)
+        // resolve inheritdoc comments
+        foreach (var member in inheritDocMembers)
         {
-            AddDocComment(item);
+            InheritDocumentation(member);
         }
+    }
+
+    /// <summary>
+    /// Replaces the 'inheritdoc' doc comment of the member with the actual documentation.
+    /// </summary>
+    /// <param name="member">The member whose documentation is to be inherited.</param>
+    private void InheritDocumentation(MemberWithDocComment member)
+    {
+        // get the resolved contents of the 'inheritdoc' element
+        var resolvedNodes = inheritDocHandler.Resolve(member.Type, member.MemberId);
+
+        // replace the 'inheritdoc' element with the actual documentation.
+        var resolvedDocElement = member.DocComment;
+        resolvedDocElement.RemoveNodes();
+        resolvedDocElement.Add(resolvedNodes);
+
+        AddDocComment(resolvedDocElement);
     }
 
     /// <summary>
