@@ -65,7 +65,10 @@ internal class DocCommentExtractor
     /// </summary>
     private readonly DelegateTypeDocHandler delegateTypeDocHandler = new();
 
-    private readonly List<MemberRecord> inheritdocs = [];
+    /// <summary>
+    /// List of member records, that have 'inheritdoc' documentation.
+    /// </summary>
+    private readonly List<MemberRecord> inheritDocMembers = [];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
@@ -92,7 +95,7 @@ internal class DocCommentExtractor
             AddDocComment(memberNode);
         }
 
-        var inheritDocHandler = new InheritDocHandler(typeRegistry, inheritdocs);
+        var inheritDocHandler = new InheritDocHandler(typeRegistry, inheritDocMembers);
 
         var loadedComments = inheritDocHandler.Handle();
 
@@ -169,9 +172,9 @@ internal class DocCommentExtractor
         if (typeRegistry.ObjectTypes.TryGetValue(typeName, out var type)) // member of a value, reference or interface type
         {
             // inheritdoc - TODO: update
-            if (docCommentNode.TryGetElement("inheritdoc", out var _))
+            if (docCommentNode.TryGetElement(XmlDocIdentifiers.Inheritdoc, out var _))
             {
-                inheritdocs.Add(new(type, memberId, docCommentNode));
+                inheritDocMembers.Add(new(type, memberId, docCommentNode));
                 return;
             }
 

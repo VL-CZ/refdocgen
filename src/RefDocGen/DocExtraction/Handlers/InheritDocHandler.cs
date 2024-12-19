@@ -9,15 +9,18 @@ internal record MemberRecord(ObjectTypeData Type, string MemberId, XElement DocC
 
 internal class InheritDocHandler
 {
-    private record Node(ObjectTypeData Type, string MemberId);
+    private record MemberNode(ObjectTypeData Type, string MemberId);
 
     /// <summary>
-    /// Registry of the declared types, to which the documentation comments will be added.
+    /// Registry of the declared types.
     /// </summary>
     private readonly TypeRegistry typeRegistry;
     private List<XElement> toReturn = [];
 
-    private readonly Dictionary<Node, XElement> done = [];
+    /// <summary>
+    /// Cache of the already resolved nodes and its corresponding doc comments.
+    /// </summary>
+    private readonly Dictionary<MemberNode, XElement> cache = [];
     private List<MemberRecord> inheritDocs;
 
     public InheritDocHandler(TypeRegistry typeRegistry, List<MemberRecord> inheritDocs)
@@ -38,8 +41,8 @@ internal class InheritDocHandler
 
     private void Handle(MemberRecord memberRecord)
     {
-        var node = new Node(memberRecord.Type, memberRecord.MemberId);
-        var docComment = LoadComment(node);
+        var node = new MemberNode(memberRecord.Type, memberRecord.MemberId);
+        var docComment = DfsForDocumentation(node);
 
         if (docComment is null)
         {
@@ -52,7 +55,12 @@ internal class InheritDocHandler
         toReturn.Add(memberRecord.DocComment);
     }
 
-    private XElement? LoadComment(Node node)
+    /// <summary>
+    /// Perform depth-first search for the documentation comment.
+    /// </summary>
+    /// <param name="node"></param>
+    /// <returns></returns>
+    private XElement? DfsForDocumentation(MemberNode node)
     {
         // the member is not contained in the type -> return null
         if (!node.Type.AllMembers.TryGetValue(node.MemberId, out var member))
@@ -67,21 +75,21 @@ internal class InheritDocHandler
         }
 
         // the member documentation is stored in the cache.
-        if (done.TryGetValue(node, out var cached))
+        if (cache.TryGetValue(node, out var cached))
         {
             return cached;
         }
 
         // get the documentation.
-        var parentNodes = GetParentNodes(node);
+        var parentNodes = GetParentMemberNodes(node);
 
         foreach (var parentNode in parentNodes)
         {
-            var parentDocComment = LoadComment(parentNode);
+            var parentDocComment = DfsForDocumentation(parentNode);
 
             if (parentDocComment is not null)
             {
-                done[node] = parentDocComment;
+                cache[node] = parentDocComment;
                 return parentDocComment;
             }
         }
@@ -89,7 +97,14 @@ internal class InheritDocHandler
         return null;
     }
 
-    private List<Node> GetParentNodes(Node node)
+    /// <summary>
+    /// Get nodes representing the members with same ID in the parent types (base class and interfaces) of the current node.
+    /// </summary>
+    /// <param name="node">Node representing the member of a type.</param>
+    /// <returns>
+    /// List of nodes representing the members with same ID in the parent types (base class and interfaces) of the current node.
+    /// </returns>
+    private List<MemberNode> GetParentMemberNodes(MemberNode node)
     {
         var parentTypes = new List<ITypeNameData>();
 
@@ -102,22 +117,24 @@ internal class InheritDocHandler
 
         parentTypes.AddRange(node.Type.Interfaces);
 
-        List<Node> returnValues = [];
+        List<MemberNode> parentNodes = [];
 
         foreach (var parentType in parentTypes)
         {
-            var parentId = parentType.HasTypeParameters
+            // convert the ID: TODO refactor
+            string parentId = parentType.HasTypeParameters
                 ? $"{parentType.FullName}`{parentType.TypeParameters.Count}"
                 : parentType.Id;
 
+            // the parent type is contained in the type registry
             if (typeRegistry.ObjectTypes.TryGetValue(parentId, out var parent))
             {
-                returnValues.Add(
-                    new Node(parent, node.MemberId)
+                parentNodes.Add(
+                    new MemberNode(parent, node.MemberId)
                     );
             }
         }
 
-        return returnValues;
+        return parentNodes;
     }
 }
