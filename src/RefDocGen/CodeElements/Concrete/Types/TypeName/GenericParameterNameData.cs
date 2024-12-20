@@ -56,12 +56,21 @@ internal class GenericTypeParameterNameData : ITypeNameData
                 }
             }
 
-            // We need to get the index of the generic parameter, for further info see:
-            // https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/documentation-comments#d42-id-string-format
+            if (declaredTypeParameters.TryGetValue(paramName, out var typeParameter))
+            {
+                // We need to get the index of the generic parameter, for further info see:
+                // https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/documentation-comments#d42-id-string-format
 
-            return declaredTypeParameters.TryGetValue(paramName, out var typeParameter)
-                ? "`" + typeParameter.Index + idSuffix // type found -> use its Order
-                : "`" + idSuffix; // type not found -> use arbitrary value
+                string idPrefix = typeParameter.DeclaredAt == CodeElementKind.Type
+                    ? "`" // declared in a type -> single backtick
+                    : "``"; // declared in a member -> double backtick
+
+                return idPrefix + typeParameter.Index + idSuffix; // type found -> use its index
+            }
+            else
+            {
+                return "`" + idSuffix; // type not found -> use arbitrary value
+            }
         }
     }
 

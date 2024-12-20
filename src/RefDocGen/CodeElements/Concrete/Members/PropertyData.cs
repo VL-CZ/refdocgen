@@ -19,7 +19,7 @@ internal class PropertyData : MemberData, IPropertyData
     /// </summary>
     /// <param name="propertyInfo"><see cref="System.Reflection.PropertyInfo"/> object representing the property.</param>
     /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    internal PropertyData(PropertyInfo propertyInfo, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters) : base(propertyInfo)
+    internal PropertyData(PropertyInfo propertyInfo, Dictionary<string, TypeParameterData> declaredTypeParameters) : base(propertyInfo)
     {
         PropertyInfo = propertyInfo;
         Type = propertyInfo.PropertyType.GetNameData(declaredTypeParameters);

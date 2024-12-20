@@ -14,9 +14,18 @@ internal class MemberId
     /// <returns>The ID of the given <paramref name="member"/></returns>
     internal static string Of(IExecutableMemberData member)
     {
+        string id = member.Name;
+
+        // add type parameter count (if any)
+        int typeParamsCount = member.TypeParameters.Count;
+        if (typeParamsCount > 0)
+        {
+            id += $"``{typeParamsCount}";
+        }
+
         if (member.Parameters.Count == 0)
         {
-            return member.Name; // no params -> return the Name
+            return id; // no params -> don't append anything
         }
         else
         {
@@ -27,7 +36,7 @@ internal class MemberId
                             : p.Type.Id
             );
 
-            return member.Name + "(" + string.Join(",", parameterNames) + ")";
+            return id + "(" + string.Join(",", parameterNames) + ")";
         }
     }
 }

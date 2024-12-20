@@ -1,5 +1,6 @@
 using FluentAssertions;
 using NSubstitute;
+using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Concrete.Types.TypeName;
 
@@ -35,8 +36,8 @@ public class GenericTypeParameterNameDataTests
 
         declaredTypeParameters = new Dictionary<string, TypeParameterData>()
         {
-            ["TKey"] = new TypeParameterData(tKeyMock, 0),
-            ["TValue"] = new TypeParameterData(tValueMock, 1)
+            ["TKey"] = new TypeParameterData(tKeyMock, 0, CodeElementKind.Type),
+            ["TValue"] = new TypeParameterData(tValueMock, 1, CodeElementKind.Type)
         };
     }
 

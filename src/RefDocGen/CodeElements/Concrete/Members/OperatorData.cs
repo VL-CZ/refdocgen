@@ -14,7 +14,7 @@ internal class OperatorData : MethodData, IOperatorData
     /// </summary>
     /// <param name="methodInfo"><see cref="MethodInfo"/> object representing the operator.</param>
     /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    internal OperatorData(MethodInfo methodInfo, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters)
+    internal OperatorData(MethodInfo methodInfo, Dictionary<string, TypeParameterData> declaredTypeParameters)
         : base(methodInfo, declaredTypeParameters)
     {
         Kind = methodNameToOperatorKind[methodInfo.Name];

@@ -1,3 +1,5 @@
+using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
+
 namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 
 /// <summary>
@@ -11,6 +13,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <param name="RemarksDocComment">'remarks' documentation comment for the method.</param>
 /// <param name="ReturnsDocComment">Documentation comment for the method's return value.</param>
 /// <param name="Modifiers">Collection of modifiers for the method (e.g. private, abstract, virtual, etc.)</param>
+/// <param name="TypeParameters">Template models of the generic type parameters declared in the method.</param>
 /// <param name="Exceptions">
 /// A collection of user-documented exceptions (using the 'exception' XML tag) that the method might throw.
 /// </param>
@@ -23,4 +26,5 @@ public record MethodTM(
     string RemarksDocComment,
     string ReturnsDocComment,
     IEnumerable<string> Modifiers,
+    TypeParameterTM[] TypeParameters,
     IEnumerable<ExceptionTM> Exceptions);

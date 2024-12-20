@@ -1,3 +1,5 @@
+using RefDocGen.CodeElements.Abstract.Types;
+
 namespace RefDocGen.CodeElements.Abstract.Members;
 
 /// <summary>
@@ -12,4 +14,9 @@ public interface IExecutableMemberData : ICallableMemberData
     /// Readonly list of the member parameters, indexed by their position.
     /// </summary>
     IReadOnlyList<IParameterData> Parameters { get; }
+
+    /// <summary>
+    /// Collection of generic type parameters declared in the member.
+    /// </summary>
+    IReadOnlyList<ITypeParameterData> TypeParameters { get; }
 }
