@@ -17,8 +17,9 @@ internal static class ObjectTypeTMCreator
     /// Creates a <see cref="ObjectTypeTM"/> instance based on the provided <see cref="IObjectTypeData"/> object.
     /// </summary>
     /// <param name="typeData">The <see cref="IObjectTypeData"/> instance representing the type.</param>
+    /// <param name="commentParser">TODO</param>
     /// <returns>A <see cref="ObjectTypeTM"/> instance based on the provided <paramref name="typeData"/>.</returns>
-    public static ObjectTypeTM GetFrom(IObjectTypeData typeData, HtmlCommentParser commentParser)
+    internal static ObjectTypeTM GetFrom(IObjectTypeData typeData, HtmlCommentParser commentParser)
     {
         var constructors = typeData.Constructors.Select(c => GetFrom(c, commentParser)).ToArray();
         var fields = typeData.Fields.Select(c => GetFrom(c, commentParser)).ToArray();
@@ -71,6 +72,7 @@ internal static class ObjectTypeTMCreator
     /// Creates a <see cref="ConstructorTM"/> instance based on the provided <see cref="IConstructorData"/> object.
     /// </summary>
     /// <param name="constructorData">The <see cref="IConstructorData"/> instance representing the constructor.</param>
+    /// <param name="commentParser">TODO</param>
     /// <returns>A <see cref="ConstructorTM"/> instance based on the provided <paramref name="constructorData"/>.</returns>
     private static ConstructorTM GetFrom(IConstructorData constructorData, HtmlCommentParser commentParser)
     {
@@ -91,6 +93,7 @@ internal static class ObjectTypeTMCreator
     /// Creates a <see cref="FieldTM"/> instance based on the provided <see cref="IFieldData"/> object.
     /// </summary>
     /// <param name="fieldData">The <see cref="IFieldData"/> instance representing the field.</param>
+    /// <param name="commentParser">TODO</param>
     /// <returns>A <see cref="FieldTM"/> instance based on the provided <paramref name="fieldData"/>.</returns>
     private static FieldTM GetFrom(IFieldData fieldData, HtmlCommentParser commentParser)
     {
