@@ -30,6 +30,8 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     /// </summary>
     private readonly RazorLightEngine razorLightEngine;
 
+    private HtmlCommentParser htmlCommentParser = new();
+
     /// <summary>
     /// Initialize a new instance of <see cref="DefaultTemplateGenerator"/> class.
     /// </summary>
@@ -50,6 +52,8 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     /// <inheritdoc/>
     public void GenerateTemplates(ITypeRegistry typeRegistry)
     {
+        htmlCommentParser = new HtmlCommentParser(typeRegistry);
+
         GenerateObjectTypeTemplates(typeRegistry.ObjectTypes);
         GenerateEnumTemplates(typeRegistry.Enums);
         GenerateDelegateTemplates(typeRegistry.Delegates);
@@ -62,7 +66,7 @@ internal class DefaultTemplateGenerator : ITemplateGenerator
     /// <param name="types">The type data to be used in the templates.</param>
     private void GenerateObjectTypeTemplates(IEnumerable<IObjectTypeData> types)
     {
-        var typeTemplateModels = types.Select(ObjectTypeTMCreator.GetFrom);
+        var typeTemplateModels = types.Select(t => ObjectTypeTMCreator.GetFrom(t, htmlCommentParser));
         GenerateTemplates(typeTemplateModels, TemplateKind.ObjectType);
     }
 

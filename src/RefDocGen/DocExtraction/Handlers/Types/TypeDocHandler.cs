@@ -29,6 +29,9 @@ internal class TypeDocHandler
             type.RemarksDocComment = remarksNode;
         }
 
+        // add 'seealso' doc comments
+        type.SeeAlsoDocComments = docComment.Elements(XmlDocIdentifiers.SeeAlso);
+
         var typeParamElements = docComment.Descendants(XmlDocIdentifiers.TypeParam);
 
         // add type param doc comments

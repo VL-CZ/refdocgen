@@ -17,11 +17,12 @@ internal static class ObjectTypeTMCreator
     /// Creates a <see cref="ObjectTypeTM"/> instance based on the provided <see cref="IObjectTypeData"/> object.
     /// </summary>
     /// <param name="typeData">The <see cref="IObjectTypeData"/> instance representing the type.</param>
+    /// <param name="commentParser">TODO</param>
     /// <returns>A <see cref="ObjectTypeTM"/> instance based on the provided <paramref name="typeData"/>.</returns>
-    public static ObjectTypeTM GetFrom(IObjectTypeData typeData)
+    internal static ObjectTypeTM GetFrom(IObjectTypeData typeData, HtmlCommentParser commentParser)
     {
-        var constructors = typeData.Constructors.Select(GetFrom).ToArray();
-        var fields = typeData.Fields.Select(GetFrom).ToArray();
+        var constructors = typeData.Constructors.Select(c => GetFrom(c, commentParser)).ToArray();
+        var fields = typeData.Fields.Select(c => GetFrom(c, commentParser)).ToArray();
         var properties = typeData.Properties.Select(GetFrom).ToArray();
         var methods = typeData.Methods.Select(GetFrom).ToArray();
         var operators = typeData.Operators.Select(GetFrom).ToArray();
@@ -45,8 +46,6 @@ internal static class ObjectTypeTMCreator
         {
             modifiers.Add(Keyword.Abstract);
         }
-
-        var commentParser = new HtmlCommentParser();
         string summaryDocComment = commentParser.Parse(typeData.SummaryDocComment);
 
         return new ObjectTypeTM(
@@ -73,13 +72,13 @@ internal static class ObjectTypeTMCreator
     /// Creates a <see cref="ConstructorTM"/> instance based on the provided <see cref="IConstructorData"/> object.
     /// </summary>
     /// <param name="constructorData">The <see cref="IConstructorData"/> instance representing the constructor.</param>
+    /// <param name="commentParser">TODO</param>
     /// <returns>A <see cref="ConstructorTM"/> instance based on the provided <paramref name="constructorData"/>.</returns>
-    private static ConstructorTM GetFrom(IConstructorData constructorData)
+    private static ConstructorTM GetFrom(IConstructorData constructorData, HtmlCommentParser commentParser)
     {
         var modifiers = GetCallableMemberModifiers(constructorData);
         var exceptionTMs = constructorData.Exceptions.Select(ExceptionTMCreator.GetFrom);
 
-        var commentParser = new HtmlCommentParser();
         string summaryDocComment = commentParser.Parse(constructorData.SummaryDocComment);
 
         return new ConstructorTM(
@@ -94,8 +93,9 @@ internal static class ObjectTypeTMCreator
     /// Creates a <see cref="FieldTM"/> instance based on the provided <see cref="IFieldData"/> object.
     /// </summary>
     /// <param name="fieldData">The <see cref="IFieldData"/> instance representing the field.</param>
+    /// <param name="commentParser">TODO</param>
     /// <returns>A <see cref="FieldTM"/> instance based on the provided <paramref name="fieldData"/>.</returns>
-    private static FieldTM GetFrom(IFieldData fieldData)
+    private static FieldTM GetFrom(IFieldData fieldData, HtmlCommentParser commentParser)
     {
         List<Keyword> modifiers = [fieldData.AccessModifier.ToKeyword()];
 
@@ -114,10 +114,17 @@ internal static class ObjectTypeTMCreator
             modifiers.Add(Keyword.Readonly);
         }
 
-        var commentParser = new HtmlCommentParser();
         string docComment = commentParser.Parse(fieldData.SummaryDocComment);
 
-        return new FieldTM(fieldData.Name, CSharpTypeName.Of(fieldData.Type), docComment, fieldData.RemarksDocComment.Value, modifiers.GetStrings());
+        string[] seeAlsoDocComments = fieldData.SeeAlsoDocComments.Select(commentParser.Parse).ToArray();
+
+        return new FieldTM(
+            fieldData.Name,
+            CSharpTypeName.Of(fieldData.Type),
+            docComment,
+            fieldData.RemarksDocComment.Value,
+            modifiers.GetStrings(),
+            seeAlsoDocComments);
     }
 
     /// <summary>

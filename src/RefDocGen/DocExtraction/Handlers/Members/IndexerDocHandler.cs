@@ -10,7 +10,7 @@ namespace RefDocGen.DocExtraction.Handlers.Members;
 /// <summary>
 /// Class responsible for handling and adding XML doc comments to the corresponding indexers.
 /// </summary>
-internal class IndexerDocHandler : MemberDocHandler<IndexerData>, IMemberDocHandler
+internal class IndexerDocHandler : MemberDocHandler<ObjectTypeData, IndexerData>
 {
     /// <inheritdoc/>
     protected override void AddRemainingComments(IndexerData member, XElement memberDocComment)

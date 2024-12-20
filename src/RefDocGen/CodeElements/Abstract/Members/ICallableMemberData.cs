@@ -54,5 +54,5 @@ public interface ICallableMemberData : IMemberData
     /// This collection includes only the exceptions explicitly documented using the <c>exception</c> XML tag. 
     /// It does not include all possible exceptions that might occur during execution.
     /// </remarks>
-    IReadOnlyList<IExceptionDocumentation> Exceptions { get; }
+    IEnumerable<IExceptionDocumentation> Exceptions { get; }
 }

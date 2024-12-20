@@ -1,3 +1,8 @@
+using RefDocGen.CodeElements.Abstract;
+using RefDocGen.CodeElements.Concrete;
+using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Concrete.Types.Delegate;
+using RefDocGen.CodeElements.Concrete.Types.Enum;
 using RefDocGen.DocExtraction.Tools;
 using System.Xml.Linq;
 
@@ -5,6 +10,22 @@ namespace RefDocGen.TemplateGenerators.Tools;
 
 internal class HtmlCommentParser
 {
+    private readonly ITypeRegistry typeRegistry;
+
+    public HtmlCommentParser(ITypeRegistry typeRegistry)
+    {
+        this.typeRegistry = typeRegistry;
+    }
+
+    public HtmlCommentParser() // TODO: code smell
+    {
+        typeRegistry = new TypeRegistry(
+                new Dictionary<string, ObjectTypeData>(),
+                new Dictionary<string, EnumTypeData>(),
+                new Dictionary<string, DelegateTypeData>()
+            );
+    }
+
     private readonly Dictionary<string, string> tags = new()
     {
         ["summary"] = "div",
@@ -23,7 +44,6 @@ internal class HtmlCommentParser
         //["example"] = "div",
         //["description"] = "p",
         //["term"] = "strong",
-        //["seealso"] = "a",
         //["inheritdoc"] = "div",
         //["permission"] = "div",
     };
@@ -45,6 +65,10 @@ internal class HtmlCommentParser
             HandleCodeElement(element);
         }
         else if (element.Name == "see")
+        {
+            HandleSeeElement(element);
+        }
+        else if (element.Name == "seealso")
         {
             HandleSeeElement(element);
         }
@@ -105,23 +129,89 @@ internal class HtmlCommentParser
 
     private void HandleSeeElement(XElement element)
     {
-        element.Name = "a";
-
-        if (element.Attribute("href") is not null)
+        if (element.Attribute("href") is XAttribute hrefAttr)
         {
+            element.Name = "a";
+
+            if (!element.Nodes().Any())
+            {
+                element.Add(new XText(hrefAttr.Value));
+            }
+
             return;
         }
         else if (element.TryGetAttribute("langword", out var attr))
         {
-            var codeElement = new XElement("code", new XAttribute("skip", true), new XText(attr.Value));
-
-            element.Add(codeElement);
             element.RemoveAttributes();
-        }
-        //else if (element.Attribute("cref") is not null) // TODO: handle cref
-        //{
+            element.Name = "code";
 
-        //}
+            element.Add(new XText(attr.Value));
+        }
+        else if (element.TryGetCrefAttribute(out var codeRefAttr))
+        {
+            element.RemoveAttributes();
+
+            string[] splitMemberName = codeRefAttr.Value.Split(':');
+            (string objectIdentifier, string fullObjectName) = (splitMemberName[0], splitMemberName[1]);
+
+            string typeId;
+            string? memberId = null;
+
+            if (objectIdentifier == MemberTypeId.Type) // type
+            {
+                typeId = fullObjectName;
+            }
+            else if (objectIdentifier == "!") // reference not found
+            {
+                element.Name = "span";
+
+                // no child nodes -> add cref 
+                if (!element.Nodes().Any())
+                {
+                    element.Add(new XText(fullObjectName));
+                }
+                return;
+            }
+            else // member
+            {
+                (typeId, string memberName, string paramsString) = MemberSignatureParser.Parse(fullObjectName);
+                memberId = memberName + paramsString;
+            }
+
+            // type found
+            if (typeRegistry.TryGetType(typeId, out _))
+            {
+                element.Name = "a";
+
+                string target = typeId + ".html";
+
+                // TODO: check if member is found
+
+                if (memberId is not null)
+                {
+                    target += $"#{memberId}";
+                }
+
+                element.Add(
+                    new XAttribute("href", target)
+                );
+
+                // no child nodes -> add cref 
+                if (!element.Nodes().Any())
+                {
+                    element.Add(new XText(target));
+                }
+            }
+            else // type not found
+            {
+                element.Name = "code";
+
+                if (!element.Nodes().Any())
+                {
+                    element.Add(new XText(fullObjectName));
+                }
+            }
+        }
     }
 
     private void HandleParamRefElement(XElement element)

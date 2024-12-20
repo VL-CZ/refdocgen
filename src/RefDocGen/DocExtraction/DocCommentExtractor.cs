@@ -35,9 +35,9 @@ internal class DocCommentExtractor
     private readonly XDocument xmlDocument;
 
     /// <summary>
-    /// Dictionary of selected member documentation handlers, identified by <see cref="MemberTypeId"/> identifiers.
+    /// Dictionary of the selected member documentation handlers, identified by <see cref="MemberTypeId"/> identifiers.
     /// </summary>
-    private readonly Dictionary<string, IMemberDocHandler> memberDocHandlers = new()
+    private readonly Dictionary<string, IMemberDocHandler<ObjectTypeData>> memberDocHandlers = new()
     {
         [MemberTypeId.Field] = new FieldDocHandler(),
         [MemberTypeId.Property] = new PropertyDocHandler(),
@@ -201,7 +201,7 @@ internal class DocCommentExtractor
         if (typeRegistry.ObjectTypes.TryGetValue(typeName, out var type)) // member of a value, reference or interface type
         {
             // inheritdoc - TODO: update
-            if (docCommentNode.TryGetElement(XmlDocIdentifiers.Inheritdoc, out var _))
+            if (docCommentNode.TryGetElement(XmlDocIdentifiers.InheritDoc, out var _))
             {
                 inheritDocMembers.Add(new(type, memberId, docCommentNode));
                 return;

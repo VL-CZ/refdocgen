@@ -30,30 +30,30 @@ public interface IObjectTypeData : ITypeDeclaration
     /// <summary>
     /// Collection of constructors declared in the type.
     /// </summary>
-    IReadOnlyList<IConstructorData> Constructors { get; }
+    IEnumerable<IConstructorData> Constructors { get; }
 
     /// <summary>
     /// Collection of fields declared in the type.
     /// </summary>
-    IReadOnlyList<IFieldData> Fields { get; }
+    IEnumerable<IFieldData> Fields { get; }
 
     /// <summary>
     /// Collection of methods declared in the type.
     /// </summary>
-    IReadOnlyList<IMethodData> Methods { get; }
+    IEnumerable<IMethodData> Methods { get; }
 
     /// <summary>
     /// Collection of properties declared in the type.
     /// </summary>
-    IReadOnlyList<IPropertyData> Properties { get; }
+    IEnumerable<IPropertyData> Properties { get; }
 
     /// <summary>
     /// Collection of operators declared in the type.
     /// </summary>
-    IReadOnlyList<IOperatorData> Operators { get; }
+    IEnumerable<IOperatorData> Operators { get; }
 
     /// <summary>
     /// Collection of indexers declared in the type.
     /// </summary>
-    IReadOnlyList<IIndexerData> Indexers { get; }
+    IEnumerable<IIndexerData> Indexers { get; }
 }

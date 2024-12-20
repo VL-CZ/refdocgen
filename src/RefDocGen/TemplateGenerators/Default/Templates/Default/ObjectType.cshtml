@@ -277,7 +277,7 @@
                 <div class="col-md-12">
                     @foreach (var field in Model.Fields)
                     {
-                        <div class="border p-2 mb-2">
+                        <div class="border p-2 mb-2" id="@field.Name">
                             <h6 class="mb-1">
                                 <samp>
                                     <span class="text-primary">
@@ -296,11 +296,25 @@
                                     @Raw(field.SummaryDocComment)
                                 </i>
                             </div>
+
                             @if (field.RemarksDocComment.Length > 0)
                             {
                                 <div class="mt-3">
                                     <div class="lead">Remarks</div>
                                     <i>@field.RemarksDocComment</i>
+                                </div>
+                            }
+
+                            @if (field.SeeAlsoDocComments.Any())
+                            {
+                                <div class="mt-3">
+                                    <div class="lead">See also</div>
+                                    @foreach (var comment in field.SeeAlsoDocComments)
+                                    {
+                                        <div>
+                                            @Raw(comment)
+                                        </div>
+                                    }
                                 </div>
                             }
                         </div>

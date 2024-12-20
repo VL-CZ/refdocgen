@@ -1,20 +1,18 @@
 using RefDocGen.CodeElements.Abstract.Members.Enum;
-using RefDocGen.Tools.Xml;
 using System.Reflection;
-using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Concrete.Members.Enum;
 
 /// <summary>
 /// Class representing data of an enum member.
 /// </summary>
-internal class EnumMemberData : IEnumMemberData
+internal class EnumMemberData : MemberData, IEnumMemberData
 {
     /// <summary>
     /// Initialize a new instance of the <see cref="EnumMemberData"/> class.
     /// </summary>
     /// <param name="fieldInfo"><see cref="System.Reflection.FieldInfo"/> object representing the enum member.</param>
-    public EnumMemberData(FieldInfo fieldInfo)
+    public EnumMemberData(FieldInfo fieldInfo) : base(fieldInfo)
     {
         FieldInfo = fieldInfo;
     }
@@ -23,14 +21,14 @@ internal class EnumMemberData : IEnumMemberData
     public FieldInfo FieldInfo { get; }
 
     /// <inheritdoc/>
-    public string Id => Name;
+    public override AccessModifier AccessModifier => AccessModifierExtensions.GetAccessModifier(
+        FieldInfo.IsPrivate,
+        FieldInfo.IsFamily,
+        FieldInfo.IsAssembly,
+        FieldInfo.IsPublic,
+        FieldInfo.IsFamilyAndAssembly,
+        FieldInfo.IsFamilyOrAssembly);
 
     /// <inheritdoc/>
-    public string Name => FieldInfo.Name;
-
-    /// <inheritdoc/>
-    public XElement SummaryDocComment { get; internal set; } = XmlDocElements.EmptySummary;
-
-    /// <inheritdoc/>
-    public XElement RemarksDocComment { get; internal set; } = XmlDocElements.EmptySummary;
+    public override bool IsStatic => false;
 }

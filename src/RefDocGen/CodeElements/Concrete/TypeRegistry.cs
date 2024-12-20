@@ -5,6 +5,7 @@ using RefDocGen.CodeElements.Abstract;
 using RefDocGen.CodeElements.Concrete.Types.Enum;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Concrete.Types.Delegate;
+using System.Diagnostics.CodeAnalysis;
 
 namespace RefDocGen.CodeElements.Concrete;
 
@@ -28,4 +29,26 @@ internal record TypeRegistry(
 
     /// <inheritdoc/>
     IEnumerable<IDelegateTypeData> ITypeRegistry.Delegates => Delegates.Values;
+
+    /// <inheritdoc/>
+    public bool TryGetType(string typeId, [MaybeNullWhen(false)] out ITypeDeclaration? type)
+    {
+        ITypeDeclaration? foundType = null;
+
+        if (ObjectTypes.TryGetValue(typeId, out var objectType))
+        {
+            foundType = objectType;
+        }
+        else if (Enums.TryGetValue(typeId, out var enumType))
+        {
+            foundType = enumType;
+        }
+        else if (Delegates.TryGetValue(typeId, out var delegateType))
+        {
+            foundType = delegateType;
+        }
+
+        type = foundType;
+        return foundType != null;
+    }
 }
