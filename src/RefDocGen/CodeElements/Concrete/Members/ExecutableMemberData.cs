@@ -3,6 +3,7 @@ using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.Exception;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
+using RefDocGen.Tools;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -36,9 +37,8 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
             : [];
 
         // add the dicitonaries
-        var allParams = declaredTypeParameters.Values
-            .Concat(TypeParameterDeclarations.Values)
-            .ToDictionary(t => t.Name);
+        var allParams = declaredTypeParameters
+            .Merge(TypeParameterDeclarations);
 
         // add parameters
         Parameters = methodBase.GetParameters()
