@@ -23,7 +23,7 @@ internal class TypeNameData : TypeNameBaseData, ITypeNameData
     {
         TypeParameters = TypeObject
             .GetGenericArguments()
-            .Select(t => t.GetNameData(declaredTypeParameters))
+            .Select(t => t.GetTypeNameData(declaredTypeParameters))
             .ToArray();
     }
 

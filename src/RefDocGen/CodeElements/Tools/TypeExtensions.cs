@@ -16,7 +16,7 @@ internal static class TypeExtensions
     /// <param name="type">Type to transform.</param>
     /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
     /// <returns><see cref="ITypeNameData"/> instance corresponding to the given type.</returns>
-    internal static ITypeNameData GetNameData(this Type type, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters)
+    internal static ITypeNameData GetTypeNameData(this Type type, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters)
     {
         return type.IsGenericParameter || type.GetBaseElementType().IsGenericParameter
             ? new GenericTypeParameterNameData(type, declaredTypeParameters)
@@ -28,7 +28,7 @@ internal static class TypeExtensions
     /// </summary>
     /// <param name="type">Type to transform.</param>
     /// <returns><see cref="ITypeNameData"/> instance corresponding to the given type.</returns>
-    internal static ITypeNameData GetNameData(this Type type)
+    internal static ITypeNameData GetTypeNameData(this Type type)
     {
         var emptyTypeParameters = new Dictionary<string, TypeParameterData>();
 

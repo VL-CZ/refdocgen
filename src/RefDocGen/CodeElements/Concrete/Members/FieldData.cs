@@ -19,7 +19,7 @@ internal class FieldData : MemberData, IFieldData
     internal FieldData(FieldInfo fieldInfo, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters) : base(fieldInfo)
     {
         FieldInfo = fieldInfo;
-        Type = fieldInfo.FieldType.GetNameData(declaredTypeParameters);
+        Type = fieldInfo.FieldType.GetTypeNameData(declaredTypeParameters);
     }
 
     /// <inheritdoc/>

@@ -29,7 +29,7 @@ internal class TypeParameterData : ITypeParameterData
         TypeConstraints = TypeObject
             .GetGenericParameterConstraints()
             .Except([typeof(ValueType)]) // exclude `NotNullableValueType` constraint, which is a part of special constraints
-            .Select(p => p.GetNameData());
+            .Select(p => p.GetTypeNameData());
     }
 
     /// <inheritdoc/>
