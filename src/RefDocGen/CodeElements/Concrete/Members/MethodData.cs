@@ -43,4 +43,10 @@ internal class MethodData : ExecutableMemberData, IMethodData
 
     /// <inheritdoc/>
     public override bool OverridesAnotherMember => !MethodInfo.Equals(MethodInfo.GetBaseDefinition());
+
+    /// <inheritdoc/>
+    protected override bool IsConstructor()
+    {
+        return false;
+    }
 }

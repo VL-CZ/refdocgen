@@ -29,8 +29,8 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
         this.methodBase = methodBase;
 
         // add type parameters
-        TypeParameterDeclarations = methodBase is MethodInfo m
-            ? m.GetGenericArguments()
+        TypeParameterDeclarations = !IsConstructor()
+            ? methodBase.GetGenericArguments()
                 .Select((ga, i) => new TypeParameterData(ga, i, CodeElementKind.Member))
                 .ToDictionary(t => t.Name)
             : [];
@@ -92,10 +92,16 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
     /// <summary>
     /// Collection of type parameters declared in the member; the keys represent type parameter names.
     /// </summary>
-    internal IReadOnlyDictionary<string, TypeParameterData> TypeParameterDeclarations { get; }
+    internal IReadOnlyDictionary<string, TypeParameterData> TypeParameterDeclarations { get; } = new Dictionary<string, TypeParameterData>();
 
     /// <inheritdoc/>
     IReadOnlyList<ITypeParameterData> IExecutableMemberData.TypeParameters => TypeParameterDeclarations.Values
         .OrderBy(t => t.Index)
         .ToList();
+
+    /// <summary>
+    /// Checks if the member represents a constructor.
+    /// </summary>
+    /// <returns><c>true</c> if the member represents a constructor, <c>false</c> otherwise.</returns>
+    protected abstract bool IsConstructor();
 }
