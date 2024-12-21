@@ -1,7 +1,9 @@
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.Exception;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
+using RefDocGen.Tools;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -27,10 +29,21 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
     {
         this.methodBase = methodBase;
 
+        // add type parameters
+        TypeParameterDeclarations = !IsConstructor()
+            ? methodBase.GetGenericArguments()
+                .Select((ga, i) => new TypeParameterData(ga, i, CodeElementKind.Member))
+                .ToDictionary(t => t.Name)
+            : [];
+
+        // add the dicitonaries
+        var allParams = declaredTypeParameters
+            .Merge(TypeParameterDeclarations);
+
         // add parameters
         Parameters = methodBase.GetParameters()
             .OrderBy(p => p.Position)
-            .Select(p => new ParameterData(p, declaredTypeParameters))
+            .Select(p => new ParameterData(p, allParams))
             .ToArray();
     }
 
@@ -68,11 +81,27 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
     /// <summary>
     /// Array of method parameters, ordered by their position.
     /// </summary>
-    public IReadOnlyList<ParameterData> Parameters { get; }
+    internal IReadOnlyList<ParameterData> Parameters { get; }
 
     /// <inheritdoc/>
     IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters;
 
     /// <inheritdoc/>
     public IEnumerable<IExceptionDocumentation> Exceptions { get; internal set; } = [];
+
+    /// <summary>
+    /// Collection of type parameters declared in the member; the keys represent type parameter names.
+    /// </summary>
+    internal IReadOnlyDictionary<string, TypeParameterData> TypeParameterDeclarations { get; } = new Dictionary<string, TypeParameterData>();
+
+    /// <inheritdoc/>
+    IReadOnlyList<ITypeParameterData> IExecutableMemberData.TypeParameters => TypeParameterDeclarations.Values
+        .OrderBy(t => t.Index)
+        .ToList();
+
+    /// <summary>
+    /// Checks if the member represents a constructor.
+    /// </summary>
+    /// <returns><c>true</c> if the member represents a constructor, <c>false</c> otherwise.</returns>
+    protected abstract bool IsConstructor();
 }

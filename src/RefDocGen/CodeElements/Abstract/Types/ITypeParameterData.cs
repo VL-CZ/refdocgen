@@ -54,4 +54,9 @@ public interface ITypeParameterData
     /// Note: This collection doesn't contain any type constraints (these are contained in <see cref="TypeConstraints"/> collection).
     /// </remarks>
     IEnumerable<SpecialTypeConstraint> SpecialConstraints { get; }
+
+    /// <summary>
+    /// Returns kind of the code element (type / member) where the type parameter is declared.
+    /// </summary>
+    CodeElementKind DeclaredAt { get; }
 }

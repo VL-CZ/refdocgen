@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
 using System.Reflection;
@@ -24,6 +25,9 @@ internal class IndexerData : PropertyData, IIndexerData
     /// Array of index parameters, ordered by their position.
     /// </summary>
     public IReadOnlyList<ParameterData> Parameters { get; }
+
+    /// <inheritdoc/>
+    public IReadOnlyList<ITypeParameterData> TypeParameters => [];
 
     /// <inheritdoc/>
     IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters;

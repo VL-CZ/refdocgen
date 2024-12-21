@@ -18,10 +18,10 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     {
         TypeParameterDeclarations = typeParameterDeclarations;
 
-        BaseType = type.BaseType?.GetNameData(typeParameterDeclarations);
+        BaseType = type.BaseType?.GetTypeNameData(typeParameterDeclarations);
 
         Interfaces = type.GetInterfaces()
-            .Select(i => i.GetNameData(typeParameterDeclarations))
+            .Select(i => i.GetTypeNameData(typeParameterDeclarations))
             .ToArray();
     }
 
@@ -86,7 +86,7 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     /// <inheritdoc/>
     IReadOnlyList<ITypeNameData> ITypeNameData.TypeParameters => TypeParameterDeclarations.Values
         .OrderBy(t => t.Index)
-        .Select(tp => tp.TypeObject.GetNameData(TypeParameterDeclarations))
+        .Select(tp => tp.TypeObject.GetTypeNameData(TypeParameterDeclarations))
         .ToList();
 
     /// <inheritdoc/>

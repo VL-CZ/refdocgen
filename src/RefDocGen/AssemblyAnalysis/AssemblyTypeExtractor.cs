@@ -5,6 +5,7 @@ using RefDocGen.CodeElements.Concrete;
 using RefDocGen.CodeElements.Concrete.Types.Delegate;
 using RefDocGen.CodeElements.Concrete.Members.Enum;
 using RefDocGen.CodeElements.Concrete.Members;
+using RefDocGen.CodeElements;
 
 namespace RefDocGen.AssemblyAnalysis;
 
@@ -13,6 +14,11 @@ namespace RefDocGen.AssemblyAnalysis;
 /// </summary>
 internal class AssemblyTypeExtractor
 {
+    /// <summary>
+    /// Name of the delegate 'invoke' method.
+    /// </summary>
+    private const string delegateMethodName = "Invoke";
+
     /// <summary>
     /// Path to the DLL assembly to analyze and extract types.
     /// </summary>
@@ -100,7 +106,7 @@ internal class AssemblyTypeExtractor
 
         var typeParameters = type
             .GetGenericArguments()
-            .Select((ga, i) => new TypeParameterData(ga, i))
+            .Select((ga, i) => new TypeParameterData(ga, i, CodeElementKind.Type))
             .ToDictionary(t => t.Name);
 
         // construct *Data objects
@@ -157,10 +163,10 @@ internal class AssemblyTypeExtractor
     {
         var typeParameters = type
             .GetGenericArguments()
-            .Select((ga, i) => new TypeParameterData(ga, i))
+            .Select((ga, i) => new TypeParameterData(ga, i, CodeElementKind.Type))
             .ToDictionary(t => t.Name);
 
-        var invokeMethod = type.GetMethod("Invoke") ?? throw new ArgumentException("TODO");
+        var invokeMethod = type.GetMethod(delegateMethodName) ?? throw new ArgumentException("TODO");
 
         return new DelegateTypeData(type, invokeMethod, typeParameters);
     }

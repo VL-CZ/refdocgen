@@ -33,5 +33,11 @@ internal class ConstructorData : ExecutableMemberData, IConstructorData
 
     /// <inheritdoc/>
     public override string Name => DefaultName;
+
+    /// <inheritdoc/>
+    protected override bool IsConstructor()
+    {
+        return true;
+    }
 }
 

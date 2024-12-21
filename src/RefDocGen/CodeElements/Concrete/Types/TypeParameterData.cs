@@ -17,11 +17,19 @@ internal class TypeParameterData : ITypeParameterData
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type parameter.</param>
     /// <param name="index">Index of the parameter in the declaring type's parameter collection.</param>
-    public TypeParameterData(Type type, int index)
+    /// <param name="declaredAt">Kind of the code elements, where the type parameter is declared.</param>
+    public TypeParameterData(Type type, int index, CodeElementKind declaredAt)
     {
         TypeObject = type;
         Index = index;
+        DeclaredAt = declaredAt;
+
         DocComment = XmlDocElements.EmptyTypeParamWithName(Name);
+
+        TypeConstraints = TypeObject
+            .GetGenericParameterConstraints()
+            .Except([typeof(ValueType)]) // exclude `NotNullableValueType` constraint, which is a part of special constraints
+            .Select(p => p.GetTypeNameData());
     }
 
     /// <inheritdoc/>
@@ -43,10 +51,7 @@ internal class TypeParameterData : ITypeParameterData
     public bool IsContravariant => TypeObject.GenericParameterAttributes.HasFlag(GenericParameterAttributes.Contravariant);
 
     /// <inheritdoc/>
-    public IEnumerable<ITypeNameData> TypeConstraints => TypeObject
-        .GetGenericParameterConstraints()
-        .Except([typeof(ValueType)]) // exclude `NotNullableValueType` constraint
-        .Select(p => p.GetNameData());
+    public IEnumerable<ITypeNameData> TypeConstraints { get; }
 
     /// <inheritdoc/>
     public IEnumerable<SpecialTypeConstraint> SpecialConstraints
@@ -72,4 +77,7 @@ internal class TypeParameterData : ITypeParameterData
             return values;
         }
     }
+
+    /// <inheritdoc/>
+    public CodeElementKind DeclaredAt { get; }
 }

@@ -22,7 +22,7 @@ internal class MethodData : ExecutableMemberData, IMethodData
         : base(methodInfo, declaredTypeParameters)
     {
         MethodInfo = methodInfo;
-        ReturnType = methodInfo.ReturnType.GetNameData(declaredTypeParameters);
+        ReturnType = methodInfo.ReturnType.GetTypeNameData(declaredTypeParameters);
     }
 
     /// <summary>
@@ -43,4 +43,10 @@ internal class MethodData : ExecutableMemberData, IMethodData
 
     /// <inheritdoc/>
     public override bool OverridesAnotherMember => !MethodInfo.Equals(MethodInfo.GetBaseDefinition());
+
+    /// <inheritdoc/>
+    protected override bool IsConstructor()
+    {
+        return false;
+    }
 }

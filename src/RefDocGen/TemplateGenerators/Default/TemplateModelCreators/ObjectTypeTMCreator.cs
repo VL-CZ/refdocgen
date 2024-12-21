@@ -222,6 +222,7 @@ internal static class ObjectTypeTMCreator
             methodData.RemarksDocComment.Value,
             methodData.ReturnValueDocComment.Value,
             modifiers.GetStrings(),
+            methodData.TypeParameters.Select(TypeParameterTMCreator.GetFrom).ToArray(),
             exceptionTMs);
     }
 
@@ -244,6 +245,7 @@ internal static class ObjectTypeTMCreator
             operatorData.RemarksDocComment.Value,
             operatorData.ReturnValueDocComment.Value,
             modifiers.GetStrings(),
+            operatorData.TypeParameters.Select(TypeParameterTMCreator.GetFrom).ToArray(),
             exceptionTMs);
     }
 

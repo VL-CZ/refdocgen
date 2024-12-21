@@ -1,5 +1,6 @@
 using FluentAssertions;
 using NSubstitute;
+using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Concrete.Types.TypeName;
 
@@ -33,10 +34,14 @@ public class GenericTypeParameterNameDataTests
         var tValueMock = Substitute.For<Type>();
         tValueMock.Name.Returns("TValue");
 
+        var tMethodTypeMock = Substitute.For<Type>();
+        tValueMock.Name.Returns("TMethodType");
+
         declaredTypeParameters = new Dictionary<string, TypeParameterData>()
         {
-            ["TKey"] = new TypeParameterData(tKeyMock, 0),
-            ["TValue"] = new TypeParameterData(tValueMock, 1)
+            ["TKey"] = new TypeParameterData(tKeyMock, 0, CodeElementKind.Type),
+            ["TValue"] = new TypeParameterData(tValueMock, 1, CodeElementKind.Type),
+            ["TMethodType"] = new TypeParameterData(tMethodTypeMock, 0, CodeElementKind.Member) // generic type declared in a member
         };
     }
 
@@ -73,6 +78,19 @@ public class GenericTypeParameterNameDataTests
         var gp = new GenericTypeParameterNameData(type, declaredTypeParameters);
 
         string expectedId = "`0*";
+
+        gp.Id.Should().Be(expectedId);
+    }
+
+    [Fact]
+    public void Id_ReturnsCorrectData_ForTypeDeclaredInMember()
+    {
+        var typeMock = Substitute.For<Type>();
+        typeMock.Name.Returns("TMethodType");
+
+        var gp = new GenericTypeParameterNameData(typeMock, declaredTypeParameters);
+
+        string expectedId = "``0";
 
         gp.Id.Should().Be(expectedId);
     }
