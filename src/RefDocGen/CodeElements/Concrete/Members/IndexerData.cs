@@ -1,5 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
 using System.Reflection;
@@ -28,6 +29,8 @@ internal class IndexerData : PropertyData, IIndexerData
 
     /// <inheritdoc/>
     public IReadOnlyList<ITypeParameterData> TypeParameters => [];
+
+    public ITypeNameData? DeclaringType => null;
 
     /// <inheritdoc/>
     IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters;

@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 
 namespace RefDocGen.CodeElements.Abstract.Members;
 
@@ -19,4 +20,6 @@ public interface IExecutableMemberData : ICallableMemberData
     /// Collection of generic type parameters declared in the member.
     /// </summary>
     IReadOnlyList<ITypeParameterData> TypeParameters { get; }
+
+    ITypeNameData? DeclaringType { get; }
 }

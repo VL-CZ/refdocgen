@@ -25,6 +25,21 @@ internal class MethodData : ExecutableMemberData, IMethodData
         ReturnType = methodInfo.ReturnType.GetTypeNameData(declaredTypeParameters);
     }
 
+    public override string Name
+    {
+        get
+        {
+            if (IsExplicitImplementation)
+            {
+                return MethodInfo.Name.Split('.').Last();
+            }
+            else
+            {
+                return MethodInfo.Name;
+            }
+        }
+    }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="MethodData"/> class.
     /// </summary>

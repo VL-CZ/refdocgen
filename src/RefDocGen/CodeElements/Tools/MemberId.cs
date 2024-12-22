@@ -18,6 +18,8 @@ internal class MemberId
 
         if (member.IsExplicitImplementation)
         {
+            id = member.DeclaringType?.Id + '.' + id;
+
             id = id
                 .Replace('.', '#')
                 .Replace('<', '{')

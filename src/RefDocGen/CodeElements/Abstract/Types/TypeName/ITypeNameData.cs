@@ -40,5 +40,6 @@ public interface ITypeNameData : ITypeNameBaseData
     /// Checks whether the type is a pointer.
     /// </summary>
     bool IsPointer { get; }
+
 }
 
