@@ -69,7 +69,7 @@ internal class GenericTypeParameterNameData : ITypeNameData
             }
             else
             {
-                return "`" + idSuffix; // type not found -> use arbitrary value
+                return paramName + idSuffix; // type not found -> use arbitrary value
             }
         }
     }
@@ -95,4 +95,5 @@ internal class GenericTypeParameterNameData : ITypeNameData
     /// <inheritdoc/>
     public bool IsGenericParameter => true;
 
+    public string IdWithParameterNames => throw new NotImplementedException();
 }

@@ -125,7 +125,7 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
                 {
                     if (map.TargetMethods[i] == methodBase)
                     {
-                        return iface.GetTypeNameData(declaredTypeParameters);
+                        return iface.GetTypeNameData();
                     }
                 }
             }
