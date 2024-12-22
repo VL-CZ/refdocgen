@@ -65,11 +65,11 @@ internal class GenericTypeParameterNameData : ITypeNameData
                     ? "`" // declared in a type -> single backtick
                     : "``"; // declared in a member -> double backtick
 
-                return idPrefix + typeParameter.Index + idSuffix; // type found -> use its index
+                return idPrefix + typeParameter.Index + idSuffix; // generic param found -> use its index
             }
             else
             {
-                return paramName + idSuffix; // type not found -> use arbitrary value
+                return paramName + idSuffix; // generic param not found -> use its name
             }
         }
     }

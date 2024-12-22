@@ -20,10 +20,7 @@ internal class MemberId
         {
             id = member.DeclaringType?.Id + '.' + id;
 
-            id = id
-                .Replace('.', '#')
-                .Replace('<', '{')
-                .Replace('>', '}');
+            id = id.Replace('.', '#');
         }
 
         // add type parameter count (if any)

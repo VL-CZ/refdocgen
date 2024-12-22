@@ -593,6 +593,16 @@
                                         {
                                             <span class="text-dark">@method.Name<span class="text-secondary">()</span></span>
                                         }
+
+                                        @* TODO: move up *@
+                                        @if (method.TypeParameters.Any())
+                                        {
+                                            var paramsString = string.Join(',', method.TypeParameters.Select(tp => tp.Name));
+
+                                            <span class="text-secondary">&lt;</span>
+                                            <span class="text-dark">@paramsString</span>
+                                            <span class="text-secondary">&gt;</span>
+                                        }
                                     </span>
                                 </samp>
 
