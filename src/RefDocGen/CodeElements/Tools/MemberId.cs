@@ -14,7 +14,15 @@ internal class MemberId
     /// <returns>The ID of the given <paramref name="member"/></returns>
     internal static string Of(IExecutableMemberData member)
     {
-        string id = member.Name.Replace('.', '#');
+        string id = member.Name;
+
+        if (member.IsExplicitImplementation)
+        {
+            id = id
+                .Replace('.', '#')
+                .Replace('<', '{')
+                .Replace('>', '}');
+        }
 
         // add type parameter count (if any)
         int typeParamsCount = member.TypeParameters.Count;

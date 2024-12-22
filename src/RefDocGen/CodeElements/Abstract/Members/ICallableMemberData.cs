@@ -55,4 +55,9 @@ public interface ICallableMemberData : IMemberData
     /// It does not include all possible exceptions that might occur during execution.
     /// </remarks>
     IEnumerable<IExceptionDocumentation> Exceptions { get; }
+
+    /// <summary>
+    /// Checks if the member is an explicitely impletemented member of an interface.
+    /// </summary>
+    bool IsExplicitImplementation { get; }
 }

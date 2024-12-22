@@ -99,6 +99,9 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
         .OrderBy(t => t.Index)
         .ToList();
 
+    /// <inheritdoc/>
+    public virtual bool IsExplicitImplementation => Name.Contains('.');
+
     /// <summary>
     /// Checks if the member represents a constructor.
     /// </summary>
