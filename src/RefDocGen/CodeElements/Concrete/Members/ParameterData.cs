@@ -38,9 +38,6 @@ internal class ParameterData : IParameterData
     public bool IsParamsCollection => ParameterInfo.GetCustomAttribute(typeof(ParamArrayAttribute)) != null;
 
     /// <inheritdoc/>
-    public bool HasDefaultValue => ParameterInfo.HasDefaultValue;
-
-    /// <inheritdoc/>
     public bool IsInput => ParameterInfo.IsIn;
 
     /// <inheritdoc/>
@@ -56,6 +53,6 @@ internal class ParameterData : IParameterData
     public int Position => ParameterInfo.Position;
 
     /// <inheritdoc/>
-    public string? DefaultValue => ParameterInfo.RawDefaultValue?.ToString();
+    public object? DefaultValue => ParameterInfo.RawDefaultValue;
 }
 

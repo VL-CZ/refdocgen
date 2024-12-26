@@ -39,7 +39,22 @@ internal class ParameterTMCreator
             modifiers.Add(Keyword.Params);
         }
 
+        object? defaultValue = parameterData.DefaultValue;
+
+        if (defaultValue is string s)
+        {
+            defaultValue = $"\"{s}\"";
+        }
+        else if (defaultValue is null)
+        {
+            defaultValue ??= "null";
+        }
+        else if (defaultValue == DBNull.Value)
+        {
+            defaultValue = null;
+        }
+
         return new ParameterTM(parameterData.Name, CSharpTypeName.Of(parameterData.Type), parameterData.DocComment.Value,
-            modifiers.GetStrings(), parameterData.DefaultValue);
+            modifiers.GetStrings(), defaultValue?.ToString());
     }
 }

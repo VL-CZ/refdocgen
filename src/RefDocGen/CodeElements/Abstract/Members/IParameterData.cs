@@ -36,11 +36,6 @@ public interface IParameterData
     bool IsParamsCollection { get; }
 
     /// <summary>
-    /// Checks if the parameter is optional.
-    /// </summary>
-    bool HasDefaultValue { get; }
-
-    /// <summary>
     /// Checks if the parameter is an input parameter.
     /// </summary>
     bool IsInput { get; }
@@ -56,12 +51,13 @@ public interface IParameterData
     bool IsByRef { get; }
 
     /// <summary>
-    /// Default value of the parameter in the string format.
+    /// Default value of the parameter.
     /// <para>
-    /// <see langword="null"/> if the parameter has no default value.
+    /// Returns <see cref="DBNull.Value"/> if the parameter has no default value.
+    /// (note that this is done, because <see langword="null"/> can be declared as a default value of the parameter.
     /// </para>
     /// </summary>
-    string? DefaultValue { get; }
+    object? DefaultValue { get; }
 
     /// <summary>
     /// XML doc comment for the parameter.
