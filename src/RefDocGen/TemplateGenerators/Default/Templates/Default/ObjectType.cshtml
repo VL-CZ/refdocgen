@@ -577,9 +577,21 @@
 
                                                 @if (p == lastParam)
                                                 {
-                                                    <span class="text-dark">
-                                                        @p.Name<span class="text-secondary">)</span>
-                                                    </span>
+                                                    if (p.DefaultValue is not null)
+                                                    {
+                                                        <span class="text-dark">
+                                                            @p.Name
+                                                            <span class="text-secondary">=</span>
+                                                            <span class="text-success">"@p.DefaultValue"</span>
+                                                            <span class="text-secondary">)</span>
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="text-dark">
+                                                            @p.Name<span class="text-secondary">)</span>
+                                                        </span>
+                                                    }
                                                 }
                                                 else
                                                 {

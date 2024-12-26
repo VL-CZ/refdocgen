@@ -40,6 +40,6 @@ internal class ParameterTMCreator
         }
 
         return new ParameterTM(parameterData.Name, CSharpTypeName.Of(parameterData.Type), parameterData.DocComment.Value,
-            modifiers.GetStrings(), parameterData.IsOptional);
+            modifiers.GetStrings(), parameterData.DefaultValue);
     }
 }

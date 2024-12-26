@@ -38,7 +38,7 @@ public interface IParameterData
     /// <summary>
     /// Checks if the parameter is optional.
     /// </summary>
-    bool IsOptional { get; }
+    bool HasDefaultValue { get; }
 
     /// <summary>
     /// Checks if the parameter is an input parameter.
@@ -54,6 +54,14 @@ public interface IParameterData
     /// Checks if the parameter is passed by reference.
     /// </summary>
     bool IsByRef { get; }
+
+    /// <summary>
+    /// Default value of the parameter in the string format.
+    /// <para>
+    /// <see langword="null"/> if the parameter has no default value.
+    /// </para>
+    /// </summary>
+    string? DefaultValue { get; }
 
     /// <summary>
     /// XML doc comment for the parameter.
