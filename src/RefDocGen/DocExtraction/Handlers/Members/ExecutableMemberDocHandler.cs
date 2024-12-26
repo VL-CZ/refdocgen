@@ -25,7 +25,7 @@ internal abstract class ExecutableMemberDocHandler<T> : MemberDocHandler<ObjectT
 
         // add exception doc comments (if present)
         var exceptionsDocComments = memberDocComment.Descendants(XmlDocIdentifiers.Exception);
-        member.Exceptions = ExceptionDocHelper.Parse(exceptionsDocComments);
+        member.DocumentedExceptions = ExceptionDocHelper.Parse(exceptionsDocComments);
     }
 }
 

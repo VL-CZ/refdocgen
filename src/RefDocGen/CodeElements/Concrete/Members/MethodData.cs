@@ -23,22 +23,14 @@ internal class MethodData : ExecutableMemberData, IMethodData
     {
         MethodInfo = methodInfo;
         ReturnType = methodInfo.ReturnType.GetTypeNameData(declaredTypeParameters);
+
+        ExplicitInterfaceType = Tools.ExplicitInterfaceType.Of(this);
     }
 
-    public override string Name
-    {
-        get
-        {
-            if (IsExplicitImplementation)
-            {
-                return MethodInfo.Name.Split('.').Last();
-            }
-            else
-            {
-                return MethodInfo.Name;
-            }
-        }
-    }
+    /// <inheritdoc/>
+    public override string Name => IsExplicitImplementation
+        ? MethodInfo.Name.Split('.').Last()
+        : MethodInfo.Name;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MethodData"/> class.
@@ -60,8 +52,8 @@ internal class MethodData : ExecutableMemberData, IMethodData
     public override bool OverridesAnotherMember => !MethodInfo.Equals(MethodInfo.GetBaseDefinition());
 
     /// <inheritdoc/>
-    protected override bool IsConstructor()
-    {
-        return false;
-    }
+    public override bool IsConstructor => false;
+
+    /// <inheritdoc/>
+    public override ITypeNameData? ExplicitInterfaceType { get; }
 }

@@ -30,7 +30,11 @@ internal class IndexerData : PropertyData, IIndexerData
     /// <inheritdoc/>
     public IReadOnlyList<ITypeParameterData> TypeParameters => [];
 
-    public ITypeNameData? ExplicitInterfaceType => null;
+    /// <inheritdoc/>
+    public override ITypeNameData? ExplicitInterfaceType => null;
+
+    /// <inheritdoc/>
+    public bool IsConstructor => false;
 
     /// <inheritdoc/>
     IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters;

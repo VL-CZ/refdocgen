@@ -55,7 +55,7 @@ public interface ICallableMemberData : IMemberData
     /// This collection includes only the exceptions explicitly documented using the <c>exception</c> XML tag. 
     /// It does not include all possible exceptions that might occur during execution.
     /// </remarks>
-    IEnumerable<IExceptionDocumentation> Exceptions { get; }
+    IEnumerable<IExceptionDocumentation> DocumentedExceptions { get; }
 
     /// <summary>
     /// Checks if the member is an explicitely impletemented member of an interface.

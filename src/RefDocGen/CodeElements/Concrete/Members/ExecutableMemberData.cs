@@ -21,8 +21,6 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
     /// </summary>
     private readonly MethodBase methodBase;
 
-    private IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters;
-
     /// <summary>
     /// Create new <see cref="ExecutableMemberData"/> instance.
     /// </summary>
@@ -32,14 +30,12 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
     {
         this.methodBase = methodBase;
 
-        this.declaredTypeParameters = declaredTypeParameters;
-
         // add type parameters
-        TypeParameterDeclarations = !IsConstructor()
+        TypeParameterDeclarations = !IsConstructor
             ? methodBase.GetGenericArguments()
                 .Select((ga, i) => new TypeParameterData(ga, i, CodeElementKind.Member))
                 .ToDictionary(t => t.Name)
-            : [];
+            : []; // constructors can't declare generic type parameters
 
         // add the dicitonaries
         var allParams = declaredTypeParameters
@@ -92,7 +88,7 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
     IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters;
 
     /// <inheritdoc/>
-    public IEnumerable<IExceptionDocumentation> Exceptions { get; internal set; } = [];
+    public IEnumerable<IExceptionDocumentation> DocumentedExceptions { get; internal set; } = [];
 
     /// <summary>
     /// Collection of type parameters declared in the member; the keys represent type parameter names.
@@ -107,41 +103,9 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
     /// <inheritdoc/>
     public bool IsExplicitImplementation => ExplicitInterfaceType is not null;
 
-    public virtual ITypeNameData? ExplicitInterfaceType
-    {
-        get
-        {
-            if (!methodBase.Name.Contains('.'))
-            {
-                return null;
-            }
+    /// <inheritdoc/>
+    public abstract ITypeNameData? ExplicitInterfaceType { get; }
 
-            var declaringType = methodBase.DeclaringType;
-            if (declaringType == null || declaringType.IsInterface)
-                return null;
-
-            // Iterate through all interfaces implemented by the declaring type
-            foreach (var iface in declaringType.GetInterfaces())
-            {
-                var map = declaringType.GetInterfaceMap(iface);
-
-                // Check if the method exists in the target methods of the interface map
-                for (int i = 0; i < map.TargetMethods.Length; i++)
-                {
-                    if (map.TargetMethods[i] == methodBase)
-                    {
-                        return iface.GetTypeNameData();
-                    }
-                }
-            }
-
-            return null;
-        }
-    }
-
-    /// <summary>
-    /// Checks if the member represents a constructor.
-    /// </summary>
-    /// <returns><c>true</c> if the member represents a constructor, <c>false</c> otherwise.</returns>
-    protected abstract bool IsConstructor();
+    /// <inheritdoc/>
+    public abstract bool IsConstructor { get; }
 }

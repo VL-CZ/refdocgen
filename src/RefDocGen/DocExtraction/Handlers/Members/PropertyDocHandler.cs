@@ -23,7 +23,7 @@ internal class PropertyDocHandler : MemberDocHandler<ObjectTypeData, PropertyDat
 
         // add 'exception' doc comments
         var exceptionsDocComments = memberDocComment.Descendants(XmlDocIdentifiers.Exception);
-        member.Exceptions = ExceptionDocHelper.Parse(exceptionsDocComments);
+        member.DocumentedExceptions = ExceptionDocHelper.Parse(exceptionsDocComments);
     }
 
     /// <inheritdoc/>
