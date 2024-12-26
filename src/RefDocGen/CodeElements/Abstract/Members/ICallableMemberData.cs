@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Types.Exception;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 
 namespace RefDocGen.CodeElements.Abstract.Members;
 
@@ -54,5 +55,22 @@ public interface ICallableMemberData : IMemberData
     /// This collection includes only the exceptions explicitly documented using the <c>exception</c> XML tag. 
     /// It does not include all possible exceptions that might occur during execution.
     /// </remarks>
-    IEnumerable<IExceptionDocumentation> Exceptions { get; }
+    IEnumerable<IExceptionDocumentation> DocumentedExceptions { get; }
+
+    /// <summary>
+    /// Checks if the member is an explicitely impletemented member of an interface.
+    /// </summary>
+    bool IsExplicitImplementation { get; }
+
+    /// <summary>
+    /// Type of the interface that explicitly declares the member.
+    /// 
+    /// <para>
+    /// <c>null</c>, if the member is not explicitly declared.
+    /// </para>
+    /// </summary>
+    /// <remarks>
+    /// For further info, see <see href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/interfaces/explicit-interface-implementation"/>
+    /// </remarks>
+    ITypeNameData? ExplicitInterfaceType { get; }
 }

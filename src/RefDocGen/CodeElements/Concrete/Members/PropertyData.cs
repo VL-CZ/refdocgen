@@ -31,7 +31,17 @@ internal class PropertyData : MemberData, IPropertyData
         Setter = PropertyInfo.SetMethod is not null
             ? new MethodData(PropertyInfo.SetMethod, declaredTypeParameters)
             : null;
+
+        ExplicitInterfaceType = Tools.ExplicitInterfaceType.Of(this);
     }
+
+    /// <inheritdoc/>
+    public override string Id => MemberId.Of(this);
+
+    /// <inheritdoc/>
+    public override string Name => IsExplicitImplementation
+        ? PropertyInfo.Name.Split('.').Last()
+        : PropertyInfo.Name;
 
     /// <inheritdoc/>
     public PropertyInfo PropertyInfo { get; }
@@ -111,6 +121,11 @@ internal class PropertyData : MemberData, IPropertyData
     public XElement ValueDocComment { get; internal set; } = XmlDocElements.EmptySummary;
 
     /// <inheritdoc/>
-    public IEnumerable<IExceptionDocumentation> Exceptions { get; internal set; } = [];
-}
+    public IEnumerable<IExceptionDocumentation> DocumentedExceptions { get; internal set; } = [];
 
+    /// <inheritdoc/>
+    public bool IsExplicitImplementation => ExplicitInterfaceType is not null;
+
+    /// <inheritdoc/>
+    public virtual ITypeNameData? ExplicitInterfaceType { get; }
+}

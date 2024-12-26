@@ -1,6 +1,7 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.Exception;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
 using RefDocGen.Tools;
@@ -30,11 +31,11 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
         this.methodBase = methodBase;
 
         // add type parameters
-        TypeParameterDeclarations = !IsConstructor()
+        TypeParameterDeclarations = !IsConstructor
             ? methodBase.GetGenericArguments()
                 .Select((ga, i) => new TypeParameterData(ga, i, CodeElementKind.Member))
                 .ToDictionary(t => t.Name)
-            : [];
+            : []; // constructors can't declare generic type parameters
 
         // add the dicitonaries
         var allParams = declaredTypeParameters
@@ -87,7 +88,7 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
     IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters;
 
     /// <inheritdoc/>
-    public IEnumerable<IExceptionDocumentation> Exceptions { get; internal set; } = [];
+    public IEnumerable<IExceptionDocumentation> DocumentedExceptions { get; internal set; } = [];
 
     /// <summary>
     /// Collection of type parameters declared in the member; the keys represent type parameter names.
@@ -99,9 +100,12 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
         .OrderBy(t => t.Index)
         .ToList();
 
-    /// <summary>
-    /// Checks if the member represents a constructor.
-    /// </summary>
-    /// <returns><c>true</c> if the member represents a constructor, <c>false</c> otherwise.</returns>
-    protected abstract bool IsConstructor();
+    /// <inheritdoc/>
+    public bool IsExplicitImplementation => ExplicitInterfaceType is not null;
+
+    /// <inheritdoc/>
+    public abstract ITypeNameData? ExplicitInterfaceType { get; }
+
+    /// <inheritdoc/>
+    public abstract bool IsConstructor { get; }
 }

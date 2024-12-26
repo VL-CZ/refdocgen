@@ -27,7 +27,7 @@ internal class IndexerDocHandler : MemberDocHandler<ObjectTypeData, IndexerData>
 
         // add 'exception' doc comments
         var exceptionsDocComments = memberDocComment.Descendants(XmlDocIdentifiers.Exception);
-        member.Exceptions = ExceptionDocHelper.Parse(exceptionsDocComments);
+        member.DocumentedExceptions = ExceptionDocHelper.Parse(exceptionsDocComments);
     }
 
     /// <inheritdoc/>

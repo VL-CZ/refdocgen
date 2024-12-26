@@ -30,10 +30,6 @@ internal static class TypeExtensions
     /// <returns><see cref="ITypeNameData"/> instance corresponding to the given type.</returns>
     internal static ITypeNameData GetTypeNameData(this Type type)
     {
-        var emptyTypeParameters = new Dictionary<string, TypeParameterData>();
-
-        return type.IsGenericParameter || type.GetBaseElementType().IsGenericParameter
-            ? new GenericTypeParameterNameData(type, emptyTypeParameters)
-            : new TypeNameData(type, emptyTypeParameters);
+        return GetTypeNameData(type, new Dictionary<string, TypeParameterData>());
     }
 }

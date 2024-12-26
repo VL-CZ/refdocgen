@@ -67,4 +67,6 @@ internal class TypeNameData : TypeNameBaseData, ITypeNameData
 
     /// <inheritdoc/>
     public bool IsGenericParameter => false;
+
+    public string IdWithParameterNames => Id;
 }

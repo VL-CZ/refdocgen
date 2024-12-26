@@ -14,7 +14,7 @@ internal class MemberId
     /// <returns>The ID of the given <paramref name="member"/></returns>
     internal static string Of(IExecutableMemberData member)
     {
-        string id = member.Name;
+        string id = Of((ICallableMemberData)member); // get the ID without parameters
 
         // add type parameter count (if any)
         int typeParamsCount = member.TypeParameters.Count;
@@ -38,5 +38,23 @@ internal class MemberId
 
             return id + "(" + string.Join(",", parameterNames) + ")";
         }
+    }
+
+    /// <summary>
+    /// Get the ID of the given <paramref name="member"/>
+    /// </summary>
+    /// <param name="member">The member, whose ID is returned.</param>
+    /// <returns>The ID of the given <paramref name="member"/></returns>
+    internal static string Of(ICallableMemberData member)
+    {
+        string id = member.Name;
+
+        if (member.ExplicitInterfaceType is not null) // for explicitly declared members, add the interface type and use hash-tags
+        {
+            id = member.ExplicitInterfaceType.Id + '.' + id;
+            id = id.Replace('.', '#');
+        }
+
+        return id;
     }
 }

@@ -1,5 +1,6 @@
 using System.Reflection;
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
 
 namespace RefDocGen.CodeElements.Concrete.Members;
@@ -35,9 +36,9 @@ internal class ConstructorData : ExecutableMemberData, IConstructorData
     public override string Name => DefaultName;
 
     /// <inheritdoc/>
-    protected override bool IsConstructor()
-    {
-        return true;
-    }
+    public override ITypeNameData? ExplicitInterfaceType => null; // the constructors can't be explicitly declared
+
+    /// <inheritdoc/>
+    public override bool IsConstructor => true;
 }
 

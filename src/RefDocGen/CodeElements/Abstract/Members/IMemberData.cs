@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Abstract.Members;
@@ -30,6 +31,11 @@ public interface IMemberData
     /// Checks whether the member is static.
     /// </summary>
     bool IsStatic { get; }
+
+    /// <summary>
+    /// <see cref="System.Reflection.MemberInfo"/> object representing the member.
+    /// </summary>
+    MemberInfo MemberInfo { get; }
 
     /// <summary>
     /// 'summary' doc comment for the member.

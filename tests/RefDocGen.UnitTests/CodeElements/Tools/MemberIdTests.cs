@@ -1,8 +1,10 @@
 using FluentAssertions;
 using NSubstitute;
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types.TypeName;
 using RefDocGen.CodeElements.Tools;
+using System.Reflection;
 
 namespace RefDocGen.UnitTests.CodeElements.Tools;
 
@@ -38,6 +40,18 @@ public class MemberIdTests
     }
 
     [Fact]
+    public void Of_ReturnsCorrectData_ForExplicitlyImplementedMethod()
+    {
+        var explicitInterfaceType = Substitute.For<ITypeNameData>();
+        explicitInterfaceType.Id.Returns("MyApp.MyInterface");
+
+        var param = MockParameter(typeof(MemberInfo));
+        var method = MockMethodData("Execute", typeof(void), [param], explicitInterfaceType);
+
+        MemberId.Of(method).Should().Be("MyApp#MyInterface#Execute(System.Reflection.MemberInfo)");
+    }
+
+    [Fact]
     public void Of_ReturnsCorrectData_ForMultipleParameters()
     {
         var param1 = MockParameter(typeof(string));
@@ -57,8 +71,11 @@ public class MemberIdTests
     /// <param name="name">Name of the method.</param>
     /// <param name="returnType">Return type of the method.</param>
     /// <param name="parameters">Array of method parameters.</param>
+    /// <param name="explicitInterfaceType">Type of the interface that explicitly declares the member,
+    /// <c>null</c> if the member isn't explicitly implemented.</param>
     /// <returns>Mocked <see cref="IMethodData"/> instance.</returns>
-    private IMethodData MockMethodData(string name, Type returnType, IParameterData[] parameters)
+    private IMethodData MockMethodData(string name, Type returnType,
+        IParameterData[] parameters, ITypeNameData? explicitInterfaceType = null)
     {
         var methodInfo = Substitute.For<IMethodData>();
         var typeNameData = new TypeNameData(returnType);
@@ -66,6 +83,8 @@ public class MemberIdTests
         methodInfo.Name.Returns(name);
         methodInfo.ReturnType.Returns(typeNameData);
         methodInfo.Parameters.Returns(parameters);
+        methodInfo.ExplicitInterfaceType.Returns(explicitInterfaceType);
+        methodInfo.IsExplicitImplementation.Returns(explicitInterfaceType is not null);
 
         return methodInfo;
     }

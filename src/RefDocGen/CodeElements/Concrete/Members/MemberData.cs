@@ -11,24 +11,19 @@ namespace RefDocGen.CodeElements.Concrete.Members;
 internal abstract class MemberData : IMemberData
 {
     /// <summary>
-    /// <see cref="MemberInfo"/> object representing the member.
-    /// </summary>
-    private readonly MemberInfo memberInfo;
-
-    /// <summary>
     /// Initializes a new instance of the <see cref="MemberData"/> class.
     /// </summary>
     /// <param name="memberInfo"><see cref="MemberInfo"/> object representing the member.</param>
     protected MemberData(MemberInfo memberInfo)
     {
-        this.memberInfo = memberInfo;
+        MemberInfo = memberInfo;
     }
 
     /// <inheritdoc/>
     public virtual string Id => Name;
 
     /// <inheritdoc/>
-    public virtual string Name => memberInfo.Name;
+    public virtual string Name => MemberInfo.Name;
 
     /// <inheritdoc/>
     public abstract AccessModifier AccessModifier { get; }
@@ -44,6 +39,9 @@ internal abstract class MemberData : IMemberData
 
     /// <inheritdoc/>
     public IEnumerable<XElement> SeeAlsoDocComments { get; internal set; } = [];
+
+    /// <inheritdoc/>
+    public MemberInfo MemberInfo { get; }
 
     /// <summary>
     /// Raw doc comment provided to the member.

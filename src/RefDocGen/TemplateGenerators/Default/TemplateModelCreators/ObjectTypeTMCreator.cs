@@ -77,7 +77,7 @@ internal static class ObjectTypeTMCreator
     private static ConstructorTM GetFrom(IConstructorData constructorData, HtmlCommentParser commentParser)
     {
         var modifiers = GetCallableMemberModifiers(constructorData);
-        var exceptionTMs = constructorData.Exceptions.Select(ExceptionTMCreator.GetFrom);
+        var exceptionTMs = constructorData.DocumentedExceptions.Select(ExceptionTMCreator.GetFrom);
 
         string summaryDocComment = commentParser.Parse(constructorData.SummaryDocComment);
 
@@ -149,7 +149,7 @@ internal static class ObjectTypeTMCreator
             setterModifiers.Add(propertyData.Setter.AccessModifier.ToKeyword());
         }
 
-        var exceptionTMs = propertyData.Exceptions.Select(ExceptionTMCreator.GetFrom);
+        var exceptionTMs = propertyData.DocumentedExceptions.Select(ExceptionTMCreator.GetFrom);
 
         return new PropertyTM(
             propertyData.Name,
@@ -187,7 +187,7 @@ internal static class ObjectTypeTMCreator
             setterModifiers.Add(indexer.Setter.AccessModifier.ToKeyword());
         }
 
-        var exceptionTMs = indexer.Exceptions.Select(ExceptionTMCreator.GetFrom);
+        var exceptionTMs = indexer.DocumentedExceptions.Select(ExceptionTMCreator.GetFrom);
 
         return new IndexerTM(
             indexer.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
@@ -211,10 +211,14 @@ internal static class ObjectTypeTMCreator
     private static MethodTM GetFrom(IMethodData methodData)
     {
         var modifiers = GetCallableMemberModifiers(methodData);
-        var exceptionTMs = methodData.Exceptions.Select(ExceptionTMCreator.GetFrom);
+        var exceptionTMs = methodData.DocumentedExceptions.Select(ExceptionTMCreator.GetFrom);
+
+        string name = methodData.IsExplicitImplementation && methodData.ExplicitInterfaceType is not null
+            ? CSharpTypeName.Of(methodData.ExplicitInterfaceType) + "." + methodData.Name
+            : methodData.Name;
 
         return new MethodTM(
-            methodData.Name,
+            name,
             methodData.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
             CSharpTypeName.Of(methodData.ReturnType),
             methodData.ReturnType.IsVoid,
@@ -234,7 +238,7 @@ internal static class ObjectTypeTMCreator
     private static MethodTM GetFrom(IOperatorData operatorData)
     {
         var modifiers = GetCallableMemberModifiers(operatorData);
-        var exceptionTMs = operatorData.Exceptions.Select(ExceptionTMCreator.GetFrom);
+        var exceptionTMs = operatorData.DocumentedExceptions.Select(ExceptionTMCreator.GetFrom);
 
         return new MethodTM(
             operatorData.Kind.GetName(),
