@@ -105,14 +105,19 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
         .ToList();
 
     /// <inheritdoc/>
-    public virtual bool IsExplicitImplementation => methodBase.Name.Contains('.');
+    public bool IsExplicitImplementation => ExplicitInterfaceType is not null;
 
-    public ITypeNameData? DeclaringType
+    public virtual ITypeNameData? ExplicitInterfaceType
     {
         get
         {
+            if (!methodBase.Name.Contains('.'))
+            {
+                return null;
+            }
+
             var declaringType = methodBase.DeclaringType;
-            if (declaringType == null)
+            if (declaringType == null || declaringType.IsInterface)
                 return null;
 
             // Iterate through all interfaces implemented by the declaring type

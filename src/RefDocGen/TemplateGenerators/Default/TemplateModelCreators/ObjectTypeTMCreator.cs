@@ -213,8 +213,8 @@ internal static class ObjectTypeTMCreator
         var modifiers = GetCallableMemberModifiers(methodData);
         var exceptionTMs = methodData.Exceptions.Select(ExceptionTMCreator.GetFrom);
 
-        var name = methodData.IsExplicitImplementation && methodData.DeclaringType is not null
-            ? CSharpTypeName.Of(methodData.DeclaringType) + "." + methodData.Name
+        var name = methodData.IsExplicitImplementation && methodData.ExplicitInterfaceType is not null
+            ? CSharpTypeName.Of(methodData.ExplicitInterfaceType) + "." + methodData.Name
             : methodData.Name;
 
         return new MethodTM(

@@ -34,9 +34,7 @@ internal class PropertyData : MemberData, IPropertyData
     }
 
     /// <inheritdoc/>
-    public override string Id => IsExplicitImplementation
-        ? Name.Replace('.', '#')
-        : Name;
+    public override string Id => MemberId.Of(this);
 
     /// <inheritdoc/>
     public PropertyInfo PropertyInfo { get; }
@@ -119,6 +117,8 @@ internal class PropertyData : MemberData, IPropertyData
     public IEnumerable<IExceptionDocumentation> Exceptions { get; internal set; } = [];
 
     /// <inheritdoc/>
-    public bool IsExplicitImplementation => Name.Contains('.');
+    public bool IsExplicitImplementation => ExplicitInterfaceType is not null;
+
+    public ITypeNameData? ExplicitInterfaceType => null;
 }
 
