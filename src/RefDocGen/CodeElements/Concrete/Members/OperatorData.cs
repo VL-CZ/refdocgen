@@ -54,7 +54,10 @@ internal class OperatorData : MethodData, IOperatorData
         ["op_LessThan"] = OperatorKind.LessThan,
         ["op_GreaterThan"] = OperatorKind.GreaterThan,
         ["op_LessThanOrEqual"] = OperatorKind.LessThanOrEqual,
-        ["op_GreaterThanOrEqual"] = OperatorKind.GreaterThanOrEqual
+        ["op_GreaterThanOrEqual"] = OperatorKind.GreaterThanOrEqual,
+
+        ["op_Explicit"] = OperatorKind.ExplicitConversion,
+        ["op_Implicit"] = OperatorKind.ImplicitConversion,
     };
 
     /// <summary>

@@ -43,6 +43,9 @@ public static class OperatorKindExtensions
             OperatorKind.GreaterThan => ">",
             OperatorKind.LessThanOrEqual => "<=",
             OperatorKind.GreaterThanOrEqual => ">=",
+
+            OperatorKind.ExplicitConversion => "explicit",
+            OperatorKind.ImplicitConversion => "implicit",
             _ => throw new ArgumentOutOfRangeException(nameof(operatorKind), operatorKind, "Unknown operator kind"),
         };
 
