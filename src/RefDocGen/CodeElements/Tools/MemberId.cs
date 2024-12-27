@@ -57,4 +57,18 @@ internal class MemberId
 
         return id;
     }
+
+    /// <summary>
+    /// Get the ID of the given <paramref name="operatorData"/>
+    /// </summary>
+    /// <param name="operatorData">The operator, whose ID is returned.</param>
+    /// <returns>The ID of the given <paramref name="operatorData"/></returns>
+    internal static string Of(IOperatorData operatorData)
+    {
+        string operatorMethodId = Of((IExecutableMemberData)operatorData);
+
+        return operatorData.IsConversionOperator
+            ? operatorMethodId + "~" + operatorData.ReturnType.Id // for conversion operator, we need to append the return type
+            : operatorMethodId;
+    }
 }

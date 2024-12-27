@@ -129,4 +129,14 @@ public enum OperatorKind
     /// Represents the greater-than-or-equal operator.
     /// </summary>
     GreaterThanOrEqual,
+
+    /// <summary>
+    /// Represents the explicit conversion operator.
+    /// </summary>
+    ExplicitConversion,
+
+    /// <summary>
+    /// Represents the implicit conversion operator.
+    /// </summary>
+    ImplicitConversion,
 }
