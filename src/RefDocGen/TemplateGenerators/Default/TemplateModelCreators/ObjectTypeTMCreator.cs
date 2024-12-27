@@ -115,8 +115,11 @@ internal static class ObjectTypeTMCreator
         }
 
         string docComment = commentParser.Parse(fieldData.SummaryDocComment);
-
         string[] seeAlsoDocComments = fieldData.SeeAlsoDocComments.Select(commentParser.Parse).ToArray();
+
+        string? constantValue = fieldData.ConstantValue == DBNull.Value
+            ? null
+            : LiteralValueFormatter.Format(fieldData.ConstantValue);
 
         return new FieldTM(
             fieldData.Name,
@@ -124,7 +127,8 @@ internal static class ObjectTypeTMCreator
             docComment,
             fieldData.RemarksDocComment.Value,
             modifiers.GetStrings(),
-            seeAlsoDocComments);
+            seeAlsoDocComments,
+            constantValue);
     }
 
     /// <summary>
@@ -151,6 +155,10 @@ internal static class ObjectTypeTMCreator
 
         var exceptionTMs = propertyData.DocumentedExceptions.Select(ExceptionTMCreator.GetFrom);
 
+        string? constantValue = propertyData.ConstantValue == DBNull.Value
+            ? null
+            : LiteralValueFormatter.Format(propertyData.ConstantValue);
+
         return new PropertyTM(
             propertyData.Name,
             CSharpTypeName.Of(propertyData.Type),
@@ -162,7 +170,8 @@ internal static class ObjectTypeTMCreator
             propertyData.Setter is not null,
             getterModifiers.GetStrings(),
             setterModifiers.GetStrings(),
-            exceptionTMs);
+            exceptionTMs,
+            constantValue);
     }
 
     /// <summary>

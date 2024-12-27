@@ -289,6 +289,13 @@
                                     <span class="text-dark">
                                         @field.Name
                                     </span>
+
+                                    @if (field.ConstantValue is not null)
+                                    {
+                                        <span class="text-secondary">=</span>
+                                        <span class="text-success">@field.ConstantValue</span>
+                                    }
+
                                 </samp>
                             </h6>
                             <div class="text-muted mb-0">
@@ -364,6 +371,12 @@
                                     }
 
                                     <span class="text-secondary">}</span>
+
+                                    @if (property.ConstantValue is not null)
+                                    {
+                                        <span class="text-secondary">=</span>
+                                        <span class="text-success">@property.ConstantValue</span>
+                                    }
                                 </samp>
                             </h6>
                             <p class="text-muted mb-0">
@@ -577,15 +590,39 @@
 
                                                 @if (p == lastParam)
                                                 {
-                                                    <span class="text-dark">
-                                                        @p.Name<span class="text-secondary">)</span>
-                                                    </span>
+                                                    if (p.DefaultValue is not null)
+                                                    {
+                                                        <span class="text-dark">
+                                                            @p.Name
+                                                            <span class="text-secondary">=</span>
+                                                            <span class="text-success">@p.DefaultValue</span>
+                                                            <span class="text-secondary">)</span>
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="text-dark">
+                                                            @p.Name<span class="text-secondary">)</span>
+                                                        </span>
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    <span class="text-dark">
-                                                        @($"{p.Name},")
-                                                    </span>
+                                                    if (p.DefaultValue is not null)
+                                                    {
+                                                        <span class="text-dark">
+                                                            @p.Name
+                                                            <span class="text-secondary">=</span>
+                                                            <span class="text-success">@p.DefaultValue</span>
+                                                            ,
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="text-dark">
+                                                            @p.Name,
+                                                        </span>
+                                                    }
                                                 }
                                             }
                                         }

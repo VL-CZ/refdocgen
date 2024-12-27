@@ -1,5 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
+using RefDocGen.TemplateGenerators.Tools;
 using RefDocGen.TemplateGenerators.Tools.Keywords;
 using RefDocGen.TemplateGenerators.Tools.TypeName;
 
@@ -39,7 +40,11 @@ internal class ParameterTMCreator
             modifiers.Add(Keyword.Params);
         }
 
+        string? defaultValue = parameterData.DefaultValue == DBNull.Value
+            ? null
+            : LiteralValueFormatter.Format(parameterData.DefaultValue);
+
         return new ParameterTM(parameterData.Name, CSharpTypeName.Of(parameterData.Type), parameterData.DocComment.Value,
-            modifiers.GetStrings(), parameterData.IsOptional);
+            modifiers.GetStrings(), defaultValue);
     }
 }

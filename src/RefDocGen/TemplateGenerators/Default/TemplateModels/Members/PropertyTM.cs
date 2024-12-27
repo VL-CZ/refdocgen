@@ -16,6 +16,12 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <param name="Exceptions">
 /// A collection of user-documented exceptions (using the 'exception' XML tag) that the property might throw.
 /// </param>
+/// <param name="ConstantValue">
+/// Default value of the parameter as a string.
+/// <para>
+/// <see langword="null"/> if the parameter has no default value.
+/// </para>
+/// </param>
 public record PropertyTM(
     string Name,
     string Type,
@@ -27,4 +33,5 @@ public record PropertyTM(
     bool HasSetter,
     IEnumerable<string> GetterModifiers,
     IEnumerable<string> SetterModifiers,
-    IEnumerable<ExceptionTM> Exceptions);
+    IEnumerable<ExceptionTM> Exceptions,
+    string? ConstantValue);

@@ -128,4 +128,7 @@ internal class PropertyData : MemberData, IPropertyData
 
     /// <inheritdoc/>
     public virtual ITypeNameData? ExplicitInterfaceType { get; }
+
+    /// <inheritdoc/>
+    public object? ConstantValue => DBNull.Value;
 }

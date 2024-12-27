@@ -7,5 +7,10 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <param name="Type">Type of the method parameter.</param>
 /// <param name="DocComment">Documentation comment for the method parameter.</param>
 /// <param name="Modifiers">Collection of the parameter modifiers (e.g. out, ref, etc.).</param>
-/// <param name="IsOptional">Indicates whether the parameter is optional.</param>
-public record ParameterTM(string Name, string Type, string DocComment, IEnumerable<string> Modifiers, bool IsOptional);
+/// <param name="DefaultValue">
+/// Default value of the parameter as a string.
+/// <para>
+/// <see langword="null"/> if the parameter has no default value.
+/// </para>
+/// </param>
+public record ParameterTM(string Name, string Type, string DocComment, IEnumerable<string> Modifiers, string? DefaultValue);
