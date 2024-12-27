@@ -1,3 +1,4 @@
+using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
@@ -247,12 +248,30 @@ internal static class ObjectTypeTMCreator
     private static MethodTM GetFrom(IOperatorData operatorData)
     {
         var modifiers = GetCallableMemberModifiers(operatorData);
+        string returnType = CSharpTypeName.Of(operatorData.ReturnType);
+        string name = operatorData.Kind.GetName();
+
+        if (operatorData.IsConversionOperator)
+        {
+            if (operatorData.Kind == OperatorKind.ExplicitConversion)
+            {
+                modifiers.Add(Keyword.Explicit);
+            }
+            else if (operatorData.Kind == OperatorKind.ImplicitConversion)
+            {
+                modifiers.Add(Keyword.Implicit);
+            }
+
+            returnType = "";
+            name = $"operator {CSharpTypeName.Of(operatorData.ReturnType)}";
+        }
+
         var exceptionTMs = operatorData.DocumentedExceptions.Select(ExceptionTMCreator.GetFrom);
 
         return new MethodTM(
-            operatorData.Kind.GetName(),
+            name,
             operatorData.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
-            CSharpTypeName.Of(operatorData.ReturnType),
+            returnType,
             operatorData.ReturnType.IsVoid,
             operatorData.SummaryDocComment.Value,
             operatorData.RemarksDocComment.Value,

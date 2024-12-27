@@ -21,10 +21,12 @@ internal class OperatorData : MethodData, IOperatorData
         Kind = methodNameToOperatorKind[methodInfo.Name];
     }
 
+    /// <inheritdoc/>
     public override string Id => IsConversionOperator
-        ? base.Id + "~" + ReturnType.Id
+        ? base.Id + "~" + ReturnType.Id // for conversion operator, we need to append the return type
         : base.Id;
 
+    /// <inheritdoc/>
     public bool IsConversionOperator => Kind is OperatorKind.ExplicitConversion or OperatorKind.ImplicitConversion;
 
     /// <inheritdoc/>
