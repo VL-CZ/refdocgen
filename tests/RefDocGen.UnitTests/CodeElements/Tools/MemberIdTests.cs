@@ -1,5 +1,6 @@
 using FluentAssertions;
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types.TypeName;
@@ -63,6 +64,26 @@ public class MemberIdTests
         string expectedId = "Execute(System.String,System.Type,System.Int32@,System.Double[])";
 
         MemberId.Of(method).Should().Be(expectedId);
+    }
+
+    [Fact]
+    public void Of_ReturnsCorrectData_ForConversionOperator()
+    {
+        var returnType = Substitute.For<ITypeNameData>();
+        returnType.Id.Returns("MyApp.MyClass");
+
+        var param = MockParameter(typeof(MemberInfo));
+
+        var operatorData = Substitute.For<IOperatorData>();
+
+        operatorData.Name.Returns("op_Explicit");
+        operatorData.ReturnType.Returns(returnType);
+        operatorData.Parameters.Returns([param]);
+        operatorData.IsConversionOperator.Returns(true);
+        operatorData.IsExplicitImplementation.Returns(false);
+        operatorData.ExplicitInterfaceType.ReturnsNull();
+
+        MemberId.Of(operatorData).Should().Be("op_Explicit(System.Reflection.MemberInfo)~MyApp.MyClass");
     }
 
     /// <summary>

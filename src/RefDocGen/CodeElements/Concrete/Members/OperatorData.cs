@@ -1,7 +1,7 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Tools;
 using System.Reflection;
-using System.Reflection.Emit;
 
 namespace RefDocGen.CodeElements.Concrete.Members;
 
@@ -22,9 +22,7 @@ internal class OperatorData : MethodData, IOperatorData
     }
 
     /// <inheritdoc/>
-    public override string Id => IsConversionOperator
-        ? base.Id + "~" + ReturnType.Id // for conversion operator, we need to append the return type
-        : base.Id;
+    public override string Id => MemberId.Of(this);
 
     /// <inheritdoc/>
     public bool IsConversionOperator => Kind is OperatorKind.ExplicitConversion or OperatorKind.ImplicitConversion;

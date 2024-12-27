@@ -248,23 +248,21 @@ internal static class ObjectTypeTMCreator
     private static MethodTM GetFrom(IOperatorData operatorData)
     {
         var modifiers = GetCallableMemberModifiers(operatorData);
-        string returnType = CSharpTypeName.Of(operatorData.ReturnType);
-        string name = operatorData.Kind.GetName();
 
-        if (operatorData.IsConversionOperator)
+        if (operatorData.Kind == OperatorKind.ExplicitConversion)
         {
-            if (operatorData.Kind == OperatorKind.ExplicitConversion)
-            {
-                modifiers.Add(Keyword.Explicit);
-            }
-            else if (operatorData.Kind == OperatorKind.ImplicitConversion)
-            {
-                modifiers.Add(Keyword.Implicit);
-            }
-
-            returnType = "";
-            name = $"operator {CSharpTypeName.Of(operatorData.ReturnType)}";
+            modifiers.Add(Keyword.Explicit);
         }
+        else if (operatorData.Kind == OperatorKind.ImplicitConversion)
+        {
+            modifiers.Add(Keyword.Implicit);
+        }
+
+        string name = CSharpOperatorName.Of(operatorData);
+
+        string returnType = operatorData.IsConversionOperator
+            ? "" // for conversion operators, the return type is shown in its name
+            : CSharpTypeName.Of(operatorData.ReturnType);
 
         var exceptionTMs = operatorData.DocumentedExceptions.Select(ExceptionTMCreator.GetFrom);
 
