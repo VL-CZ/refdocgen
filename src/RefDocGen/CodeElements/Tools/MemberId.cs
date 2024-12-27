@@ -68,8 +68,7 @@ internal class MemberId
         string operatorMethodId = Of((IExecutableMemberData)operatorData);
 
         return operatorData.IsConversionOperator
-            // for conversion operator, we need to append the return type
-            ? operatorMethodId + "~" + operatorData.ReturnType.Id
+            ? operatorMethodId + "~" + operatorData.ReturnType.Id // for conversion operator, we need to append the return type
             : operatorMethodId;
     }
 }
