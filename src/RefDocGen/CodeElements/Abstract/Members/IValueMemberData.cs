@@ -21,4 +21,13 @@ public interface IValueMemberData : IMemberData
     /// Type of the member.
     /// </summary>
     ITypeNameData Type { get; }
+
+    /// <summary>
+    /// Constant value of the member.
+    /// <para>
+    /// Returns <see cref="DBNull.Value"/> if the member has no constant value.
+    /// (note that this is done, because <see langword="null"/> can be declared as a constant value of the member.
+    /// </para>
+    /// </summary>
+    object? ConstantValue { get; }
 }

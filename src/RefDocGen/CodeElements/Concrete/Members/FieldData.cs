@@ -40,4 +40,9 @@ internal class FieldData : MemberData, IFieldData
 
     /// <inheritdoc/>
     public bool IsConstant => FieldInfo.IsLiteral;
+
+    /// <inheritdoc/>
+    public object? ConstantValue => IsConstant
+        ? FieldInfo.GetRawConstantValue()
+        : DBNull.Value;
 }

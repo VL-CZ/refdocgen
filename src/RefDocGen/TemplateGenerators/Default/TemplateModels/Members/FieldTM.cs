@@ -9,4 +9,17 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <param name="RemarksDocComment">'remarks' documentation comment for the field.</param>
 /// <param name="Modifiers">Collection of modifiers for the field (e.g. public, static, etc.)</param>
 /// <param name="SeeAlsoDocComments">Collection of 'seealso' documentation comments for the field.</param>
-public record FieldTM(string Name, string Type, string SummaryDocComment, string RemarksDocComment, IEnumerable<string> Modifiers, IEnumerable<string> SeeAlsoDocComments);
+/// <param name="ConstantValue">
+/// Default value of the parameter as a string.
+/// <para>
+/// <see langword="null"/> if the parameter has no default value.
+/// </para>
+/// </param>
+public record FieldTM(
+    string Name,
+    string Type,
+    string SummaryDocComment,
+    string RemarksDocComment,
+    IEnumerable<string> Modifiers,
+    IEnumerable<string> SeeAlsoDocComments,
+    string? ConstantValue);
