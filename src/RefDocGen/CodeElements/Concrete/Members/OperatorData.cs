@@ -1,6 +1,7 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Concrete.Types;
 using System.Reflection;
+using System.Reflection.Emit;
 
 namespace RefDocGen.CodeElements.Concrete.Members;
 
@@ -19,6 +20,12 @@ internal class OperatorData : MethodData, IOperatorData
     {
         Kind = methodNameToOperatorKind[methodInfo.Name];
     }
+
+    public override string Id => IsConversionOperator
+        ? base.Id + "~" + ReturnType.Id
+        : base.Id;
+
+    public bool IsConversionOperator => Kind is OperatorKind.ExplicitConversion or OperatorKind.ImplicitConversion;
 
     /// <inheritdoc/>
     public OperatorKind Kind { get; }
