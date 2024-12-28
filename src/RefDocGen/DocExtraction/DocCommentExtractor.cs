@@ -123,8 +123,42 @@ internal class DocCommentExtractor
     /// <param name="member">The member whose documentation is to be inherited.</param>
     private void InheritDocumentation(MemberWithDocComment member)
     {
-        // get the resolved contents of the 'inheritdoc' element
-        var resolvedNodes = inheritDocHandler.Resolve(member.Type, member.MemberId);
+        IEnumerable<XNode> resolvedNodes = [];
+
+        if (member.DocComment.Element("inheritdoc")?.Attribute("cref") is XAttribute cref)
+        {
+            string[] splitMemberName = cref.Value.Split(':');
+            (string objectIdentifier, string fullObjectName) = (splitMemberName[0], splitMemberName[1]);
+
+            string typeId;
+            string? memberId = null;
+
+            if (objectIdentifier == MemberTypeId.Type) // type
+            {
+                typeId = fullObjectName;
+            }
+            else // member
+            {
+                (typeId, string memberName, string paramsString) = MemberSignatureParser.Parse(fullObjectName);
+                memberId = memberName + paramsString;
+            }
+
+            // type found
+            if (typeRegistry.TryGetType(typeId, out var type))
+            {
+                if (type is ObjectTypeData oType &&
+                    oType.AllMembers.TryGetValue(memberId, out var typeMember))
+                {
+                    resolvedNodes = typeMember.RawDocComment?.Nodes() ?? [];
+                }
+
+            }
+        }
+        else
+        {
+            // get the resolved contents of the 'inheritdoc' element
+            resolvedNodes = inheritDocHandler.Resolve(member.Type, member.MemberId);
+        }
 
         // replace the 'inheritdoc' element with the actual documentation.
         var resolvedDocElement = member.DocComment;
