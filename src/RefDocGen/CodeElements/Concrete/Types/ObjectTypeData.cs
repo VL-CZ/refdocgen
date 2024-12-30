@@ -115,8 +115,6 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
     /// <inheritdoc/>
     IEnumerable<IIndexerData> IObjectTypeData.Indexers => Indexers.Values;
 
-    /// <summary>
-    /// Dictionary of all members declared in the type; keys are the corresponding member IDs.
-    /// </summary>
-    internal IReadOnlyDictionary<string, MemberData> AllMembers { get; }
+    /// <inheritdoc/>
+    internal override IReadOnlyDictionary<string, MemberData> AllMembers { get; }
 }

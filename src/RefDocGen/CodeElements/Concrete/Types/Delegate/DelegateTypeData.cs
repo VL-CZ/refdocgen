@@ -30,6 +30,11 @@ internal class DelegateTypeData : TypeDeclaration, IDelegateTypeData
         : base(type, typeParameterDeclarations)
     {
         this.invokeMethod = new MethodData(invokeMethod, typeParameterDeclarations);
+
+        AllMembers = new Dictionary<string, MemberData>
+        {
+            [InvokeMethod.Id] = (MemberData)InvokeMethod
+        };
     }
 
     /// <inheritdoc/>
@@ -66,4 +71,7 @@ internal class DelegateTypeData : TypeDeclaration, IDelegateTypeData
 
     /// <inheritdoc/>
     public IEnumerable<IExceptionDocumentation> Exceptions { get; internal set; } = [];
+
+    /// <inheritdoc/>
+    internal override IReadOnlyDictionary<string, MemberData> AllMembers { get; }
 }

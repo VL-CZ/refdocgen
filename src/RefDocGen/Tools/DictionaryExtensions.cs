@@ -31,4 +31,11 @@ internal static class DictionaryExtensions
 
         return result;
     }
+
+    internal static Dictionary<TKey, TParentValue> ToParent<TKey, TChildValue, TParentValue>(this IReadOnlyDictionary<TKey, TChildValue> dictionary)
+        where TKey : notnull
+        where TChildValue : TParentValue
+    {
+        return dictionary.ToDictionary(pair => pair.Key, pair => (TParentValue)pair.Value);
+    }
 }

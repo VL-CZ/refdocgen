@@ -1,5 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
+using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types.TypeName;
 using RefDocGen.CodeElements.Tools;
 using RefDocGen.Tools.Xml;
@@ -91,4 +92,9 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
 
     /// <inheritdoc/>
     bool ITypeNameData.IsPointer => false;
+
+    /// <summary>
+    /// Dictionary of all members declared in the type; keys are the corresponding member IDs.
+    /// </summary>
+    internal abstract IReadOnlyDictionary<string, MemberData> AllMembers { get; }
 }

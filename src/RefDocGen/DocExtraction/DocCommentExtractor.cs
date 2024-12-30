@@ -1,6 +1,7 @@
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
+using System.Xml.XPath;
 using RefDocGen.DocExtraction.Handlers.Members;
 using RefDocGen.DocExtraction.Handlers.Members.Enum;
 using RefDocGen.DocExtraction.Handlers.Types;
@@ -125,33 +126,36 @@ internal class DocCommentExtractor
     {
         IEnumerable<XNode> resolvedNodes = [];
 
-        if (member.DocComment.Element("inheritdoc")?.Attribute("cref") is XAttribute cref)
+        var inheritDocElement = member.DocComment.Element(XmlDocIdentifiers.InheritDoc);
+
+        if (inheritDocElement is null)
+        {
+            return; // no <inheritdoc /> child element found -> return
+        }
+
+        if (inheritDocElement.Attribute(XmlDocIdentifiers.Cref) is XAttribute cref)
         {
             string[] splitMemberName = cref.Value.Split(':');
             (string objectIdentifier, string fullObjectName) = (splitMemberName[0], splitMemberName[1]);
 
-            string typeId;
-            string? memberId = null;
-
             if (objectIdentifier == MemberTypeId.Type) // type
             {
-                typeId = fullObjectName;
+                return;
             }
             else // member
             {
-                (typeId, string memberName, string paramsString) = MemberSignatureParser.Parse(fullObjectName);
-                memberId = memberName + paramsString;
-            }
+                var typeMember = typeRegistry.GetMember(fullObjectName);
+                resolvedNodes = typeMember?.RawDocComment?.Nodes() ?? [];
 
-            // type found
-            if (typeRegistry.TryGetType(typeId, out var type))
-            {
-                if (type is ObjectTypeData oType &&
-                    oType.AllMembers.TryGetValue(memberId, out var typeMember))
+                if (inheritDocElement.Attribute("path") is XAttribute xpath && typeMember?.RawDocComment is not null)
                 {
-                    resolvedNodes = typeMember.RawDocComment?.Nodes() ?? [];
-                }
+                    var memberDocComment = typeMember.RawDocComment;
 
+                    var value = xpath.Value.Trim('/');
+
+                    resolvedNodes = memberDocComment?
+                        .XPathSelectElements(value) ?? [];
+                }
             }
         }
         else
@@ -161,11 +165,9 @@ internal class DocCommentExtractor
         }
 
         // replace the 'inheritdoc' element with the actual documentation.
-        var resolvedDocElement = member.DocComment;
-        resolvedDocElement.RemoveNodes();
-        resolvedDocElement.Add(resolvedNodes);
+        inheritDocElement.ReplaceWith(resolvedNodes);
 
-        AddDocComment(resolvedDocElement);
+        AddDocComment(member.DocComment);
     }
 
     /// <summary>
