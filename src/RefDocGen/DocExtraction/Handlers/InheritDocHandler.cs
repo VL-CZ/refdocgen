@@ -13,7 +13,7 @@ namespace RefDocGen.DocExtraction.Handlers;
 /// </summary>
 internal class InheritDocHandler
 {
-    private record MemberNode(ObjectTypeData Type, string MemberId);
+    private record MemberNode(TypeDeclaration Type, string MemberId);
 
     /// <summary>
     /// The registry of the declared types.
@@ -52,7 +52,7 @@ internal class InheritDocHandler
     /// The resolvement is done recursively using DFS, firstly we try to resolve the base class member (if existing),
     /// then we resolve the interface members one-by-one.
     /// </remarks>
-    internal IEnumerable<XNode> Resolve(ObjectTypeData type, string memberId, XElement inheritDocElement)
+    internal IEnumerable<XNode> Resolve(TypeDeclaration type, string memberId, XElement inheritDocElement)
     {
         XElement? resolvedDocComment;
 
@@ -61,14 +61,9 @@ internal class InheritDocHandler
             string[] splitMemberName = crefAttr.Value.Split(':');
             (string objectIdentifier, string fullObjectName) = (splitMemberName[0], splitMemberName[1]);
 
-            if (objectIdentifier == MemberTypeId.Type) // type
-            {
-                resolvedDocComment = typeRegistry.GetType(fullObjectName)?.RawDocComment;
-            }
-            else // member
-            {
-                resolvedDocComment = typeRegistry.GetMember(fullObjectName)?.RawDocComment;
-            }
+            resolvedDocComment = objectIdentifier == MemberTypeId.Type
+                ? (typeRegistry.GetDeclaredType(fullObjectName)?.RawDocComment)
+                : (typeRegistry.GetMember(fullObjectName)?.RawDocComment);
         }
         else // no cref attribute -> resolve recursively
         {
@@ -103,19 +98,19 @@ internal class InheritDocHandler
             return null;
         }
 
-        // the member is documented.
+        // the member is documented
         if (member.RawDocComment is not null)
         {
             return member.RawDocComment;
         }
 
-        // the member documentation is stored in the cache.
+        // the member documentation is stored in the cache
         if (cache.TryGetValue(node, out var cached))
         {
             return cached;
         }
 
-        // get the documentation from parent.
+        // get the documentation from parent
         var parentNodes = GetParentMemberNodes(node);
 
         foreach (var parentNode in parentNodes)

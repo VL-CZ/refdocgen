@@ -3,7 +3,6 @@ using RefDocGen.CodeElements.Abstract.Types.Enum;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Members.Enum;
 using RefDocGen.Tools;
-using System.Collections.Immutable;
 
 namespace RefDocGen.CodeElements.Concrete.Types.Enum;
 

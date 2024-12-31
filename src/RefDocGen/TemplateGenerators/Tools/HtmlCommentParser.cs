@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract;
+using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Concrete;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Concrete.Types.Delegate;
@@ -179,7 +180,7 @@ internal class HtmlCommentParser
             }
 
             // type found
-            if (typeRegistry.TryGetType(typeId, out _))
+            if (typeRegistry.GetDeclaredType(typeId) is not null)
             {
                 element.Name = "a";
 

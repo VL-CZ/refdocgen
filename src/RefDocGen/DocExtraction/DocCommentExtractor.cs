@@ -1,7 +1,6 @@
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
-using System.Xml.XPath;
 using RefDocGen.DocExtraction.Handlers.Members;
 using RefDocGen.DocExtraction.Handlers.Members.Enum;
 using RefDocGen.DocExtraction.Handlers.Types;

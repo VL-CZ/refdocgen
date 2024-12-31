@@ -5,7 +5,6 @@ using RefDocGen.CodeElements.Abstract;
 using RefDocGen.CodeElements.Concrete.Types.Enum;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Concrete.Types.Delegate;
-using System.Diagnostics.CodeAnalysis;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.DocExtraction.Tools;
 
@@ -32,17 +31,19 @@ internal record TypeRegistry(
     /// <inheritdoc/>
     IEnumerable<IDelegateTypeData> ITypeRegistry.Delegates => Delegates.Values;
 
+
     internal MemberData? GetMember(string typeMemberId)
     {
         (string typeId, string memberName, string paramsString) = MemberSignatureParser.Parse(typeMemberId);
         string memberId = memberName + paramsString;
 
-        var foundType = GetType(typeId);
+        var foundType = GetDeclaredType(typeId);
 
         return foundType?.AllMembers.GetValueOrDefault(memberId);
     }
 
-    internal TypeDeclaration? GetType(string typeId)
+    /// <inheritdoc cref="ITypeRegistry.GetDeclaredType(string)"/>
+    internal TypeDeclaration? GetDeclaredType(string typeId)
     {
         if (ObjectTypes.TryGetValue(typeId, out var objectType))
         {
@@ -61,24 +62,8 @@ internal record TypeRegistry(
     }
 
     /// <inheritdoc/>
-    public bool TryGetType(string typeId, [MaybeNullWhen(false)] out ITypeDeclaration? type)
+    ITypeDeclaration? ITypeRegistry.GetDeclaredType(string typeId)
     {
-        ITypeDeclaration? foundType = null;
-
-        if (ObjectTypes.TryGetValue(typeId, out var objectType))
-        {
-            foundType = objectType;
-        }
-        else if (Enums.TryGetValue(typeId, out var enumType))
-        {
-            foundType = enumType;
-        }
-        else if (Delegates.TryGetValue(typeId, out var delegateType))
-        {
-            foundType = delegateType;
-        }
-
-        type = foundType;
-        return foundType != null;
+        return GetDeclaredType(typeId);
     }
 }
