@@ -97,4 +97,13 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     /// Dictionary of all members declared in the type; keys are the corresponding member IDs.
     /// </summary>
     internal abstract IReadOnlyDictionary<string, MemberData> AllMembers { get; }
+
+    /// <summary>
+    /// Raw doc comment provided to the type.
+    ///
+    /// <para>
+    /// <see langword="null"/> if the type isn't documented.
+    /// </para>
+    /// </summary>
+    internal XElement? RawDocComment { get; set; }
 }

@@ -32,28 +32,32 @@ internal record TypeRegistry(
     /// <inheritdoc/>
     IEnumerable<IDelegateTypeData> ITypeRegistry.Delegates => Delegates.Values;
 
-
     internal MemberData? GetMember(string typeMemberId)
     {
         (string typeId, string memberName, string paramsString) = MemberSignatureParser.Parse(typeMemberId);
         string memberId = memberName + paramsString;
 
-        TypeDeclaration? foundType = null;
+        var foundType = GetType(typeId);
 
+        return foundType?.AllMembers.GetValueOrDefault(memberId);
+    }
+
+    internal TypeDeclaration? GetType(string typeId)
+    {
         if (ObjectTypes.TryGetValue(typeId, out var objectType))
         {
-            foundType = objectType;
+            return objectType;
         }
         else if (Enums.TryGetValue(typeId, out var enumType))
         {
-            foundType = enumType;
+            return enumType;
         }
         else if (Delegates.TryGetValue(typeId, out var delegateType))
         {
-            foundType = delegateType;
+            return delegateType;
         }
 
-        return foundType?.AllMembers.GetValueOrDefault(memberId);
+        return null;
     }
 
     /// <inheritdoc/>

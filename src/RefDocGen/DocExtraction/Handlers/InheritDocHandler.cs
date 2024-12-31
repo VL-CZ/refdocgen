@@ -1,7 +1,10 @@
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.DocExtraction.Tools;
+using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace RefDocGen.DocExtraction.Handlers;
 
@@ -49,12 +52,40 @@ internal class InheritDocHandler
     /// The resolvement is done recursively using DFS, firstly we try to resolve the base class member (if existing),
     /// then we resolve the interface members one-by-one.
     /// </remarks>
-    internal IEnumerable<XNode> Resolve(ObjectTypeData type, string memberId)
+    internal IEnumerable<XNode> Resolve(ObjectTypeData type, string memberId, XElement inheritDocElement)
     {
-        var node = new MemberNode(type, memberId);
-        var docComment = DfsResolve(node);
+        XElement? resolvedDocComment;
 
-        return docComment?.Nodes() ?? [];
+        if (inheritDocElement.Attribute(XmlDocIdentifiers.Cref) is XAttribute crefAttr)
+        {
+            string[] splitMemberName = crefAttr.Value.Split(':');
+            (string objectIdentifier, string fullObjectName) = (splitMemberName[0], splitMemberName[1]);
+
+            if (objectIdentifier == MemberTypeId.Type) // type
+            {
+                resolvedDocComment = typeRegistry.GetType(fullObjectName)?.RawDocComment;
+            }
+            else // member
+            {
+                resolvedDocComment = typeRegistry.GetMember(fullObjectName)?.RawDocComment;
+            }
+        }
+        else // no cref attribute -> resolve recursively
+        {
+            var node = new MemberNode(type, memberId);
+            resolvedDocComment = DfsResolve(node);
+        }
+
+        if (inheritDocElement.Attribute(XmlDocIdentifiers.Path) is XAttribute xpathAttr)
+        {
+            string xpath = xpathAttr.Value;
+
+            return resolvedDocComment?.XPathSelectElements(xpath) ?? [];
+        }
+        else
+        {
+            return resolvedDocComment?.Nodes() ?? [];
+        }
     }
 
     /// <summary>

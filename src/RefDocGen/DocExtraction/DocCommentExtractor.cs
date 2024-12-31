@@ -124,8 +124,6 @@ internal class DocCommentExtractor
     /// <param name="member">The member whose documentation is to be inherited.</param>
     private void InheritDocumentation(MemberWithDocComment member)
     {
-        IEnumerable<XNode> resolvedNodes = [];
-
         var inheritDocElement = member.DocComment.Element(XmlDocIdentifiers.InheritDoc);
 
         if (inheritDocElement is null)
@@ -133,36 +131,8 @@ internal class DocCommentExtractor
             return; // no <inheritdoc /> child element found -> return
         }
 
-        if (inheritDocElement.Attribute(XmlDocIdentifiers.Cref) is XAttribute cref)
-        {
-            string[] splitMemberName = cref.Value.Split(':');
-            (string objectIdentifier, string fullObjectName) = (splitMemberName[0], splitMemberName[1]);
-
-            if (objectIdentifier == MemberTypeId.Type) // type
-            {
-                return;
-            }
-            else // member
-            {
-                var typeMember = typeRegistry.GetMember(fullObjectName);
-                resolvedNodes = typeMember?.RawDocComment?.Nodes() ?? [];
-
-                if (inheritDocElement.Attribute("path") is XAttribute xpath && typeMember?.RawDocComment is not null)
-                {
-                    var memberDocComment = typeMember.RawDocComment;
-
-                    var value = xpath.Value.Trim('/');
-
-                    resolvedNodes = memberDocComment?
-                        .XPathSelectElements(value) ?? [];
-                }
-            }
-        }
-        else
-        {
-            // get the resolved contents of the 'inheritdoc' element
-            resolvedNodes = inheritDocHandler.Resolve(member.Type, member.MemberId);
-        }
+        // get the resolved contents of the 'inheritdoc' element
+        var resolvedNodes = inheritDocHandler.Resolve(member.Type, member.MemberId, inheritDocElement);
 
         // replace the 'inheritdoc' element with the actual documentation.
         inheritDocElement.ReplaceWith(resolvedNodes);
