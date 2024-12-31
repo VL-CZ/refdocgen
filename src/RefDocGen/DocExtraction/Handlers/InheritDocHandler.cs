@@ -78,7 +78,7 @@ internal class InheritDocHandler
 
         if (inheritDocElement.Attribute(XmlDocIdentifiers.Path) is XAttribute xpathAttr)
         {
-            string xpath = xpathAttr.Value;
+            string xpath = '.' + xpathAttr.Value; // make the xpath relative
 
             return resolvedDocComment?.XPathSelectElements(xpath) ?? [];
         }

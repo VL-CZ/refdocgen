@@ -124,18 +124,16 @@ internal class DocCommentExtractor
     /// <param name="member">The member whose documentation is to be inherited.</param>
     private void InheritDocumentation(MemberWithDocComment member)
     {
-        var inheritDocElement = member.DocComment.Element(XmlDocIdentifiers.InheritDoc);
+        var inheritDocElements = member.DocComment.Elements(XmlDocIdentifiers.InheritDoc).ToList();
 
-        if (inheritDocElement is null)
+        foreach (var inheritDocElement in inheritDocElements)
         {
-            return; // no <inheritdoc /> child element found -> return
+            // get the resolved contents of the 'inheritdoc' element
+            var resolvedNodes = inheritDocHandler.Resolve(member.Type, member.MemberId, inheritDocElement);
+
+            // replace the 'inheritdoc' element with the actual documentation.
+            inheritDocElement.ReplaceWith(resolvedNodes);
         }
-
-        // get the resolved contents of the 'inheritdoc' element
-        var resolvedNodes = inheritDocHandler.Resolve(member.Type, member.MemberId, inheritDocElement);
-
-        // replace the 'inheritdoc' element with the actual documentation.
-        inheritDocElement.ReplaceWith(resolvedNodes);
 
         AddDocComment(member.DocComment);
     }
