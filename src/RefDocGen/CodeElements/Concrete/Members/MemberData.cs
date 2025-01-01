@@ -46,8 +46,11 @@ internal abstract class MemberData : IMemberData
     /// <inheritdoc/>
     public MemberInfo MemberInfo { get; }
 
+    /// <inheritdoc cref="IMemberData.DeclaringType"/>
+    public TypeDeclaration DeclaringType { get; }
+
     /// <inheritdoc/>
-    public ITypeDeclaration DeclaringType { get; }
+    ITypeDeclaration IMemberData.DeclaringType => DeclaringType;
 
     /// <summary>
     /// Raw doc comment provided to the member.
@@ -57,4 +60,5 @@ internal abstract class MemberData : IMemberData
     /// </para>
     /// </summary>
     internal XElement? RawDocComment { get; set; }
+
 }
