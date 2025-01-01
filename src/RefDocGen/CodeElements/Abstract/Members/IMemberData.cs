@@ -1,3 +1,4 @@
+using RefDocGen.CodeElements.Abstract.Types;
 using System.Reflection;
 using System.Xml.Linq;
 
@@ -51,4 +52,9 @@ public interface IMemberData
     /// Collection of 'seealso' doc comments for the member.
     /// </summary>
     IEnumerable<XElement> SeeAlsoDocComments { get; }
+
+    /// <summary>
+    /// Type that declares the member.
+    /// </summary>
+    ITypeDeclaration DeclaringType { get; }
 }

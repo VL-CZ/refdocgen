@@ -16,7 +16,8 @@ internal class FieldData : MemberData, IFieldData
     /// </summary>
     /// <param name="fieldInfo"><see cref="System.Reflection.FieldInfo"/> object representing the field.</param>
     /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    internal FieldData(FieldInfo fieldInfo, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters) : base(fieldInfo)
+    internal FieldData(FieldInfo fieldInfo, TypeDeclaration declaringType, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters)
+        : base(fieldInfo, declaringType)
     {
         FieldInfo = fieldInfo;
         Type = fieldInfo.FieldType.GetTypeNameData(declaredTypeParameters);

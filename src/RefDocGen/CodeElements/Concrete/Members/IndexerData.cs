@@ -9,8 +9,8 @@ namespace RefDocGen.CodeElements.Concrete.Members;
 
 internal class IndexerData : PropertyData, IIndexerData
 {
-    internal IndexerData(PropertyInfo propertyInfo, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters)
-        : base(propertyInfo, declaredTypeParameters)
+    internal IndexerData(PropertyInfo propertyInfo, TypeDeclaration declaringType, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters)
+        : base(propertyInfo, declaringType, declaredTypeParameters)
     {
         // add parameters
         Parameters = propertyInfo.GetIndexParameters()

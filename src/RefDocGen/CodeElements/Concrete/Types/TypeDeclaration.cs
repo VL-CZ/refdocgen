@@ -96,7 +96,7 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     /// <summary>
     /// Dictionary of all members declared in the type; keys are the corresponding member IDs.
     /// </summary>
-    internal abstract IReadOnlyDictionary<string, MemberData> AllMembers { get; }
+    internal abstract IReadOnlyDictionary<string, MemberData> AllMembers { get; private protected set; }
 
     /// <summary>
     /// Raw doc comment provided to the type.

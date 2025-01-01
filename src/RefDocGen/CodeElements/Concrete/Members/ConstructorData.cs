@@ -1,5 +1,6 @@
 using System.Reflection;
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
 
@@ -20,8 +21,8 @@ internal class ConstructorData : ExecutableMemberData, IConstructorData
     /// </summary>
     /// <param name="constructorInfo"><see cref="System.Reflection.ConstructorInfo"/> object representing the constructor.</param>
     /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    internal ConstructorData(ConstructorInfo constructorInfo, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters)
-        : base(constructorInfo, declaredTypeParameters)
+    internal ConstructorData(ConstructorInfo constructorInfo, TypeDeclaration declaringType, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters)
+        : base(constructorInfo, declaringType, declaredTypeParameters)
     {
         ConstructorInfo = constructorInfo;
     }

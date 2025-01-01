@@ -29,7 +29,7 @@ internal class DelegateTypeData : TypeDeclaration, IDelegateTypeData
     public DelegateTypeData(Type type, MethodInfo invokeMethod, Dictionary<string, TypeParameterData> typeParameterDeclarations)
         : base(type, typeParameterDeclarations)
     {
-        this.invokeMethod = new MethodData(invokeMethod, typeParameterDeclarations);
+        this.invokeMethod = new MethodData(invokeMethod, this, typeParameterDeclarations);
 
         AllMembers = new Dictionary<string, MemberData>
         {
@@ -73,5 +73,5 @@ internal class DelegateTypeData : TypeDeclaration, IDelegateTypeData
     public IEnumerable<IExceptionDocumentation> Exceptions { get; internal set; } = [];
 
     /// <inheritdoc/>
-    internal override IReadOnlyDictionary<string, MemberData> AllMembers { get; }
+    internal override IReadOnlyDictionary<string, MemberData> AllMembers { get; private protected set; }
 }

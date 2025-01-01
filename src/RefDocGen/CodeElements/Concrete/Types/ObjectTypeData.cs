@@ -27,62 +27,48 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
     /// <param name="operators">Dictionary of operators declared in the class; keys are the corresponding operator IDs.</param>
     /// <param name="indexers">Dictionary of indexers declared in the class; keys are the corresponding operator IDs.</param>
     /// <param name="typeParameterDeclarations">Collection of type parameters declared in this type; the keys represent type parameter names.</param>
-    public ObjectTypeData(
-        Type type,
-        IReadOnlyDictionary<string, ConstructorData> constructors,
-        IReadOnlyDictionary<string, FieldData> fields,
-        IReadOnlyDictionary<string, PropertyData> properties,
-        IReadOnlyDictionary<string, MethodData> methods,
-        IReadOnlyDictionary<string, OperatorData> operators,
-        IReadOnlyDictionary<string, IndexerData> indexers,
-        IReadOnlyDictionary<string, TypeParameterData> typeParameterDeclarations)
+    public ObjectTypeData(Type type, IReadOnlyDictionary<string, TypeParameterData> typeParameterDeclarations)
         : base(type, typeParameterDeclarations)
     {
-        Constructors = constructors;
-        Fields = fields;
-        Properties = properties;
-        Methods = methods;
-        Operators = operators;
-        Indexers = indexers;
+        Constructors = new Dictionary<string, ConstructorData>();
+        Fields = new Dictionary<string, FieldData>();
+        Properties = new Dictionary<string, PropertyData>();
+        Methods = new Dictionary<string, MethodData>();
+        Operators = new Dictionary<string, OperatorData>();
+        Indexers = new Dictionary<string, IndexerData>();
 
-        AllMembers = ((IEnumerable<MemberData>)Constructors.Values)
-            .Concat(Fields.Values)
-            .Concat(Methods.Values)
-            .Concat(Properties.Values)
-            .Concat(Operators.Values)
-            .Concat(Indexers.Values)
-            .ToDictionary(m => m.Id);
+        AllMembers = new Dictionary<string, MemberData>();
     }
 
     /// <summary>
     /// Dictionary of constructors declared in the type; keys are the corresponding constructor IDs.
     /// </summary>
-    public IReadOnlyDictionary<string, ConstructorData> Constructors { get; }
+    public IReadOnlyDictionary<string, ConstructorData> Constructors { get; private set; }
 
     /// <summary>
     /// Dictionary of fields declared in the type; keys are the corresponding field IDs.
     /// </summary>
-    public IReadOnlyDictionary<string, FieldData> Fields { get; }
+    public IReadOnlyDictionary<string, FieldData> Fields { get; private set; }
 
     /// <summary>
     /// Dictionary of properties declared in the type; keys are the corresponding property IDs.
     /// </summary>
-    public IReadOnlyDictionary<string, PropertyData> Properties { get; }
+    public IReadOnlyDictionary<string, PropertyData> Properties { get; private set; }
 
     /// <summary>
     /// Dictionary of methods declared in the type; keys are the corresponding method IDs.
     /// </summary>
-    public IReadOnlyDictionary<string, MethodData> Methods { get; }
+    public IReadOnlyDictionary<string, MethodData> Methods { get; private set; }
 
     /// <summary>
     /// Dictionary of operators declared in the type; keys are the corresponding operator IDs.
     /// </summary>
-    public IReadOnlyDictionary<string, OperatorData> Operators { get; }
+    public IReadOnlyDictionary<string, OperatorData> Operators { get; private set; }
 
     /// <summary>
     /// Dictionary of indexers declared in the type; keys are the corresponding operator IDs.
     /// </summary>
-    public IReadOnlyDictionary<string, IndexerData> Indexers { get; }
+    public IReadOnlyDictionary<string, IndexerData> Indexers { get; private set; }
 
     /// <inheritdoc/>
     public bool IsAbstract => TypeObject.IsAbstract;
@@ -116,5 +102,29 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
     IEnumerable<IIndexerData> IObjectTypeData.Indexers => Indexers.Values;
 
     /// <inheritdoc/>
-    internal override IReadOnlyDictionary<string, MemberData> AllMembers { get; }
+    internal override IReadOnlyDictionary<string, MemberData> AllMembers { get; private protected set; }
+
+    internal void AddMembers(
+        IReadOnlyDictionary<string, ConstructorData> constructors,
+        IReadOnlyDictionary<string, FieldData> fields,
+        IReadOnlyDictionary<string, PropertyData> properties,
+        IReadOnlyDictionary<string, MethodData> methods,
+        IReadOnlyDictionary<string, OperatorData> operators,
+        IReadOnlyDictionary<string, IndexerData> indexers)
+    {
+        Constructors = constructors;
+        Fields = fields;
+        Properties = properties;
+        Methods = methods;
+        Operators = operators;
+        Indexers = indexers;
+
+        AllMembers = ((IEnumerable<MemberData>)Constructors.Values)
+            .Concat(Fields.Values)
+            .Concat(Methods.Values)
+            .Concat(Properties.Values)
+            .Concat(Operators.Values)
+            .Concat(Indexers.Values)
+            .ToDictionary(m => m.Id);
+    }
 }

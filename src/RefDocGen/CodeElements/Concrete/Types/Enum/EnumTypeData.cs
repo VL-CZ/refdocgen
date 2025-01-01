@@ -16,20 +16,26 @@ internal class EnumTypeData : TypeDeclaration, IEnumTypeData
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
     /// <param name="members">Dictionary containing the enum members; keys are the corresponding member IDs.</param>
-    public EnumTypeData(Type type, IReadOnlyDictionary<string, EnumMemberData> members) : base(type)
+    public EnumTypeData(Type type) : base(type)
     {
-        Members = members;
-        AllMembers = members.ToParent<string, EnumMemberData, MemberData>();
+        Members = new Dictionary<string, EnumMemberData>();
+        AllMembers = new Dictionary<string, MemberData>();
     }
 
     /// <summary>
     /// Dictionary containing the enum members; keys are the corresponding member IDs.
     /// </summary>
-    public IReadOnlyDictionary<string, EnumMemberData> Members { get; }
+    public IReadOnlyDictionary<string, EnumMemberData> Members { get; private set; }
 
     /// <inheritdoc/>
-    internal override IReadOnlyDictionary<string, MemberData> AllMembers { get; }
+    internal override IReadOnlyDictionary<string, MemberData> AllMembers { get; private protected set; }
 
     /// <inheritdoc/>
     IEnumerable<IEnumMemberData> IEnumTypeData.Members => Members.Values;
+
+    internal void AddMembers(IReadOnlyDictionary<string, EnumMemberData> members)
+    {
+        Members = members;
+        AllMembers = members.ToParent<string, EnumMemberData, MemberData>();
+    }
 }
