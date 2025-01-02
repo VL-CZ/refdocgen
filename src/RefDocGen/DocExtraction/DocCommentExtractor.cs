@@ -16,13 +16,6 @@ namespace RefDocGen.DocExtraction;
 /// </summary>
 internal class DocCommentExtractor
 {
-    /// <summary>
-    /// Represents a triple containing a type, member ID and doc comment.
-    /// </summary>
-    /// <param name="Type">The type containing the member.</param>
-    /// <param name="MemberId">Id of the member.</param>
-    /// <param name="DocComment">Doc comment for the member.</param>
-    private record MemberWithDocComment(MemberData Member, XElement DocComment);
 
     /// <summary>
     /// Registry of the declared types, to which the documentation comments will be added.
@@ -82,7 +75,9 @@ internal class DocCommentExtractor
     /// <summary>
     /// List of member records, that have 'inheritdoc' documentation.
     /// </summary>
-    private readonly List<MemberWithDocComment> inheritDocMembers = [];
+    private readonly List<MemberData> inheritDocMembers = [];
+
+    private bool inheriting;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
@@ -110,7 +105,14 @@ internal class DocCommentExtractor
             AddDocComment(memberNode);
         }
 
+        inheriting = true;
+
         // resolve inheritdoc comments
+        foreach (var member in inheritDocMembers)
+        {
+            inheritDocHandler.Resolve(member);
+        }
+
         foreach (var member in inheritDocMembers)
         {
             InheritDocumentation(member);
@@ -121,20 +123,12 @@ internal class DocCommentExtractor
     /// Replaces the 'inheritdoc' doc comment of the member with the actual documentation.
     /// </summary>
     /// <param name="member">The member whose documentation is to be inherited.</param>
-    private void InheritDocumentation(MemberWithDocComment member)
+    private void InheritDocumentation(MemberData member)
     {
-        var inheritDocElements = member.DocComment.Elements(XmlDocIdentifiers.InheritDoc).ToList();
-
-        foreach (var inheritDocElement in inheritDocElements)
+        if (member.RawDocComment is not null)
         {
-            // get the resolved contents of the 'inheritdoc' element
-            var resolvedNodes = inheritDocHandler.Resolve(member.Member, inheritDocElement);
-
-            // replace the 'inheritdoc' element with the actual documentation.
-            inheritDocElement.ReplaceWith(resolvedNodes);
+            AddDocComment(member.RawDocComment);
         }
-
-        AddDocComment(member.DocComment);
     }
 
     /// <summary>
@@ -204,10 +198,12 @@ internal class DocCommentExtractor
         if (typeRegistry.ObjectTypes.TryGetValue(typeName, out var type)) // member of a value, reference or interface type
         {
             // inheritdoc - TODO: update
-            if (docCommentNode.Element(XmlDocIdentifiers.InheritDoc) is not null
+            if (docCommentNode.Element(XmlDocIdentifiers.InheritDoc) is XElement
+                && !inheriting
                 && type.AllMembers.TryGetValue(memberId, out var member))
             {
-                inheritDocMembers.Add(new(member, docCommentNode));
+                member.RawDocComment = docCommentNode;
+                inheritDocMembers.Add(member);
                 return;
             }
 

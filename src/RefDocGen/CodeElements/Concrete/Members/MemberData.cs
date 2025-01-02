@@ -61,4 +61,5 @@ internal abstract class MemberData : IMemberData
     /// </summary>
     internal XElement? RawDocComment { get; set; }
 
+    internal bool IsInheritDoc => RawDocComment?.Elements(XmlDocIdentifiers.InheritDoc).Any() ?? false;
 }
