@@ -54,8 +54,7 @@ internal abstract class InheritDocHandler<TNode>
             return;
         }
 
-        var inheritDocs = rawDoc?.Descendants(XmlDocIdentifiers.InheritDoc)
-            .ToList() ?? [];
+        var inheritDocs = GetNestedInheritDocs(rawDoc);
 
         foreach (var inheritDocElement in inheritDocs)
         {
@@ -104,6 +103,12 @@ internal abstract class InheritDocHandler<TNode>
     protected bool IsLiteralDoc(XElement? rawDocComment)
     {
         return !rawDocComment?.Descendants(XmlDocIdentifiers.InheritDoc).Any() ?? false;
+    }
+
+    protected List<XElement> GetNestedInheritDocs(XElement? rawDocComment)
+    {
+        return rawDocComment?.Descendants(XmlDocIdentifiers.InheritDoc)
+            .ToList() ?? [];
     }
 
     /// <summary>
