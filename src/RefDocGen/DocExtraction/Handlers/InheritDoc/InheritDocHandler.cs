@@ -15,7 +15,7 @@ internal abstract class InheritDocHandler<TNode>
     /// <summary>
     /// The registry of the declared types.
     /// </summary>
-    private readonly TypeRegistry typeRegistry;
+    protected readonly TypeRegistry typeRegistry;
 
     /// <summary>
     /// Initializes a new instance of <see cref="InheritDocHandler"/> class.
@@ -100,14 +100,15 @@ internal abstract class InheritDocHandler<TNode>
         }
     }
 
-    protected bool IsLiteralDoc(XElement? rawDocComment)
+    protected virtual bool IsLiteralDoc(XElement? rawDocComment)
     {
-        return !rawDocComment?.Descendants(XmlDocIdentifiers.InheritDoc).Any() ?? false;
+        return GetNestedInheritDocs(rawDocComment).Count == 0;
     }
 
-    protected List<XElement> GetNestedInheritDocs(XElement? rawDocComment)
+    protected virtual List<XElement> GetNestedInheritDocs(XElement? rawDocComment)
     {
         return rawDocComment?.Descendants(XmlDocIdentifiers.InheritDoc)
+            .Where(e => e.Attribute(XmlDocIdentifiers.Cref) is null)
             .ToList() ?? [];
     }
 

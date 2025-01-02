@@ -73,6 +73,7 @@ internal class DocCommentExtractor
     /// </summary>
     private readonly MemberInheritDocHandler memberInheritDocHandler;
     private readonly TypeInheritDocHandler typeInheritDocHandler;
+    private readonly CrefInheritDocHandler crefInheritDocHandler;
 
     /// <summary>
     /// List of member records, that have 'inheritdoc' documentation.
@@ -97,6 +98,7 @@ internal class DocCommentExtractor
         this.typeRegistry = typeRegistry;
         memberInheritDocHandler = new(typeRegistry);
         typeInheritDocHandler = new(typeRegistry);
+        crefInheritDocHandler = new(typeRegistry);
 
         // load the document
         xmlDocument = XDocument.Load(docXmlPath);
@@ -136,6 +138,15 @@ internal class DocCommentExtractor
         foreach (var type in inheritDocTypes)
         {
             InheritDocumentation(type);
+        }
+
+        foreach (var (_, type) in typeRegistry.ObjectTypes)
+        {
+            if (type.RawDocComment?.Descendants(XmlDocIdentifiers.InheritDoc).Any() ?? false)
+            {
+                crefInheritDocHandler.DfsResolve(type.RawDocComment);
+                InheritDocumentation(type);
+            }
         }
     }
 
