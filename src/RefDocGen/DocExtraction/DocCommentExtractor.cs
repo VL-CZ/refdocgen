@@ -6,8 +6,8 @@ using RefDocGen.DocExtraction.Handlers.Members.Enum;
 using RefDocGen.DocExtraction.Handlers.Types;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete;
-using RefDocGen.DocExtraction.Handlers;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.DocExtraction.Handlers.InheritDoc;
 
 namespace RefDocGen.DocExtraction;
 
@@ -22,7 +22,7 @@ internal class DocCommentExtractor
     /// <param name="Type">The type containing the member.</param>
     /// <param name="MemberId">Id of the member.</param>
     /// <param name="DocComment">Doc comment for the member.</param>
-    private record MemberWithDocComment(ObjectTypeData Type, string MemberId, XElement DocComment);
+    private record MemberWithDocComment(MemberData Member, XElement DocComment);
 
     /// <summary>
     /// Registry of the declared types, to which the documentation comments will be added.
@@ -128,7 +128,7 @@ internal class DocCommentExtractor
         foreach (var inheritDocElement in inheritDocElements)
         {
             // get the resolved contents of the 'inheritdoc' element
-            var resolvedNodes = inheritDocHandler.Resolve(member.Type, member.MemberId, inheritDocElement);
+            var resolvedNodes = inheritDocHandler.Resolve(member.Member, inheritDocElement);
 
             // replace the 'inheritdoc' element with the actual documentation.
             inheritDocElement.ReplaceWith(resolvedNodes);
@@ -204,9 +204,10 @@ internal class DocCommentExtractor
         if (typeRegistry.ObjectTypes.TryGetValue(typeName, out var type)) // member of a value, reference or interface type
         {
             // inheritdoc - TODO: update
-            if (docCommentNode.TryGetElement(XmlDocIdentifiers.InheritDoc, out var _))
+            if (docCommentNode.Element(XmlDocIdentifiers.InheritDoc) is not null
+                && type.AllMembers.TryGetValue(memberId, out var member))
             {
-                inheritDocMembers.Add(new(type, memberId, docCommentNode));
+                inheritDocMembers.Add(new(member, docCommentNode));
                 return;
             }
 
