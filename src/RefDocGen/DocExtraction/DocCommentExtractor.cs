@@ -8,6 +8,7 @@ using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.DocExtraction.Handlers.InheritDoc;
+using RefDocGen.CodeElements.Tools;
 
 namespace RefDocGen.DocExtraction;
 
@@ -70,12 +71,19 @@ internal class DocCommentExtractor
     /// <summary>
     /// Handler for the 'inheritdoc' doc comments.
     /// </summary>
-    private readonly InheritDocHandler inheritDocHandler;
+    private readonly MemberInheritDocHandler memberInheritDocHandler;
+    private readonly TypeInheritDocHandler typeInheritDocHandler;
 
     /// <summary>
     /// List of member records, that have 'inheritdoc' documentation.
     /// </summary>
     private readonly List<MemberData> inheritDocMembers = [];
+
+    /// <summary>
+    /// List of member records, that have 'inheritdoc' documentation.
+    /// </summary>
+    private readonly List<TypeDeclaration> inheritDocTypes = [];
+
 
     private bool inheriting;
 
@@ -87,7 +95,8 @@ internal class DocCommentExtractor
     internal DocCommentExtractor(string docXmlPath, TypeRegistry typeRegistry)
     {
         this.typeRegistry = typeRegistry;
-        inheritDocHandler = new(typeRegistry);
+        memberInheritDocHandler = new(typeRegistry);
+        typeInheritDocHandler = new(typeRegistry);
 
         // load the document
         xmlDocument = XDocument.Load(docXmlPath);
@@ -110,24 +119,43 @@ internal class DocCommentExtractor
         // resolve inheritdoc comments
         foreach (var member in inheritDocMembers)
         {
-            inheritDocHandler.DfsResolve(member);
+            memberInheritDocHandler.DfsResolve(member);
         }
 
         foreach (var member in inheritDocMembers)
         {
             InheritDocumentation(member);
         }
+
+        // resolve inheritdoc comments
+        foreach (var type in inheritDocTypes)
+        {
+            typeInheritDocHandler.DfsResolve(type);
+        }
+
+        foreach (var type in inheritDocTypes)
+        {
+            InheritDocumentation(type);
+        }
     }
 
     /// <summary>
     /// Replaces the 'inheritdoc' doc comment of the member with the actual documentation.
     /// </summary>
-    /// <param name="member">The member whose documentation is to be inherited.</param>
-    private void InheritDocumentation(MemberData member)
+    /// <param name="type">The member whose documentation is to be inherited.</param>
+    private void InheritDocumentation(MemberData type)
     {
-        if (member.RawDocComment is not null)
+        if (type.RawDocComment is not null)
         {
-            AddDocComment(member.RawDocComment);
+            AddDocComment(type.RawDocComment);
+        }
+    }
+
+    private void InheritDocumentation(TypeDeclaration type)
+    {
+        if (type.RawDocComment is not null)
+        {
+            AddDocComment(type.RawDocComment);
         }
     }
 
@@ -169,6 +197,16 @@ internal class DocCommentExtractor
     /// <param name="docCommentNode">XML node of the doc comment for the given type.</param>
     private void AddTypeDocComment(string typeId, XElement docCommentNode)
     {
+        // inheritdoc - TODO: update
+        if (docCommentNode.Element(XmlDocIdentifiers.InheritDoc) is not null
+            && !inheriting
+            && typeRegistry.GetDeclaredType(typeId) is TypeDeclaration t)
+        {
+            t.RawDocComment = docCommentNode;
+            inheritDocTypes.Add(t);
+            return;
+        }
+
         if (typeRegistry.ObjectTypes.TryGetValue(typeId, out var type)) // the type is an 'object' type
         {
             typeDocHandler.AddDocumentation(type, docCommentNode);

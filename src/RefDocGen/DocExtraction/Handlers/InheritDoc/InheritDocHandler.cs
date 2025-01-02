@@ -1,6 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete;
-using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
@@ -11,7 +10,7 @@ namespace RefDocGen.DocExtraction.Handlers.InheritDoc;
 /// <summary>
 /// Class responsible for handling the 'inheritdoc' comments and replacing them with the actual documentation.
 /// </summary>
-internal class InheritDocHandler<TNode>
+internal abstract class InheritDocHandler<TNode>
 {
     /// <summary>
     /// The registry of the declared types.
@@ -47,13 +46,16 @@ internal class InheritDocHandler<TNode>
     /// </remarks>
     internal void DfsResolve(TNode node)
     {
+        var rawDoc = GetRawDocumentation(node);
+
         // literal -> no need to continue
-        if (HasLiteralDocumentation(node))
+        if (IsLiteralDoc(rawDoc))
         {
             return;
         }
 
-        var inheritDocs = node.RawDocComment?.Descendants(XmlDocIdentifiers.InheritDoc).ToList() ?? [];
+        var inheritDocs = rawDoc?.Descendants(XmlDocIdentifiers.InheritDoc)
+            .ToList() ?? [];
 
         foreach (var inheritDocElement in inheritDocs)
         {
@@ -77,30 +79,31 @@ internal class InheritDocHandler<TNode>
         {
             DfsResolve(parentNode);
 
-            if (parentNode.RawDocComment is not null)
-            {
+            var rawParentDoc = GetRawDocumentation(parentNode);
 
+            if (rawParentDoc is not null)
+            {
                 string? xpath = inheritDocElement.Attribute(XmlDocIdentifiers.Path)?.Value;
 
                 if (xpath is not null)
                 {
                     xpath = XPathTools.MakeRelative(xpath);
 
-                    var xpathNodes = parentNode.RawDocComment.XPathSelectElements(xpath);
+                    var xpathNodes = rawParentDoc.XPathSelectElements(xpath);
                     inheritDocElement.ReplaceWith(xpathNodes);
                 }
                 else
                 {
-                    inheritDocElement.ReplaceWith(parentNode.RawDocComment.Nodes());
+                    inheritDocElement.ReplaceWith(rawParentDoc.Nodes());
                 }
                 return;
             }
         }
     }
 
-    protected bool HasLiteralDocumentation(TNode member)
+    protected bool IsLiteralDoc(XElement? rawDocComment)
     {
-        return !member.IsInheritDoc;
+        return !rawDocComment?.Descendants(XmlDocIdentifiers.InheritDoc).Any() ?? false;
     }
 
     /// <summary>
@@ -110,22 +113,9 @@ internal class InheritDocHandler<TNode>
     /// <returns>
     /// List of nodes representing the members with same ID in the parent types (base class and interfaces) of the current node.
     /// </returns>
-    protected abstract List<TNode> GetParentNodes(TNode member)
-    {
-        var parents = GetDeclaredParents(member.DeclaringType);
+    protected abstract List<TNode> GetParentNodes(TNode member);
 
-        var result = new List<MemberData>();
-
-        foreach (var p in parents)
-        {
-            if (p.AllMembers.TryGetValue(member.Id, out var parentMember))
-            {
-                result.Add(parentMember);
-            }
-        }
-
-        return result;
-    }
+    protected abstract XElement? GetRawDocumentation(TNode member);
 
     protected List<TypeDeclaration> GetDeclaredParents(TypeDeclaration type)
     {
