@@ -56,6 +56,8 @@ internal class TypeInheritDocHandler : InheritDocHandler<TypeDeclaration>
 
 internal class CrefInheritDocHandler : InheritDocHandler<XElement>
 {
+    private HashSet<XElement> visited = [];
+
     public CrefInheritDocHandler(TypeRegistry typeRegistry) : base(typeRegistry)
     {
     }
@@ -84,7 +86,7 @@ internal class CrefInheritDocHandler : InheritDocHandler<XElement>
                     ? (typeRegistry.GetDeclaredType(fullObjectName)?.RawDocComment)
                     : (typeRegistry.GetMember(fullObjectName)?.RawDocComment);
 
-                if (neighbour is not null)
+                if (neighbour is not null && !visited.Contains(neighbour))
                 {
                     neighbours.Add(neighbour);
                 }
@@ -96,6 +98,7 @@ internal class CrefInheritDocHandler : InheritDocHandler<XElement>
 
     protected override XElement? GetRawDocumentation(XElement member)
     {
+        _ = visited.Add(member);
         return member;
     }
 
