@@ -119,7 +119,7 @@ internal class InheritDocHandler
         //else // no cref attribute -> resolve recursively
         //{
 
-        var inheritDocs = member.RawDocComment?.Elements(XmlDocIdentifiers.InheritDoc).ToList() ?? [];
+        var inheritDocs = member.RawDocComment?.Descendants(XmlDocIdentifiers.InheritDoc).ToList() ?? [];
 
         foreach (var inheritDocElement in inheritDocs)
         {
@@ -165,11 +165,23 @@ internal class InheritDocHandler
             if (parentNode.RawDocComment is not null)
             {
                 //cache[node] = parentDocComment;
-                inheritDocElement.ReplaceWith(parentNode.RawDocComment.Nodes());
+
+                string? xpath = inheritDocElement.Attribute(XmlDocIdentifiers.Path)?.Value;
+
+                if (xpath is not null)
+                {
+                    xpath = XPathTools.MakeRelative(xpath);
+
+                    var xpathNodes = parentNode.RawDocComment.XPathSelectElements(xpath);
+                    inheritDocElement.ReplaceWith(xpathNodes);
+                }
+                else
+                {
+                    inheritDocElement.ReplaceWith(parentNode.RawDocComment.Nodes());
+                }
+                return;
             }
         }
-
-
     }
 
     protected XElement? GetLiteralDocumentation(MemberData member)
