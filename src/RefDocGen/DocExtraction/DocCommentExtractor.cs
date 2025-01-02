@@ -110,7 +110,7 @@ internal class DocCommentExtractor
         // resolve inheritdoc comments
         foreach (var member in inheritDocMembers)
         {
-            inheritDocHandler.Resolve(member);
+            inheritDocHandler.DfsResolve(member);
         }
 
         foreach (var member in inheritDocMembers)
