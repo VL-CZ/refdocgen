@@ -13,8 +13,9 @@ internal class EnumMemberData : MemberData, IEnumMemberData
     /// Initialize a new instance of the <see cref="EnumMemberData"/> class.
     /// </summary>
     /// <param name="fieldInfo"><see cref="System.Reflection.FieldInfo"/> object representing the enum member.</param>
-    public EnumMemberData(FieldInfo fieldInfo, TypeDeclaration declaringType)
-        : base(fieldInfo, declaringType)
+    /// <param name="containingType">Type that contains the member.</param>
+    public EnumMemberData(FieldInfo fieldInfo, TypeDeclaration containingType)
+        : base(fieldInfo, containingType)
     {
         FieldInfo = fieldInfo;
     }

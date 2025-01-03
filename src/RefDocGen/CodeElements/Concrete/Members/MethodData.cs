@@ -17,12 +17,13 @@ internal class MethodData : ExecutableMemberData, IMethodData
     /// Initializes a new instance of the <see cref="MethodData"/> class.
     /// </summary>
     /// <param name="methodInfo"><see cref="System.Reflection.MethodInfo"/> object representing the method.</param>
-    /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    internal MethodData(MethodInfo methodInfo, TypeDeclaration declaringType, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters)
-        : base(methodInfo, declaringType, declaredTypeParameters)
+    /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
+    /// <param name="containingType">Type that contains the member.</param>
+    internal MethodData(MethodInfo methodInfo, TypeDeclaration containingType, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
+        : base(methodInfo, containingType, availableTypeParameters)
     {
         MethodInfo = methodInfo;
-        ReturnType = methodInfo.ReturnType.GetTypeNameData(declaredTypeParameters);
+        ReturnType = methodInfo.ReturnType.GetTypeNameData(availableTypeParameters);
 
         ExplicitInterfaceType = Tools.ExplicitInterfaceType.Of(this);
     }
@@ -36,7 +37,7 @@ internal class MethodData : ExecutableMemberData, IMethodData
     /// Initializes a new instance of the <see cref="MethodData"/> class.
     /// </summary>
     /// <param name="methodInfo"><see cref="System.Reflection.MethodInfo"/> object representing the method.</param>
-    internal MethodData(MethodInfo methodInfo, TypeDeclaration declaringType) : this(methodInfo, declaringType, new Dictionary<string, TypeParameterData>())
+    internal MethodData(MethodInfo methodInfo, TypeDeclaration containingType) : this(methodInfo, containingType, new Dictionary<string, TypeParameterData>())
     { }
 
     /// <inheritdoc/>

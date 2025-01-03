@@ -18,12 +18,12 @@ internal class TypeNameData : TypeNameBaseData, ITypeNameData
     /// Initializes a new instance of the <see cref="TypeNameData"/> class.
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
-    /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    internal TypeNameData(Type type, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters) : base(type)
+    /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
+    internal TypeNameData(Type type, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters) : base(type)
     {
         TypeParameters = TypeObject
             .GetGenericArguments()
-            .Select(t => t.GetTypeNameData(declaredTypeParameters))
+            .Select(t => t.GetTypeNameData(availableTypeParameters))
             .ToArray();
     }
 

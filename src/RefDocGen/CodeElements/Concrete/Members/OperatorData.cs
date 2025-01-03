@@ -14,9 +14,10 @@ internal class OperatorData : MethodData, IOperatorData
     /// Initializes a new instance of the <see cref="OperatorData"/> class.
     /// </summary>
     /// <param name="methodInfo"><see cref="MethodInfo"/> object representing the operator.</param>
-    /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    internal OperatorData(MethodInfo methodInfo, TypeDeclaration declaringType, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters)
-        : base(methodInfo, declaringType, declaredTypeParameters)
+    /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
+    /// <param name="containingType">Type that contains the member.</param>
+    internal OperatorData(MethodInfo methodInfo, TypeDeclaration containingType, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
+        : base(methodInfo, containingType, availableTypeParameters)
     {
         Kind = methodNameToOperatorKind[methodInfo.Name];
     }

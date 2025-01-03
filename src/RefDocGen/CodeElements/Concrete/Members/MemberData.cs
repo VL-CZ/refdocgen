@@ -16,10 +16,11 @@ internal abstract class MemberData : IMemberData
     /// Initializes a new instance of the <see cref="MemberData"/> class.
     /// </summary>
     /// <param name="memberInfo"><see cref="MemberInfo"/> object representing the member.</param>
-    protected MemberData(MemberInfo memberInfo, TypeDeclaration declaringType)
+    /// <param name="containingType">Type that contains the member.</param>
+    protected MemberData(MemberInfo memberInfo, TypeDeclaration containingType)
     {
         MemberInfo = memberInfo;
-        DeclaringType = declaringType;
+        ContainingType = containingType;
     }
 
     /// <inheritdoc/>
@@ -46,11 +47,11 @@ internal abstract class MemberData : IMemberData
     /// <inheritdoc/>
     public MemberInfo MemberInfo { get; }
 
-    /// <inheritdoc cref="IMemberData.DeclaringType"/>
-    public TypeDeclaration DeclaringType { get; }
+    /// <inheritdoc cref="IMemberData.ContainingType"/>
+    public TypeDeclaration ContainingType { get; }
 
     /// <inheritdoc/>
-    ITypeDeclaration IMemberData.DeclaringType => DeclaringType;
+    ITypeDeclaration IMemberData.ContainingType => ContainingType;
 
     /// <summary>
     /// Raw doc comment provided to the member.

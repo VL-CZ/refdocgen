@@ -58,7 +58,11 @@ public interface IMemberData
     IEnumerable<XElement> SeeAlsoDocComments { get; }
 
     /// <summary>
-    /// Type that declares the member.
+    /// Type that contains the member.
+    ///
+    /// <para>
+    /// Note that for inherited members, this property returns child type (not the original type that declares the member).
+    /// </para>
     /// </summary>
-    ITypeDeclaration DeclaringType { get; }
+    ITypeDeclaration ContainingType { get; }
 }

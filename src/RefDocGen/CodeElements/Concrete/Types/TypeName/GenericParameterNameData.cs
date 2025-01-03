@@ -11,16 +11,16 @@ internal class GenericTypeParameterNameData : ITypeNameData
     /// <summary>
     /// Dictionary of type parameters declared in the containing type; the keys represent type parameter names.
     /// </summary>
-    private readonly IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters;
+    private readonly IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GenericTypeParameterNameData"/> class.
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
-    /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    internal GenericTypeParameterNameData(Type type, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters)
+    /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
+    internal GenericTypeParameterNameData(Type type, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
     {
-        this.declaredTypeParameters = declaredTypeParameters;
+        this.availableTypeParameters = availableTypeParameters;
         TypeObject = type;
     }
 
@@ -56,7 +56,7 @@ internal class GenericTypeParameterNameData : ITypeNameData
                 }
             }
 
-            if (declaredTypeParameters.TryGetValue(paramName, out var typeParameter))
+            if (availableTypeParameters.TryGetValue(paramName, out var typeParameter))
             {
                 // We need to get the index of the generic parameter, for further info see:
                 // https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/documentation-comments#d42-id-string-format

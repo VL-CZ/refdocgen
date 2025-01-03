@@ -16,7 +16,7 @@ internal class MemberInheritDocHandler : InheritDocHandler<MemberData>
 
     protected override List<MemberData> GetParentNodes(MemberData member)
     {
-        var parents = GetDeclaredParents(member.DeclaringType);
+        var parents = GetDeclaredParents(member.ContainingType);
 
         var result = new List<MemberData>();
 
