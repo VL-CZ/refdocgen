@@ -1,11 +1,9 @@
-using RefDocGen.CodeElements.Abstract;
 using RefDocGen.CodeElements.Concrete;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.DocExtraction.Handlers.InheritDoc;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.Tools.Xml;
-using System;
 using System.Xml.Linq;
 
 internal class MemberInheritDocHandler : InheritDocHandler<MemberData>
@@ -64,9 +62,7 @@ internal class CrefInheritDocHandler : InheritDocHandler<XElement>
 
     protected override List<XElement> GetNestedInheritDocs(XElement? rawDocComment)
     {
-        return rawDocComment?.Descendants(XmlDocIdentifiers.InheritDoc)
-            .Where(e => e.Attribute(XmlDocIdentifiers.Cref) is not null)
-            .ToList() ?? [];
+        return rawDocComment.GetInheritDocs(InheritDocType.Cref).ToList();
     }
 
     protected override List<XElement> GetParentNodes(XElement member)

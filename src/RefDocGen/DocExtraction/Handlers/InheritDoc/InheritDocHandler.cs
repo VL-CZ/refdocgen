@@ -1,6 +1,7 @@
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.DocExtraction.Tools;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
@@ -80,7 +81,7 @@ internal abstract class InheritDocHandler<TNode>
 
             var rawParentDoc = GetRawDocumentation(parentNode);
 
-            if (rawParentDoc is not null)
+            if (rawParentDoc is not null && rawParentDoc.Nodes().Any())
             {
                 string? xpath = inheritDocElement.Attribute(XmlDocIdentifiers.Path)?.Value;
 
@@ -98,6 +99,8 @@ internal abstract class InheritDocHandler<TNode>
                 return;
             }
         }
+
+        inheritDocElement.Remove();
     }
 
     protected virtual bool IsLiteralDoc(XElement? rawDocComment)
@@ -107,9 +110,7 @@ internal abstract class InheritDocHandler<TNode>
 
     protected virtual List<XElement> GetNestedInheritDocs(XElement? rawDocComment)
     {
-        return rawDocComment?.Descendants(XmlDocIdentifiers.InheritDoc)
-            .Where(e => e.Attribute(XmlDocIdentifiers.Cref) is null)
-            .ToList() ?? [];
+        return rawDocComment.GetInheritDocs(InheritDocType.NonCref).ToList();
     }
 
     /// <summary>
@@ -145,7 +146,7 @@ internal abstract class InheritDocHandler<TNode>
                 : parentType.Id;
 
             // the parent type is contained in the type registry
-            if (typeRegistry.ObjectTypes.TryGetValue(parentId, out var parent))
+            if (typeRegistry.GetDeclaredType(parentId) is TypeDeclaration parent)
             {
                 result.Add(parent);
             }
