@@ -8,12 +8,12 @@ using System.Xml.Linq;
 /// Class responsible for handling the 'inheritdoc' comments with 'cref' attribute and replacing them with the actual documentation.
 /// </summary>
 /// <remarks>
-/// This class isn't intended to handle inheritdoc comments with 'cref' attribute (for further info, see <see cref="CrefInheritDocHandler"/>).
+/// This class isn't intended to handle inheritdoc comments with 'cref' attribute (for further info, see <see cref="InheritDocCrefHandler"/>).
 /// </remarks>
-internal class CrefInheritDocHandler : InheritDocHandler<XElement>
+internal class InheritDocCrefHandler : InheritDocHandler<XElement>
 {
     /// <inheritdoc/>
-    public CrefInheritDocHandler(TypeRegistry typeRegistry) : base(typeRegistry)
+    public InheritDocCrefHandler(TypeRegistry typeRegistry) : base(typeRegistry)
     {
     }
 

@@ -67,19 +67,27 @@ internal class DocCommentExtractor
     private readonly DelegateTypeDocHandler delegateTypeDocHandler = new();
 
     /// <summary>
-    /// Handler for the 'inheritdoc' doc comments.
+    /// Handler for the 'inheritdoc' member comments.
     /// </summary>
     private readonly MemberInheritDocHandler memberInheritDocHandler;
-    private readonly TypeInheritDocHandler typeInheritDocHandler;
-    private readonly CrefInheritDocHandler crefInheritDocHandler;
 
     /// <summary>
-    /// List of member records, that have 'inheritdoc' documentation.
+    /// Handler for the 'inheritdoc' type comments.
+    /// </summary>
+    private readonly TypeInheritDocHandler typeInheritDocHandler;
+
+    /// <summary>
+    /// Handler for the 'inheritdoc' cref comments.
+    /// </summary>
+    private readonly InheritDocCrefHandler crefInheritDocHandler;
+
+    /// <summary>
+    /// List of members, that have 'inheritdoc' documentation without 'cref' attribute.
     /// </summary>
     private readonly List<MemberData> inheritDocMembers = [];
 
     /// <summary>
-    /// List of member records, that have 'inheritdoc' documentation.
+    /// List of types, that have 'inheritdoc' documentation without 'cref' attribute.
     /// </summary>
     private readonly List<TypeDeclaration> inheritDocTypes = [];
 
@@ -94,6 +102,7 @@ internal class DocCommentExtractor
     internal DocCommentExtractor(string docXmlPath, TypeRegistry typeRegistry)
     {
         this.typeRegistry = typeRegistry;
+
         memberInheritDocHandler = new(typeRegistry);
         typeInheritDocHandler = new(typeRegistry);
         crefInheritDocHandler = new(typeRegistry);
@@ -109,6 +118,7 @@ internal class DocCommentExtractor
     {
         var memberNodes = xmlDocument.Descendants(XmlDocIdentifiers.Member);
 
+        // add the doc comments
         foreach (var memberNode in memberNodes)
         {
             AddDocComment(memberNode);
@@ -116,75 +126,39 @@ internal class DocCommentExtractor
 
         inheriting = true;
 
-        // resolve inheritdoc comments
+        // resolve member inheritdoc comments (excluding 'cref')
         foreach (var member in inheritDocMembers)
         {
             memberInheritDocHandler.Resolve(member);
-            InheritDocumentation(member);
+            AddInheritedDocComment(member.RawDocComment);
         }
 
-        // resolve inheritdoc comments
+        // resolve type inheritdoc comments (excluding 'cref')
         foreach (var type in inheritDocTypes)
         {
             typeInheritDocHandler.Resolve(type);
-            InheritDocumentation(type);
+            AddInheritedDocComment(type.RawDocComment);
         }
 
-        // handle non-cref types & members
-        foreach (var (_, type) in typeRegistry.ObjectTypes)
-        {
-            if (type.RawDocComment?.GetInheritDocs(InheritDocKind.Cref).Any() ?? false)
-            {
-                crefInheritDocHandler.Resolve(type.RawDocComment);
-                InheritDocumentation(type);
-            }
-
-            foreach (var (_, member) in type.AllMembers)
-            {
-                if (member.RawDocComment?.GetInheritDocs(InheritDocKind.Cref).Any() ?? false)
-                {
-                    crefInheritDocHandler.Resolve(member.RawDocComment);
-                    InheritDocumentation(member);
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// Replaces the 'inheritdoc' doc comment of the member with the actual documentation.
-    /// </summary>
-    /// <param name="member">The member whose documentation is to be inherited.</param>
-    private void InheritDocumentation(MemberData member)
-    {
-        if (member.RawDocComment?.Nodes().Any() ?? false)
-        {
-            AddDocComment(member.RawDocComment);
-        }
-    }
-
-    private void InheritDocumentation(TypeDeclaration type)
-    {
-        if (type.RawDocComment?.Nodes().Any() ?? false)
-        {
-            AddDocComment(type.RawDocComment);
-        }
+        // resolve 'cref' inheritdoc comments
+        ResolveCrefInheritDocs();
     }
 
     /// <summary>
     /// Add doc comment to the corresponding type or type member.
     /// </summary>
-    /// <param name="docCommentNode">Doc comment XML node.</param>
-    private void AddDocComment(XElement docCommentNode)
+    /// <param name="docComment">Doc comment to add.</param>
+    private void AddDocComment(XElement docComment)
     {
         // try to get type / member name
-        if (docCommentNode.TryGetNameAttribute(out var memberNameAttr))
+        if (docComment.TryGetNameAttribute(out var memberNameAttr))
         {
             string[] splitMemberName = memberNameAttr.Value.Split(':');
             (string objectIdentifier, string fullObjectName) = (splitMemberName[0], splitMemberName[1]);
 
             if (objectIdentifier == MemberTypeId.Type) // type
             {
-                AddTypeDocComment(fullObjectName, docCommentNode);
+                AddTypeDocComment(fullObjectName, docComment);
             }
             else if (objectIdentifier == MemberTypeId.Namespace) // namespace
             {
@@ -192,7 +166,7 @@ internal class DocCommentExtractor
             }
             else // Type member
             {
-                AddMemberDocComment(objectIdentifier, fullObjectName, docCommentNode);
+                AddMemberDocComment(objectIdentifier, fullObjectName, docComment);
             }
         }
         else
@@ -276,6 +250,45 @@ internal class DocCommentExtractor
         else if (typeRegistry.Enums.TryGetValue(typeName, out var e)) // member of an enum
         {
             enumMemberDocHandler.AddDocumentation(e, memberId, docCommentNode);
+        }
+    }
+
+    /// <summary>
+    /// Add the inherited doc comment to the corresponding type or type member.
+    /// Does nothing if <paramref name="docComment"/> is <c>null</c> or empty.
+    /// </summary>
+    /// <param name="docComment">Doc comment to add.</param>
+    private void AddInheritedDocComment(XElement? docComment)
+    {
+        if (docComment?.Nodes().Any() ?? false)
+        {
+            AddDocComment(docComment);
+        }
+    }
+
+    /// <summary>
+    /// Checks all types and members for inheritdoc comments with 'cref' attribute and resolves them (if possible).
+    /// </summary>
+    private void ResolveCrefInheritDocs()
+    {
+        foreach (var (_, type) in typeRegistry.AllTypes)
+        {
+            // check the type doc comment
+            if (type.RawDocComment?.GetInheritDocs(InheritDocKind.Cref).Any() ?? false)
+            {
+                crefInheritDocHandler.Resolve(type.RawDocComment);
+                AddInheritedDocComment(type.RawDocComment);
+            }
+
+            // check all member doc comments
+            foreach (var (_, member) in type.AllMembers)
+            {
+                if (member.RawDocComment?.GetInheritDocs(InheritDocKind.Cref).Any() ?? false)
+                {
+                    crefInheritDocHandler.Resolve(member.RawDocComment);
+                    AddInheritedDocComment(member.RawDocComment);
+                }
+            }
         }
     }
 }
