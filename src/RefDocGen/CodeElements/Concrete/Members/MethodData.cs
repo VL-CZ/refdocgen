@@ -33,10 +33,7 @@ internal class MethodData : ExecutableMemberData, IMethodData
         ? MethodInfo.Name.Split('.').Last()
         : MethodInfo.Name;
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="MethodData"/> class.
-    /// </summary>
-    /// <param name="methodInfo"><see cref="System.Reflection.MethodInfo"/> object representing the method.</param>
+    /// <inheritdoc cref="MethodData(MethodInfo, TypeDeclaration, IReadOnlyDictionary{string, TypeParameterData})"/>
     internal MethodData(MethodInfo methodInfo, TypeDeclaration containingType) : this(methodInfo, containingType, new Dictionary<string, TypeParameterData>())
     { }
 
