@@ -1,5 +1,4 @@
 using RefDocGen.CodeElements.Abstract;
-using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Concrete;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Concrete.Types.Delegate;
