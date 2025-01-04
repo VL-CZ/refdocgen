@@ -114,7 +114,7 @@ internal static class XElementExtensions
     /// An empty enumerable is returned if there are no such elements.
     /// </para>
     /// </returns>
-    internal static IEnumerable<XElement> GetInheritDocs(this XElement? element, InheritDocType inheritDocType = InheritDocType.Any)
+    internal static IEnumerable<XElement> GetInheritDocs(this XElement? element, InheritDocKind inheritDocType = InheritDocKind.Any)
     {
         if (element is null)
         {
@@ -123,11 +123,11 @@ internal static class XElementExtensions
 
         var allInheritDocs = element.Descendants(XmlDocIdentifiers.InheritDoc);
 
-        if (inheritDocType == InheritDocType.NonCref)
+        if (inheritDocType == InheritDocKind.NonCref)
         {
             return allInheritDocs.Where(e => e.Attribute(XmlDocIdentifiers.Cref) is null);
         }
-        else if (inheritDocType == InheritDocType.Cref)
+        else if (inheritDocType == InheritDocKind.Cref)
         {
             return allInheritDocs.Where(e => e.Attribute(XmlDocIdentifiers.Cref) is not null);
         }
@@ -142,9 +142,9 @@ internal static class XElementExtensions
 }
 
 /// <summary>
-/// Represents type of the inheritdoc doc comment.
+/// Represents kind of the inheritdoc doc comment.
 /// </summary>
-internal enum InheritDocType
+internal enum InheritDocKind
 {
     /// <summary>
     /// Represents any inheritdoc element.
@@ -152,12 +152,12 @@ internal enum InheritDocType
     Any,
 
     /// <summary>
-    /// Represents inheritdoc element without 'cref' attribute.
+    /// Represents any inheritdoc element without 'cref' attribute.
     /// </summary>
     NonCref,
 
     /// <summary>
-    /// Represents inheritdoc element with 'cref' attribute.
+    /// Represents any inheritdoc element with 'cref' attribute.
     /// </summary>
     Cref
 }

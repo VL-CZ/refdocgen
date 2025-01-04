@@ -8,6 +8,7 @@ using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Concrete.Types;
 
+/// <inheritdoc cref="ITypeDeclaration"/>
 internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
 {
     /// <summary>

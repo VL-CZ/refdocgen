@@ -1,6 +1,4 @@
-using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete;
-using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
@@ -9,9 +7,14 @@ using System.Xml.XPath;
 namespace RefDocGen.DocExtraction.Handlers.InheritDoc;
 
 /// <summary>
-/// Class responsible for handling the 'inheritdoc' comments and replacing them with the actual documentation.
+/// Generic base class responsible for handling the 'inheritdoc' comments and replacing them with the actual documentation
 /// </summary>
+/// <typeparam name="TNode">Type of the nodes containing the documentation.</typeparam>
+/// <remarks>
+/// See <see cref="DfsResolve(TNode)"/> for the detailed description of the process.
+/// </remarks>
 internal abstract class InheritDocHandler<TNode>
+    where TNode : notnull
 {
     /// <summary>
     /// The registry of the declared types.
@@ -19,7 +22,12 @@ internal abstract class InheritDocHandler<TNode>
     protected readonly TypeRegistry typeRegistry;
 
     /// <summary>
-    /// Initializes a new instance of <see cref="InheritDocHandler"/> class.
+    /// Set of visited nodes.
+    /// </summary>
+    private readonly HashSet<TNode> visited = [];
+
+    /// <summary>
+    /// Initializes a new instance of <see cref="InheritDocHandler{TNode}"/> class.
     /// </summary>
     /// <param name="typeRegistry">The registry of the declared types.</param>
     public InheritDocHandler(TypeRegistry typeRegistry)
@@ -28,35 +36,59 @@ internal abstract class InheritDocHandler<TNode>
     }
 
     /// <summary>
-    /// Resolve the documentation for the selected member.
+    /// Kind of the inherit doc elements to be resolved.
     /// </summary>
-    /// <param name="type">The type containing the member.</param>
-    /// <param name="memberId">Id of the member, whose documentation is to be resolved.</param>
-    /// <returns>
-    /// Enumerable of resolved documentation comments.
-    /// <para>
-    /// These comments are intended to replace the 'inheritdoc' element.
-    /// </para>
-    /// <para>
-    /// If there are no suitable comments found, an empty enumerable is returned.
-    /// </para>
-    /// </returns>
-    /// <remarks>
-    /// The resolvement is done recursively using DFS, firstly we try to resolve the base class member (if existing),
-    /// then we resolve the interface members one-by-one.
-    /// </remarks>
-    internal void DfsResolve(TNode node)
-    {
-        var rawDoc = GetRawDocumentation(node);
+    protected abstract InheritDocKind InheritDocKind { get; }
 
-        // literal -> no need to continue
-        if (IsLiteralDoc(rawDoc))
+    /// <inheritdoc cref="DfsResolve(TNode)"/>
+    internal void Resolve(TNode node)
+    {
+        visited.Clear(); // clear the visited nodes
+        DfsResolve(node);
+    }
+
+    /// <summary>
+    /// Resolve the documentation for the selected node.
+    ///
+    /// <para>
+    /// The process consists of the following steps:
+    /// </para>
+    /// <list type="number">
+    ///   <item>Select all <c>inheritdoc</c> elements contained in the node documentation.</item>
+    ///   <item>
+    ///         Resolve them one by one.
+    ///
+    ///         <para>
+    ///           The resolvment is done recursively using DFS and also resolves the documentation of all visited nodes.
+    ///         </para>
+    ///         <para>
+    ///            The end condition of recursion are:
+    ///            <list type="bullet">
+    ///                 <item>The node documentation has no <c>inheritdoc</c> elements (i.e. nothing to resolve)</item>
+    ///                 <item>The node has no parent nodes (example: the type whose documentation is being resolved implements no interfaces and its base type is outside the analyzed assembly).</item>
+    ///             </list>
+    ///             Also note that the cycles are detected - the parent nodes that have already been visited are filtered out.
+    ///         </para>
+    ///   </item>
+    ///   <item>Replace the <c>inheritdoc</c> elements with the resolved documentation (if there's no documentation resolved, the <c>inheritdoc</c> element is simply removed).</item>
+    /// </list>
+    /// <para>
+    ///     As a result, all of the 'inheritdoc' elements in the mode documentation are replaced by the actual documentation (if possible).
+    /// </para>
+    /// </summary>
+    /// <param name="node">The node whose documentation is to be resolved.</param>
+    private void DfsResolve(TNode node)
+    {
+        var inheritDocs = GetNestedInheritDocs(node);
+
+        if (inheritDocs.Count == 0)
         {
-            return;
+            return; // no nested inheritdocs -> return
         }
 
-        var inheritDocs = GetNestedInheritDocs(rawDoc);
+        _ = visited.Add(node); // mark the current node as visited
 
+        // nested inheritdocs found -> resolve them one by one
         foreach (var inheritDocElement in inheritDocs)
         {
             DfsResolve(node, inheritDocElement);
@@ -64,94 +96,82 @@ internal abstract class InheritDocHandler<TNode>
     }
 
     /// <summary>
-    /// Perform depth-first search resolvment of the documentation comment.
+    /// Resolve the <c>inheritdoc</c> XML element contained in the documentation of the given <paramref name="node"/>.
+    ///
+    /// <para>
+    /// See <see cref="DfsResolve(TNode)"/> for detailed description of the resolvement process.
+    /// </para>
     /// </summary>
-    /// <param name="node">Node, whose docummetation is to be resolved.</param>
-    /// <returns>
-    /// Raw doc comment of the parent member if found, <see langword="null"/> otherwise.
-    /// </returns>
+    /// <param name="node">
+    ///     <inheritdoc cref="DfsResolve(TNode)" path="/param[@name='node']/text()"/>
+    /// </param>
+    /// <param name="inheritDocElement">The <c>inheritdoc</c> XML element to resolve.</param>
     private void DfsResolve(TNode node, XElement inheritDocElement)
     {
-        // get the documentation from parent
-        var parentNodes = GetParentNodes(node);
+        // get the parent nodes
+        var parentNodes = GetParentNodes(node)
+            .Where(p => !visited.Contains(p)); // filter out the already visited neighbours
 
         foreach (var parentNode in parentNodes)
         {
-            DfsResolve(parentNode);
+            DfsResolve(parentNode); // resolve the parent node
 
             var rawParentDoc = GetRawDocumentation(parentNode);
 
-            if (rawParentDoc is not null && rawParentDoc.Nodes().Any())
+            if (rawParentDoc is null)
             {
-                string? xpath = inheritDocElement.Attribute(XmlDocIdentifiers.Path)?.Value;
+                continue; // the parent node isn't documented -> continue with the next parent
+            }
 
-                if (xpath is not null)
-                {
-                    xpath = XPathTools.MakeRelative(xpath);
+            IEnumerable<XNode> resolvedNodes;
+            string? xpath = inheritDocElement.Attribute(XmlDocIdentifiers.Path)?.Value;
 
-                    var xpathNodes = rawParentDoc.XPathSelectElements(xpath);
-                    inheritDocElement.ReplaceWith(xpathNodes);
-                }
-                else
-                {
-                    inheritDocElement.ReplaceWith(rawParentDoc.Nodes());
-                }
+            if (xpath is not null) // XPath provided
+            {
+                xpath = XPathTools.MakeRelative(xpath);
+                resolvedNodes = rawParentDoc.XPathSelectElements(xpath); // select the nodes matching XPath
+            }
+            else // no XPath provided
+            {
+                resolvedNodes = rawParentDoc.Nodes();
+            }
+
+            if (resolvedNodes.Any()) // there are resolved nodes from the parent -> replace the 'inheritdoc' element with them
+            {
+                inheritDocElement.ReplaceWith(resolvedNodes);
                 return;
             }
         }
 
-        inheritDocElement.Remove();
-    }
-
-    protected virtual bool IsLiteralDoc(XElement? rawDocComment)
-    {
-        return GetNestedInheritDocs(rawDocComment).Count == 0;
-    }
-
-    protected virtual List<XElement> GetNestedInheritDocs(XElement? rawDocComment)
-    {
-        return rawDocComment.GetInheritDocs(InheritDocType.NonCref).ToList();
+        inheritDocElement.Remove(); // can't resolve the inheritdoc -> remove the element (don't replace it with anything)
     }
 
     /// <summary>
-    /// Get nodes representing the members with same ID in the parent types (base class and interfaces) of the current node.
+    /// Gets list of nested inheritdoc elements contained in the provided <paramref name="node"/>.
     /// </summary>
-    /// <param name="member">Node representing the member of a type.</param>
-    /// <returns>
-    /// List of nodes representing the members with same ID in the parent types (base class and interfaces) of the current node.
-    /// </returns>
-    protected abstract List<TNode> GetParentNodes(TNode member);
-
-    protected abstract XElement? GetRawDocumentation(TNode member);
-
-    protected List<TypeDeclaration> GetDeclaredParents(TypeDeclaration type)
+    /// <param name="node">Node that is searched for the inheritdoc elements.</param>
+    /// <returns>List of nested inheritdoc elements contained in <paramref name="node"/>.</returns>
+    protected IReadOnlyList<XElement> GetNestedInheritDocs(TNode node)
     {
-        var parentTypes = new List<ITypeNameData>();
-        var result = new List<TypeDeclaration>();
-
-        var baseType = type.BaseType;
-
-        if (baseType is not null)
-        {
-            parentTypes.Add(baseType);
-        }
-
-        parentTypes.AddRange(type.Interfaces);
-
-        foreach (var parentType in parentTypes)
-        {
-            // convert the ID: TODO refactor
-            string parentId = parentType.HasTypeParameters
-                ? $"{parentType.FullName}`{parentType.TypeParameters.Count}"
-                : parentType.Id;
-
-            // the parent type is contained in the type registry
-            if (typeRegistry.GetDeclaredType(parentId) is TypeDeclaration parent)
-            {
-                result.Add(parent);
-            }
-        }
-
-        return result;
+        return GetRawDocumentation(node).GetInheritDocs(InheritDocKind).ToList();
     }
+
+    /// <summary>
+    /// Gets raw XML documentation of the given node.
+    /// </summary>
+    /// <param name="node">The node whose documentation is to be returned.</param>
+    /// <returns>Raw XML documentation of the given node.</returns>
+    protected abstract XElement? GetRawDocumentation(TNode node);
+
+    /// <summary>
+    /// Get nodes representing the parent of <paramref name="node"/>.
+    /// </summary>
+    /// <param name="node">Node, whose parents are returned.</param>
+    /// <returns>
+    /// List of nodes representing the parents of <paramref name="node"/>.
+    /// </returns>
+    /// <remarks>
+    /// Note that the order of parents is important, since the resolving is done recursively using DFS (i.e. if the documentation is resolved from the 1st parent, the 2nd isn't even visited).
+    /// </remarks>
+    protected abstract IReadOnlyList<TNode> GetParentNodes(TNode node);
 }

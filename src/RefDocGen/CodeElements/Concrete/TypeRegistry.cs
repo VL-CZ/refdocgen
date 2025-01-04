@@ -7,6 +7,7 @@ using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Concrete.Types.Delegate;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.DocExtraction.Tools;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 
 namespace RefDocGen.CodeElements.Concrete;
 
@@ -30,7 +31,6 @@ internal record TypeRegistry(
 
     /// <inheritdoc/>
     IEnumerable<IDelegateTypeData> ITypeRegistry.Delegates => Delegates.Values;
-
 
     internal MemberData? GetMember(string typeMemberId)
     {
@@ -65,5 +65,44 @@ internal record TypeRegistry(
     ITypeDeclaration? ITypeRegistry.GetDeclaredType(string typeId)
     {
         return GetDeclaredType(typeId);
+    }
+
+    /// <summary>
+    /// Get list of declared base types (parent class and implemented interfaces) of the given type.
+    /// </summary>
+    /// <remarks>
+    /// This method only selects types declared in any of the analyzed assemblies.
+    /// </remarks>
+    /// <param name="type">Type whose base types are retrieved.</param>
+    /// <returns>A list of declared base types (parent class and implemented interfaces) of the given type.</returns>
+    internal IReadOnlyList<TypeDeclaration> GetDeclaredBaseTypes(TypeDeclaration type)
+    {
+        var parentTypes = new List<ITypeNameData>();
+        var result = new List<TypeDeclaration>();
+
+        var baseType = type.BaseType;
+
+        if (baseType is not null)
+        {
+            parentTypes.Add(baseType);
+        }
+
+        parentTypes.AddRange(type.Interfaces);
+
+        foreach (var parentType in parentTypes)
+        {
+            // convert the ID: TODO refactor
+            string parentId = parentType.HasTypeParameters
+                ? $"{parentType.FullName}`{parentType.TypeParameters.Count}"
+                : parentType.Id;
+
+            // the parent type is contained in the type registry
+            if (GetDeclaredType(parentId) is TypeDeclaration parent)
+            {
+                result.Add(parent);
+            }
+        }
+
+        return result;
     }
 }

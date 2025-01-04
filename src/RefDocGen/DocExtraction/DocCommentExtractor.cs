@@ -119,31 +119,31 @@ internal class DocCommentExtractor
         // resolve inheritdoc comments
         foreach (var member in inheritDocMembers)
         {
-            memberInheritDocHandler.DfsResolve(member);
+            memberInheritDocHandler.Resolve(member);
             InheritDocumentation(member);
         }
 
         // resolve inheritdoc comments
         foreach (var type in inheritDocTypes)
         {
-            typeInheritDocHandler.DfsResolve(type);
+            typeInheritDocHandler.Resolve(type);
             InheritDocumentation(type);
         }
 
         // handle non-cref types & members
         foreach (var (_, type) in typeRegistry.ObjectTypes)
         {
-            if (type.RawDocComment?.GetInheritDocs(InheritDocType.Cref).Any() ?? false)
+            if (type.RawDocComment?.GetInheritDocs(InheritDocKind.Cref).Any() ?? false)
             {
-                crefInheritDocHandler.DfsResolve(type.RawDocComment);
+                crefInheritDocHandler.Resolve(type.RawDocComment);
                 InheritDocumentation(type);
             }
 
             foreach (var (_, member) in type.AllMembers)
             {
-                if (member.RawDocComment?.GetInheritDocs(InheritDocType.Cref).Any() ?? false)
+                if (member.RawDocComment?.GetInheritDocs(InheritDocKind.Cref).Any() ?? false)
                 {
-                    crefInheritDocHandler.DfsResolve(member.RawDocComment);
+                    crefInheritDocHandler.Resolve(member.RawDocComment);
                     InheritDocumentation(member);
                 }
             }
@@ -153,12 +153,12 @@ internal class DocCommentExtractor
     /// <summary>
     /// Replaces the 'inheritdoc' doc comment of the member with the actual documentation.
     /// </summary>
-    /// <param name="type">The member whose documentation is to be inherited.</param>
-    private void InheritDocumentation(MemberData type)
+    /// <param name="member">The member whose documentation is to be inherited.</param>
+    private void InheritDocumentation(MemberData member)
     {
-        if (type.RawDocComment?.Nodes().Any() ?? false)
+        if (member.RawDocComment?.Nodes().Any() ?? false)
         {
-            AddDocComment(type.RawDocComment);
+            AddDocComment(member.RawDocComment);
         }
     }
 
@@ -209,7 +209,7 @@ internal class DocCommentExtractor
     private void AddTypeDocComment(string typeId, XElement docCommentNode)
     {
         // inheritdoc - TODO: update
-        if (docCommentNode.GetInheritDocs(InheritDocType.NonCref).Any()
+        if (docCommentNode.GetInheritDocs(InheritDocKind.NonCref).Any()
             && !inheriting
             && typeRegistry.GetDeclaredType(typeId) is TypeDeclaration t)
         {
@@ -245,7 +245,7 @@ internal class DocCommentExtractor
         if (typeRegistry.ObjectTypes.TryGetValue(typeName, out var type)) // member of a value, reference or interface type
         {
             // inheritdoc - TODO: update
-            if (docCommentNode.GetInheritDocs(InheritDocType.NonCref).Any()
+            if (docCommentNode.GetInheritDocs(InheritDocKind.NonCref).Any()
                 && !inheriting
                 && type.AllMembers.TryGetValue(memberId, out var member))
             {
