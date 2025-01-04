@@ -91,8 +91,10 @@ internal class DocCommentExtractor
     /// </summary>
     private readonly List<TypeDeclaration> inheritDocTypes = [];
 
-
-    private bool inheriting;
+    /// <summary>
+    /// Checks whether we're in the phase of adding resolved inheritdocs.
+    /// </summary>
+    private bool addingInheritedDocs;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
@@ -124,7 +126,8 @@ internal class DocCommentExtractor
             AddDocComment(memberNode);
         }
 
-        inheriting = true;
+        // from now on, we're adding the resolved inheritdocs
+        addingInheritedDocs = true;
 
         // resolve member inheritdoc comments (excluding 'cref')
         foreach (var member in inheritDocMembers)
@@ -182,10 +185,9 @@ internal class DocCommentExtractor
     /// <param name="docCommentNode">XML node of the doc comment for the given type.</param>
     private void AddTypeDocComment(string typeId, XElement docCommentNode)
     {
-        // inheritdoc - TODO: update
         if (docCommentNode.GetInheritDocs(InheritDocKind.NonCref).Any()
-            && !inheriting
-            && typeRegistry.GetDeclaredType(typeId) is TypeDeclaration t)
+            && !addingInheritedDocs
+            && typeRegistry.GetDeclaredType(typeId) is TypeDeclaration t) // non-cref inheritdoc found
         {
             inheritDocTypes.Add(t);
         }
@@ -218,10 +220,9 @@ internal class DocCommentExtractor
 
         if (typeRegistry.ObjectTypes.TryGetValue(typeName, out var type)) // member of a value, reference or interface type
         {
-            // inheritdoc - TODO: update
             if (docCommentNode.GetInheritDocs(InheritDocKind.NonCref).Any()
-                && !inheriting
-                && type.AllMembers.TryGetValue(memberId, out var member))
+                && !addingInheritedDocs
+                && type.AllMembers.TryGetValue(memberId, out var member)) // non-cref inheritdoc found
             {
                 inheritDocMembers.Add(member);
             }
