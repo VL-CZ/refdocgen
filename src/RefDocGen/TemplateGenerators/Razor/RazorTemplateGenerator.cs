@@ -8,6 +8,7 @@ using RefDocGen.TemplateGenerators.Default;
 using RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
+using RefDocGen.TemplateGenerators.Tools;
 
 namespace RefDocGen.TemplateGenerators.Razor;
 
@@ -43,6 +44,9 @@ internal class RazorTemplateGenerator<
     /// </summary>
     private readonly HtmlRenderer htmlRenderer;
 
+
+    private HtmlCommentParser htmlCommentParser = new();
+
     /// <summary>
     /// Initialize a new instance of <see cref="DefaultTemplateGenerator"/> class.
     /// </summary>
@@ -57,6 +61,8 @@ internal class RazorTemplateGenerator<
     /// <inheritdoc/>
     public void GenerateTemplates(ITypeRegistry typeRegistry)
     {
+        htmlCommentParser = new HtmlCommentParser(typeRegistry);
+
         GenerateObjectTypeTemplates(typeRegistry.ObjectTypes);
         GenerateEnumTemplates(typeRegistry.Enums);
         GenerateDelegateTemplates(typeRegistry.Delegates);
@@ -69,7 +75,7 @@ internal class RazorTemplateGenerator<
     /// <param name="types">The type data to be used in the templates.</param>
     private void GenerateObjectTypeTemplates(IEnumerable<IObjectTypeData> types)
     {
-        var typeTemplateModels = types.Select(ObjectTypeTMCreator.GetFrom);
+        var typeTemplateModels = types.Select(t => ObjectTypeTMCreator.GetFrom(t, htmlCommentParser));
         GenerateTemplates<TObjectTypeTemplate, ObjectTypeTM>(typeTemplateModels);
     }
 

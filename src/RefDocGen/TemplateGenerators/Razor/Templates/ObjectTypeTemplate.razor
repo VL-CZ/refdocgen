@@ -1,5 +1,4 @@
 @using RefDocGen.TemplateGenerators.Default.TemplateModels.Types
-@using RefDocGen.TemplateGenerators.Razor.Templates.Shared
 @inherits ComponentBase
 
 @code {
@@ -96,7 +95,7 @@
 
         <div class="my-3" />
 
-        <NamespaceLink Namespace="@Model.Namespace" />
+        <NamespaceLinkComponent Namespace="@Model.Namespace" />
 
         <!-- Base type name -->
         @if (Model.BaseTypeName is not null)
@@ -310,7 +309,7 @@
                                     @foreach (var comment in field.SeeAlsoDocComments)
                                     {
                                         <div>
-                                            @Raw(comment)
+                                            @* @Raw(comment) *@
                                         </div>
                                     }
                                 </div>
