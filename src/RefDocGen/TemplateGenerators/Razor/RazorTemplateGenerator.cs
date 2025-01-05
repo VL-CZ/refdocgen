@@ -12,8 +12,13 @@ using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 namespace RefDocGen.TemplateGenerators.Razor;
 
 /// <summary>
-/// Class used for generating RazorLight templates using the <see cref="ObjectTypeTM"/> as a type template model and <see cref="NamespaceTM"/> as a namespace template model.
+/// Class used for generating Razor templates using the <see cref="ObjectTypeTM"/> as a type template model and <see cref="NamespaceTM"/> as a namespace template model.
 /// </summary>
+/// <typeparam name="TDelegateTemplate">Type of the Razor component representing the delegate type.</typeparam>
+/// <typeparam name="TEnumTemplate">Type of the Razor component representing the enum type.</typeparam>
+/// <typeparam name="TNamespaceDetailTemplate">Type of the Razor component representing the namespace detail.</typeparam>
+/// <typeparam name="TNamespaceListTemplate">Type of the Razor component representing the namespace list.</typeparam>
+/// <typeparam name="TObjectTypeTemplate">Type of the Razor component representing the object type.</typeparam>
 internal class RazorTemplateGenerator<
         TDelegateTemplate,
         TEnumTemplate,
@@ -33,15 +38,17 @@ internal class RazorTemplateGenerator<
     /// </summary>
     private readonly string outputDir;
 
-    private HtmlRenderer htmlRenderer;
+    /// <summary>
+    /// Rendered of the Razor components.
+    /// </summary>
+    private readonly HtmlRenderer htmlRenderer;
 
     /// <summary>
     /// Initialize a new instance of <see cref="DefaultTemplateGenerator"/> class.
     /// </summary>
+    /// <param name="htmlRenderer">Rendered of the Razor components.</param>
     /// <param name="outputDir">The directory, where the generated output will be stored.</param>
-    internal RazorTemplateGenerator(
-        HtmlRenderer htmlRenderer,
-        string outputDir)
+    internal RazorTemplateGenerator(HtmlRenderer htmlRenderer, string outputDir)
     {
         this.outputDir = outputDir;
         this.htmlRenderer = htmlRenderer;
@@ -102,30 +109,32 @@ internal class RazorTemplateGenerator<
     }
 
     /// <summary>
-    /// Generate the templates of the selected kind, using the provided template models.
+    /// Generate the given templates using the provided template models.
     /// </summary>
     /// <param name="templateModels">Template models used for the templates generation.</param>
-    /// <param name="templateKind">Kind of the templates to generate.</param>
-    private void GenerateTemplates<TTemplate, T>(IEnumerable<T> templateModels)
-        where T : ITemplateModelWithId
+    /// <typeparam name="TTemplateModel">Type of the template model to be used in the template.</typeparam>
+    /// <typeparam name="TTemplate">Type of the Razor component representing the template to generate.</typeparam>
+    private void GenerateTemplates<TTemplate, TTemplateModel>(IEnumerable<TTemplateModel> templateModels)
         where TTemplate : IComponent
+        where TTemplateModel : ITemplateModelWithId
     {
         foreach (var tm in templateModels)
         {
-            GenerateTemplate<TTemplate, T>(tm, tm.Id);
+            GenerateTemplate<TTemplate, TTemplateModel>(tm, tm.Id);
         }
     }
 
     /// <summary>
-    /// Generate the template of the selected kind, using the provided template model.
+    /// Generate the given template using the provided template model.
     /// </summary>
     /// <param name="templateModel">Template model used for the template generation.</param>
-    /// <param name="templateKind">Kind of the template to generate.</param>
-    /// <param name="templateId">Id of the template to generate</param>
-    private void GenerateTemplate<TTemplate, TTemplateModel>(TTemplateModel templateModel, string templateId)
+    /// <param name="outputFile">Name of the output file containing the generated template populated with the <paramref name="templateModel"/> data.</param>
+    /// <typeparam name="TTemplateModel">Type of the template model to be used in the template.</typeparam>
+    /// <typeparam name="TTemplate">Type of the Razor component representing the template to generate.</typeparam>
+    private void GenerateTemplate<TTemplate, TTemplateModel>(TTemplateModel templateModel, string outputFile)
         where TTemplate : IComponent
     {
-        string outputFileName = Path.Join(outputDir, $"{templateId}.html");
+        string outputFileName = Path.Join(outputDir, $"{outputFile}.html");
 
         string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
         {
