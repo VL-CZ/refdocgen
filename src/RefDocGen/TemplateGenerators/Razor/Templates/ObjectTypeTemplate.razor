@@ -1,4 +1,5 @@
 @using RefDocGen.TemplateGenerators.Default.TemplateModels.Types
+@using RefDocGen.TemplateGenerators.Razor.Templates.Shared
 @inherits ComponentBase
 
 @code {
@@ -95,19 +96,9 @@
 
         <div class="my-3" />
 
-        @{
-            var namespaceUrl = $"{Model.Namespace}.html";
-        }
+        <NamespaceLink Namespace="@Model.Namespace" />
 
-        <h6>
-            <samp>
-                <a href="@namespaceUrl" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
-                    <span class="text-primary">namespace</span>
-                    <span class="text-secondary">@Model.Namespace</span>
-                </a>
-            </samp>
-        </h6>
-
+        <!-- Base type name -->
         @if (Model.BaseTypeName is not null)
         {
             <div>
@@ -118,6 +109,7 @@
             </div>
         }
 
+        <!-- Implemented interfaces -->
         @if (Model.ImplementedInterfaces.Any())
         {
             <div>
@@ -130,7 +122,10 @@
 
         <hr />
 
+        <!-- Doc comments -->
         <div class="text-muted">
+
+            <!-- Summary doc comment -->
             <i>
                 @((MarkupString)Model.SummaryDocComment)
             </i>
@@ -157,13 +152,8 @@
                 </div>
             }
 
-            @if (Model.RemarksDocComment.Length > 0)
-            {
-                <div class="mt-3">
-                    <div class="lead">Remarks</div>
-                    <i>@Model.RemarksDocComment</i>
-                </div>
-            }
+            <!-- Remarks doc comment -->
+            <RemarksComponent DocComment="@Model.RemarksDocComment" />
 
         </div>
 
@@ -249,13 +239,8 @@
                                 </div>
                             }
 
-                            @if (constructor.RemarksDocComment.Length > 0)
-                            {
-                                <div class="mt-3">
-                                    <div class="lead">Remarks</div>
-                                    <i>@constructor.RemarksDocComment</i>
-                                </div>
-                            }
+                            <!-- Remarks doc comment -->
+                            <RemarksComponent DocComment="@constructor.RemarksDocComment" />
 
                             @if (constructor.Exceptions.Any())
                             {
@@ -397,13 +382,8 @@
                                 </p>
                             }
 
-                            @if (property.RemarksDocComment.Length > 0)
-                            {
-                                <div class="mt-3">
-                                    <div class="lead">Remarks</div>
-                                    <i>@property.RemarksDocComment</i>
-                                </div>
-                            }
+                            <!-- Remarks doc comment -->
+                            <RemarksComponent DocComment="@property.RemarksDocComment" />
 
                             @if (property.Exceptions.Any())
                             {
@@ -531,13 +511,8 @@
                                 </p>
                             }
 
-                            @if (indexer.RemarksDocComment.Length > 0)
-                            {
-                                <div class="mt-3">
-                                    <div class="lead">Remarks</div>
-                                    <i>@indexer.RemarksDocComment</i>
-                                </div>
-                            }
+                            <!-- Remarks doc comment -->
+                            <RemarksComponent DocComment="@indexer.RemarksDocComment" />
 
                             @if (indexer.Exceptions.Any())
                             {
@@ -696,13 +671,8 @@
                                 </div>
                             }
 
-                            @if (method.RemarksDocComment.Length > 0)
-                            {
-                                <div class="mt-3">
-                                    <div class="lead">Remarks</div>
-                                    <i>@method.RemarksDocComment</i>
-                                </div>
-                            }
+                            <!-- Remarks doc comment -->
+                            <RemarksComponent DocComment="@method.RemarksDocComment" />
 
                             @if (method.Exceptions.Any())
                             {
@@ -824,13 +794,8 @@
                                 </div>
                             }
 
-                            @if (method.RemarksDocComment.Length > 0)
-                            {
-                                <div class="mt-3">
-                                    <div class="lead">Remarks</div>
-                                    <i>@method.RemarksDocComment</i>
-                                </div>
-                            }
+                            <!-- Remarks doc comment -->
+                            <RemarksComponent DocComment="@method.RemarksDocComment" />
 
                             @if (method.Exceptions.Any())
                             {

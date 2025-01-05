@@ -1,0 +1,27 @@
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Types
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required TypeNameTM Type { get; set; }
+}
+
+@{
+    var typeUrl = $"./{Type.Id}.html";
+}
+
+<tr>
+    <td class="w-50">
+        <samp>
+            <a href="@typeUrl" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
+                <span class="text-primary">
+                    @Type.TypeKindName
+                </span>
+                @Type.Name
+            </a>
+        </samp>
+    </td>
+    <td class="text-muted">
+        <i>@Type.DocComment</i>
+    </td>
+</tr>

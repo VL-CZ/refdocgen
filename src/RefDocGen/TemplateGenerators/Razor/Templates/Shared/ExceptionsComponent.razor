@@ -1,0 +1,21 @@
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Members
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required IEnumerable<ExceptionTM> Exceptions { get; set; }
+}
+
+@if (Exceptions.Any())
+{
+    <div class="mt-3">
+        <div class="lead">Exceptions</div>
+        @foreach (var exception in Exceptions)
+        {
+            <div>
+                <span>@exception.Name</span>
+                <i>@exception.DocComment</i>
+            </div>
+        }
+    </div>
+}

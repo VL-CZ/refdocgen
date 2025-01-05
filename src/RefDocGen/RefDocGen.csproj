@@ -24,7 +24,6 @@
 
     <ItemGroup>
         <Folder Include="out\" />
-        <Folder Include="TemplateGenerators\Default\Templates\Default\" />
     </ItemGroup>
 
 </Project>
