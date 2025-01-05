@@ -1,4 +1,5 @@
 @using RefDocGen.TemplateGenerators.Default.TemplateModels.Types
+@using RefDocGen.TemplateGenerators.Razor.Templates.Shared
 @inherits ComponentBase
 
 @code {
@@ -51,19 +52,7 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg sticky-top bg-dark" data-bs-theme="dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Project name</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                    <a class="nav-link" href="./index.html">Home</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <MenuComponent />
 
     <div class="container my-4">
         <h1 class="display-4">
@@ -73,18 +62,7 @@
             </samp>
         </h1>
 
-        @{
-            var namespaceUrl = $"{Model.Namespace}.html";
-        }
-
-        <h6>
-            <samp>
-                <a href="@namespaceUrl" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
-                    <span class="text-primary">namespace</span>
-                    <span class="text-secondary">@Model.Namespace</span>
-                </a>
-            </samp>
-        </h6>
+        <NamespaceLinkComponent Namespace="@Model.Namespace" />
 
         <p class="text-muted">
             <i>@Model.SummaryDocComment</i>
