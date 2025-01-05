@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -15,6 +15,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
         <PackageReference Include="RazorLight" Version="2.3.1" />
         <InternalsVisibleTo Include="RefDocGen.UnitTests" />
         <InternalsVisibleTo Include="RefDocGen.IntegrationTests" />
@@ -22,6 +23,7 @@
 
     <ItemGroup>
         <Folder Include="out\" />
+        <Folder Include="TemplateGenerators\Default\Templates\Default\" />
     </ItemGroup>
 
 </Project>

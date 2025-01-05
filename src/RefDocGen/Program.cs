@@ -1,4 +1,9 @@
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using RazorLight.Compilation;
 using RefDocGen.TemplateGenerators.Default;
+using RefDocGen.TemplateGenerators.Razor;
 
 namespace RefDocGen;
 
@@ -10,7 +15,7 @@ public static class Program
     /// <summary>
     /// Main method, entry point of the RefDocGen app
     /// </summary>
-    public static void Main()
+    public static async Task Main()
     {
         string? rootPath = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).Parent?.Parent?.Parent?.Parent?.Parent?.FullName;
         string dllPath = Path.Join(rootPath, "demo-lib", "MyLibrary.dll");
@@ -20,7 +25,16 @@ public static class Program
         string templatePath = "TemplateGenerators/Default/Templates/Default";
         string outputDir = Path.Combine(projectPath, "out");
 
-        var templateGenerator = new DefaultTemplateGenerator(projectPath, templatePath, outputDir);
+        IServiceCollection services = new ServiceCollection();
+        services.AddLogging();
+
+        IServiceProvider serviceProvider = services.BuildServiceProvider();
+        var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
+
+        await using var htmlRenderer = new HtmlRenderer(serviceProvider, loggerFactory);
+
+        //var templateGenerator = new DefaultTemplateGenerator(projectPath, templatePath, outputDir);
+        var templateGenerator = new RazorTemplateGenerator(htmlRenderer, templatePath, outputDir);
 
         var docGenerator = new DocGenerator(dllPath, docPath, templateGenerator);
         docGenerator.GenerateDoc();
