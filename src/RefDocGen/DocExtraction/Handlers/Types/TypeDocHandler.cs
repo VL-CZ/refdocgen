@@ -32,6 +32,9 @@ internal class TypeDocHandler
         // add 'seealso' doc comments
         type.SeeAlsoDocComments = docComment.Elements(XmlDocIdentifiers.SeeAlso);
 
+        // add raw doc comment
+        type.RawDocComment = docComment;
+
         var typeParamElements = docComment.Descendants(XmlDocIdentifiers.TypeParam);
 
         // add type param doc comments

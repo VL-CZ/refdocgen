@@ -64,4 +64,9 @@ internal static class XmlDocIdentifiers
     /// Represents the 'seealso' identifier.
     /// </summary>
     public const string SeeAlso = "seealso";
+
+    /// <summary>
+    /// Represents the 'seealso' identifier.
+    /// </summary>
+    public const string Path = "path";
 }

@@ -1,4 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Xml.Linq;
@@ -14,9 +16,11 @@ internal abstract class MemberData : IMemberData
     /// Initializes a new instance of the <see cref="MemberData"/> class.
     /// </summary>
     /// <param name="memberInfo"><see cref="MemberInfo"/> object representing the member.</param>
-    protected MemberData(MemberInfo memberInfo)
+    /// <param name="containingType">Type that contains the member.</param>
+    protected MemberData(MemberInfo memberInfo, TypeDeclaration containingType)
     {
         MemberInfo = memberInfo;
+        ContainingType = containingType;
     }
 
     /// <inheritdoc/>
@@ -42,6 +46,12 @@ internal abstract class MemberData : IMemberData
 
     /// <inheritdoc/>
     public MemberInfo MemberInfo { get; }
+
+    /// <inheritdoc cref="IMemberData.ContainingType"/>
+    public TypeDeclaration ContainingType { get; }
+
+    /// <inheritdoc/>
+    ITypeDeclaration IMemberData.ContainingType => ContainingType;
 
     /// <summary>
     /// Raw doc comment provided to the member.

@@ -109,32 +109,38 @@ internal class AssemblyTypeExtractor
             .Select((ga, i) => new TypeParameterData(ga, i, CodeElementKind.Type))
             .ToDictionary(t => t.Name);
 
+        // construct the object type
+        var objectType = new ObjectTypeData(type, typeParameters);
+
         // construct *Data objects
         var ctorModels = constructors
-            .Select(c => new ConstructorData(c, typeParameters))
+            .Select(c => new ConstructorData(c, objectType, typeParameters))
             .ToDictionary(c => c.Id);
 
         var fieldModels = fields
-            .Select(f => new FieldData(f, typeParameters))
+            .Select(f => new FieldData(f, objectType, typeParameters))
             .ToDictionary(f => f.Id);
 
         var propertyModels = properties
-            .Select(p => new PropertyData(p, typeParameters))
+            .Select(p => new PropertyData(p, objectType, typeParameters))
             .ToDictionary(p => p.Id);
 
         var methodModels = methods
-            .Select(m => new MethodData(m, typeParameters))
+            .Select(m => new MethodData(m, objectType, typeParameters))
             .ToDictionary(m => m.Id);
 
         var operatorModels = operators
-            .Select(m => new OperatorData(m, typeParameters))
+            .Select(m => new OperatorData(m, objectType, typeParameters))
             .ToDictionary(m => m.Id);
 
         var indexerModels = indexers
-            .Select(m => new IndexerData(m, typeParameters))
+            .Select(m => new IndexerData(m, objectType, typeParameters))
             .ToDictionary(m => m.Id);
 
-        return new ObjectTypeData(type, ctorModels, fieldModels, propertyModels, methodModels, operatorModels, indexerModels, typeParameters);
+        // add the members
+        objectType.AddMembers(ctorModels, fieldModels, propertyModels, methodModels, operatorModels, indexerModels);
+
+        return objectType;
     }
 
     /// <summary>
@@ -144,14 +150,18 @@ internal class AssemblyTypeExtractor
     /// <returns><see cref="EnumTypeData"/> object representing the enum.</returns>
     private EnumTypeData ConstructEnum(Type type)
     {
+        var enumType = new EnumTypeData(type);
+
         var enumValues = type
             .GetFields(bindingFlags)
             .Where(f => !f.IsCompilerGenerated()
                 && !f.IsSpecialName) // exclude '_value' field.
-            .Select(f => new EnumMemberData(f))
+            .Select(f => new EnumMemberData(f, enumType))
             .ToDictionary(v => v.Id);
 
-        return new EnumTypeData(type, enumValues);
+        enumType.AddMembers(enumValues);
+
+        return enumType;
     }
 
     /// <summary>

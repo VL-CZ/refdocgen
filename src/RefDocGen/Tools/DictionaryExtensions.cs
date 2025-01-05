@@ -31,4 +31,19 @@ internal static class DictionaryExtensions
 
         return result;
     }
+
+    /// <summary>
+    /// Convert the dictionary into a dictionary, whose values are of a parent type.
+    /// </summary>
+    /// <typeparam name="TKey">Type of the dictionary keys.</typeparam>
+    /// <typeparam name="TChildValue">Type of the current dictionary values.</typeparam>
+    /// <typeparam name="TParentValue">Type of the newly constructed dictionary values.</typeparam>
+    /// <param name="dictionary">Dictionary to convert.</param>
+    /// <returns>A dictionary, whose values are of a parent type.</returns>
+    internal static Dictionary<TKey, TParentValue> ToParent<TKey, TChildValue, TParentValue>(this IReadOnlyDictionary<TKey, TChildValue> dictionary)
+        where TKey : notnull
+        where TChildValue : TParentValue
+    {
+        return dictionary.ToDictionary(pair => pair.Key, pair => (TParentValue)pair.Value);
+    }
 }

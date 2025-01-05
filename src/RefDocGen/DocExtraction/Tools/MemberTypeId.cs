@@ -11,16 +11,25 @@ internal class MemberTypeId
     /// <summary>
     /// Field identifier.
     /// </summary>
+    /// <remarks>
+    /// Note that this identifier is also used for enum members.
+    /// </remarks>
     internal const string Field = "F";
 
     /// <summary>
     /// Property identifer.
     /// </summary>
+    /// <remarks>
+    /// Note that this identifier is also used for indexers.
+    /// </remarks>
     internal const string Property = "P";
 
     /// <summary>
     /// Method identifer.
     /// </summary>
+    /// <remarks>
+    /// Note that this identifier is also used for constructors and operators.
+    /// </remarks>
     internal const string Method = "M";
 
     /// <summary>

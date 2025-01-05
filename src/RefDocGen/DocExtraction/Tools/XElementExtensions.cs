@@ -100,4 +100,64 @@ internal static class XElementExtensions
     {
         return element.TryGetAttribute(XmlDocIdentifiers.Cref, out attribute);
     }
+
+#pragma warning disable IDE0046
+
+    /// <summary>
+    /// Selects descendant 'inheritdoc' elements of the given <paramref name="element"/>.
+    /// </summary>
+    /// <param name="element">Element, whose descendant inheritdocs we search.</param>
+    /// <param name="inheritDocType">Type of the 'inheritdoc' elements to search for.</param>
+    /// <returns>
+    /// All descendant 'inheritdoc' elements of the given <paramref name="element"/>.
+    /// <para>
+    /// An empty enumerable is returned if there are no such elements.
+    /// </para>
+    /// </returns>
+    internal static IEnumerable<XElement> GetInheritDocs(this XElement? element, InheritDocKind inheritDocType = InheritDocKind.Any)
+    {
+        if (element is null)
+        {
+            return [];
+        }
+
+        var allInheritDocs = element.Descendants(XmlDocIdentifiers.InheritDoc);
+
+        if (inheritDocType == InheritDocKind.NonCref)
+        {
+            return allInheritDocs.Where(e => e.Attribute(XmlDocIdentifiers.Cref) is null);
+        }
+        else if (inheritDocType == InheritDocKind.Cref)
+        {
+            return allInheritDocs.Where(e => e.Attribute(XmlDocIdentifiers.Cref) is not null);
+        }
+        else
+        {
+            return allInheritDocs;
+        }
+
+#pragma warning restore IDE0046
+
+    }
+}
+
+/// <summary>
+/// Represents kind of the inheritdoc doc comment.
+/// </summary>
+internal enum InheritDocKind
+{
+    /// <summary>
+    /// Represents any inheritdoc element.
+    /// </summary>
+    Any,
+
+    /// <summary>
+    /// Represents any inheritdoc element without 'cref' attribute.
+    /// </summary>
+    NonCref,
+
+    /// <summary>
+    /// Represents any inheritdoc element with 'cref' attribute.
+    /// </summary>
+    Cref
 }

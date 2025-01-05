@@ -1,3 +1,4 @@
+using RefDocGen.CodeElements.Abstract.Types;
 using System.Reflection;
 using System.Xml.Linq;
 
@@ -11,10 +12,14 @@ public interface IMemberData
     /// <summary>
     /// Identifier of the member in the same format as in the XML documentation comments file.
     /// Consists of the member name (without namespace and type name) and parameters string (if the member has them - e.g. a method).
+    ///
     /// <para>
-    /// The format is described here: <see href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/#id-strings"/>
+    /// Uniquely identifies the member within a type.
     /// </para>
     /// </summary>
+    /// <remarks>
+    /// The format is described here: <see href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/#id-strings"/>
+    /// </remarks>
     string Id { get; }
 
     /// <summary>
@@ -51,4 +56,13 @@ public interface IMemberData
     /// Collection of 'seealso' doc comments for the member.
     /// </summary>
     IEnumerable<XElement> SeeAlsoDocComments { get; }
+
+    /// <summary>
+    /// Type that contains the member.
+    ///
+    /// <para>
+    /// Note that for inherited members, this property returns child type (not the original type that declares the member).
+    /// </para>
+    /// </summary>
+    ITypeDeclaration ContainingType { get; }
 }

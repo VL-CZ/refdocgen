@@ -25,8 +25,10 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
     /// Create new <see cref="ExecutableMemberData"/> instance.
     /// </summary>
     /// <param name="methodBase"><see cref="MethodBase"/> object representing the member.</param>
-    /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; keys represent type parameter names.</param>
-    protected ExecutableMemberData(MethodBase methodBase, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters) : base(methodBase)
+    /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; keys represent type parameter names.</param>
+    /// <param name="containingType">Type that contains the member.</param>
+    protected ExecutableMemberData(MethodBase methodBase, TypeDeclaration containingType, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
+        : base(methodBase, containingType)
     {
         this.methodBase = methodBase;
 
@@ -38,7 +40,7 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
             : []; // constructors can't declare generic type parameters
 
         // add the dicitonaries
-        var allParams = declaredTypeParameters
+        var allParams = availableTypeParameters
             .Merge(TypeParameterDeclarations);
 
         // add parameters

@@ -18,18 +18,20 @@ internal class PropertyData : MemberData, IPropertyData
     /// Initializes a new instance of the <see cref="PropertyData"/> class.
     /// </summary>
     /// <param name="propertyInfo"><see cref="System.Reflection.PropertyInfo"/> object representing the property.</param>
-    /// <param name="declaredTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    internal PropertyData(PropertyInfo propertyInfo, IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters) : base(propertyInfo)
+    /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
+    /// <param name="containingType">Type that contains the member.</param>
+    internal PropertyData(PropertyInfo propertyInfo, TypeDeclaration containingType, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters) :
+        base(propertyInfo, containingType)
     {
         PropertyInfo = propertyInfo;
-        Type = propertyInfo.PropertyType.GetTypeNameData(declaredTypeParameters);
+        Type = propertyInfo.PropertyType.GetTypeNameData(availableTypeParameters);
 
         Getter = PropertyInfo.GetMethod is not null
-            ? new MethodData(PropertyInfo.GetMethod, declaredTypeParameters)
+            ? new MethodData(PropertyInfo.GetMethod, containingType, availableTypeParameters)
             : null;
 
         Setter = PropertyInfo.SetMethod is not null
-            ? new MethodData(PropertyInfo.SetMethod, declaredTypeParameters)
+            ? new MethodData(PropertyInfo.SetMethod, containingType, availableTypeParameters)
             : null;
 
         ExplicitInterfaceType = Tools.ExplicitInterfaceType.Of(this);

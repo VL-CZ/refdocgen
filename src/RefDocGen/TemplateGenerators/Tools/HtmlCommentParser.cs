@@ -179,7 +179,7 @@ internal class HtmlCommentParser
             }
 
             // type found
-            if (typeRegistry.TryGetType(typeId, out _))
+            if (typeRegistry.GetDeclaredType(typeId) is not null)
             {
                 element.Name = "a";
 

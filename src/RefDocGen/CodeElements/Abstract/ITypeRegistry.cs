@@ -1,7 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.Delegate;
 using RefDocGen.CodeElements.Abstract.Types.Enum;
-using System.Diagnostics.CodeAnalysis;
 
 namespace RefDocGen.CodeElements.Abstract;
 
@@ -26,10 +25,9 @@ public interface ITypeRegistry
     IEnumerable<IDelegateTypeData> Delegates { get; }
 
     /// <summary>
-    /// Tries to get the type with the given ID.
+    /// Gets the type with the given ID.
     /// </summary>
-    /// <param name="typeId">ID of the type to search for.</param>
-    /// <param name="type">The type with the given ID, if found. <see langword="null"/> otherwise.</param>
-    /// <returns><c>true</c> if the type is found in the registry, <c>false</c> otherwise.</returns>
-    bool TryGetType(string typeId, [MaybeNullWhen(false)] out ITypeDeclaration? type);
+    /// <param name="typeId">ID of the type to return.</param>
+    /// <returns>The type with the given ID, if found. <see langword="null"/> otherwise.</returns>
+    ITypeDeclaration? GetDeclaredType(string typeId);
 }
