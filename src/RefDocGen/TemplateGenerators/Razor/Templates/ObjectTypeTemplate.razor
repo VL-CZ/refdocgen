@@ -138,25 +138,7 @@
                                                 @Model.Name<span class="text-secondary">(</span>
                                             </span>
 
-                                            @foreach (var p in constructor.Parameters)
-                                            {
-                                                <span class="text-secondary">
-                                                    @p.Type
-                                                </span>
-
-                                                @if (p == lastParam)
-                                                {
-                                                    <span class="text-dark">
-                                                        @p.Name<span class="text-secondary">)</span>
-                                                    </span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="text-dark">
-                                                        @($"{p.Name},")
-                                                    </span>
-                                                }
-                                            }
+                                            <ParametersString Parameters="@constructor.Parameters" />
                                         }
                                         else
                                         {
@@ -220,18 +202,7 @@
 
                             <RemarksDocumentation DocComment="@field.RemarksDocComment" />
 
-                            @if (field.SeeAlsoDocComments.Any())
-                            {
-                                <div class="mt-3">
-                                    <div class="lead">See also</div>
-                                    @foreach (var comment in field.SeeAlsoDocComments)
-                                    {
-                                        <div>
-                                            @((MarkupString)comment)
-                                        </div>
-                                    }
-                                </div>
-                            }
+                            <SeeAlsoDocumentation DocComments="@field.SeeAlsoDocComments" />
                         </div>
                     }
                 </div>
@@ -419,52 +390,7 @@
                                                 @method.Name<span class="text-secondary">(</span>
                                             </span>
 
-                                            @foreach (var p in method.Parameters)
-                                            {
-                                                <span class="text-primary">
-                                                    @string.Join(' ', p.Modifiers)
-                                                </span>
-                                                <span class="text-secondary">
-                                                    @p.Type
-                                                </span>
-
-                                                @if (p == lastParam)
-                                                {
-                                                    if (p.DefaultValue is not null)
-                                                    {
-                                                        <span class="text-dark">
-                                                            @p.Name
-                                                            <span class="text-secondary">=</span>
-                                                            <span class="text-success">@p.DefaultValue</span>
-                                                            <span class="text-secondary">)</span>
-                                                        </span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="text-dark">
-                                                            @p.Name<span class="text-secondary">)</span>
-                                                        </span>
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    if (p.DefaultValue is not null)
-                                                    {
-                                                        <span class="text-dark">
-                                                            @p.Name
-                                                            <span class="text-secondary">=</span>
-                                                            <span class="text-success">@p.DefaultValue</span>
-                                                            ,
-                                                        </span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="text-dark">
-                                                            @p.Name,
-                                                        </span>
-                                                    }
-                                                }
-                                            }
+                                            <ParametersString Parameters="@method.Parameters" />
                                         }
                                         else
                                         {
@@ -472,16 +398,8 @@
                                         }
 
                                         @* TODO: move up *@
-                                        @if (method.TypeParameters.Any())
-                                        {
-                                            var paramsString = string.Join(',', method.TypeParameters.Select(tp => tp.Name));
+                                        <TypeParametersString TypeParameters="@method.TypeParameters" />
 
-                                            <span class="text-secondary">&lt;</span>
-
-                                            <span class="text-dark">@paramsString</span>
-
-                                            <span class="text-secondary">&gt;</span>
-                                        }
                                     </span>
                                 </samp>
 
@@ -494,18 +412,7 @@
 
                             @if (!method.ReturnsVoid)
                             {
-                                <h3 class="lead my-2">Returns</h3>
-                                <div class="mx-2">
-
-                                    <samp>
-                                        <span class="text-secondary">
-                                            @method.ReturnType
-                                        </span>
-                                    </samp>
-                                    <p class="text-muted">
-                                        <i>@method.ReturnsDocComment</i>
-                                    </p>
-                                </div>
+                                <ReturnValueDocumentation DocComment="@method.ReturnsDocComment" TypeName="@method.ReturnType" />
                             }
 
                             <!-- Remarks doc comment -->
@@ -544,28 +451,7 @@
                                                 @method.Name<span class="text-secondary">(</span>
                                             </span>
 
-                                            @foreach (var p in method.Parameters)
-                                            {
-                                                <span class="text-primary">
-                                                    @string.Join(' ', p.Modifiers)
-                                                </span>
-                                                <span class="text-secondary">
-                                                    @p.Type
-                                                </span>
-
-                                                @if (p == lastParam)
-                                                {
-                                                    <span class="text-dark">
-                                                        @p.Name<span class="text-secondary">)</span>
-                                                    </span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="text-dark">
-                                                        @($"{p.Name},")
-                                                    </span>
-                                                }
-                                            }
+                                            <ParametersString Parameters="@method.Parameters" />
                                         }
                                         else
                                         {
@@ -583,18 +469,7 @@
 
                             @if (!method.ReturnsVoid)
                             {
-                                <h3 class="lead my-2">Returns</h3>
-                                <div class="mx-2">
-
-                                    <samp>
-                                        <span class="text-secondary">
-                                            @method.ReturnType
-                                        </span>
-                                    </samp>
-                                    <p class="text-muted">
-                                        <i>@method.ReturnsDocComment</i>
-                                    </p>
-                                </div>
+                                <ReturnValueDocumentation DocComment="@method.ReturnsDocComment" TypeName="@method.ReturnType" />
                             }
 
                             <!-- Remarks doc comment -->

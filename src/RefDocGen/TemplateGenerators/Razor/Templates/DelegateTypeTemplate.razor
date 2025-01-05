@@ -97,20 +97,7 @@
                                         @Model.Name<span class="text-secondary">(</span>
                                     </span>
 
-                                    @foreach (var p in Model.Parameters)
-                                    {
-                                        <span class="text-primary">@string.Join(' ', p.Modifiers)</span>
-                                        <span class="text-secondary">@p.Type</span>
-
-                                        @if (p == lastParam)
-                                        {
-                                            <span class="text-dark">@p.Name<span class="text-secondary">)</span></span>
-                                        }
-                                        else
-                                        {
-                                            <span class="text-dark">@($"{p.Name},")</span>
-                                        }
-                                    }
+                                    <ParametersString Parameters="@Model.Parameters" />
                                 }
                                 else
                                 {
@@ -124,6 +111,7 @@
                     </p>
 
                     <ParametersDocumentation Parameters="@Model.Parameters" />
+
                     @*
                     @if (Model.Parameters.Any())
                     {
@@ -143,13 +131,7 @@
 
                     @if (!Model.ReturnsVoid)
                     {
-                        <div class="m-2">
-                            Returns
-                            <samp>
-                                <span class="text-secondary">@Model.ReturnType</span>
-                            </samp>
-                            <p class="text-muted"><i>@Model.ReturnsDocComment</i></p>
-                        </div>
+                        <ReturnValueDocumentation DocComment="@Model.ReturnsDocComment" TypeName="@Model.ReturnType" />
                     }
 
                     <ExceptionsDocumentation Exceptions="@Model.Exceptions" />

@@ -1,0 +1,23 @@
+@inherits ComponentBase
+
+@code {
+
+    [Parameter]
+    public required string TypeName { get; set; }
+
+    [Parameter]
+    public required string DocComment { get; set; }
+}
+
+<h3 class="lead my-2">Returns</h3>
+<div class="mx-2">
+
+    <samp>
+        <span class="text-secondary">
+            @TypeName
+        </span>
+    </samp>
+    <p class="text-muted">
+        <i>@DocComment</i>
+    </p>
+</div>
