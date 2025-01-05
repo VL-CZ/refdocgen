@@ -60,69 +60,23 @@
         </div>
     </nav>
 
+
     <div class="container my-4">
-        <h1 class="display-4">
-            <samp>
-                <span class="text-primary">@string.Join(' ', Model.Modifiers) delegate</span>
-                <span class="text-dark">@Model.Name</span>
-            </samp>
-        </h1>
 
-        @foreach (var tp in Model.TypeParameters)
-        {
-            var allConstraints = tp.TypeConstraints.Concat(tp.SpecialConstraints);
+        <DeclaredTypeName TypeName="@Model.Name" TypeKindName="delegate" Modifiers="@Model.Modifiers" />
 
-            if (allConstraints.Any())
-            {
-                <h6 class="mx-3">
-                    <samp>
-                        <span class="text-primary">where</span>
-                        <span class="text-secondary">@tp.Name : </span>
-                        <span class="text-primary">@string.Join(", ", tp.SpecialConstraints),</span>
-                        <span class="text-secondary">@string.Join(", ", tp.TypeConstraints)</span>
-                    </samp>
-                </h6>
-            }
-        }
+        <TypeParametersConstraints TypeParameters="@Model.TypeParameters" />
 
-        <h6>
-            <samp>
-                <a href="@($"{Model.Namespace}.html")" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
-                    <span class="text-primary">namespace</span>
-                    <span class="text-secondary">@Model.Namespace</span>
-                </a>
-            </samp>
-        </h6>
+        <NamespaceLink Namespace="@Model.Namespace" />
 
         <hr />
 
         <p class="text-muted">
             <i>@Model.SummaryDocComment</i>
 
-            @if (Model.TypeParameters.Any())
-            {
-                <div class="mx-3">
-                    @foreach (var typeParam in Model.TypeParameters)
-                    {
-                        if (!string.IsNullOrEmpty(typeParam.DocComment))
-                        {
-                            <samp>
-                                <span class="text-primary">@string.Join(' ', typeParam.Modifiers)</span>
-                                <span class="text-dark">@typeParam.Name</span>
-                            </samp>
-                            <p class="text-muted"><i>@typeParam.DocComment</i></p>
-                        }
-                    }
-                </div>
-            }
+            <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
 
-            @if (Model.RemarksDocComment.Length > 0)
-            {
-                <div class="mt-3">
-                    <div class="lead">Remarks</div>
-                    <i>@Model.RemarksDocComment</i>
-                </div>
-            }
+            <RemarksDocumentation DocComment="@Model.RemarksDocComment" />
         </p>
 
         <hr />
@@ -195,19 +149,7 @@
                         </div>
                     }
 
-                    @if (Model.Exceptions.Any())
-                    {
-                        <div class="mt-3">
-                            <div class="lead">Exceptions</div>
-                            @foreach (var exception in Model.Exceptions)
-                            {
-                                <div>
-                                    <span>@exception.Name</span>
-                                    <i>@exception.DocComment</i>
-                                </div>
-                            }
-                        </div>
-                    }
+                    <ExceptionsDocumentation Exceptions="@Model.Exceptions" />
                 </div>
             </div>
         </div>

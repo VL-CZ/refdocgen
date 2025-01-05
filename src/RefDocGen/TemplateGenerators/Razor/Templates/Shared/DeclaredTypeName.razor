@@ -1,0 +1,19 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required IEnumerable<string> Modifiers { get; set; }
+
+    [Parameter]
+    public required string TypeKindName { get; set; }
+
+    [Parameter]
+    public required string TypeName { get; set; }
+}
+
+<h1 class="display-4">
+    <samp>
+        <span class="text-primary">@string.Join(' ', Modifiers) @TypeKindName</span>
+        <span class="text-dark">@TypeName</span>
+    </samp>
+</h1>

@@ -1,0 +1,29 @@
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Types
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required TypeParameterTM[] TypeParameters { get; set; }
+}
+
+@foreach (var tp in TypeParameters)
+{
+    var allConstraints = tp.TypeConstraints.Concat(tp.SpecialConstraints);
+
+    if (allConstraints.Any())
+    {
+        <h6 class="mx-3">
+            <samp>
+                <span class="text-primary">where</span>
+                <span class="text-secondary">@tp.Name : </span>
+                <span class="text-primary">@string.Join(", ", tp.SpecialConstraints),</span>
+                <span class="text-secondary">@string.Join(", ", tp.TypeConstraints)</span>
+            </samp>
+        </h6>
+    }
+}
+
+@if (TypeParameters.Any())
+{
+    <div class="my-3" />
+}
