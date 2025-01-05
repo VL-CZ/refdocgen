@@ -123,6 +123,8 @@
                         <i>@Model.SummaryDocComment</i>
                     </p>
 
+                    <ParametersDocumentation Parameters="@Model.Parameters" />
+                    @*
                     @if (Model.Parameters.Any())
                     {
                         <div class="m-2">
@@ -137,6 +139,7 @@
                             }
                         </div>
                     }
+                    *@
 
                     @if (!Model.ReturnsVoid)
                     {

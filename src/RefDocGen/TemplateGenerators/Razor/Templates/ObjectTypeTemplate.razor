@@ -172,29 +172,7 @@
                                 </i>
                             </div>
 
-                            @if (constructor.Parameters.Any())
-                            {
-                                <h3 class="lead my-2">Parameters</h3>
-                                <div class="mx-2">
-                                    @foreach (var parameter in constructor.Parameters)
-                                    {
-                                        <samp>
-                                            <span class="text-primary">
-                                                @string.Join(' ', parameter.Modifiers)
-                                            </span>
-                                            <span class="text-secondary">
-                                                @parameter.Type
-                                            </span>
-                                            <span class="text-dark">
-                                                @parameter.Name
-                                            </span>
-                                        </samp>
-                                        <p class="text-muted">
-                                            <i>@parameter.DocComment</i>
-                                        </p>
-                                    }
-                                </div>
-                            }
+                            <ParametersDocumentation Parameters="@constructor.Parameters" />
 
                             <!-- Remarks doc comment -->
                             <RemarksDocumentation DocComment="@constructor.RemarksDocComment" />
@@ -401,28 +379,7 @@
                                 <i>@indexer.SummaryDocComment</i>
                             </p>
 
-                            @if (indexer.Parameters.Any())
-                            {
-                                <div class="m-3">
-                                    @foreach (var parameter in indexer.Parameters)
-                                    {
-                                        <samp>
-                                            <span class="text-primary">
-                                                @string.Join(' ', parameter.Modifiers)
-                                            </span>
-                                            <span class="text-secondary">
-                                                @parameter.Type
-                                            </span>
-                                            <span class="text-dark">
-                                                @parameter.Name
-                                            </span>
-                                        </samp>
-                                        <p class="text-muted">
-                                            <i>@parameter.DocComment</i>
-                                        </p>
-                                    }
-                                </div>
-                            }
+                            <ParametersDocumentation Parameters="@indexer.Parameters" />
 
                             <ValueDocumentation DocComment="@indexer.ValueDocComment" />
 
@@ -533,29 +490,7 @@
                                 <i>@method.SummaryDocComment</i>
                             </p>
 
-                            @if (method.Parameters.Any())
-                            {
-                                <h3 class="lead my-2">Parameters</h3>
-                                <div class="mx-2">
-                                    @foreach (var parameter in method.Parameters)
-                                    {
-                                        <samp>
-                                            <span class="text-primary">
-                                                @string.Join(' ', parameter.Modifiers)
-                                            </span>
-                                            <span class="text-secondary">
-                                                @parameter.Type
-                                            </span>
-                                            <span class="text-dark">
-                                                @parameter.Name
-                                            </span>
-                                        </samp>
-                                        <p class="text-muted">
-                                            <i>@parameter.DocComment</i>
-                                        </p>
-                                    }
-                                </div>
-                            }
+                            <ParametersDocumentation Parameters="@method.Parameters" />
 
                             @if (!method.ReturnsVoid)
                             {
@@ -644,29 +579,7 @@
                                 <i>@method.SummaryDocComment</i>
                             </p>
 
-                            @if (method.Parameters.Any())
-                            {
-                                <h3 class="lead my-2">Parameters</h3>
-                                <div class="mx-2">
-                                    @foreach (var parameter in method.Parameters)
-                                    {
-                                        <samp>
-                                            <span class="text-primary">
-                                                @string.Join(' ', parameter.Modifiers)
-                                            </span>
-                                            <span class="text-secondary">
-                                                @parameter.Type
-                                            </span>
-                                            <span class="text-dark">
-                                                @parameter.Name
-                                            </span>
-                                        </samp>
-                                        <p class="text-muted">
-                                            <i>@parameter.DocComment</i>
-                                        </p>
-                                    }
-                                </div>
-                            }
+                            <ParametersDocumentation Parameters="@method.Parameters" />
 
                             @if (!method.ReturnsVoid)
                             {
