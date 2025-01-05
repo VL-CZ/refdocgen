@@ -1,4 +1,10 @@
-@model IEnumerable<RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces.NamespaceTM>
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required IEnumerable<NamespaceTM> Model { get; set; }
+}
 
 <!DOCTYPE html>
 <html lang="en">

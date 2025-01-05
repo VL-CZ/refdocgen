@@ -1,4 +1,10 @@
-@model RefDocGen.TemplateGenerators.Default.TemplateModels.Types.EnumTypeTM
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Types
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required EnumTypeTM Model { get; set; }
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -53,7 +59,6 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <!-- <a class="nav-link active" aria-current="page" href="#">Home</a> -->
                     <a class="nav-link" href="./index.html">Home</a>
                 </div>
             </div>

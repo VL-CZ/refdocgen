@@ -1,4 +1,10 @@
-@model RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces.NamespaceTM
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required NamespaceTM Model { get; set; }
+}
 
 <!DOCTYPE html>
 <html lang="en">

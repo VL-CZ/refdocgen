@@ -23,7 +23,8 @@ public static class Program
 
         string projectPath = Path.Join(rootPath, "src", "RefDocGen");
         string templatePath = "TemplateGenerators/Default/Templates/Default";
-        string outputDir = Path.Combine(projectPath, "out");
+        //string outputDir = Path.Combine(projectPath, "out");
+        string outputDir = Path.Combine(projectPath, "out-razor");
 
         IServiceCollection services = new ServiceCollection();
         services.AddLogging();
@@ -34,7 +35,7 @@ public static class Program
         await using var htmlRenderer = new HtmlRenderer(serviceProvider, loggerFactory);
 
         //var templateGenerator = new DefaultTemplateGenerator(projectPath, templatePath, outputDir);
-        var templateGenerator = new RazorTemplateGenerator(htmlRenderer, templatePath, outputDir);
+        var templateGenerator = new RazorTemplateGenerator(htmlRenderer, outputDir);
 
         var docGenerator = new DocGenerator(dllPath, docPath, templateGenerator);
         docGenerator.GenerateDoc();
