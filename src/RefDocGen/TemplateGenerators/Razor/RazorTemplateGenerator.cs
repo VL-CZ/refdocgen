@@ -14,7 +14,19 @@ namespace RefDocGen.TemplateGenerators.Razor;
 /// <summary>
 /// Class used for generating RazorLight templates using the <see cref="ObjectTypeTM"/> as a type template model and <see cref="NamespaceTM"/> as a namespace template model.
 /// </summary>
-internal class RazorTemplateGenerator : ITemplateGenerator
+internal class RazorTemplateGenerator<
+        TDelegateTemplate,
+        TEnumTemplate,
+        TNamespaceDetailTemplate,
+        TNamespaceListTemplate,
+        TObjectTypeTemplate
+    > : ITemplateGenerator
+
+    where TDelegateTemplate : IComponent
+    where TEnumTemplate : IComponent
+    where TNamespaceDetailTemplate : IComponent
+    where TNamespaceListTemplate : IComponent
+    where TObjectTypeTemplate : IComponent
 {
     /// <summary>
     /// The directory, where the generated output will be stored.
@@ -27,7 +39,9 @@ internal class RazorTemplateGenerator : ITemplateGenerator
     /// Initialize a new instance of <see cref="DefaultTemplateGenerator"/> class.
     /// </summary>
     /// <param name="outputDir">The directory, where the generated output will be stored.</param>
-    internal RazorTemplateGenerator(HtmlRenderer htmlRenderer, string outputDir)
+    internal RazorTemplateGenerator(
+        HtmlRenderer htmlRenderer,
+        string outputDir)
     {
         this.outputDir = outputDir;
         this.htmlRenderer = htmlRenderer;
@@ -49,7 +63,7 @@ internal class RazorTemplateGenerator : ITemplateGenerator
     private void GenerateObjectTypeTemplates(IEnumerable<IObjectTypeData> types)
     {
         var typeTemplateModels = types.Select(ObjectTypeTMCreator.GetFrom);
-        GenerateTemplates<Templates.ObjectType, ObjectTypeTM>(typeTemplateModels);
+        GenerateTemplates<TObjectTypeTemplate, ObjectTypeTM>(typeTemplateModels);
     }
 
     /// <summary>
@@ -59,7 +73,7 @@ internal class RazorTemplateGenerator : ITemplateGenerator
     private void GenerateEnumTemplates(IEnumerable<IEnumTypeData> enums)
     {
         var enumTMs = enums.Select(EnumTMCreator.GetFrom);
-        GenerateTemplates<Templates.EnumType, EnumTypeTM>(enumTMs);
+        GenerateTemplates<TEnumTemplate, EnumTypeTM>(enumTMs);
     }
 
     /// <summary>
@@ -69,7 +83,7 @@ internal class RazorTemplateGenerator : ITemplateGenerator
     private void GenerateDelegateTemplates(IEnumerable<IDelegateTypeData> delegates)
     {
         var delegateTMs = delegates.Select(DelegateTMCreator.GetFrom);
-        GenerateTemplates<Templates.DelegateType, DelegateTypeTM>(delegateTMs);
+        GenerateTemplates<TDelegateTemplate, DelegateTypeTM>(delegateTMs);
     }
 
     /// <summary>
@@ -81,10 +95,10 @@ internal class RazorTemplateGenerator : ITemplateGenerator
         var namespaceTMs = NamespaceListTMCreator.GetFrom(types);
 
         // namespace list template
-        GenerateTemplate<Templates.NamespaceList, IEnumerable<NamespaceTM>>(namespaceTMs, "index");
+        GenerateTemplate<TNamespaceListTemplate, IEnumerable<NamespaceTM>>(namespaceTMs, "index");
 
         // namespace detail templates
-        GenerateTemplates<Templates.NamespaceDetail, NamespaceTM>(namespaceTMs);
+        GenerateTemplates<TNamespaceDetailTemplate, NamespaceTM>(namespaceTMs);
     }
 
     /// <summary>

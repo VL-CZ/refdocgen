@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using RazorLight.Compilation;
 using RefDocGen.TemplateGenerators.Default;
 using RefDocGen.TemplateGenerators.Razor;
+using RefDocGen.TemplateGenerators.Razor.Templates;
 
 namespace RefDocGen;
 
@@ -35,7 +36,13 @@ public static class Program
         await using var htmlRenderer = new HtmlRenderer(serviceProvider, loggerFactory);
 
         //var templateGenerator = new DefaultTemplateGenerator(projectPath, templatePath, outputDir);
-        var templateGenerator = new RazorTemplateGenerator(htmlRenderer, outputDir);
+        var templateGenerator = new RazorTemplateGenerator<
+                DelegateTypeTemplate,
+                EnumTypeTemplate,
+                NamespaceDetailTemplate,
+                NamespaceListTemplate,
+                ObjectTypeTemplate
+            >(htmlRenderer, outputDir);
 
         var docGenerator = new DocGenerator(dllPath, docPath, templateGenerator);
         docGenerator.GenerateDoc();
