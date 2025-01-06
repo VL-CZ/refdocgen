@@ -2,7 +2,10 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RefDocGen.TemplateGenerators.Default;
+
+#pragma warning disable IDE0005
 using RefDocGen.TemplateGenerators.Default.Templates;
+#pragma warning restore IDE0005
 
 namespace RefDocGen;
 
