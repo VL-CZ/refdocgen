@@ -1,0 +1,27 @@
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Types
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required IEnumerable<TypeParameterTM> TypeParameters { get; set; }
+}
+
+@if (TypeParameters.Any())
+{
+    <span class="text-success">&lt;</span>
+
+    @foreach (var p in TypeParameters)
+    {
+        @if (p.Modifiers.Any())
+        {
+            <span class="text-primary">
+                @string.Join(' ', p.Modifiers)
+            </span>
+        }
+        <span class="text-secondary">
+            @p.Name
+        </span>
+    }
+
+    <span class="text-success">&gt;</span>
+}

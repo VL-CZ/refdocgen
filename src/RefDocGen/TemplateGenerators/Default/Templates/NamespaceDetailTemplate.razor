@@ -1,4 +1,10 @@
-@model IEnumerable<RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces.NamespaceTM>
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required NamespaceTM Model { get; set; }
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -62,47 +68,77 @@
 
         <h1 class="display-4">
             <samp>
-                <span class="text-dark">Namespace list</span>
+                <span class="text-primary">namespace</span>
+                <span class="text-dark">@Model.Name</span>
             </samp>
         </h1>
         <hr />
 
-        @foreach (var ns in Model)
+        <!-- Classes -->
+        @if (Model.Classes.Any())
         {
-            var namespaceUrl = $"./{ns.Id}.html";
-
-            <h1 class="display-6">
-                <samp>
-                    <a href="@namespaceUrl" class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
-                        <span class="text-primary">namespace</span>
-                        <span class="text-dark">@ns.Name</span>
-                    </a>
-                </samp>
-            </h1>
-
-            <hr />
-
+            <h2 class="display-5">Classes</h2>
             <table class="table">
                 <tbody>
-                    @foreach (var type in ns.AllTypes)
+                    @foreach (var type in Model.Classes)
                     {
-                        var typeUrl = $"./{type.Id}.html";
+                        <TypeNameRow Type="@type" />
+                    }
+                </tbody>
+            </table>
+        }
 
-                        <tr>
-                            <td class="w-50">
-                                <samp>
-                                    <a href="@typeUrl" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
-                                        <span class="text-primary">
-                                            @type.TypeKindName
-                                        </span>
-                                        @type.Name
-                                    </a>
-                                </samp>
-                            </td>
-                            <td class="text-muted">
-                                <i>@type.DocComment</i>
-                            </td>
-                        </tr>
+        <!-- Structures -->
+        @if (Model.ValueTypes.Any())
+        {
+            <h2 class="display-5">Structs</h2>
+            <table class="table">
+                <tbody>
+                    @foreach (var type in Model.ValueTypes)
+                    {
+                        <TypeNameRow Type="@type" />
+                    }
+                </tbody>
+            </table>
+        }
+
+        <!-- Interfaces -->
+        @if (Model.Interfaces.Any())
+        {
+            <h2 class="display-5">Interfaces</h2>
+            <table class="table">
+                <tbody>
+                    @foreach (var type in Model.Interfaces)
+                    {
+                        <TypeNameRow Type="@type" />
+                    }
+                </tbody>
+            </table>
+        }
+
+        <!-- Enums -->
+        @if (Model.Enums.Any())
+        {
+            <h2 class="display-5">Enums</h2>
+            <table class="table">
+                <tbody>
+                    @foreach (var type in Model.Enums)
+                    {
+                        <TypeNameRow Type="@type" />
+                    }
+                </tbody>
+            </table>
+        }
+
+        <!-- Delegates -->
+        @if (Model.Delegates.Any())
+        {
+            <h2 class="display-5">Delegates</h2>
+            <table class="table">
+                <tbody>
+                    @foreach (var type in Model.Delegates)
+                    {
+                        <TypeNameRow Type="@type" />
                     }
                 </tbody>
             </table>

@@ -1,0 +1,14 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required string DocComment { get; set; }
+}
+
+@if (DocComment.Length > 0)
+{
+    <div class="mt-3">
+        <div class="lead">Remarks</div>
+        <i>@DocComment</i>
+    </div>
+}

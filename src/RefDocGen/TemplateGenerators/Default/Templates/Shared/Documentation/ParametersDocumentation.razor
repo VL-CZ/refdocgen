@@ -1,0 +1,31 @@
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Members
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required IEnumerable<ParameterTM> Parameters { get; set; }
+}
+
+@if (Parameters.Any())
+{
+    <h3 class="lead my-2">Parameters</h3>
+    <div class="mx-2">
+        @foreach (var parameter in Parameters)
+        {
+            <samp>
+                <span class="text-primary">
+                    @string.Join(' ', parameter.Modifiers)
+                </span>
+                <span class="text-secondary">
+                    @parameter.Type
+                </span>
+                <span class="text-dark">
+                    @parameter.Name
+                </span>
+            </samp>
+            <p class="text-muted">
+                <i>@parameter.DocComment</i>
+            </p>
+        }
+    </div>
+}
