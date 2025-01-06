@@ -22,12 +22,12 @@ public static class Program
         string docPath = Path.Join(rootPath, "demo-lib", "MyLibrary.xml");
 
         string projectPath = Path.Join(rootPath, "src", "RefDocGen");
-        string templatePath = "TemplateGenerators/Default/Templates/Default";
+        //string templatePath = "TemplateGenerators/Default/Templates/Default";
         //string outputDir = Path.Combine(projectPath, "out");
         string outputDir = Path.Combine(projectPath, "out-razor");
 
         IServiceCollection services = new ServiceCollection();
-        services.AddLogging();
+        _ = services.AddLogging();
 
         IServiceProvider serviceProvider = services.BuildServiceProvider();
         var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
