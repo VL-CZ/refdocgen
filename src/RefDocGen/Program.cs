@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using RefDocGen.TemplateGenerators.Default;
 using RefDocGen.TemplateGenerators.Default.Templates;
 
-
 namespace RefDocGen;
 
 /// <summary>
