@@ -16,8 +16,12 @@
             <samp>
                 <span class="text-primary">where</span>
                 <span class="text-secondary">@tp.Name : </span>
-                <span class="text-primary">@string.Join(", ", tp.SpecialConstraints),</span>
-                <span class="text-secondary">@string.Join(", ", tp.TypeConstraints)</span>
+                <span class="text-primary">@string.Join(", ", tp.SpecialConstraints)</span>
+
+                @if (tp.TypeConstraints.Any())
+                {
+                    <span class="text-secondary">, @string.Join(", ", tp.TypeConstraints)</span>
+                }
             </samp>
         </h6>
     }

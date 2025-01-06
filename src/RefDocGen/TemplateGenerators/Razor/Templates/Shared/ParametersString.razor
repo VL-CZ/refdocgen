@@ -6,56 +6,42 @@
     public required IEnumerable<ParameterTM> Parameters { get; set; }
 }
 
-@{
-    var lastParam = Parameters.Last();
-}
+<span class="text-dark">(</span>
 
-@foreach (var p in Parameters)
+@if (Parameters.Any())
 {
-    <span class="text-primary">
-        @string.Join(' ', p.Modifiers)
-    </span>
-    <span> </span>
-    <span class="text-secondary">@p.Type</span>
-    <span>
+    var lastParam = Parameters.Last();
 
-    </span>
-
-    @if (p == lastParam)
+    foreach (var p in Parameters)
     {
+        @if (p.Modifiers.Any())
+        {
+            <span class="text-primary">
+                @string.Join(' ', p.Modifiers)
+            </span>
+            <span></span>
+        }
+
+        <span class="text-secondary">
+            @p.Type
+        </span>
+        <span></span>
+
+        <span class="text-dark">
+            @p.Name
+        </span>
+
         if (p.DefaultValue is not null)
         {
-            <span class="text-dark">
-                @p.Name
+            <span class="text-secondary"> = </span>
+            <span class="text-success">@p.DefaultValue</span>
+        }
 
-                <span class="text-secondary">=</span>
-                <span class="text-success">@p.DefaultValue</span>
-                <span class="text-secondary">)</span>
-            </span>
-        }
-        else
+        if (p != lastParam)
         {
-            <span class="text-dark">
-                @p.Name<span class="text-secondary">)</span>
-            </span>
-        }
-    }
-    else
-    {
-        if (p.DefaultValue is not null)
-        {
-            <span class="text-dark">
-                @p.Name
-                <span class="text-secondary">=</span>
-                <span class="text-success">@p.DefaultValue</span>
-                ,
-            </span>
-        }
-        else
-        {
-            <span class="text-dark">
-                @p.Name,
-            </span>
+            <span class="text-dark">, </span>
         }
     }
 }
+
+<span class="text-dark">)</span>

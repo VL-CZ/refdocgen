@@ -8,18 +8,20 @@
 
 @if (TypeParameters.Any())
 {
-    <span class="text-secondary">&lt;</span>
+    <span class="text-success">&lt;</span>
 
     @foreach (var p in TypeParameters)
     {
-        <span class="text-primary">
-            @string.Join(' ', p.Modifiers)
-        </span>
-        <span> </span>
+        @if (p.Modifiers.Any())
+        {
+            <span class="text-primary">
+                @string.Join(' ', p.Modifiers)
+            </span>
+        }
         <span class="text-secondary">
             @p.Name
         </span>
     }
 
-    <span class="text-secondary">&gt;</span>
+    <span class="text-success">&gt;</span>
 }

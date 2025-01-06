@@ -129,22 +129,11 @@
                                     <span class="text-primary">
                                         @string.Join(' ', constructor.Modifiers)
                                     </span>
-                                    <span class="text-secondary">
-                                        @if (constructor.Parameters.Any())
-                                        {
-                                            var lastParam = constructor.Parameters.Last();
-
-                                            <span class="text-dark">
-                                                @Model.Name<span class="text-secondary">(</span>
-                                            </span>
-
-                                            <ParametersString Parameters="@constructor.Parameters" />
-                                        }
-                                        else
-                                        {
-                                            <span class="text-dark">@Model.Name<span class="text-secondary">()</span></span>
-                                        }
+                                    <span class="text-dark">
+                                        @Model.Name
                                     </span>
+
+                                    <ParametersString Parameters="@constructor.Parameters" />
                                 </samp>
 
                             </h6>
@@ -381,28 +370,13 @@
                                     <span class="text-secondary">
                                         @method.ReturnType
                                     </span>
-                                    <span class="text-secondary">
-                                        @if (method.Parameters.Any())
-                                        {
-                                            var lastParam = method.Parameters.Last();
-
-                                            <span class="text-dark">
-                                                @method.Name<span class="text-secondary">(</span>
-                                            </span>
-
-                                            <ParametersString Parameters="@method.Parameters" />
-                                        }
-                                        else
-                                        {
-                                            <span class="text-dark">@method.Name<span class="text-secondary">()</span></span>
-                                        }
-
-                                        @* TODO: move up *@
-                                        <TypeParametersString TypeParameters="@method.TypeParameters" />
-
+                                    <span class="text-dark">
+                                        @method.Name
                                     </span>
-                                </samp>
+                                    <TypeParametersString TypeParameters="@method.TypeParameters" />
+                                    <ParametersString Parameters="@method.Parameters" />
 
+                                </samp>
                             </h6>
                             <p class="text-muted mb-0">
                                 <i>@method.SummaryDocComment</i>
@@ -442,22 +416,11 @@
                                     <span class="text-secondary">
                                         @method.ReturnType
                                     </span>
-                                    <span class="text-secondary">
-                                        @if (method.Parameters.Any())
-                                        {
-                                            var lastParam = method.Parameters.Last();
-
-                                            <span class="text-dark">
-                                                @method.Name<span class="text-secondary">(</span>
-                                            </span>
-
-                                            <ParametersString Parameters="@method.Parameters" />
-                                        }
-                                        else
-                                        {
-                                            <span class="text-dark">@method.Name<span class="text-secondary">()</span></span>
-                                        }
+                                    <span class="text-dark">
+                                        @method.Name
                                     </span>
+
+                                    <ParametersString Parameters="@method.Parameters" />
                                 </samp>
 
                             </h6>
