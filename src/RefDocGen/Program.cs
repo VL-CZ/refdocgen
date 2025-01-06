@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using RazorLight.Compilation;
 using RefDocGen.TemplateGenerators.Default;
-using RefDocGen.TemplateGenerators.Razor;
-using RefDocGen.TemplateGenerators.Razor.Templates;
+using RefDocGen.TemplateGenerators.Default.Templates;
+
 
 namespace RefDocGen;
 

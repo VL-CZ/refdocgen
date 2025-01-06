@@ -4,13 +4,12 @@ using RefDocGen.CodeElements.Abstract;
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.Delegate;
 using RefDocGen.CodeElements.Abstract.Types.Enum;
-using RefDocGen.TemplateGenerators.Default;
 using RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Tools;
 
-namespace RefDocGen.TemplateGenerators.Razor;
+namespace RefDocGen.TemplateGenerators.Default;
 
 /// <summary>
 /// Class used for generating Razor templates using the <see cref="ObjectTypeTM"/> as a type template model and <see cref="NamespaceTM"/> as a namespace template model.
@@ -48,7 +47,7 @@ internal class RazorTemplateGenerator<
     private HtmlCommentParser htmlCommentParser = new();
 
     /// <summary>
-    /// Initialize a new instance of <see cref="DefaultTemplateGenerator"/> class.
+    /// Initialize a new instance of <see cref="RazorTemplateGenerator{TDelegateTemplate, TEnumTemplate, TNamespaceDetailTemplate, TNamespaceListTemplate, TObjectTypeTemplate}"/> class.
     /// </summary>
     /// <param name="htmlRenderer">Rendered of the Razor components.</param>
     /// <param name="outputDir">The directory, where the generated output will be stored.</param>
