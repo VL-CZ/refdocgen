@@ -4,23 +4,68 @@ using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Concrete.Types.Delegate;
 using RefDocGen.CodeElements.Concrete.Types.Enum;
 using RefDocGen.DocExtraction.Tools;
+using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 
 namespace RefDocGen.TemplateGenerators.Tools;
 
 internal abstract class DefaultCommentParser
 {
-    private readonly ITypeRegistry typeRegistry;
+    private XElement GetEmptyDescendant(XElement element)
+    {
+        return element.Descendants().Single(n => n.IsEmpty);
+    }
 
-    protected abstract XElement BulletListElement { get; }
-    protected abstract XElement NumberListElement { get; }
+    private void Annotate(XElement element)
+    {
+        var attribute = new XAttribute("refdocgen-generated", true);
 
-    public DefaultCommentParser(ITypeRegistry typeRegistry)
+        element.Add(attribute);
+
+        foreach (var e in element.Elements())
+        {
+            Annotate(e);
+        }
+    }
+
+    protected readonly ITypeRegistry typeRegistry;
+
+    protected virtual XElement ParagraphElement => new("p");
+
+    protected virtual XElement BulletListElement => new("ul");
+
+    protected virtual XElement NumberListElement => new("ol");
+
+    protected virtual XElement ListItemElement => new("li");
+
+    protected virtual XElement InlineCodeElement => new("code");
+
+    protected virtual XElement CodeBlockElement => new("pre",
+                                                        new XElement("code")
+                                                    );
+
+    protected virtual XElement ExampleElement => new("div");
+
+    protected virtual XElement ParamRefElement => new("xxx");
+
+    protected virtual XElement TypeParamRefElement => new("code");
+
+    protected virtual XElement SeeCrefElement => new("a");
+
+    protected virtual XElement SeeHrefElement => new("a");
+
+    protected virtual XElement SeeLangwordElement => new("a");
+
+    protected virtual XElement SeeCrefNotFoundElement => new("code");
+
+    private string[] toRemove = ["summary", "remarks", "returns", "exception", "value"];
+
+    protected DefaultCommentParser(ITypeRegistry typeRegistry)
     {
         this.typeRegistry = typeRegistry;
     }
 
-    public DefaultCommentParser() // TODO: code smell
+    protected DefaultCommentParser() // TODO: code smell
     {
         typeRegistry = new TypeRegistry(
                 new Dictionary<string, ObjectTypeData>(),
@@ -28,28 +73,6 @@ internal abstract class DefaultCommentParser
                 new Dictionary<string, DelegateTypeData>()
             );
     }
-
-    private readonly Dictionary<string, string> tags = new()
-    {
-        ["summary"] = "div",
-        ["remarks"] = "div",
-
-        ["returns"] = "div",
-        ["param"] = "div",
-        ["value"] = "div",
-
-        ["para"] = "p",
-        ["c"] = "code",
-        ["item"] = "li",
-
-        ["typeparam"] = "div",
-
-        //["example"] = "div",
-        //["description"] = "p",
-        //["term"] = "strong",
-        //["inheritdoc"] = "div",
-        //["permission"] = "div",
-    };
 
     internal string Parse(XElement docComment)
     {
@@ -59,33 +82,53 @@ internal abstract class DefaultCommentParser
 
     private void ParseElement(XElement element)
     {
-        if (element.Name == "list")
+        if (element.Attribute("refdocgen-generated") is null)
         {
-            HandleListElement(element);
-        }
-        else if (element.Name == "code")
-        {
-            HandleCodeElement(element);
-        }
-        else if (element.Name == "see")
-        {
-            HandleSeeElement(element);
-        }
-        else if (element.Name == "seealso")
-        {
-            HandleSeeElement(element);
-        }
-        else if (element.Name == "paramref")
-        {
-            HandleParamRefElement(element);
-        }
-        else if (element.Name == "typeparamref")
-        {
-            HandleTypeParamRefElement(element);
-        }
-        else if (tags.TryGetValue(element.Name.ToString(), out string? htmlName))
-        {
-            element.Name = htmlName;
+
+            if (element.Name == "para")
+            {
+                HandleParagraphElement(element);
+            }
+            else if (element.Name == "list")
+            {
+                HandleListElement(element);
+            }
+            else if (element.Name == "item")
+            {
+                HandleListItemElement(element);
+            }
+            else if (element.Name == "c")
+            {
+                HandleInlineCodeElement(element);
+            }
+            else if (element.Name == "code")
+            {
+                HandleCodeBlockElement(element);
+            }
+            else if (element.Name == "example")
+            {
+                HandleExampleElement(element);
+            }
+            else if (element.Name == "see")
+            {
+                HandleSeeElement(element);
+            }
+            else if (element.Name == "seealso")
+            {
+                HandleSeeElement(element); // TODO: add
+            }
+            else if (element.Name == "paramref")
+            {
+                HandleParamRefElement(element);
+            }
+            else if (element.Name == "typeparamref")
+            {
+                HandleTypeParamRefElement(element);
+            }
+            else if (toRemove.Contains(element.Name.LocalName))
+            {
+                element.Name = "div";
+            }
         }
 
         foreach (var child in element.Elements())
@@ -94,7 +137,7 @@ internal abstract class DefaultCommentParser
         }
     }
 
-    private void HandleListElement(XElement element)
+    protected virtual void HandleListElement(XElement element)
     {
         string listType = element.Attribute("type")?.Value ?? "bullet";
 
@@ -107,376 +150,193 @@ internal abstract class DefaultCommentParser
 
         if (types.TryGetValue(listType, out var newElement))
         {
-            newElement.Add(element.Nodes());
-            element.ReplaceWith(newElement);
+            element.ReplaceAttributes(newElement.Attributes());
+            element.Name = newElement.Name;
         }
-
     }
 
-    private void HandleCodeElement(XElement element)
+    protected virtual void HandleListItemElement(XElement element)
+    {
+        element.Name = ListItemElement.Name;
+    }
+
+    protected virtual void HandleParagraphElement(XElement element)
+    {
+        element.Name = ParagraphElement.Name;
+    }
+
+    protected virtual void HandleInlineCodeElement(XElement element)
+    {
+        element.Name = InlineCodeElement.Name;
+    }
+
+    protected virtual void HandleCodeBlockElement(XElement element)
     {
         if (element.Attribute("skip") is not null)
         {
             return;
         }
 
-        element.Name = "pre";
-        var children = element.Nodes();
+        var newElement = CodeBlockElement;
 
-        var codeElement = new XElement("code", new XAttribute("skip", true));
-        codeElement.Add(children);
+        Annotate(newElement);
+        var deepestChild = GetEmptyDescendant(newElement);
+        var elementNodes = element.Nodes().ToList();
+        deepestChild.Add(elementNodes);
 
-        element.RemoveNodes();
-        element.Add(codeElement);
+        element.Name = newElement.Name;
+        element.ReplaceAttributes(newElement.Attributes());
+        element.ReplaceNodes(newElement.Nodes());
     }
 
-    private void HandleSeeElement(XElement element)
+    protected virtual void HandleExampleElement(XElement element)
     {
-        if (element.Attribute("href") is XAttribute hrefAttr)
+        element.Name = ExampleElement.Name;
+    }
+
+    protected virtual void HandleSeeElement(XElement element)
+    {
+        if (element.Attribute(XmlDocIdentifiers.Href) is XAttribute hrefAttr)
         {
-            element.Name = "a";
+            HandleAnySeeHrefElement(element, hrefAttr.Value);
+        }
+        else if (element.Attribute(XmlDocIdentifiers.Cref) is XAttribute crefAttr)
+        {
+            HandleAnySeeCrefElement(element, crefAttr.Value);
+        }
+        else if (element.Attribute(XmlDocIdentifiers.Langword) is XAttribute langwordAttr)
+        {
+            HandleAnySeeLangwordElement(element, langwordAttr.Value);
+        }
+    }
+
+    protected virtual void HandleAnySeeHrefElement(XElement element, string hrefValue)
+    {
+        element.Name = SeeHrefElement.Name;
+
+        if (!element.Nodes().Any())
+        {
+            element.Add(hrefValue);
+        }
+    }
+
+    protected virtual void HandleAnySeeLangwordElement(XElement element, string langword)
+    {
+        element.RemoveAttributes();
+        element.Name = SeeLangwordElement.Name;
+
+        element.Add(new XText(langword));
+    }
+
+    protected virtual void HandleAnySeeCrefElement(XElement element, string crefValue)
+    {
+        element.RemoveAttributes();
+
+        string[] splitMemberName = crefValue.Split(':');
+        (string objectIdentifier, string fullObjectName) = (splitMemberName[0], splitMemberName[1]);
+
+        string typeId;
+        string? memberId = null;
+
+        if (objectIdentifier == MemberTypeId.Type) // type
+        {
+            typeId = fullObjectName;
+        }
+        else if (objectIdentifier == "!") // reference not found
+        {
+            HandleNotFoundCrefElement(element, fullObjectName);
+            return;
+        }
+        else // member
+        {
+            (typeId, string memberName, string paramsString) = MemberSignatureParser.Parse(fullObjectName);
+            memberId = memberName + paramsString;
+        }
+
+        // type found
+        if (typeRegistry.GetDeclaredType(typeId) is not null)
+        {
+            element.Name = SeeCrefElement.Name;
+
+            string target = typeId + ".html";
+
+            // TODO: check if member is found
+
+            if (memberId is not null)
+            {
+                target += $"#{memberId}";
+            }
+
+            element.Add(
+                new XAttribute("href", target)
+            );
+
+            // no child nodes -> add cref 
+            if (!element.Nodes().Any())
+            {
+                element.Add(new XText(target));
+            }
+        }
+        else // type not found
+        {
+            element.Name = "code";
 
             if (!element.Nodes().Any())
             {
-                element.Add(new XText(hrefAttr.Value));
-            }
-
-            return;
-        }
-        else if (element.TryGetAttribute("langword", out var attr))
-        {
-            element.RemoveAttributes();
-            element.Name = "code";
-
-            element.Add(new XText(attr.Value));
-        }
-        else if (element.TryGetCrefAttribute(out var codeRefAttr))
-        {
-            element.RemoveAttributes();
-
-            string[] splitMemberName = codeRefAttr.Value.Split(':');
-            (string objectIdentifier, string fullObjectName) = (splitMemberName[0], splitMemberName[1]);
-
-            string typeId;
-            string? memberId = null;
-
-            if (objectIdentifier == MemberTypeId.Type) // type
-            {
-                typeId = fullObjectName;
-            }
-            else if (objectIdentifier == "!") // reference not found
-            {
-                element.Name = "span";
-
-                // no child nodes -> add cref 
-                if (!element.Nodes().Any())
-                {
-                    element.Add(new XText(fullObjectName));
-                }
-                return;
-            }
-            else // member
-            {
-                (typeId, string memberName, string paramsString) = MemberSignatureParser.Parse(fullObjectName);
-                memberId = memberName + paramsString;
-            }
-
-            // type found
-            if (typeRegistry.GetDeclaredType(typeId) is not null)
-            {
-                element.Name = "a";
-
-                string target = typeId + ".html";
-
-                // TODO: check if member is found
-
-                if (memberId is not null)
-                {
-                    target += $"#{memberId}";
-                }
-
-                element.Add(
-                    new XAttribute("href", target)
-                );
-
-                // no child nodes -> add cref 
-                if (!element.Nodes().Any())
-                {
-                    element.Add(new XText(target));
-                }
-            }
-            else // type not found
-            {
-                element.Name = "code";
-
-                if (!element.Nodes().Any())
-                {
-                    element.Add(new XText(fullObjectName));
-                }
+                element.Add(new XText(fullObjectName));
             }
         }
     }
 
-    private void HandleParamRefElement(XElement element)
+    protected virtual void HandleNotFoundCrefElement(XElement element, string crefValue)
     {
-        string? name = element.Attribute("name")?.Value;
+        element.Name = SeeCrefNotFoundElement.Name;
+
+        // no child nodes -> add cref 
+        if (!element.Nodes().Any())
+        {
+            element.Add(new XText(crefValue));
+        }
+    }
+
+    protected virtual void HandleParamRefElement(XElement element)
+    {
+        HandleAnyParamRefElement(element, ParamRefElement);
+    }
+
+    protected virtual void HandleTypeParamRefElement(XElement element)
+    {
+        HandleAnyParamRefElement(element, TypeParamRefElement);
+    }
+
+    protected virtual void HandleAnyParamRefElement(XElement element, XElement htmlElement)
+    {
+        string? name = element.Attribute(XmlDocIdentifiers.Name)?.Value;
 
         if (name is null)
         {
             return;
         }
 
-        element.Name = "code";
-        element.RemoveAttributes();
-        element.Add(new XText(name));
-    }
+        element.ReplaceAttributes(htmlElement.Attributes());
+        element.Name = htmlElement.Name;
 
-    private void HandleTypeParamRefElement(XElement element)
-    {
-        string? name = element.Attribute("name")?.Value;
-
-        if (name is null)
-        {
-            return;
-        }
-
-        element.Name = "code";
-        element.RemoveAttributes();
         element.Add(new XText(name));
     }
 }
 
-internal class HtmlCommentParser
+internal class HtmlCommentParser : DefaultCommentParser
 {
-    private readonly ITypeRegistry typeRegistry;
-
-    public HtmlCommentParser(ITypeRegistry typeRegistry)
+    public HtmlCommentParser()
     {
-        this.typeRegistry = typeRegistry;
     }
 
-    public HtmlCommentParser() // TODO: code smell
+    public HtmlCommentParser(ITypeRegistry typeRegistry) : base(typeRegistry)
     {
-        typeRegistry = new TypeRegistry(
-                new Dictionary<string, ObjectTypeData>(),
-                new Dictionary<string, EnumTypeData>(),
-                new Dictionary<string, DelegateTypeData>()
-            );
     }
 
-    private readonly Dictionary<string, string> tags = new()
-    {
-        ["summary"] = "div",
-        ["remarks"] = "div",
-
-        ["returns"] = "div",
-        ["param"] = "div",
-        ["value"] = "div",
-
-        ["para"] = "p",
-        ["c"] = "code",
-        ["item"] = "li",
-
-        ["typeparam"] = "div",
-
-        //["example"] = "div",
-        //["description"] = "p",
-        //["term"] = "strong",
-        //["inheritdoc"] = "div",
-        //["permission"] = "div",
-    };
-
-    internal string Parse(XElement docComment)
-    {
-        ParseElement(docComment);
-        return docComment.ToString();
-    }
-
-    private void ParseElement(XElement element)
-    {
-        if (element.Name == "list")
-        {
-            HandleListElement(element);
-        }
-        else if (element.Name == "code")
-        {
-            HandleCodeElement(element);
-        }
-        else if (element.Name == "see")
-        {
-            HandleSeeElement(element);
-        }
-        else if (element.Name == "seealso")
-        {
-            HandleSeeElement(element);
-        }
-        else if (element.Name == "paramref")
-        {
-            HandleParamRefElement(element);
-        }
-        else if (element.Name == "typeparamref")
-        {
-            HandleTypeParamRefElement(element);
-        }
-        else if (tags.TryGetValue(element.Name.ToString(), out string? htmlName))
-        {
-            element.Name = htmlName;
-        }
-
-        foreach (var child in element.Elements())
-        {
-            ParseElement(child);
-        }
-    }
-
-    private void HandleListElement(XElement element)
-    {
-        string listType = element.Attribute("type")?.Value ?? "bullet";
-
-        var types = new Dictionary<string, string>()
-        {
-            ["bullet"] = "ul",
-            ["number"] = "ol",
-            ["table"] = "ul", // TODO: add 
-        };
-
-        if (types.TryGetValue(listType, out string? newName))
-        {
-            element.Name = newName;
-            element.RemoveAttributes();
-        }
-
-    }
-
-    private void HandleCodeElement(XElement element)
-    {
-        if (element.Attribute("skip") is not null)
-        {
-            return;
-        }
-
-        element.Name = "pre";
-        var children = element.Nodes();
-
-        var codeElement = new XElement("code", new XAttribute("skip", true));
-        codeElement.Add(children);
-
-        element.RemoveNodes();
-        element.Add(codeElement);
-    }
-
-    private void HandleSeeElement(XElement element)
-    {
-        if (element.Attribute("href") is XAttribute hrefAttr)
-        {
-            element.Name = "a";
-
-            if (!element.Nodes().Any())
-            {
-                element.Add(new XText(hrefAttr.Value));
-            }
-
-            return;
-        }
-        else if (element.TryGetAttribute("langword", out var attr))
-        {
-            element.RemoveAttributes();
-            element.Name = "code";
-
-            element.Add(new XText(attr.Value));
-        }
-        else if (element.TryGetCrefAttribute(out var codeRefAttr))
-        {
-            element.RemoveAttributes();
-
-            string[] splitMemberName = codeRefAttr.Value.Split(':');
-            (string objectIdentifier, string fullObjectName) = (splitMemberName[0], splitMemberName[1]);
-
-            string typeId;
-            string? memberId = null;
-
-            if (objectIdentifier == MemberTypeId.Type) // type
-            {
-                typeId = fullObjectName;
-            }
-            else if (objectIdentifier == "!") // reference not found
-            {
-                element.Name = "span";
-
-                // no child nodes -> add cref 
-                if (!element.Nodes().Any())
-                {
-                    element.Add(new XText(fullObjectName));
-                }
-                return;
-            }
-            else // member
-            {
-                (typeId, string memberName, string paramsString) = MemberSignatureParser.Parse(fullObjectName);
-                memberId = memberName + paramsString;
-            }
-
-            // type found
-            if (typeRegistry.GetDeclaredType(typeId) is not null)
-            {
-                element.Name = "a";
-
-                string target = typeId + ".html";
-
-                // TODO: check if member is found
-
-                if (memberId is not null)
-                {
-                    target += $"#{memberId}";
-                }
-
-                element.Add(
-                    new XAttribute("href", target)
-                );
-
-                // no child nodes -> add cref 
-                if (!element.Nodes().Any())
-                {
-                    element.Add(new XText(target));
-                }
-            }
-            else // type not found
-            {
-                element.Name = "code";
-
-                if (!element.Nodes().Any())
-                {
-                    element.Add(new XText(fullObjectName));
-                }
-            }
-        }
-    }
-
-    private void HandleParamRefElement(XElement element)
-    {
-        string? name = element.Attribute("name")?.Value;
-
-        if (name is null)
-        {
-            return;
-        }
-
-        element.Name = "code";
-        element.RemoveAttributes();
-        element.Add(new XText(name));
-    }
-
-    private void HandleTypeParamRefElement(XElement element)
-    {
-        string? name = element.Attribute("name")?.Value;
-
-        if (name is null)
-        {
-            return;
-        }
-
-        element.Name = "code";
-        element.RemoveAttributes();
-        element.Add(new XText(name));
-    }
+    protected override XElement ParamRefElement =>
+        new(
+            "code",
+            new XAttribute("class", "text-light bg-dark")); // TODO: just for demo, remove afterwards
 }

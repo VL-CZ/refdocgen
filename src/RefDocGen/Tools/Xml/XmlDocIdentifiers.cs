@@ -56,6 +56,16 @@ internal static class XmlDocIdentifiers
     public const string Cref = "cref";
 
     /// <summary>
+    /// Represents the 'href' identifier.
+    /// </summary>
+    public const string Href = "href";
+
+    /// <summary>
+    /// Represents the 'href' identifier.
+    /// </summary>
+    public const string Langword = "langword";
+
+    /// <summary>
     /// Represents the 'inheritdoc' identifier.
     /// </summary>
     public const string InheritDoc = "inheritdoc";
