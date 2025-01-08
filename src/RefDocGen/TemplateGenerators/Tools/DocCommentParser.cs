@@ -1,16 +1,22 @@
 using RefDocGen.CodeElements.Abstract;
+using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Concrete;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Concrete.Types.Delegate;
 using RefDocGen.CodeElements.Concrete.Types.Enum;
 using RefDocGen.DocExtraction.Tools;
+using RefDocGen.TemplateGenerators.Tools.TypeName;
 using RefDocGen.Tools.Xml;
-using System;
 using System.Xml.Linq;
 
 namespace RefDocGen.TemplateGenerators.Tools;
 
-internal abstract class DefaultCommentParser
+internal interface IDocCommentParser
+{
+    string ToHtmlString(XElement docComment);
+}
+
+internal abstract class DefaultDocCommentParser : IDocCommentParser
 {
 
     /// <summary>
@@ -92,12 +98,12 @@ internal abstract class DefaultCommentParser
 
     private readonly string[] toRemove = ["summary", "remarks", "returns", "exception", "value"];
 
-    protected DefaultCommentParser(ITypeRegistry typeRegistry)
+    protected DefaultDocCommentParser(ITypeRegistry typeRegistry)
     {
         this.typeRegistry = typeRegistry;
     }
 
-    protected DefaultCommentParser() // TODO: code smell
+    protected DefaultDocCommentParser() // TODO: code smell
     {
         typeRegistry = new TypeRegistry(
                 new Dictionary<string, ObjectTypeData>(),
@@ -106,7 +112,7 @@ internal abstract class DefaultCommentParser
             );
     }
 
-    internal string ToHtmlString(XElement docComment)
+    public string ToHtmlString(XElement docComment)
     {
         var parsed = TransformToHtml(docComment);
         return parsed.ToString();
@@ -120,43 +126,43 @@ internal abstract class DefaultCommentParser
         {
             if (element.Name == "para")
             {
-                transformedElement = HandleParagraphElement(element);
+                transformedElement = TransformParagraphElement(element);
             }
             else if (element.Name == "list")
             {
-                transformedElement = HandleListElement(element);
+                transformedElement = TransformListElement(element);
             }
             else if (element.Name == "item")
             {
-                transformedElement = HandleListItemElement(element);
+                transformedElement = TransformListItemElement(element);
             }
             else if (element.Name == "c")
             {
-                transformedElement = HandleInlineCodeElement(element);
+                transformedElement = TransformInlineCodeElement(element);
             }
             else if (element.Name == "code")
             {
-                transformedElement = HandleCodeBlockElement(element);
+                transformedElement = TransformCodeBlockElement(element);
             }
             else if (element.Name == "example")
             {
-                transformedElement = HandleExampleElement(element);
+                transformedElement = TransformExampleElement(element);
             }
             else if (element.Name == "see")
             {
-                transformedElement = HandleSeeElement(element);
+                transformedElement = TransformSeeElement(element);
             }
             else if (element.Name == "seealso")
             {
-                transformedElement = HandleSeeElement(element); // TODO: add
+                transformedElement = TransformSeeElement(element); // TODO: add
             }
             else if (element.Name == "paramref")
             {
-                transformedElement = HandleParamRefElement(element);
+                transformedElement = TransformParamRefElement(element);
             }
             else if (element.Name == "typeparamref")
             {
-                transformedElement = HandleTypeParamRefElement(element);
+                transformedElement = TransformTypeParamRefElement(element);
             }
             else if (toRemove.Contains(element.Name.LocalName))
             {
@@ -179,7 +185,7 @@ internal abstract class DefaultCommentParser
         return transformedElement;
     }
 
-    protected virtual XElement HandleListElement(XElement element)
+    protected virtual XElement TransformListElement(XElement element)
     {
         string listType = element.Attribute("type")?.Value ?? "bullet";
 
@@ -195,44 +201,44 @@ internal abstract class DefaultCommentParser
             : element;
     }
 
-    protected virtual XElement HandleListItemElement(XElement element)
+    protected virtual XElement TransformListItemElement(XElement element)
     {
         return Transform(element, ListItemElement);
     }
 
-    protected virtual XElement HandleParagraphElement(XElement element)
+    protected virtual XElement TransformParagraphElement(XElement element)
     {
         return Transform(element, ParagraphElement);
     }
 
-    protected virtual XElement HandleInlineCodeElement(XElement element)
+    protected virtual XElement TransformInlineCodeElement(XElement element)
     {
         return Transform(element, InlineCodeElement);
     }
 
-    protected virtual XElement HandleCodeBlockElement(XElement element)
+    protected virtual XElement TransformCodeBlockElement(XElement element)
     {
         return Transform(element, CodeBlockElement);
     }
 
-    protected virtual XElement HandleExampleElement(XElement element)
+    protected virtual XElement TransformExampleElement(XElement element)
     {
         return Transform(element, ExampleElement);
     }
 
-    protected virtual XElement HandleSeeElement(XElement element)
+    protected virtual XElement TransformSeeElement(XElement element)
     {
         if (element.Attribute(XmlDocIdentifiers.Href) is XAttribute hrefAttr)
         {
-            return HandleAnySeeHrefElement(element, hrefAttr.Value);
+            return TransformAnySeeHrefElement(element, hrefAttr.Value);
         }
         else if (element.Attribute(XmlDocIdentifiers.Cref) is XAttribute crefAttr)
         {
-            return HandleAnySeeCrefElement(element, crefAttr.Value);
+            return TransformAnySeeCrefElement(element, crefAttr.Value);
         }
         else if (element.Attribute(XmlDocIdentifiers.Langword) is XAttribute langwordAttr)
         {
-            return HandleAnySeeLangwordElement(element, langwordAttr.Value);
+            return TransformAnySeeLangwordElement(element, langwordAttr.Value);
         }
         else
         {
@@ -240,7 +246,7 @@ internal abstract class DefaultCommentParser
         }
     }
 
-    protected virtual XElement HandleAnySeeHrefElement(XElement element, string hrefValue)
+    protected virtual XElement TransformAnySeeHrefElement(XElement element, string hrefValue)
     {
         var newElement = MarkAsGenerated(SeeHrefElement);
         var deepestChild = newElement.GetEmptyDescendantOrSelf();
@@ -261,12 +267,12 @@ internal abstract class DefaultCommentParser
         return newElement;
     }
 
-    protected virtual XElement HandleAnySeeLangwordElement(XElement element, string langword)
+    protected virtual XElement TransformAnySeeLangwordElement(XElement element, string langword)
     {
         return Transform(element, SeeLangwordElement, XmlDocIdentifiers.Langword);
     }
 
-    protected virtual XElement HandleAnySeeCrefElement(XElement element, string crefValue)
+    protected virtual XElement TransformAnySeeCrefElement(XElement element, string crefValue)
     {
         element.RemoveAttributes();
 
@@ -282,7 +288,7 @@ internal abstract class DefaultCommentParser
         }
         else if (objectIdentifier == "!") // reference not found
         {
-            return HandleNotFoundCrefElement(element, fullObjectName);
+            return TransformNotFoundCrefElement(element, fullObjectName);
         }
         else // member
         {
@@ -291,18 +297,20 @@ internal abstract class DefaultCommentParser
         }
 
         // type found
-        if (typeRegistry.GetDeclaredType(typeId) is not null)
+        if (typeRegistry.GetDeclaredType(typeId) is ITypeDeclaration type)
         {
             var newElement = MarkAsGenerated(SeeCrefElement);
             var deepestChild = newElement.GetEmptyDescendantOrSelf();
 
             string target = typeId + ".html";
+            string targetName = CSharpTypeName.Of(type);
 
             // TODO: check if member is found
 
             if (memberId is not null)
             {
                 target += $"#{memberId}";
+                targetName += $".{memberId}";
             }
 
             deepestChild.Add(
@@ -312,7 +320,7 @@ internal abstract class DefaultCommentParser
             // no child nodes -> add cref 
             if (!element.Nodes().Any())
             {
-                deepestChild.Add(new XText(target));
+                deepestChild.Add(targetName);
             }
             else
             {
@@ -341,39 +349,39 @@ internal abstract class DefaultCommentParser
         }
     }
 
-    protected virtual XElement HandleNotFoundCrefElement(XElement element, string crefValue)
+    protected virtual XElement TransformNotFoundCrefElement(XElement element, string crefValue)
     {
         return Transform(element, SeeCrefNotFoundElement, XmlDocIdentifiers.Cref);
     }
 
-    protected virtual XElement HandleParamRefElement(XElement element)
+    protected virtual XElement TransformParamRefElement(XElement element)
     {
-        return HandleAnyParamRefElement(element, ParamRefElement);
+        return TransformAnyParamRefElement(element, ParamRefElement);
     }
 
-    protected virtual XElement HandleTypeParamRefElement(XElement element)
+    protected virtual XElement TransformTypeParamRefElement(XElement element)
     {
-        return HandleAnyParamRefElement(element, TypeParamRefElement);
+        return TransformAnyParamRefElement(element, TypeParamRefElement);
     }
 
-    protected virtual XElement HandleAnyParamRefElement(XElement element, XElement htmlElement)
+    protected virtual XElement TransformAnyParamRefElement(XElement element, XElement htmlElement)
     {
         return Transform(element, htmlElement, XmlDocIdentifiers.Name);
     }
 }
 
-internal class HtmlCommentParser : DefaultCommentParser
+internal class CustomDocCommentParser : DefaultDocCommentParser
 {
-    public HtmlCommentParser()
+    public CustomDocCommentParser()
     {
     }
 
-    public HtmlCommentParser(ITypeRegistry typeRegistry) : base(typeRegistry)
+    public CustomDocCommentParser(ITypeRegistry typeRegistry) : base(typeRegistry)
     {
     }
 
     protected override XElement ParamRefElement =>
         new(
             "code",
-            new XAttribute("class", "text-light bg-dark")); // TODO: just for demo, remove afterwards
+            new XAttribute("class", "text-warning bg-success")); // TODO: just for demo, remove afterwards
 }
