@@ -47,7 +47,7 @@ internal static class ObjectTypeTMCreator
         {
             modifiers.Add(Keyword.Abstract);
         }
-        string summaryDocComment = commentParser.Parse(typeData.SummaryDocComment);
+        string summaryDocComment = commentParser.ToHtmlString(typeData.SummaryDocComment);
 
         return new ObjectTypeTM(
             typeData.Id,
@@ -80,7 +80,7 @@ internal static class ObjectTypeTMCreator
         var modifiers = GetCallableMemberModifiers(constructorData);
         var exceptionTMs = constructorData.DocumentedExceptions.Select(ExceptionTMCreator.GetFrom);
 
-        string summaryDocComment = commentParser.Parse(constructorData.SummaryDocComment);
+        string summaryDocComment = commentParser.ToHtmlString(constructorData.SummaryDocComment);
 
         return new ConstructorTM(
             constructorData.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
@@ -115,8 +115,8 @@ internal static class ObjectTypeTMCreator
             modifiers.Add(Keyword.Readonly);
         }
 
-        string docComment = commentParser.Parse(fieldData.SummaryDocComment);
-        string[] seeAlsoDocComments = fieldData.SeeAlsoDocComments.Select(commentParser.Parse).ToArray();
+        string docComment = commentParser.ToHtmlString(fieldData.SummaryDocComment);
+        string[] seeAlsoDocComments = fieldData.SeeAlsoDocComments.Select(commentParser.ToHtmlString).ToArray();
 
         string? constantValue = fieldData.ConstantValue == DBNull.Value
             ? null
