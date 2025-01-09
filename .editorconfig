@@ -15,7 +15,7 @@ trim_trailing_whitespace = false
 [*.{yml,yaml}]
 indent_size = 2
 
-[*.{cs,cshtml}]
+[*.{cs,cshtml,razor}]
 dotnet_analyzer_diagnostic.category-Style.severity = warning
 dotnet_analyzer_diagnostic.category-CodeQuality.severity = warning
 
@@ -76,8 +76,10 @@ dotnet_naming_style.camel_case.capitalization = camel_case
 
 # Customized rules
 dotnet_code_quality.CA1716.analyzed_symbol_kinds = NamedType, Method, Property, Event, Parameter # exclude Namespace https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1716
+dotnet_style_prefer_conditional_expression_over_return = false
 
 # Suppressed rules
 dotnet_diagnostic.IDE0072.severity = none # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0072
-dotnet_diagnostic.CA1822.severity = none # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1822 TODO: maybe allow afterwards?
+dotnet_diagnostic.CA1822.severity = none # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1822
 dotnet_diagnostic.CA1852.severity = none # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1852
+dotnet_diagnostic.IDE0046.severity = none # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0046

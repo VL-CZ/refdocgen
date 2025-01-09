@@ -34,7 +34,7 @@ internal class InheritDocCrefHandler : InheritDocHandler<XElement>
                 string[] splitMemberName = crefAttr.Value.Split(':');
                 (string objectIdentifier, string fullObjectName) = (splitMemberName[0], splitMemberName[1]);
 
-                var neighbour = objectIdentifier == MemberTypeId.Type
+                var neighbour = objectIdentifier == CodeElementId.Type
                     ? (typeRegistry.GetDeclaredType(fullObjectName)?.RawDocComment)
                     : (typeRegistry.GetMember(fullObjectName)?.RawDocComment);
 
