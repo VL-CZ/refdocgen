@@ -44,7 +44,7 @@ internal class RazorTemplateGenerator<
     private readonly HtmlRenderer htmlRenderer;
 
 
-    private DefaultDocCommentParser htmlCommentParser = new(new Configuration());
+    private DefaultDocCommentParser htmlCommentParser = new(new DefaultConfiguration());
 
     /// <summary>
     /// Initialize a new instance of <see cref="RazorTemplateGenerator{TDelegateTemplate, TEnumTemplate, TNamespaceDetailTemplate, TNamespaceListTemplate, TObjectTypeTemplate}"/> class.
@@ -60,7 +60,7 @@ internal class RazorTemplateGenerator<
     /// <inheritdoc/>
     public void GenerateTemplates(ITypeRegistry typeRegistry)
     {
-        htmlCommentParser = new DefaultDocCommentParser(typeRegistry, new Configuration());
+        htmlCommentParser = new DefaultDocCommentParser(typeRegistry, new DefaultConfiguration());
 
         GenerateObjectTypeTemplates(typeRegistry.ObjectTypes);
         GenerateEnumTemplates(typeRegistry.Enums);

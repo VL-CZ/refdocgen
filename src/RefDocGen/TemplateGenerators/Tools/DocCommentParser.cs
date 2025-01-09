@@ -11,89 +11,143 @@ using System.Xml.Linq;
 
 namespace RefDocGen.TemplateGenerators.Tools;
 
-internal class Configuration
+/// <summary>
+/// Defines the configuration for transforming XML documentation elements to HTML representations.
+/// </summary>
+internal interface IConfiguration
 {
     /// <summary>
     /// The HTML representation of the <c>&lt;para&gt;</c> element.
     /// </summary>
-    internal virtual XElement ParagraphElement => new("div");
+    XElement ParagraphElement { get; }
 
     /// <summary>
     /// The HTML representation of the <c>&lt;list type="bullet"&gt;</c> element.
     /// </summary>
-    internal virtual XElement BulletListElement => new("ul");
+    XElement BulletListElement { get; }
 
     /// <summary>
     /// The HTML representation of the <c>&lt;list type="number"&gt;</c> element.
     /// </summary>
-    internal virtual XElement NumberListElement => new("ol");
+    XElement NumberListElement { get; }
 
     /// <summary>
     /// The HTML representation of the <c>&lt;item&gt;</c> element.
     /// </summary>
-    internal virtual XElement ListItemElement => new("li");
+    XElement ListItemElement { get; }
 
     /// <summary>
     /// The HTML representation of the <c>&lt;c&gt;</c> element.
     /// </summary>
-    internal virtual XElement InlineCodeElement => new("code");
+    XElement InlineCodeElement { get; }
 
     /// <summary>
     /// The HTML representation of the <c>&lt;code&gt;</c> element.
     /// </summary>
-    internal virtual XElement CodeBlockElement => new("pre",
-                                                        new XElement("code")
-                                                    );
+    XElement CodeBlockElement { get; }
 
     /// <summary>
     /// The HTML representation of the <c>&lt;example&gt;</c> element.
     /// </summary>
-    internal virtual XElement ExampleElement => new("div");
+    XElement ExampleElement { get; }
 
     /// <summary>
     /// The HTML representation of the <c>&lt;paramref&gt;</c> element.
     /// </summary>
-    internal virtual XElement ParamRefElement => new("xxx");
+    XElement ParamRefElement { get; }
 
     /// <summary>
     /// The HTML representation of the <c>&lt;typeparamref&gt;</c> element.
     /// </summary>
-    internal virtual XElement TypeParamRefElement => new("code");
+    XElement TypeParamRefElement { get; }
 
     /// <summary>
     /// The HTML representation of the <c>&lt;see cref="..."&gt;</c> element.
     /// </summary>
-    internal virtual XElement SeeCrefElement => new("a");
+    XElement SeeCrefElement { get; }
 
     /// <summary>
     /// The HTML representation of the <c>&lt;see href="..."&gt;</c> element.
     /// </summary>
-    internal virtual XElement SeeHrefElement => new("a");
+    XElement SeeHrefElement { get; }
 
     /// <summary>
     /// The HTML representation of the <c>&lt;see langword="..."&gt;</c> element.
     /// </summary>
-    internal virtual XElement SeeLangwordElement => new("code");
+    XElement SeeLangwordElement { get; }
 
     /// <summary>
     /// The HTML representation of the <c>&lt;see cref="..."&gt;</c> element, whose reference isn't found.
     /// </summary>
-    internal virtual XElement SeeCrefNotFoundElement => new("code");
+    XElement SeeCrefNotFoundElement { get; }
 
     /// <summary>
     /// The HTML representation of the <c>&lt;seealso cref="..."&gt;</c> element.
     /// </summary>
-    internal virtual XElement SeeAlsoCrefElement => new("a");
+    XElement SeeAlsoCrefElement { get; }
 
     /// <summary>
     /// The HTML representation of the <c>&lt;seealso href="..."&gt;</c> element.
     /// </summary>
-    internal virtual XElement SeeAlsoHrefElement => new("a");
+    XElement SeeAlsoHrefElement { get; }
 
     /// <summary>
     /// The HTML representation of the <c>&lt;seealso cref="..."&gt;</c> element, whose reference isn't found.
     /// </summary>
-    internal virtual XElement SeeAlsoCrefNotFoundElement => new("code");
+    XElement SeeAlsoCrefNotFoundElement { get; }
+}
+
+/// <inheritdoc />
+internal class DefaultConfiguration : IConfiguration
+{
+    /// <inheritdoc />
+    public virtual XElement ParagraphElement => new("div");
+
+    /// <inheritdoc />
+    public virtual XElement BulletListElement => new("ul");
+
+    /// <inheritdoc />
+    public virtual XElement NumberListElement => new("ol");
+
+    /// <inheritdoc />
+    public virtual XElement ListItemElement => new("li");
+
+    /// <inheritdoc />
+    public virtual XElement InlineCodeElement => new("code");
+
+    /// <inheritdoc />
+    public virtual XElement CodeBlockElement => new("pre",
+        new XElement("code"));
+
+    /// <inheritdoc />
+    public virtual XElement ExampleElement => new("div");
+
+    /// <inheritdoc />
+    public virtual XElement ParamRefElement => new("xxx");
+
+    /// <inheritdoc />
+    public virtual XElement TypeParamRefElement => new("code");
+
+    /// <inheritdoc />
+    public virtual XElement SeeCrefElement => new("a");
+
+    /// <inheritdoc />
+    public virtual XElement SeeHrefElement => new("a");
+
+    /// <inheritdoc />
+    public virtual XElement SeeLangwordElement => new("code");
+
+    /// <inheritdoc />
+    public virtual XElement SeeCrefNotFoundElement => new("code");
+
+    /// <inheritdoc />
+    public virtual XElement SeeAlsoCrefElement => new("a");
+
+    /// <inheritdoc />
+    public virtual XElement SeeAlsoHrefElement => new("a");
+
+    /// <inheritdoc />
+    public virtual XElement SeeAlsoCrefNotFoundElement => new("code");
 }
 
 internal interface IDocCommentParser
@@ -103,7 +157,6 @@ internal interface IDocCommentParser
 
 internal class DefaultDocCommentParser : IDocCommentParser
 {
-
     /// <summary>
     /// Marks the <paramref name="element"/> and all of its child elements as generated by the app.
     /// </summary>
@@ -169,17 +222,17 @@ internal class DefaultDocCommentParser : IDocCommentParser
 
     protected readonly ITypeRegistry typeRegistry;
 
-    private readonly Configuration configuration;
+    private readonly IConfiguration configuration;
 
     private readonly string[] toRemove = ["summary", "remarks", "returns", "exception", "value"];
 
-    internal DefaultDocCommentParser(ITypeRegistry typeRegistry, Configuration configuration)
+    internal DefaultDocCommentParser(ITypeRegistry typeRegistry, IConfiguration configuration)
     {
         this.typeRegistry = typeRegistry;
         this.configuration = configuration;
     }
 
-    internal DefaultDocCommentParser(Configuration configuration) // TODO: code smell
+    internal DefaultDocCommentParser(IConfiguration? configuration = null) // TODO: code smell
     {
         typeRegistry = new TypeRegistry(
                 new Dictionary<string, ObjectTypeData>(),
@@ -187,7 +240,7 @@ internal class DefaultDocCommentParser : IDocCommentParser
                 new Dictionary<string, DelegateTypeData>()
             );
 
-        this.configuration = configuration;
+        this.configuration = configuration ?? new DefaultConfiguration();
     }
 
     public string ToHtmlString(XElement docComment)
@@ -535,9 +588,9 @@ internal class DefaultDocCommentParser : IDocCommentParser
     }
 }
 
-internal class CustomConfiguration : Configuration
+internal class CustomConfiguration : DefaultConfiguration
 {
-    internal override XElement ParamRefElement =>
+    public override XElement ParamRefElement =>
         new(
             "code",
             new XAttribute("class", "text-warning bg-success")); // TODO: just for demo, remove afterwards
