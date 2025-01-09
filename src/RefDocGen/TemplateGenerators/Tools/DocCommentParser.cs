@@ -117,13 +117,14 @@ internal class DefaultConfiguration : IConfiguration
 
     /// <inheritdoc />
     public virtual XElement CodeBlockElement => new("pre",
-        new XElement("code"));
+                                                    new XElement("code")
+                                                );
 
     /// <inheritdoc />
     public virtual XElement ExampleElement => new("div");
 
     /// <inheritdoc />
-    public virtual XElement ParamRefElement => new("xxx");
+    public virtual XElement ParamRefElement => new("code");
 
     /// <inheritdoc />
     public virtual XElement TypeParamRefElement => new("code");
@@ -157,6 +158,8 @@ internal interface IDocCommentParser
 
 internal class DefaultDocCommentParser : IDocCommentParser
 {
+    private static readonly XElement emptyDivElement = new("div");
+
     protected readonly ITypeRegistry typeRegistry;
 
     private readonly IConfiguration configuration;
@@ -194,6 +197,10 @@ internal class DefaultDocCommentParser : IDocCommentParser
         return docCommentCopy.ToString();
     }
 
+    /// <summary>
+    /// Transforms the <paramref name="element"/> to its HTML representation.
+    /// </summary>
+    /// <param name="element">The element to transform to HTML.</param>
     private void TransformToHtml(XElement element)
     {
         // firstly transform the children
@@ -202,56 +209,28 @@ internal class DefaultDocCommentParser : IDocCommentParser
             TransformToHtml(child);
         }
 
-        var transformedElement = element;
+        // transform the element to HTML based on its name
+        var transformedElement = element.Name.ToString() switch
+        {
+            XmlDocIdentifiers.Para => TransformParagraphElement(element),
+            XmlDocIdentifiers.List => TransformListElement(element),
+            XmlDocIdentifiers.Item => TransformListItemElement(element),
+            XmlDocIdentifiers.InlineCode => TransformInlineCodeElement(element),
+            XmlDocIdentifiers.CodeBlock => TransformCodeBlockElement(element),
+            XmlDocIdentifiers.Example => TransformExampleElement(element),
+            XmlDocIdentifiers.See => TransformSeeElement(element),
+            XmlDocIdentifiers.SeeAlso => TransformSeeAlsoElement(element),
+            XmlDocIdentifiers.ParamRef => TransformParamRefElement(element),
+            XmlDocIdentifiers.TypeParamRef => TransformTypeParamRefElement(element),
+            _ when toRemove.Contains(element.Name.ToString()) => new XElement("div", element.Nodes()),
+            _ => null
+        };
 
-        if (element.Name == "para")
+        if (transformedElement is not null)
         {
-            transformedElement = TransformParagraphElement(element);
+            // replace the element by HTML representation
+            element.ReplaceDataBy(transformedElement);
         }
-        else if (element.Name == "list")
-        {
-            transformedElement = TransformListElement(element);
-        }
-        else if (element.Name == "item")
-        {
-            transformedElement = TransformListItemElement(element);
-        }
-        else if (element.Name == "c")
-        {
-            transformedElement = TransformInlineCodeElement(element);
-        }
-        else if (element.Name == "code")
-        {
-            transformedElement = TransformCodeBlockElement(element);
-        }
-        else if (element.Name == "example")
-        {
-            transformedElement = TransformExampleElement(element);
-        }
-        else if (element.Name == "see")
-        {
-            transformedElement = TransformSeeElement(element);
-        }
-        else if (element.Name == "seealso")
-        {
-            transformedElement = TransformSeeAlsoElement(element);
-        }
-        else if (element.Name == "paramref")
-        {
-            transformedElement = TransformParamRefElement(element);
-        }
-        else if (element.Name == "typeparamref")
-        {
-            transformedElement = TransformTypeParamRefElement(element);
-        }
-        else if (toRemove.Contains(element.Name.LocalName))
-        {
-            element.Name = "div";
-            transformedElement = element;
-        }
-
-        // replace the element by its transformation
-        element.ReplaceDataBy(transformedElement);
     }
 
     /// <summary>
@@ -323,11 +302,17 @@ internal class DefaultDocCommentParser : IDocCommentParser
     }
 
     /// <summary>
-    /// 
+    /// Adds text to <paramref name="target"/> node.
+    /// <para>
+    /// If the <paramref name="target"/> isn't an empty element, the nodes are copied to its innermost empty descendant.
+    /// </para>
+    /// <para>
+    /// Note: <paramref name="target"/> must have exactly one empty descendant, otherwise an exception is thrown.
+    /// </para>
     /// </summary>
-    /// <param name="text"></param>
-    /// <param name="target"></param>
-    /// <returns></returns>
+    /// <param name="text">The text to add.</param>
+    /// <param name="target">The target <see cref="XElement"/> to which the child nodes will be copied.</param>
+    /// <returns>A copy of <paramref name="target"/> element, containing the <paramref name="text"/>.</returns>
     private XElement AddTextNodeTo(string text, XElement target)
     {
         var result = new XElement(target);
@@ -620,12 +605,4 @@ internal class DefaultDocCommentParser : IDocCommentParser
             return AddTextNodeTo(fullObjectName, htmlTemplateIfNotFound);
         }
     }
-}
-
-internal class CustomConfiguration : DefaultConfiguration
-{
-    public override XElement ParamRefElement =>
-        new(
-            "code",
-            new XAttribute("class", "text-warning bg-success")); // TODO: just for demo, remove afterwards
 }
