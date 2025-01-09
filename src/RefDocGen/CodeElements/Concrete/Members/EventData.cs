@@ -2,6 +2,7 @@ using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types.Exception;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Tools;
 using System.Reflection;
 
 namespace RefDocGen.CodeElements.Concrete.Members;
@@ -19,7 +20,7 @@ internal class EventData : MemberData, IEventData
         : base(eventInfo, containingType)
     {
         EventInfo = eventInfo;
-        //Type = eventInfo.EventHandlerType.GetTypeNameData(availableTypeParameters);
+        Type = eventInfo.EventHandlerType?.GetTypeNameData(availableTypeParameters) ?? typeof(void).GetTypeNameData();
     }
 
     public EventInfo EventInfo { get; }
@@ -44,9 +45,9 @@ internal class EventData : MemberData, IEventData
 
     public ITypeNameData? ExplicitInterfaceType => throw new NotImplementedException();
 
-    public ITypeNameData Type => throw new NotImplementedException();
+    public ITypeNameData Type { get; }
 
-    public override AccessModifier AccessModifier => throw new NotImplementedException();
+    public override AccessModifier AccessModifier => AccessModifier.Public; // TODO: update
 
-    public override bool IsStatic => throw new NotImplementedException();
+    public override bool IsStatic => false; // TODO
 }
