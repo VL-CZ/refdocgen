@@ -2,7 +2,6 @@ using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types.Exception;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
-using RefDocGen.CodeElements.Tools;
 using System.Reflection;
 
 namespace RefDocGen.CodeElements.Concrete.Members;
@@ -11,9 +10,9 @@ namespace RefDocGen.CodeElements.Concrete.Members;
 internal class EventData : MemberData, IEventData
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="FieldData"/> class.
+    /// Initializes a new instance of the <see cref="EventData"/> class.
     /// </summary>
-    /// <param name="fieldInfo"><see cref="System.Reflection.FieldInfo"/> object representing the field.</param>
+    /// <param name="eventInfo"><see cref="System.Reflection.EventInfo"/> object representing the event.</param>
     /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
     /// <param name="containingType">Type that contains the member.</param>
     internal EventData(EventInfo eventInfo, TypeDeclaration containingType, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
@@ -44,4 +43,10 @@ internal class EventData : MemberData, IEventData
     public bool IsExplicitImplementation => throw new NotImplementedException();
 
     public ITypeNameData? ExplicitInterfaceType => throw new NotImplementedException();
+
+    public ITypeNameData Type => throw new NotImplementedException();
+
+    public override AccessModifier AccessModifier => throw new NotImplementedException();
+
+    public override bool IsStatic => throw new NotImplementedException();
 }

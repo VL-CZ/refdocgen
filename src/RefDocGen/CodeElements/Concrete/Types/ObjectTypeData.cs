@@ -97,6 +97,9 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
     IEnumerable<IIndexerData> IObjectTypeData.Indexers => Indexers.Values;
 
     /// <inheritdoc/>
+    IEnumerable<IEventData> IObjectTypeData.Events => Events.Values;
+
+    /// <inheritdoc/>
     internal override IReadOnlyDictionary<string, MemberData> AllMembers { get; private protected set; } = new Dictionary<string, MemberData>();
 
     /// <summary>
