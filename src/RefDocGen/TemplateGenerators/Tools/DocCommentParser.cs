@@ -11,12 +11,97 @@ using System.Xml.Linq;
 
 namespace RefDocGen.TemplateGenerators.Tools;
 
+internal class Configuration
+{
+    /// <summary>
+    /// The HTML representation of the <c>&lt;para&gt;</c> element.
+    /// </summary>
+    internal virtual XElement ParagraphElement => new("div");
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;list type="bullet"&gt;</c> element.
+    /// </summary>
+    internal virtual XElement BulletListElement => new("ul");
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;list type="number"&gt;</c> element.
+    /// </summary>
+    internal virtual XElement NumberListElement => new("ol");
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;item&gt;</c> element.
+    /// </summary>
+    internal virtual XElement ListItemElement => new("li");
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;c&gt;</c> element.
+    /// </summary>
+    internal virtual XElement InlineCodeElement => new("code");
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;code&gt;</c> element.
+    /// </summary>
+    internal virtual XElement CodeBlockElement => new("pre",
+                                                        new XElement("code")
+                                                    );
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;example&gt;</c> element.
+    /// </summary>
+    internal virtual XElement ExampleElement => new("div");
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;paramref&gt;</c> element.
+    /// </summary>
+    internal virtual XElement ParamRefElement => new("xxx");
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;typeparamref&gt;</c> element.
+    /// </summary>
+    internal virtual XElement TypeParamRefElement => new("code");
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;see cref="..."&gt;</c> element.
+    /// </summary>
+    internal virtual XElement SeeCrefElement => new("a");
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;see href="..."&gt;</c> element.
+    /// </summary>
+    internal virtual XElement SeeHrefElement => new("a");
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;see langword="..."&gt;</c> element.
+    /// </summary>
+    internal virtual XElement SeeLangwordElement => new("code");
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;see cref="..."&gt;</c> element, whose reference isn't found.
+    /// </summary>
+    internal virtual XElement SeeCrefNotFoundElement => new("code");
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;seealso cref="..."&gt;</c> element.
+    /// </summary>
+    internal virtual XElement SeeAlsoCrefElement => new("a");
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;seealso href="..."&gt;</c> element.
+    /// </summary>
+    internal virtual XElement SeeAlsoHrefElement => new("a");
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;seealso cref="..."&gt;</c> element, whose reference isn't found.
+    /// </summary>
+    internal virtual XElement SeeAlsoCrefNotFoundElement => new("code");
+}
+
 internal interface IDocCommentParser
 {
     string ToHtmlString(XElement docComment);
 }
 
-internal abstract class DefaultDocCommentParser : IDocCommentParser
+internal class DefaultDocCommentParser : IDocCommentParser
 {
 
     /// <summary>
@@ -48,16 +133,23 @@ internal abstract class DefaultDocCommentParser : IDocCommentParser
         return newElement;
     }
 
-    private XElement Transform(XElement before, XElement template, string attribute)
+    private XElement Transform(XElement before, XElement template, string attributeName, bool addAttribute = false)
     {
         var newElement = MarkAsGenerated(template);
 
         var deepestChild = newElement.GetEmptyDescendantOrSelf();
         deepestChild.Add(before.Nodes());
 
-        if (before.Attribute(attribute) is XAttribute attr && !before.Nodes().Any())
+        if (before.Attribute(attributeName) is XAttribute attr)
         {
-            deepestChild.Add(attr.Value);
+            if (!before.Nodes().Any())
+            {
+                deepestChild.Add(attr.Value);
+            }
+            if (addAttribute)
+            {
+                deepestChild.SetAttributeValue(attributeName, attr.Value);
+            }
         }
 
         return newElement;
@@ -77,54 +169,25 @@ internal abstract class DefaultDocCommentParser : IDocCommentParser
 
     protected readonly ITypeRegistry typeRegistry;
 
-    protected virtual XElement ParagraphElement => new("div");
-
-    protected virtual XElement BulletListElement => new("ul");
-
-    protected virtual XElement NumberListElement => new("ol");
-
-    protected virtual XElement ListItemElement => new("li");
-
-    protected virtual XElement InlineCodeElement => new("code");
-
-    protected virtual XElement CodeBlockElement => new("pre",
-                                                        new XElement("code")
-                                                    );
-
-    protected virtual XElement ExampleElement => new("div");
-
-    protected virtual XElement ParamRefElement => new("xxx");
-
-    protected virtual XElement TypeParamRefElement => new("code");
-
-    protected virtual XElement SeeCrefElement => new("a");
-
-    protected virtual XElement SeeHrefElement => new("a");
-
-    protected virtual XElement SeeLangwordElement => new("code");
-
-    protected virtual XElement SeeCrefNotFoundElement => new("code");
-
-    protected virtual XElement SeeAlsoCrefElement => new("a");
-
-    protected virtual XElement SeeAlsoHrefElement => new("a");
-
-    protected virtual XElement SeeAlsoNotFoundElement => new("code");
+    private readonly Configuration configuration;
 
     private readonly string[] toRemove = ["summary", "remarks", "returns", "exception", "value"];
 
-    protected DefaultDocCommentParser(ITypeRegistry typeRegistry)
+    internal DefaultDocCommentParser(ITypeRegistry typeRegistry, Configuration configuration)
     {
         this.typeRegistry = typeRegistry;
+        this.configuration = configuration;
     }
 
-    protected DefaultDocCommentParser() // TODO: code smell
+    internal DefaultDocCommentParser(Configuration configuration) // TODO: code smell
     {
         typeRegistry = new TypeRegistry(
                 new Dictionary<string, ObjectTypeData>(),
                 new Dictionary<string, EnumTypeData>(),
                 new Dictionary<string, DelegateTypeData>()
             );
+
+        this.configuration = configuration;
     }
 
     public string ToHtmlString(XElement docComment)
@@ -196,15 +259,20 @@ internal abstract class DefaultDocCommentParser : IDocCommentParser
         }
     }
 
+    /// <summary>
+    /// Transforms the <c>&lt;list&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;list&gt;</c> element to transform.</param>
+    /// <returns>The HTML representation of the <c>&lt;list&gt;</c> element.</returns>
     protected virtual XElement TransformListElement(XElement element)
     {
         string listType = element.Attribute("type")?.Value ?? "bullet";
 
         var types = new Dictionary<string, XElement>()
         {
-            ["bullet"] = BulletListElement,
-            ["number"] = NumberListElement,
-            ["table"] = BulletListElement, // TODO: add 
+            ["bullet"] = configuration.BulletListElement,
+            ["number"] = configuration.NumberListElement,
+            ["table"] = configuration.BulletListElement, // TODO: add 
         };
 
         return types.TryGetValue(listType, out var newElement)
@@ -212,44 +280,74 @@ internal abstract class DefaultDocCommentParser : IDocCommentParser
             : element;
     }
 
+    /// <summary>
+    /// Transforms the <c>&lt;item&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;item&gt;</c> element to transform.</param>
+    /// <returns>The HTML representation of the <c>&lt;item&gt;</c> element.</returns>
     protected virtual XElement TransformListItemElement(XElement element)
     {
-        return Transform(element, ListItemElement);
+        return Transform(element, configuration.ListItemElement);
     }
 
+    /// <summary>
+    /// Transforms the <c>&lt;para&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;para&gt;</c> element to transform.</param>
+    /// <returns>The HTML representation of the <c>&lt;para&gt;</c> element.</returns>
     protected virtual XElement TransformParagraphElement(XElement element)
     {
-        return Transform(element, ParagraphElement);
+        return Transform(element, configuration.ParagraphElement);
     }
 
+    /// <summary>
+    /// Transforms the <c>&lt;c&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;c&gt;</c> element to transform.</param>
+    /// <returns>The HTML representation of the <c>&lt;c&gt;</c> element.</returns>
     protected virtual XElement TransformInlineCodeElement(XElement element)
     {
-        return Transform(element, InlineCodeElement);
+        return Transform(element, configuration.InlineCodeElement);
     }
 
+    /// <summary>
+    /// Transforms the <c>&lt;code&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;code&gt;</c> element to transform.</param>
+    /// <returns>The HTML representation of the <c>&lt;code&gt;</c> element.</returns>
     protected virtual XElement TransformCodeBlockElement(XElement element)
     {
-        return Transform(element, CodeBlockElement);
+        return Transform(element, configuration.CodeBlockElement);
     }
 
+    /// <summary>
+    /// Transforms the <c>&lt;example&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;example&gt;</c> element to transform.</param>
+    /// <returns>The HTML representation of the <c>&lt;example&gt;</c> element.</returns>
     protected virtual XElement TransformExampleElement(XElement element)
     {
-        return Transform(element, ExampleElement);
+        return Transform(element, configuration.ExampleElement);
     }
 
+    /// <summary>
+    /// Transforms any <c>&lt;see&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;see&gt;</c> element to transform.</param>
+    /// <returns>The HTML representation of the <c>&lt;see&gt;</c> element.</returns>
     protected virtual XElement TransformSeeElement(XElement element)
     {
         if (element.Attribute(XmlDocIdentifiers.Href) is XAttribute hrefAttr)
         {
-            return TransformAnySeeHrefElement(element, hrefAttr.Value);
+            return TransformSeeHrefElement(element, hrefAttr.Value);
         }
         else if (element.Attribute(XmlDocIdentifiers.Cref) is XAttribute crefAttr)
         {
-            return TransformAnySeeCrefElement(element, crefAttr.Value);
+            return TransformSeeCrefElement(element, crefAttr.Value);
         }
-        else if (element.Attribute(XmlDocIdentifiers.Langword) is XAttribute langwordAttr)
+        else if (element.Attribute(XmlDocIdentifiers.Langword) is not null)
         {
-            return TransformAnySeeLangwordElement(element, langwordAttr.Value);
+            return TransformSeeLangwordElement(element);
         }
         else
         {
@@ -257,33 +355,111 @@ internal abstract class DefaultDocCommentParser : IDocCommentParser
         }
     }
 
-    protected virtual XElement TransformAnySeeHrefElement(XElement element, string hrefValue)
+    /// <summary>
+    /// Transforms the <c>&lt;see cref="..."&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;see&gt;</c> element to transform.</param>
+    /// <param name="crefValue">Value of the <c>cref</c> attribute.</param>
+    /// <returns>The HTML representation of the <c>&lt;see cref="..."&gt;</c> element.
+    /// <para>
+    /// If the referenced object is not found, the HTML representation of the not found <c>cref</c> element is returned.
+    /// </para>
+    /// </returns>
+    protected virtual XElement TransformSeeCrefElement(XElement element, string crefValue)
     {
-        var newElement = MarkAsGenerated(SeeHrefElement);
-        var deepestChild = newElement.GetEmptyDescendantOrSelf();
+        return TransformAnyCrefElement(element, configuration.SeeCrefElement, configuration.SeeCrefNotFoundElement, crefValue);
+    }
 
-        if (element.Nodes().Any())
+    /// <summary>
+    /// Transforms the <c>&lt;see href="..."&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;see&gt;</c> element to transform.</param>
+    /// <param name="hrefValue">Value of the <c>href</c> attribute.</param>
+    /// <returns>The HTML representation of the <c>&lt;see href="..."&gt;</c> element.</returns>
+    protected virtual XElement TransformSeeHrefElement(XElement element, string hrefValue)
+    {
+        return Transform(element, configuration.SeeHrefElement, XmlDocIdentifiers.Href, true);
+    }
+
+    /// <summary>
+    /// Transforms the <c>&lt;see langword="..."&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;see&gt;</c> element to transform.</param>
+    /// <returns>The HTML representation of the <c>&lt;see langword="..."&gt;</c> element.</returns>
+    protected virtual XElement TransformSeeLangwordElement(XElement element)
+    {
+        return Transform(element, configuration.SeeLangwordElement, XmlDocIdentifiers.Langword);
+    }
+
+    /// <summary>
+    /// Transforms any <c>&lt;seealso&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;seealso&gt;</c> element to transform.</param>
+    /// <returns>The HTML representation of the <c>&lt;seealso&gt;</c> element.</returns>
+    protected virtual XElement TransformSeeAlsoElement(XElement element)
+    {
+        if (element.Attribute(XmlDocIdentifiers.Href) is XAttribute hrefAttr)
         {
-            deepestChild.Add(element.Nodes());
+            return TransformSeeHrefElement(element, hrefAttr.Value);
+        }
+        else if (element.Attribute(XmlDocIdentifiers.Cref) is XAttribute crefAttr)
+        {
+            return TransformSeeCrefElement(element, crefAttr.Value);
         }
         else
         {
-            deepestChild.Add(hrefValue);
+            return element;
         }
-
-        deepestChild.Add(
-            new XAttribute(XmlDocIdentifiers.Href, hrefValue)
-            );
-
-        return newElement;
     }
 
-    protected virtual XElement TransformAnySeeLangwordElement(XElement element, string langword)
+    /// <summary>
+    /// Transforms the <c>&lt;seealso href="..."&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;seealso&gt;</c> element to transform.</param>
+    /// <param name="hrefValue">Value of the <c>href</c> attribute.</param>
+    /// <returns>The HTML representation of the <c>&lt;seealso href="..."&gt;</c> element.</returns>
+    protected virtual XElement TransformSeeAlsoHrefElement(XElement element, string hrefValue)
     {
-        return Transform(element, SeeLangwordElement, XmlDocIdentifiers.Langword);
+        return Transform(element, configuration.SeeAlsoHrefElement, XmlDocIdentifiers.Href, true);
     }
 
-    protected virtual XElement TransformAnySeeCrefElement(XElement element, string crefValue)
+    /// <summary>
+    /// Transforms the <c>&lt;seealso cref="..."&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;seealso&gt;</c> element to transform.</param>
+    /// <param name="crefValue">Value of the <c>cref</c> attribute.</param>
+    /// <returns>
+    /// The HTML representation of the <c>&lt;seealso cref="..."&gt;</c> element.
+    /// <para>
+    /// If the referenced object is not found, the HTML representation of the not found <c>cref</c> element is returned.
+    /// </para>
+    /// </returns>
+    protected virtual XElement TransformSeeAlsoCrefElement(XElement element, string crefValue)
+    {
+        return TransformAnyCrefElement(element, configuration.SeeAlsoCrefElement, configuration.SeeAlsoCrefNotFoundElement, crefValue);
+    }
+
+    /// <summary>
+    /// Transforms the <c>&lt;paramref&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;paramref&gt;</c> element to transform.</param>
+    /// <returns>The HTML representation of the <c>&lt;paramref&gt;</c> element.</returns>
+    protected virtual XElement TransformParamRefElement(XElement element)
+    {
+        return Transform(element, configuration.ParamRefElement, XmlDocIdentifiers.Name);
+    }
+
+    /// <summary>
+    /// Transforms the <c>&lt;paramref&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;paramref&gt;</c> element to transform.</param>
+    /// <returns>The HTML representation of the <c>&lt;paramref&gt;</c> element.</returns>
+    protected virtual XElement TransformTypeParamRefElement(XElement element)
+    {
+        return Transform(element, configuration.TypeParamRefElement, XmlDocIdentifiers.Name);
+    }
+
+    private XElement TransformAnyCrefElement(XElement element, XElement foundHtmltemplate, XElement notFoundHtmlTemplate, string crefValue)
     {
         string[] splitMemberName = crefValue.Split(':');
         (string objectIdentifier, string fullObjectName) = (splitMemberName[0], splitMemberName[1]);
@@ -291,24 +467,24 @@ internal abstract class DefaultDocCommentParser : IDocCommentParser
         string typeId;
         string? memberId = null;
 
-        if (objectIdentifier == MemberTypeId.Type) // type
+        if (objectIdentifier == CodeElementId.Type) // type
         {
             typeId = fullObjectName;
         }
-        else if (objectIdentifier == "!") // reference not found
-        {
-            return TransformNotFoundCrefElement(element, fullObjectName);
-        }
-        else // member
+        else if (CodeElementId.IsMember(objectIdentifier)) // member
         {
             (typeId, string memberName, string paramsString) = MemberSignatureParser.Parse(fullObjectName);
             memberId = memberName + paramsString;
+        }
+        else // reference not found
+        {
+            return Transform(element, notFoundHtmlTemplate, XmlDocIdentifiers.Cref);
         }
 
         // type found
         if (typeRegistry.GetDeclaredType(typeId) is ITypeDeclaration type)
         {
-            var newElement = MarkAsGenerated(SeeCrefElement);
+            var newElement = MarkAsGenerated(foundHtmltemplate);
             var deepestChild = newElement.GetEmptyDescendantOrSelf();
 
             string target = typeId + ".html";
@@ -340,7 +516,7 @@ internal abstract class DefaultDocCommentParser : IDocCommentParser
         }
         else // type not found
         {
-            var newElement = MarkAsGenerated(SeeAlsoNotFoundElement);
+            var newElement = MarkAsGenerated(notFoundHtmlTemplate);
             var deepestChild = newElement.GetEmptyDescendantOrSelf();
 
             deepestChild.Add();
@@ -357,39 +533,11 @@ internal abstract class DefaultDocCommentParser : IDocCommentParser
             return newElement;
         }
     }
-
-    protected virtual XElement TransformNotFoundCrefElement(XElement element, string crefValue)
-    {
-        return Transform(element, SeeCrefNotFoundElement, XmlDocIdentifiers.Cref);
-    }
-
-    protected virtual XElement TransformParamRefElement(XElement element)
-    {
-        return TransformAnyParamRefElement(element, ParamRefElement);
-    }
-
-    protected virtual XElement TransformTypeParamRefElement(XElement element)
-    {
-        return TransformAnyParamRefElement(element, TypeParamRefElement);
-    }
-
-    protected virtual XElement TransformAnyParamRefElement(XElement element, XElement htmlElement)
-    {
-        return Transform(element, htmlElement, XmlDocIdentifiers.Name);
-    }
 }
 
-internal class CustomDocCommentParser : DefaultDocCommentParser
+internal class CustomConfiguration : Configuration
 {
-    public CustomDocCommentParser()
-    {
-    }
-
-    public CustomDocCommentParser(ITypeRegistry typeRegistry) : base(typeRegistry)
-    {
-    }
-
-    protected override XElement ParamRefElement =>
+    internal override XElement ParamRefElement =>
         new(
             "code",
             new XAttribute("class", "text-warning bg-success")); // TODO: just for demo, remove afterwards

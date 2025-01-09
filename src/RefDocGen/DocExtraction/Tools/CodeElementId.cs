@@ -1,12 +1,12 @@
 namespace RefDocGen.DocExtraction.Tools;
 
 /// <summary>
-/// Class containing constants representing the member identifiers in the XML documentation file.
+/// Class containing constants representing the code element identifiers in the XML documentation file.
 /// <para>
 /// See also <see href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/#id-strings"/>
 /// </para>
 /// </summary>
-internal class MemberTypeId
+internal class CodeElementId
 {
     /// <summary>
     /// Field identifier.
@@ -46,5 +46,15 @@ internal class MemberTypeId
     /// Namespace identifier.
     /// </summary>
     internal const string Namespace = "N";
+
+    /// <summary>
+    /// Checks if the identifier represents a type member.
+    /// </summary>
+    /// <param name="id">The provided identifier.</param>
+    /// <returns><c>true</c> if identifier represents a type member, <c>false</c> otherwise.</returns>
+    internal static bool IsMember(string id)
+    {
+        return id is Field or Property or Method or Event;
+    }
 }
 
