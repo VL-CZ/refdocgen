@@ -24,7 +24,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <summary>
     /// Configuration for transforming the XML elements into HTML.
     /// </summary>
-    private readonly IDocCommentHtmlConfiguration configuration;
+    private readonly IDocCommentHtmlConfiguration htmlConfiguration;
 
     /// <summary>
     /// An array of parent XML doc comment elements.
@@ -44,18 +44,18 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <inheritdoc cref="TypeRegistry"/>
     /// </param>
     /// <param name="configuration">
-    /// <inheritdoc cref="configuration"/>
+    /// <inheritdoc cref="htmlConfiguration"/>
     /// </param>
     internal DefaultDocCommentTransformer(IDocCommentHtmlConfiguration configuration, ITypeRegistry typeRegistry)
     {
-        this.configuration = configuration;
+        this.htmlConfiguration = configuration;
         TypeRegistry = typeRegistry;
     }
 
     /// <inheritdoc cref="DefaultDocCommentTransformer(IDocCommentHtmlConfiguration, ITypeRegistry)"/>
     internal DefaultDocCommentTransformer(IDocCommentHtmlConfiguration configuration)
     {
-        this.configuration = configuration;
+        this.htmlConfiguration = configuration;
 
         TypeRegistry = new TypeRegistry(
                 new Dictionary<string, ObjectTypeData>(),
@@ -216,9 +216,9 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
 
         var types = new Dictionary<string, XElement>()
         {
-            ["bullet"] = configuration.BulletListElement,
-            ["number"] = configuration.NumberListElement,
-            ["table"] = configuration.BulletListElement, // TODO: add 
+            ["bullet"] = htmlConfiguration.BulletListElement,
+            ["number"] = htmlConfiguration.NumberListElement,
+            ["table"] = htmlConfiguration.BulletListElement, // TODO: add 
         };
 
         return types.TryGetValue(listType, out var newElement)
@@ -233,7 +233,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <returns>The HTML representation of the <c>&lt;item&gt;</c> element.</returns>
     protected virtual XElement TransformListItemElement(XElement element)
     {
-        return CopyChildNodes(element, configuration.ListItemElement);
+        return CopyChildNodes(element, htmlConfiguration.ListItemElement);
     }
 
     /// <summary>
@@ -243,7 +243,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <returns>The HTML representation of the <c>&lt;para&gt;</c> element.</returns>
     protected virtual XElement TransformParagraphElement(XElement element)
     {
-        return CopyChildNodes(element, configuration.ParagraphElement);
+        return CopyChildNodes(element, htmlConfiguration.ParagraphElement);
     }
 
     /// <summary>
@@ -253,7 +253,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <returns>The HTML representation of the <c>&lt;c&gt;</c> element.</returns>
     protected virtual XElement TransformInlineCodeElement(XElement element)
     {
-        return CopyChildNodes(element, configuration.InlineCodeElement);
+        return CopyChildNodes(element, htmlConfiguration.InlineCodeElement);
     }
 
     /// <summary>
@@ -263,7 +263,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <returns>The HTML representation of the <c>&lt;code&gt;</c> element.</returns>
     protected virtual XElement TransformCodeBlockElement(XElement element)
     {
-        return CopyChildNodes(element, configuration.CodeBlockElement);
+        return CopyChildNodes(element, htmlConfiguration.CodeBlockElement);
     }
 
     /// <summary>
@@ -273,7 +273,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <returns>The HTML representation of the <c>&lt;example&gt;</c> element.</returns>
     protected virtual XElement TransformExampleElement(XElement element)
     {
-        return CopyChildNodes(element, configuration.ExampleElement);
+        return CopyChildNodes(element, htmlConfiguration.ExampleElement);
     }
 
     /// <summary>
@@ -313,7 +313,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// </returns>
     protected virtual XElement TransformSeeCrefElement(XElement element, string crefValue)
     {
-        return TransformAnyCrefElement(element, configuration.SeeCrefElement, configuration.SeeCrefNotFoundElement, crefValue);
+        return TransformAnyCrefElement(element, htmlConfiguration.SeeCrefElement, htmlConfiguration.SeeCrefNotFoundElement, crefValue);
     }
 
     /// <summary>
@@ -324,7 +324,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <returns>The HTML representation of the <c>&lt;see href="..."&gt;</c> element.</returns>
     protected virtual XElement TransformSeeHrefElement(XElement element, string hrefValue)
     {
-        return CopyChildNodesAndAttribute(element, configuration.SeeHrefElement, XmlDocIdentifiers.Href);
+        return CopyChildNodesAndAttribute(element, htmlConfiguration.SeeHrefElement, XmlDocIdentifiers.Href);
     }
 
     /// <summary>
@@ -335,7 +335,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     protected virtual XElement TransformSeeLangwordElement(XElement element)
     {
         return element.Attribute(XmlDocIdentifiers.Langword) is XAttribute langwordAttr
-            ? AddTextNodeTo(langwordAttr.Value, configuration.SeeLangwordElement)
+            ? AddTextNodeTo(langwordAttr.Value, htmlConfiguration.SeeLangwordElement)
             : element;
     }
 
@@ -368,7 +368,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <returns>The HTML representation of the <c>&lt;seealso href="..."&gt;</c> element.</returns>
     protected virtual XElement TransformSeeAlsoHrefElement(XElement element, string hrefValue)
     {
-        return CopyChildNodesAndAttribute(element, configuration.SeeAlsoHrefElement, XmlDocIdentifiers.Href);
+        return CopyChildNodesAndAttribute(element, htmlConfiguration.SeeAlsoHrefElement, XmlDocIdentifiers.Href);
     }
 
     /// <summary>
@@ -384,7 +384,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// </returns>
     protected virtual XElement TransformSeeAlsoCrefElement(XElement element, string crefValue)
     {
-        return TransformAnyCrefElement(element, configuration.SeeAlsoCrefElement, configuration.SeeAlsoCrefNotFoundElement, crefValue);
+        return TransformAnyCrefElement(element, htmlConfiguration.SeeAlsoCrefElement, htmlConfiguration.SeeAlsoCrefNotFoundElement, crefValue);
     }
 
     /// <summary>
@@ -396,7 +396,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     {
         if (element.Attribute(XmlDocIdentifiers.Name) is XAttribute nameAttr)
         {
-            return AddTextNodeTo(nameAttr.Value, configuration.ParamRefElement);
+            return AddTextNodeTo(nameAttr.Value, htmlConfiguration.ParamRefElement);
         }
         return element;
     }
@@ -410,7 +410,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     {
         if (element.Attribute(XmlDocIdentifiers.Name) is XAttribute nameAttr)
         {
-            return AddTextNodeTo(nameAttr.Value, configuration.TypeParamRefElement);
+            return AddTextNodeTo(nameAttr.Value, htmlConfiguration.TypeParamRefElement);
         }
         return element;
     }
