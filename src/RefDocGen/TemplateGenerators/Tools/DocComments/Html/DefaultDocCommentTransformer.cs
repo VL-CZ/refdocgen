@@ -9,15 +9,27 @@ using RefDocGen.TemplateGenerators.Tools.TypeName;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 
-namespace RefDocGen.TemplateGenerators.Tools.DocComments;
+namespace RefDocGen.TemplateGenerators.Tools.DocComments.Html;
 
-internal class HtmlDocCommentTransformer : IDocCommentTransformer
+/// <summary>
+/// Class responsible for transforming the XML doc comments into HTML.
+/// </summary>
+internal class DefaultDocCommentTransformer : IDocCommentTransformer
 {
+    /// <summary>
+    /// <c>div</c> element name.
+    /// </summary>
     private const string div = "div";
 
-    private readonly IConfiguration configuration;
+    /// <summary>
+    /// Configuration for transforming the XML elements into HTML.
+    /// </summary>
+    private readonly IDocCommentTransformerConfiguration configuration;
 
-    private readonly string[] toRemove = [
+    /// <summary>
+    /// An array of parent XML doc comment elements.
+    /// </summary>
+    private readonly string[] docCommentParentElements = [
         XmlDocIdentifiers.Summary,
         XmlDocIdentifiers.Remarks,
         XmlDocIdentifiers.Returns,
@@ -25,14 +37,23 @@ internal class HtmlDocCommentTransformer : IDocCommentTransformer
         XmlDocIdentifiers.Value
     ];
 
-
-    internal HtmlDocCommentTransformer(ITypeRegistry typeRegistry, IConfiguration configuration)
+    /// <summary>
+    /// Initializes a new instance of <see cref="DefaultDocCommentTransformer"/> class.
+    /// </summary>
+    /// <param name="typeRegistry">
+    /// <inheritdoc cref="TypeRegistry"/>
+    /// </param>
+    /// <param name="configuration">
+    /// <inheritdoc cref="configuration"/>
+    /// </param>
+    internal DefaultDocCommentTransformer(IDocCommentTransformerConfiguration configuration, ITypeRegistry typeRegistry)
     {
         this.configuration = configuration;
         TypeRegistry = typeRegistry;
     }
 
-    internal HtmlDocCommentTransformer(IConfiguration configuration)
+    /// <inheritdoc cref="DefaultDocCommentTransformer(IDocCommentTransformerConfiguration, ITypeRegistry)"/>
+    internal DefaultDocCommentTransformer(IDocCommentTransformerConfiguration configuration)
     {
         this.configuration = configuration;
 
@@ -43,6 +64,7 @@ internal class HtmlDocCommentTransformer : IDocCommentTransformer
             );
     }
 
+    /// <inheritdoc/>
     public ITypeRegistry TypeRegistry { get; set; }
 
     /// <inheritdoc/>
@@ -82,7 +104,7 @@ internal class HtmlDocCommentTransformer : IDocCommentTransformer
             XmlDocIdentifiers.SeeAlso => TransformSeeAlsoElement(element),
             XmlDocIdentifiers.ParamRef => TransformParamRefElement(element),
             XmlDocIdentifiers.TypeParamRef => TransformTypeParamRefElement(element),
-            string name when toRemove.Contains(name) => new XElement(div, element.Nodes()),
+            string name when docCommentParentElements.Contains(name) => new XElement(div, element.Nodes()),
             _ => null // the element isn't one of the doc comment elements -> keep it as it is
         };
 

@@ -6,7 +6,7 @@ using RefDocGen.TemplateGenerators.Default;
 
 #pragma warning disable IDE0005 // add the namespace containing the Razor templates
 using RefDocGen.TemplateGenerators.Default.Templates;
-using RefDocGen.TemplateGenerators.Tools.DocComments;
+using RefDocGen.TemplateGenerators.Tools.DocComments.Html;
 #pragma warning restore IDE0005
 
 namespace RefDocGen;

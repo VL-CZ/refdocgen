@@ -1,10 +1,12 @@
-using RefDocGen.TemplateGenerators.Tools.DocComments;
+using RefDocGen.TemplateGenerators.Tools.DocComments.Html;
 using System.Xml.Linq;
 
 namespace RefDocGen.TemplateGenerators.Default;
 
-/// <inheritdoc />
-internal class DefaultConfiguration : IConfiguration
+/// <summary>
+/// Default configuration for transforming the XML documentation elements into their HTML representations.
+/// </summary>
+internal class DefaultConfiguration : IDocCommentTransformerConfiguration
 {
     /// <inheritdoc />
     public virtual XElement ParagraphElement => new("div");
