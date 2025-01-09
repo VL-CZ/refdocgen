@@ -7,7 +7,7 @@ using RefDocGen.CodeElements.Abstract.Types.Enum;
 using RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
-using RefDocGen.TemplateGenerators.Tools;
+using RefDocGen.TemplateGenerators.Tools.DocComments;
 
 namespace RefDocGen.TemplateGenerators.Default;
 
@@ -43,24 +43,24 @@ internal class RazorTemplateGenerator<
     /// </summary>
     private readonly HtmlRenderer htmlRenderer;
 
-
-    private DefaultDocCommentParser htmlCommentParser = new(new DefaultConfiguration());
+    private IDocCommentTransformer docCommentParser;
 
     /// <summary>
     /// Initialize a new instance of <see cref="RazorTemplateGenerator{TDelegateTemplate, TEnumTemplate, TNamespaceDetailTemplate, TNamespaceListTemplate, TObjectTypeTemplate}"/> class.
     /// </summary>
     /// <param name="htmlRenderer">Rendered of the Razor components.</param>
     /// <param name="outputDir">The directory, where the generated output will be stored.</param>
-    internal RazorTemplateGenerator(HtmlRenderer htmlRenderer, string outputDir)
+    internal RazorTemplateGenerator(HtmlRenderer htmlRenderer, IDocCommentTransformer docCommentParser, string outputDir)
     {
         this.outputDir = outputDir;
         this.htmlRenderer = htmlRenderer;
+        this.docCommentParser = docCommentParser;
     }
 
     /// <inheritdoc/>
     public void GenerateTemplates(ITypeRegistry typeRegistry)
     {
-        htmlCommentParser = new DefaultDocCommentParser(typeRegistry, new DefaultConfiguration());
+        docCommentParser.TypeRegistry = typeRegistry;
 
         GenerateObjectTypeTemplates(typeRegistry.ObjectTypes);
         GenerateEnumTemplates(typeRegistry.Enums);
@@ -74,7 +74,7 @@ internal class RazorTemplateGenerator<
     /// <param name="types">The type data to be used in the templates.</param>
     private void GenerateObjectTypeTemplates(IEnumerable<IObjectTypeData> types)
     {
-        var typeTemplateModels = types.Select(t => ObjectTypeTMCreator.GetFrom(t, htmlCommentParser));
+        var typeTemplateModels = types.Select(t => ObjectTypeTMCreator.GetFrom(t, docCommentParser));
         GenerateTemplates<TObjectTypeTemplate, ObjectTypeTM>(typeTemplateModels);
     }
 

@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using RefDocGen.DocExtraction;
 using RefDocGen.TemplateGenerators.Default;
 
 #pragma warning disable IDE0005 // add the namespace containing the Razor templates
 using RefDocGen.TemplateGenerators.Default.Templates;
+using RefDocGen.TemplateGenerators.Tools.DocComments;
 #pragma warning restore IDE0005
 
 namespace RefDocGen;
@@ -37,13 +39,18 @@ public static class Program
         await using var htmlRenderer = new HtmlRenderer(serviceProvider, loggerFactory);
 
         //var templateGenerator = new DefaultTemplateGenerator(projectPath, templatePath, outputDir);
+
+        IDocCommentTransformer docCommentParser = new DefaultDocCommentTransformer(
+                new DefaultConfiguration()
+            );
+
         var templateGenerator = new RazorTemplateGenerator<
                 DelegateTypeTemplate,
                 EnumTypeTemplate,
                 NamespaceDetailTemplate,
                 NamespaceListTemplate,
                 ObjectTypeTemplate
-            >(htmlRenderer, outputDir);
+            >(htmlRenderer, docCommentParser, outputDir);
 
         var docGenerator = new DocGenerator(dllPath, docPath, templateGenerator);
         docGenerator.GenerateDoc();

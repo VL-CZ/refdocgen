@@ -4,6 +4,7 @@ using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Tools;
+using RefDocGen.TemplateGenerators.Tools.DocComments;
 using RefDocGen.TemplateGenerators.Tools.Keywords;
 using RefDocGen.TemplateGenerators.Tools.TypeName;
 
@@ -20,7 +21,7 @@ internal static class ObjectTypeTMCreator
     /// <param name="typeData">The <see cref="IObjectTypeData"/> instance representing the type.</param>
     /// <param name="commentParser">TODO</param>
     /// <returns>A <see cref="ObjectTypeTM"/> instance based on the provided <paramref name="typeData"/>.</returns>
-    internal static ObjectTypeTM GetFrom(IObjectTypeData typeData, DefaultDocCommentParser commentParser)
+    internal static ObjectTypeTM GetFrom(IObjectTypeData typeData, IDocCommentTransformer commentParser)
     {
         var constructors = typeData.Constructors.Select(c => GetFrom(c, commentParser)).ToArray();
         var fields = typeData.Fields.Select(c => GetFrom(c, commentParser)).ToArray();
@@ -75,7 +76,7 @@ internal static class ObjectTypeTMCreator
     /// <param name="constructorData">The <see cref="IConstructorData"/> instance representing the constructor.</param>
     /// <param name="commentParser">TODO</param>
     /// <returns>A <see cref="ConstructorTM"/> instance based on the provided <paramref name="constructorData"/>.</returns>
-    private static ConstructorTM GetFrom(IConstructorData constructorData, DefaultDocCommentParser commentParser)
+    private static ConstructorTM GetFrom(IConstructorData constructorData, IDocCommentTransformer commentParser)
     {
         var modifiers = GetCallableMemberModifiers(constructorData);
         var exceptionTMs = constructorData.DocumentedExceptions.Select(ExceptionTMCreator.GetFrom);
@@ -96,7 +97,7 @@ internal static class ObjectTypeTMCreator
     /// <param name="fieldData">The <see cref="IFieldData"/> instance representing the field.</param>
     /// <param name="commentParser">TODO</param>
     /// <returns>A <see cref="FieldTM"/> instance based on the provided <paramref name="fieldData"/>.</returns>
-    private static FieldTM GetFrom(IFieldData fieldData, DefaultDocCommentParser commentParser)
+    private static FieldTM GetFrom(IFieldData fieldData, IDocCommentTransformer commentParser)
     {
         List<Keyword> modifiers = [fieldData.AccessModifier.ToKeyword()];
 

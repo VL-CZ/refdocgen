@@ -9,158 +9,11 @@ using RefDocGen.TemplateGenerators.Tools.TypeName;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 
-namespace RefDocGen.TemplateGenerators.Tools;
+namespace RefDocGen.TemplateGenerators.Tools.DocComments;
 
-/// <summary>
-/// Defines the configuration for transforming XML documentation elements to HTML representations.
-/// </summary>
-internal interface IConfiguration
+internal class HtmlDocCommentTransformer : IDocCommentTransformer
 {
-    /// <summary>
-    /// The HTML representation of the <c>&lt;para&gt;</c> element.
-    /// </summary>
-    XElement ParagraphElement { get; }
-
-    /// <summary>
-    /// The HTML representation of the <c>&lt;list type="bullet"&gt;</c> element.
-    /// </summary>
-    XElement BulletListElement { get; }
-
-    /// <summary>
-    /// The HTML representation of the <c>&lt;list type="number"&gt;</c> element.
-    /// </summary>
-    XElement NumberListElement { get; }
-
-    /// <summary>
-    /// The HTML representation of the <c>&lt;item&gt;</c> element.
-    /// </summary>
-    XElement ListItemElement { get; }
-
-    /// <summary>
-    /// The HTML representation of the <c>&lt;c&gt;</c> element.
-    /// </summary>
-    XElement InlineCodeElement { get; }
-
-    /// <summary>
-    /// The HTML representation of the <c>&lt;code&gt;</c> element.
-    /// </summary>
-    XElement CodeBlockElement { get; }
-
-    /// <summary>
-    /// The HTML representation of the <c>&lt;example&gt;</c> element.
-    /// </summary>
-    XElement ExampleElement { get; }
-
-    /// <summary>
-    /// The HTML representation of the <c>&lt;paramref&gt;</c> element.
-    /// </summary>
-    XElement ParamRefElement { get; }
-
-    /// <summary>
-    /// The HTML representation of the <c>&lt;typeparamref&gt;</c> element.
-    /// </summary>
-    XElement TypeParamRefElement { get; }
-
-    /// <summary>
-    /// The HTML representation of the <c>&lt;see cref="..."&gt;</c> element.
-    /// </summary>
-    XElement SeeCrefElement { get; }
-
-    /// <summary>
-    /// The HTML representation of the <c>&lt;see href="..."&gt;</c> element.
-    /// </summary>
-    XElement SeeHrefElement { get; }
-
-    /// <summary>
-    /// The HTML representation of the <c>&lt;see langword="..."&gt;</c> element.
-    /// </summary>
-    XElement SeeLangwordElement { get; }
-
-    /// <summary>
-    /// The HTML representation of the <c>&lt;see cref="..."&gt;</c> element, whose reference isn't found.
-    /// </summary>
-    XElement SeeCrefNotFoundElement { get; }
-
-    /// <summary>
-    /// The HTML representation of the <c>&lt;seealso cref="..."&gt;</c> element.
-    /// </summary>
-    XElement SeeAlsoCrefElement { get; }
-
-    /// <summary>
-    /// The HTML representation of the <c>&lt;seealso href="..."&gt;</c> element.
-    /// </summary>
-    XElement SeeAlsoHrefElement { get; }
-
-    /// <summary>
-    /// The HTML representation of the <c>&lt;seealso cref="..."&gt;</c> element, whose reference isn't found.
-    /// </summary>
-    XElement SeeAlsoCrefNotFoundElement { get; }
-}
-
-/// <inheritdoc />
-internal class DefaultConfiguration : IConfiguration
-{
-    /// <inheritdoc />
-    public virtual XElement ParagraphElement => new("div");
-
-    /// <inheritdoc />
-    public virtual XElement BulletListElement => new("ul");
-
-    /// <inheritdoc />
-    public virtual XElement NumberListElement => new("ol");
-
-    /// <inheritdoc />
-    public virtual XElement ListItemElement => new("li");
-
-    /// <inheritdoc />
-    public virtual XElement InlineCodeElement => new("code");
-
-    /// <inheritdoc />
-    public virtual XElement CodeBlockElement => new("pre",
-                                                    new XElement("code")
-                                                );
-
-    /// <inheritdoc />
-    public virtual XElement ExampleElement => new("div");
-
-    /// <inheritdoc />
-    public virtual XElement ParamRefElement => new("code");
-
-    /// <inheritdoc />
-    public virtual XElement TypeParamRefElement => new("code");
-
-    /// <inheritdoc />
-    public virtual XElement SeeCrefElement => new("a");
-
-    /// <inheritdoc />
-    public virtual XElement SeeHrefElement => new("a");
-
-    /// <inheritdoc />
-    public virtual XElement SeeLangwordElement => new("code");
-
-    /// <inheritdoc />
-    public virtual XElement SeeCrefNotFoundElement => new("code");
-
-    /// <inheritdoc />
-    public virtual XElement SeeAlsoCrefElement => new("a");
-
-    /// <inheritdoc />
-    public virtual XElement SeeAlsoHrefElement => new("a");
-
-    /// <inheritdoc />
-    public virtual XElement SeeAlsoCrefNotFoundElement => new("code");
-}
-
-internal interface IDocCommentParser
-{
-    string ToHtmlString(XElement docComment);
-}
-
-internal class DefaultDocCommentParser : IDocCommentParser
-{
-    private static readonly XElement emptyDivElement = new("div");
-
-    protected readonly ITypeRegistry typeRegistry;
+    private const string div = "div";
 
     private readonly IConfiguration configuration;
 
@@ -172,23 +25,27 @@ internal class DefaultDocCommentParser : IDocCommentParser
         XmlDocIdentifiers.Value
     ];
 
-    internal DefaultDocCommentParser(ITypeRegistry typeRegistry, IConfiguration configuration)
+
+    internal HtmlDocCommentTransformer(ITypeRegistry typeRegistry, IConfiguration configuration)
     {
-        this.typeRegistry = typeRegistry;
         this.configuration = configuration;
+        TypeRegistry = typeRegistry;
     }
 
-    internal DefaultDocCommentParser(IConfiguration? configuration = null) // TODO: code smell
+    internal HtmlDocCommentTransformer(IConfiguration configuration)
     {
-        typeRegistry = new TypeRegistry(
+        this.configuration = configuration;
+
+        TypeRegistry = new TypeRegistry(
                 new Dictionary<string, ObjectTypeData>(),
                 new Dictionary<string, EnumTypeData>(),
                 new Dictionary<string, DelegateTypeData>()
             );
-
-        this.configuration = configuration ?? new DefaultConfiguration();
     }
 
+    public ITypeRegistry TypeRegistry { get; set; }
+
+    /// <inheritdoc/>
     public string ToHtmlString(XElement docComment)
     {
         var docCommentCopy = new XElement(docComment);
@@ -201,6 +58,9 @@ internal class DefaultDocCommentParser : IDocCommentParser
     /// Transforms the <paramref name="element"/> to its HTML representation.
     /// </summary>
     /// <param name="element">The element to transform to HTML.</param>
+    /// <remarks>
+    /// The transformation is done in-place, therefore the caller should pass a copy of the element as a parameter.
+    /// </remarks>
     private void TransformToHtml(XElement element)
     {
         // firstly transform the children
@@ -222,8 +82,8 @@ internal class DefaultDocCommentParser : IDocCommentParser
             XmlDocIdentifiers.SeeAlso => TransformSeeAlsoElement(element),
             XmlDocIdentifiers.ParamRef => TransformParamRefElement(element),
             XmlDocIdentifiers.TypeParamRef => TransformTypeParamRefElement(element),
-            _ when toRemove.Contains(element.Name.ToString()) => new XElement("div", element.Nodes()),
-            _ => null
+            string name when toRemove.Contains(name) => new XElement(div, element.Nodes()),
+            _ => null // the element isn't one of the doc comment elements -> keep it as it is
         };
 
         if (transformedElement is not null)
@@ -569,7 +429,7 @@ internal class DefaultDocCommentParser : IDocCommentParser
         }
 
         // type found
-        if (typeRegistry.GetDeclaredType(typeId) is ITypeDeclaration type)
+        if (TypeRegistry.GetDeclaredType(typeId) is ITypeDeclaration type)
         {
             var result = new XElement(htmlTemplateIfFound);
             var emptyDescendant = result.GetSingleEmptyDescendantOrSelf();
