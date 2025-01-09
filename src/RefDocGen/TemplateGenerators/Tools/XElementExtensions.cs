@@ -10,7 +10,8 @@ internal static class XElementExtensions
 
     internal static XElement GetEmptyDescendantOrSelf(this XElement element)
     {
-        return element.DescendantsAndSelf().SingleOrDefault(n => n.IsEmpty)
-            ?? throw new ArgumentException(""); // TODO: add exception message
+        var x = element;
+        return element.DescendantsAndSelf().SingleOrDefault(n => !n.Nodes().Any())
+            ?? throw new ArgumentException($"{element} problem."); // TODO: add exception message
     }
 }
