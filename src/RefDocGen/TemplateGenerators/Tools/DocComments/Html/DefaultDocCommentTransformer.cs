@@ -43,19 +43,19 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <param name="typeRegistry">
     /// <inheritdoc cref="TypeRegistry"/>
     /// </param>
-    /// <param name="configuration">
+    /// <param name="htmlConfiguration">
     /// <inheritdoc cref="htmlConfiguration"/>
     /// </param>
-    internal DefaultDocCommentTransformer(IDocCommentHtmlConfiguration configuration, ITypeRegistry typeRegistry)
+    internal DefaultDocCommentTransformer(IDocCommentHtmlConfiguration htmlConfiguration, ITypeRegistry typeRegistry)
     {
-        this.htmlConfiguration = configuration;
+        this.htmlConfiguration = htmlConfiguration;
         TypeRegistry = typeRegistry;
     }
 
     /// <inheritdoc cref="DefaultDocCommentTransformer(IDocCommentHtmlConfiguration, ITypeRegistry)"/>
-    internal DefaultDocCommentTransformer(IDocCommentHtmlConfiguration configuration)
+    internal DefaultDocCommentTransformer(IDocCommentHtmlConfiguration htmlConfiguration)
     {
-        this.htmlConfiguration = configuration;
+        this.htmlConfiguration = htmlConfiguration;
 
         TypeRegistry = new TypeRegistry(
                 new Dictionary<string, ObjectTypeData>(),
