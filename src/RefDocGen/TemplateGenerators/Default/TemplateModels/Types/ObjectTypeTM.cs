@@ -13,12 +13,13 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 /// <param name="SummaryDocComment">'summary' documentation comment for the type.</param>
 /// <param name="RemarksDocComment">'remarks' documentation comment for the type.</param>
 /// <param name="Constructors">Template models of the type constructors.</param>
-/// <param name="Fields">Template models of the fields declared in the type.</param>
-/// <param name="Properties">Template models of the properties declared in the type.</param>
-/// <param name="Methods">Template models of the methods declared in the type.</param>
-/// <param name="Operators">Template models of the operators declared in the type.</param>
-/// <param name="Indexers">Template models of the indexers declared in the type.</param>
-/// <param name="TypeParameters">Template models of the generic type parameters declared in the type.</param>
+/// <param name="Fields">Template models of the fields contained in the type.</param>
+/// <param name="Properties">Template models of the properties contained in the type.</param>
+/// <param name="Methods">Template models of the methods contained in the type.</param>
+/// <param name="Operators">Template models of the operators contained in the type.</param>
+/// <param name="Indexers">Template models of the indexers contained in the type.</param>
+/// <param name="Events">Template models of the events contained in the type.</param>
+/// <param name="TypeParameters">Template models of the generic type parameters contained in the type.</param>
 /// <param name="BaseTypeName">Name of the base type, null if the type doesn't have any base type.</param>
 /// <param name="ImplementedInterfaces">Collection of interfaces implemented by the type.</param>
 public record ObjectTypeTM(
@@ -35,6 +36,7 @@ public record ObjectTypeTM(
     MethodTM[] Methods,
     MethodTM[] Operators,
     IndexerTM[] Indexers,
+    EventTM[] Events,
     TypeParameterTM[] TypeParameters,
     string? BaseTypeName,
     IEnumerable<string> ImplementedInterfaces) : ITemplateModelWithId;
