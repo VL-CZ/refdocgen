@@ -24,7 +24,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <summary>
     /// Configuration for transforming the XML elements into HTML.
     /// </summary>
-    private readonly IDocCommentTransformerConfiguration configuration;
+    private readonly IDocCommentHtmlConfiguration configuration;
 
     /// <summary>
     /// An array of parent XML doc comment elements.
@@ -46,14 +46,14 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <param name="configuration">
     /// <inheritdoc cref="configuration"/>
     /// </param>
-    internal DefaultDocCommentTransformer(IDocCommentTransformerConfiguration configuration, ITypeRegistry typeRegistry)
+    internal DefaultDocCommentTransformer(IDocCommentHtmlConfiguration configuration, ITypeRegistry typeRegistry)
     {
         this.configuration = configuration;
         TypeRegistry = typeRegistry;
     }
 
-    /// <inheritdoc cref="DefaultDocCommentTransformer(IDocCommentTransformerConfiguration, ITypeRegistry)"/>
-    internal DefaultDocCommentTransformer(IDocCommentTransformerConfiguration configuration)
+    /// <inheritdoc cref="DefaultDocCommentTransformer(IDocCommentHtmlConfiguration, ITypeRegistry)"/>
+    internal DefaultDocCommentTransformer(IDocCommentHtmlConfiguration configuration)
     {
         this.configuration = configuration;
 
@@ -291,7 +291,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
         {
             return TransformSeeCrefElement(element, crefAttr.Value);
         }
-        else if (element.Attribute(XmlDocIdentifiers.Langword) is XAttribute langwordAttr)
+        else if (element.Attribute(XmlDocIdentifiers.Langword) is not null)
         {
             return TransformSeeLangwordElement(element);
         }

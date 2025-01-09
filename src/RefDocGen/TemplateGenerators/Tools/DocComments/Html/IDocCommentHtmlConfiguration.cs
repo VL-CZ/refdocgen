@@ -3,9 +3,9 @@ using System.Xml.Linq;
 namespace RefDocGen.TemplateGenerators.Tools.DocComments.Html;
 
 /// <summary>
-/// Defines the configuration for transforming the XML documentation elements into their HTML representations.
+/// Defines the HTML representations for the XML doc comment elements.
 /// </summary>
-internal interface IDocCommentTransformerConfiguration
+internal interface IDocCommentHtmlConfiguration
 {
     /// <summary>
     /// The HTML representation of the <c>&lt;para&gt;</c> element.

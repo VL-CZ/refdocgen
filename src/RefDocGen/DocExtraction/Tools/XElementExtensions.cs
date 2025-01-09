@@ -101,8 +101,6 @@ internal static class XElementExtensions
         return element.TryGetAttribute(XmlDocIdentifiers.Cref, out attribute);
     }
 
-#pragma warning disable IDE0046
-
     /// <summary>
     /// Selects descendant 'inheritdoc' elements of the given <paramref name="element"/>.
     /// </summary>
@@ -135,9 +133,6 @@ internal static class XElementExtensions
         {
             return allInheritDocs;
         }
-
-#pragma warning restore IDE0046
-
     }
 }
 

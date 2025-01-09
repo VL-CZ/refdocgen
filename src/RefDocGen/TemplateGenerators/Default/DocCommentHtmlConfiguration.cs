@@ -6,7 +6,7 @@ namespace RefDocGen.TemplateGenerators.Default;
 /// <summary>
 /// Default configuration for transforming the XML documentation elements into their HTML representations.
 /// </summary>
-internal class DefaultConfiguration : IDocCommentTransformerConfiguration
+internal class DocCommentHtmlConfiguration : IDocCommentHtmlConfiguration
 {
     /// <inheritdoc />
     public virtual XElement ParagraphElement => new("div");

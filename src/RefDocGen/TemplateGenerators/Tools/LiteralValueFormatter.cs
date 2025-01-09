@@ -2,8 +2,6 @@ using System.Globalization;
 
 namespace RefDocGen.TemplateGenerators.Tools;
 
-#pragma warning disable IDE0046
-
 /// <summary>
 /// Class responsible for formatting literal values.
 /// </summary>
@@ -34,5 +32,3 @@ internal class LiteralValueFormatter
         }
     }
 }
-
-#pragma warning restore IDE0046
