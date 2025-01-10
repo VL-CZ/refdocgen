@@ -1,6 +1,5 @@
 using RefDocGen.CodeElements.Abstract;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
-using System;
 using System.Globalization;
 
 namespace RefDocGen.TemplateGenerators.Tools;
