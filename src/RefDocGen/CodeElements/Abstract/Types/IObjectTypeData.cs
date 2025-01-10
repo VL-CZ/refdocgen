@@ -28,32 +28,37 @@ public interface IObjectTypeData : ITypeDeclaration
     bool IsSealed { get; }
 
     /// <summary>
-    /// Collection of constructors declared in the type.
+    /// Collection of constructors contained in the type.
     /// </summary>
     IEnumerable<IConstructorData> Constructors { get; }
 
     /// <summary>
-    /// Collection of fields declared in the type.
+    /// Collection of fields contained in the type.
     /// </summary>
     IEnumerable<IFieldData> Fields { get; }
 
     /// <summary>
-    /// Collection of methods declared in the type.
+    /// Collection of methods contained in the type.
     /// </summary>
     IEnumerable<IMethodData> Methods { get; }
 
     /// <summary>
-    /// Collection of properties declared in the type.
+    /// Collection of properties contained in the type.
     /// </summary>
     IEnumerable<IPropertyData> Properties { get; }
 
     /// <summary>
-    /// Collection of operators declared in the type.
+    /// Collection of operators contained in the type.
     /// </summary>
     IEnumerable<IOperatorData> Operators { get; }
 
     /// <summary>
-    /// Collection of indexers declared in the type.
+    /// Collection of indexers contained in the type.
     /// </summary>
     IEnumerable<IIndexerData> Indexers { get; }
+
+    /// <summary>
+    /// Collection of indexers contained in the type.
+    /// </summary>
+    IEnumerable<IEventData> Events { get; }
 }

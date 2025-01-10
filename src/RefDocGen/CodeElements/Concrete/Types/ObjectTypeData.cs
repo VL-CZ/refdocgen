@@ -8,7 +8,7 @@ namespace RefDocGen.CodeElements.Concrete.Types;
 /// <summary>
 /// Class representing data of a value, reference or interface type, including its members.
 /// <para>
-/// Typically, only the types declared in the assemblies we analyze, are represented by this class.
+/// Typically, only the types contained in the assemblies we analyze, are represented by this class.
 /// </para>
 /// <para>
 /// Note: This class doesn't represent enum types - see <see cref="EnumTypeData"/>.
@@ -31,34 +31,39 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
     { }
 
     /// <summary>
-    /// Dictionary of constructors declared in the type; keys are the corresponding constructor IDs.
+    /// Dictionary of constructors contained in the type; keys are the corresponding constructor IDs.
     /// </summary>
     public IReadOnlyDictionary<string, ConstructorData> Constructors { get; private set; } = new Dictionary<string, ConstructorData>();
 
     /// <summary>
-    /// Dictionary of fields declared in the type; keys are the corresponding field IDs.
+    /// Dictionary of fields contained in the type; keys are the corresponding field IDs.
     /// </summary>
     public IReadOnlyDictionary<string, FieldData> Fields { get; private set; } = new Dictionary<string, FieldData>();
 
     /// <summary>
-    /// Dictionary of properties declared in the type; keys are the corresponding property IDs.
+    /// Dictionary of properties contained in the type; keys are the corresponding property IDs.
     /// </summary>
     public IReadOnlyDictionary<string, PropertyData> Properties { get; private set; } = new Dictionary<string, PropertyData>();
 
     /// <summary>
-    /// Dictionary of methods declared in the type; keys are the corresponding method IDs.
+    /// Dictionary of methods contained in the type; keys are the corresponding method IDs.
     /// </summary>
     public IReadOnlyDictionary<string, MethodData> Methods { get; private set; } = new Dictionary<string, MethodData>();
 
     /// <summary>
-    /// Dictionary of operators declared in the type; keys are the corresponding operator IDs.
+    /// Dictionary of operators contained in the type; keys are the corresponding operator IDs.
     /// </summary>
     public IReadOnlyDictionary<string, OperatorData> Operators { get; private set; } = new Dictionary<string, OperatorData>();
 
     /// <summary>
-    /// Dictionary of indexers declared in the type; keys are the corresponding operator IDs.
+    /// Dictionary of indexers contained in the type; keys are the corresponding operator IDs.
     /// </summary>
     public IReadOnlyDictionary<string, IndexerData> Indexers { get; private set; } = new Dictionary<string, IndexerData>();
+
+    /// <summary>
+    /// Dictionary of events contained in the type; keys are the corresponding operator IDs.
+    /// </summary>
+    public IReadOnlyDictionary<string, EventData> Events { get; private set; } = new Dictionary<string, EventData>();
 
     /// <inheritdoc/>
     public bool IsAbstract => TypeObject.IsAbstract;
@@ -92,15 +97,46 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
     IEnumerable<IIndexerData> IObjectTypeData.Indexers => Indexers.Values;
 
     /// <inheritdoc/>
+    IEnumerable<IEventData> IObjectTypeData.Events => Events.Values;
+
+    /// <inheritdoc/>
     internal override IReadOnlyDictionary<string, MemberData> AllMembers { get; private protected set; } = new Dictionary<string, MemberData>();
 
+    /// <summary>
+    /// Adds the members to the type.
+    /// </summary>
+    /// <param name="constructors">
+    /// <inheritdoc cref="Constructors"/>
+    /// </param>
+    /// <param name="fields">
+    /// <inheritdoc cref="Fields"/>
+    /// </param>
+    /// <param name="properties">
+    /// <inheritdoc cref="Properties"/>
+    /// </param>
+    /// <param name="methods">
+    /// <inheritdoc cref="Methods"/>
+    /// </param>
+    /// <param name="operators">
+    /// <inheritdoc cref="Operators"/>
+    /// </param>
+    /// <param name="indexers">
+    /// <inheritdoc cref="Indexers"/>
+    /// </param>
+    /// <param name="events">
+    /// <inheritdoc cref="Events"/>
+    /// </param>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if the members have already been added.
+    /// </exception>
     internal void AddMembers(
         IReadOnlyDictionary<string, ConstructorData> constructors,
         IReadOnlyDictionary<string, FieldData> fields,
         IReadOnlyDictionary<string, PropertyData> properties,
         IReadOnlyDictionary<string, MethodData> methods,
         IReadOnlyDictionary<string, OperatorData> operators,
-        IReadOnlyDictionary<string, IndexerData> indexers)
+        IReadOnlyDictionary<string, IndexerData> indexers,
+        IReadOnlyDictionary<string, EventData> events)
     {
         if (membersAdded)
         {
@@ -113,6 +149,7 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
         Methods = methods;
         Operators = operators;
         Indexers = indexers;
+        Events = events;
 
         AllMembers = ((IEnumerable<MemberData>)Constructors.Values)
             .Concat(Fields.Values)
@@ -120,6 +157,7 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
             .Concat(Properties.Values)
             .Concat(Operators.Values)
             .Concat(Indexers.Values)
+            .Concat(Events.Values)
             .ToDictionary(m => m.Id);
 
         membersAdded = true;

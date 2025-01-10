@@ -34,6 +34,7 @@ internal class DocCommentExtractor
         [CodeElementId.Field] = new FieldDocHandler(),
         [CodeElementId.Property] = new PropertyDocHandler(),
         [CodeElementId.Method] = new MethodDocHandler(),
+        [CodeElementId.Event] = new EventDocHandler()
     };
 
     /// <summary>

@@ -198,6 +198,42 @@
             </div>
         }
 
+        @if (Model.Events.Any())
+        {
+            <h2 class="display-5 mt-2">Events</h2>
+            <div class="row">
+                <div class="col-md-12">
+                    @foreach (var e in Model.Events)
+                    {
+                        <div class="border p-2 mb-2" id="@e.Name">
+                            <h6 class="mb-1">
+                                <samp>
+                                    <span class="text-primary">
+                                        @string.Join(' ', e.Modifiers)
+                                    </span>
+                                    <span class="text-secondary">
+                                        @e.Type
+                                    </span>
+                                    <span class="text-dark">
+                                        @e.Name
+                                    </span>
+                                </samp>
+                            </h6>
+                            <div class="text-muted mb-0">
+                                <i>
+                                    @((MarkupString)e.SummaryDocComment)
+                                </i>
+                            </div>
+
+                            <RemarksDocumentation DocComment="@e.RemarksDocComment" />
+
+                            <SeeAlsoDocumentation DocComments="@e.SeeAlsoDocComments" />
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
         @if (Model.Properties.Any())
         {
             <h2 class="display-5 mt-2">Properties</h2>

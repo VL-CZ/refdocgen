@@ -32,6 +32,8 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     private readonly string[] docCommentParentElements = [
         XmlDocIdentifiers.Summary,
         XmlDocIdentifiers.Remarks,
+        XmlDocIdentifiers.Param,
+        XmlDocIdentifiers.TypeParam,
         XmlDocIdentifiers.Returns,
         XmlDocIdentifiers.Exception,
         XmlDocIdentifiers.Value

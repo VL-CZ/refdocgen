@@ -29,6 +29,7 @@ internal static class ObjectTypeTMCreator
         var methods = typeData.Methods.Select(GetFrom).ToArray();
         var operators = typeData.Operators.Select(GetFrom).ToArray();
         var indexers = typeData.Indexers.Select(GetFrom).ToArray();
+        var events = typeData.Events.Select(e => GetFrom(e, commentParser)).ToArray();
         var typeParameterDeclarations = typeData.TypeParameterDeclarations.Select(TypeParameterTMCreator.GetFrom).ToArray();
 
         string? baseType = typeData.BaseType is not null
@@ -64,6 +65,7 @@ internal static class ObjectTypeTMCreator
             methods,
             operators,
             indexers,
+            events,
             typeParameterDeclarations,
             baseType,
             interfaces
@@ -278,6 +280,29 @@ internal static class ObjectTypeTMCreator
             modifiers.GetStrings(),
             operatorData.TypeParameters.Select(TypeParameterTMCreator.GetFrom).ToArray(),
             exceptionTMs);
+    }
+
+    /// <summary>
+    /// Creates a <see cref="EventTM"/> instance based on the provided <see cref="IEventData"/> object.
+    /// </summary>
+    /// <param name="eventData">The <see cref="IEventData"/> instance representing the event.</param>
+    /// <param name="commentParser">TODO</param>
+    /// <returns>A <see cref="EventTM"/> instance based on the provided <paramref name="eventData"/>.</returns>
+    private static EventTM GetFrom(IEventData eventData, IDocCommentTransformer commentParser)
+    {
+        var modifiers = GetCallableMemberModifiers(eventData);
+
+        string docComment = commentParser.ToHtmlString(eventData.SummaryDocComment);
+        string[] seeAlsoDocComments = eventData.SeeAlsoDocComments.Select(commentParser.ToHtmlString).ToArray();
+
+        return new EventTM(
+            eventData.Name,
+            CSharpTypeName.Of(eventData.Type),
+            docComment,
+            eventData.RemarksDocComment.Value,
+            modifiers.GetStrings(),
+            seeAlsoDocComments
+            );
     }
 
     /// <summary>

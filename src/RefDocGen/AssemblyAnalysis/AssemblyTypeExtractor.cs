@@ -83,8 +83,13 @@ internal class AssemblyTypeExtractor
     /// <returns><see cref="ObjectTypeData"/> object representing the type.</returns>
     private ObjectTypeData ConstructObjectType(Type type)
     {
-        var constructors = type.GetConstructors(bindingFlags).Where(c => !c.IsCompilerGenerated());
-        var fields = type.GetFields(bindingFlags).Where(f => !f.IsCompilerGenerated());
+        var constructors = type
+            .GetConstructors(bindingFlags)
+            .Where(c => !c.IsCompilerGenerated());
+
+        var fields = type
+            .GetFields(bindingFlags)
+            .Where(f => !f.IsCompilerGenerated());
 
         var indexers = type
             .GetProperties(bindingFlags)
@@ -103,6 +108,10 @@ internal class AssemblyTypeExtractor
             .GetMethods(bindingFlags)
             .Where(m => !m.IsCompilerGenerated() && !m.IsSpecialName)
             .Except(operators);
+
+        var events = type
+            .GetEvents(bindingFlags)
+            .Where(e => !e.IsCompilerGenerated());
 
         var typeParameters = type
             .GetGenericArguments()
@@ -137,8 +146,12 @@ internal class AssemblyTypeExtractor
             .Select(m => new IndexerData(m, objectType, typeParameters))
             .ToDictionary(m => m.Id);
 
+        var eventModels = events
+            .Select(e => new EventData(e, objectType, typeParameters))
+            .ToDictionary(e => e.Id);
+
         // add the members
-        objectType.AddMembers(ctorModels, fieldModels, propertyModels, methodModels, operatorModels, indexerModels);
+        objectType.AddMembers(ctorModels, fieldModels, propertyModels, methodModels, operatorModels, indexerModels, eventModels);
 
         return objectType;
     }
