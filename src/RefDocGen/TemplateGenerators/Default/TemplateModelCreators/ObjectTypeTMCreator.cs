@@ -257,8 +257,6 @@ internal class ObjectTypeTMCreator : BaseTMCreator
             ? "" // for conversion operators, the return type is shown in its name
             : CSharpTypeName.Of(operatorData.ReturnType);
 
-        var exceptionTMs = operatorData.DocumentedExceptions.Select(exceptionTMCreator.GetFrom);
-
         return new MethodTM(
             name,
             GetTemplateModels(operatorData.Parameters),
