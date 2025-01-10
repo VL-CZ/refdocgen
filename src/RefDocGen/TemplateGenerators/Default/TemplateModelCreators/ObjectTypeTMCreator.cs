@@ -290,12 +290,7 @@ internal static class ObjectTypeTMCreator
     /// <returns>A <see cref="EventTM"/> instance based on the provided <paramref name="eventData"/>.</returns>
     private static EventTM GetFrom(IEventData eventData, IDocCommentTransformer commentParser)
     {
-        List<Keyword> modifiers = [eventData.AccessModifier.ToKeyword()];
-
-        if (eventData.IsStatic)
-        {
-            modifiers.Add(Keyword.Static);
-        }
+        var modifiers = GetCallableMemberModifiers(eventData);
 
         string docComment = commentParser.ToHtmlString(eventData.SummaryDocComment);
         string[] seeAlsoDocComments = eventData.SeeAlsoDocComments.Select(commentParser.ToHtmlString).ToArray();

@@ -11,6 +11,16 @@ namespace RefDocGen.CodeElements.Concrete.Members;
 internal class EventData : MemberData, IEventData
 {
     /// <summary>
+    /// Add method of the delegate.
+    /// </summary>
+    private readonly IMethodData? addMethod;
+
+    /// <summary>
+    /// Remove method of the delegate.
+    /// </summary>
+    private readonly IMethodData? removeMethod;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="EventData"/> class.
     /// </summary>
     /// <param name="eventInfo"><see cref="System.Reflection.EventInfo"/> object representing the event.</param>
@@ -20,34 +30,86 @@ internal class EventData : MemberData, IEventData
         : base(eventInfo, containingType)
     {
         EventInfo = eventInfo;
-        Type = eventInfo.EventHandlerType?.GetTypeNameData(availableTypeParameters) ?? typeof(void).GetTypeNameData();
+        Type = eventInfo.EventHandlerType?.GetTypeNameData(availableTypeParameters)
+            ?? throw new ArgumentException("Cannot obtain event handler type.");
+
+        // construct the event methods
+        if (eventInfo.GetAddMethod(nonPublic: true) is MethodInfo addMethod)
+        {
+            this.addMethod = new MethodData(addMethod, containingType, availableTypeParameters);
+        }
+
+        if (eventInfo.GetRemoveMethod(nonPublic: true) is MethodInfo removeMethod)
+        {
+            this.removeMethod = new MethodData(removeMethod, containingType, availableTypeParameters);
+        }
+
     }
 
-    public EventInfo EventInfo { get; }
-
-    public bool IsOverridable => throw new NotImplementedException();
-
-    public bool OverridesAnotherMember => throw new NotImplementedException();
-
-    public bool IsAbstract => throw new NotImplementedException();
-
-    public bool IsFinal => throw new NotImplementedException();
-
-    public bool IsSealed => throw new NotImplementedException();
-
-    public bool IsAsync => throw new NotImplementedException();
-
-    public bool IsVirtual => throw new NotImplementedException();
-
-    public IEnumerable<IExceptionDocumentation> DocumentedExceptions => throw new NotImplementedException();
-
-    public bool IsExplicitImplementation => throw new NotImplementedException();
-
-    public ITypeNameData? ExplicitInterfaceType => throw new NotImplementedException();
-
+    /// <inheritdoc/>
     public ITypeNameData Type { get; }
 
-    public override AccessModifier AccessModifier => AccessModifier.Public; // TODO: update
+    /// <summary>
+    /// Gets the collection of <c>Add</c> and <c>Remove</c> methods (if not null).
+    /// </summary>
+    private IEnumerable<IMethodData> Methods
+    {
+        get
+        {
+            if (addMethod is not null)
+            {
+                yield return addMethod;
+            }
+            if (removeMethod is not null)
+            {
+                yield return removeMethod;
+            }
+        }
+    }
 
-    public override bool IsStatic => false; // TODO
+    /// <inheritdoc/>
+    public EventInfo EventInfo { get; }
+
+    /// <inheritdoc/>
+    public bool IsOverridable => Methods.All(m => m.IsOverridable);
+
+    /// <inheritdoc/>
+    public bool OverridesAnotherMember => Methods.All(m => m.OverridesAnotherMember);
+
+    /// <inheritdoc/>
+    public bool IsAbstract => Methods.All(m => m.IsAbstract);
+
+    /// <inheritdoc/>
+    public bool IsFinal => Methods.All(m => m.IsFinal);
+
+    /// <inheritdoc/>
+    public bool IsSealed => Methods.All(m => m.IsSealed);
+
+    /// <inheritdoc/>
+    public bool IsAsync => false;
+
+    /// <inheritdoc/>
+    public bool IsVirtual => Methods.All(m => m.IsVirtual);
+
+    /// <inheritdoc/>
+    public IEnumerable<IExceptionDocumentation> DocumentedExceptions => [];
+
+    /// <inheritdoc/>
+    public bool IsExplicitImplementation => Methods.All(m => m.IsExplicitImplementation);
+
+    /// <inheritdoc/>
+    public ITypeNameData? ExplicitInterfaceType => Methods.Select(m => m.ExplicitInterfaceType).SingleOrDefault();
+
+    /// <inheritdoc/>
+    public override AccessModifier AccessModifier
+    {
+        get
+        {
+            var accessModifiers = Methods.Select(m => m.AccessModifier);
+            return AccessModifierExtensions.GetTheLeastRestrictive(accessModifiers);
+        }
+    }
+
+    /// <inheritdoc/>
+    public override bool IsStatic => Methods.All(m => m.IsStatic);
 }
