@@ -1,3 +1,5 @@
+using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
+
 namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 
 /// <summary>
@@ -14,7 +16,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// </param>
 public record EventTM(
     string Name,
-    string Type,
+    TypeLinkTM Type,
     string SummaryDocComment,
     string RemarksDocComment,
     IEnumerable<string> Modifiers,

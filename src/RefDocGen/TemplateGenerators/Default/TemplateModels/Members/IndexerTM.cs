@@ -1,3 +1,5 @@
+using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
+
 namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 
 /// <summary>
@@ -18,8 +20,8 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// A collection of user-documented exceptions (using the <c>exception</c> XML tag) that the indexer might throw.
 /// </param>
 public record IndexerTM(
-    IEnumerable<ParameterTM> Parameters,
-    string Type,
+    ParameterTM[] Parameters,
+    TypeLinkTM Type,
     string SummaryDocComment,
     string RemarksDocComment,
     string ValueDocComment,

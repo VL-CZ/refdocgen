@@ -20,9 +20,9 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// </param>
 public record MethodTM(
     string Name,
-    IEnumerable<ParameterTM> Parameters,
+    ParameterTM[] Parameters,
     TypeParameterTM[] TypeParameters,
-    string ReturnType,
+    TypeLinkTM ReturnType,
     bool ReturnsVoid,
     string SummaryDocComment,
     string RemarksDocComment,

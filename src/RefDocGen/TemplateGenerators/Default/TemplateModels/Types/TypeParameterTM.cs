@@ -8,4 +8,9 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 /// <param name="Modifiers">Collection of the type parameter modifiers (e.g. in, out, etc.).</param>
 /// <param name="TypeConstraints">Collection of the type constraint names of the type parameter.</param>
 /// <param name="SpecialConstraints">Collection of the special constraints of the type parameter.</param>
-public record TypeParameterTM(string Name, string DocComment, IEnumerable<string> Modifiers, IEnumerable<string> TypeConstraints, IEnumerable<string> SpecialConstraints);
+public record TypeParameterTM(
+    string Name,
+    string DocComment,
+    IEnumerable<string> Modifiers,
+    IEnumerable<string> TypeConstraints,
+    IEnumerable<string> SpecialConstraints);

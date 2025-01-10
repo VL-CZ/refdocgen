@@ -32,7 +32,7 @@ internal class DelegateTMCreator : BaseTMCreator
             ToHtmlString(delegateType.RemarksDocComment),
             modifiers.GetStrings(),
             ToHtmlString(delegateType.ReturnValueDocComment),
-            CSharpTypeName.Of(delegateType.ReturnType),
+            GetTypeLink(delegateType.ReturnType),
             delegateType.ReturnType.IsVoid,
             GetTemplateModels(delegateType.Parameters),
             GetTemplateModels(delegateType.TypeParameterDeclarations),

@@ -97,7 +97,7 @@ internal class BaseTMCreator
 
         return new ParameterTM(
             parameterData.Name,
-            CSharpTypeName.Of(parameterData.Type),
+            GetTypeLink(parameterData.Type),
             ToHtmlString(parameterData.DocComment),
             modifiers.GetStrings(),
             defaultValue);

@@ -158,7 +158,7 @@ internal class ObjectTypeTMCreator : BaseTMCreator
 
         return new PropertyTM(
             property.Name,
-            CSharpTypeName.Of(property.Type),
+            GetTypeLink(property.Type),
             ToHtmlString(property.SummaryDocComment),
             ToHtmlString(property.RemarksDocComment),
             ToHtmlString(property.ValueDocComment),
@@ -196,7 +196,7 @@ internal class ObjectTypeTMCreator : BaseTMCreator
 
         return new IndexerTM(
             GetTemplateModels(indexer.Parameters),
-            CSharpTypeName.Of(indexer.Type),
+            GetTypeLink(indexer.Type),
             ToHtmlString(indexer.SummaryDocComment),
             ToHtmlString(indexer.RemarksDocComment),
             ToHtmlString(indexer.ValueDocComment),
@@ -226,7 +226,7 @@ internal class ObjectTypeTMCreator : BaseTMCreator
             name,
             GetTemplateModels(method.Parameters),
             GetTemplateModels(method.TypeParameters),
-            CSharpTypeName.Of(method.ReturnType),
+            GetTypeLink(method.ReturnType),
             method.ReturnType.IsVoid,
             ToHtmlString(method.SummaryDocComment),
             ToHtmlString(method.RemarksDocComment),
@@ -256,9 +256,14 @@ internal class ObjectTypeTMCreator : BaseTMCreator
 
         string name = CSharpOperatorName.Of(operatorData);
 
-        string returnType = operatorData.IsConversionOperator
+        string returnTypeName = operatorData.IsConversionOperator
             ? "" // for conversion operators, the return type is shown in its name
             : CSharpTypeName.Of(operatorData.ReturnType);
+
+        var returnType = new TypeLinkTM(
+            returnTypeName,
+            typeUrlResolver.GetUrlOf(operatorData.ReturnType)
+        );
 
         return new MethodTM(
             name,
@@ -286,7 +291,7 @@ internal class ObjectTypeTMCreator : BaseTMCreator
 
         return new EventTM(
             eventData.Name,
-            CSharpTypeName.Of(eventData.Type),
+            GetTypeLink(eventData.Type),
             ToHtmlString(eventData.SummaryDocComment),
             ToHtmlString(eventData.RemarksDocComment),
             modifiers.GetStrings(),

@@ -1,3 +1,5 @@
+using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
+
 namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 
 /// <summary>
@@ -13,4 +15,9 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <see langword="null"/> if the parameter has no default value.
 /// </para>
 /// </param>
-public record ParameterTM(string Name, string Type, string DocComment, IEnumerable<string> Modifiers, string? DefaultValue);
+public record ParameterTM(
+    string Name,
+    TypeLinkTM Type,
+    string DocComment,
+    IEnumerable<string> Modifiers,
+    string? DefaultValue);

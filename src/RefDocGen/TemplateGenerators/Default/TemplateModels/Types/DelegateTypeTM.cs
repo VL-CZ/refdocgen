@@ -28,7 +28,7 @@ public record DelegateTypeTM(
     string RemarksDocComment,
     IEnumerable<string> Modifiers,
     string ReturnsDocComment,
-    string ReturnType,
+    TypeLinkTM ReturnType,
     bool ReturnsVoid,
     ParameterTM[] Parameters,
     TypeParameterTM[] TypeParameters,
