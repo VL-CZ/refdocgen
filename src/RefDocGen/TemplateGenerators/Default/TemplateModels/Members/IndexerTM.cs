@@ -13,6 +13,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <param name="HasSetter">Checks if the indexer has setter.</param>
 /// <param name="GetterModifiers">Collection of the getter modifiers (possibly empty).</param>
 /// <param name="SetterModifiers">Collection of the setter modifiers (possibly empty).</param>
+/// <param name="SeeAlsoDocComments">Collection of <c>seealso</c> documentation comments for the indexer.</param>
 /// <param name="Exceptions">
 /// A collection of user-documented exceptions (using the <c>exception</c> XML tag) that the indexer might throw.
 /// </param>
@@ -27,4 +28,5 @@ public record IndexerTM(
     bool HasSetter,
     IEnumerable<string> GetterModifiers,
     IEnumerable<string> SetterModifiers,
-    IEnumerable<ExceptionTM> Exceptions);
+    IEnumerable<string> SeeAlsoDocComments,
+    ExceptionTM[] Exceptions);

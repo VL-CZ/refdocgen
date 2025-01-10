@@ -13,6 +13,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <param name="HasSetter">Checks if the property has setter.</param>
 /// <param name="GetterModifiers">Collection of the getter modifiers (possibly empty).</param>
 /// <param name="SetterModifiers">Collection of the setter modifiers (possibly empty).</param>
+/// <param name="SeeAlsoDocComments">Collection of <c>seealso</c> documentation comments for the property.</param>
 /// <param name="Exceptions">
 /// A collection of user-documented exceptions (using the <c>exception</c> XML tag) that the property might throw.
 /// </param>
@@ -33,5 +34,6 @@ public record PropertyTM(
     bool HasSetter,
     IEnumerable<string> GetterModifiers,
     IEnumerable<string> SetterModifiers,
-    IEnumerable<ExceptionTM> Exceptions,
+    IEnumerable<string> SeeAlsoDocComments,
+    ExceptionTM[] Exceptions,
     string? ConstantValue);

@@ -89,6 +89,7 @@ internal class ObjectTypeTMCreator : BaseTMCreator
             ToHtmlString(constructor.SummaryDocComment),
             ToHtmlString(constructor.RemarksDocComment),
             modifiers.GetStrings(),
+            GetHtmlStrings(constructor.SeeAlsoDocComments),
             GetTemplateModels(constructor.DocumentedExceptions));
     }
 
@@ -114,8 +115,6 @@ internal class ObjectTypeTMCreator : BaseTMCreator
             modifiers.Add(Keyword.Readonly);
         }
 
-        string[] seeAlsoDocComments = field.SeeAlsoDocComments.Select(docCommentTransformer.ToHtmlString).ToArray();
-
         string? constantValue = field.ConstantValue == DBNull.Value
             ? null
             : LiteralValueFormatter.Format(field.ConstantValue);
@@ -126,7 +125,7 @@ internal class ObjectTypeTMCreator : BaseTMCreator
             ToHtmlString(field.SummaryDocComment),
             ToHtmlString(field.RemarksDocComment),
             modifiers.GetStrings(),
-            seeAlsoDocComments,
+            GetHtmlStrings(field.SeeAlsoDocComments),
             constantValue);
     }
 
@@ -167,6 +166,7 @@ internal class ObjectTypeTMCreator : BaseTMCreator
             property.Setter is not null,
             getterModifiers.GetStrings(),
             setterModifiers.GetStrings(),
+            GetHtmlStrings(property.SeeAlsoDocComments),
             GetTemplateModels(property.DocumentedExceptions),
             constantValue);
     }
@@ -204,6 +204,7 @@ internal class ObjectTypeTMCreator : BaseTMCreator
             indexer.Setter is not null,
             getterModifiers.GetStrings(),
             setterModifiers.GetStrings(),
+            GetHtmlStrings(indexer.SeeAlsoDocComments),
             GetTemplateModels(indexer.DocumentedExceptions));
     }
 
@@ -223,13 +224,14 @@ internal class ObjectTypeTMCreator : BaseTMCreator
         return new MethodTM(
             name,
             GetTemplateModels(method.Parameters),
+            GetTemplateModels(method.TypeParameters),
             CSharpTypeName.Of(method.ReturnType),
             method.ReturnType.IsVoid,
             ToHtmlString(method.SummaryDocComment),
             ToHtmlString(method.RemarksDocComment),
             ToHtmlString(method.ReturnValueDocComment),
             modifiers.GetStrings(),
-            GetTemplateModels(method.TypeParameters),
+            GetHtmlStrings(method.SeeAlsoDocComments),
             GetTemplateModels(method.DocumentedExceptions));
     }
 
@@ -260,13 +262,14 @@ internal class ObjectTypeTMCreator : BaseTMCreator
         return new MethodTM(
             name,
             GetTemplateModels(operatorData.Parameters),
+            GetTemplateModels(operatorData.TypeParameters),
             returnType,
             operatorData.ReturnType.IsVoid,
             ToHtmlString(operatorData.SummaryDocComment),
             ToHtmlString(operatorData.RemarksDocComment),
             ToHtmlString(operatorData.ReturnValueDocComment),
             modifiers.GetStrings(),
-            GetTemplateModels(operatorData.TypeParameters),
+            GetHtmlStrings(operatorData.SeeAlsoDocComments),
             GetTemplateModels(operatorData.DocumentedExceptions));
     }
 
@@ -280,15 +283,14 @@ internal class ObjectTypeTMCreator : BaseTMCreator
         var modifiers = GetCallableMemberModifiers(eventData);
         modifiers.Add(Keyword.Event);
 
-        string[] seeAlsoDocComments = eventData.SeeAlsoDocComments.Select(docCommentTransformer.ToHtmlString).ToArray();
-
         return new EventTM(
             eventData.Name,
             CSharpTypeName.Of(eventData.Type),
             ToHtmlString(eventData.SummaryDocComment),
             ToHtmlString(eventData.RemarksDocComment),
             modifiers.GetStrings(),
-            seeAlsoDocComments
+            GetHtmlStrings(eventData.SeeAlsoDocComments),
+            GetTemplateModels(eventData.DocumentedExceptions)
             );
     }
 

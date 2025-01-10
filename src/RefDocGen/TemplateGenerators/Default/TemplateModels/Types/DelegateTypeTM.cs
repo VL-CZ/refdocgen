@@ -31,4 +31,4 @@ public record DelegateTypeTM(
     bool ReturnsVoid,
     ParameterTM[] Parameters,
     TypeParameterTM[] TypeParameters,
-    IEnumerable<ExceptionTM> Exceptions) : ITemplateModelWithId;
+    ExceptionTM[] Exceptions) : ITemplateModelWithId;

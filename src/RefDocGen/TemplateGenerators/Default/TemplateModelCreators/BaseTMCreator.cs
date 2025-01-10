@@ -28,6 +28,11 @@ internal class BaseTMCreator
         return docCommentTransformer.ToHtmlString(docComment);
     }
 
+    protected string[] GetHtmlStrings(IEnumerable<XElement> elements)
+    {
+        return elements.Select(ToHtmlString).ToArray();
+    }
+
     protected ParameterTM[] GetTemplateModels(IEnumerable<IParameterData> parameters)
     {
         return parameters

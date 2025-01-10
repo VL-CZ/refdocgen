@@ -14,17 +14,19 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <param name="ReturnsDocComment">Documentation comment for the method's return value.</param>
 /// <param name="Modifiers">Collection of modifiers for the method (e.g. private, abstract, virtual, etc.)</param>
 /// <param name="TypeParameters">Template models of the generic type parameters declared in the method.</param>
+/// <param name="SeeAlsoDocComments">Collection of <c>seealso</c> documentation comments for the method.</param>
 /// <param name="Exceptions">
 /// A collection of user-documented exceptions (using the <c>exception</c> XML tag) that the method might throw.
 /// </param>
 public record MethodTM(
     string Name,
     IEnumerable<ParameterTM> Parameters,
+    TypeParameterTM[] TypeParameters,
     string ReturnType,
     bool ReturnsVoid,
     string SummaryDocComment,
     string RemarksDocComment,
     string ReturnsDocComment,
     IEnumerable<string> Modifiers,
-    TypeParameterTM[] TypeParameters,
-    IEnumerable<ExceptionTM> Exceptions);
+    IEnumerable<string> SeeAlsoDocComments,
+    ExceptionTM[] Exceptions);

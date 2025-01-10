@@ -46,6 +46,7 @@ internal class EnumTMCreator : BaseTMCreator
         return new EnumMemberTM(
             enumMember.Name,
             ToHtmlString(enumMember.SummaryDocComment),
-            ToHtmlString(enumMember.RemarksDocComment));
+            ToHtmlString(enumMember.RemarksDocComment),
+            GetHtmlStrings(enumMember.SeeAlsoDocComments));
     }
 }
