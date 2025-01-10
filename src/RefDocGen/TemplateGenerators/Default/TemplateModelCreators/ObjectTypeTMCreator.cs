@@ -13,51 +13,54 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 /// <summary>
 /// Class responsible for creating template models representing the individual object types.
 /// </summary>
-internal static class ObjectTypeTMCreator
+internal class ObjectTypeTMCreator : BaseTMCreator
 {
+    public ObjectTypeTMCreator(IDocCommentTransformer docCommentTransformer) : base(docCommentTransformer)
+    {
+    }
+
     /// <summary>
     /// Creates a <see cref="ObjectTypeTM"/> instance based on the provided <see cref="IObjectTypeData"/> object.
     /// </summary>
-    /// <param name="typeData">The <see cref="IObjectTypeData"/> instance representing the type.</param>
-    /// <param name="commentParser">TODO</param>
-    /// <returns>A <see cref="ObjectTypeTM"/> instance based on the provided <paramref name="typeData"/>.</returns>
-    internal static ObjectTypeTM GetFrom(IObjectTypeData typeData, IDocCommentTransformer commentParser)
+    /// <param name="type">The <see cref="IObjectTypeData"/> instance representing the type.</param>
+    /// <returns>A <see cref="ObjectTypeTM"/> instance based on the provided <paramref name="type"/>.</returns>
+    internal ObjectTypeTM GetFrom(IObjectTypeData type)
     {
-        var constructors = typeData.Constructors.Select(c => GetFrom(c, commentParser)).ToArray();
-        var fields = typeData.Fields.Select(c => GetFrom(c, commentParser)).ToArray();
-        var properties = typeData.Properties.Select(GetFrom).ToArray();
-        var methods = typeData.Methods.Select(GetFrom).ToArray();
-        var operators = typeData.Operators.Select(GetFrom).ToArray();
-        var indexers = typeData.Indexers.Select(GetFrom).ToArray();
-        var events = typeData.Events.Select(e => GetFrom(e, commentParser)).ToArray();
-        var typeParameterDeclarations = typeData.TypeParameterDeclarations.Select(TypeParameterTMCreator.GetFrom).ToArray();
+        var constructors = type.Constructors.Select(GetFrom).ToArray();
+        var fields = type.Fields.Select(GetFrom).ToArray();
+        var properties = type.Properties.Select(GetFrom).ToArray();
+        var methods = type.Methods.Select(GetFrom).ToArray();
+        var operators = type.Operators.Select(GetFrom).ToArray();
+        var indexers = type.Indexers.Select(GetFrom).ToArray();
+        var events = type.Events.Select(GetFrom).ToArray();
 
-        string? baseType = typeData.BaseType is not null
-            ? CSharpTypeName.Of(typeData.BaseType)
+        string? baseType = type.BaseType is not null
+            ? CSharpTypeName.Of(type.BaseType)
             : null;
 
-        var interfaces = typeData.Interfaces.Select(CSharpTypeName.Of);
+        var interfaces = type.Interfaces.Select(CSharpTypeName.Of);
 
-        List<Keyword> modifiers = [typeData.AccessModifier.ToKeyword()];
+        List<Keyword> modifiers = [type.AccessModifier.ToKeyword()];
 
-        if (SealedKeyword.IsPresentIn(typeData))
+        if (SealedKeyword.IsPresentIn(type))
         {
             modifiers.Add(Keyword.Sealed);
         }
 
-        if (AbstractKeyword.IsPresentIn(typeData))
+        if (AbstractKeyword.IsPresentIn(type))
         {
             modifiers.Add(Keyword.Abstract);
         }
-        string summaryDocComment = commentParser.ToHtmlString(typeData.SummaryDocComment);
+
+        string summaryDocComment = docCommentTransformer.ToHtmlString(type.SummaryDocComment);
 
         return new ObjectTypeTM(
-            typeData.Id,
-            CSharpTypeName.Of(typeData),
-            typeData.Namespace,
-            summaryDocComment,
-            typeData.RemarksDocComment.Value,
-            typeData.Kind.GetName(),
+            type.Id,
+            CSharpTypeName.Of(type),
+            type.Namespace,
+            ToHtmlString(type.SummaryDocComment),
+            ToHtmlString(type.RemarksDocComment),
+            type.Kind.GetName(),
             modifiers.GetStrings(),
             constructors,
             fields,
@@ -66,7 +69,7 @@ internal static class ObjectTypeTMCreator
             operators,
             indexers,
             events,
-            typeParameterDeclarations,
+            GetTemplateModels(type.TypeParameterDeclarations),
             baseType,
             interfaces
             );
@@ -75,68 +78,60 @@ internal static class ObjectTypeTMCreator
     /// <summary>
     /// Creates a <see cref="ConstructorTM"/> instance based on the provided <see cref="IConstructorData"/> object.
     /// </summary>
-    /// <param name="constructorData">The <see cref="IConstructorData"/> instance representing the constructor.</param>
-    /// <param name="commentParser">TODO</param>
-    /// <returns>A <see cref="ConstructorTM"/> instance based on the provided <paramref name="constructorData"/>.</returns>
-    private static ConstructorTM GetFrom(IConstructorData constructorData, IDocCommentTransformer commentParser)
+    /// <param name="constructor">The <see cref="IConstructorData"/> instance representing the constructor.</param>
+    /// <returns>A <see cref="ConstructorTM"/> instance based on the provided <paramref name="constructor"/>.</returns>
+    private ConstructorTM GetFrom(IConstructorData constructor)
     {
-        var modifiers = GetCallableMemberModifiers(constructorData);
-        var exceptionTMs = constructorData.DocumentedExceptions.Select(ExceptionTMCreator.GetFrom);
-
-        string summaryDocComment = commentParser.ToHtmlString(constructorData.SummaryDocComment);
+        var modifiers = GetCallableMemberModifiers(constructor);
 
         return new ConstructorTM(
-            constructorData.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
-            summaryDocComment,
-            constructorData.RemarksDocComment.Value,
+            GetTemplateModels(constructor.Parameters),
+            ToHtmlString(constructor.SummaryDocComment),
+            ToHtmlString(constructor.RemarksDocComment),
             modifiers.GetStrings(),
-            exceptionTMs);
+            GetTemplateModels(constructor.DocumentedExceptions));
     }
 
     /// <summary>
     /// Creates a <see cref="FieldTM"/> instance based on the provided <see cref="IFieldData"/> object.
     /// </summary>
-    /// <param name="fieldData">The <see cref="IFieldData"/> instance representing the field.</param>
-    /// <param name="commentParser">TODO</param>
-    /// <returns>A <see cref="FieldTM"/> instance based on the provided <paramref name="fieldData"/>.</returns>
-    private static FieldTM GetFrom(IFieldData fieldData, IDocCommentTransformer commentParser)
+    /// <param name="field">The <see cref="IFieldData"/> instance representing the field.</param>
+    /// <returns>A <see cref="FieldTM"/> instance based on the provided <paramref name="field"/>.</returns>
+    private FieldTM GetFrom(IFieldData field)
     {
-        List<Keyword> modifiers = [fieldData.AccessModifier.ToKeyword()];
+        List<Keyword> modifiers = [field.AccessModifier.ToKeyword()];
 
-        if (fieldData.IsStatic && !fieldData.IsConstant)
+        if (field.IsStatic && !field.IsConstant)
         {
             modifiers.Add(Keyword.Static);
         }
-
-        if (fieldData.IsConstant)
+        if (field.IsConstant)
         {
             modifiers.Add(Keyword.Const);
         }
-
-        if (fieldData.IsReadonly)
+        if (field.IsReadonly)
         {
             modifiers.Add(Keyword.Readonly);
         }
 
-        string docComment = commentParser.ToHtmlString(fieldData.SummaryDocComment);
-        string[] seeAlsoDocComments = fieldData.SeeAlsoDocComments.Select(commentParser.ToHtmlString).ToArray();
+        string[] seeAlsoDocComments = field.SeeAlsoDocComments.Select(docCommentTransformer.ToHtmlString).ToArray();
 
-        string? constantValue = fieldData.ConstantValue == DBNull.Value
+        string? constantValue = field.ConstantValue == DBNull.Value
             ? null
-            : LiteralValueFormatter.Format(fieldData.ConstantValue);
+            : LiteralValueFormatter.Format(field.ConstantValue);
 
-        var typeLink = new TypeUrlResolver(commentParser.TypeRegistry);
+        var typeLink = new TypeUrlResolver(docCommentTransformer.TypeRegistry);
 
         var typeRef = new TypeLinkTM(
-            CSharpTypeName.Of(fieldData.Type),
-            typeLink.GetUrlOf(fieldData.Type)
+            CSharpTypeName.Of(field.Type),
+            typeLink.GetUrlOf(field.Type)
             );
 
         return new FieldTM(
-            fieldData.Name,
+            field.Name,
             typeRef,
-            docComment,
-            fieldData.RemarksDocComment.Value,
+            ToHtmlString(field.SummaryDocComment),
+            ToHtmlString(field.RemarksDocComment),
             modifiers.GetStrings(),
             seeAlsoDocComments,
             constantValue);
@@ -145,43 +140,41 @@ internal static class ObjectTypeTMCreator
     /// <summary>
     /// Creates a <see cref="PropertyTM"/> instance based on the provided <see cref="IPropertyData"/> object.
     /// </summary>
-    /// <param name="propertyData">The <see cref="IPropertyData"/> instance representing the property.</param>
-    /// <returns>A <see cref="PropertyTM"/> instance based on the provided <paramref name="propertyData"/>.</returns>
-    private static PropertyTM GetFrom(IPropertyData propertyData)
+    /// <param name="property">The <see cref="IPropertyData"/> instance representing the property.</param>
+    /// <returns>A <see cref="PropertyTM"/> instance based on the provided <paramref name="property"/>.</returns>
+    private PropertyTM GetFrom(IPropertyData property)
     {
-        var modifiers = GetCallableMemberModifiers(propertyData);
+        var modifiers = GetCallableMemberModifiers(property);
 
         List<Keyword> getterModifiers = [];
         List<Keyword> setterModifiers = [];
 
-        if (propertyData.Getter is not null && propertyData.Getter.AccessModifier != propertyData.AccessModifier)
+        if (property.Getter is not null && property.Getter.AccessModifier != property.AccessModifier)
         {
-            getterModifiers.Add(propertyData.Getter.AccessModifier.ToKeyword());
+            getterModifiers.Add(property.Getter.AccessModifier.ToKeyword());
         }
 
-        if (propertyData.Setter is not null && propertyData.Setter.AccessModifier != propertyData.AccessModifier)
+        if (property.Setter is not null && property.Setter.AccessModifier != property.AccessModifier)
         {
-            setterModifiers.Add(propertyData.Setter.AccessModifier.ToKeyword());
+            setterModifiers.Add(property.Setter.AccessModifier.ToKeyword());
         }
 
-        var exceptionTMs = propertyData.DocumentedExceptions.Select(ExceptionTMCreator.GetFrom);
-
-        string? constantValue = propertyData.ConstantValue == DBNull.Value
+        string? constantValue = property.ConstantValue == DBNull.Value
             ? null
-            : LiteralValueFormatter.Format(propertyData.ConstantValue);
+            : LiteralValueFormatter.Format(property.ConstantValue);
 
         return new PropertyTM(
-            propertyData.Name,
-            CSharpTypeName.Of(propertyData.Type),
-            propertyData.SummaryDocComment.Value,
-            propertyData.RemarksDocComment.Value,
-            propertyData.ValueDocComment.Value,
+            property.Name,
+            CSharpTypeName.Of(property.Type),
+            ToHtmlString(property.SummaryDocComment),
+            ToHtmlString(property.RemarksDocComment),
+            ToHtmlString(property.ValueDocComment),
             modifiers.GetStrings(),
-            propertyData.Getter is not null,
-            propertyData.Setter is not null,
+            property.Getter is not null,
+            property.Setter is not null,
             getterModifiers.GetStrings(),
             setterModifiers.GetStrings(),
-            exceptionTMs,
+            GetTemplateModels(property.DocumentedExceptions),
             constantValue);
     }
 
@@ -190,7 +183,7 @@ internal static class ObjectTypeTMCreator
     /// </summary>
     /// <param name="indexer">The <see cref="IIndexerData"/> instance representing the indexer.</param>
     /// <returns>An <see cref="IndexerTM"/> instance based on the provided <paramref name="indexer"/>.</returns>
-    private static IndexerTM GetFrom(IIndexerData indexer)
+    private IndexerTM GetFrom(IIndexerData indexer)
     {
         var modifiers = GetCallableMemberModifiers(indexer);
 
@@ -207,47 +200,44 @@ internal static class ObjectTypeTMCreator
             setterModifiers.Add(indexer.Setter.AccessModifier.ToKeyword());
         }
 
-        var exceptionTMs = indexer.DocumentedExceptions.Select(ExceptionTMCreator.GetFrom);
-
         return new IndexerTM(
-            indexer.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
+            GetTemplateModels(indexer.Parameters),
             CSharpTypeName.Of(indexer.Type),
-            indexer.SummaryDocComment.Value,
-            indexer.RemarksDocComment.Value,
-            indexer.ValueDocComment.Value,
+            ToHtmlString(indexer.SummaryDocComment),
+            ToHtmlString(indexer.RemarksDocComment),
+            ToHtmlString(indexer.ValueDocComment),
             modifiers.GetStrings(),
             indexer.Getter is not null,
             indexer.Setter is not null,
             getterModifiers.GetStrings(),
             setterModifiers.GetStrings(),
-            exceptionTMs);
+            GetTemplateModels(indexer.DocumentedExceptions));
     }
 
     /// <summary>
     /// Creates a <see cref="MethodTM"/> instance based on the provided <see cref="IMethodData"/> object.
     /// </summary>
-    /// <param name="methodData">The <see cref="IMethodData"/> instance representing the method.</param>
-    /// <returns>A <see cref="MethodTM"/> instance based on the provided <paramref name="methodData"/>.</returns>
-    private static MethodTM GetFrom(IMethodData methodData)
+    /// <param name="method">The <see cref="IMethodData"/> instance representing the method.</param>
+    /// <returns>A <see cref="MethodTM"/> instance based on the provided <paramref name="method"/>.</returns>
+    private MethodTM GetFrom(IMethodData method)
     {
-        var modifiers = GetCallableMemberModifiers(methodData);
-        var exceptionTMs = methodData.DocumentedExceptions.Select(ExceptionTMCreator.GetFrom);
+        var modifiers = GetCallableMemberModifiers(method);
 
-        string name = methodData.IsExplicitImplementation && methodData.ExplicitInterfaceType is not null
-            ? CSharpTypeName.Of(methodData.ExplicitInterfaceType) + "." + methodData.Name
-            : methodData.Name;
+        string name = method.IsExplicitImplementation && method.ExplicitInterfaceType is not null
+            ? CSharpTypeName.Of(method.ExplicitInterfaceType) + "." + method.Name
+            : method.Name;
 
         return new MethodTM(
             name,
-            methodData.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
-            CSharpTypeName.Of(methodData.ReturnType),
-            methodData.ReturnType.IsVoid,
-            methodData.SummaryDocComment.Value,
-            methodData.RemarksDocComment.Value,
-            methodData.ReturnValueDocComment.Value,
+            GetTemplateModels(method.Parameters),
+            CSharpTypeName.Of(method.ReturnType),
+            method.ReturnType.IsVoid,
+            ToHtmlString(method.SummaryDocComment),
+            ToHtmlString(method.RemarksDocComment),
+            ToHtmlString(method.ReturnValueDocComment),
             modifiers.GetStrings(),
-            methodData.TypeParameters.Select(TypeParameterTMCreator.GetFrom).ToArray(),
-            exceptionTMs);
+            GetTemplateModels(method.TypeParameters),
+            GetTemplateModels(method.DocumentedExceptions));
     }
 
     /// <summary>
@@ -255,7 +245,7 @@ internal static class ObjectTypeTMCreator
     /// </summary>
     /// <param name="operatorData">The <see cref="IOperatorData"/> instance representing the method.</param>
     /// <returns>A <see cref="MethodTM"/> instance based on the provided <paramref name="operatorData"/>.</returns>
-    private static MethodTM GetFrom(IOperatorData operatorData)
+    private MethodTM GetFrom(IOperatorData operatorData)
     {
         var modifiers = GetCallableMemberModifiers(operatorData);
 
@@ -274,41 +264,38 @@ internal static class ObjectTypeTMCreator
             ? "" // for conversion operators, the return type is shown in its name
             : CSharpTypeName.Of(operatorData.ReturnType);
 
-        var exceptionTMs = operatorData.DocumentedExceptions.Select(ExceptionTMCreator.GetFrom);
+        var exceptionTMs = operatorData.DocumentedExceptions.Select(exceptionTMCreator.GetFrom);
 
         return new MethodTM(
             name,
-            operatorData.Parameters.Select(ParameterTMCreator.GetFrom).ToArray(),
+            GetTemplateModels(operatorData.Parameters),
             returnType,
             operatorData.ReturnType.IsVoid,
-            operatorData.SummaryDocComment.Value,
-            operatorData.RemarksDocComment.Value,
-            operatorData.ReturnValueDocComment.Value,
+            ToHtmlString(operatorData.SummaryDocComment),
+            ToHtmlString(operatorData.RemarksDocComment),
+            ToHtmlString(operatorData.ReturnValueDocComment),
             modifiers.GetStrings(),
-            operatorData.TypeParameters.Select(TypeParameterTMCreator.GetFrom).ToArray(),
-            exceptionTMs);
+            GetTemplateModels(operatorData.TypeParameters),
+            GetTemplateModels(operatorData.DocumentedExceptions));
     }
 
     /// <summary>
     /// Creates a <see cref="EventTM"/> instance based on the provided <see cref="IEventData"/> object.
     /// </summary>
     /// <param name="eventData">The <see cref="IEventData"/> instance representing the event.</param>
-    /// <param name="commentParser">TODO</param>
     /// <returns>A <see cref="EventTM"/> instance based on the provided <paramref name="eventData"/>.</returns>
-    private static EventTM GetFrom(IEventData eventData, IDocCommentTransformer commentParser)
+    private EventTM GetFrom(IEventData eventData)
     {
         var modifiers = GetCallableMemberModifiers(eventData);
-
         modifiers.Add(Keyword.Event);
 
-        string docComment = commentParser.ToHtmlString(eventData.SummaryDocComment);
-        string[] seeAlsoDocComments = eventData.SeeAlsoDocComments.Select(commentParser.ToHtmlString).ToArray();
+        string[] seeAlsoDocComments = eventData.SeeAlsoDocComments.Select(docCommentTransformer.ToHtmlString).ToArray();
 
         return new EventTM(
             eventData.Name,
             CSharpTypeName.Of(eventData.Type),
-            docComment,
-            eventData.RemarksDocComment.Value,
+            ToHtmlString(eventData.SummaryDocComment),
+            ToHtmlString(eventData.RemarksDocComment),
             modifiers.GetStrings(),
             seeAlsoDocComments
             );
@@ -319,7 +306,7 @@ internal static class ObjectTypeTMCreator
     /// </summary>
     /// <param name="memberData">Member, whose modifiers we get.</param>
     /// <returns>A list of modifiers for the provided member.</returns>
-    private static List<Keyword> GetCallableMemberModifiers(ICallableMemberData memberData)
+    private List<Keyword> GetCallableMemberModifiers(ICallableMemberData memberData)
     {
         List<Keyword> modifiers = [memberData.AccessModifier.ToKeyword()];
 

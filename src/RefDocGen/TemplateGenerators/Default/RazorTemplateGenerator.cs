@@ -78,7 +78,8 @@ internal class RazorTemplateGenerator<
     /// <param name="types">The type data to be used in the templates.</param>
     private void GenerateObjectTypeTemplates(IEnumerable<IObjectTypeData> types)
     {
-        var typeTemplateModels = types.Select(t => ObjectTypeTMCreator.GetFrom(t, docCommentTransformer));
+        var creator = new ObjectTypeTMCreator(docCommentTransformer);
+        var typeTemplateModels = types.Select(creator.GetFrom);
         GenerateTemplates<TObjectTypeTemplate, ObjectTypeTM>(typeTemplateModels);
     }
 
@@ -88,7 +89,8 @@ internal class RazorTemplateGenerator<
     /// <param name="enums">The enum data to be used in the templates.</param>
     private void GenerateEnumTemplates(IEnumerable<IEnumTypeData> enums)
     {
-        var enumTMs = enums.Select(EnumTMCreator.GetFrom);
+        var creator = new EnumTMCreator(docCommentTransformer);
+        var enumTMs = enums.Select(creator.GetFrom);
         GenerateTemplates<TEnumTemplate, EnumTypeTM>(enumTMs);
     }
 
@@ -98,7 +100,8 @@ internal class RazorTemplateGenerator<
     /// <param name="delegates">The delegate data to be used in the templates.</param>
     private void GenerateDelegateTemplates(IEnumerable<IDelegateTypeData> delegates)
     {
-        var delegateTMs = delegates.Select(DelegateTMCreator.GetFrom);
+        var creator = new DelegateTMCreator(docCommentTransformer);
+        var delegateTMs = delegates.Select(creator.GetFrom);
         GenerateTemplates<TDelegateTemplate, DelegateTypeTM>(delegateTMs);
     }
 

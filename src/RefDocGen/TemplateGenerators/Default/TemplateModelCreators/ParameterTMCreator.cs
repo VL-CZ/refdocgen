@@ -1,6 +1,7 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Tools;
+using RefDocGen.TemplateGenerators.Tools.DocComments.Html;
 using RefDocGen.TemplateGenerators.Tools.Keywords;
 using RefDocGen.TemplateGenerators.Tools.TypeName;
 
@@ -9,14 +10,18 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 /// <summary>
 /// Class responsible for creating template models representing the individual method parameters.
 /// </summary>
-internal class ParameterTMCreator
+internal class ParameterTMCreator : BaseTMCreator
 {
+    public ParameterTMCreator(IDocCommentTransformer docCommentTransformer) : base(docCommentTransformer)
+    {
+    }
+
     /// <summary>
     /// Creates a <see cref="ParameterTM"/> instance based on the provided <see cref="IParameterData"/> object.
     /// </summary>
     /// <param name="parameterData">The <see cref="IParameterData"/> instance representing the parameter.</param>
     /// <returns>A <see cref="ParameterTM"/> instance based on the provided <paramref name="parameterData"/>.</returns>
-    internal static ParameterTM GetFrom(IParameterData parameterData)
+    internal ParameterTM GetFrom(IParameterData parameterData)
     {
         List<Keyword> modifiers = [];
 

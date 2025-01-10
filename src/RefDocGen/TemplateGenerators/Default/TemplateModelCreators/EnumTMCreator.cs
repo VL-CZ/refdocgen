@@ -2,6 +2,7 @@ using RefDocGen.CodeElements.Abstract.Members.Enum;
 using RefDocGen.CodeElements.Abstract.Types.Enum;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
+using RefDocGen.TemplateGenerators.Tools.DocComments.Html;
 using RefDocGen.TemplateGenerators.Tools.Keywords;
 
 namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
@@ -9,14 +10,18 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 /// <summary>
 /// Class responsible for creating template models representing the individual enums.
 /// </summary>
-internal static class EnumTMCreator
+internal class EnumTMCreator : BaseTMCreator
 {
+    public EnumTMCreator(IDocCommentTransformer docCommentTransformer) : base(docCommentTransformer)
+    {
+    }
+
     /// <summary>
     /// Creates a <see cref="EnumTypeTM"/> instance based on the provided <see cref="IEnumTypeData"/> object.
     /// </summary>
     /// <param name="enumData">The <see cref="IEnumTypeData"/> instance representing the enum.</param>
     /// <returns>A <see cref="EnumTypeTM"/> instance based on the provided <paramref name="enumData"/>.</returns>
-    internal static EnumTypeTM GetFrom(IEnumTypeData enumData)
+    internal EnumTypeTM GetFrom(IEnumTypeData enumData)
     {
         var enumMemberTMs = enumData.Members.Select(GetFrom);
         List<Keyword> modifiers = [enumData.AccessModifier.ToKeyword()];
@@ -25,8 +30,8 @@ internal static class EnumTMCreator
             enumData.Id,
             enumData.ShortName,
             enumData.Namespace,
-            enumData.SummaryDocComment.Value,
-            enumData.RemarksDocComment.Value,
+            ToHtmlString(enumData.SummaryDocComment),
+            ToHtmlString(enumData.RemarksDocComment),
             modifiers.GetStrings(),
             enumMemberTMs);
     }
@@ -36,8 +41,11 @@ internal static class EnumTMCreator
     /// </summary>
     /// <param name="enumMember">The <see cref="IEnumTypeData"/> instance representing the enum member.</param>
     /// <returns>A <see cref="EnumMemberTM"/> instance based on the provided <paramref name="enumMember"/>.</returns>
-    internal static EnumMemberTM GetFrom(IEnumMemberData enumMember)
+    internal EnumMemberTM GetFrom(IEnumMemberData enumMember)
     {
-        return new EnumMemberTM(enumMember.Name, enumMember.SummaryDocComment.Value, enumMember.RemarksDocComment.Value);
+        return new EnumMemberTM(
+            enumMember.Name,
+            ToHtmlString(enumMember.SummaryDocComment),
+            ToHtmlString(enumMember.RemarksDocComment));
     }
 }

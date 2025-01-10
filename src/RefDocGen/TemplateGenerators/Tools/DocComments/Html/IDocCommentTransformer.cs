@@ -18,5 +18,8 @@ internal interface IDocCommentTransformer
     /// <summary>
     /// A registry of the declared types.
     /// </summary>
+    /// <remarks>
+    /// Note: The type registry is needed for resolving <c>cref</c> attributes.
+    /// </remarks>
     ITypeRegistry TypeRegistry { get; set; }
 }
