@@ -6,17 +6,15 @@
     public required TypeLinkTM Type { get; set; }
 }
 
-@if (Type.Url is not null)
-{
-    <span class="text-secondary">
+<span class="text-secondary">
+    @if (Type.Url is not null)
+    {
         <a href="@Type.Url" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
             @Type.Name
         </a>
-    </span>
-}
-else
-{
-    <span class="text-secondary">
+    }
+    else
+    {
         @Type.Name
-    </span>
-}
+    }
+</span>

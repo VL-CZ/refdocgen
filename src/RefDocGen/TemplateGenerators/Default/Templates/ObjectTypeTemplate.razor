@@ -213,9 +213,9 @@
                                     <span class="text-primary">
                                         @string.Join(' ', e.Modifiers)
                                     </span>
-                                    <span class="text-secondary">
-                                        @e.Type
-                                    </span>
+
+                                    <TypeLink Type="@e.Type" />
+
                                     <span class="text-dark">
                                         @e.Name
                                     </span>
@@ -251,9 +251,9 @@
                                     <span class="text-primary">
                                         @string.Join(' ', property.Modifiers)
                                     </span>
-                                    <span class="text-secondary">
-                                        @property.Type
-                                    </span>
+
+                                    <TypeLink Type="@property.Type" />
+
                                     <span class="text-dark">
                                         @property.Name
                                     </span>
@@ -318,9 +318,8 @@
                                     <span class="text-primary">
                                         @string.Join(' ', indexer.Modifiers)
                                     </span>
-                                    <span class="text-secondary">
-                                        @indexer.Type
-                                    </span>
+
+                                    <TypeLink Type="@indexer.Type" />
 
                                     @if (indexer.Parameters.Any())
                                     {
@@ -335,9 +334,8 @@
                                             <span class="text-primary">
                                                 @string.Join(' ', p.Modifiers)
                                             </span>
-                                            <span class="text-secondary">
-                                                @p.Type
-                                            </span>
+
+                                            <TypeLink Type="@p.Type" />
 
                                             @if (p == lastParam)
                                             {
@@ -411,9 +409,9 @@
                                     <span class="text-primary">
                                         @string.Join(' ', method.Modifiers)
                                     </span>
-                                    <span class="text-secondary">
-                                        @method.ReturnType
-                                    </span>
+
+                                    <TypeLink Type="@method.ReturnType" />
+
                                     <span class="text-dark">
                                         @method.Name
                                     </span>
@@ -430,7 +428,7 @@
 
                             @if (!method.ReturnsVoid)
                             {
-                                <ReturnValueDocumentation DocComment="@method.ReturnsDocComment" TypeName="@method.ReturnType" />
+                                <ReturnValueDocumentation DocComment="@method.ReturnsDocComment" TypeName="@method.ReturnType.Name" />
                             }
 
                             <!-- Remarks doc comment -->
@@ -459,9 +457,9 @@
                                     <span class="text-primary">
                                         @string.Join(' ', method.Modifiers)
                                     </span>
-                                    <span class="text-secondary">
-                                        @method.ReturnType
-                                    </span>
+
+                                    <TypeLink Type="@method.ReturnType" />
+
                                     <span class="text-dark">
                                         @method.Name
                                     </span>
@@ -478,7 +476,7 @@
 
                             @if (!method.ReturnsVoid)
                             {
-                                <ReturnValueDocumentation DocComment="@method.ReturnsDocComment" TypeName="@method.ReturnType" />
+                                <ReturnValueDocumentation DocComment="@method.ReturnsDocComment" TypeName="@method.ReturnType.Name" />
                             }
 
                             <!-- Remarks doc comment -->

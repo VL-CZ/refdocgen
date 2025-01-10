@@ -13,8 +13,8 @@
         @foreach (var exception in Exceptions)
         {
             <div>
-                <span>@exception.Name</span>
-                <i>@exception.DocComment</i>
+                <span>@exception.Type.Name</span>
+                <i>@((MarkupString)exception.DocComment)</i>
             </div>
         }
     </div>

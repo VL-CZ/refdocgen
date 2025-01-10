@@ -21,9 +21,9 @@
                     @typeParam.Name
                 </span>
             </samp>
-            <p class="text-muted">
-                <i>@typeParam.DocComment</i>
-            </p>
+            <div class="text-muted">
+                <i>@((MarkupString)typeParam.DocComment)</i>
+            </div>
         }
     </div>
 }

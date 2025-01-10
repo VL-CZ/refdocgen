@@ -75,6 +75,11 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
         var docCommentCopy = new XElement(docComment);
         TransformToHtml(docCommentCopy);
 
+        if (docCommentCopy.IsEmpty)
+        {
+            docCommentCopy.Add("");
+        }
+
         return docCommentCopy.ToString();
     }
 

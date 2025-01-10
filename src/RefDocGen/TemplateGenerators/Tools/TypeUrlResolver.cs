@@ -75,7 +75,7 @@ internal class TypeUrlResolver
 
         if (rootTypeNamespace == systemNs)
         {
-            string typeUrl = type.FullName.ToLower(CultureInfo.InvariantCulture).Replace('`', '-'); // The .NET API docs use the following convention
+            string typeUrl = type.FullName.ToLower(CultureInfo.InvariantCulture).Replace('`', '-'); // The .NET API docs use the following convention (TODO: fix)
             return new Uri(dotnetApiDocs, typeUrl).ToString();
         }
 
