@@ -5,16 +5,16 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// </summary>
 /// <param name="Type">Type of the indexer.</param>
 /// <param name="Parameters">Collection of index parameters.</param>
-/// <param name="SummaryDocComment">'summary' documentation comment for the indexer.</param>
-/// <param name="RemarksDocComment">'remarks' documentation comment for the indexer.</param>
-/// <param name="ValueDocComment">'value' documentation comment for the indexer.</param>
+/// <param name="SummaryDocComment"><c>summary</c> documentation comment for the indexer.</param>
+/// <param name="RemarksDocComment"><c>remarks</c> documentation comment for the indexer.</param>
+/// <param name="ValueDocComment"><c>value</c> documentation comment for the indexer.</param>
 /// <param name="Modifiers">Collection of indexer modifiers (e.g. public, static, etc.)</param>
 /// <param name="HasGetter">Checks if the indexer has getter.</param>
 /// <param name="HasSetter">Checks if the indexer has setter.</param>
 /// <param name="GetterModifiers">Collection of the getter modifiers (possibly empty).</param>
 /// <param name="SetterModifiers">Collection of the setter modifiers (possibly empty).</param>
 /// <param name="Exceptions">
-/// A collection of user-documented exceptions (using the 'exception' XML tag) that the indexer might throw.
+/// A collection of user-documented exceptions (using the <c>exception</c> XML tag) that the indexer might throw.
 /// </param>
 public record IndexerTM(
     IEnumerable<ParameterTM> Parameters,

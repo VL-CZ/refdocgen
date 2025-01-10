@@ -168,9 +168,9 @@
                                     <span class="text-primary">
                                         @string.Join(' ', field.Modifiers)
                                     </span>
-                                    <span class="text-secondary">
-                                        @field.Type
-                                    </span>
+
+                                    <TypeLink Type="@field.Type" />
+
                                     <span class="text-dark">
                                         @field.Name
                                     </span>

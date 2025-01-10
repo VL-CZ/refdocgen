@@ -125,9 +125,16 @@ internal static class ObjectTypeTMCreator
             ? null
             : LiteralValueFormatter.Format(fieldData.ConstantValue);
 
+        var typeLink = new TypeUrlResolver(commentParser.TypeRegistry);
+
+        var typeRef = new TypeLinkTM(
+            CSharpTypeName.Of(fieldData.Type),
+            typeLink.GetUrlOf(fieldData.Type)
+            );
+
         return new FieldTM(
             fieldData.Name,
-            CSharpTypeName.Of(fieldData.Type),
+            typeRef,
             docComment,
             fieldData.RemarksDocComment.Value,
             modifiers.GetStrings(),
@@ -291,6 +298,8 @@ internal static class ObjectTypeTMCreator
     private static EventTM GetFrom(IEventData eventData, IDocCommentTransformer commentParser)
     {
         var modifiers = GetCallableMemberModifiers(eventData);
+
+        modifiers.Add(Keyword.Event);
 
         string docComment = commentParser.ToHtmlString(eventData.SummaryDocComment);
         string[] seeAlsoDocComments = eventData.SeeAlsoDocComments.Select(commentParser.ToHtmlString).ToArray();
