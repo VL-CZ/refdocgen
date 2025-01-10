@@ -1,3 +1,4 @@
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Abstract.Types.Exception;
@@ -11,9 +12,10 @@ namespace RefDocGen.CodeElements.Abstract.Types.Exception;
 public interface IExceptionDocumentation
 {
     /// <summary>
-    /// Fully qualified name of the exception.
+    /// Identifier of the exception.
+    /// The format is same as for <see cref="ITypeNameBaseData.Id"/>
     /// </summary>
-    string TypeName { get; }
+    string Id { get; }
 
     /// <summary>
     /// Doc comment provided to the exception.

@@ -141,7 +141,10 @@ internal class BaseTMCreator
     protected ExceptionTM GetFrom(IExceptionDocumentation exception)
     {
         return new ExceptionTM(
-            exception.TypeName,
+            new TypeLinkTM(
+                exception.Id,
+                null
+                ),
             ToHtmlString(exception.DocComment));
     }
 }
