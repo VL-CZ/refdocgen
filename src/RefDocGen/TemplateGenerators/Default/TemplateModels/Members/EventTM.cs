@@ -18,5 +18,5 @@ public record EventTM(
     string SummaryDocComment,
     string RemarksDocComment,
     IEnumerable<string> Modifiers,
-    IEnumerable<string> SeeAlsoDocComments,
+    string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions);

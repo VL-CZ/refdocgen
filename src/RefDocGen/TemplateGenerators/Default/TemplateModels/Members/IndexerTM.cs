@@ -28,5 +28,5 @@ public record IndexerTM(
     bool HasSetter,
     IEnumerable<string> GetterModifiers,
     IEnumerable<string> SetterModifiers,
-    IEnumerable<string> SeeAlsoDocComments,
+    string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions);

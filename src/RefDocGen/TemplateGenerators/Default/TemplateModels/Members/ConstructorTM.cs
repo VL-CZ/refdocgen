@@ -16,5 +16,5 @@ public record ConstructorTM(
     string SummaryDocComment,
     string RemarksDocComment,
     IEnumerable<string> Modifiers,
-    IEnumerable<string> SeeAlsoDocComments,
+    string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions);

@@ -11,4 +11,4 @@ public record EnumMemberTM(
     string Name,
     string SummaryDocComment,
     string RemarksDocComment,
-    IEnumerable<string> SeeAlsoDocComments);
+    string[] SeeAlsoDocComments);

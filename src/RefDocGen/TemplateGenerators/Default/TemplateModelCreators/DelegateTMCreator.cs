@@ -18,24 +18,25 @@ internal class DelegateTMCreator : BaseTMCreator
     /// <summary>
     /// Creates a <see cref="DelegateTypeTM"/> instance based on the provided <see cref="IDelegateTypeData"/> object.
     /// </summary>
-    /// <param name="delegateTypeData">The <see cref="IDelegateTypeData"/> instance representing the delegate.</param>
-    /// <returns>A <see cref="DelegateTypeTM"/> instance based on the provided <paramref name="delegateTypeData"/>.</returns>
-    internal DelegateTypeTM GetFrom(IDelegateTypeData delegateTypeData)
+    /// <param name="delegateType">The <see cref="IDelegateTypeData"/> instance representing the delegate.</param>
+    /// <returns>A <see cref="DelegateTypeTM"/> instance based on the provided <paramref name="delegateType"/>.</returns>
+    internal DelegateTypeTM GetFrom(IDelegateTypeData delegateType)
     {
-        List<Keyword> modifiers = [delegateTypeData.AccessModifier.ToKeyword()];
+        List<Keyword> modifiers = [delegateType.AccessModifier.ToKeyword()];
 
         return new DelegateTypeTM(
-            delegateTypeData.Id,
-            CSharpTypeName.Of(delegateTypeData),
-            delegateTypeData.Namespace,
-            ToHtmlString(delegateTypeData.SummaryDocComment),
-            ToHtmlString(delegateTypeData.RemarksDocComment),
+            delegateType.Id,
+            CSharpTypeName.Of(delegateType),
+            delegateType.Namespace,
+            ToHtmlString(delegateType.SummaryDocComment),
+            ToHtmlString(delegateType.RemarksDocComment),
             modifiers.GetStrings(),
-            ToHtmlString(delegateTypeData.ReturnValueDocComment),
-            CSharpTypeName.Of(delegateTypeData.ReturnType),
-            delegateTypeData.ReturnType.IsVoid,
-            GetTemplateModels(delegateTypeData.Parameters),
-            GetTemplateModels(delegateTypeData.TypeParameterDeclarations),
-            GetTemplateModels(delegateTypeData.Exceptions));
+            ToHtmlString(delegateType.ReturnValueDocComment),
+            CSharpTypeName.Of(delegateType.ReturnType),
+            delegateType.ReturnType.IsVoid,
+            GetTemplateModels(delegateType.Parameters),
+            GetTemplateModels(delegateType.TypeParameterDeclarations),
+            GetHtmlStrings(delegateType.SeeAlsoDocComments),
+            GetTemplateModels(delegateType.Exceptions));
     }
 }

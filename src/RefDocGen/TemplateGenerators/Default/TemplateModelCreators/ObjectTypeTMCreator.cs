@@ -71,7 +71,8 @@ internal class ObjectTypeTMCreator : BaseTMCreator
             events,
             GetTemplateModels(type.TypeParameterDeclarations),
             baseType,
-            interfaces
+            interfaces,
+            GetHtmlStrings(type.SeeAlsoDocComments)
             );
     }
 

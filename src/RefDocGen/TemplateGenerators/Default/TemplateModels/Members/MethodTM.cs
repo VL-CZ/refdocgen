@@ -28,5 +28,5 @@ public record MethodTM(
     string RemarksDocComment,
     string ReturnsDocComment,
     IEnumerable<string> Modifiers,
-    IEnumerable<string> SeeAlsoDocComments,
+    string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions);

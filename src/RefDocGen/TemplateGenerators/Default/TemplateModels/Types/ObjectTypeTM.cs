@@ -22,6 +22,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 /// <param name="TypeParameters">Template models of the generic type parameters contained in the type.</param>
 /// <param name="BaseTypeName">Name of the base type, null if the type doesn't have any base type.</param>
 /// <param name="ImplementedInterfaces">Collection of interfaces implemented by the type.</param>
+/// <param name="SeeAlsoDocComments">Collection of <c>seealso</c> documentation comments for the type.</param>
 public record ObjectTypeTM(
     string Id,
     string Name,
@@ -39,4 +40,5 @@ public record ObjectTypeTM(
     EventTM[] Events,
     TypeParameterTM[] TypeParameters,
     string? BaseTypeName,
-    IEnumerable<string> ImplementedInterfaces) : ITemplateModelWithId;
+    IEnumerable<string> ImplementedInterfaces,
+    string[] SeeAlsoDocComments) : ITemplateModelWithId;

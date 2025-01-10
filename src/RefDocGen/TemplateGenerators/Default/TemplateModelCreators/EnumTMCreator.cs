@@ -19,20 +19,21 @@ internal class EnumTMCreator : BaseTMCreator
     /// <summary>
     /// Creates a <see cref="EnumTypeTM"/> instance based on the provided <see cref="IEnumTypeData"/> object.
     /// </summary>
-    /// <param name="enumData">The <see cref="IEnumTypeData"/> instance representing the enum.</param>
-    /// <returns>A <see cref="EnumTypeTM"/> instance based on the provided <paramref name="enumData"/>.</returns>
-    internal EnumTypeTM GetFrom(IEnumTypeData enumData)
+    /// <param name="enumType">The <see cref="IEnumTypeData"/> instance representing the enum.</param>
+    /// <returns>A <see cref="EnumTypeTM"/> instance based on the provided <paramref name="enumType"/>.</returns>
+    internal EnumTypeTM GetFrom(IEnumTypeData enumType)
     {
-        var enumMemberTMs = enumData.Members.Select(GetFrom);
-        List<Keyword> modifiers = [enumData.AccessModifier.ToKeyword()];
+        var enumMemberTMs = enumType.Members.Select(GetFrom);
+        List<Keyword> modifiers = [enumType.AccessModifier.ToKeyword()];
 
         return new EnumTypeTM(
-            enumData.Id,
-            enumData.ShortName,
-            enumData.Namespace,
-            ToHtmlString(enumData.SummaryDocComment),
-            ToHtmlString(enumData.RemarksDocComment),
+            enumType.Id,
+            enumType.ShortName,
+            enumType.Namespace,
+            ToHtmlString(enumType.SummaryDocComment),
+            ToHtmlString(enumType.RemarksDocComment),
             modifiers.GetStrings(),
+            GetHtmlStrings(enumType.SeeAlsoDocComments),
             enumMemberTMs);
     }
 

@@ -23,5 +23,5 @@ public record FieldTM(
     string SummaryDocComment,
     string RemarksDocComment,
     IEnumerable<string> Modifiers,
-    IEnumerable<string> SeeAlsoDocComments,
+    string[] SeeAlsoDocComments,
     string? ConstantValue);
