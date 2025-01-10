@@ -125,11 +125,11 @@ internal static class ObjectTypeTMCreator
             ? null
             : LiteralValueFormatter.Format(fieldData.ConstantValue);
 
-        var typeLink = new TypeLink(commentParser.TypeRegistry);
+        var typeLink = new TypeUrlResolver(commentParser.TypeRegistry);
 
         var typeRef = new TypeReferenceTM(
             CSharpTypeName.Of(fieldData.Type),
-            typeLink.GetLink(fieldData.Type)
+            typeLink.GetUrlOf(fieldData.Type)
             );
 
         return new FieldTM(
