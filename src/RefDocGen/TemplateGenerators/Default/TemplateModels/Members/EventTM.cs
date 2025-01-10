@@ -9,7 +9,6 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <param name="RemarksDocComment">'remarks' documentation comment for the event.</param>
 /// <param name="Modifiers">Collection of modifiers for the event (e.g. public, static, etc.)</param>
 /// <param name="SeeAlsoDocComments">Collection of 'seealso' documentation comments for the event.</param>
-/// </param>
 public record EventTM(
     string Name,
     string Type,
