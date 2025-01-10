@@ -292,6 +292,8 @@ internal static class ObjectTypeTMCreator
     {
         var modifiers = GetCallableMemberModifiers(eventData);
 
+        modifiers.Add(Keyword.Event);
+
         string docComment = commentParser.ToHtmlString(eventData.SummaryDocComment);
         string[] seeAlsoDocComments = eventData.SeeAlsoDocComments.Select(commentParser.ToHtmlString).ToArray();
 

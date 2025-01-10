@@ -5,16 +5,16 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// </summary>
 /// <param name="Name">Name of the property.</param>
 /// <param name="Type">Type of the property.</param>
-/// <param name="SummaryDocComment">'summary' documentation comment for the property.</param>
-/// <param name="RemarksDocComment">'remarks' documentation comment for the property.</param>
-/// <param name="ValueDocComment">'value' documentation comment for the property.</param>
+/// <param name="SummaryDocComment"><c>summary</c> documentation comment for the property.</param>
+/// <param name="RemarksDocComment"><c>remarks</c> documentation comment for the property.</param>
+/// <param name="ValueDocComment"><c>value</c> documentation comment for the property.</param>
 /// <param name="Modifiers">Collection of property modifiers (e.g. public, static, etc.)</param>
 /// <param name="HasGetter">Checks if the property has getter.</param>
 /// <param name="HasSetter">Checks if the property has setter.</param>
 /// <param name="GetterModifiers">Collection of the getter modifiers (possibly empty).</param>
 /// <param name="SetterModifiers">Collection of the setter modifiers (possibly empty).</param>
 /// <param name="Exceptions">
-/// A collection of user-documented exceptions (using the 'exception' XML tag) that the property might throw.
+/// A collection of user-documented exceptions (using the <c>exception</c> XML tag) that the property might throw.
 /// </param>
 /// <param name="ConstantValue">
 /// Default value of the parameter as a string.
