@@ -127,7 +127,7 @@ internal static class ObjectTypeTMCreator
 
         var typeLink = new TypeUrlResolver(commentParser.TypeRegistry);
 
-        var typeRef = new TypeReferenceTM(
+        var typeRef = new TypeLinkTM(
             CSharpTypeName.Of(fieldData.Type),
             typeLink.GetUrlOf(fieldData.Type)
             );

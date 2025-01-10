@@ -19,7 +19,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// </param>
 public record FieldTM(
     string Name,
-    TypeReferenceTM Type,
+    TypeLinkTM Type,
     string SummaryDocComment,
     string RemarksDocComment,
     IEnumerable<string> Modifiers,
