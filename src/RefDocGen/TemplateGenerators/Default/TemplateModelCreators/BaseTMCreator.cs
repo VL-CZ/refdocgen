@@ -1,10 +1,12 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.Exception;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Tools;
 using RefDocGen.TemplateGenerators.Tools.DocComments.Html;
+using RefDocGen.TemplateGenerators.Tools.TypeName;
 using System.Xml.Linq;
 
 namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
@@ -51,5 +53,13 @@ internal class BaseTMCreator
         return exceptions
                 .Select(exceptionTMCreator.GetFrom)
                 .ToArray();
+    }
+
+    protected TypeLinkTM GetTypeLink(ITypeNameData type)
+    {
+        return new TypeLinkTM(
+            CSharpTypeName.Of(type),
+            typeUrlResolver.GetUrlOf(type)
+            );
     }
 }

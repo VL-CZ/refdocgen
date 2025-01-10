@@ -49,7 +49,11 @@ internal class ParameterTMCreator : BaseTMCreator
             ? null
             : LiteralValueFormatter.Format(parameterData.DefaultValue);
 
-        return new ParameterTM(parameterData.Name, CSharpTypeName.Of(parameterData.Type), parameterData.DocComment.Value,
-            modifiers.GetStrings(), defaultValue);
+        return new ParameterTM(
+            parameterData.Name,
+            CSharpTypeName.Of(parameterData.Type),
+            ToHtmlString(parameterData.DocComment),
+            modifiers.GetStrings(),
+            defaultValue);
     }
 }

@@ -38,6 +38,11 @@ internal class TypeParameterTMCreator : BaseTMCreator
         var typeConstraints = typeParameter.TypeConstraints.Select(CSharpTypeName.Of);
         var specialConstraints = typeParameter.SpecialConstraints.Select(c => c.GetName());
 
-        return new TypeParameterTM(typeParameter.Name, typeParameter.DocComment.Value, modifiers.GetStrings(), typeConstraints, specialConstraints);
+        return new TypeParameterTM(
+            typeParameter.Name,
+            ToHtmlString(typeParameter.DocComment),
+            modifiers.GetStrings(),
+            typeConstraints,
+            specialConstraints);
     }
 }

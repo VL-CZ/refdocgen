@@ -17,6 +17,8 @@ internal class ExceptionTMCreator : BaseTMCreator
     /// <returns>A <see cref="ExceptionTM"/> instance based on the provided <paramref name="exception"/>.</returns>
     internal ExceptionTM GetFrom(IExceptionDocumentation exception)
     {
-        return new ExceptionTM(exception.TypeName, exception.DocComment.Value);
+        return new ExceptionTM(
+            exception.TypeName,
+            ToHtmlString(exception.DocComment));
     }
 }

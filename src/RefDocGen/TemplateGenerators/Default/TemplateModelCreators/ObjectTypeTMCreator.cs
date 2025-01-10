@@ -120,16 +120,9 @@ internal class ObjectTypeTMCreator : BaseTMCreator
             ? null
             : LiteralValueFormatter.Format(field.ConstantValue);
 
-        var typeLink = new TypeUrlResolver(docCommentTransformer.TypeRegistry);
-
-        var typeRef = new TypeLinkTM(
-            CSharpTypeName.Of(field.Type),
-            typeLink.GetUrlOf(field.Type)
-            );
-
         return new FieldTM(
             field.Name,
-            typeRef,
+            GetTypeLink(field.Type),
             ToHtmlString(field.SummaryDocComment),
             ToHtmlString(field.RemarksDocComment),
             modifiers.GetStrings(),
