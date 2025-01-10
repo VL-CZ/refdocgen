@@ -169,20 +169,7 @@
                                         @string.Join(' ', field.Modifiers)
                                     </span>
 
-                                    @if (field.Type.Url is not null)
-                                    {
-                                        <span class="text-secondary">
-                                            <a href="@field.Type.Url">
-                                                @field.Type.TypeName
-                                            </a>
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-secondary">
-                                            @field.Type.TypeName
-                                        </span>
-                                    }
+                                    <TypeLink Type="@field.Type" />
 
                                     <span class="text-dark">
                                         @field.Name

@@ -1,13 +1,16 @@
 using RefDocGen.CodeElements.Abstract;
-using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
-using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 
 namespace RefDocGen.TemplateGenerators.Tools.TypeName;
 
 internal class TypeLink
 {
     private ITypeRegistry typeRegistry;
+
+    private Dictionary<string, Uri> links = new()
+    {
+        ["System"] = new Uri("https://learn.microsoft.com/en-us/dotnet/api/")
+    };
 
     public TypeLink(ITypeRegistry typeRegistry)
     {
@@ -16,8 +19,6 @@ internal class TypeLink
 
     public string? GetLink(ITypeNameData typeNameData)
     {
-        string? link = null;
-
         string parentId = typeNameData.HasTypeParameters
                 ? $"{typeNameData.FullName}`{typeNameData.TypeParameters.Count}"
                 : typeNameData.Id;
@@ -25,14 +26,25 @@ internal class TypeLink
         // the parent type is contained in the type registry
         if (typeRegistry.GetDeclaredType(parentId) is not null)
         {
-            link = parentId + ".html";
+            return parentId + ".html";
         }
-        else if (typeNameData.Namespace.StartsWith("System"))
+        else if (GetUrl(typeNameData) is string url)
         {
-            var url = new Uri("https://learn.microsoft.com/en-us/dotnet/api/") + typeNameData.FullName.Replace('`', '-');
-            link = url;
+            return url;
         }
 
-        return link;
+        return null;
+    }
+
+    private string? GetUrl(ITypeNameData type)
+    {
+        var parentNamespace = type.Namespace.Split('.').First();
+
+        if (links.TryGetValue(parentNamespace, out var url))
+        {
+            return url + type.FullName.Replace('`', '-'); // TODO: update
+        }
+
+        return null;
     }
 }
