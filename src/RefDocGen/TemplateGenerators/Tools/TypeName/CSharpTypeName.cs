@@ -1,3 +1,4 @@
+using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.Tools;
 
@@ -73,6 +74,20 @@ internal static class CSharpTypeName
         if (type.IsPointer)
         {
             typeName += '*';
+        }
+
+        return typeName;
+    }
+
+    /// <inheritdoc cref="Of(ITypeNameData)"/>
+    internal static string Of(ITypeDeclaration type)
+    {
+        string typeName = type.ShortName;
+
+        if (type.HasTypeParameters)
+        {
+            string genericParamsString = string.Join(", ", type.TypeParameterDeclarations.Select(tp => tp.Name));
+            typeName += '<' + genericParamsString + '>'; // add generic params to the type name
         }
 
         return typeName;
