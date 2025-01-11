@@ -59,16 +59,35 @@ internal class TypeUrlResolver
     /// <inheritdoc cref="GetUrlOf(ITypeNameData)" path="/summary"/>
     /// <inheritdoc cref="GetUrlOf(ITypeNameData)" path="/returns"/>
     /// <param name="typeId">ID of the type for which the documentation page URL is returned.</param>
-    internal string? GetUrlOf(string typeId)
+    /// <param name="memberId">
+    /// ID of the member for which the documentation page URL is returned.
+    /// Pass <c>null</c> if the type documentation should be returned.
+    /// </param>
+    internal string? GetUrlOf(string typeId, string? memberId = null)
     {
         if (typeRegistry.GetDeclaredType(typeId) is not null) // the type is found in the type registry
         {
             string uriEncodedString = Uri.EscapeDataString(typeId);
-            return $"./{uriEncodedString}.html";
+
+            if (memberId is not null)
+            {
+                return $"./{uriEncodedString}.html#{memberId}";
+            }
+            else
+            {
+                return $"./{uriEncodedString}.html";
+            }
         }
         else if (GetSystemTypeUrl(typeId) is string url) // the type is found in the .NET API docs
         {
-            return url;
+            if (memberId is not null)
+            {
+                return $"{url}.{memberId.ToLower(CultureInfo.InvariantCulture)}";
+            }
+            else
+            {
+                return url;
+            }
         }
 
         return null;

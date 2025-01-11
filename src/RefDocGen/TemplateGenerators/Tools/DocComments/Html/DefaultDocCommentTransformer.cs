@@ -477,12 +477,11 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
         }
 
         // type documentation found
-        if (typeUrlResolver.GetUrlOf(typeId) is string typeUrl)
+        if (typeUrlResolver.GetUrlOf(typeId, memberId) is string targetUrl)
         {
             var result = new XElement(htmlTemplateIfFound);
             var emptyDescendant = result.GetSingleEmptyDescendantOrSelf();
 
-            string targetUrl = typeUrl;
             string targetName = typeId;
 
             if (TypeRegistry.GetDeclaredType(typeId) is ITypeDeclaration type) // the type is found in the registry -> get its name
@@ -493,7 +492,6 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
             // add member ID (if the reference target is a type member)
             if (memberId is not null)
             {
-                targetUrl += $"#{memberId}";
                 targetName += $".{memberId}";
             }
 
