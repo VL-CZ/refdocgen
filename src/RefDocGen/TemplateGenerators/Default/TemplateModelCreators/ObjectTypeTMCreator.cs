@@ -13,7 +13,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 /// <summary>
 /// Class responsible for creating template models representing the individual object types.
 /// </summary>
-internal class ObjectTypeTMCreator : BaseTMCreator
+internal class ObjectTypeTMCreator : TypeTMCreator
 {
     public ObjectTypeTMCreator(IDocCommentTransformer docCommentTransformer) : base(docCommentTransformer)
     {

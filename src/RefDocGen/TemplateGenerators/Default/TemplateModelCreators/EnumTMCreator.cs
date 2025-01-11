@@ -10,7 +10,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 /// <summary>
 /// Class responsible for creating template models representing the individual enums.
 /// </summary>
-internal class EnumTMCreator : BaseTMCreator
+internal class EnumTMCreator : TypeTMCreator
 {
     public EnumTMCreator(IDocCommentTransformer docCommentTransformer) : base(docCommentTransformer)
     {

@@ -13,27 +13,54 @@ using System.Xml.Linq;
 
 namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 
-internal class BaseTMCreator
+/// <summary>
+/// Base class responsible for creating template models representing any types.
+/// </summary>
+internal abstract class TypeTMCreator
 {
+    /// <summary>
+    /// Transformer of the XML doc comments into HTML.
+    /// </summary>
     protected readonly IDocCommentTransformer docCommentTransformer;
+
+    /// <summary>
+    /// Resolver of the individual type's documentation pages.
+    /// </summary>
     protected readonly TypeUrlResolver typeUrlResolver;
 
-    public BaseTMCreator(IDocCommentTransformer docCommentTransformer)
+    /// <summary>
+    /// Creates a new instance of <see cref="TypeTMCreator"/> class.
+    /// </summary>
+    /// <param name="docCommentTransformer">
+    /// <inheritdoc cref="docCommentTransformer"/>.
+    /// </param>
+    protected TypeTMCreator(IDocCommentTransformer docCommentTransformer)
     {
         this.docCommentTransformer = docCommentTransformer;
         typeUrlResolver = new(docCommentTransformer.TypeRegistry);
     }
 
+    /// <inheritdoc cref="IDocCommentTransformer.ToHtmlString(XElement)"/>
     protected string? ToHtmlString(XElement docComment)
     {
         return docCommentTransformer.ToHtmlString(docComment);
     }
 
+    /// <summary>
+    /// Converts each of the <see cref="XElement"/> to its HTML string representation.
+    /// </summary>
+    /// <param name="elements">The elements to be converted to their HTML strings.</param>
+    /// <returns>Collection of raw HTML string representation of the <paramref name="elements"/>.</returns>
     protected string[] GetHtmlStrings(IEnumerable<XElement> elements)
     {
         return elements.Select(ToHtmlString).WhereNotNull().ToArray();
     }
 
+    /// <summary>
+    /// Converts each item of the enumerable into <see cref="ParameterTM"/> instance.
+    /// </summary>
+    /// <param name="parameters">An enumerable of the provided <see cref="IParameterData" /> to convert</param>
+    /// <returns>Enumerable of <see cref="ParameterTM"/> instances, corresponding to the provided parameters.</returns>
     protected ParameterTM[] GetTemplateModels(IEnumerable<IParameterData> parameters)
     {
         return parameters
@@ -41,6 +68,11 @@ internal class BaseTMCreator
                 .ToArray();
     }
 
+    /// <summary>
+    /// Converts each item of the enumerable into <see cref="TypeParameterTM"/> instance.
+    /// </summary>
+    /// <param name="typeParameters">An enumerable of the provided <see cref="ITypeParameterData" /> to convert</param>
+    /// <returns>Enumerable of <see cref="TypeParameterTM"/> instances, corresponding to the provided type parameters.</returns>
     protected TypeParameterTM[] GetTemplateModels(IEnumerable<ITypeParameterData> typeParameters)
     {
         return typeParameters
@@ -48,6 +80,11 @@ internal class BaseTMCreator
                 .ToArray();
     }
 
+    /// <summary>
+    /// Converts each item of the enumerable into <see cref="ExceptionTM"/> instance.
+    /// </summary>
+    /// <param name="exceptions">An enumerable of the provided <see cref="IExceptionDocumentation" /> to convert</param>
+    /// <returns>Enumerable of <see cref="ExceptionTM"/> instances, corresponding to the provided exceptions.</returns>
     protected ExceptionTM[] GetTemplateModels(IEnumerable<IExceptionDocumentation> exceptions)
     {
         return exceptions
@@ -55,6 +92,11 @@ internal class BaseTMCreator
                 .ToArray();
     }
 
+    /// <summary>
+    /// Gets the <see cref="TypeLinkTM"/> from the provided <paramref name="type"/>.
+    /// </summary>
+    /// <param name="type">The provided type.</param>
+    /// <returns><see cref="TypeLinkTM"/> corresponding to the provided <paramref name="type"/>.</returns>
     protected TypeLinkTM GetTypeLink(ITypeNameData type)
     {
         return new TypeLinkTM(

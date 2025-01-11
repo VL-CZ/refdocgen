@@ -9,7 +9,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 /// <summary>
 /// Class responsible for creating template models representing the individual delegates.
 /// </summary>
-internal class DelegateTMCreator : BaseTMCreator
+internal class DelegateTMCreator : TypeTMCreator
 {
     public DelegateTMCreator(IDocCommentTransformer docCommentTransformer) : base(docCommentTransformer)
     {
