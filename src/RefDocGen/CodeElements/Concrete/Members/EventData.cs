@@ -47,6 +47,12 @@ internal class EventData : MemberData, IEventData
     }
 
     /// <inheritdoc/>
+    public override string Id => MemberId.Of(this);
+
+    /// <inheritdoc/>
+    public override string Name => MemberName.Of(this);
+
+    /// <inheritdoc/>
     public ITypeNameData Type { get; }
 
     /// <summary>

@@ -29,9 +29,7 @@ internal class MethodData : ExecutableMemberData, IMethodData
     }
 
     /// <inheritdoc/>
-    public override string Name => IsExplicitImplementation
-        ? MethodInfo.Name.Split('.').Last()
-        : MethodInfo.Name;
+    public override string Name => MemberName.Of(this);
 
     /// <inheritdoc cref="MethodData(MethodInfo, TypeDeclaration, IReadOnlyDictionary{string, TypeParameterData})"/>
     internal MethodData(MethodInfo methodInfo, TypeDeclaration containingType) : this(methodInfo, containingType, new Dictionary<string, TypeParameterData>())
