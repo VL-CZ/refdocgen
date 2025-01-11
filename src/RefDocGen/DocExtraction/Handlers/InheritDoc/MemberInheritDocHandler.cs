@@ -1,8 +1,9 @@
 using RefDocGen.CodeElements.Concrete;
 using RefDocGen.CodeElements.Concrete.Members;
-using RefDocGen.DocExtraction.Handlers.InheritDoc;
 using RefDocGen.DocExtraction.Tools;
 using System.Xml.Linq;
+
+namespace RefDocGen.DocExtraction.Handlers.InheritDoc;
 
 /// <summary>
 /// Class responsible for handling the 'inheritdoc' comments provided to type members and replacing them with the actual documentation.
