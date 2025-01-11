@@ -99,20 +99,14 @@
         <hr />
 
         <!-- Doc comments -->
-        <div class="text-muted">
+        <SummaryDocumentation DocComment="@Model.SummaryDocComment" />
 
-            <!-- Summary doc comment -->
-            <i>
-                @((MarkupString)Model.SummaryDocComment)
-            </i>
+        <!-- Type parameter doc comments -->
+        <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
 
-            <!-- Type parameter doc comments -->
-            <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
+        <!-- Remarks doc comment -->
+        <RemarksDocumentation DocComment="@Model.RemarksDocComment" />
 
-            <!-- Remarks doc comment -->
-            <RemarksDocumentation DocComment="@Model.RemarksDocComment" />
-
-        </div>
 
         <hr />
 
@@ -137,11 +131,8 @@
                                 </samp>
 
                             </h6>
-                            <div class="text-muted mb-0">
-                                <i>
-                                    @((MarkupString)constructor.SummaryDocComment)
-                                </i>
-                            </div>
+
+                            <SummaryDocumentation DocComment="@constructor.SummaryDocComment" />
 
                             <ParametersDocumentation Parameters="@constructor.Parameters" />
 
@@ -185,11 +176,8 @@
 
                                 </samp>
                             </h6>
-                            <div class="text-muted mb-0">
-                                <i>
-                                    @((MarkupString)field.SummaryDocComment)
-                                </i>
-                            </div>
+
+                            <SummaryDocumentation DocComment="@field.SummaryDocComment" />
 
                             <RemarksDocumentation DocComment="@field.RemarksDocComment" />
 
@@ -221,11 +209,8 @@
                                     </span>
                                 </samp>
                             </h6>
-                            <div class="text-muted mb-0">
-                                <i>
-                                    @((MarkupString)e.SummaryDocComment)
-                                </i>
-                            </div>
+
+                            <SummaryDocumentation DocComment="@e.SummaryDocComment" />
 
                             <RemarksDocumentation DocComment="@e.RemarksDocComment" />
 
@@ -287,9 +272,8 @@
                                     }
                                 </samp>
                             </h6>
-                            <div class="text-muted mb-0">
-                                <i>@property.SummaryDocComment</i>
-                            </div>
+
+                            <SummaryDocumentation DocComment="@property.SummaryDocComment" />
 
                             <ValueDocumentation DocComment="@property.ValueDocComment" />
 
@@ -375,9 +359,8 @@
                                     <span class="text-secondary">}</span>
                                 </samp>
                             </h6>
-                            <div class="text-muted mb-0">
-                                <i>@indexer.SummaryDocComment</i>
-                            </div>
+
+                            <SummaryDocumentation DocComment="@indexer.SummaryDocComment" />
 
                             <ParametersDocumentation Parameters="@indexer.Parameters" />
 
@@ -420,9 +403,8 @@
 
                                 </samp>
                             </h6>
-                            <div class="text-muted mb-0">
-                                <i>@method.SummaryDocComment</i>
-                            </div>
+                            
+                            <SummaryDocumentation DocComment="@method.SummaryDocComment" />
 
                             <ParametersDocumentation Parameters="@method.Parameters" />
 
@@ -468,9 +450,8 @@
                                 </samp>
 
                             </h6>
-                            <div class="text-muted mb-0">
-                                <i>@method.SummaryDocComment</i>
-                            </div>
+
+                            <SummaryDocumentation DocComment="@method.SummaryDocComment" />
 
                             <ParametersDocumentation Parameters="@method.Parameters" />
 

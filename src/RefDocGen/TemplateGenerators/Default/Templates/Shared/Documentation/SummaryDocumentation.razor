@@ -1,0 +1,15 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required string DocComment { get; set; }
+}
+
+@if (DocComment.Length > 0)
+{
+    <div class="text-muted mb-0">
+        <i>
+            @((MarkupString)DocComment)
+        </i>
+    </div>
+}

@@ -71,13 +71,12 @@
 
         <hr />
 
-        <div class="text-muted">
-            <i>@Model.SummaryDocComment</i>
+        <SummaryDocumentation DocComment="@Model.SummaryDocComment" />
 
-            <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
+        <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
 
-            <RemarksDocumentation DocComment="@Model.RemarksDocComment" />
-        </div>
+        <RemarksDocumentation DocComment="@Model.RemarksDocComment" />
+
 
         <hr />
 
@@ -98,9 +97,8 @@
 
                         </samp>
                     </h6>
-                    <div class="text-muted mb-0">
-                        <i>@Model.SummaryDocComment</i>
-                    </div>
+
+                    <SummaryDocumentation DocComment="@Model.SummaryDocComment" />
 
                     <ParametersDocumentation Parameters="@Model.Parameters" />
 
