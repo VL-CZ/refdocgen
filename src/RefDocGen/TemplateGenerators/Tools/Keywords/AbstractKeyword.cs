@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements;
+using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
 
 namespace RefDocGen.TemplateGenerators.Tools.Keywords;
@@ -16,5 +17,21 @@ internal static class AbstractKeyword
     internal static bool IsPresentIn(IObjectTypeData typeData)
     {
         return typeData.IsAbstract && typeData.Kind == TypeKind.Class;
+    }
+
+    /// <summary>
+    /// Checks whether the 'abstract' keyword is present in the provided member signature.
+    /// </summary>
+    /// <param name="memberData">Member that we check for 'abstract' keyword.</param>
+    /// <returns>Boolean representing if the 'abstract' keyword is present in the member signature.</returns>
+    internal static bool IsPresentIn(ICallableMemberData memberData)
+    {
+        if (memberData.ContainingType is IObjectTypeData objectType
+            && objectType.Kind == TypeKind.Interface)
+        {
+            return false; // for all interface members, return false.
+        }
+
+        return memberData.IsAbstract;
     }
 }

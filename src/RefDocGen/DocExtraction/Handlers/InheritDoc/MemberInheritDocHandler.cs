@@ -30,7 +30,7 @@ internal class MemberInheritDocHandler : InheritDocHandler<MemberData>
 
         foreach (var p in parents)
         {
-            if (p.AllMembers.TryGetValue(member.Id, out var parentMember))
+            if (p.AllMembers.TryGetValue(member.Id, out var parentMember)) // TODO: explicit interface implementation & inheriting generic type
             {
                 result.Add(parentMember);
             }

@@ -52,8 +52,6 @@ internal class ObjectTypeTMCreator : BaseTMCreator
             modifiers.Add(Keyword.Abstract);
         }
 
-        string summaryDocComment = docCommentTransformer.ToHtmlString(type.SummaryDocComment);
-
         return new ObjectTypeTM(
             type.Id,
             CSharpTypeName.Of(type),
@@ -157,7 +155,7 @@ internal class ObjectTypeTMCreator : BaseTMCreator
             : LiteralValueFormatter.Format(property.ConstantValue);
 
         return new PropertyTM(
-            property.Name,
+            GetCallableMemberName(property),
             GetTypeLink(property.Type),
             ToHtmlString(property.SummaryDocComment),
             ToHtmlString(property.RemarksDocComment),
@@ -218,12 +216,8 @@ internal class ObjectTypeTMCreator : BaseTMCreator
     {
         var modifiers = GetCallableMemberModifiers(method);
 
-        string name = method.IsExplicitImplementation && method.ExplicitInterfaceType is not null
-            ? CSharpTypeName.Of(method.ExplicitInterfaceType) + "." + method.Name
-            : method.Name;
-
         return new MethodTM(
-            name,
+            GetCallableMemberName(method),
             GetTemplateModels(method.Parameters),
             GetTemplateModels(method.TypeParameters),
             GetTypeLink(method.ReturnType),
@@ -290,7 +284,7 @@ internal class ObjectTypeTMCreator : BaseTMCreator
         modifiers.Add(Keyword.Event);
 
         return new EventTM(
-            eventData.Name,
+            GetCallableMemberName(eventData),
             GetTypeLink(eventData.Type),
             ToHtmlString(eventData.SummaryDocComment),
             ToHtmlString(eventData.RemarksDocComment),
@@ -301,40 +295,45 @@ internal class ObjectTypeTMCreator : BaseTMCreator
     }
 
     /// <summary>
-    /// Gets the list of modifiers for the provided <paramref name="memberData"/> object.
+    /// Gets the list of modifiers for the provided <paramref name="member"/> object.
     /// </summary>
-    /// <param name="memberData">Member, whose modifiers we get.</param>
+    /// <param name="member">Member, whose modifiers we get.</param>
     /// <returns>A list of modifiers for the provided member.</returns>
-    private List<Keyword> GetCallableMemberModifiers(ICallableMemberData memberData)
+    private List<Keyword> GetCallableMemberModifiers(ICallableMemberData member)
     {
-        List<Keyword> modifiers = [memberData.AccessModifier.ToKeyword()];
+        List<Keyword> modifiers = [];
 
-        if (memberData.IsStatic)
+        if (!member.IsExplicitImplementation)
+        {
+            modifiers.Add(member.AccessModifier.ToKeyword());
+        }
+
+        if (member.IsStatic)
         {
             modifiers.Add(Keyword.Static);
         }
 
-        if (memberData.IsAbstract)
+        if (AbstractKeyword.IsPresentIn(member))
         {
             modifiers.Add(Keyword.Abstract);
         }
 
-        if (VirtualKeyword.IsPresentIn(memberData))
+        if (VirtualKeyword.IsPresentIn(member))
         {
             modifiers.Add(Keyword.Virtual);
         }
 
-        if (memberData.OverridesAnotherMember)
+        if (member.OverridesAnotherMember)
         {
             modifiers.Add(Keyword.Override);
         }
 
-        if (memberData.IsSealed)
+        if (member.IsSealed)
         {
             modifiers.Add(Keyword.Sealed);
         }
 
-        if (memberData.IsAsync)
+        if (member.IsAsync)
         {
             modifiers.Add(Keyword.Async);
         }
@@ -342,4 +341,20 @@ internal class ObjectTypeTMCreator : BaseTMCreator
         return modifiers;
     }
 
+    /// <summary>
+    /// Gets the C# name of <see cref="ICallableMemberData"/>.
+    /// </summary>
+    /// <param name="member">The provided member.</param>
+    /// <returns>C# name of the provided member.</returns>
+    private string GetCallableMemberName(ICallableMemberData member)
+    {
+        if (member.ExplicitInterfaceType is not null)
+        {
+            return CSharpTypeName.Of(member.ExplicitInterfaceType) + "." + member.Name;
+        }
+        else
+        {
+            return member.Name;
+        }
+    }
 }
