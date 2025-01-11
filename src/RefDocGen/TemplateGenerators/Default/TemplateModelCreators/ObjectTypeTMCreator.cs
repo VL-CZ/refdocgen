@@ -34,11 +34,11 @@ internal class ObjectTypeTMCreator : BaseTMCreator
         var indexers = type.Indexers.Select(GetFrom).ToArray();
         var events = type.Events.Select(GetFrom).ToArray();
 
-        string? baseType = type.BaseType is not null
-            ? CSharpTypeName.Of(type.BaseType)
+        var baseType = type.BaseType is not null
+            ? GetTypeLink(type.BaseType)
             : null;
 
-        var interfaces = type.Interfaces.Select(CSharpTypeName.Of);
+        var interfaces = type.Interfaces.Select(GetTypeLink);
 
         List<Keyword> modifiers = [type.AccessModifier.ToKeyword()];
 

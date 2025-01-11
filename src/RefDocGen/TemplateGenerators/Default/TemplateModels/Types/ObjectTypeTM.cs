@@ -20,7 +20,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 /// <param name="Indexers">Template models of the indexers contained in the type.</param>
 /// <param name="Events">Template models of the events contained in the type.</param>
 /// <param name="TypeParameters">Template models of the generic type parameters contained in the type.</param>
-/// <param name="BaseTypeName">Name of the base type, null if the type doesn't have any base type.</param>
+/// <param name="BaseType">Base type of this type, null if the type doesn't have any base type.</param>
 /// <param name="ImplementedInterfaces">Collection of interfaces implemented by the type.</param>
 /// <param name="SeeAlsoDocComments">Collection of <c>seealso</c> documentation comments for the type.</param>
 public record ObjectTypeTM(
@@ -39,6 +39,6 @@ public record ObjectTypeTM(
     IndexerTM[] Indexers,
     EventTM[] Events,
     TypeParameterTM[] TypeParameters,
-    string? BaseTypeName,
-    IEnumerable<string> ImplementedInterfaces,
+    TypeLinkTM? BaseType,
+    IEnumerable<TypeLinkTM> ImplementedInterfaces,
     string[] SeeAlsoDocComments) : ITemplateModelWithId;

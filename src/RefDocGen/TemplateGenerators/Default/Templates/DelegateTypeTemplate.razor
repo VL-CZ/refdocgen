@@ -121,7 +121,7 @@
 
                     @if (!Model.ReturnsVoid)
                     {
-                        <ReturnValueDocumentation DocComment="@Model.ReturnsDocComment" TypeName="@Model.ReturnType.Name" />
+                        <ReturnValueDocumentation DocComment="@Model.ReturnsDocComment" Type="@Model.ReturnType" />
                     }
 
                     <ExceptionsDocumentation Exceptions="@Model.Exceptions" />

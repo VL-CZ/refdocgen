@@ -75,12 +75,12 @@
         <NamespaceLink Namespace="@Model.Namespace" />
 
         <!-- Base type name -->
-        @if (Model.BaseTypeName is not null)
+        @if (Model.BaseType is not null)
         {
             <div>
                 <i>Base type:</i>
                 <samp class="text-secondary">
-                    @Model.BaseTypeName
+                    <TypeLink Type="@Model.BaseType" />
                 </samp>
             </div>
         }
@@ -91,7 +91,11 @@
             <div>
                 <i>Implements:</i>
                 <samp class="text-secondary">
-                    @string.Join(", ", Model.ImplementedInterfaces)
+                    @foreach (var iface in Model.ImplementedInterfaces)
+                    {
+                        <TypeLink Type="@iface" />
+                        <span>, </span>
+                    }
                 </samp>
             </div>
         }
@@ -106,7 +110,6 @@
 
         <!-- Remarks doc comment -->
         <RemarksDocumentation DocComment="@Model.RemarksDocComment" />
-
 
         <hr />
 
@@ -403,14 +406,14 @@
 
                                 </samp>
                             </h6>
-                            
+
                             <SummaryDocumentation DocComment="@method.SummaryDocComment" />
 
                             <ParametersDocumentation Parameters="@method.Parameters" />
 
                             @if (!method.ReturnsVoid)
                             {
-                                <ReturnValueDocumentation DocComment="@method.ReturnsDocComment" TypeName="@method.ReturnType.Name" />
+                                <ReturnValueDocumentation DocComment="@method.ReturnsDocComment" Type="@method.ReturnType" />
                             }
 
                             <!-- Remarks doc comment -->
@@ -457,7 +460,7 @@
 
                             @if (!method.ReturnsVoid)
                             {
-                                <ReturnValueDocumentation DocComment="@method.ReturnsDocComment" TypeName="@method.ReturnType.Name" />
+                                <ReturnValueDocumentation DocComment="@method.ReturnsDocComment" Type="@method.ReturnType" />
                             }
 
                             <!-- Remarks doc comment -->

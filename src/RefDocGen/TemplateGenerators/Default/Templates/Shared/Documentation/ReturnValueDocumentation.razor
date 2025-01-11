@@ -1,9 +1,10 @@
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Types
 @inherits ComponentBase
 
 @code {
 
     [Parameter]
-    public required string TypeName { get; set; }
+    public required TypeLinkTM Type { get; set; }
 
     [Parameter]
     public required string DocComment { get; set; }
@@ -11,11 +12,8 @@
 
 <h3 class="lead my-2">Returns</h3>
 <div class="mx-2">
-
     <samp>
-        <span class="text-secondary">
-            @TypeName
-        </span>
+        <TypeLink Type="@Type" />
     </samp>
     <div class="text-muted">
         <i>@((MarkupString)DocComment)</i>
