@@ -2,10 +2,10 @@
 
 @code {
     [Parameter]
-    public required string DocComment { get; set; }
+    public required string? DocComment { get; set; }
 }
 
-@if (!string.IsNullOrEmpty(DocComment))
+@if (DocComment is not null)
 {
     <div class="mt-3">
         <div class="lead">Remarks</div>

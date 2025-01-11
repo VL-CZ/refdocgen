@@ -7,9 +7,9 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// </summary>
 /// <param name="Type">Type of the indexer.</param>
 /// <param name="Parameters">Collection of index parameters.</param>
-/// <param name="SummaryDocComment"><c>summary</c> documentation comment for the indexer.</param>
-/// <param name="RemarksDocComment"><c>remarks</c> documentation comment for the indexer.</param>
-/// <param name="ValueDocComment"><c>value</c> documentation comment for the indexer.</param>
+/// <param name="SummaryDocComment"><c>summary</c> documentation comment for the indexer. <c>null</c> if the doc comment is not provided.</param>
+/// <param name="RemarksDocComment"><c>remarks</c> documentation comment for the indexer. <c>null</c> if the doc comment is not provided.</param>
+/// <param name="ValueDocComment"><c>value</c> documentation comment for the indexer. <c>null</c> if the doc comment is not provided.</param>
 /// <param name="Modifiers">Collection of indexer modifiers (e.g. public, static, etc.)</param>
 /// <param name="HasGetter">Checks if the indexer has getter.</param>
 /// <param name="HasSetter">Checks if the indexer has setter.</param>
@@ -22,9 +22,9 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 public record IndexerTM(
     ParameterTM[] Parameters,
     TypeLinkTM Type,
-    string SummaryDocComment,
-    string RemarksDocComment,
-    string ValueDocComment,
+    string? SummaryDocComment,
+    string? RemarksDocComment,
+    string? ValueDocComment,
     IEnumerable<string> Modifiers,
     bool HasGetter,
     bool HasSetter,

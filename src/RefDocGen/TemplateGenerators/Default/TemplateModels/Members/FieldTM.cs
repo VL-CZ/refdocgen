@@ -7,8 +7,8 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// </summary>
 /// <param name="Name">Name of the field.</param>
 /// <param name="Type">Type of the field.</param>
-/// <param name="SummaryDocComment"><c>summary</c> documentation comment for the field.</param>
-/// <param name="RemarksDocComment"><c>remarks</c> documentation comment for the field.</param>
+/// <param name="SummaryDocComment"><c>summary</c> documentation comment for the field. <c>null</c> if the doc comment is not provided.</param>
+/// <param name="RemarksDocComment"><c>remarks</c> documentation comment for the field. <c>null</c> if the doc comment is not provided.</param>
 /// <param name="Modifiers">Collection of modifiers for the field (e.g. public, static, etc.)</param>
 /// <param name="SeeAlsoDocComments">Collection of <c>seealso</c> documentation comments for the field.</param>
 /// <param name="ConstantValue">
@@ -20,8 +20,8 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 public record FieldTM(
     string Name,
     TypeLinkTM Type,
-    string SummaryDocComment,
-    string RemarksDocComment,
+    string? SummaryDocComment,
+    string? RemarksDocComment,
     IEnumerable<string> Modifiers,
     string[] SeeAlsoDocComments,
     string? ConstantValue);

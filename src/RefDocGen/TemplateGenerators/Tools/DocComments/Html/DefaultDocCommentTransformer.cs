@@ -70,14 +70,14 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     public ITypeRegistry TypeRegistry { get; set; }
 
     /// <inheritdoc/>
-    public string ToHtmlString(XElement docComment)
+    public string? ToHtmlString(XElement docComment)
     {
         var docCommentCopy = new XElement(docComment);
         TransformToHtml(docCommentCopy);
 
-        if (!docCommentCopy.Nodes().Any()) // no content -> return empty string
+        if (!docCommentCopy.Nodes().Any()) // no content -> return null
         {
-            return string.Empty;
+            return null;
         }
 
         return docCommentCopy.ToString();

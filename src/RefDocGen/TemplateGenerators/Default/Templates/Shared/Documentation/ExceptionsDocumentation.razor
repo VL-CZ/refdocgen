@@ -14,7 +14,11 @@
         {
             <div>
                 <span>@exception.Type.Name</span>
-                <i>@((MarkupString)exception.DocComment)</i>
+
+                @if (exception.DocComment is not null)
+                {
+                    <i>@((MarkupString)exception.DocComment)</i>
+                }
             </div>
         }
     </div>

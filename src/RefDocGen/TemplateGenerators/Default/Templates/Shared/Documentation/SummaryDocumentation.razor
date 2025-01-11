@@ -2,10 +2,10 @@
 
 @code {
     [Parameter]
-    public required string DocComment { get; set; }
+    public required string? DocComment { get; set; }
 }
 
-@if (DocComment.Length > 0)
+@if (DocComment is not null)
 {
     <div class="text-muted mb-0">
         <i>

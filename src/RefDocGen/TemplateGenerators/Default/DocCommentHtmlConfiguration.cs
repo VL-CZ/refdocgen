@@ -38,10 +38,13 @@ internal class DocCommentHtmlConfiguration : IDocCommentHtmlConfiguration
     public virtual XElement TypeParamRefElement => new("code");
 
     /// <inheritdoc />
-    public virtual XElement SeeCrefElement => new("a");
+    public virtual XElement SeeCrefElement =>
+        new("a",
+            new XAttribute("class", "link-primary link-offset-2 link-underline-opacity-50 link-underline-opacity-100-hover")
+        );
 
     /// <inheritdoc />
-    public virtual XElement SeeHrefElement => new("a");
+    public virtual XElement SeeHrefElement => SeeCrefElement;
 
     /// <inheritdoc />
     public virtual XElement SeeLangwordElement => new("code");
@@ -50,10 +53,10 @@ internal class DocCommentHtmlConfiguration : IDocCommentHtmlConfiguration
     public virtual XElement SeeCrefNotFoundElement => new("code");
 
     /// <inheritdoc />
-    public virtual XElement SeeAlsoCrefElement => new("a");
+    public virtual XElement SeeAlsoCrefElement => SeeCrefElement;
 
     /// <inheritdoc />
-    public virtual XElement SeeAlsoHrefElement => new("a");
+    public virtual XElement SeeAlsoHrefElement => SeeCrefElement;
 
     /// <inheritdoc />
     public virtual XElement SeeAlsoCrefNotFoundElement => new("code");

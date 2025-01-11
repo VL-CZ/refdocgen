@@ -7,9 +7,9 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// </summary>
 /// <param name="Name">Name of the property.</param>
 /// <param name="Type">Type of the property.</param>
-/// <param name="SummaryDocComment"><c>summary</c> documentation comment for the property.</param>
-/// <param name="RemarksDocComment"><c>remarks</c> documentation comment for the property.</param>
-/// <param name="ValueDocComment"><c>value</c> documentation comment for the property.</param>
+/// <param name="SummaryDocComment"><c>summary</c> documentation comment for the property. <c>null</c> if the doc comment is not provided.</param>
+/// <param name="RemarksDocComment"><c>remarks</c> documentation comment for the property. <c>null</c> if the doc comment is not provided.</param>
+/// <param name="ValueDocComment"><c>value</c> documentation comment for the property. <c>null</c> if the doc comment is not provided.</param>
 /// <param name="Modifiers">Collection of property modifiers (e.g. public, static, etc.)</param>
 /// <param name="HasGetter">Checks if the property has getter.</param>
 /// <param name="HasSetter">Checks if the property has setter.</param>
@@ -28,9 +28,9 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 public record PropertyTM(
     string Name,
     TypeLinkTM Type,
-    string SummaryDocComment,
-    string RemarksDocComment,
-    string ValueDocComment,
+    string? SummaryDocComment,
+    string? RemarksDocComment,
+    string? ValueDocComment,
     IEnumerable<string> Modifiers,
     bool HasGetter,
     bool HasSetter,

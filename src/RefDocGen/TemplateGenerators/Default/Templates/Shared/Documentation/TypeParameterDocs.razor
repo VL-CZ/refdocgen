@@ -22,7 +22,10 @@
                 </span>
             </samp>
             <div class="text-muted">
-                <i>@((MarkupString)typeParam.DocComment)</i>
+                @if (typeParam.DocComment is not null)
+                {
+                    <i>@((MarkupString)typeParam.DocComment)</i>
+                }
             </div>
         }
     </div>

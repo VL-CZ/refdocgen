@@ -25,8 +25,12 @@
                     @parameter.Name
                 </span>
             </samp>
+
             <div class="text-muted">
-                <i>@((MarkupString)parameter.DocComment)</i>
+                @if (parameter.DocComment is not null)
+                {
+                    <i>@((MarkupString)parameter.DocComment)</i>
+                }
             </div>
         }
     </div>

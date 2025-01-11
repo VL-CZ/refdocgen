@@ -8,6 +8,7 @@ using RefDocGen.TemplateGenerators.Tools;
 using RefDocGen.TemplateGenerators.Tools.DocComments.Html;
 using RefDocGen.TemplateGenerators.Tools.Keywords;
 using RefDocGen.TemplateGenerators.Tools.TypeName;
+using RefDocGen.Tools;
 using System.Xml.Linq;
 
 namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
@@ -23,14 +24,14 @@ internal class BaseTMCreator
         typeUrlResolver = new(docCommentTransformer.TypeRegistry);
     }
 
-    protected string ToHtmlString(XElement docComment)
+    protected string? ToHtmlString(XElement docComment)
     {
         return docCommentTransformer.ToHtmlString(docComment);
     }
 
     protected string[] GetHtmlStrings(IEnumerable<XElement> elements)
     {
-        return elements.Select(ToHtmlString).ToArray();
+        return elements.Select(ToHtmlString).WhereNotNull().ToArray();
     }
 
     protected ParameterTM[] GetTemplateModels(IEnumerable<IParameterData> parameters)
