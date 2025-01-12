@@ -28,50 +28,15 @@
                                 this<span class="text-secondary">[</span>
                             </span>
 
-                            @foreach (var p in indexer.Parameters)
-                            {
-                                <span class="text-primary">
-                                    @string.Join(' ', p.Modifiers)
-                                </span>
+                            <ParametersString Parameters=indexer.Parameters />
 
-                                <TypeLink Type="@p.Type" />
-
-                                @if (p == lastParam)
-                                {
-                                    <span class="text-dark">
-                                        @p.Name<span class="text-secondary">]</span>
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span class="text-dark">
-                                        @($"{p.Name},")
-                                    </span>
-                                }
-                            }
+                            <span class="text-secondary">]</span>
                         }
 
-                        <span class="text-secondary">{ </span>
-
-                        @{
-                            var getterWithModifiers = indexer.HasGetter ? $"{string.Join(' ', indexer.GetterModifiers)} get" : string.Empty;
-                            var setterWithModifiers = indexer.HasSetter ? $"{string.Join(' ', indexer.SetterModifiers)} set" : string.Empty;
-                        }
-
-                        @if (indexer.HasGetter)
-                        {
-                            <span class="text-primary">
-                                @getterWithModifiers<span class="text-secondary">;</span>
-                            </span>
-                        }
-                        @if (indexer.HasSetter)
-                        {
-                            <span class="text-primary">
-                                @setterWithModifiers<span class="text-secondary">;</span>
-                            </span>
-                        }
-
-                        <span class="text-secondary">}</span>
+                        <AccessorMethods HasGetter="indexer.HasGetter"
+                                         HasSetter="indexer.HasSetter"
+                                         GetterModifiers="indexer.GetterModifiers"
+                                         SetterModifiers="indexer.SetterModifiers" />
                     </samp>
                 </h6>
 

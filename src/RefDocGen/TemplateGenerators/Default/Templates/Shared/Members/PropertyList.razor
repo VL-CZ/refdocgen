@@ -24,27 +24,10 @@
                             @property.Name
                         </span>
 
-                        <span class="text-secondary">{ </span>
-
-                        @{
-                            var getterWithModifiers = property.HasGetter ? $"{string.Join(' ', property.GetterModifiers)} get" : string.Empty;
-                            var setterWithModifiers = property.HasSetter ? $"{string.Join(' ', property.SetterModifiers)} set" : string.Empty;
-                        }
-
-                        @if (property.HasGetter)
-                        {
-                            <span class="text-primary">
-                                @getterWithModifiers<span class="text-secondary">; </span>
-                            </span>
-                        }
-                        @if (property.HasSetter)
-                        {
-                            <span class="text-primary">
-                                @setterWithModifiers<span class="text-secondary">; </span>
-                            </span>
-                        }
-
-                        <span class="text-secondary"> }</span>
+                        <AccessorMethods HasGetter="property.HasGetter"
+                                         HasSetter="property.HasSetter"
+                                         GetterModifiers="property.GetterModifiers"
+                                         SetterModifiers="property.SetterModifiers" />
 
                         <LiteralValueSuffix Value="@property.ConstantValue" />
                     </samp>

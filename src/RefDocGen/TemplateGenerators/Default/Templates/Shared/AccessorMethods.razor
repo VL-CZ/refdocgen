@@ -1,0 +1,43 @@
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Members
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required bool HasGetter { get; set; }
+
+    [Parameter]
+    public required string[] GetterModifiers { get; set; }
+
+    [Parameter]
+    public required bool HasSetter { get; set; }
+
+    [Parameter]
+    public required string[] SetterModifiers { get; set; }
+}
+
+<span class="text-secondary"> { </span>
+
+@{
+    var getterWithModifiers = HasGetter
+        ? $"{string.Join(' ', GetterModifiers)} get"
+        : string.Empty;
+
+    var setterWithModifiers = HasSetter
+        ? $"{string.Join(' ', SetterModifiers)} set"
+        : string.Empty;
+}
+
+@if (HasGetter)
+{
+    <span class="text-primary">
+        @getterWithModifiers<span class="text-secondary">; </span>
+    </span>
+}
+@if (HasSetter)
+{
+    <span class="text-primary">
+        @setterWithModifiers<span class="text-secondary">; </span>
+    </span>
+}
+
+<span class="text-secondary"> }</span>

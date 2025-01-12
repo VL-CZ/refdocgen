@@ -6,7 +6,6 @@
     public required IEnumerable<ParameterTM> Parameters { get; set; }
 }
 
-<span class="text-dark">(</span>
 
 @if (Parameters.Any())
 {
@@ -19,9 +18,9 @@
             <span class="text-primary">
                 @string.Join(' ', p.Modifiers)
             </span>
+            <span> </span>
         }
 
-        <span> </span>
         <TypeLink Type="@p.Type" />
         <span> </span>
 
@@ -37,5 +36,3 @@
         }
     }
 }
-
-<span class="text-dark">)</span>
