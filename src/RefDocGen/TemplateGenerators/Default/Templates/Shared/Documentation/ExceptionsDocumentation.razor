@@ -12,7 +12,7 @@
         <div class="lead">Exceptions</div>
         @foreach (var exception in Exceptions)
         {
-            <div>
+            <div class="mb-2">
                 <span>@exception.Type.Name</span>
 
                 @if (exception.DocComment is not null)
