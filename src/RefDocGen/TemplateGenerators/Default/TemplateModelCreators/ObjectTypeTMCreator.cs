@@ -54,7 +54,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
 
         return new ObjectTypeTM(
             type.Id,
-            CSharpTypeName.Of(type),
+            type.ShortName,
             type.Namespace,
             ToHtmlString(type.SummaryDocComment),
             ToHtmlString(type.RemarksDocComment),

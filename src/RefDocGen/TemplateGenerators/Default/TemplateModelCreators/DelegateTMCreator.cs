@@ -26,7 +26,7 @@ internal class DelegateTMCreator : TypeTMCreator
 
         return new DelegateTypeTM(
             delegateType.Id,
-            CSharpTypeName.Of(delegateType),
+            delegateType.ShortName,
             delegateType.Namespace,
             ToHtmlString(delegateType.SummaryDocComment),
             ToHtmlString(delegateType.RemarksDocComment),

@@ -20,7 +20,12 @@
 
                 @if (tp.TypeConstraints.Any())
                 {
-                    <span class="text-secondary">, @string.Join(", ", tp.TypeConstraints)</span>
+                    @* @if (tp.SpecialConstraints.Any())
+                    {
+                        <span class="text-secondary">, </span>
+                    } *@
+
+                    <span class="text-secondary">@string.Join(", ", tp.TypeConstraints)</span>
                 }
             </samp>
         </h6>

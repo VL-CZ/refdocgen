@@ -68,7 +68,7 @@
 
     <div class="container my-4">
 
-        <DeclaredTypeName TypeName="@Model.Name" TypeKindName="@Model.TypeKindName" Modifiers="@Model.Modifiers" />
+        <DeclaredTypeName TypeName="@Model.Name" TypeKindName="@Model.TypeKindName" Modifiers="@Model.Modifiers" TypeParameters="@Model.TypeParameters" />
 
         <TypeParametersConstraints TypeParameters="@Model.TypeParameters" />
 
@@ -94,7 +94,11 @@
                     @foreach (var iface in Model.ImplementedInterfaces)
                     {
                         <TypeLink Type="@iface" />
-                        <span>, </span>
+
+                        @if (iface != Model.ImplementedInterfaces.Last())
+                        {
+                            <span>, </span>
+                        }
                     }
                 </samp>
             </div>
