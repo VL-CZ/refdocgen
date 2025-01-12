@@ -1,0 +1,12 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required string? Value { get; set; }
+}
+
+@if (Value is not null)
+{
+    <span class="text-secondary"> = </span>
+    <span class="text-success">@Value</span>
+}

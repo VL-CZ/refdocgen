@@ -1,0 +1,55 @@
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Members
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required MethodTM[] Methods { get; set; }
+
+    [Parameter]
+    public required string SectionName { get; set; }
+}
+
+<h2 class="display-5 mt-2">@SectionName</h2>
+<div class="row">
+    <div class="col-md-12">
+
+        @foreach (var method in Methods)
+        {
+            <div class="border p-2 mb-2">
+                <h6 class="mb-1">
+                    <samp>
+                        <span class="text-primary">
+                            @string.Join(' ', method.Modifiers)
+                        </span>
+
+                        <TypeLink Type="@method.ReturnType" />
+
+                        <span class="text-dark">
+                            @method.Name
+                        </span>
+
+                        <TypeParametersString TypeParameters="@method.TypeParameters" />
+                        <ParametersString Parameters="@method.Parameters" />
+
+                    </samp>
+                </h6>
+
+                <SummaryDocumentation DocComment="@method.SummaryDocComment" />
+
+                <ParametersDocumentation Parameters="@method.Parameters" />
+
+                @if (!method.ReturnsVoid)
+                {
+                    <ReturnValueDocumentation DocComment="@method.ReturnsDocComment" Type="@method.ReturnType" />
+                }
+
+                <!-- Remarks doc comment -->
+                <RemarksDocumentation DocComment="@method.RemarksDocComment" />
+
+                <ExceptionsDocumentation Exceptions="@method.Exceptions" />
+
+                <SeeAlsoDocumentation DocComments="@method.SeeAlsoDocComments" />
+            </div>
+        }
+    </div>
+</div>

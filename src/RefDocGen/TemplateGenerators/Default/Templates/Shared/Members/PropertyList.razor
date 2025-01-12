@@ -1,0 +1,66 @@
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Members
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required PropertyTM[] Properties { get; set; }
+}
+
+<h2 class="display-5 mt-2">Properties</h2>
+<div class="row">
+    <div class="col-md-12">
+        @foreach (var property in Properties)
+        {
+            <div class="border p-2 mb-2">
+                <h6 class="mb-1">
+                    <samp>
+                        <span class="text-primary">
+                            @string.Join(' ', property.Modifiers)
+                        </span>
+
+                        <TypeLink Type="@property.Type" />
+
+                        <span class="text-dark">
+                            @property.Name
+                        </span>
+
+                        <span class="text-secondary">{ </span>
+
+                        @{
+                            var getterWithModifiers = property.HasGetter ? $"{string.Join(' ', property.GetterModifiers)} get" : string.Empty;
+                            var setterWithModifiers = property.HasSetter ? $"{string.Join(' ', property.SetterModifiers)} set" : string.Empty;
+                        }
+
+                        @if (property.HasGetter)
+                        {
+                            <span class="text-primary">
+                                @getterWithModifiers<span class="text-secondary">; </span>
+                            </span>
+                        }
+                        @if (property.HasSetter)
+                        {
+                            <span class="text-primary">
+                                @setterWithModifiers<span class="text-secondary">; </span>
+                            </span>
+                        }
+
+                        <span class="text-secondary"> }</span>
+
+                        <LiteralValueSuffix Value="@property.ConstantValue" />
+                    </samp>
+                </h6>
+
+                <SummaryDocumentation DocComment="@property.SummaryDocComment" />
+
+                <ValueDocumentation DocComment="@property.ValueDocComment" />
+
+                <!-- Remarks doc comment -->
+                <RemarksDocumentation DocComment="@property.RemarksDocComment" />
+
+                <ExceptionsDocumentation Exceptions="@property.Exceptions" />
+
+                <SeeAlsoDocumentation DocComments="@property.SeeAlsoDocComments" />
+            </div>
+        }
+    </div>
+</div>

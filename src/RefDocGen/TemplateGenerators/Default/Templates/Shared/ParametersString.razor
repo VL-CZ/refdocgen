@@ -29,11 +29,7 @@
             @p.Name
         </span>
 
-        if (p.DefaultValue is not null)
-        {
-            <span class="text-secondary"> = </span>
-            <span class="text-success">@p.DefaultValue</span>
-        }
+        <LiteralValueSuffix Value="@p.DefaultValue" />
 
         if (p != lastParam)
         {

@@ -9,7 +9,7 @@ namespace RefDocGen.TemplateGenerators.Default;
 internal class DocCommentHtmlConfiguration : IDocCommentHtmlConfiguration
 {
     /// <inheritdoc />
-    public virtual XElement ParagraphElement => new("div");
+    public virtual XElement ParagraphElement => new("div", new XAttribute("class", "mx-2"));
 
     /// <inheritdoc />
     public virtual XElement BulletListElement => new("ul");
