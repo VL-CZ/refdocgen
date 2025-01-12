@@ -47,6 +47,12 @@ internal class EventData : MemberData, IEventData
     }
 
     /// <inheritdoc/>
+    public override string Id => MemberId.Of(this);
+
+    /// <inheritdoc/>
+    public override string Name => MemberName.Of(this);
+
+    /// <inheritdoc/>
     public ITypeNameData Type { get; }
 
     /// <summary>
@@ -98,7 +104,10 @@ internal class EventData : MemberData, IEventData
     public bool IsExplicitImplementation => Methods.All(m => m.IsExplicitImplementation);
 
     /// <inheritdoc/>
-    public ITypeNameData? ExplicitInterfaceType => Methods.Select(m => m.ExplicitInterfaceType).SingleOrDefault();
+    public ITypeNameData? ExplicitInterfaceType => Methods
+        .Select(m => m.ExplicitInterfaceType)
+        .Distinct()
+        .SingleOrDefault();
 
     /// <inheritdoc/>
     public override AccessModifier AccessModifier

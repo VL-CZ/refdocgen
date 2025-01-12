@@ -41,9 +41,7 @@ internal class PropertyData : MemberData, IPropertyData
     public override string Id => MemberId.Of(this);
 
     /// <inheritdoc/>
-    public override string Name => IsExplicitImplementation
-        ? PropertyInfo.Name.Split('.').Last()
-        : PropertyInfo.Name;
+    public override string Name => MemberName.Of(this);
 
     /// <inheritdoc/>
     public PropertyInfo PropertyInfo { get; }

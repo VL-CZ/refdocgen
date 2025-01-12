@@ -75,12 +75,12 @@
         <NamespaceLink Namespace="@Model.Namespace" />
 
         <!-- Base type name -->
-        @if (Model.BaseTypeName is not null)
+        @if (Model.BaseType is not null)
         {
             <div>
                 <i>Base type:</i>
                 <samp class="text-secondary">
-                    @Model.BaseTypeName
+                    <TypeLink Type="@Model.BaseType" />
                 </samp>
             </div>
         }
@@ -91,7 +91,11 @@
             <div>
                 <i>Implements:</i>
                 <samp class="text-secondary">
-                    @string.Join(", ", Model.ImplementedInterfaces)
+                    @foreach (var iface in Model.ImplementedInterfaces)
+                    {
+                        <TypeLink Type="@iface" />
+                        <span>, </span>
+                    }
                 </samp>
             </div>
         }
@@ -99,20 +103,15 @@
         <hr />
 
         <!-- Doc comments -->
-        <div class="text-muted">
+        <SummaryDocumentation DocComment="@Model.SummaryDocComment" />
 
-            <!-- Summary doc comment -->
-            <i>
-                @((MarkupString)Model.SummaryDocComment)
-            </i>
+        <!-- Type parameter doc comments -->
+        <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
 
-            <!-- Type parameter doc comments -->
-            <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
+        <!-- Remarks doc comment -->
+        <RemarksDocumentation DocComment="@Model.RemarksDocComment" />
 
-            <!-- Remarks doc comment -->
-            <RemarksDocumentation DocComment="@Model.RemarksDocComment" />
-
-        </div>
+        <SeeAlsoDocumentation DocComments="@Model.SeeAlsoDocComments" />
 
         <hr />
 
@@ -137,11 +136,8 @@
                                 </samp>
 
                             </h6>
-                            <div class="text-muted mb-0">
-                                <i>
-                                    @((MarkupString)constructor.SummaryDocComment)
-                                </i>
-                            </div>
+
+                            <SummaryDocumentation DocComment="@constructor.SummaryDocComment" />
 
                             <ParametersDocumentation Parameters="@constructor.Parameters" />
 
@@ -149,6 +145,8 @@
                             <RemarksDocumentation DocComment="@constructor.RemarksDocComment" />
 
                             <ExceptionsDocumentation Exceptions="@constructor.Exceptions" />
+
+                            <SeeAlsoDocumentation DocComments="@constructor.SeeAlsoDocComments" />
                         </div>
                     }
                 </div>
@@ -183,11 +181,8 @@
 
                                 </samp>
                             </h6>
-                            <div class="text-muted mb-0">
-                                <i>
-                                    @((MarkupString)field.SummaryDocComment)
-                                </i>
-                            </div>
+
+                            <SummaryDocumentation DocComment="@field.SummaryDocComment" />
 
                             <RemarksDocumentation DocComment="@field.RemarksDocComment" />
 
@@ -211,21 +206,20 @@
                                     <span class="text-primary">
                                         @string.Join(' ', e.Modifiers)
                                     </span>
-                                    <span class="text-secondary">
-                                        @e.Type
-                                    </span>
+
+                                    <TypeLink Type="@e.Type" />
+
                                     <span class="text-dark">
                                         @e.Name
                                     </span>
                                 </samp>
                             </h6>
-                            <div class="text-muted mb-0">
-                                <i>
-                                    @((MarkupString)e.SummaryDocComment)
-                                </i>
-                            </div>
+
+                            <SummaryDocumentation DocComment="@e.SummaryDocComment" />
 
                             <RemarksDocumentation DocComment="@e.RemarksDocComment" />
+
+                            <ExceptionsDocumentation Exceptions="@e.Exceptions" />
 
                             <SeeAlsoDocumentation DocComments="@e.SeeAlsoDocComments" />
                         </div>
@@ -247,9 +241,9 @@
                                     <span class="text-primary">
                                         @string.Join(' ', property.Modifiers)
                                     </span>
-                                    <span class="text-secondary">
-                                        @property.Type
-                                    </span>
+
+                                    <TypeLink Type="@property.Type" />
+
                                     <span class="text-dark">
                                         @property.Name
                                     </span>
@@ -283,9 +277,8 @@
                                     }
                                 </samp>
                             </h6>
-                            <p class="text-muted mb-0">
-                                <i>@property.SummaryDocComment</i>
-                            </p>
+
+                            <SummaryDocumentation DocComment="@property.SummaryDocComment" />
 
                             <ValueDocumentation DocComment="@property.ValueDocComment" />
 
@@ -293,6 +286,8 @@
                             <RemarksDocumentation DocComment="@property.RemarksDocComment" />
 
                             <ExceptionsDocumentation Exceptions="@property.Exceptions" />
+
+                            <SeeAlsoDocumentation DocComments="@property.SeeAlsoDocComments" />
                         </div>
                     }
                 </div>
@@ -312,9 +307,8 @@
                                     <span class="text-primary">
                                         @string.Join(' ', indexer.Modifiers)
                                     </span>
-                                    <span class="text-secondary">
-                                        @indexer.Type
-                                    </span>
+
+                                    <TypeLink Type="@indexer.Type" />
 
                                     @if (indexer.Parameters.Any())
                                     {
@@ -329,9 +323,8 @@
                                             <span class="text-primary">
                                                 @string.Join(' ', p.Modifiers)
                                             </span>
-                                            <span class="text-secondary">
-                                                @p.Type
-                                            </span>
+
+                                            <TypeLink Type="@p.Type" />
 
                                             @if (p == lastParam)
                                             {
@@ -371,9 +364,8 @@
                                     <span class="text-secondary">}</span>
                                 </samp>
                             </h6>
-                            <p class="text-muted mb-0">
-                                <i>@indexer.SummaryDocComment</i>
-                            </p>
+
+                            <SummaryDocumentation DocComment="@indexer.SummaryDocComment" />
 
                             <ParametersDocumentation Parameters="@indexer.Parameters" />
 
@@ -383,6 +375,8 @@
                             <RemarksDocumentation DocComment="@indexer.RemarksDocComment" />
 
                             <ExceptionsDocumentation Exceptions="@indexer.Exceptions" />
+
+                            <SeeAlsoDocumentation DocComments="@indexer.SeeAlsoDocComments" />
                         </div>
                     }
                 </div>
@@ -403,9 +397,9 @@
                                     <span class="text-primary">
                                         @string.Join(' ', method.Modifiers)
                                     </span>
-                                    <span class="text-secondary">
-                                        @method.ReturnType
-                                    </span>
+
+                                    <TypeLink Type="@method.ReturnType" />
+
                                     <span class="text-dark">
                                         @method.Name
                                     </span>
@@ -414,21 +408,22 @@
 
                                 </samp>
                             </h6>
-                            <p class="text-muted mb-0">
-                                <i>@method.SummaryDocComment</i>
-                            </p>
+
+                            <SummaryDocumentation DocComment="@method.SummaryDocComment" />
 
                             <ParametersDocumentation Parameters="@method.Parameters" />
 
                             @if (!method.ReturnsVoid)
                             {
-                                <ReturnValueDocumentation DocComment="@method.ReturnsDocComment" TypeName="@method.ReturnType" />
+                                <ReturnValueDocumentation DocComment="@method.ReturnsDocComment" Type="@method.ReturnType" />
                             }
 
                             <!-- Remarks doc comment -->
                             <RemarksDocumentation DocComment="@method.RemarksDocComment" />
 
                             <ExceptionsDocumentation Exceptions="@method.Exceptions" />
+
+                            <SeeAlsoDocumentation DocComments="@method.SeeAlsoDocComments" />
                         </div>
                     }
                 </div>
@@ -449,9 +444,9 @@
                                     <span class="text-primary">
                                         @string.Join(' ', method.Modifiers)
                                     </span>
-                                    <span class="text-secondary">
-                                        @method.ReturnType
-                                    </span>
+
+                                    <TypeLink Type="@method.ReturnType" />
+
                                     <span class="text-dark">
                                         @method.Name
                                     </span>
@@ -460,21 +455,22 @@
                                 </samp>
 
                             </h6>
-                            <p class="text-muted mb-0">
-                                <i>@method.SummaryDocComment</i>
-                            </p>
+
+                            <SummaryDocumentation DocComment="@method.SummaryDocComment" />
 
                             <ParametersDocumentation Parameters="@method.Parameters" />
 
                             @if (!method.ReturnsVoid)
                             {
-                                <ReturnValueDocumentation DocComment="@method.ReturnsDocComment" TypeName="@method.ReturnType" />
+                                <ReturnValueDocumentation DocComment="@method.ReturnsDocComment" Type="@method.ReturnType" />
                             }
 
                             <!-- Remarks doc comment -->
                             <RemarksDocumentation DocComment="@method.RemarksDocComment" />
 
                             <ExceptionsDocumentation Exceptions="@method.Exceptions" />
+
+                            <SeeAlsoDocumentation DocComments="@method.SeeAlsoDocComments" />
                         </div>
                     }
                 </div>

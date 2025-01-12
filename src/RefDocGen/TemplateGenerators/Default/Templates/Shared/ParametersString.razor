@@ -19,13 +19,11 @@
             <span class="text-primary">
                 @string.Join(' ', p.Modifiers)
             </span>
-            <span></span>
         }
 
-        <span class="text-secondary">
-            @p.Type
-        </span>
-        <span></span>
+        <span> </span>
+        <TypeLink Type="@p.Type" />
+        <span> </span>
 
         <span class="text-dark">
             @p.Name

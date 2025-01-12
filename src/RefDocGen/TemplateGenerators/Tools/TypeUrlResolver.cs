@@ -1,5 +1,7 @@
 using RefDocGen.CodeElements.Abstract;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
+using RefDocGen.CodeElements.Tools;
+using RefDocGen.Tools;
 using System.Globalization;
 
 namespace RefDocGen.TemplateGenerators.Tools;
@@ -28,7 +30,7 @@ internal class TypeUrlResolver
     /// <param name="typeRegistry">
     /// The registry of types declared in the analyzed assemblies.
     /// </param>
-    public TypeUrlResolver(ITypeRegistry typeRegistry)
+    internal TypeUrlResolver(ITypeRegistry typeRegistry)
     {
         this.typeRegistry = typeRegistry;
     }
@@ -40,42 +42,74 @@ internal class TypeUrlResolver
     /// <returns>
     /// URL of the documentation page of the provided <paramref name="type"/>. <c>null</c> if the documentation page is not found.
     /// </returns>
-    public string? GetUrlOf(ITypeNameData type)
+    internal string? GetUrlOf(ITypeNameData type)
     {
-        string typeId = type.HasTypeParameters
+        if (type.IsArray || type.IsPointer) // array or pointer -> select base element type (i.e. `int` instead of `int[]`)
+        {
+            type = type.TypeObject.GetBaseElementType().GetTypeNameData();
+        }
+
+        string typeId = type.HasTypeParameters // TODO: fix
                 ? $"{type.FullName}`{type.TypeParameters.Count}"
                 : type.Id;
 
+        return GetUrlOf(typeId);
+    }
+
+    /// <inheritdoc cref="GetUrlOf(ITypeNameData)" path="/summary"/>
+    /// <inheritdoc cref="GetUrlOf(ITypeNameData)" path="/returns"/>
+    /// <param name="typeId">ID of the type for which the documentation page URL is returned.</param>
+    /// <param name="memberId">
+    /// ID of the member for which the documentation page URL is returned.
+    /// Pass <c>null</c> if the type documentation should be returned.
+    /// </param>
+    internal string? GetUrlOf(string typeId, string? memberId = null)
+    {
         if (typeRegistry.GetDeclaredType(typeId) is not null) // the type is found in the type registry
         {
             string uriEncodedString = Uri.EscapeDataString(typeId);
-            return $"./{uriEncodedString}.html";
+
+            if (memberId is not null)
+            {
+                return $"./{uriEncodedString}.html#{memberId}";
+            }
+            else
+            {
+                return $"./{uriEncodedString}.html";
+            }
         }
-        else if (GetSystemTypeUrl(type) is string url) // the type is found in the .NET API docs
+        else if (GetSystemTypeUrl(typeId) is string url) // the type is found in the .NET API docs
         {
-            return url;
+            if (memberId is not null)
+            {
+                return $"{url}.{memberId.ToLower(CultureInfo.InvariantCulture)}";
+            }
+            else
+            {
+                return url;
+            }
         }
 
         return null;
     }
 
     /// <summary>
-    /// Gets the URL of the .NET API docs page of the provided <paramref name="type"/>.
+    /// Gets the URL of the .NET API docs page of the provided type.
     /// </summary>
-    /// <param name="type">The type for which the documentation page URL is returned.</param>
+    /// <param name="typeId">ID of the type for which the documentation page URL is returned.</param>
     /// <returns>
-    /// URL of the documentation page of the provided <paramref name="type"/>.
+    /// URL of the documentation page of the desired type.
     /// <c>null</c> if the type isn't contained in .NET API docs.
     /// </returns>
     /// <seealso cref="dotnetApiDocs"/>
-    private string? GetSystemTypeUrl(ITypeNameData type)
+    private string? GetSystemTypeUrl(string typeId)
     {
         const string systemNs = "System";
-        string rootTypeNamespace = type.Namespace.Split('.').First();
+        string rootTypeNamespace = typeId.Split('.').First();
 
         if (rootTypeNamespace == systemNs)
         {
-            string typeUrl = type.FullName.ToLower(CultureInfo.InvariantCulture).Replace('`', '-'); // The .NET API docs use the following convention
+            string typeUrl = typeId.ToLower(CultureInfo.InvariantCulture).Replace('`', '-'); // The .NET API docs use the following convention (TODO: fix)
             return new Uri(dotnetApiDocs, typeUrl).ToString();
         }
 

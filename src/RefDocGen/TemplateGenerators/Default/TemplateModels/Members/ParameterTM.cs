@@ -1,3 +1,5 @@
+using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
+
 namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 
 /// <summary>
@@ -5,7 +7,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// </summary>
 /// <param name="Name">Name of the method parameter.</param>
 /// <param name="Type">Type of the method parameter.</param>
-/// <param name="DocComment">Documentation comment for the method parameter.</param>
+/// <param name="DocComment">Documentation comment for the method parameter. <c>null</c> if the doc comment is not provided.</param>
 /// <param name="Modifiers">Collection of the parameter modifiers (e.g. <c>out</c>, <c>ref</c>, etc.).</param>
 /// <param name="DefaultValue">
 /// Default value of the parameter as a string.
@@ -13,4 +15,9 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <see langword="null"/> if the parameter has no default value.
 /// </para>
 /// </param>
-public record ParameterTM(string Name, string Type, string DocComment, IEnumerable<string> Modifiers, string? DefaultValue);
+public record ParameterTM(
+    string Name,
+    TypeLinkTM Type,
+    string? DocComment,
+    IEnumerable<string> Modifiers,
+    string? DefaultValue);

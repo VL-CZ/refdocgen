@@ -55,12 +55,13 @@
 
         <NamespaceLink Namespace="@Model.Namespace" />
 
-        <p class="text-muted">
-            <i>@Model.SummaryDocComment</i>
+        <SummaryDocumentation DocComment="@Model.SummaryDocComment" />
 
-            <!-- Remarks doc comment -->
-            <RemarksDocumentation DocComment="@Model.RemarksDocComment" />
-        </p>
+        <!-- Remarks doc comment -->
+        <RemarksDocumentation DocComment="@Model.RemarksDocComment" />
+
+        <SeeAlsoDocumentation DocComments="@Model.SeeAlsoDocComments" />
+
         <hr />
 
         <h2 class="display-5 mt-2">Members</h2>
@@ -76,11 +77,12 @@
                                 </span>
                             </samp>
                         </h6>
-                        <p class="text-muted mb-0">
-                            <i>@enumMember.SummaryDocComment</i>
 
-                            <RemarksDocumentation DocComment="@enumMember.RemarksDocComment" />
-                        </p>
+                        <SummaryDocumentation DocComment="@enumMember.SummaryDocComment" />
+
+                        <RemarksDocumentation DocComment="@enumMember.RemarksDocComment" />
+
+                        <SeeAlsoDocumentation DocComments="@enumMember.SeeAlsoDocComments" />
                     </div>
                 }
             </div>

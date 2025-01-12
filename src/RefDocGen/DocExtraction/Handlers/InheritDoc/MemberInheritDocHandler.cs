@@ -1,8 +1,9 @@
 using RefDocGen.CodeElements.Concrete;
 using RefDocGen.CodeElements.Concrete.Members;
-using RefDocGen.DocExtraction.Handlers.InheritDoc;
 using RefDocGen.DocExtraction.Tools;
 using System.Xml.Linq;
+
+namespace RefDocGen.DocExtraction.Handlers.InheritDoc;
 
 /// <summary>
 /// Class responsible for handling the 'inheritdoc' comments provided to type members and replacing them with the actual documentation.
@@ -29,7 +30,7 @@ internal class MemberInheritDocHandler : InheritDocHandler<MemberData>
 
         foreach (var p in parents)
         {
-            if (p.AllMembers.TryGetValue(member.Id, out var parentMember))
+            if (p.AllMembers.TryGetValue(member.Id, out var parentMember)) // TODO: explicit interface implementation & inheriting generic type
             {
                 result.Add(parentMember);
             }

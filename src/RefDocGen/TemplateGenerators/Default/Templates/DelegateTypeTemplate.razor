@@ -71,13 +71,13 @@
 
         <hr />
 
-        <p class="text-muted">
-            <i>@Model.SummaryDocComment</i>
+        <SummaryDocumentation DocComment="@Model.SummaryDocComment" />
 
-            <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
+        <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
 
-            <RemarksDocumentation DocComment="@Model.RemarksDocComment" />
-        </p>
+        <RemarksDocumentation DocComment="@Model.RemarksDocComment" />
+
+        <SeeAlsoDocumentation DocComments="@Model.SeeAlsoDocComments" />
 
         <hr />
 
@@ -87,7 +87,9 @@
                     <h6 class="mb-1">
                         <samp>
                             <span class="text-primary">@string.Join(' ', Model.Modifiers) delegate</span>
-                            <span class="text-secondary">@Model.ReturnType</span>
+
+                            <TypeLink Type="@Model.ReturnType" />
+
                             <span class="text-dark">
                                 @Model.Name
                             </span>
@@ -96,9 +98,8 @@
 
                         </samp>
                     </h6>
-                    <p class="text-muted mb-0">
-                        <i>@Model.SummaryDocComment</i>
-                    </p>
+
+                    <SummaryDocumentation DocComment="@Model.SummaryDocComment" />
 
                     <ParametersDocumentation Parameters="@Model.Parameters" />
 
@@ -113,7 +114,7 @@
                                     <span class="text-secondary">@parameter.Type</span>
                                     <span class="text-dark">@parameter.Name</span>
                                 </samp>
-                                <p class="text-muted"><i>@parameter.DocComment</i></p>
+                                <div class="text-muted"><i>@parameter.DocComment</i></div>
                             }
                         </div>
                     }
@@ -121,10 +122,12 @@
 
                     @if (!Model.ReturnsVoid)
                     {
-                        <ReturnValueDocumentation DocComment="@Model.ReturnsDocComment" TypeName="@Model.ReturnType" />
+                        <ReturnValueDocumentation DocComment="@Model.ReturnsDocComment" Type="@Model.ReturnType" />
                     }
 
                     <ExceptionsDocumentation Exceptions="@Model.Exceptions" />
+
+                    <SeeAlsoDocumentation DocComments="@Model.SeeAlsoDocComments" />
                 </div>
             </div>
         </div>

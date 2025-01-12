@@ -27,6 +27,14 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     private readonly IDocCommentHtmlConfiguration htmlConfiguration;
 
     /// <summary>
+    /// Resolver of the individual type's documentation pages.
+    /// </summary>
+    private TypeUrlResolver typeUrlResolver;
+
+    /// <inheritdoc cref="TypeRegistry"/>
+    private ITypeRegistry typeRegistry;
+
+    /// <summary>
     /// An array of parent XML doc comment elements.
     /// </summary>
     private readonly string[] docCommentParentElements = [
@@ -51,7 +59,8 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     internal DefaultDocCommentTransformer(IDocCommentHtmlConfiguration htmlConfiguration, ITypeRegistry typeRegistry)
     {
         this.htmlConfiguration = htmlConfiguration;
-        TypeRegistry = typeRegistry;
+        this.typeRegistry = typeRegistry;
+        typeUrlResolver = new(typeRegistry);
     }
 
     /// <inheritdoc cref="DefaultDocCommentTransformer(IDocCommentHtmlConfiguration, ITypeRegistry)"/>
@@ -59,21 +68,36 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     {
         this.htmlConfiguration = htmlConfiguration;
 
-        TypeRegistry = new TypeRegistry(
+        typeRegistry = new TypeRegistry(
                 new Dictionary<string, ObjectTypeData>(),
                 new Dictionary<string, EnumTypeData>(),
                 new Dictionary<string, DelegateTypeData>()
             );
+
+        typeUrlResolver = new(typeRegistry);
     }
 
     /// <inheritdoc/>
-    public ITypeRegistry TypeRegistry { get; set; }
+    public ITypeRegistry TypeRegistry
+    {
+        get => typeRegistry;
+        set
+        {
+            typeRegistry = value;
+            typeUrlResolver = new(typeRegistry);
+        }
+    }
 
     /// <inheritdoc/>
-    public string ToHtmlString(XElement docComment)
+    public string? ToHtmlString(XElement docComment)
     {
         var docCommentCopy = new XElement(docComment);
         TransformToHtml(docCommentCopy);
+
+        if (!docCommentCopy.Nodes().Any()) // no content -> return null
+        {
+            return null;
+        }
 
         return docCommentCopy.ToString();
     }
@@ -452,19 +476,22 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
             return AddTextNodeTo(crefValue, htmlTemplateIfNotFound);
         }
 
-        // type found
-        if (TypeRegistry.GetDeclaredType(typeId) is ITypeDeclaration type)
+        // type documentation found
+        if (typeUrlResolver.GetUrlOf(typeId, memberId) is string targetUrl)
         {
             var result = new XElement(htmlTemplateIfFound);
             var emptyDescendant = result.GetSingleEmptyDescendantOrSelf();
 
-            string targetUrl = "./" + typeId + ".html";
-            string targetName = CSharpTypeName.Of(type);
+            string targetName = typeId;
+
+            if (TypeRegistry.GetDeclaredType(typeId) is ITypeDeclaration type) // the type is found in the registry -> get its name
+            {
+                targetName = CSharpTypeName.Of(type);
+            }
 
             // add member ID (if the reference target is a type member)
             if (memberId is not null)
             {
-                targetUrl += $"#{memberId}";
                 targetName += $".{memberId}";
             }
 
@@ -484,7 +511,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
 
             return result;
         }
-        else // type not found
+        else // type documentation not found
         {
             return AddTextNodeTo(fullObjectName, htmlTemplateIfNotFound);
         }

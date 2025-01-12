@@ -11,16 +11,16 @@ internal class ExceptionDocumentation : IExceptionDocumentation
     /// <summary>
     /// Initialize a new instance of <see cref="ExceptionDocumentation"/> class.
     /// </summary>
-    /// <param name="name">Fully qualified name of the exception.</param>
+    /// <param name="id">Identifier of the exception.</param>
     /// <param name="docComment">Doc comment provided to the exception.</param>
-    public ExceptionDocumentation(string name, XElement docComment)
+    public ExceptionDocumentation(string id, XElement docComment)
     {
-        TypeName = name;
+        Id = id;
         DocComment = docComment;
     }
 
     /// <inheritdoc/>
-    public string TypeName { get; }
+    public string Id { get; }
 
     /// <inheritdoc/>
     public XElement DocComment { get; }

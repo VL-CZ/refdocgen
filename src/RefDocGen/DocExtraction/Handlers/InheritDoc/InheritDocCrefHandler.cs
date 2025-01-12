@@ -1,8 +1,9 @@
 using RefDocGen.CodeElements.Concrete;
-using RefDocGen.DocExtraction.Handlers.InheritDoc;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
+
+namespace RefDocGen.DocExtraction.Handlers.InheritDoc;
 
 /// <summary>
 /// Class responsible for handling the 'inheritdoc' comments with 'cref' attribute and replacing them with the actual documentation.
