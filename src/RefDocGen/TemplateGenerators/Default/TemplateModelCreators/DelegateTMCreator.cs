@@ -2,7 +2,6 @@ using RefDocGen.CodeElements.Abstract.Types.Delegate;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Tools.DocComments.Html;
 using RefDocGen.TemplateGenerators.Tools.Keywords;
-using RefDocGen.TemplateGenerators.Tools.TypeName;
 
 namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 
