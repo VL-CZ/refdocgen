@@ -80,13 +80,13 @@
 
         <hr />
 
-        <SummaryDocumentation DocComment="@Model.SummaryDocComment" />
+        <SummaryDoc DocComment="@Model.SummaryDocComment" />
 
         <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
 
-        <RemarksDocumentation DocComment="@Model.RemarksDocComment" />
+        <RemarksDoc DocComment="@Model.RemarksDocComment" />
 
-        <SeeAlsoDocumentation DocComments="@Model.SeeAlsoDocComments" />
+        <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
 
         @if (IsModelDocumented())
         {
@@ -109,18 +109,18 @@
                         </samp>
                     </h6>
 
-                    <SummaryDocumentation DocComment="@Model.SummaryDocComment" />
+                    <SummaryDoc DocComment="@Model.SummaryDocComment" />
 
-                    <ParametersDocumentation Parameters="@Model.Parameters" />
+                    <ParameterDocs Parameters="@Model.Parameters" />
 
                     @if (!Model.ReturnsVoid)
                     {
-                        <ReturnValueDocumentation DocComment="@Model.ReturnsDocComment" Type="@Model.ReturnType" />
+                        <ReturnValueDoc DocComment="@Model.ReturnsDocComment" Type="@Model.ReturnType" />
                     }
 
-                    <ExceptionsDocumentation Exceptions="@Model.Exceptions" />
+                    <ExceptionDocs Exceptions="@Model.Exceptions" />
 
-                    <SeeAlsoDocumentation DocComments="@Model.SeeAlsoDocComments" />
+                    <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
                 </div>
             </div>
         </div>

@@ -31,23 +31,23 @@
                     </samp>
                 </h6>
 
-                <SummaryDocumentation DocComment="@method.SummaryDocComment" />
+                <SummaryDoc DocComment="@method.SummaryDocComment" />
 
                 <TypeParameterDocs TypeParameters="@method.TypeParameters" />
 
-                <ParametersDocumentation Parameters="@method.Parameters" />
+                <ParameterDocs Parameters="@method.Parameters" />
 
                 @if (!method.ReturnsVoid)
                 {
-                    <ReturnValueDocumentation DocComment="@method.ReturnsDocComment" Type="@method.ReturnType" />
+                    <ReturnValueDoc DocComment="@method.ReturnsDocComment" Type="@method.ReturnType" />
                 }
 
                 <!-- Remarks doc comment -->
-                <RemarksDocumentation DocComment="@method.RemarksDocComment" />
+                <RemarksDoc DocComment="@method.RemarksDocComment" />
 
-                <ExceptionsDocumentation Exceptions="@method.Exceptions" />
+                <ExceptionDocs Exceptions="@method.Exceptions" />
 
-                <SeeAlsoDocumentation DocComments="@method.SeeAlsoDocComments" />
+                <SeeAlsoDocs DocComments="@method.SeeAlsoDocComments" />
             </div>
         }
     </div>
