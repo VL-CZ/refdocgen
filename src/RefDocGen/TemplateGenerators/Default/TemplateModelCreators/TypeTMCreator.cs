@@ -186,7 +186,7 @@ internal abstract class TypeTMCreator
         return new ExceptionTM(
             new TypeLinkTM(
                 exception.Id,
-                null
+                typeUrlResolver.GetUrlOf(exception.Id)
                 ),
             ToHtmlString(exception.DocComment));
     }
