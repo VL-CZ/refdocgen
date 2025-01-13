@@ -24,11 +24,10 @@
                         {
                             var lastParam = indexer.Parameters.Last();
 
-                            <span class="text-dark"> this[</span>
+                            <span class="text-dark"> this</span>
 
-                            <ParametersString Parameters=indexer.Parameters />
+                            <ParametersString Parameters=indexer.Parameters Prefix="[" Suffix="]" />
 
-                            <span class="text-dark">]</span>
                         }
 
                         <AccessorMethods HasGetter="indexer.HasGetter"

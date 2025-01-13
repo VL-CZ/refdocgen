@@ -4,9 +4,15 @@
 @code {
     [Parameter]
     public required IEnumerable<ParameterTM> Parameters { get; set; }
+
+    [Parameter]
+    public required string Prefix { get; set; } = "(";
+
+    [Parameter]
+    public required string Suffix { get; set; } = ")";
 }
 
-
+<span class="text-dark">@Prefix</span>
 @if (Parameters.Any())
 {
     var lastParam = Parameters.Last();
@@ -23,3 +29,4 @@
         }
     }
 }
+<span class="text-dark">@Suffix</span>
