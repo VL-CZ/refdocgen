@@ -4,6 +4,15 @@
 @code {
     [Parameter]
     public required DelegateTypeTM Model { get; set; }
+
+    /// <summary>
+    /// Checks if the model has any (summary, remarks,...) doc comments.
+    /// </summary>
+    /// <returns>Boolean indicating whether the model is documented.</returns>
+    private bool IsModelDocumented()
+    {
+        return Model.SummaryDocComment is not null || Model.RemarksDocComment is not null || Model.SeeAlsoDocComments.Any() || Model.TypeParameters.Any();
+    }
 }
 
 <!DOCTYPE html>
@@ -79,7 +88,10 @@
 
         <SeeAlsoDocumentation DocComments="@Model.SeeAlsoDocComments" />
 
-        <hr />
+        @if (IsModelDocumented())
+        {
+            <hr />
+        }
 
         <div class="row">
             <div class="col-md-12">
@@ -92,9 +104,7 @@
 
                             <span class="text-dark">
                                 @Model.Name
-                            </span>
-
-                            (<ParametersString Parameters="@Model.Parameters" />)
+                            </span><TypeParametersString TypeParameters="@Model.TypeParameters" />(<ParametersString Parameters="@Model.Parameters" />)
 
                         </samp>
                     </h6>

@@ -4,6 +4,15 @@
 @code {
     [Parameter]
     public required EnumTypeTM Model { get; set; }
+
+    /// <summary>
+    /// Checks if the model has any (summary, remarks,...) doc comments.
+    /// </summary>
+    /// <returns>Boolean indicating whether the model is documented.</returns>
+    private bool IsModelDocumented()
+    {
+        return Model.SummaryDocComment is not null || Model.RemarksDocComment is not null || Model.SeeAlsoDocComments.Any();
+    }
 }
 
 <!DOCTYPE html>
@@ -55,6 +64,8 @@
 
         <NamespaceLink Namespace="@Model.Namespace" />
 
+        <hr />
+
         <SummaryDocumentation DocComment="@Model.SummaryDocComment" />
 
         <!-- Remarks doc comment -->
@@ -62,7 +73,11 @@
 
         <SeeAlsoDocumentation DocComments="@Model.SeeAlsoDocComments" />
 
-        <hr />
+
+        @if (IsModelDocumented())
+        {
+            <hr />
+        }
 
         <h2 class="display-5 mt-2">Members</h2>
         <div class="row">

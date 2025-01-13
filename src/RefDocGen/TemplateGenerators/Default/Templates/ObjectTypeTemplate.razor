@@ -4,6 +4,15 @@
 @code {
     [Parameter]
     public required ObjectTypeTM Model { get; set; }
+
+    /// <summary>
+    /// Checks if the model has any (summary, remarks,...) doc comments.
+    /// </summary>
+    /// <returns>Boolean indicating whether the model is documented.</returns>
+    private bool IsModelDocumented()
+    {
+        return Model.SummaryDocComment is not null || Model.RemarksDocComment is not null || Model.SeeAlsoDocComments.Any() || Model.TypeParameters.Any();
+    }
 }
 
 <!DOCTYPE html>
@@ -117,7 +126,10 @@
 
         <SeeAlsoDocumentation DocComments="@Model.SeeAlsoDocComments" />
 
-        <hr />
+        @if (IsModelDocumented())
+        {
+            <hr />
+        }
 
         @if (Model.Constructors.Any())
         {

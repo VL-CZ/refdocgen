@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.DocExtraction.Handlers.Tools;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
@@ -35,30 +36,8 @@ internal class TypeDocHandler
         // add raw doc comment
         type.RawDocComment = docComment;
 
+        // add 'typeparam' doc comments
         var typeParamElements = docComment.Descendants(XmlDocIdentifiers.TypeParam);
-
-        // add type param doc comments
-        foreach (var typeParamDocComment in typeParamElements)
-        {
-            AddTypeParamDocumentation(type, typeParamDocComment);
-        }
-    }
-
-    /// <summary>
-    /// Add the doc comment to the corresponding type parameter.
-    /// </summary>
-    /// <param name="type">The type containing the parameter.</param>
-    /// <param name="docComment">XML node of the doc comment for the given type parameter.</param>
-    private void AddTypeParamDocumentation(TypeDeclaration type, XElement docComment)
-    {
-        if (docComment.TryGetNameAttribute(out var nameAttr))
-        {
-            string typeParamName = nameAttr.Value;
-
-            if (type.TypeParameterDeclarations.TryGetValue(typeParamName, out var typeParam))
-            {
-                typeParam.DocComment = docComment;
-            }
-        }
+        TypeParameterDocHelper.Add(typeParamElements, type.TypeParameterDeclarations);
     }
 }
