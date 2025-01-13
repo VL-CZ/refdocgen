@@ -12,5 +12,5 @@ public record TypeParameterTM(
     string Name,
     string? DocComment,
     IEnumerable<string> Modifiers,
-    IEnumerable<string> TypeConstraints,
+    IEnumerable<TypeLinkTM> TypeConstraints,
     IEnumerable<string> SpecialConstraints);

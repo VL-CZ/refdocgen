@@ -121,37 +121,37 @@
 
         @if (Model.Constructors.Any())
         {
-            <ConstructorList Constructors="@Model.Constructors" TypeName="@Model.Name" />
+            <ConstructorsSection Constructors="@Model.Constructors" TypeName="@Model.Name" />
         }
 
         @if (Model.Fields.Any())
         {
-            <FieldList Fields="@Model.Fields" />
+            <FieldsSection Fields="@Model.Fields" />
         }
 
         @if (Model.Events.Any())
         {
-            <EventList Events="@Model.Events" />
+            <EventsSection Events="@Model.Events" />
         }
 
         @if (Model.Properties.Any())
         {
-            <PropertyList Properties="@Model.Properties" />
+            <PropertiesSection Properties="@Model.Properties" />
         }
 
         @if (Model.Indexers.Any())
         {
-            <IndexerList Indexers="@Model.Indexers" />
+            <IndexersSection Indexers="@Model.Indexers" />
         }
 
         @if (Model.Methods.Any())
         {
-            <MethodList Methods="@Model.Methods" SectionName="Methods" />
+            <MethodsSection Methods="@Model.Methods" SectionName="Methods" />
         }
 
         @if (Model.Operators.Any())
         {
-            <MethodList Methods="@Model.Operators" SectionName="Operators" />
+            <MethodsSection Methods="@Model.Operators" SectionName="Operators" />
         }
 
     </div>

@@ -8,7 +8,9 @@
 
 @foreach (var tp in TypeParameters)
 {
-    var allConstraints = tp.TypeConstraints.Concat(tp.SpecialConstraints);
+    var allConstraints = tp.SpecialConstraints.Concat(
+        tp.TypeConstraints.Select(c => c.Name)
+    );
 
     if (allConstraints.Any())
     {
@@ -20,12 +22,22 @@
 
                 @if (tp.TypeConstraints.Any())
                 {
-                    @* @if (tp.SpecialConstraints.Any())
-                    {
-                        <span class="text-secondary">, </span>
-                    } *@
+                    var lastItem = tp.TypeConstraints.Last();
 
-                    <span class="text-secondary">@string.Join(", ", tp.TypeConstraints)</span>
+                    @if (tp.SpecialConstraints.Any())
+                    {
+                        <span class="text-primary">, </span>
+                    }
+
+                    foreach (var constraint in tp.TypeConstraints)
+                    {
+                        <TypeLink Type="@constraint" />
+
+                        if (constraint != lastItem)
+                        {
+                            <text>, </text>
+                        }
+                    }
                 }
             </samp>
         </h6>

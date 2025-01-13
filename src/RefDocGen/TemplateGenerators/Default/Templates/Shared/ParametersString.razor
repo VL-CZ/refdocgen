@@ -13,20 +13,7 @@
 
     foreach (var p in Parameters)
     {
-        @if (p.Modifiers.Any())
-        {
-            <span class="text-primary">
-                @string.Join(' ', p.Modifiers)
-            </span>
-            <span> </span>
-        }
-
-        <TypeLink Type="@p.Type" />
-        <span> </span>
-
-        <span class="text-dark">
-            @p.Name
-        </span>
+        <ParameterName Parameter="@p" />
 
         <LiteralValueSuffix Value="@p.DefaultValue" />
 

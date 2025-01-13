@@ -165,7 +165,7 @@ internal abstract class TypeTMCreator
         }
 
         // get constraints
-        var typeConstraints = typeParameter.TypeConstraints.Select(CSharpTypeName.Of);
+        var typeConstraints = typeParameter.TypeConstraints.Select(GetTypeLink);
         var specialConstraints = typeParameter.SpecialConstraints.Select(c => c.GetName());
 
         return new TypeParameterTM(

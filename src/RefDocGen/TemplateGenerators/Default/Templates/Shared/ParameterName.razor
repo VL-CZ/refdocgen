@@ -1,0 +1,22 @@
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Members
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required ParameterTM Parameter { get; set; }
+}
+
+
+@if (Parameter.Modifiers.Any())
+{
+    <span class="text-primary">
+        @string.Join(' ', Parameter.Modifiers)
+    </span>
+    <span> </span>
+}
+
+<TypeLink Type="@Parameter.Type" />
+
+<span class="text-dark">
+    @Parameter.Name
+</span>
