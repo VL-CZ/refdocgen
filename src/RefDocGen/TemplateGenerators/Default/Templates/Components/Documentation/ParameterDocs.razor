@@ -13,17 +13,7 @@
         @foreach (var parameter in Parameters)
         {
             <samp>
-                <span class="text-primary">
-                    @string.Join(' ', parameter.Modifiers)
-                </span>
-
-                <TypeLink Type="@parameter.Type" />
-
-                <span> </span>
-
-                <span class="text-dark">
-                    @parameter.Name
-                </span>
+                <ParameterName Parameter="@parameter" />
             </samp>
 
             <div class="text-muted mb-2">

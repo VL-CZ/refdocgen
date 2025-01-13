@@ -1,3 +1,4 @@
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Types
 @inherits ComponentBase
 
 @code {
@@ -9,11 +10,14 @@
 
     [Parameter]
     public required string TypeName { get; set; }
+
+    [Parameter]
+    public required TypeParameterTM[] TypeParameters { get; set; } = [];
 }
 
 <h1 class="display-4">
     <samp>
         <span class="text-primary">@string.Join(' ', Modifiers) @TypeKindName</span>
-        <span class="text-dark">@TypeName</span>
+        <span class="text-dark">@TypeName</span><TypeParametersString TypeParameters="TypeParameters" />
     </samp>
 </h1>

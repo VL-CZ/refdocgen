@@ -1,0 +1,49 @@
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Members
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required PropertyTM[] Properties { get; set; }
+}
+
+<h2 class="display-5 mt-2">Properties</h2>
+<div class="row">
+    <div class="col-md-12">
+        @foreach (var property in Properties)
+        {
+            <div class="border p-2 mb-2">
+                <h6 class="mb-1">
+                    <samp>
+                        <span class="text-primary">
+                            @string.Join(' ', property.Modifiers)
+                        </span>
+
+                        <TypeLink Type="@property.Type" />
+
+                        <span class="text-dark">
+                            @property.Name
+                        </span>
+
+                        <AccessorMethods HasGetter="property.HasGetter"
+                                         HasSetter="property.HasSetter"
+                                         GetterModifiers="property.GetterModifiers"
+                                         SetterModifiers="property.SetterModifiers" />
+
+                        <LiteralValueSuffix Value="@property.ConstantValue" />
+                    </samp>
+                </h6>
+
+                <SummaryDoc DocComment="@property.SummaryDocComment" />
+
+                <ValueDoc DocComment="@property.ValueDocComment" />
+
+                <!-- Remarks doc comment -->
+                <RemarksDoc DocComment="@property.RemarksDocComment" />
+
+                <ExceptionDocs Exceptions="@property.Exceptions" />
+
+                <SeeAlsoDocs DocComments="@property.SeeAlsoDocComments" />
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,40 @@
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Members
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required FieldTM[] Fields { get; set; }
+}
+
+<h2 class="display-5 mt-2">Fields</h2>
+<div class="row">
+    <div class="col-md-12">
+        @foreach (var field in Fields)
+        {
+            <div class="border p-2 mb-2" id="@field.Name">
+                <h6 class="mb-1">
+                    <samp>
+                        <span class="text-primary">
+                            @string.Join(' ', field.Modifiers)
+                        </span>
+
+                        <TypeLink Type="@field.Type" />
+
+                        <span class="text-dark">
+                            @field.Name
+                        </span>
+
+                        <LiteralValueSuffix Value="@field.ConstantValue" />
+
+                    </samp>
+                </h6>
+
+                <SummaryDoc DocComment="@field.SummaryDocComment" />
+
+                <RemarksDoc DocComment="@field.RemarksDocComment" />
+
+                <SeeAlsoDocs DocComments="@field.SeeAlsoDocComments" />
+            </div>
+        }
+    </div>
+</div>

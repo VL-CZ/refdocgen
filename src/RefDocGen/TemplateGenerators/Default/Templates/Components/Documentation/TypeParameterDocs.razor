@@ -8,8 +8,7 @@
 
 @if (TypeParameters.Any())
 {
-    <!-- <h3 class="lead my-2">Type parameters</h3> -->
-
+    <h3 class="lead my-2">Type parameters</h3>
     <div class="mx-2">
         @foreach (var typeParam in TypeParameters)
         {
@@ -17,7 +16,7 @@
                 <span class="text-primary">
                     @string.Join(' ', typeParam.Modifiers)
                 </span>
-                <span class="text-dark">
+                <span class="text-secondary">
                     @typeParam.Name
                 </span>
             </samp>

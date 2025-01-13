@@ -4,6 +4,15 @@
 @code {
     [Parameter]
     public required ObjectTypeTM Model { get; set; }
+
+    /// <summary>
+    /// Checks if the model has any (summary, remarks,...) doc comments.
+    /// </summary>
+    /// <returns>Boolean indicating whether the model is documented.</returns>
+    private bool IsModelDocumented()
+    {
+        return Model.SummaryDocComment is not null || Model.RemarksDocComment is not null || Model.SeeAlsoDocComments.Any() || Model.TypeParameters.Any();
+    }
 }
 
 <!DOCTYPE html>
@@ -12,9 +21,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>
-        @Model.Name
-    </title>
+    <title>@Model.Name</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -68,7 +75,7 @@
 
     <div class="container my-4">
 
-        <DeclaredTypeName TypeName="@Model.Name" TypeKindName="@Model.TypeKindName" Modifiers="@Model.Modifiers" />
+        <DeclaredTypeName TypeName="@Model.Name" TypeKindName="@Model.TypeKindName" Modifiers="@Model.Modifiers" TypeParameters="@Model.TypeParameters" />
 
         <TypeParametersConstraints TypeParameters="@Model.TypeParameters" />
 
@@ -94,7 +101,11 @@
                     @foreach (var iface in Model.ImplementedInterfaces)
                     {
                         <TypeLink Type="@iface" />
-                        <span>, </span>
+
+                        @if (iface != Model.ImplementedInterfaces.Last())
+                        {
+                            <span>, </span>
+                        }
                     }
                 </samp>
             </div>
@@ -103,378 +114,54 @@
         <hr />
 
         <!-- Doc comments -->
-        <SummaryDocumentation DocComment="@Model.SummaryDocComment" />
+        <SummaryDoc DocComment="@Model.SummaryDocComment" />
 
         <!-- Type parameter doc comments -->
         <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
 
         <!-- Remarks doc comment -->
-        <RemarksDocumentation DocComment="@Model.RemarksDocComment" />
+        <RemarksDoc DocComment="@Model.RemarksDocComment" />
 
-        <SeeAlsoDocumentation DocComments="@Model.SeeAlsoDocComments" />
+        <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
 
-        <hr />
+        @if (IsModelDocumented())
+        {
+            <hr />
+        }
 
         @if (Model.Constructors.Any())
         {
-            <h2 class="display-5 mt-2">Constructors</h2>
-            <div class="row">
-                <div class="col-md-12">
-                    @foreach (var constructor in Model.Constructors)
-                    {
-                        <div class="border p-2 mb-2">
-                            <h6 class="mb-1">
-                                <samp>
-                                    <span class="text-primary">
-                                        @string.Join(' ', constructor.Modifiers)
-                                    </span>
-                                    <span class="text-dark">
-                                        @Model.Name
-                                    </span>
-
-                                    <ParametersString Parameters="@constructor.Parameters" />
-                                </samp>
-
-                            </h6>
-
-                            <SummaryDocumentation DocComment="@constructor.SummaryDocComment" />
-
-                            <ParametersDocumentation Parameters="@constructor.Parameters" />
-
-                            <!-- Remarks doc comment -->
-                            <RemarksDocumentation DocComment="@constructor.RemarksDocComment" />
-
-                            <ExceptionsDocumentation Exceptions="@constructor.Exceptions" />
-
-                            <SeeAlsoDocumentation DocComments="@constructor.SeeAlsoDocComments" />
-                        </div>
-                    }
-                </div>
-            </div>
+            <ConstructorsSection Constructors="@Model.Constructors" TypeName="@Model.Name" />
         }
 
         @if (Model.Fields.Any())
         {
-            <h2 class="display-5 mt-2">Fields</h2>
-            <div class="row">
-                <div class="col-md-12">
-                    @foreach (var field in Model.Fields)
-                    {
-                        <div class="border p-2 mb-2" id="@field.Name">
-                            <h6 class="mb-1">
-                                <samp>
-                                    <span class="text-primary">
-                                        @string.Join(' ', field.Modifiers)
-                                    </span>
-
-                                    <TypeLink Type="@field.Type" />
-
-                                    <span class="text-dark">
-                                        @field.Name
-                                    </span>
-
-                                    @if (field.ConstantValue is not null)
-                                    {
-                                        <span class="text-secondary">=</span>
-                                        <span class="text-success">@field.ConstantValue</span>
-                                    }
-
-                                </samp>
-                            </h6>
-
-                            <SummaryDocumentation DocComment="@field.SummaryDocComment" />
-
-                            <RemarksDocumentation DocComment="@field.RemarksDocComment" />
-
-                            <SeeAlsoDocumentation DocComments="@field.SeeAlsoDocComments" />
-                        </div>
-                    }
-                </div>
-            </div>
+            <FieldsSection Fields="@Model.Fields" />
         }
 
         @if (Model.Events.Any())
         {
-            <h2 class="display-5 mt-2">Events</h2>
-            <div class="row">
-                <div class="col-md-12">
-                    @foreach (var e in Model.Events)
-                    {
-                        <div class="border p-2 mb-2" id="@e.Name">
-                            <h6 class="mb-1">
-                                <samp>
-                                    <span class="text-primary">
-                                        @string.Join(' ', e.Modifiers)
-                                    </span>
-
-                                    <TypeLink Type="@e.Type" />
-
-                                    <span class="text-dark">
-                                        @e.Name
-                                    </span>
-                                </samp>
-                            </h6>
-
-                            <SummaryDocumentation DocComment="@e.SummaryDocComment" />
-
-                            <RemarksDocumentation DocComment="@e.RemarksDocComment" />
-
-                            <ExceptionsDocumentation Exceptions="@e.Exceptions" />
-
-                            <SeeAlsoDocumentation DocComments="@e.SeeAlsoDocComments" />
-                        </div>
-                    }
-                </div>
-            </div>
+            <EventsSection Events="@Model.Events" />
         }
 
         @if (Model.Properties.Any())
         {
-            <h2 class="display-5 mt-2">Properties</h2>
-            <div class="row">
-                <div class="col-md-12">
-                    @foreach (var property in Model.Properties)
-                    {
-                        <div class="border p-2 mb-2">
-                            <h6 class="mb-1">
-                                <samp>
-                                    <span class="text-primary">
-                                        @string.Join(' ', property.Modifiers)
-                                    </span>
-
-                                    <TypeLink Type="@property.Type" />
-
-                                    <span class="text-dark">
-                                        @property.Name
-                                    </span>
-
-                                    <span class="text-secondary">{ </span>
-
-                                    @{
-                                        var getterWithModifiers = property.HasGetter ? $"{string.Join(' ', property.GetterModifiers)} get" : string.Empty;
-                                        var setterWithModifiers = property.HasSetter ? $"{string.Join(' ', property.SetterModifiers)} set" : string.Empty;
-                                    }
-
-                                    @if (property.HasGetter)
-                                    {
-                                        <span class="text-primary">
-                                            @getterWithModifiers<span class="text-secondary">;</span>
-                                        </span>
-                                    }
-                                    @if (property.HasSetter)
-                                    {
-                                        <span class="text-primary">
-                                            @setterWithModifiers<span class="text-secondary">;</span>
-                                        </span>
-                                    }
-
-                                    <span class="text-secondary">}</span>
-
-                                    @if (property.ConstantValue is not null)
-                                    {
-                                        <span class="text-secondary">=</span>
-                                        <span class="text-success">@property.ConstantValue</span>
-                                    }
-                                </samp>
-                            </h6>
-
-                            <SummaryDocumentation DocComment="@property.SummaryDocComment" />
-
-                            <ValueDocumentation DocComment="@property.ValueDocComment" />
-
-                            <!-- Remarks doc comment -->
-                            <RemarksDocumentation DocComment="@property.RemarksDocComment" />
-
-                            <ExceptionsDocumentation Exceptions="@property.Exceptions" />
-
-                            <SeeAlsoDocumentation DocComments="@property.SeeAlsoDocComments" />
-                        </div>
-                    }
-                </div>
-            </div>
+            <PropertiesSection Properties="@Model.Properties" />
         }
 
         @if (Model.Indexers.Any())
         {
-            <h2 class="display-5 mt-2">Indexers</h2>
-            <div class="row">
-                <div class="col-md-12">
-                    @foreach (var indexer in Model.Indexers)
-                    {
-                        <div class="border p-2 mb-2">
-                            <h6 class="mb-1">
-                                <samp>
-                                    <span class="text-primary">
-                                        @string.Join(' ', indexer.Modifiers)
-                                    </span>
-
-                                    <TypeLink Type="@indexer.Type" />
-
-                                    @if (indexer.Parameters.Any())
-                                    {
-                                        var lastParam = indexer.Parameters.Last();
-
-                                        <span class="text-dark">
-                                            this<span class="text-secondary">[</span>
-                                        </span>
-
-                                        @foreach (var p in indexer.Parameters)
-                                        {
-                                            <span class="text-primary">
-                                                @string.Join(' ', p.Modifiers)
-                                            </span>
-
-                                            <TypeLink Type="@p.Type" />
-
-                                            @if (p == lastParam)
-                                            {
-                                                <span class="text-dark">
-                                                    @p.Name<span class="text-secondary">]</span>
-                                                </span>
-                                            }
-                                            else
-                                            {
-                                                <span class="text-dark">
-                                                    @($"{p.Name},")
-                                                </span>
-                                            }
-                                        }
-                                    }
-
-                                    <span class="text-secondary">{ </span>
-
-                                    @{
-                                        var getterWithModifiers = indexer.HasGetter ? $"{string.Join(' ', indexer.GetterModifiers)} get" : string.Empty;
-                                        var setterWithModifiers = indexer.HasSetter ? $"{string.Join(' ', indexer.SetterModifiers)} set" : string.Empty;
-                                    }
-
-                                    @if (indexer.HasGetter)
-                                    {
-                                        <span class="text-primary">
-                                            @getterWithModifiers<span class="text-secondary">;</span>
-                                        </span>
-                                    }
-                                    @if (indexer.HasSetter)
-                                    {
-                                        <span class="text-primary">
-                                            @setterWithModifiers<span class="text-secondary">;</span>
-                                        </span>
-                                    }
-
-                                    <span class="text-secondary">}</span>
-                                </samp>
-                            </h6>
-
-                            <SummaryDocumentation DocComment="@indexer.SummaryDocComment" />
-
-                            <ParametersDocumentation Parameters="@indexer.Parameters" />
-
-                            <ValueDocumentation DocComment="@indexer.ValueDocComment" />
-
-                            <!-- Remarks doc comment -->
-                            <RemarksDocumentation DocComment="@indexer.RemarksDocComment" />
-
-                            <ExceptionsDocumentation Exceptions="@indexer.Exceptions" />
-
-                            <SeeAlsoDocumentation DocComments="@indexer.SeeAlsoDocComments" />
-                        </div>
-                    }
-                </div>
-            </div>
+            <IndexersSection Indexers="@Model.Indexers" />
         }
 
         @if (Model.Methods.Any())
         {
-            <h2 class="display-5 mt-2">Methods</h2>
-            <div class="row">
-                <div class="col-md-12">
-
-                    @foreach (var method in Model.Methods)
-                    {
-                        <div class="border p-2 mb-2">
-                            <h6 class="mb-1">
-                                <samp>
-                                    <span class="text-primary">
-                                        @string.Join(' ', method.Modifiers)
-                                    </span>
-
-                                    <TypeLink Type="@method.ReturnType" />
-
-                                    <span class="text-dark">
-                                        @method.Name
-                                    </span>
-                                    <TypeParametersString TypeParameters="@method.TypeParameters" />
-                                    <ParametersString Parameters="@method.Parameters" />
-
-                                </samp>
-                            </h6>
-
-                            <SummaryDocumentation DocComment="@method.SummaryDocComment" />
-
-                            <ParametersDocumentation Parameters="@method.Parameters" />
-
-                            @if (!method.ReturnsVoid)
-                            {
-                                <ReturnValueDocumentation DocComment="@method.ReturnsDocComment" Type="@method.ReturnType" />
-                            }
-
-                            <!-- Remarks doc comment -->
-                            <RemarksDocumentation DocComment="@method.RemarksDocComment" />
-
-                            <ExceptionsDocumentation Exceptions="@method.Exceptions" />
-
-                            <SeeAlsoDocumentation DocComments="@method.SeeAlsoDocComments" />
-                        </div>
-                    }
-                </div>
-            </div>
+            <MethodsSection Methods="@Model.Methods" SectionName="Methods" />
         }
 
         @if (Model.Operators.Any())
         {
-            <h2 class="display-5 mt-2">Operators</h2>
-            <div class="row">
-                <div class="col-md-12">
-
-                    @foreach (var method in Model.Operators)
-                    {
-                        <div class="border p-2 mb-2">
-                            <h6 class="mb-1">
-                                <samp>
-                                    <span class="text-primary">
-                                        @string.Join(' ', method.Modifiers)
-                                    </span>
-
-                                    <TypeLink Type="@method.ReturnType" />
-
-                                    <span class="text-dark">
-                                        @method.Name
-                                    </span>
-
-                                    <ParametersString Parameters="@method.Parameters" />
-                                </samp>
-
-                            </h6>
-
-                            <SummaryDocumentation DocComment="@method.SummaryDocComment" />
-
-                            <ParametersDocumentation Parameters="@method.Parameters" />
-
-                            @if (!method.ReturnsVoid)
-                            {
-                                <ReturnValueDocumentation DocComment="@method.ReturnsDocComment" Type="@method.ReturnType" />
-                            }
-
-                            <!-- Remarks doc comment -->
-                            <RemarksDocumentation DocComment="@method.RemarksDocComment" />
-
-                            <ExceptionsDocumentation Exceptions="@method.Exceptions" />
-
-                            <SeeAlsoDocumentation DocComments="@method.SeeAlsoDocComments" />
-                        </div>
-                    }
-                </div>
-            </div>
+            <MethodsSection Methods="@Model.Operators" SectionName="Operators" />
         }
 
     </div>

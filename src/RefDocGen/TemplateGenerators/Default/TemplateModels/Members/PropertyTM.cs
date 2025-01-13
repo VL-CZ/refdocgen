@@ -34,8 +34,8 @@ public record PropertyTM(
     IEnumerable<string> Modifiers,
     bool HasGetter,
     bool HasSetter,
-    IEnumerable<string> GetterModifiers,
-    IEnumerable<string> SetterModifiers,
+    string[] GetterModifiers,
+    string[] SetterModifiers,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions,
     string? ConstantValue);

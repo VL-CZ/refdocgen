@@ -165,7 +165,7 @@ internal abstract class TypeTMCreator
         }
 
         // get constraints
-        var typeConstraints = typeParameter.TypeConstraints.Select(CSharpTypeName.Of);
+        var typeConstraints = typeParameter.TypeConstraints.Select(GetTypeLink);
         var specialConstraints = typeParameter.SpecialConstraints.Select(c => c.GetName());
 
         return new TypeParameterTM(
@@ -186,7 +186,7 @@ internal abstract class TypeTMCreator
         return new ExceptionTM(
             new TypeLinkTM(
                 exception.Id,
-                null
+                typeUrlResolver.GetUrlOf(exception.Id)
                 ),
             ToHtmlString(exception.DocComment));
     }

@@ -1,0 +1,39 @@
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Members
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required EventTM[] Events { get; set; }
+}
+
+<h2 class="display-5 mt-2">Events</h2>
+<div class="row">
+    <div class="col-md-12">
+        @foreach (var e in Events)
+        {
+            <div class="border p-2 mb-2" id="@e.Name">
+                <h6 class="mb-1">
+                    <samp>
+                        <span class="text-primary">
+                            @string.Join(' ', e.Modifiers)
+                        </span>
+
+                        <TypeLink Type="@e.Type" />
+
+                        <span class="text-dark">
+                            @e.Name
+                        </span>
+                    </samp>
+                </h6>
+
+                <SummaryDoc DocComment="@e.SummaryDocComment" />
+
+                <RemarksDoc DocComment="@e.RemarksDocComment" />
+
+                <ExceptionDocs Exceptions="@e.Exceptions" />
+
+                <SeeAlsoDocs DocComments="@e.SeeAlsoDocComments" />
+            </div>
+        }
+    </div>
+</div>

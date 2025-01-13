@@ -4,6 +4,15 @@
 @code {
     [Parameter]
     public required DelegateTypeTM Model { get; set; }
+
+    /// <summary>
+    /// Checks if the model has any (summary, remarks,...) doc comments.
+    /// </summary>
+    /// <returns>Boolean indicating whether the model is documented.</returns>
+    private bool IsModelDocumented()
+    {
+        return Model.SummaryDocComment is not null || Model.RemarksDocComment is not null || Model.SeeAlsoDocComments.Any() || Model.TypeParameters.Any();
+    }
 }
 
 <!DOCTYPE html>
@@ -63,7 +72,7 @@
 
     <div class="container my-4">
 
-        <DeclaredTypeName TypeName="@Model.Name" TypeKindName="delegate" Modifiers="@Model.Modifiers" />
+        <DeclaredTypeName TypeName="@Model.Name" TypeKindName="delegate" Modifiers="@Model.Modifiers" TypeParameters="@Model.TypeParameters" />
 
         <TypeParametersConstraints TypeParameters="@Model.TypeParameters" />
 
@@ -71,15 +80,18 @@
 
         <hr />
 
-        <SummaryDocumentation DocComment="@Model.SummaryDocComment" />
+        <SummaryDoc DocComment="@Model.SummaryDocComment" />
 
         <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
 
-        <RemarksDocumentation DocComment="@Model.RemarksDocComment" />
+        <RemarksDoc DocComment="@Model.RemarksDocComment" />
 
-        <SeeAlsoDocumentation DocComments="@Model.SeeAlsoDocComments" />
+        <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
 
-        <hr />
+        @if (IsModelDocumented())
+        {
+            <hr />
+        }
 
         <div class="row">
             <div class="col-md-12">
@@ -92,42 +104,23 @@
 
                             <span class="text-dark">
                                 @Model.Name
-                            </span>
-
-                            <ParametersString Parameters="@Model.Parameters" />
+                            </span><TypeParametersString TypeParameters="@Model.TypeParameters" /><ParametersString Parameters="@Model.Parameters" />
 
                         </samp>
                     </h6>
 
-                    <SummaryDocumentation DocComment="@Model.SummaryDocComment" />
+                    <SummaryDoc DocComment="@Model.SummaryDocComment" />
 
-                    <ParametersDocumentation Parameters="@Model.Parameters" />
-
-                    @*
-                    @if (Model.Parameters.Any())
-                    {
-                        <div class="m-2">
-                            @foreach (var parameter in Model.Parameters)
-                            {
-                                <samp>
-                                    <span class="text-primary">@string.Join(' ', parameter.Modifiers)</span>
-                                    <span class="text-secondary">@parameter.Type</span>
-                                    <span class="text-dark">@parameter.Name</span>
-                                </samp>
-                                <div class="text-muted"><i>@parameter.DocComment</i></div>
-                            }
-                        </div>
-                    }
-                    *@
+                    <ParameterDocs Parameters="@Model.Parameters" />
 
                     @if (!Model.ReturnsVoid)
                     {
-                        <ReturnValueDocumentation DocComment="@Model.ReturnsDocComment" Type="@Model.ReturnType" />
+                        <ReturnValueDoc DocComment="@Model.ReturnsDocComment" Type="@Model.ReturnType" />
                     }
 
-                    <ExceptionsDocumentation Exceptions="@Model.Exceptions" />
+                    <ExceptionDocs Exceptions="@Model.Exceptions" />
 
-                    <SeeAlsoDocumentation DocComments="@Model.SeeAlsoDocComments" />
+                    <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
                 </div>
             </div>
         </div>

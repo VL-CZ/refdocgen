@@ -3,12 +3,12 @@
 
 @code {
     [Parameter]
-    public required IEnumerable<TypeParameterTM> TypeParameters { get; set; }
+    public required TypeParameterTM[] TypeParameters { get; set; }
 }
 
 @if (TypeParameters.Any())
 {
-    <span class="text-success">&lt;</span>
+    <span class="text-dark">&lt;</span>
 
     @foreach (var p in TypeParameters)
     {
@@ -17,11 +17,17 @@
             <span class="text-primary">
                 @string.Join(' ', p.Modifiers)
             </span>
+            <span> </span>
         }
         <span class="text-secondary">
             @p.Name
         </span>
+
+        @if (p != TypeParameters[^1])
+        {
+            <span class="text-dark">, </span>
+        }
     }
 
-    <span class="text-success">&gt;</span>
+    <span class="text-dark">&gt;</span>
 }

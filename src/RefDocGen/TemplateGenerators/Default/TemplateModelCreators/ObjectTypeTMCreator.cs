@@ -54,7 +54,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
 
         return new ObjectTypeTM(
             type.Id,
-            CSharpTypeName.Of(type),
+            type.ShortName,
             type.Namespace,
             ToHtmlString(type.SummaryDocComment),
             ToHtmlString(type.RemarksDocComment),
@@ -163,8 +163,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             modifiers.GetStrings(),
             property.Getter is not null,
             property.Setter is not null,
-            getterModifiers.GetStrings(),
-            setterModifiers.GetStrings(),
+            getterModifiers.GetStrings().ToArray(),
+            setterModifiers.GetStrings().ToArray(),
             GetHtmlStrings(property.SeeAlsoDocComments),
             GetTemplateModels(property.DocumentedExceptions),
             constantValue);
@@ -201,8 +201,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             modifiers.GetStrings(),
             indexer.Getter is not null,
             indexer.Setter is not null,
-            getterModifiers.GetStrings(),
-            setterModifiers.GetStrings(),
+            getterModifiers.GetStrings().ToArray(),
+            setterModifiers.GetStrings().ToArray(),
             GetHtmlStrings(indexer.SeeAlsoDocComments),
             GetTemplateModels(indexer.DocumentedExceptions));
     }

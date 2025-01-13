@@ -8,13 +8,15 @@
 
 @if (Exceptions.Any())
 {
-    <div class="mt-3">
-        <div class="lead">Exceptions</div>
+    <h3 class="lead mt-3">Exceptions</h3>
+    <div class="mx-2">
         @foreach (var exception in Exceptions)
         {
-            <div class="mb-2">
-                <span>@exception.Type.Name</span>
+            <samp>
+                <TypeLink Type="@exception.Type" />
+            </samp>
 
+            <div class="text-muted mb-2">
                 @if (exception.DocComment is not null)
                 {
                     <i>@((MarkupString)exception.DocComment)</i>
