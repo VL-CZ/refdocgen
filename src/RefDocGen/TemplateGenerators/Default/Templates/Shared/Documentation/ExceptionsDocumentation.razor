@@ -14,12 +14,16 @@
         {
             <div class="mb-2">
 
-                <TypeLink Type="@exception.Type" />
+                <samp>
+                    <TypeLink Type="@exception.Type" />
+                </samp>
 
-                @if (exception.DocComment is not null)
-                {
-                    <i>@((MarkupString)exception.DocComment)</i>
-                }
+                <div class="text-muted">
+                    @if (exception.DocComment is not null)
+                    {
+                        <i>@((MarkupString)exception.DocComment)</i>
+                    }
+                </div>
             </div>
         }
     </div>

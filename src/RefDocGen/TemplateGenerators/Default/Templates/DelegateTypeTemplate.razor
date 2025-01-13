@@ -113,23 +113,6 @@
 
                     <ParametersDocumentation Parameters="@Model.Parameters" />
 
-                    @*
-                    @if (Model.Parameters.Any())
-                    {
-                        <div class="m-2">
-                            @foreach (var parameter in Model.Parameters)
-                            {
-                                <samp>
-                                    <span class="text-primary">@string.Join(' ', parameter.Modifiers)</span>
-                                    <span class="text-secondary">@parameter.Type</span>
-                                    <span class="text-dark">@parameter.Name</span>
-                                </samp>
-                                <div class="text-muted"><i>@parameter.DocComment</i></div>
-                            }
-                        </div>
-                    }
-                    *@
-
                     @if (!Model.ReturnsVoid)
                     {
                         <ReturnValueDocumentation DocComment="@Model.ReturnsDocComment" Type="@Model.ReturnType" />
