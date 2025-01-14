@@ -22,6 +22,8 @@ internal class IndexerData : PropertyData, IIndexerData
         Parameters = propertyInfo.GetIndexParameters()
             .Select(p => new ParameterData(p, availableTypeParameters))
             .ToDictionary(p => p.Name);
+
+        ExplicitInterfaceType = Tools.ExplicitInterfaceType.Of((IPropertyData)this);
     }
 
     /// <inheritdoc/>
@@ -33,7 +35,7 @@ internal class IndexerData : PropertyData, IIndexerData
     internal IReadOnlyDictionary<string, ParameterData> Parameters { get; }
 
     /// <inheritdoc/>
-    public override ITypeNameData? ExplicitInterfaceType => null;
+    public override ITypeNameData? ExplicitInterfaceType { get; }
 
     /// <inheritdoc/>
     IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters.Values
