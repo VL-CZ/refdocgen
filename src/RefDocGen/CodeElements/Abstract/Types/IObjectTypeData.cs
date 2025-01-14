@@ -28,6 +28,14 @@ public interface IObjectTypeData : ITypeDeclaration
     bool IsSealed { get; }
 
     /// <summary>
+    /// Indicates whether the type is a byref-like structure.
+    /// </summary>
+    /// <remarks>
+    /// For further info, see <see href="https://learn.microsoft.com/en-us/dotnet/api/system.type.isbyreflike"/>
+    /// </remarks>
+    bool IsByRefLike { get; }
+
+    /// <summary>
     /// Collection of constructors contained in the type.
     /// </summary>
     IEnumerable<IConstructorData> Constructors { get; }

@@ -2,6 +2,8 @@ using RefDocGen.DocExtraction.Tools;
 using System.Xml.Linq;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Concrete.Members;
+using RefDocGen.DocExtraction.Handlers.Tools;
+using RefDocGen.Tools.Xml;
 
 namespace RefDocGen.DocExtraction.Handlers.Members;
 
@@ -26,5 +28,9 @@ internal class MethodDocHandler : ExecutableMemberDocHandler<MethodData>
         {
             member.ReturnValueDocComment = returnsNode;
         }
+
+        // add type parameter doc comments
+        var typeParamElements = memberDocComment.Descendants(XmlDocIdentifiers.TypeParam);
+        TypeParameterDocHelper.Add(typeParamElements, member.TypeParameterDeclarations);
     }
 }

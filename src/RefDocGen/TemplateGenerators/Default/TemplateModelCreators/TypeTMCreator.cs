@@ -108,40 +108,45 @@ internal abstract class TypeTMCreator
     /// <summary>
     /// Creates a <see cref="ParameterTM"/> instance based on the provided <see cref="IParameterData"/> object.
     /// </summary>
-    /// <param name="parameterData">The <see cref="IParameterData"/> instance representing the parameter.</param>
-    /// <returns>A <see cref="ParameterTM"/> instance based on the provided <paramref name="parameterData"/>.</returns>
-    protected ParameterTM GetFrom(IParameterData parameterData)
+    /// <param name="parameter">The <see cref="IParameterData"/> instance representing the parameter.</param>
+    /// <returns>A <see cref="ParameterTM"/> instance based on the provided <paramref name="parameter"/>.</returns>
+    protected ParameterTM GetFrom(IParameterData parameter)
     {
         List<Keyword> modifiers = [];
 
-        if (parameterData.IsInput)
+        if (parameter.IsExtensionParameter)
+        {
+            modifiers.Add(Keyword.This);
+        }
+
+        if (parameter.IsInput)
         {
             modifiers.Add(Keyword.In);
         }
 
-        if (parameterData.IsOutput)
+        if (parameter.IsOutput)
         {
             modifiers.Add(Keyword.Out);
         }
 
-        if (RefKeyword.IsPresentIn(parameterData))
+        if (RefKeyword.IsPresentIn(parameter))
         {
             modifiers.Add(Keyword.Ref);
         }
 
-        if (parameterData.IsParamsCollection)
+        if (parameter.IsParamsCollection)
         {
             modifiers.Add(Keyword.Params);
         }
 
-        string? defaultValue = parameterData.DefaultValue == DBNull.Value
+        string? defaultValue = parameter.DefaultValue == DBNull.Value
             ? null
-            : LiteralValueFormatter.Format(parameterData.DefaultValue);
+            : LiteralValueFormatter.Format(parameter.DefaultValue);
 
         return new ParameterTM(
-            parameterData.Name,
-            GetTypeLink(parameterData.Type),
-            ToHtmlString(parameterData.DocComment),
+            parameter.Name,
+            GetTypeLink(parameter.Type),
+            ToHtmlString(parameter.DocComment),
             modifiers.GetStrings(),
             defaultValue);
     }

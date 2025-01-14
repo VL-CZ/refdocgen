@@ -23,10 +23,6 @@ internal abstract class ExecutableMemberDocHandler<T> : MemberDocHandler<ObjectT
         var paramElements = memberDocComment.Descendants(XmlDocIdentifiers.Param);
         ParameterDocHelper.Add(paramElements, member.Parameters);
 
-        // add type parameter doc comments
-        var typeParamElements = memberDocComment.Descendants(XmlDocIdentifiers.TypeParam);
-        TypeParameterDocHelper.Add(typeParamElements, member.TypeParameterDeclarations);
-
         // add exception doc comments (if present)
         var exceptionsDocComments = memberDocComment.Descendants(XmlDocIdentifiers.Exception);
         member.DocumentedExceptions = ExceptionDocHelper.Parse(exceptionsDocComments);

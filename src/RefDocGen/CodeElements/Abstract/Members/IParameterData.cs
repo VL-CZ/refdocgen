@@ -36,6 +36,11 @@ public interface IParameterData
     bool IsParamsCollection { get; }
 
     /// <summary>
+    /// Checks if the parameter is the 1st parameter of an extension method.
+    /// </summary>
+    bool IsExtensionParameter { get; }
+
+    /// <summary>
     /// Checks if the parameter is an input parameter.
     /// </summary>
     bool IsInput { get; }

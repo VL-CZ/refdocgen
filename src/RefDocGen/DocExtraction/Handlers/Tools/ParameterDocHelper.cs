@@ -13,15 +13,15 @@ internal class ParameterDocHelper
     /// Adds parameter doc comments to the corresponding parameters.
     /// </summary>
     /// <param name="paramElements">Enumerable of doc comments for the parameters. (i.e. a collection of 'param' elements)</param>
-    /// <param name="parameters">A collection of parameters to assign the doc comments to.</param>
-    internal static void Add(IEnumerable<XElement> paramElements, IReadOnlyList<ParameterData> parameters)
+    /// <param name="parameters">A dictionary of parameters (indexed by its name) to assign the doc comments to.</param>
+    internal static void Add(IEnumerable<XElement> paramElements, IReadOnlyDictionary<string, ParameterData> parameters)
     {
         foreach (var paramDocComment in paramElements)
         {
             if (paramDocComment.TryGetNameAttribute(out var nameAttr))
             {
                 string paramName = nameAttr.Value;
-                var parameter = parameters.FirstOrDefault(p => p.Name == paramName);
+                var parameter = parameters.GetValueOrDefault(paramName);
 
                 if (parameter is null)
                 {

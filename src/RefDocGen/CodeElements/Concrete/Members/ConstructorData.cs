@@ -22,9 +22,14 @@ internal class ConstructorData : ExecutableMemberData, IConstructorData
     /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
     /// <param name="containingType">Type that contains the member.</param>
     internal ConstructorData(ConstructorInfo constructorInfo, TypeDeclaration containingType, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
-        : base(constructorInfo, containingType, availableTypeParameters)
+        : base(constructorInfo, containingType)
     {
         ConstructorInfo = constructorInfo;
+
+        // add parameters
+        Parameters = constructorInfo.GetParameters()
+            .Select(p => new ParameterData(p, availableTypeParameters))
+            .ToDictionary(p => p.Name);
     }
 
     /// <inheritdoc/>
@@ -39,7 +44,8 @@ internal class ConstructorData : ExecutableMemberData, IConstructorData
     /// <inheritdoc/>
     public override ITypeNameData? ExplicitInterfaceType => null; // the constructors can't be explicitly declared
 
+
     /// <inheritdoc/>
-    public override bool IsConstructor => true;
+    internal override IReadOnlyDictionary<string, ParameterData> Parameters { get; }
 }
 

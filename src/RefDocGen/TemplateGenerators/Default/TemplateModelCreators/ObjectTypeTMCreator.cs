@@ -52,6 +52,16 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             modifiers.Add(Keyword.Abstract);
         }
 
+        if (StaticKeyword.IsPresentIn(type))
+        {
+            modifiers.Add(Keyword.Static);
+        }
+
+        if (type.IsByRefLike)
+        {
+            modifiers.Add(Keyword.Ref);
+        }
+
         return new ObjectTypeTM(
             type.Id,
             type.ShortName,

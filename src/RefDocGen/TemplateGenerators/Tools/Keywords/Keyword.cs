@@ -39,6 +39,7 @@ internal enum Keyword
     Sealed,
     Static,
     Struct,
+    This,
     Virtual,
     Void,
     Volatile,
