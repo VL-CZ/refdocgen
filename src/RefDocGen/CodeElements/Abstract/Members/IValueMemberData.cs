@@ -18,6 +18,14 @@ public interface IValueMemberData : IMemberData
     bool IsReadonly { get; }
 
     /// <summary>
+    /// Checks if the member is required (i.e. must be initialized by an object initializer).
+    /// </summary>
+    /// <remarks>
+    /// For further info, see <see href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/required"/>.
+    /// </remarks>
+    bool IsRequired { get; }
+
+    /// <summary>
     /// Type of the member.
     /// </summary>
     ITypeNameData Type { get; }

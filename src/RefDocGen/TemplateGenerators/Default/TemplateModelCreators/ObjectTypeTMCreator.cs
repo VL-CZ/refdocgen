@@ -123,6 +123,10 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         {
             modifiers.Add(Keyword.Readonly);
         }
+        if (field.IsRequired)
+        {
+            modifiers.Add(Keyword.Required);
+        }
 
         string? constantValue = field.ConstantValue == DBNull.Value
             ? null
@@ -146,6 +150,11 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     private PropertyTM GetFrom(IPropertyData property)
     {
         var modifiers = GetCallableMemberModifiers(property);
+
+        if (property.IsRequired)
+        {
+            modifiers.Add(Keyword.Required);
+        }
 
         List<Keyword> getterModifiers = [];
         List<Keyword> setterModifiers = [];
@@ -313,7 +322,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     {
         List<Keyword> modifiers = [];
 
-        if (!member.IsExplicitImplementation)
+        if (!member.IsExplicitImplementation) // don't add access modifiers for explicitly implemeneted members
         {
             modifiers.Add(member.AccessModifier.ToKeyword());
         }

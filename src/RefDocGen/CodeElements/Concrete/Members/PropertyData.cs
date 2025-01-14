@@ -5,6 +5,7 @@ using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Concrete.Members;
@@ -131,4 +132,7 @@ internal class PropertyData : MemberData, IPropertyData
 
     /// <inheritdoc/>
     public object? ConstantValue => DBNull.Value;
+
+    /// <inheritdoc/>
+    public bool IsRequired => PropertyInfo.IsDefined(typeof(RequiredMemberAttribute), false);
 }
