@@ -82,6 +82,13 @@ internal class TypeUrlResolver
         {
             if (memberId is not null)
             {
+                int parenthesisIndex = memberId.IndexOf('(');
+
+                if (parenthesisIndex != -1)
+                {
+                    memberId = memberId[..parenthesisIndex];
+                }
+
                 return $"{url}.{memberId.ToLower(CultureInfo.InvariantCulture)}";
             }
             else
