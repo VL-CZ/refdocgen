@@ -15,7 +15,7 @@ namespace RefDocGen.UnitTests.CodeElements.Tools;
 public class MemberIdTests
 {
     [Fact]
-    public void Of_ReturnsMemberName_WhenNoParameters()
+    public void Of_ReturnsMemberName_ForMethodWithoutParameters()
     {
         var method = MockMethodData("Execute", typeof(void), []);
 
@@ -23,7 +23,7 @@ public class MemberIdTests
     }
 
     [Fact]
-    public void Of_ReturnsCorrectData_ForSingleParameter()
+    public void Of_ReturnsCorrectData_ForMethodWithASingleParameter()
     {
         var param = MockParameter(typeof(string));
         var method = MockMethodData("Execute", typeof(void), [param]);
@@ -32,7 +32,7 @@ public class MemberIdTests
     }
 
     [Fact]
-    public void Of_ReturnsCorrectData_ForSingleRefParameter()
+    public void Of_ReturnsCorrectData_ForMethodWithASingleRefParameter()
     {
         var param = MockParameter(typeof(string), true);
         var method = MockMethodData("Execute", typeof(void), [param]);
@@ -53,7 +53,7 @@ public class MemberIdTests
     }
 
     [Fact]
-    public void Of_ReturnsCorrectData_ForMultipleParameters()
+    public void Of_ReturnsCorrectData_ForMethodWithMultipleParameters()
     {
         var param1 = MockParameter(typeof(string));
         var param2 = MockParameter(typeof(Type));
@@ -84,6 +84,21 @@ public class MemberIdTests
         operatorData.ExplicitInterfaceType.ReturnsNull();
 
         MemberId.Of(operatorData).Should().Be("op_Explicit(System.Reflection.MemberInfo)~MyApp.MyClass");
+    }
+
+    [Fact]
+    public void Of_ReturnsCorrectData_ForIndexer()
+    {
+        var param = MockParameter(typeof(int));
+
+        var indexerData = Substitute.For<IIndexerData>();
+
+        indexerData.Name.Returns("Item");
+        indexerData.Parameters.Returns([param]);
+        indexerData.IsExplicitImplementation.Returns(false);
+        indexerData.ExplicitInterfaceType.ReturnsNull();
+
+        MemberId.Of(indexerData).Should().Be("Item(System.Int32)");
     }
 
     /// <summary>

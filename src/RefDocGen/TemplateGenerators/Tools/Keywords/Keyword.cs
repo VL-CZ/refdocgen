@@ -40,7 +40,6 @@ internal enum Keyword
     This,
     Virtual,
     Void,
-    Volatile,
     Where,
     PrivateProtected,
     ProtectedInternal
