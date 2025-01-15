@@ -15,23 +15,30 @@ namespace RefDocGen.UnitTests.TemplateGenerators.Tools;
 /// </remarks>
 public class TypeUrlResolverTests
 {
+    /// <summary>
+    /// Resolver of the type pages URLs.
+    /// </summary>
     private readonly TypeUrlResolver typeUrlResolver;
-    private static readonly string[] typeId = new[] { "MyApp.Person", "MyApp.Dictionary`2" };
+
+    /// <summary>
+    /// IDs of the types contained in the type registry.
+    /// </summary>
+    private static readonly string[] declaredTypeIds = ["MyApp.Person", "MyApp.Dictionary`2"];
 
     public TypeUrlResolverTests()
     {
         var typeRegistry = Substitute.For<ITypeRegistry>();
 
         var person = Substitute.For<ITypeDeclaration>();
-        var animal = Substitute.For<ITypeDeclaration>();
+        var dictionary = Substitute.For<ITypeDeclaration>();
 
         typeRegistry.GetDeclaredType("MyApp.Person")
             .Returns(person);
 
         typeRegistry.GetDeclaredType("MyApp.Dictionary`2")
-            .Returns(animal);
+            .Returns(dictionary);
 
-        typeRegistry.GetDeclaredType(Arg.Is<string>(a => !typeId.Contains(a)))
+        typeRegistry.GetDeclaredType(Arg.Is<string>(t => !declaredTypeIds.Contains(t)))
             .ReturnsNull();
 
         typeUrlResolver = new TypeUrlResolver(typeRegistry);
@@ -40,7 +47,7 @@ public class TypeUrlResolverTests
 
     [Theory]
     [InlineData("MyApp.Person", "./MyApp.Person.html")]
-    [InlineData("MyApp.Dictionary`2", "./MyApp.Dictionary`2.html")]
+    [InlineData("MyApp.Dictionary`2", "./MyApp.Dictionary%602.html")]
     public void GetUrlOf_ReturnsCorrectData_ForDeclaredType(string typeId, string expectedUrl)
     {
         string? result = typeUrlResolver.GetUrlOf(typeId);
@@ -50,7 +57,7 @@ public class TypeUrlResolverTests
 
     [Theory]
     [InlineData("MyApp.Person", "Name", "./MyApp.Person.html#Name")]
-    [InlineData("MyApp.Dictionary`2", "Add(System.String,`0)", "./MyApp.Dictionary`2.html#Add(System.String,`0)")]
+    [InlineData("MyApp.Dictionary`2", "Add(System.String,`0)", "./MyApp.Dictionary%602.html#Add%28System.String%2C%600%29")]
     public void GetUrlOf_ReturnsCorrectData_ForDeclaredTypeAndMember(string typeId, string memberId, string expectedUrl)
     {
         string? result = typeUrlResolver.GetUrlOf(typeId, memberId);
