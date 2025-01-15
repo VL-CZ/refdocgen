@@ -1,5 +1,3 @@
-using RefDocGen.CodeElements.Abstract.Types;
-
 namespace RefDocGen.CodeElements.Abstract.Members;
 
 /// <summary>
@@ -15,14 +13,4 @@ public interface IExecutableMemberData : ICallableMemberData
     /// </summary>
     IReadOnlyList<IParameterData> Parameters { get; }
 
-    /// <summary>
-    /// Collection of generic type parameters declared in the member.
-    /// </summary>
-    IReadOnlyList<ITypeParameterData> TypeParameters { get; }
-
-    /// <summary>
-    /// Checks if the member represents a constructor.
-    /// </summary>
-    /// <returns><c>true</c> if the member represents a constructor, <c>false</c> otherwise.</returns>
-    bool IsConstructor { get; }
 }

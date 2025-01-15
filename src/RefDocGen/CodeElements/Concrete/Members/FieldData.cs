@@ -3,6 +3,7 @@ using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace RefDocGen.CodeElements.Concrete.Members;
 
@@ -47,4 +48,7 @@ internal class FieldData : MemberData, IFieldData
     public object? ConstantValue => IsConstant
         ? FieldInfo.GetRawConstantValue()
         : DBNull.Value;
+
+    /// <inheritdoc/>
+    public bool IsRequired => FieldInfo.IsDefined(typeof(RequiredMemberAttribute), false);
 }

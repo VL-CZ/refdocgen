@@ -18,11 +18,15 @@ internal class ParameterData : IParameterData
     /// </summary>
     /// <param name="parameterInfo"><see cref="System.Reflection.ParameterInfo"/> object representing the parameter.</param>
     /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    public ParameterData(ParameterInfo parameterInfo, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
+    /// <param name="isExtensionParameter">
+    /// <inheritdoc cref="IsExtensionParameter" path="/summary"/>
+    /// </param>
+    public ParameterData(ParameterInfo parameterInfo, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters, bool isExtensionParameter = false)
     {
         ParameterInfo = parameterInfo;
         Type = parameterInfo.ParameterType.GetTypeNameData(availableTypeParameters);
         DocComment = XmlDocElements.EmptyParamWithName(Name);
+        IsExtensionParameter = isExtensionParameter;
     }
 
     /// <inheritdoc/>
@@ -54,5 +58,8 @@ internal class ParameterData : IParameterData
 
     /// <inheritdoc/>
     public object? DefaultValue => ParameterInfo.RawDefaultValue;
+
+    /// <inheritdoc/>
+    public bool IsExtensionParameter { get; }
 }
 

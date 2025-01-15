@@ -1,5 +1,4 @@
 using RefDocGen.CodeElements.Abstract.Members;
-using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
@@ -21,28 +20,25 @@ internal class IndexerData : PropertyData, IIndexerData
     {
         // add parameters
         Parameters = propertyInfo.GetIndexParameters()
-            .OrderBy(p => p.Position)
             .Select(p => new ParameterData(p, availableTypeParameters))
-            .ToArray();
+            .ToDictionary(p => p.Name);
+
+        ExplicitInterfaceType = Tools.ExplicitInterfaceType.Of((IPropertyData)this);
     }
 
     /// <inheritdoc/>
     public override string Id => MemberId.Of(this);
 
     /// <summary>
-    /// Array of index parameters, ordered by their position.
+    /// Dictionary of index parameters, the keys represent parameter names.
     /// </summary>
-    public IReadOnlyList<ParameterData> Parameters { get; }
+    internal IReadOnlyDictionary<string, ParameterData> Parameters { get; }
 
     /// <inheritdoc/>
-    public IReadOnlyList<ITypeParameterData> TypeParameters => [];
+    public override ITypeNameData? ExplicitInterfaceType { get; }
 
     /// <inheritdoc/>
-    public override ITypeNameData? ExplicitInterfaceType => null;
-
-    /// <inheritdoc/>
-    public bool IsConstructor => false;
-
-    /// <inheritdoc/>
-    IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters;
+    IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters.Values
+        .OrderBy(p => p.Position)
+        .ToList();
 }

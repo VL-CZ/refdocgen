@@ -58,12 +58,14 @@ internal class DelegateTypeData : TypeDeclaration, IDelegateTypeData
     }
 
     /// <summary>
-    /// List of delegate method parameters, indexed by their position.
+    /// List of delegate method parameters, the keys represent its names.
     /// </summary>
-    public IReadOnlyList<ParameterData> Parameters => invokeMethod.Parameters;
+    public IReadOnlyDictionary<string, ParameterData> Parameters => invokeMethod.Parameters;
 
     /// <inheritdoc/>
-    IReadOnlyList<IParameterData> IDelegateTypeData.Parameters => Parameters;
+    IReadOnlyList<IParameterData> IDelegateTypeData.Parameters => Parameters.Values
+        .OrderBy(p => p.Position)
+        .ToList();
 
     /// <inheritdoc/>
     IReadOnlyList<ITypeParameterData> ITypeDeclaration.TypeParameterDeclarations =>

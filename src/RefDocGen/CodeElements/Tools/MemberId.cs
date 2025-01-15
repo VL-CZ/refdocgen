@@ -16,28 +16,9 @@ internal class MemberId
     {
         string id = Of((ICallableMemberData)member); // get the ID without parameters
 
-        // add type parameter count (if any)
-        int typeParamsCount = member.TypeParameters.Count;
-        if (typeParamsCount > 0)
-        {
-            id += $"``{typeParamsCount}";
-        }
+        id += GetParameterString(member.Parameters); // append parameters string
 
-        if (member.Parameters.Count == 0)
-        {
-            return id; // no params -> don't append anything
-        }
-        else
-        {
-            // Get the parameters in the format: System.String, System.Int32, etc.
-            var parameterNames = member.Parameters.Select(
-                        p => p.IsByRef
-                            ? p.Type.Id + "@" // if the param is passed by reference, add '@' suffix
-                            : p.Type.Id
-            );
-
-            return id + "(" + string.Join(",", parameterNames) + ")";
-        }
+        return id;
     }
 
     /// <summary>
@@ -59,16 +40,61 @@ internal class MemberId
     }
 
     /// <summary>
+    /// Get the ID of the given <paramref name="method"/>
+    /// </summary>
+    /// <param name="method">The method, whose ID is returned.</param>
+    /// <returns>The ID of the given <paramref name="method"/></returns>
+    internal static string Of(IMethodData method)
+    {
+        string id = Of((ICallableMemberData)method); // get the ID without parameters
+
+        // add type parameter count (if any)
+        int typeParamsCount = method.TypeParameters.Count;
+        if (typeParamsCount > 0)
+        {
+            id += $"``{typeParamsCount}";
+        }
+
+        id += GetParameterString(method.Parameters); // append parameters string
+
+        return id;
+    }
+
+    /// <summary>
     /// Get the ID of the given <paramref name="operatorData"/>
     /// </summary>
     /// <param name="operatorData">The operator, whose ID is returned.</param>
     /// <returns>The ID of the given <paramref name="operatorData"/></returns>
     internal static string Of(IOperatorData operatorData)
     {
-        string operatorMethodId = Of((IExecutableMemberData)operatorData);
+        string operatorMethodId = Of((IMethodData)operatorData);
 
         return operatorData.IsConversionOperator
             ? operatorMethodId + "~" + operatorData.ReturnType.Id // for conversion operator, we need to append the return type
             : operatorMethodId;
+    }
+
+    /// <summary>
+    /// Get the ID of the given parameters list.
+    /// </summary>
+    /// <param name="parameters">The list of parameters, whose ID is returned.</param>
+    /// <returns>The ID of the given <paramref name="parameters"/> list.</returns>
+    private static string GetParameterString(IReadOnlyList<IParameterData> parameters)
+    {
+        if (parameters.Count == 0)
+        {
+            return ""; // no params -> return an empty string
+        }
+        else
+        {
+            // Get the parameters in the format: System.String, System.Int32, etc.
+            var parameterNames = parameters.Select(
+                        p => p.IsByRef
+                            ? p.Type.Id + "@" // if the param is passed by reference, add '@' suffix
+                            : p.Type.Id
+            );
+
+            return "(" + string.Join(",", parameterNames) + ")";
+        }
     }
 }

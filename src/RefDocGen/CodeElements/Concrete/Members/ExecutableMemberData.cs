@@ -1,10 +1,8 @@
 using RefDocGen.CodeElements.Abstract.Members;
-using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.Exception;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
-using RefDocGen.Tools;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -25,29 +23,11 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
     /// Create new <see cref="ExecutableMemberData"/> instance.
     /// </summary>
     /// <param name="methodBase"><see cref="MethodBase"/> object representing the member.</param>
-    /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; keys represent type parameter names.</param>
     /// <param name="containingType">Type that contains the member.</param>
-    protected ExecutableMemberData(MethodBase methodBase, TypeDeclaration containingType, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
+    protected ExecutableMemberData(MethodBase methodBase, TypeDeclaration containingType)
         : base(methodBase, containingType)
     {
         this.methodBase = methodBase;
-
-        // add type parameters
-        TypeParameterDeclarations = !IsConstructor
-            ? methodBase.GetGenericArguments()
-                .Select((ga, i) => new TypeParameterData(ga, i, CodeElementKind.Member))
-                .ToDictionary(t => t.Name)
-            : []; // constructors can't declare generic type parameters
-
-        // add the dicitonaries
-        var allParams = availableTypeParameters
-            .Merge(TypeParameterDeclarations);
-
-        // add parameters
-        Parameters = methodBase.GetParameters()
-            .OrderBy(p => p.Position)
-            .Select(p => new ParameterData(p, allParams))
-            .ToArray();
     }
 
     /// <inheritdoc/>
@@ -82,32 +62,21 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
     public bool IsVirtual => methodBase.IsVirtual;
 
     /// <summary>
-    /// Array of method parameters, ordered by their position.
+    /// Dictionary of method parameters, the keys represents parameter names.
     /// </summary>
-    internal IReadOnlyList<ParameterData> Parameters { get; }
+    internal abstract IReadOnlyDictionary<string, ParameterData> Parameters { get; }
 
     /// <inheritdoc/>
-    IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters;
+    IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters.Values
+        .OrderBy(p => p.Position)
+        .ToList();
 
     /// <inheritdoc/>
     public IEnumerable<IExceptionDocumentation> DocumentedExceptions { get; internal set; } = [];
-
-    /// <summary>
-    /// Collection of type parameters declared in the member; the keys represent type parameter names.
-    /// </summary>
-    internal IReadOnlyDictionary<string, TypeParameterData> TypeParameterDeclarations { get; } = new Dictionary<string, TypeParameterData>();
-
-    /// <inheritdoc/>
-    IReadOnlyList<ITypeParameterData> IExecutableMemberData.TypeParameters => TypeParameterDeclarations.Values
-        .OrderBy(t => t.Index)
-        .ToList();
 
     /// <inheritdoc/>
     public bool IsExplicitImplementation => ExplicitInterfaceType is not null;
 
     /// <inheritdoc/>
-    public abstract ITypeNameData? ExplicitInterfaceType { get; }
-
-    /// <inheritdoc/>
-    public abstract bool IsConstructor { get; }
+    public virtual ITypeNameData? ExplicitInterfaceType => Tools.ExplicitInterfaceType.Of(this);
 }

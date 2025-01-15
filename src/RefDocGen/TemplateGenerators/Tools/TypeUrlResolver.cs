@@ -67,21 +67,29 @@ internal class TypeUrlResolver
     {
         if (typeRegistry.GetDeclaredType(typeId) is not null) // the type is found in the type registry
         {
-            string uriEncodedString = Uri.EscapeDataString(typeId);
+            string uriEncodedType = Uri.EscapeDataString(typeId);
 
             if (memberId is not null)
             {
-                return $"./{uriEncodedString}.html#{memberId}";
+                string uriEncodedMember = Uri.EscapeDataString(memberId);
+                return $"./{uriEncodedType}.html#{uriEncodedMember}"; // append member string
             }
             else
             {
-                return $"./{uriEncodedString}.html";
+                return $"./{uriEncodedType}.html";
             }
         }
         else if (GetSystemTypeUrl(typeId) is string url) // the type is found in the .NET API docs
         {
-            if (memberId is not null)
+            if (memberId is not null) // append member string
             {
+                int parenthesisIndex = memberId.IndexOf('(');
+
+                if (parenthesisIndex != -1)
+                {
+                    memberId = memberId[..parenthesisIndex];
+                }
+
                 return $"{url}.{memberId.ToLower(CultureInfo.InvariantCulture)}";
             }
             else

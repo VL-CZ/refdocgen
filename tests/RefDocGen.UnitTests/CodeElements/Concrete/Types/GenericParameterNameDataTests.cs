@@ -19,12 +19,12 @@ public class GenericTypeParameterNameDataTests
     private class Helper<TKey, TValue> { }
 
     /// <summary>
-    /// Collection of type parameters declared in the containing type; the keys represent type parameter names.
+    /// Collection of type parameters available; the keys represent type parameter names.
     /// <para>
     /// These data should be passed to <see cref="GenericTypeParameterNameData"/> constructor.
     /// </para>
     /// </summary>
-    private readonly IReadOnlyDictionary<string, TypeParameterData> declaredTypeParameters;
+    private readonly IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters;
 
     public GenericTypeParameterNameDataTests()
     {
@@ -37,7 +37,7 @@ public class GenericTypeParameterNameDataTests
         var tMethodTypeMock = Substitute.For<Type>();
         tValueMock.Name.Returns("TMethodType");
 
-        declaredTypeParameters = new Dictionary<string, TypeParameterData>()
+        availableTypeParameters = new Dictionary<string, TypeParameterData>()
         {
             ["TKey"] = new TypeParameterData(tKeyMock, 0, CodeElementKind.Type),
             ["TValue"] = new TypeParameterData(tValueMock, 1, CodeElementKind.Type),
@@ -51,7 +51,7 @@ public class GenericTypeParameterNameDataTests
         var typeMock = Substitute.For<Type>();
         typeMock.Name.Returns("TValue");
 
-        var gp = new GenericTypeParameterNameData(typeMock, declaredTypeParameters);
+        var gp = new GenericTypeParameterNameData(typeMock, availableTypeParameters);
 
         string expectedId = "`1";
 
@@ -63,7 +63,7 @@ public class GenericTypeParameterNameDataTests
     {
         var type = typeof(Helper<,>).GetGenericArguments()[0].MakeArrayType(); // get 'TKey[]' type.
 
-        var gp = new GenericTypeParameterNameData(type, declaredTypeParameters);
+        var gp = new GenericTypeParameterNameData(type, availableTypeParameters);
 
         string expectedId = "`0[]";
 
@@ -75,7 +75,7 @@ public class GenericTypeParameterNameDataTests
     {
         var type = typeof(Helper<,>).GetGenericArguments()[0].MakePointerType(); // get 'TKey*' type.
 
-        var gp = new GenericTypeParameterNameData(type, declaredTypeParameters);
+        var gp = new GenericTypeParameterNameData(type, availableTypeParameters);
 
         string expectedId = "`0*";
 
@@ -88,7 +88,7 @@ public class GenericTypeParameterNameDataTests
         var typeMock = Substitute.For<Type>();
         typeMock.Name.Returns("TMethodType");
 
-        var gp = new GenericTypeParameterNameData(typeMock, declaredTypeParameters);
+        var gp = new GenericTypeParameterNameData(typeMock, availableTypeParameters);
 
         string expectedId = "``0";
 

@@ -11,10 +11,10 @@ internal static class SealedKeyword
     /// <summary>
     /// Checks whether the 'sealed' keyword is present in the provided type definition.
     /// </summary>
-    /// <param name="typeData">Type that we check for 'sealed' keyword.</param>
+    /// <param name="type">Type that we check for 'sealed' keyword.</param>
     /// <returns>Boolean representing if the 'sealed' keyword is present in the type definition.</returns>
-    internal static bool IsPresentIn(IObjectTypeData typeData)
+    internal static bool IsPresentIn(IObjectTypeData type)
     {
-        return typeData.IsSealed && typeData.Kind == TypeKind.Class;
+        return type.IsSealed && type.Kind == TypeKind.Class && !type.IsAbstract;
     }
 }

@@ -1,9 +1,12 @@
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
+using RefDocGen.Tools;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Concrete.Members;
@@ -20,13 +23,33 @@ internal class MethodData : ExecutableMemberData, IMethodData
     /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
     /// <param name="containingType">Type that contains the member.</param>
     internal MethodData(MethodInfo methodInfo, TypeDeclaration containingType, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
-        : base(methodInfo, containingType, availableTypeParameters)
+        : base(methodInfo, containingType)
     {
         MethodInfo = methodInfo;
         ReturnType = methodInfo.ReturnType.GetTypeNameData(availableTypeParameters);
+        IsExtensionMethod = MethodInfo.IsDefined(typeof(ExtensionAttribute), true);
 
-        ExplicitInterfaceType = Tools.ExplicitInterfaceType.Of(this);
+        // add type parameters
+        TypeParameterDeclarations = methodInfo.GetGenericArguments()
+                .Select((ga, i) => new TypeParameterData(ga, i, CodeElementKind.Member))
+                .ToDictionary(t => t.Name);
+
+        // add the dicitonaries
+        var allParams = availableTypeParameters
+            .Merge(TypeParameterDeclarations);
+
+        // add parameters
+        Parameters = methodInfo.GetParameters()
+            .Select((p, index) =>
+            {
+                return new ParameterData(
+                    p, allParams, IsExtensionMethod && index == 0);
+            })
+            .ToDictionary(t => t.Name);
     }
+
+    /// <inheritdoc/>
+    public override string Id => MemberId.Of(this);
 
     /// <inheritdoc/>
     public override string Name => MemberName.Of(this);
@@ -48,8 +71,18 @@ internal class MethodData : ExecutableMemberData, IMethodData
     public override bool OverridesAnotherMember => !MethodInfo.Equals(MethodInfo.GetBaseDefinition());
 
     /// <inheritdoc/>
-    public override bool IsConstructor => false;
+    public bool IsExtensionMethod { get; }
+
+    /// <summary>
+    /// Collection of type parameters declared in the member; the keys represent type parameter names.
+    /// </summary>
+    internal IReadOnlyDictionary<string, TypeParameterData> TypeParameterDeclarations { get; }
 
     /// <inheritdoc/>
-    public override ITypeNameData? ExplicitInterfaceType { get; }
+    IReadOnlyList<ITypeParameterData> IMethodData.TypeParameters => TypeParameterDeclarations.Values
+        .OrderBy(t => t.Index)
+        .ToList();
+
+    /// <inheritdoc/>
+    internal override IReadOnlyDictionary<string, ParameterData> Parameters { get; }
 }

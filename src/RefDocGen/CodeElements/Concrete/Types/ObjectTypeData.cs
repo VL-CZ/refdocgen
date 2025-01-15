@@ -79,6 +79,9 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
             : TypeKind.Class;
 
     /// <inheritdoc/>
+    public bool IsByRefLike => TypeObject.IsByRefLike;
+
+    /// <inheritdoc/>
     IEnumerable<IConstructorData> IObjectTypeData.Constructors => Constructors.Values;
 
     /// <inheritdoc/>

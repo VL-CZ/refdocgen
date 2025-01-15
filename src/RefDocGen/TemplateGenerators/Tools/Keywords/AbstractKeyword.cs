@@ -12,11 +12,11 @@ internal static class AbstractKeyword
     /// <summary>
     /// Checks whether the 'abstract' keyword is present in the provided type definition.
     /// </summary>
-    /// <param name="typeData">Type that we check for 'abstract' keyword.</param>
+    /// <param name="type">Type that we check for 'abstract' keyword.</param>
     /// <returns>Boolean representing if the 'abstract' keyword is present in the type definition.</returns>
-    internal static bool IsPresentIn(IObjectTypeData typeData)
+    internal static bool IsPresentIn(IObjectTypeData type)
     {
-        return typeData.IsAbstract && typeData.Kind == TypeKind.Class;
+        return type.IsAbstract && type.Kind == TypeKind.Class && !type.IsSealed;
     }
 
     /// <summary>
