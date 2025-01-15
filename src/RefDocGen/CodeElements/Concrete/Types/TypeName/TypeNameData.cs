@@ -8,10 +8,15 @@ namespace RefDocGen.CodeElements.Concrete.Types.TypeName;
 /// <para>
 /// Doesn't include any type member data (such as fields, methods, etc.)
 /// </para>
+/// </summary>
+/// <remarks>
 /// <para>
 /// Note: this class doesn't represent generic type parameters (see <see cref="GenericTypeParameterNameData"/>).
 /// </para>
-/// </summary>
+/// <para>
+/// Note: this class doesn't repreesent declaration of a type (see <see cref="TypeDeclaration"/>).
+/// </para>
+/// </remarks>
 internal class TypeNameData : TypeNameBaseData, ITypeNameData
 {
     /// <summary>
@@ -35,23 +40,10 @@ internal class TypeNameData : TypeNameBaseData, ITypeNameData
     { }
 
     /// <inheritdoc/>
-    public override string Id
-    {
-        get
-        {
-            string name = FullName;
-
-            if (HasTypeParameters)
-            {
-                name = name + '{' + string.Join(",", TypeParameters.Select(p => p.Id)) + '}';
-            }
-
-            return name;
-        }
-    }
+    public override string Id => TypeId.Of(this);
 
     /// <inheritdoc/>
-    public bool HasTypeParameters => TypeObject.IsGenericType;
+    public override bool HasTypeParameters => TypeObject.IsGenericType;
 
     /// <inheritdoc/>
     public IReadOnlyList<ITypeNameData> TypeParameters { get; }
@@ -68,5 +60,6 @@ internal class TypeNameData : TypeNameBaseData, ITypeNameData
     /// <inheritdoc/>
     public bool IsGenericParameter => false;
 
-    public string IdWithParameterNames => Id;
+    /// <inheritdoc/>
+    public string TypeDeclarationId => TypeId.Of(this, true);
 }

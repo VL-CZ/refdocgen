@@ -77,7 +77,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             operators,
             indexers,
             events,
-            GetTemplateModels(type.TypeParameterDeclarations),
+            GetTemplateModels(type.TypeParameters),
             baseType,
             interfaces,
             GetHtmlStrings(type.SeeAlsoDocComments)

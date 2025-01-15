@@ -129,9 +129,7 @@ internal class TypeRegistry : ITypeRegistry
         foreach (var parentType in parentTypes)
         {
             // convert the ID: TODO refactor
-            string parentId = parentType.HasTypeParameters
-                ? $"{parentType.FullName}`{parentType.TypeParameters.Count}"
-                : parentType.Id;
+            string parentId = parentType.TypeDeclarationId;
 
             // the parent type is contained in the type registry
             if (GetDeclaredType(parentId) is TypeDeclaration parent)

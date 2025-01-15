@@ -57,6 +57,11 @@ public interface ITypeNameBaseData
     /// </para>
     /// </summary>
     string Namespace { get; }
+
+    /// <summary>
+    /// Checks whether the type has any type parameters.
+    /// </summary>
+    bool HasTypeParameters { get; }
 }
 
 #pragma warning restore CA1716

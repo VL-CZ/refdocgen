@@ -34,7 +34,7 @@ internal class DelegateTMCreator : TypeTMCreator
             GetTypeLink(delegateType.ReturnType),
             delegateType.ReturnType.IsVoid,
             GetTemplateModels(delegateType.Parameters),
-            GetTemplateModels(delegateType.TypeParameterDeclarations),
+            GetTemplateModels(delegateType.TypeParameters),
             GetHtmlStrings(delegateType.SeeAlsoDocComments),
             GetTemplateModels(delegateType.Exceptions));
     }

@@ -56,4 +56,7 @@ internal abstract class TypeNameBaseData : ITypeNameBaseData
 
     /// <inheritdoc/>
     public string Namespace => TypeObject.Namespace ?? string.Empty;
+
+    /// <inheritdoc/>
+    public abstract bool HasTypeParameters { get; }
 }

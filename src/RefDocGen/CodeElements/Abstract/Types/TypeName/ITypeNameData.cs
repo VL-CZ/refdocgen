@@ -1,3 +1,5 @@
+using RefDocGen.CodeElements.Concrete.Types;
+
 namespace RefDocGen.CodeElements.Abstract.Types.TypeName;
 
 /// <summary>
@@ -11,11 +13,6 @@ namespace RefDocGen.CodeElements.Abstract.Types.TypeName;
 /// </summary>
 public interface ITypeNameData : ITypeNameBaseData
 {
-    /// <summary>
-    /// Checks whether the type has any type parameters.
-    /// </summary>
-    bool HasTypeParameters { get; }
-
     /// <summary>
     /// Checks whether the type is a generic type parameter.
     /// </summary>
@@ -40,5 +37,9 @@ public interface ITypeNameData : ITypeNameBaseData
     /// Checks whether the type is a pointer.
     /// </summary>
     bool IsPointer { get; }
-}
 
+    /// <summary>
+    /// Id of the type in the type declaration format (i.e. the same format as <see cref="TypeDeclaration.Id"/>).
+    /// </summary>
+    string TypeDeclarationId { get; }
+}

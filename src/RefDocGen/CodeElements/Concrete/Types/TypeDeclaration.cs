@@ -15,15 +15,15 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     /// Initializes a new instance of the <see cref="TypeNameBaseData"/> class.
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
-    /// <param name="typeParameterDeclarations">Collection of the type parameters declared in the type; the keys represent type parameter names.</param>
-    protected TypeDeclaration(Type type, IReadOnlyDictionary<string, TypeParameterData> typeParameterDeclarations) : base(type)
+    /// <param name="typeParameters">Collection of the type parameters declared in the type; the keys represent type parameter names.</param>
+    protected TypeDeclaration(Type type, IReadOnlyDictionary<string, TypeParameterData> typeParameters) : base(type)
     {
-        TypeParameterDeclarations = typeParameterDeclarations;
+        TypeParameters = typeParameters;
 
-        BaseType = type.BaseType?.GetTypeNameData(typeParameterDeclarations);
+        BaseType = type.BaseType?.GetTypeNameData(typeParameters);
 
         Interfaces = type.GetInterfaces()
-            .Select(i => i.GetTypeNameData(typeParameterDeclarations))
+            .Select(i => i.GetTypeNameData(typeParameters))
             .ToArray();
     }
 
@@ -46,7 +46,15 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
             TypeObject.IsNestedFamANDAssem,
             TypeObject.IsNestedFamORAssem);
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Identifier of the type. Consists of fully qualified type name, backtick symbol and type parameters count
+    /// <example>
+    /// Example: for <c>MyNamespace.MyClass&lt;T1,T2&gt;</c> it returns
+    /// <code>
+    /// MyNamespace.MyClass`2
+    /// </code>
+    /// </example>
+    /// </summary>
     public override string Id => TypeId.Of(this);
 
     /// <inheritdoc/>
@@ -59,7 +67,7 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     public IEnumerable<XElement> SeeAlsoDocComments { get; internal set; } = [];
 
     /// <inheritdoc/>
-    public bool HasTypeParameters => TypeParameterDeclarations.Count > 0;
+    public override bool HasTypeParameters => TypeParameters.Count > 0;
 
     /// <inheritdoc/>
     public ITypeNameData? BaseType { get; }
@@ -70,29 +78,13 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     /// <summary>
     /// Collection of type parameters declared in this type; the keys represent type parameter names.
     /// </summary>
-    public IReadOnlyDictionary<string, TypeParameterData> TypeParameterDeclarations { get; }
+    public IReadOnlyDictionary<string, TypeParameterData> TypeParameters { get; }
 
     /// <inheritdoc/>
-    IReadOnlyList<ITypeParameterData> ITypeDeclaration.TypeParameterDeclarations =>
-        TypeParameterDeclarations.Values.OrderBy(t => t.Index).ToList();
-
-    /// <inheritdoc/>
-    bool ITypeNameData.IsGenericParameter => false;
-
-    /// <inheritdoc/>
-    bool ITypeNameData.IsArray => false;
-
-    /// <inheritdoc/>
-    bool ITypeNameData.IsVoid => false;
-
-    /// <inheritdoc/>
-    IReadOnlyList<ITypeNameData> ITypeNameData.TypeParameters => TypeParameterDeclarations.Values
+    IReadOnlyList<ITypeParameterData> ITypeDeclaration.TypeParameters =>
+        TypeParameters.Values
         .OrderBy(t => t.Index)
-        .Select(tp => tp.TypeObject.GetTypeNameData(TypeParameterDeclarations))
         .ToList();
-
-    /// <inheritdoc/>
-    bool ITypeNameData.IsPointer => false;
 
     /// <summary>
     /// Dictionary of all members declared in the type; keys are the corresponding member IDs.

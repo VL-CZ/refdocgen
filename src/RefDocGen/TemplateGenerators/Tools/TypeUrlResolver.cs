@@ -49,9 +49,7 @@ internal class TypeUrlResolver
             type = type.TypeObject.GetBaseElementType().GetTypeNameData();
         }
 
-        string typeId = type.HasTypeParameters // TODO: fix
-                ? $"{type.FullName}`{type.TypeParameters.Count}"
-                : type.Id;
+        string typeId = type.TypeDeclarationId;
 
         return GetUrlOf(typeId);
     }
