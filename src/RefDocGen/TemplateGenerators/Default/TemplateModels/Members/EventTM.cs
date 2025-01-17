@@ -5,6 +5,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <summary>
 /// Represents the template model for an event.
 /// </summary>
+/// <param name="Id">Identifier of the event.</param>
 /// <param name="Name">Name of the event.</param>
 /// <param name="Type">Type of the event.</param>
 /// <param name="SummaryDocComment"><c>summary</c> documentation comment for the event. <c>null</c> if the doc comment is not provided.</param>
@@ -15,10 +16,11 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// A collection of user-documented exceptions (using the <c>exception</c> XML tag) that the event might throw.
 /// </param>
 public record EventTM(
+    string Id,
     string Name,
     TypeLinkTM Type,
+    string[] Modifiers,
     string? SummaryDocComment,
     string? RemarksDocComment,
-    IEnumerable<string> Modifiers,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions);

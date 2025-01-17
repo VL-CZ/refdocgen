@@ -27,14 +27,14 @@ internal class DelegateTMCreator : TypeTMCreator
             delegateType.Id,
             delegateType.ShortName,
             delegateType.Namespace,
-            ToHtmlString(delegateType.SummaryDocComment),
-            ToHtmlString(delegateType.RemarksDocComment),
             modifiers.GetStrings(),
-            ToHtmlString(delegateType.ReturnValueDocComment),
             GetTypeLink(delegateType.ReturnType),
             delegateType.ReturnType.IsVoid,
             GetTemplateModels(delegateType.Parameters),
             GetTemplateModels(delegateType.TypeParameters),
+            ToHtmlString(delegateType.SummaryDocComment),
+            ToHtmlString(delegateType.RemarksDocComment),
+            ToHtmlString(delegateType.ReturnValueDocComment),
             GetHtmlStrings(delegateType.SeeAlsoDocComments),
             GetTemplateModels(delegateType.Exceptions));
     }

@@ -5,6 +5,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <summary>
 /// Represents the template model for a field.
 /// </summary>
+/// <param name="Id">Identifier of the field.</param>
 /// <param name="Name">Name of the field.</param>
 /// <param name="Type">Type of the field.</param>
 /// <param name="SummaryDocComment"><c>summary</c> documentation comment for the field. <c>null</c> if the doc comment is not provided.</param>
@@ -18,10 +19,11 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// </para>
 /// </param>
 public record FieldTM(
+    string Id,
     string Name,
     TypeLinkTM Type,
+    string[] Modifiers,
+    string? ConstantValue,
     string? SummaryDocComment,
     string? RemarksDocComment,
-    IEnumerable<string> Modifiers,
-    string[] SeeAlsoDocComments,
-    string? ConstantValue);
+    string[] SeeAlsoDocComments);

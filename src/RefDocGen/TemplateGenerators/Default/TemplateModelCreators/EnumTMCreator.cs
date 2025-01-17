@@ -23,18 +23,18 @@ internal class EnumTMCreator : TypeTMCreator
     /// <returns>A <see cref="EnumTypeTM"/> instance based on the provided <paramref name="enumType"/>.</returns>
     internal EnumTypeTM GetFrom(IEnumTypeData enumType)
     {
-        var enumMemberTMs = enumType.Members.Select(GetFrom);
+        var enumMemberTMs = enumType.Members.Select(GetFrom).ToArray();
         List<Keyword> modifiers = [enumType.AccessModifier.ToKeyword()];
 
         return new EnumTypeTM(
             enumType.Id,
             enumType.ShortName,
             enumType.Namespace,
+            modifiers.GetStrings(),
+            enumMemberTMs,
             ToHtmlString(enumType.SummaryDocComment),
             ToHtmlString(enumType.RemarksDocComment),
-            modifiers.GetStrings(),
-            GetHtmlStrings(enumType.SeeAlsoDocComments),
-            enumMemberTMs);
+            GetHtmlStrings(enumType.SeeAlsoDocComments));
     }
 
     /// <summary>
@@ -45,6 +45,7 @@ internal class EnumTMCreator : TypeTMCreator
     internal EnumMemberTM GetFrom(IEnumMemberData enumMember)
     {
         return new EnumMemberTM(
+            enumMember.Id,
             enumMember.Name,
             ToHtmlString(enumMember.SummaryDocComment),
             ToHtmlString(enumMember.RemarksDocComment),

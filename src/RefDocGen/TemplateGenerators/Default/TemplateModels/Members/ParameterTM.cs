@@ -18,6 +18,6 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 public record ParameterTM(
     string Name,
     TypeLinkTM Type,
-    string? DocComment,
-    IEnumerable<string> Modifiers,
-    string? DefaultValue);
+    string[] Modifiers,
+    string? DefaultValue,
+    string? DocComment);

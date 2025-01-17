@@ -17,8 +17,8 @@ public record EnumTypeTM(
     string Id,
     string Name,
     string Namespace,
+    string[] Modifiers,
+    EnumMemberTM[] Members,
     string? SummaryDocComment,
     string? RemarksDocComment,
-    IEnumerable<string> Modifiers,
-    string[] SeeAlsoDocComments,
-    IEnumerable<EnumMemberTM> Members) : ITemplateModelWithId;
+    string[] SeeAlsoDocComments) : ITemplateModelWithId;
