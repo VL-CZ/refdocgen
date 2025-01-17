@@ -18,6 +18,7 @@ internal class EnumMemberData : MemberData, IEnumMemberData
         : base(fieldInfo, containingType)
     {
         FieldInfo = fieldInfo;
+        Value = fieldInfo.GetRawConstantValue() ?? 0;
     }
 
     /// <inheritdoc/>
@@ -34,4 +35,7 @@ internal class EnumMemberData : MemberData, IEnumMemberData
 
     /// <inheritdoc/>
     public override bool IsStatic => false;
+
+    /// <inheritdoc/>
+    public object Value { get; }
 }

@@ -2,6 +2,7 @@ using RefDocGen.CodeElements.Abstract.Members.Enum;
 using RefDocGen.CodeElements.Abstract.Types.Enum;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
+using RefDocGen.TemplateGenerators.Tools;
 using RefDocGen.TemplateGenerators.Tools.DocComments.Html;
 using RefDocGen.TemplateGenerators.Tools.Keywords;
 
@@ -47,6 +48,7 @@ internal class EnumTMCreator : TypeTMCreator
         return new EnumMemberTM(
             enumMember.Id,
             enumMember.Name,
+            LiteralValueFormatter.Format(enumMember.Value),
             ToHtmlString(enumMember.SummaryDocComment),
             ToHtmlString(enumMember.RemarksDocComment),
             GetHtmlStrings(enumMember.SeeAlsoDocComments));
