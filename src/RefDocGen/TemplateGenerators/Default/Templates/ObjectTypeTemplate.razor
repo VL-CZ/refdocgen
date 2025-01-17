@@ -100,7 +100,7 @@
         @if (Model.BaseType is not null)
         {
             <div>
-                <i>Base type:</i>
+                <i>Base type:&nbsp;</i>
                 <samp class="text-secondary">
                     <TypeLink Type="@Model.BaseType" />
                 </samp>
@@ -111,7 +111,7 @@
         @if (Model.ImplementedInterfaces.Any())
         {
             <div>
-                <i>Implements:</i>
+                <i>Implements:&nbsp;</i>
                 <samp class="text-secondary">
                     @foreach (var iface in Model.ImplementedInterfaces)
                     {
