@@ -11,7 +11,7 @@
     <div class="col-md-12">
         @foreach (var field in Fields)
         {
-            <div class="border p-2 mb-2" id="@field.Name">
+            <div class="border p-2 mb-2" id="@field.Id">
                 <h6 class="mb-1">
                     <samp>
                         <span class="text-primary">
@@ -26,7 +26,9 @@
 
                         <LiteralValueSuffix Value="@field.ConstantValue" />
 
+                        <AnchorLink Id="@field.Id" />
                     </samp>
+
                 </h6>
 
                 <SummaryDoc DocComment="@field.SummaryDocComment" />

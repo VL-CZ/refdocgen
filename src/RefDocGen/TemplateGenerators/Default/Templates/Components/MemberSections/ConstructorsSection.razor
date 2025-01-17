@@ -14,7 +14,7 @@
     <div class="col-md-12">
         @foreach (var constructor in Constructors)
         {
-            <div class="border p-2 mb-2">
+            <div class="border p-2 mb-2" id="@constructor.Id">
                 <h6 class="mb-1">
                     <samp>
                         <span class="text-primary">
@@ -23,6 +23,8 @@
                         <span class="text-dark">
                             @TypeName
                         </span><ParametersString Parameters="@constructor.Parameters" />
+
+                        <AnchorLink Id="@constructor.Id" />
                     </samp>
 
                 </h6>

@@ -6,7 +6,7 @@ namespace RefDocGen.CodeElements.Abstract.Types;
 /// <summary>
 /// Represents a type declared in any of the assemblies analyzed.
 /// </summary>
-public interface ITypeDeclaration : ITypeNameData
+public interface ITypeDeclaration : ITypeNameBaseData
 {
     /// <summary>
     /// Access modifier of the type.
@@ -39,7 +39,7 @@ public interface ITypeDeclaration : ITypeNameData
     IReadOnlyList<ITypeNameData> Interfaces { get; }
 
     /// <summary>
-    /// Collection of generic type parameters declared in the delegate, ordered by their index.
+    /// Collection of generic type parameters declared in the type, ordered by their index.
     /// </summary>
-    IReadOnlyList<ITypeParameterData> TypeParameterDeclarations { get; }
+    IReadOnlyList<ITypeParameterData> TypeParameters { get; }
 }

@@ -11,7 +11,7 @@
     <div class="col-md-12">
         @foreach (var property in Properties)
         {
-            <div class="border p-2 mb-2">
+            <div class="border p-2 mb-2" id="@property.Id">
                 <h6 class="mb-1">
                     <samp>
                         <span class="text-primary">
@@ -30,6 +30,8 @@
                                          SetterModifiers="property.SetterModifiers" />
 
                         <LiteralValueSuffix Value="@property.ConstantValue" />
+
+                        <AnchorLink Id="@property.Id" />
                     </samp>
                 </h6>
 

@@ -53,6 +53,21 @@
         .display-6 {
             font-size: 1.5rem;
         }
+
+        html {
+            scroll-padding-top: 60px;
+        }
+
+        /* Style the anchor link */
+        .anchor-link {
+            visibility: hidden;
+            font-size: 1.25rem;
+        }
+
+        /* Reveal the anchor link on hover */
+        h6:hover .anchor-link {
+            visibility: visible;
+        }
     </style>
 </head>
 
@@ -85,7 +100,7 @@
         @if (Model.BaseType is not null)
         {
             <div>
-                <i>Base type:</i>
+                <i>Base type:&nbsp;</i>
                 <samp class="text-secondary">
                     <TypeLink Type="@Model.BaseType" />
                 </samp>
@@ -96,7 +111,7 @@
         @if (Model.ImplementedInterfaces.Any())
         {
             <div>
-                <i>Implements:</i>
+                <i>Implements:&nbsp;</i>
                 <samp class="text-secondary">
                     @foreach (var iface in Model.ImplementedInterfaces)
                     {

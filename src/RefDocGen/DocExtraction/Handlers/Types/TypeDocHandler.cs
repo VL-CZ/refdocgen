@@ -38,6 +38,6 @@ internal class TypeDocHandler
 
         // add 'typeparam' doc comments
         var typeParamElements = docComment.Descendants(XmlDocIdentifiers.TypeParam);
-        TypeParameterDocHelper.Add(typeParamElements, type.TypeParameterDeclarations);
+        TypeParameterDocHelper.Add(typeParamElements, type.TypeParameters);
     }
 }

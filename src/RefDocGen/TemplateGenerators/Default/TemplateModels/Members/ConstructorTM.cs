@@ -3,6 +3,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <summary>
 /// Represents the template model of a constructor.
 /// </summary>
+/// <param name="Id">Identifier of the constructor.</param>
 /// <param name="Parameters">Collection of the constructor parameters.</param>
 /// <param name="SummaryDocComment"><c>summary</c> documentation comment for the constructor. <c>null</c> if the doc comment is not provided.</param>
 /// <param name="RemarksDocComment"><c>remarks</c> documentation comment for the constructor. <c>null</c> if the doc comment is not provided.</param>
@@ -12,9 +13,10 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// A collection of user-documented exceptions (using the <c>exception</c> XML tag) the constructor might throw.
 /// </param>
 public record ConstructorTM(
-    IEnumerable<ParameterTM> Parameters,
+    string Id,
+    ParameterTM[] Parameters,
+    string[] Modifiers,
     string? SummaryDocComment,
     string? RemarksDocComment,
-    IEnumerable<string> Modifiers,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions);

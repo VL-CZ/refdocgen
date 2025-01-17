@@ -5,6 +5,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <summary>
 /// Represents the template model for a method.
 /// </summary>
+/// <param name="Id">Identifier of the method.</param>
 /// <param name="Name">Name of the method.</param>
 /// <param name="Parameters">Collection of the method parameters.</param>
 /// <param name="ReturnType">Return type of the method.</param>
@@ -19,14 +20,15 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// A collection of user-documented exceptions (using the <c>exception</c> XML tag) that the method might throw.
 /// </param>
 public record MethodTM(
+    string Id,
     string Name,
     ParameterTM[] Parameters,
     TypeParameterTM[] TypeParameters,
     TypeLinkTM ReturnType,
     bool ReturnsVoid,
+    string[] Modifiers,
     string? SummaryDocComment,
     string? RemarksDocComment,
     string? ReturnsDocComment,
-    IEnumerable<string> Modifiers,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions);

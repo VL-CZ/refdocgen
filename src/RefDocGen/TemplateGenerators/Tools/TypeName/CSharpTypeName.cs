@@ -87,7 +87,7 @@ internal static class CSharpTypeName
 
         if (type.HasTypeParameters)
         {
-            string genericParamsString = string.Join(", ", type.TypeParameterDeclarations.Select(tp => tp.Name));
+            string genericParamsString = string.Join(", ", type.TypeParameters.Select(tp => tp.Name));
             typeName += '<' + genericParamsString + '>'; // add generic params to the type name
         }
 

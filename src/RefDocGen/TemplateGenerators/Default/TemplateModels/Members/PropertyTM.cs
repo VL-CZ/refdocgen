@@ -5,6 +5,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <summary>
 /// Represents the template model for a property.
 /// </summary>
+/// <param name="Id">Identifier of the property.</param>
 /// <param name="Name">Name of the property.</param>
 /// <param name="Type">Type of the property.</param>
 /// <param name="SummaryDocComment"><c>summary</c> documentation comment for the property. <c>null</c> if the doc comment is not provided.</param>
@@ -26,16 +27,17 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// </para>
 /// </param>
 public record PropertyTM(
+    string Id,
     string Name,
     TypeLinkTM Type,
+    bool HasGetter,
+    bool HasSetter,
+    string[] Modifiers,
+    string[] GetterModifiers,
+    string[] SetterModifiers,
+    string? ConstantValue,
     string? SummaryDocComment,
     string? RemarksDocComment,
     string? ValueDocComment,
-    IEnumerable<string> Modifiers,
-    bool HasGetter,
-    bool HasSetter,
-    string[] GetterModifiers,
-    string[] SetterModifiers,
     string[] SeeAlsoDocComments,
-    ExceptionTM[] Exceptions,
-    string? ConstantValue);
+    ExceptionTM[] Exceptions);

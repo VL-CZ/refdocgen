@@ -146,9 +146,9 @@ internal abstract class TypeTMCreator
         return new ParameterTM(
             parameter.Name,
             GetTypeLink(parameter.Type),
-            ToHtmlString(parameter.DocComment),
             modifiers.GetStrings(),
-            defaultValue);
+            defaultValue,
+            ToHtmlString(parameter.DocComment));
     }
 
     /// <summary>

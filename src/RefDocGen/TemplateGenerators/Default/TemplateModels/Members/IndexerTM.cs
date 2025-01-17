@@ -5,6 +5,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <summary>
 /// Represents the template model for an indexer.
 /// </summary>
+/// <param name="Id">Identifier of the indexer.</param>
 /// <param name="Type">Type of the indexer.</param>
 /// <param name="Parameters">Collection of index parameters.</param>
 /// <param name="SummaryDocComment"><c>summary</c> documentation comment for the indexer. <c>null</c> if the doc comment is not provided.</param>
@@ -20,15 +21,16 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// A collection of user-documented exceptions (using the <c>exception</c> XML tag) that the indexer might throw.
 /// </param>
 public record IndexerTM(
-    ParameterTM[] Parameters,
+    string Id,
     TypeLinkTM Type,
+    ParameterTM[] Parameters,
+    bool HasGetter,
+    bool HasSetter,
+    string[] Modifiers,
+    string[] GetterModifiers,
+    string[] SetterModifiers,
     string? SummaryDocComment,
     string? RemarksDocComment,
     string? ValueDocComment,
-    IEnumerable<string> Modifiers,
-    bool HasGetter,
-    bool HasSetter,
-    string[] GetterModifiers,
-    string[] SetterModifiers,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions);

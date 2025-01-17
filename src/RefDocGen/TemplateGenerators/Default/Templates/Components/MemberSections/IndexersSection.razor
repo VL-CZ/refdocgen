@@ -11,7 +11,7 @@
     <div class="col-md-12">
         @foreach (var indexer in Indexers)
         {
-            <div class="border p-2 mb-2">
+            <div class="border p-2 mb-2" id="@indexer.Id">
                 <h6 class="mb-1">
                     <samp>
                         <span class="text-primary">
@@ -34,6 +34,8 @@
                                          HasSetter="indexer.HasSetter"
                                          GetterModifiers="indexer.GetterModifiers"
                                          SetterModifiers="indexer.SetterModifiers" />
+
+                        <AnchorLink Id="@indexer.Id" />
                     </samp>
                 </h6>
 

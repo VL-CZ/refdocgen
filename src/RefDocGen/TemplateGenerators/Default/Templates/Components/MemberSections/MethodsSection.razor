@@ -15,7 +15,7 @@
 
         @foreach (var method in Methods)
         {
-            <div class="border p-2 mb-2">
+            <div class="border p-2 mb-2" id="@method.Id">
                 <h6 class="mb-1">
                     <samp>
                         <span class="text-primary">
@@ -28,6 +28,7 @@
                             @method.Name
                         </span><TypeParametersString TypeParameters="@method.TypeParameters" /><ParametersString Parameters="@method.Parameters" />
 
+                        <AnchorLink Id="@method.Id" />
                     </samp>
                 </h6>
 

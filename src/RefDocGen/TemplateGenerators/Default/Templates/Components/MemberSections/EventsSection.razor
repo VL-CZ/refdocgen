@@ -11,7 +11,7 @@
     <div class="col-md-12">
         @foreach (var e in Events)
         {
-            <div class="border p-2 mb-2" id="@e.Name">
+            <div class="border p-2 mb-2" id="@e.Id">
                 <h6 class="mb-1">
                     <samp>
                         <span class="text-primary">
@@ -23,6 +23,8 @@
                         <span class="text-dark">
                             @e.Name
                         </span>
+
+                        <AnchorLink Id="@e.Id" />
                     </samp>
                 </h6>
 
