@@ -1,6 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Tools;
-using RefDocGen.Tools;
 
 namespace RefDocGen.CodeElements.Concrete.Types.TypeName;
 
