@@ -11,4 +11,9 @@ public interface IEnumMemberData : IMemberData
     /// <see cref="System.Reflection.FieldInfo"/> object representing the enum member.
     /// </summary>
     FieldInfo FieldInfo { get; }
+
+    /// <summary>
+    /// Integral value of the enum member.
+    /// </summary>
+    object Value { get; }
 }
