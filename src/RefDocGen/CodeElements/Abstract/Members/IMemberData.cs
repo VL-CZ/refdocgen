@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using System.Reflection;
 using System.Xml.Linq;
 

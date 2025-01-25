@@ -1,9 +1,9 @@
-using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Tools;
 using System.Reflection;
 
-namespace RefDocGen.CodeElements.Concrete.Types;
+namespace RefDocGen.CodeElements.Concrete.Types.Attribute;
 
 /// <inheritdoc/>
 internal class AttributeData : IAttributeData

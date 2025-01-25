@@ -1,5 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types.Enum;
 

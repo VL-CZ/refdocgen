@@ -6,6 +6,7 @@ using RefDocGen.CodeElements.Concrete.Types.Delegate;
 using RefDocGen.CodeElements.Concrete.Members.Enum;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements;
+using RefDocGen.CodeElements.Concrete.Types.Attribute;
 
 namespace RefDocGen.AssemblyAnalysis;
 
@@ -122,31 +123,31 @@ internal class AssemblyTypeExtractor
 
         // construct *Data objects
         var ctorModels = constructors
-            .Select(c => new ConstructorData(c, objectType, typeParameters))
+            .Select(c => new ConstructorData(c, objectType, typeParameters, GetAttributeData(c, typeParameters)))
             .ToDictionary(c => c.Id);
 
         var fieldModels = fields
-            .Select(f => new FieldData(f, objectType, typeParameters))
+            .Select(f => new FieldData(f, objectType, typeParameters, GetAttributeData(f, typeParameters)))
             .ToDictionary(f => f.Id);
 
         var propertyModels = properties
-            .Select(p => new PropertyData(p, objectType, typeParameters))
+            .Select(p => new PropertyData(p, objectType, typeParameters, GetAttributeData(p, typeParameters)))
             .ToDictionary(p => p.Id);
 
         var methodModels = methods
-            .Select(m => new MethodData(m, objectType, typeParameters))
+            .Select(m => new MethodData(m, objectType, typeParameters, GetAttributeData(m, typeParameters)))
             .ToDictionary(m => m.Id);
 
         var operatorModels = operators
-            .Select(m => new OperatorData(m, objectType, typeParameters))
+            .Select(m => new OperatorData(m, objectType, typeParameters, GetAttributeData(m, typeParameters)))
             .ToDictionary(m => m.Id);
 
         var indexerModels = indexers
-            .Select(m => new IndexerData(m, objectType, typeParameters))
+            .Select(m => new IndexerData(m, objectType, typeParameters, GetAttributeData(m, typeParameters)))
             .ToDictionary(m => m.Id);
 
         var eventModels = events
-            .Select(e => new EventData(e, objectType, typeParameters))
+            .Select(e => new EventData(e, objectType, typeParameters, GetAttributeData(e, typeParameters)))
             .ToDictionary(e => e.Id);
 
         // add the members
@@ -162,7 +163,8 @@ internal class AssemblyTypeExtractor
     /// <returns><see cref="EnumTypeData"/> object representing the enum.</returns>
     private EnumTypeData ConstructEnum(Type type)
     {
-        var attributeData = GetAttributeData(type, new Dictionary<string, TypeParameterData>());
+        var emptyTypeParams = new Dictionary<string, TypeParameterData>();
+        var attributeData = GetAttributeData(type, emptyTypeParams);
 
         var enumType = new EnumTypeData(type, attributeData);
 
@@ -170,7 +172,7 @@ internal class AssemblyTypeExtractor
             .GetFields(bindingFlags)
             .Where(f => !f.IsCompilerGenerated()
                 && !f.IsSpecialName) // exclude '_value' field.
-            .Select(f => new EnumMemberData(f, enumType))
+            .Select(f => new EnumMemberData(f, enumType, GetAttributeData(f, emptyTypeParams)))
             .ToDictionary(v => v.Id);
 
         enumType.AddMembers(enumValues);

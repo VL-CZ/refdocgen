@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types.TypeName;

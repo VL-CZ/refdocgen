@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Abstract.Types.Exception;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 
 namespace RefDocGen.CodeElements.Concrete.Types.Delegate;
 

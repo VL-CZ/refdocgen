@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
@@ -13,10 +14,14 @@ internal class IndexerData : PropertyData, IIndexerData
     /// Create new instance of <see cref="IndexerData"/> class.
     /// </summary>
     /// <param name="propertyInfo"><see cref="PropertyInfo"/> object representing the indexer.</param>
-    /// <param name="containingType"> Type that contains the member.</param>
-    /// <param name="availableTypeParameters"></param>
-    internal IndexerData(PropertyInfo propertyInfo, TypeDeclaration containingType, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
-        : base(propertyInfo, containingType, availableTypeParameters)
+    /// <param name="containingType">Type that contains the member.</param>
+    /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
+    /// <param name="attributes">Collection of attributes applied to the indexer.</param>
+    internal IndexerData(
+        PropertyInfo propertyInfo,
+        TypeDeclaration containingType,
+        IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters,
+        IReadOnlyList<IAttributeData> attributes) : base(propertyInfo, containingType, availableTypeParameters, attributes)
     {
         // add parameters
         Parameters = propertyInfo.GetIndexParameters()

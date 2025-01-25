@@ -1,5 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
@@ -22,8 +23,12 @@ internal class MethodData : ExecutableMemberData, IMethodData
     /// <param name="methodInfo"><see cref="System.Reflection.MethodInfo"/> object representing the method.</param>
     /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
     /// <param name="containingType">Type that contains the member.</param>
-    internal MethodData(MethodInfo methodInfo, TypeDeclaration containingType, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
-        : base(methodInfo, containingType)
+    /// <param name="attributes">Collection of attributes applied to the method.</param>
+    internal MethodData(
+        MethodInfo methodInfo,
+        TypeDeclaration containingType,
+        IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters,
+        IReadOnlyList<IAttributeData> attributes) : base(methodInfo, containingType, attributes)
     {
         MethodInfo = methodInfo;
         ReturnType = methodInfo.ReturnType.GetTypeNameData(availableTypeParameters);
@@ -48,15 +53,20 @@ internal class MethodData : ExecutableMemberData, IMethodData
             .ToDictionary(t => t.Name);
     }
 
+    /// <inheritdoc cref="MethodData(MethodInfo, TypeDeclaration, IReadOnlyDictionary{string, TypeParameterData}, IReadOnlyList{IAttributeData})"/>
+    internal MethodData(MethodInfo methodInfo, TypeDeclaration containingType, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
+        : this(methodInfo, containingType, availableTypeParameters, [])
+    { }
+
+    /// <inheritdoc cref="MethodData(MethodInfo, TypeDeclaration, IReadOnlyDictionary{string, TypeParameterData}, IReadOnlyList{IAttributeData})"/>
+    internal MethodData(MethodInfo methodInfo, TypeDeclaration containingType) : this(methodInfo, containingType, new Dictionary<string, TypeParameterData>())
+    { }
+
     /// <inheritdoc/>
     public override string Id => MemberId.Of(this);
 
     /// <inheritdoc/>
     public override string Name => MemberName.Of(this);
-
-    /// <inheritdoc cref="MethodData(MethodInfo, TypeDeclaration, IReadOnlyDictionary{string, TypeParameterData})"/>
-    internal MethodData(MethodInfo methodInfo, TypeDeclaration containingType) : this(methodInfo, containingType, new Dictionary<string, TypeParameterData>())
-    { }
 
     /// <inheritdoc/>
     public MethodInfo MethodInfo { get; }

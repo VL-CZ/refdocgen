@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.Exception;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
@@ -24,8 +25,9 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
     /// </summary>
     /// <param name="methodBase"><see cref="MethodBase"/> object representing the member.</param>
     /// <param name="containingType">Type that contains the member.</param>
-    protected ExecutableMemberData(MethodBase methodBase, TypeDeclaration containingType)
-        : base(methodBase, containingType)
+    /// <param name="attributes">Collection of attributes applied to the member.</param>
+    protected ExecutableMemberData(MethodBase methodBase, TypeDeclaration containingType, IReadOnlyList<IAttributeData> attributes)
+        : base(methodBase, containingType, attributes)
     {
         this.methodBase = methodBase;
     }

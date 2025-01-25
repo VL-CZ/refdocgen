@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
@@ -18,8 +19,12 @@ internal class FieldData : MemberData, IFieldData
     /// <param name="fieldInfo"><see cref="System.Reflection.FieldInfo"/> object representing the field.</param>
     /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
     /// <param name="containingType">Type that contains the member.</param>
-    internal FieldData(FieldInfo fieldInfo, TypeDeclaration containingType, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
-        : base(fieldInfo, containingType)
+    /// <param name="attributes">Collection of attributes applied to the field.</param>
+    internal FieldData(
+        FieldInfo fieldInfo,
+        TypeDeclaration containingType,
+        IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters,
+        IReadOnlyList<IAttributeData> attributes) : base(fieldInfo, containingType, attributes)
     {
         FieldInfo = fieldInfo;
         Type = fieldInfo.FieldType.GetTypeNameData(availableTypeParameters);

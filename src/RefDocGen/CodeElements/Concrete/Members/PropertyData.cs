@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.Exception;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
@@ -21,8 +22,12 @@ internal class PropertyData : MemberData, IPropertyData
     /// <param name="propertyInfo"><see cref="System.Reflection.PropertyInfo"/> object representing the property.</param>
     /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
     /// <param name="containingType">Type that contains the member.</param>
-    internal PropertyData(PropertyInfo propertyInfo, TypeDeclaration containingType, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters) :
-        base(propertyInfo, containingType)
+    /// <param name="attributes">Collection of attributes applied to the property.</param>
+    internal PropertyData(
+        PropertyInfo propertyInfo,
+        TypeDeclaration containingType,
+        IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters,
+        IReadOnlyList<IAttributeData> attributes) : base(propertyInfo, containingType, attributes)
     {
         PropertyInfo = propertyInfo;
         Type = propertyInfo.PropertyType.GetTypeNameData(availableTypeParameters);

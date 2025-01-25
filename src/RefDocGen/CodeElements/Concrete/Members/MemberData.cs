@@ -1,5 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 using RefDocGen.Tools.Xml;
@@ -18,10 +19,12 @@ internal abstract class MemberData : IMemberData
     /// </summary>
     /// <param name="memberInfo"><see cref="MemberInfo"/> object representing the member.</param>
     /// <param name="containingType">Type that contains the member.</param>
-    protected MemberData(MemberInfo memberInfo, TypeDeclaration containingType)
+    /// <param name="attributes">Collection of attributes applied to the member.</param>
+    protected MemberData(MemberInfo memberInfo, TypeDeclaration containingType, IReadOnlyList<IAttributeData> attributes)
     {
         MemberInfo = memberInfo;
         ContainingType = containingType;
+        Attributes = attributes;
     }
 
     /// <inheritdoc/>

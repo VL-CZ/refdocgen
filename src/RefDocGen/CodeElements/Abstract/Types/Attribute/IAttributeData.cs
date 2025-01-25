@@ -1,7 +1,7 @@
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using System.Reflection;
 
-namespace RefDocGen.CodeElements.Abstract.Types;
+namespace RefDocGen.CodeElements.Abstract.Types.Attribute;
 
 /// <summary>
 /// Represents an attribute assigned to a type or member.

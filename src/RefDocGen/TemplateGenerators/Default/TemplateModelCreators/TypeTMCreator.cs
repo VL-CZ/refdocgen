@@ -1,5 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.Exception;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Members;

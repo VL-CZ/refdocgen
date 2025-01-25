@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.Exception;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
@@ -26,8 +27,12 @@ internal class EventData : MemberData, IEventData
     /// <param name="eventInfo"><see cref="System.Reflection.EventInfo"/> object representing the event.</param>
     /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
     /// <param name="containingType">Type that contains the member.</param>
-    internal EventData(EventInfo eventInfo, TypeDeclaration containingType, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
-        : base(eventInfo, containingType)
+    /// <param name="attributes">Collection of attributes applied to the event.</param>
+    internal EventData(
+        EventInfo eventInfo,
+        TypeDeclaration containingType,
+        IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters,
+        IReadOnlyList<IAttributeData> attributes) : base(eventInfo, containingType, attributes)
     {
         EventInfo = eventInfo;
         Type = eventInfo.EventHandlerType?.GetTypeNameData(availableTypeParameters)

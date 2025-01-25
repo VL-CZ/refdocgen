@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Members.Enum;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Concrete.Types;
 using System.Reflection;
 
@@ -14,8 +15,9 @@ internal class EnumMemberData : MemberData, IEnumMemberData
     /// </summary>
     /// <param name="fieldInfo"><see cref="System.Reflection.FieldInfo"/> object representing the enum member.</param>
     /// <param name="containingType">Type that contains the member.</param>
-    public EnumMemberData(FieldInfo fieldInfo, TypeDeclaration containingType)
-        : base(fieldInfo, containingType)
+    /// <param name="attributes">Collection of attributes applied to the enum member.</param>
+    public EnumMemberData(FieldInfo fieldInfo, TypeDeclaration containingType, IReadOnlyList<IAttributeData> attributes)
+        : base(fieldInfo, containingType, attributes)
     {
         FieldInfo = fieldInfo;
         Value = fieldInfo.GetRawConstantValue() ?? 0;
