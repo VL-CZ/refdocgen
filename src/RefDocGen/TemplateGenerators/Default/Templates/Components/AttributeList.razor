@@ -14,18 +14,8 @@
         {
             <div>
                 <samp>
-                    <span class="text-secondary">
-                        @if (attr.Url is not null)
-                        {
-                            <a href="@attr.Url" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
-                                @attr.Name
-                            </a>
-                        }
-                        else
-                        {
-                            @attr.Name
-                        }
-                    </span>
+                    <TypeLink Type="@attr.Type" />
+
                     @if (attr.ConstructorArguments.Any() || attr.NamedArguments.Any())
                     {
                         <span class="text-secondary">(</span>
@@ -45,11 +35,8 @@
 
                         @foreach (var namedArg in attr.NamedArguments)
                         {
-                            <TypeLink Type="@namedArg.Item1" />
-                            <text> = </text>
-                            <span class="text-success">
-                                @namedArg.Item2
-                            </span>
+                            <TypeLink Type="@namedArg.Name" />
+                            <LiteralValueSuffix Value="@namedArg.Value" />
                         }
                         <span class="text-secondary">)</span>
                     }

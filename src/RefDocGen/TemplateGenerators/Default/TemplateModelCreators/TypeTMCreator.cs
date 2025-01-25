@@ -216,21 +216,28 @@ internal abstract class TypeTMCreator
     /// <returns>A <see cref="AttributeTM"/> instance based on the provided <paramref name="attribute"/>.</returns>
     protected AttributeTM GetFrom(IAttributeData attribute)
     {
-        var attributeTypeLink = GetTypeLink(attribute.Type);
-
         string?[] constructorArgumentTMs = attribute.ConstructorArgumentValues.Select(LiteralValueFormatter.Format).ToArray();
+        var namedArgumentTMs = attribute.NamedArguments.Select(na => GetFrom(na, attribute)).ToArray();
 
         return new AttributeTM(
-               attributeTypeLink.Name,
-               attributeTypeLink.Url,
+               GetTypeLink(attribute.Type),
                constructorArgumentTMs,
-               attribute.NamedArguments.Select(na =>
-                   (new TypeLinkTM(
-                           na.Name,
-                           typeUrlResolver.GetUrlOf(attribute.Type.Id, na.Name)
-                       ),
-                   LiteralValueFormatter.Format(na.Value))
-               ).ToArray()
-        );
+               namedArgumentTMs);
+    }
+
+    /// <summary>
+    /// Creates a <see cref="NamedAttributeArgumentTM"/> instance based on the provided <see cref="NamedAttributeArgument"/> and <see cref="IAttributeData"/> objects.
+    /// </summary>
+    /// <param name="argument">The <see cref="NamedAttributeArgument"/> instance representing the attribute argument.</param>
+    /// <param name="attribute">The attribute containing the <paramref name="argument"/>.</param>
+    /// <returns>A <see cref="NamedAttributeArgumentTM"/> instance based on the provided <paramref name="argument"/> and <paramref name="attribute"/>.</returns>
+    protected NamedAttributeArgumentTM GetFrom(NamedAttributeArgument argument, IAttributeData attribute)
+    {
+        return new NamedAttributeArgumentTM(
+            new TypeLinkTM(
+                argument.Name,
+                typeUrlResolver.GetUrlOf(attribute.Type.Id, argument.Name)
+            ),
+            LiteralValueFormatter.Format(argument.Value));
     }
 }
