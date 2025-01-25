@@ -1,0 +1,60 @@
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Types
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required IEnumerable<AttributeTM> Attributes { get; set; }
+}
+
+@if (Attributes.Any())
+{
+    <h3 class="lead mt-3">Attributes</h3>
+    <div class="mx-2">
+        @foreach (var attr in Attributes)
+        {
+            <div>
+                <samp>
+                    <span class="text-secondary">
+                        @if (attr.Url is not null)
+                        {
+                            <a href="@attr.Url" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
+                                @attr.Name
+                            </a>
+                        }
+                        else
+                        {
+                            @attr.Name
+                        }
+                    </span>
+                    @if (attr.ConstructorArguments.Any() || attr.NamedArguments.Any())
+                    {
+                        <span class="text-secondary">(</span>
+                        @foreach (var ctorArg in attr.ConstructorArguments)
+                        {
+                            <span class="text-success">@ctorArg</span>
+                            @if (ctorArg != attr.ConstructorArguments.Last())
+                            {
+                                <span class="text-secondary">, </span>
+                            }
+                        }
+
+                        @if (attr.ConstructorArguments.Any() && attr.NamedArguments.Any())
+                        {
+                            <span class="text-secondary">, </span>
+                        }
+
+                        @foreach (var namedArg in attr.NamedArguments)
+                        {
+                            <TypeLink Type="@namedArg.Item1" />
+                            <text> = </text>
+                            <span class="text-success">
+                                @namedArg.Item2
+                            </span>
+                        }
+                        <span class="text-secondary">)</span>
+                    }
+                </samp>
+            </div>
+        }
+    </div>
+}

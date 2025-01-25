@@ -93,6 +93,18 @@ internal abstract class TypeTMCreator
     }
 
     /// <summary>
+    /// Converts each item of the enumerable into <see cref="AttributeTM"/> instance.
+    /// </summary>
+    /// <param name="attributes">An enumerable of the provided <see cref="IAttributeData" /> to convert.</param>
+    /// <returns>Enumerable of <see cref="AttributeTM"/> instances, corresponding to the provided attributes.</returns>
+    protected AttributeTM[] GetTemplateModels(IEnumerable<IAttributeData> attributes)
+    {
+        return attributes
+                .Select(GetFrom)
+                .ToArray();
+    }
+
+    /// <summary>
     /// Gets the <see cref="TypeLinkTM"/> from the provided <paramref name="type"/>.
     /// </summary>
     /// <param name="type">The provided type.</param>
@@ -194,5 +206,30 @@ internal abstract class TypeTMCreator
                 typeUrlResolver.GetUrlOf(exception.Id)
                 ),
             ToHtmlString(exception.DocComment));
+    }
+
+    /// <summary>
+    /// Creates a <see cref="AttributeTM"/> instance based on the provided <see cref="IAttributeData"/> object.
+    /// </summary>
+    /// <param name="attribute">The <see cref="IAttributeData"/> instance representing the attribute.</param>
+    /// <returns>A <see cref="AttributeTM"/> instance based on the provided <paramref name="attribute"/>.</returns>
+    protected AttributeTM GetFrom(IAttributeData attribute)
+    {
+        var attributeTypeLink = GetTypeLink(attribute.Type);
+
+        string?[] constructorArgumentTMs = attribute.ConstructorArgumentValues.Select(LiteralValueFormatter.Format).ToArray();
+
+        return new AttributeTM(
+               attributeTypeLink.Name,
+               attributeTypeLink.Url,
+               constructorArgumentTMs,
+               attribute.NamedArguments.Select(na =>
+                   (new TypeLinkTM(
+                           na.Name,
+                           typeUrlResolver.GetUrlOf(attribute.Type.Id, na.Name)
+                       ),
+                   LiteralValueFormatter.Format(na.Value))
+               ).ToArray()
+        );
     }
 }

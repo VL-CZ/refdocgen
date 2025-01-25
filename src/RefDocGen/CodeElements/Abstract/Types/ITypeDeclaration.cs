@@ -42,4 +42,9 @@ public interface ITypeDeclaration : ITypeNameBaseData
     /// Collection of generic type parameters declared in the type, ordered by their index.
     /// </summary>
     IReadOnlyList<ITypeParameterData> TypeParameters { get; }
+
+    /// <summary>
+    /// Collection of attributes assigned to the type.
+    /// </summary>
+    IReadOnlyList<IAttributeData> Attributes { get; }
 }

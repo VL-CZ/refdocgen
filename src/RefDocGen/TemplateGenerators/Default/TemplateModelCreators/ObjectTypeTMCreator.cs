@@ -78,10 +78,11 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             GetTemplateModels(type.TypeParameters),
             baseType,
             interfaces,
+            GetTemplateModels(type.Attributes),
             ToHtmlString(type.SummaryDocComment),
             ToHtmlString(type.RemarksDocComment),
             GetHtmlStrings(type.SeeAlsoDocComments)
-            );
+        );
     }
 
     /// <summary>

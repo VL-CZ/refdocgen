@@ -25,6 +25,11 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
         Interfaces = type.GetInterfaces()
             .Select(i => i.GetTypeNameData(typeParameters))
             .ToArray();
+
+        Attributes = type.GetCustomAttributesData()
+            .Where(a => a.AttributeType.Namespace != "System.Runtime.CompilerServices")
+            .Select(a => new AttributeData(a, typeParameters))
+            .ToArray();
     }
 
     /// <summary>
@@ -99,4 +104,7 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     /// </para>
     /// </summary>
     internal XElement? RawDocComment { get; set; }
+
+    /// <inheritdoc/>
+    public IReadOnlyList<IAttributeData> Attributes { get; }
 }
