@@ -113,13 +113,12 @@ internal class AssemblyTypeExtractor
             .GetEvents(bindingFlags)
             .Where(e => !e.IsCompilerGenerated());
 
-        var typeParameters = type
-            .GetGenericArguments()
-            .Select((ga, i) => new TypeParameterData(ga, i, CodeElementKind.Type))
-            .ToDictionary(t => t.Name);
+        var typeParameters = GetTypeParameters(type);
+
+        var attributeData = GetAttributeData(type, typeParameters);
 
         // construct the object type
-        var objectType = new ObjectTypeData(type, typeParameters);
+        var objectType = new ObjectTypeData(type, typeParameters, attributeData);
 
         // construct *Data objects
         var ctorModels = constructors
@@ -163,7 +162,9 @@ internal class AssemblyTypeExtractor
     /// <returns><see cref="EnumTypeData"/> object representing the enum.</returns>
     private EnumTypeData ConstructEnum(Type type)
     {
-        var enumType = new EnumTypeData(type);
+        var attributeData = GetAttributeData(type, new Dictionary<string, TypeParameterData>());
+
+        var enumType = new EnumTypeData(type, attributeData);
 
         var enumValues = type
             .GetFields(bindingFlags)
@@ -184,13 +185,27 @@ internal class AssemblyTypeExtractor
     /// <returns><see cref="DelegateTypeData"/> object representing the enum.</returns>
     private DelegateTypeData ConstructDelegate(Type type)
     {
-        var typeParameters = type
+        var typeParameters = GetTypeParameters(type);
+
+        var invokeMethod = type.GetMethod(delegateMethodName) ?? throw new ArgumentException("TODO");
+        var attributeData = GetAttributeData(type, typeParameters);
+
+        return new DelegateTypeData(type, invokeMethod, typeParameters, attributeData);
+    }
+
+    private AttributeData[] GetAttributeData(MemberInfo type, IReadOnlyDictionary<string, TypeParameterData> typeParameters)
+    {
+        return type.GetCustomAttributesData()
+            .Where(a => !a.IsCompilerGenerated())
+            .Select(a => new AttributeData(a, typeParameters))
+            .ToArray();
+    }
+
+    private Dictionary<string, TypeParameterData> GetTypeParameters(Type type)
+    {
+        return type
             .GetGenericArguments()
             .Select((ga, i) => new TypeParameterData(ga, i, CodeElementKind.Type))
             .ToDictionary(t => t.Name);
-
-        var invokeMethod = type.GetMethod(delegateMethodName) ?? throw new ArgumentException("TODO");
-
-        return new DelegateTypeData(type, invokeMethod, typeParameters);
     }
 }

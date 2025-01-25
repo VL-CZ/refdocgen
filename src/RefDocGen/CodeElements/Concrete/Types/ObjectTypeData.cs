@@ -26,8 +26,9 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
     /// <param name="typeParameterDeclarations">Collection of type parameters declared in this type; the keys represent type parameter names.</param>
-    public ObjectTypeData(Type type, IReadOnlyDictionary<string, TypeParameterData> typeParameterDeclarations)
-        : base(type, typeParameterDeclarations)
+    /// <param name="attributes">Collection of attributes applied to the type.</param>
+    public ObjectTypeData(Type type, IReadOnlyDictionary<string, TypeParameterData> typeParameterDeclarations, IReadOnlyList<IAttributeData> attributes)
+        : base(type, typeParameterDeclarations, attributes)
     { }
 
     /// <summary>

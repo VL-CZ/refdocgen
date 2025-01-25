@@ -1,6 +1,7 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Xml.Linq;
@@ -52,6 +53,9 @@ internal abstract class MemberData : IMemberData
 
     /// <inheritdoc/>
     ITypeDeclaration IMemberData.ContainingType => ContainingType;
+
+    /// <inheritdoc/>
+    public IReadOnlyList<IAttributeData> Attributes { get; }
 
     /// <summary>
     /// Raw doc comment provided to the member.

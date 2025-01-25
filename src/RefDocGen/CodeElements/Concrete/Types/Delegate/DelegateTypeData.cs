@@ -26,8 +26,9 @@ internal class DelegateTypeData : TypeDeclaration, IDelegateTypeData
     /// <param name="type"><see cref="Type"/> object representing the delegate.</param>
     /// <param name="invokeMethod"><c>Invoke</c> method of the delegate.</param>
     /// <param name="typeParameterDeclarations">Collection of the type parameters declared in this delegate; the keys represent type parameter names.</param>
-    public DelegateTypeData(Type type, MethodInfo invokeMethod, Dictionary<string, TypeParameterData> typeParameterDeclarations)
-        : base(type, typeParameterDeclarations)
+    /// <param name="attributes">Collection of attributes applied to the type.</param>
+    public DelegateTypeData(Type type, MethodInfo invokeMethod, Dictionary<string, TypeParameterData> typeParameterDeclarations, IReadOnlyList<IAttributeData> attributes)
+        : base(type, typeParameterDeclarations, attributes)
     {
         this.invokeMethod = new MethodData(invokeMethod, this, typeParameterDeclarations);
 

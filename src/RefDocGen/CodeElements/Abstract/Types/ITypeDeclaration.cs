@@ -44,7 +44,10 @@ public interface ITypeDeclaration : ITypeNameBaseData
     IReadOnlyList<ITypeParameterData> TypeParameters { get; }
 
     /// <summary>
-    /// Collection of attributes assigned to the type.
+    /// Collection of attributes applied to the type.
     /// </summary>
+    /// <remarks>
+    /// Note that the compiler generated attributes are not included.
+    /// </remarks>
     IReadOnlyList<IAttributeData> Attributes { get; }
 }
