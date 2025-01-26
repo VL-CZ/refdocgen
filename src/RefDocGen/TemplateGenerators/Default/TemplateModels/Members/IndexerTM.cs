@@ -20,6 +20,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <param name="Exceptions">
 /// A collection of user-documented exceptions (using the <c>exception</c> XML tag) that the indexer might throw.
 /// </param>
+/// <param name="Attributes">Array of attributes applied to the indexer.</param>
 public record IndexerTM(
     string Id,
     TypeLinkTM Type,
@@ -29,6 +30,7 @@ public record IndexerTM(
     string[] Modifiers,
     string[] GetterModifiers,
     string[] SetterModifiers,
+    AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,
     string? ValueDocComment,

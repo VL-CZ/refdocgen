@@ -15,11 +15,13 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <param name="Exceptions">
 /// A collection of user-documented exceptions (using the <c>exception</c> XML tag) that the event might throw.
 /// </param>
+/// <param name="Attributes">Array of attributes applied to the event.</param>
 public record EventTM(
     string Id,
     string Name,
     TypeLinkTM Type,
     string[] Modifiers,
+    AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,
     string[] SeeAlsoDocComments,

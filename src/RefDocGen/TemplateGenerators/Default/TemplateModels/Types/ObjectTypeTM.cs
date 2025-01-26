@@ -23,7 +23,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 /// <param name="BaseType">Base type of this type, null if the type doesn't have any base type.</param>
 /// <param name="ImplementedInterfaces">Collection of interfaces implemented by the type.</param>
 /// <param name="SeeAlsoDocComments">Collection of <c>seealso</c> documentation comments for the type.</param>
-/// <param name="Attributes">Array of attributes assigned to the type.</param>
+/// <param name="Attributes">Array of attributes applied to the type.</param>
 public record ObjectTypeTM(
     string Id,
     string Name,
