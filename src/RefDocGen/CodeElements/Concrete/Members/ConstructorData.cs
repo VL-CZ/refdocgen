@@ -20,21 +20,17 @@ internal class ConstructorData : ExecutableMemberData, IConstructorData
     /// Initializes a new instance of the <see cref="ConstructorData"/> class.
     /// </summary>
     /// <param name="constructorInfo"><see cref="System.Reflection.ConstructorInfo"/> object representing the constructor.</param>
-    /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
+    /// <param name="parameters">Dictionary of constructor parameters, the keys represent parameter names.</param>
     /// <param name="containingType">Type that contains the member.</param>
     /// <param name="attributes">Collection of attributes applied to the constructor.</param>
     internal ConstructorData(
         ConstructorInfo constructorInfo,
         TypeDeclaration containingType,
-        IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters,
+        IReadOnlyDictionary<string, ParameterData> parameters,
         IReadOnlyList<IAttributeData> attributes) : base(constructorInfo, containingType, attributes)
     {
         ConstructorInfo = constructorInfo;
-
-        // add parameters
-        Parameters = constructorInfo.GetParameters()
-            .Select(p => new ParameterData(p, availableTypeParameters))
-            .ToDictionary(p => p.Name);
+        Parameters = parameters;
     }
 
     /// <inheritdoc/>
@@ -48,7 +44,6 @@ internal class ConstructorData : ExecutableMemberData, IConstructorData
 
     /// <inheritdoc/>
     public override ITypeNameData? ExplicitInterfaceType => null; // the constructors can't be explicitly declared
-
 
     /// <inheritdoc/>
     internal override IReadOnlyDictionary<string, ParameterData> Parameters { get; }

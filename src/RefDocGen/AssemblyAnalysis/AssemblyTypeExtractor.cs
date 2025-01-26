@@ -114,44 +114,16 @@ internal class AssemblyTypeExtractor
             .GetEvents(bindingFlags)
             .Where(e => !e.IsCompilerGenerated());
 
-        var typeParameters = GetTypeParameters(type);
-
-        var attributeData = GetAttributeData(type, typeParameters);
-
-        // construct the object type
-        var objectType = new ObjectTypeData(type, typeParameters, attributeData);
-
-        // construct *Data objects
-        var ctorModels = constructors
-            .Select(c => new ConstructorData(c, objectType, typeParameters, GetAttributeData(c, typeParameters)))
-            .ToDictionary(c => c.Id);
-
-        var fieldModels = fields
-            .Select(f => new FieldData(f, objectType, typeParameters, GetAttributeData(f, typeParameters)))
-            .ToDictionary(f => f.Id);
-
-        var propertyModels = properties
-            .Select(p => new PropertyData(p, objectType, typeParameters, GetAttributeData(p, typeParameters)))
-            .ToDictionary(p => p.Id);
-
-        var methodModels = methods
-            .Select(m => new MethodData(m, objectType, typeParameters, GetAttributeData(m, typeParameters)))
-            .ToDictionary(m => m.Id);
-
-        var operatorModels = operators
-            .Select(m => new OperatorData(m, objectType, typeParameters, GetAttributeData(m, typeParameters)))
-            .ToDictionary(m => m.Id);
-
-        var indexerModels = indexers
-            .Select(m => new IndexerData(m, objectType, typeParameters, GetAttributeData(m, typeParameters)))
-            .ToDictionary(m => m.Id);
-
-        var eventModels = events
-            .Select(e => new EventData(e, objectType, typeParameters, GetAttributeData(e, typeParameters)))
-            .ToDictionary(e => e.Id);
-
-        // add the members
-        objectType.AddMembers(ctorModels, fieldModels, propertyModels, methodModels, operatorModels, indexerModels, eventModels);
+        // build the object type
+        var objectType = new ObjectTypeBuilder(type)
+            .WithConstructors(constructors)
+            .WithFields(fields)
+            .WithProperties(properties)
+            .WithIndexers(indexers)
+            .WithMethods(methods)
+            .WithOperators(operators)
+            .WithEvents(events)
+            .Build();
 
         return objectType;
     }
@@ -188,18 +160,34 @@ internal class AssemblyTypeExtractor
     private DelegateTypeData ConstructDelegate(Type type)
     {
         var typeParameters = GetTypeParameters(type);
-
-        var invokeMethod = type.GetMethod(delegateMethodName) ?? throw new ArgumentException("TODO");
         var attributeData = GetAttributeData(type, typeParameters);
 
-        return new DelegateTypeData(type, invokeMethod, typeParameters, attributeData);
+        var delegateType = new DelegateTypeData(type, typeParameters, attributeData);
+
+        var invokeMethodInfo = type.GetMethod(delegateMethodName) ?? throw new ArgumentException("TODO");
+
+        var parameters = invokeMethodInfo.GetParameters()
+            .Select((p, index) => new ParameterData(p, typeParameters, []))
+            .ToDictionary(p => p.Name);
+
+        var invokeMethod = new MethodData(
+            invokeMethodInfo,
+            delegateType,
+            parameters,
+            new Dictionary<string, TypeParameterData>(),
+            typeParameters,
+            []);
+
+        delegateType.AddInvokeMethod(invokeMethod);
+
+        return delegateType;
     }
 
-    private AttributeData[] GetAttributeData(MemberInfo type, IReadOnlyDictionary<string, TypeParameterData> typeParameters)
+    private AttributeData[] GetAttributeData(MemberInfo member, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
     {
-        return type.GetCustomAttributesData()
+        return member.GetCustomAttributesData()
             .Where(a => !a.IsCompilerGenerated())
-            .Select(a => new AttributeData(a, typeParameters))
+            .Select(a => new AttributeData(a, availableTypeParameters))
             .ToArray();
     }
 

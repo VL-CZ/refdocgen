@@ -68,7 +68,7 @@ public interface IMemberData
     ITypeDeclaration ContainingType { get; }
 
     /// <summary>
-    /// Collection of attributes assigned to the member.
+    /// Collection of attributes applied to the member.
     /// </summary>
     IReadOnlyList<IAttributeData> Attributes { get; }
 }

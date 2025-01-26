@@ -21,46 +21,28 @@ internal class MethodData : ExecutableMemberData, IMethodData
     /// Initializes a new instance of the <see cref="MethodData"/> class.
     /// </summary>
     /// <param name="methodInfo"><see cref="System.Reflection.MethodInfo"/> object representing the method.</param>
-    /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
+    /// <param name="typeParameterDeclarations">Collection of the type parameters declared by the method.</param>
+    /// <param name="availableTypeParameters">
+    /// Collection of type parameters declared in the containing type; the keys represent type parameter names.
+    /// Includes <paramref name="typeParameterDeclarations"/>.
+    /// </param>
     /// <param name="containingType">Type that contains the member.</param>
     /// <param name="attributes">Collection of attributes applied to the method.</param>
+    /// <param name="parameters">Dictionary of method parameters, the keys represent parameter names.</param>
     internal MethodData(
         MethodInfo methodInfo,
         TypeDeclaration containingType,
+        IReadOnlyDictionary<string, ParameterData> parameters,
+        IReadOnlyDictionary<string, TypeParameterData> typeParameterDeclarations,
         IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters,
         IReadOnlyList<IAttributeData> attributes) : base(methodInfo, containingType, attributes)
     {
         MethodInfo = methodInfo;
         ReturnType = methodInfo.ReturnType.GetTypeNameData(availableTypeParameters);
+        Parameters = parameters;
+        TypeParameterDeclarations = typeParameterDeclarations;
         IsExtensionMethod = MethodInfo.IsDefined(typeof(ExtensionAttribute), true);
-
-        // add type parameters
-        TypeParameterDeclarations = methodInfo.GetGenericArguments()
-                .Select((ga, i) => new TypeParameterData(ga, i, CodeElementKind.Member))
-                .ToDictionary(t => t.Name);
-
-        // add the dicitonaries
-        var allParams = availableTypeParameters
-            .Merge(TypeParameterDeclarations);
-
-        // add parameters
-        Parameters = methodInfo.GetParameters()
-            .Select((p, index) =>
-            {
-                return new ParameterData(
-                    p, allParams, IsExtensionMethod && index == 0);
-            })
-            .ToDictionary(t => t.Name);
     }
-
-    /// <inheritdoc cref="MethodData(MethodInfo, TypeDeclaration, IReadOnlyDictionary{string, TypeParameterData}, IReadOnlyList{IAttributeData})"/>
-    internal MethodData(MethodInfo methodInfo, TypeDeclaration containingType, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
-        : this(methodInfo, containingType, availableTypeParameters, [])
-    { }
-
-    /// <inheritdoc cref="MethodData(MethodInfo, TypeDeclaration, IReadOnlyDictionary{string, TypeParameterData}, IReadOnlyList{IAttributeData})"/>
-    internal MethodData(MethodInfo methodInfo, TypeDeclaration containingType) : this(methodInfo, containingType, new Dictionary<string, TypeParameterData>())
-    { }
 
     /// <inheritdoc/>
     public override string Id => MemberId.Of(this);

@@ -23,24 +23,26 @@ internal class PropertyData : MemberData, IPropertyData
     /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
     /// <param name="containingType">Type that contains the member.</param>
     /// <param name="attributes">Collection of attributes applied to the property.</param>
+    /// <param name="getterMethod">
+    /// <inheritdoc cref="Getter"/>
+    /// </param>
+    /// <param name="setterMethod">
+    /// <inheritdoc cref="Setter"/>
+    /// </param>
     internal PropertyData(
         PropertyInfo propertyInfo,
+        MethodData? getterMethod,
+        MethodData? setterMethod,
         TypeDeclaration containingType,
         IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters,
         IReadOnlyList<IAttributeData> attributes) : base(propertyInfo, containingType, attributes)
     {
         PropertyInfo = propertyInfo;
         Type = propertyInfo.PropertyType.GetTypeNameData(availableTypeParameters);
-
-        Getter = PropertyInfo.GetMethod is not null
-            ? new MethodData(PropertyInfo.GetMethod, containingType, availableTypeParameters)
-            : null;
-
-        Setter = PropertyInfo.SetMethod is not null
-            ? new MethodData(PropertyInfo.SetMethod, containingType, availableTypeParameters)
-            : null;
-
         ExplicitInterfaceType = Tools.ExplicitInterfaceType.Of(this);
+
+        (Getter, Setter) = (getterMethod, setterMethod);
+
     }
 
     /// <inheritdoc/>

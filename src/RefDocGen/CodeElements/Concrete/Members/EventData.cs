@@ -28,8 +28,12 @@ internal class EventData : MemberData, IEventData
     /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
     /// <param name="containingType">Type that contains the member.</param>
     /// <param name="attributes">Collection of attributes applied to the event.</param>
+    /// <param name="addMethod"><inheritdoc cref="addMethod"/></param>
+    /// <param name="removeMethod"><inheritdoc cref="removeMethod"/></param>
     internal EventData(
         EventInfo eventInfo,
+        MethodData? addMethod,
+        MethodData? removeMethod,
         TypeDeclaration containingType,
         IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters,
         IReadOnlyList<IAttributeData> attributes) : base(eventInfo, containingType, attributes)
@@ -38,17 +42,8 @@ internal class EventData : MemberData, IEventData
         Type = eventInfo.EventHandlerType?.GetTypeNameData(availableTypeParameters)
             ?? throw new ArgumentException("Cannot obtain event handler type.");
 
-        // construct the event methods
-        if (eventInfo.GetAddMethod(nonPublic: true) is MethodInfo addMethod)
-        {
-            this.addMethod = new MethodData(addMethod, containingType, availableTypeParameters);
-        }
-
-        if (eventInfo.GetRemoveMethod(nonPublic: true) is MethodInfo removeMethod)
-        {
-            this.removeMethod = new MethodData(removeMethod, containingType, availableTypeParameters);
-        }
-
+        this.addMethod = addMethod;
+        this.removeMethod = removeMethod;
     }
 
     /// <inheritdoc/>

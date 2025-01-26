@@ -14,12 +14,12 @@ public interface IPropertyData : IValueMemberData, ICallableMemberData
     PropertyInfo PropertyInfo { get; }
 
     /// <summary>
-    /// Gets the getter method represented as a <see cref="IMethodData"/> object, or <c>null</c> if no getter exists.
+    /// Getter method represented as a <see cref="IMethodData"/> object, or <c>null</c> if no getter exists.
     /// </summary>
     IMethodData? Getter { get; }
 
     /// <summary>
-    /// Gets the setter method represented as a <see cref="IMethodData"/> object, or <c>null</c> if no setter exists.
+    /// Setter method represented as a <see cref="IMethodData"/> object, or <c>null</c> if no setter exists.
     /// </summary>
     IMethodData? Setter { get; }
 

@@ -41,6 +41,7 @@ internal class EnumTypeData : TypeDeclaration, IEnumTypeData
     /// Adds the enum members to the enum.
     /// </summary>
     /// <param name="members">Dictionary containing the enum members; keys are the corresponding member IDs.</param>
+    /// <exception cref="InvalidOperationException">Thrown if the members have already been added.</exception>
     internal void AddMembers(IReadOnlyDictionary<string, EnumMemberData> members)
     {
         if (membersAdded)
