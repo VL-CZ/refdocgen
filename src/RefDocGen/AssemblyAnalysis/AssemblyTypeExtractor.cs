@@ -61,7 +61,7 @@ internal class AssemblyTypeExtractor
             .Except(enums)
             .Except(delegates);
 
-        // construct *Data objects
+        // construct types
         var enumData = enums
             .Select(ConstructEnum)
             .ToDictionary(t => t.Id);
