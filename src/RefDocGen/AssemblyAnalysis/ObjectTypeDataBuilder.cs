@@ -6,7 +6,7 @@ using System.Reflection;
 namespace RefDocGen.AssemblyAnalysis;
 
 /// <summary>
-/// Class responsible for building an <see cref="ObjectTypeData"/> instance.
+/// Class responsible for building an instance of <see cref="ObjectTypeData"/> class.
 /// </summary>
 internal class ObjectTypeDataBuilder
 {

@@ -4,7 +4,6 @@ using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
-using RefDocGen.Tools;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -35,12 +34,11 @@ internal class MethodData : ExecutableMemberData, IMethodData
         IReadOnlyDictionary<string, ParameterData> parameters,
         IReadOnlyDictionary<string, TypeParameterData> typeParameterDeclarations,
         IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters,
-        IReadOnlyList<IAttributeData> attributes) : base(methodInfo, containingType, attributes)
+        IReadOnlyList<IAttributeData> attributes) : base(methodInfo, containingType, parameters, attributes)
     {
         MethodInfo = methodInfo;
         ReturnType = methodInfo.ReturnType.GetTypeNameData(availableTypeParameters);
-        Parameters = parameters;
-        TypeParameterDeclarations = typeParameterDeclarations;
+        TypeParameters = typeParameterDeclarations;
         IsExtensionMethod = MethodInfo.IsDefined(typeof(ExtensionAttribute), true);
     }
 
@@ -66,15 +64,12 @@ internal class MethodData : ExecutableMemberData, IMethodData
     public bool IsExtensionMethod { get; }
 
     /// <summary>
-    /// Collection of type parameters declared in the member; the keys represent type parameter names.
+    /// Collection of type parameters declared in the method; the keys represent type parameter names.
     /// </summary>
-    internal IReadOnlyDictionary<string, TypeParameterData> TypeParameterDeclarations { get; }
+    internal IReadOnlyDictionary<string, TypeParameterData> TypeParameters { get; }
 
     /// <inheritdoc/>
-    IReadOnlyList<ITypeParameterData> IMethodData.TypeParameters => TypeParameterDeclarations.Values
+    IReadOnlyList<ITypeParameterData> IMethodData.TypeParameters => TypeParameters.Values
         .OrderBy(t => t.Index)
         .ToList();
-
-    /// <inheritdoc/>
-    internal override IReadOnlyDictionary<string, ParameterData> Parameters { get; }
 }

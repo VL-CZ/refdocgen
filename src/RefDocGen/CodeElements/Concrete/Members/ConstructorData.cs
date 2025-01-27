@@ -27,10 +27,9 @@ internal class ConstructorData : ExecutableMemberData, IConstructorData
         ConstructorInfo constructorInfo,
         TypeDeclaration containingType,
         IReadOnlyDictionary<string, ParameterData> parameters,
-        IReadOnlyList<IAttributeData> attributes) : base(constructorInfo, containingType, attributes)
+        IReadOnlyList<IAttributeData> attributes) : base(constructorInfo, containingType, parameters, attributes)
     {
         ConstructorInfo = constructorInfo;
-        Parameters = parameters;
     }
 
     /// <inheritdoc/>
@@ -44,8 +43,4 @@ internal class ConstructorData : ExecutableMemberData, IConstructorData
 
     /// <inheritdoc/>
     public override ITypeNameData? ExplicitInterfaceType => null; // the constructors can't be explicitly declared
-
-    /// <inheritdoc/>
-    internal override IReadOnlyDictionary<string, ParameterData> Parameters { get; }
 }
-

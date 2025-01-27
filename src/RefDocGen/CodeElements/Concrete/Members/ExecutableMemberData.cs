@@ -26,10 +26,16 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
     /// <param name="methodBase"><see cref="MethodBase"/> object representing the member.</param>
     /// <param name="containingType">Type that contains the member.</param>
     /// <param name="attributes">Collection of attributes applied to the member.</param>
-    protected ExecutableMemberData(MethodBase methodBase, TypeDeclaration containingType, IReadOnlyList<IAttributeData> attributes)
+    /// <param name="parameters">Dictionary of member parameters, the keys represent parameter names.</param>
+    protected ExecutableMemberData(
+        MethodBase methodBase,
+        TypeDeclaration containingType,
+        IReadOnlyDictionary<string, ParameterData> parameters,
+        IReadOnlyList<IAttributeData> attributes)
         : base(methodBase, containingType, attributes)
     {
         this.methodBase = methodBase;
+        Parameters = parameters;
     }
 
     /// <inheritdoc/>
@@ -66,7 +72,7 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
     /// <summary>
     /// Dictionary of method parameters, the keys represents parameter names.
     /// </summary>
-    internal abstract IReadOnlyDictionary<string, ParameterData> Parameters { get; }
+    internal IReadOnlyDictionary<string, ParameterData> Parameters { get; }
 
     /// <inheritdoc/>
     IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters.Values
