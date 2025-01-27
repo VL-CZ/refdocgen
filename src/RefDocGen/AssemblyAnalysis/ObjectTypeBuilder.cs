@@ -2,6 +2,7 @@ using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Concrete.Types.Attribute;
+using RefDocGen.Tools;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -185,13 +186,15 @@ internal class ObjectTypeBuilder
     private MethodData ConstructMethod(MethodInfo methodInfo)
     {
         bool isExtensionMethod = methodInfo.IsDefined(typeof(ExtensionAttribute), true);
+        var declaredtypeParameters = GetTypeParameters(methodInfo);
+        var availableTypeParameters = typeParameters.Merge(declaredtypeParameters);
 
         return new MethodData(
             methodInfo,
             type,
-            GetDictionary(methodInfo.GetParameters(), isExtensionMethod),
-            GetTypeParameters(methodInfo),
-            typeParameters,
+            GetDictionary(methodInfo.GetParameters(), availableTypeParameters, isExtensionMethod),
+            declaredtypeParameters,
+            availableTypeParameters,
             GetAttributeData(methodInfo));
     }
 
@@ -230,8 +233,13 @@ internal class ObjectTypeBuilder
             GetAttributeData(eventInfo));
     }
 
-    private Dictionary<string, ParameterData> GetDictionary(ParameterInfo[] parameters, bool hasExtensionParameter = false)
+    private Dictionary<string, ParameterData> GetDictionary(
+        ParameterInfo[] parameters,
+        IReadOnlyDictionary<string, TypeParameterData>? typeParameters = null,
+        bool hasExtensionParameter = false)
     {
+        typeParameters ??= this.typeParameters;
+
         return parameters
             .Select((p, index) => new ParameterData(
                 p,
