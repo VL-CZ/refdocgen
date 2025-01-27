@@ -22,6 +22,6 @@ internal static class FieldDataCreator
             field,
             containingType,
             availableTypeParameters,
-            Helper.GetAttributeData(field, availableTypeParameters));
+            MemberCreatorHelper.GetAttributeData(field, availableTypeParameters));
     }
 }

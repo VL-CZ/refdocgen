@@ -31,8 +31,8 @@ internal static class IndexerDataCreator
             getterMethod,
             setterMethod,
             containingType,
-            Helper.GetParametersDictionary(propertyInfo, availableTypeParameters),
+            MemberCreatorHelper.CreateParametersDictionary(propertyInfo, availableTypeParameters),
             availableTypeParameters,
-            Helper.GetAttributeData(propertyInfo, availableTypeParameters));
+            MemberCreatorHelper.GetAttributeData(propertyInfo, availableTypeParameters));
     }
 }

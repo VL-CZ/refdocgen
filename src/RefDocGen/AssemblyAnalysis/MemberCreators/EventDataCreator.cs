@@ -37,6 +37,6 @@ internal static class EventDataCreator
             removeMethod,
             containingType,
             availableTypeParameters,
-            Helper.GetAttributeData(eventInfo, availableTypeParameters));
+            MemberCreatorHelper.GetAttributeData(eventInfo, availableTypeParameters));
     }
 }

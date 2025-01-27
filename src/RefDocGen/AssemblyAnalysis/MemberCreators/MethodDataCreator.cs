@@ -19,15 +19,15 @@ internal static class MethodDataCreator
     /// <returns>A <see cref="MethodData"/> instance representing the method.</returns>
     internal static MethodData CreateFrom(MethodInfo methodInfo, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
     {
-        var declaredTypeParameters = Helper.GetTypeParametersDictionary(methodInfo);
+        var declaredTypeParameters = MemberCreatorHelper.CreateTypeParametersDictionary(methodInfo);
         var allTypeParameters = availableTypeParameters.Merge(declaredTypeParameters);
 
         return new MethodData(
             methodInfo,
             containingType,
-            Helper.GetParametersDictionary(methodInfo, allTypeParameters),
+            MemberCreatorHelper.CreateParametersDictionary(methodInfo, allTypeParameters),
             declaredTypeParameters,
             allTypeParameters,
-            Helper.GetAttributeData(methodInfo, allTypeParameters));
+            MemberCreatorHelper.GetAttributeData(methodInfo, allTypeParameters));
     }
 }

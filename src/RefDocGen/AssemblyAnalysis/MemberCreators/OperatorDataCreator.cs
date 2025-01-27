@@ -21,9 +21,9 @@ internal static class OperatorDataCreator
         return new OperatorData(
             methodInfo,
             containingType,
-            Helper.GetParametersDictionary(methodInfo, availableTypeParameters),
-            Helper.GetTypeParametersDictionary(methodInfo),
+            MemberCreatorHelper.CreateParametersDictionary(methodInfo, availableTypeParameters),
+            MemberCreatorHelper.CreateTypeParametersDictionary(methodInfo),
             availableTypeParameters,
-            Helper.GetAttributeData(methodInfo, availableTypeParameters));
+            MemberCreatorHelper.GetAttributeData(methodInfo, availableTypeParameters));
     }
 }

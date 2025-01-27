@@ -21,7 +21,7 @@ internal static class ConstructorDataCreator
         return new ConstructorData(
             constructor,
             containingType,
-            Helper.GetParametersDictionary(constructor, availableTypeParameters),
-            Helper.GetAttributeData(constructor, availableTypeParameters));
+            MemberCreatorHelper.CreateParametersDictionary(constructor, availableTypeParameters),
+            MemberCreatorHelper.GetAttributeData(constructor, availableTypeParameters));
     }
 }

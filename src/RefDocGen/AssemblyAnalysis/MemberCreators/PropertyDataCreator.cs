@@ -32,6 +32,6 @@ internal static class PropertyDataCreator
             setterMethod,
             containingType,
             availableTypeParameters,
-            Helper.GetAttributeData(property, availableTypeParameters));
+            MemberCreatorHelper.GetAttributeData(property, availableTypeParameters));
     }
 }

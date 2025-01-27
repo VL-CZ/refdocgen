@@ -113,7 +113,7 @@ internal class AssemblyTypeExtractor
             .Where(e => !e.IsCompilerGenerated());
 
         // build the object type
-        var objectType = new ObjectTypeBuilder(type)
+        var objectType = new ObjectTypeDataBuilder(type)
             .AddConstructors(constructors)
             .AddFields(fields)
             .AddProperties(properties)
@@ -134,7 +134,7 @@ internal class AssemblyTypeExtractor
     private EnumTypeData ConstructEnum(Type type)
     {
         var emptyTypeParams = new Dictionary<string, TypeParameterData>();
-        var attributeData = Helper.GetAttributeData(type, emptyTypeParams);
+        var attributeData = MemberCreatorHelper.GetAttributeData(type, emptyTypeParams);
 
         var enumType = new EnumTypeData(type, attributeData);
 
@@ -142,7 +142,7 @@ internal class AssemblyTypeExtractor
             .GetFields(bindingFlags)
             .Where(f => !f.IsCompilerGenerated()
                 && !f.IsSpecialName) // exclude '_value' field.
-            .Select(f => new EnumMemberData(f, enumType, Helper.GetAttributeData(f, emptyTypeParams)))
+            .Select(f => new EnumMemberData(f, enumType, MemberCreatorHelper.GetAttributeData(f, emptyTypeParams)))
             .ToIdDictionary();
 
         enumType.AddMembers(enumValues);
@@ -157,8 +157,8 @@ internal class AssemblyTypeExtractor
     /// <returns><see cref="DelegateTypeData"/> object representing the enum.</returns>
     private DelegateTypeData ConstructDelegate(Type type)
     {
-        var typeParameters = Helper.GetTypeParametersDictionary(type);
-        var attributeData = Helper.GetAttributeData(type, typeParameters);
+        var typeParameters = MemberCreatorHelper.CreateTypeParametersDictionary(type);
+        var attributeData = MemberCreatorHelper.GetAttributeData(type, typeParameters);
 
         var delegateType = new DelegateTypeData(type, typeParameters, attributeData);
 
