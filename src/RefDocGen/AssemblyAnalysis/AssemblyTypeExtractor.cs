@@ -38,9 +38,9 @@ internal class AssemblyTypeExtractor
     }
 
     /// <summary>
-    /// Get all the declared types in the assembly and return them as <see cref="ObjectTypeData"/> objects.
+    /// Get all the declared types in the assembly (including enums and delegates).
     /// </summary>
-    /// <returns>An array of <see cref="ObjectTypeData"/> objects representing the types in the assembly.</returns>
+    /// <returns>An instance of <see cref="TypeRegistry"/> class, containing all of the declared types.</returns>
     internal TypeRegistry GetDeclaredTypes()
     {
         var assembly = Assembly.LoadFrom(assemblyPath);
