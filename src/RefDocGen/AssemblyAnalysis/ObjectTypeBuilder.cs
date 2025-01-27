@@ -23,8 +23,8 @@ internal class ObjectTypeBuilder
 
     internal ObjectTypeBuilder(Type type)
     {
-        typeParameters = GetTypeParameters(type);
-        var attributeData = GetAttributeData(type);
+        typeParameters = Helper.GetTypeParametersDictionary(type);
+        var attributeData = Helper.GetAttributeData(type, typeParameters);
 
         // construct the object type
         this.type = new ObjectTypeData(type, typeParameters, attributeData);
@@ -33,8 +33,8 @@ internal class ObjectTypeBuilder
     internal ObjectTypeBuilder WithConstructors(IEnumerable<ConstructorInfo> constructors)
     {
         this.constructors = constructors
-            .Select(ConstructConstructor)
-            .ToDictionary(c => c.Id);
+            .Select(c => ConstructorDataCreator.CreateFrom(c, type, typeParameters))
+            .ToIdDictionary();
 
         return this;
     }
@@ -42,8 +42,8 @@ internal class ObjectTypeBuilder
     internal ObjectTypeBuilder WithFields(IEnumerable<FieldInfo> fields)
     {
         this.fields = fields
-            .Select(ConstructField)
-            .ToDictionary(c => c.Id);
+            .Select(f => FieldDataCreator.CreateFrom(f, type, typeParameters))
+            .ToIdDictionary();
 
         return this;
     }
@@ -51,8 +51,8 @@ internal class ObjectTypeBuilder
     internal ObjectTypeBuilder WithProperties(IEnumerable<PropertyInfo> properties)
     {
         this.properties = properties
-            .Select(ConstructProperty)
-            .ToDictionary(p => p.Id);
+            .Select(p => PropertyDataCreator.CreateFrom(p, type, typeParameters))
+            .ToIdDictionary();
 
         return this;
     }
@@ -60,8 +60,8 @@ internal class ObjectTypeBuilder
     internal ObjectTypeBuilder WithIndexers(IEnumerable<PropertyInfo> indexers)
     {
         this.indexers = indexers
-            .Select(ConstructIndexer)
-            .ToDictionary(p => p.Id);
+            .Select(i => IndexerDataCreator.CreateFrom(i, type, typeParameters))
+            .ToIdDictionary();
 
         return this;
     }
@@ -69,8 +69,8 @@ internal class ObjectTypeBuilder
     internal ObjectTypeBuilder WithMethods(IEnumerable<MethodInfo> methods)
     {
         this.methods = methods
-            .Select(ConstructMethod)
-            .ToDictionary(m => m.Id);
+            .Select(m => MethodDataCreator.CreateFrom(m, type, typeParameters))
+            .ToIdDictionary();
 
         return this;
     }
@@ -78,8 +78,8 @@ internal class ObjectTypeBuilder
     internal ObjectTypeBuilder WithOperators(IEnumerable<MethodInfo> operators)
     {
         this.operators = operators
-            .Select(ConstructOperator)
-            .ToDictionary(m => m.Id);
+            .Select(o => OperatorDataCreator.CreateFrom(o, type, typeParameters))
+            .ToIdDictionary();
 
         return this;
     }
@@ -87,8 +87,8 @@ internal class ObjectTypeBuilder
     internal ObjectTypeBuilder WithEvents(IEnumerable<EventInfo> events)
     {
         this.events = events
-            .Select(ConstructEvent)
-            .ToDictionary(e => e.Id);
+            .Select(e => EventDataCreator.CreateFrom(e, type, typeParameters))
+            .ToIdDictionary();
 
         return this;
     }
@@ -99,160 +99,209 @@ internal class ObjectTypeBuilder
         type.AddMembers(constructors, fields, properties, methods, operators, indexers, events);
         return type;
     }
+}
 
-    private AttributeData[] GetAttributeData(MemberInfo member)
-    {
-        return member.GetCustomAttributesData()
-            .Where(a => !a.IsCompilerGenerated())
-            .Select(a => new AttributeData(a, typeParameters))
-            .ToArray();
-    }
-
-    private AttributeData[] GetAttributeData(ParameterInfo member)
-    {
-        return member.GetCustomAttributesData()
-            .Where(a => !a.IsCompilerGenerated())
-            .Select(a => new AttributeData(a, typeParameters))
-            .ToArray();
-    }
-
-    private Dictionary<string, TypeParameterData> GetTypeParameters(Type type)
-    {
-        return GetDictionary(type.GetGenericArguments(), CodeElementKind.Type);
-    }
-
-    private Dictionary<string, TypeParameterData> GetTypeParameters(MethodBase method)
-    {
-        return GetDictionary(method.GetGenericArguments(), CodeElementKind.Member);
-    }
-
-    private ConstructorData ConstructConstructor(ConstructorInfo constructorInfo)
+/// <summary>
+/// Class responsible for creating <see cref="ConstructorData"/> instances.
+/// </summary>
+internal static class ConstructorDataCreator
+{
+    /// <summary>
+    /// Creates a <see cref="ConstructorData"/> instance from the corresponding <paramref name="constructor"/>.
+    /// </summary>
+    /// <param name="constructor"><see cref="ConstructorInfo"/> object representing the constructor.</param>
+    /// <param name="containingType">Type containing the constructor.</param>
+    /// <param name="availableTypeParameters">A dictionary of available type parameters; the keys represent type parameter names.</param>
+    /// <returns>A <see cref="ConstructorData"/> instance representing the constructor.</returns>
+    internal static ConstructorData CreateFrom(ConstructorInfo constructor, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
     {
         return new ConstructorData(
-            constructorInfo,
-            type,
-            GetDictionary(constructorInfo.GetParameters()),
-            GetAttributeData(constructorInfo));
+            constructor,
+            containingType,
+            Helper.GetParametersDictionary(constructor, availableTypeParameters),
+            Helper.GetAttributeData(constructor, availableTypeParameters));
     }
+}
 
-    private FieldData ConstructField(FieldInfo fieldInfo)
+internal static class FieldDataCreator
+{
+    internal static FieldData CreateFrom(FieldInfo field, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
     {
         return new FieldData(
-            fieldInfo,
-            type,
-            typeParameters,
-            GetAttributeData(fieldInfo));
+            field,
+            containingType,
+            availableTypeParameters,
+            Helper.GetAttributeData(field, availableTypeParameters));
     }
+}
 
-    private PropertyData ConstructProperty(PropertyInfo propertyInfo)
+internal static class PropertyDataCreator
+{
+    internal static PropertyData CreateFrom(PropertyInfo property, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
     {
-        var getterMethod = propertyInfo.GetMethod is not null
-            ? ConstructMethod(propertyInfo.GetMethod)
+        var getterMethod = property.GetMethod is not null
+            ? MethodDataCreator.CreateFrom(property.GetMethod, containingType, availableTypeParameters)
             : null;
 
-        var setterMethod = propertyInfo.SetMethod is not null
-            ? ConstructMethod(propertyInfo.SetMethod)
+        var setterMethod = property.SetMethod is not null
+            ? MethodDataCreator.CreateFrom(property.SetMethod, containingType, availableTypeParameters)
             : null;
 
         return new PropertyData(
-            propertyInfo,
+            property,
             getterMethod,
             setterMethod,
-            type,
-            typeParameters,
-            GetAttributeData(propertyInfo));
+            containingType,
+            availableTypeParameters,
+            Helper.GetAttributeData(property, availableTypeParameters));
     }
+}
 
-    private IndexerData ConstructIndexer(PropertyInfo propertyInfo)
+internal static class IndexerDataCreator
+{
+    internal static IndexerData CreateFrom(PropertyInfo propertyInfo, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
     {
         var getterMethod = propertyInfo.GetMethod is not null
-            ? ConstructMethod(propertyInfo.GetMethod)
+            ? MethodDataCreator.CreateFrom(propertyInfo.GetMethod, containingType, availableTypeParameters)
             : null;
 
         var setterMethod = propertyInfo.SetMethod is not null
-            ? ConstructMethod(propertyInfo.SetMethod)
+            ? MethodDataCreator.CreateFrom(propertyInfo.SetMethod, containingType, availableTypeParameters)
             : null;
 
         return new IndexerData(
             propertyInfo,
             getterMethod,
             setterMethod,
-            type,
-            GetDictionary(propertyInfo.GetIndexParameters()),
-            typeParameters,
-            GetAttributeData(propertyInfo));
+            containingType,
+            Helper.GetParametersDictionary(propertyInfo, availableTypeParameters),
+            availableTypeParameters,
+            Helper.GetAttributeData(propertyInfo, availableTypeParameters));
     }
+}
 
-    private MethodData ConstructMethod(MethodInfo methodInfo)
+internal static class MethodDataCreator
+{
+    internal static MethodData CreateFrom(MethodInfo methodInfo, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
     {
-        bool isExtensionMethod = methodInfo.IsDefined(typeof(ExtensionAttribute), true);
-        var declaredtypeParameters = GetTypeParameters(methodInfo);
-        var availableTypeParameters = typeParameters.Merge(declaredtypeParameters);
+        var declaredTypeParameters = Helper.GetTypeParametersDictionary(methodInfo);
+        var allTypeParameters = availableTypeParameters.Merge(declaredTypeParameters);
 
         return new MethodData(
             methodInfo,
-            type,
-            GetDictionary(methodInfo.GetParameters(), availableTypeParameters, isExtensionMethod),
-            declaredtypeParameters,
-            availableTypeParameters,
-            GetAttributeData(methodInfo));
+            containingType,
+            Helper.GetParametersDictionary(methodInfo, allTypeParameters),
+            declaredTypeParameters,
+            allTypeParameters,
+            Helper.GetAttributeData(methodInfo, allTypeParameters));
     }
+}
 
-    private OperatorData ConstructOperator(MethodInfo methodInfo)
+internal static class OperatorDataCreator
+{
+    internal static OperatorData CreateFrom(MethodInfo methodInfo, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
     {
         return new OperatorData(
             methodInfo,
-            type,
-            GetDictionary(methodInfo.GetParameters()),
-            GetTypeParameters(methodInfo),
-            typeParameters,
-            GetAttributeData(methodInfo));
+            containingType,
+            Helper.GetParametersDictionary(methodInfo, availableTypeParameters),
+            Helper.GetTypeParametersDictionary(methodInfo),
+            availableTypeParameters,
+            Helper.GetAttributeData(methodInfo, availableTypeParameters));
     }
+}
 
-    private EventData ConstructEvent(EventInfo eventInfo)
+internal static class EventDataCreator
+{
+    internal static EventData CreateFrom(EventInfo eventInfo, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
     {
-        (MethodData? addMethod, MethodData? removeMethod) = (null, null);
+        MethodData? addMethod = null;
+        MethodData? removeMethod = null;
 
-        // construct the event methods
         if (eventInfo.GetAddMethod(nonPublic: true) is MethodInfo addMethodInfo)
         {
-            addMethod = ConstructMethod(addMethodInfo);
+            addMethod = MethodDataCreator.CreateFrom(addMethodInfo, containingType, availableTypeParameters);
         }
 
         if (eventInfo.GetRemoveMethod(nonPublic: true) is MethodInfo removeMethodInfo)
         {
-            removeMethod = ConstructMethod(removeMethodInfo);
+            removeMethod = MethodDataCreator.CreateFrom(removeMethodInfo, containingType, availableTypeParameters);
         }
 
         return new EventData(
             eventInfo,
             addMethod,
             removeMethod,
-            type,
-            typeParameters,
-            GetAttributeData(eventInfo));
+            containingType,
+            availableTypeParameters,
+            Helper.GetAttributeData(eventInfo, availableTypeParameters));
     }
+}
 
-    private Dictionary<string, ParameterData> GetDictionary(
-        ParameterInfo[] parameters,
-        IReadOnlyDictionary<string, TypeParameterData>? typeParameters = null,
-        bool hasExtensionParameter = false)
+internal static class Helper
+{
+    internal static Dictionary<string, ParameterData> GetParametersDictionary(ConstructorInfo constructor, IReadOnlyDictionary<string, TypeParameterData> typeParameters)
     {
-        typeParameters ??= this.typeParameters;
-
-        return parameters
-            .Select((p, index) => new ParameterData(
-                p,
-                typeParameters,
-                GetAttributeData(p),
-                hasExtensionParameter && index == 0))
-            .ToDictionary(p => p.Name);
+        return GetParametersDictionary(constructor.GetParameters(), typeParameters);
     }
 
-    private Dictionary<string, TypeParameterData> GetDictionary(Type[] typeParameters, CodeElementKind codeElementKind)
+    internal static Dictionary<string, ParameterData> GetParametersDictionary(MethodInfo method, IReadOnlyDictionary<string, TypeParameterData> typeParameters)
+    {
+        bool isExtensionMethod = method.IsDefined(typeof(ExtensionAttribute), true);
+        return GetParametersDictionary(method.GetParameters(), typeParameters, isExtensionMethod);
+    }
+
+    internal static Dictionary<string, ParameterData> GetParametersDictionary(PropertyInfo indexer, IReadOnlyDictionary<string, TypeParameterData> typeParameters)
+    {
+        return GetParametersDictionary(indexer.GetIndexParameters(), typeParameters);
+    }
+
+    internal static Dictionary<string, TypeParameterData> GetTypeParametersDictionary(Type type)
+    {
+        return GetTypeParametersDictionary(type.GetGenericArguments(), CodeElementKind.Type);
+    }
+
+    internal static Dictionary<string, TypeParameterData> GetTypeParametersDictionary(MethodBase method)
+    {
+        return GetTypeParametersDictionary(method.GetGenericArguments(), CodeElementKind.Member);
+    }
+
+    internal static AttributeData[] GetAttributeData(ParameterInfo member, IReadOnlyDictionary<string, TypeParameterData> typeParameters)
+    {
+        return GetAttributeData(member.GetCustomAttributesData(), typeParameters);
+    }
+
+    internal static AttributeData[] GetAttributeData(MemberInfo member, IReadOnlyDictionary<string, TypeParameterData> typeParameters)
+    {
+        return GetAttributeData(member.GetCustomAttributesData(), typeParameters);
+    }
+
+    private static AttributeData[] GetAttributeData(IEnumerable<CustomAttributeData> attributes, IReadOnlyDictionary<string, TypeParameterData> typeParameters)
+    {
+        return attributes
+            .Where(a => !a.IsCompilerGenerated())
+            .Select(a => new AttributeData(a, typeParameters))
+            .ToArray();
+    }
+
+    private static Dictionary<string, TypeParameterData> GetTypeParametersDictionary(Type[] typeParameters, CodeElementKind codeElementKind)
     {
         return typeParameters
             .Select((ga, i) => new TypeParameterData(ga, i, codeElementKind))
             .ToDictionary(t => t.Name);
+    }
+
+    private static Dictionary<string, ParameterData> GetParametersDictionary(
+        ParameterInfo[] parameters,
+        IReadOnlyDictionary<string, TypeParameterData> typeParameters,
+        bool hasExtensionParameter = false)
+    {
+        return parameters
+            .Select((p, index) => new ParameterData(
+                p,
+                typeParameters,
+                GetAttributeData(p, typeParameters),
+                hasExtensionParameter && index == 0))
+            .ToDictionary(p => p.Name);
     }
 }

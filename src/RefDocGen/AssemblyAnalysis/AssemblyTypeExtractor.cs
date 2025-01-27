@@ -4,9 +4,6 @@ using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Concrete;
 using RefDocGen.CodeElements.Concrete.Types.Delegate;
 using RefDocGen.CodeElements.Concrete.Members.Enum;
-using RefDocGen.CodeElements.Concrete.Members;
-using RefDocGen.CodeElements;
-using RefDocGen.CodeElements.Concrete.Types.Attribute;
 
 namespace RefDocGen.AssemblyAnalysis;
 
@@ -136,7 +133,7 @@ internal class AssemblyTypeExtractor
     private EnumTypeData ConstructEnum(Type type)
     {
         var emptyTypeParams = new Dictionary<string, TypeParameterData>();
-        var attributeData = GetAttributeData(type, emptyTypeParams);
+        var attributeData = Helper.GetAttributeData(type, emptyTypeParams);
 
         var enumType = new EnumTypeData(type, attributeData);
 
@@ -144,8 +141,8 @@ internal class AssemblyTypeExtractor
             .GetFields(bindingFlags)
             .Where(f => !f.IsCompilerGenerated()
                 && !f.IsSpecialName) // exclude '_value' field.
-            .Select(f => new EnumMemberData(f, enumType, GetAttributeData(f, emptyTypeParams)))
-            .ToDictionary(v => v.Id);
+            .Select(f => new EnumMemberData(f, enumType, Helper.GetAttributeData(f, emptyTypeParams)))
+            .ToIdDictionary();
 
         enumType.AddMembers(enumValues);
 
@@ -159,43 +156,16 @@ internal class AssemblyTypeExtractor
     /// <returns><see cref="DelegateTypeData"/> object representing the enum.</returns>
     private DelegateTypeData ConstructDelegate(Type type)
     {
-        var typeParameters = GetTypeParameters(type);
-        var attributeData = GetAttributeData(type, typeParameters);
+        var typeParameters = Helper.GetTypeParametersDictionary(type);
+        var attributeData = Helper.GetAttributeData(type, typeParameters);
 
         var delegateType = new DelegateTypeData(type, typeParameters, attributeData);
 
         var invokeMethodInfo = type.GetMethod(delegateMethodName) ?? throw new ArgumentException("TODO");
-
-        var parameters = invokeMethodInfo.GetParameters()
-            .Select((p, index) => new ParameterData(p, typeParameters, []))
-            .ToDictionary(p => p.Name);
-
-        var invokeMethod = new MethodData(
-            invokeMethodInfo,
-            delegateType,
-            parameters,
-            new Dictionary<string, TypeParameterData>(),
-            typeParameters,
-            []);
+        var invokeMethod = MethodDataCreator.CreateFrom(invokeMethodInfo, delegateType, typeParameters);
 
         delegateType.AddInvokeMethod(invokeMethod);
 
         return delegateType;
-    }
-
-    private AttributeData[] GetAttributeData(MemberInfo member, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
-    {
-        return member.GetCustomAttributesData()
-            .Where(a => !a.IsCompilerGenerated())
-            .Select(a => new AttributeData(a, availableTypeParameters))
-            .ToArray();
-    }
-
-    private Dictionary<string, TypeParameterData> GetTypeParameters(Type type)
-    {
-        return type
-            .GetGenericArguments()
-            .Select((ga, i) => new TypeParameterData(ga, i, CodeElementKind.Type))
-            .ToDictionary(t => t.Name);
     }
 }
