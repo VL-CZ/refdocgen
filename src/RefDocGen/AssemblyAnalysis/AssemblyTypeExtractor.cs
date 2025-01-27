@@ -4,6 +4,7 @@ using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Concrete;
 using RefDocGen.CodeElements.Concrete.Types.Delegate;
 using RefDocGen.CodeElements.Concrete.Members.Enum;
+using RefDocGen.AssemblyAnalysis.MemberCreators;
 
 namespace RefDocGen.AssemblyAnalysis;
 
@@ -113,13 +114,13 @@ internal class AssemblyTypeExtractor
 
         // build the object type
         var objectType = new ObjectTypeBuilder(type)
-            .WithConstructors(constructors)
-            .WithFields(fields)
-            .WithProperties(properties)
-            .WithIndexers(indexers)
-            .WithMethods(methods)
-            .WithOperators(operators)
-            .WithEvents(events)
+            .AddConstructors(constructors)
+            .AddFields(fields)
+            .AddProperties(properties)
+            .AddIndexers(indexers)
+            .AddMethods(methods)
+            .AddOperators(operators)
+            .AddEvents(events)
             .Build();
 
         return objectType;

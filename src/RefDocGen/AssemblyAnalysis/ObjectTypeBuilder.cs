@@ -1,8 +1,8 @@
+using RefDocGen.AssemblyAnalysis.MemberCreators;
 using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Concrete.Types.Attribute;
-using RefDocGen.Tools;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -10,17 +10,39 @@ namespace RefDocGen.AssemblyAnalysis;
 
 internal class ObjectTypeBuilder
 {
+    /// <summary>
+    /// The object type to be built.
+    /// </summary>
     private readonly ObjectTypeData type;
+
+    /// <inheritdoc cref="TypeDeclaration.TypeParameters"/>
     private readonly Dictionary<string, TypeParameterData> typeParameters;
 
+    /// <inheritdoc cref="ObjectTypeData.Constructors"/>
     private Dictionary<string, ConstructorData> constructors = [];
+
+    /// <inheritdoc cref="ObjectTypeData.Fields"/>
     private Dictionary<string, FieldData> fields = [];
+
+    /// <inheritdoc cref="ObjectTypeData.Properties"/>
     private Dictionary<string, PropertyData> properties = [];
+
+    /// <inheritdoc cref="ObjectTypeData.Indexers"/>
     private Dictionary<string, IndexerData> indexers = [];
+
+    /// <inheritdoc cref="ObjectTypeData.Methods"/>
     private Dictionary<string, MethodData> methods = [];
+
+    /// <inheritdoc cref="ObjectTypeData.Operators"/>
     private Dictionary<string, OperatorData> operators = [];
+
+    /// <inheritdoc cref="ObjectTypeData.Events"/>
     private Dictionary<string, EventData> events = [];
 
+    /// <summary>
+    /// Initializes a new instance of <see cref="ObjectTypeBuilder"/> class.
+    /// </summary>
+    /// <param name="type">The type of the object to be built.</param>
     internal ObjectTypeBuilder(Type type)
     {
         typeParameters = Helper.GetTypeParametersDictionary(type);
@@ -30,7 +52,12 @@ internal class ObjectTypeBuilder
         this.type = new ObjectTypeData(type, typeParameters, attributeData);
     }
 
-    internal ObjectTypeBuilder WithConstructors(IEnumerable<ConstructorInfo> constructors)
+    /// <summary>
+    /// Adds constructors to the object being built.
+    /// </summary>
+    /// <param name="constructors">An enumerable of object constructors.</param>
+    /// <returns>The current <see cref="ObjectTypeBuilder"/> instance.</returns>
+    internal ObjectTypeBuilder AddConstructors(IEnumerable<ConstructorInfo> constructors)
     {
         this.constructors = constructors
             .Select(c => ConstructorDataCreator.CreateFrom(c, type, typeParameters))
@@ -39,7 +66,7 @@ internal class ObjectTypeBuilder
         return this;
     }
 
-    internal ObjectTypeBuilder WithFields(IEnumerable<FieldInfo> fields)
+    internal ObjectTypeBuilder AddFields(IEnumerable<FieldInfo> fields)
     {
         this.fields = fields
             .Select(f => FieldDataCreator.CreateFrom(f, type, typeParameters))
@@ -48,7 +75,7 @@ internal class ObjectTypeBuilder
         return this;
     }
 
-    internal ObjectTypeBuilder WithProperties(IEnumerable<PropertyInfo> properties)
+    internal ObjectTypeBuilder AddProperties(IEnumerable<PropertyInfo> properties)
     {
         this.properties = properties
             .Select(p => PropertyDataCreator.CreateFrom(p, type, typeParameters))
@@ -57,7 +84,7 @@ internal class ObjectTypeBuilder
         return this;
     }
 
-    internal ObjectTypeBuilder WithIndexers(IEnumerable<PropertyInfo> indexers)
+    internal ObjectTypeBuilder AddIndexers(IEnumerable<PropertyInfo> indexers)
     {
         this.indexers = indexers
             .Select(i => IndexerDataCreator.CreateFrom(i, type, typeParameters))
@@ -66,7 +93,7 @@ internal class ObjectTypeBuilder
         return this;
     }
 
-    internal ObjectTypeBuilder WithMethods(IEnumerable<MethodInfo> methods)
+    internal ObjectTypeBuilder AddMethods(IEnumerable<MethodInfo> methods)
     {
         this.methods = methods
             .Select(m => MethodDataCreator.CreateFrom(m, type, typeParameters))
@@ -75,7 +102,7 @@ internal class ObjectTypeBuilder
         return this;
     }
 
-    internal ObjectTypeBuilder WithOperators(IEnumerable<MethodInfo> operators)
+    internal ObjectTypeBuilder AddOperators(IEnumerable<MethodInfo> operators)
     {
         this.operators = operators
             .Select(o => OperatorDataCreator.CreateFrom(o, type, typeParameters))
@@ -84,7 +111,7 @@ internal class ObjectTypeBuilder
         return this;
     }
 
-    internal ObjectTypeBuilder WithEvents(IEnumerable<EventInfo> events)
+    internal ObjectTypeBuilder AddEvents(IEnumerable<EventInfo> events)
     {
         this.events = events
             .Select(e => EventDataCreator.CreateFrom(e, type, typeParameters))
@@ -93,208 +120,15 @@ internal class ObjectTypeBuilder
         return this;
     }
 
+    /// <summary>
+    /// Builds the object type using the provided members.
+    /// </summary>
+    /// <returns>An <see cref="ObjectTypeData"/> instance containing the provided members.</returns>
     internal ObjectTypeData Build()
     {
         // add the members
         type.AddMembers(constructors, fields, properties, methods, operators, indexers, events);
         return type;
-    }
-}
-
-/// <summary>
-/// Class responsible for creating <see cref="ConstructorData"/> instances.
-/// </summary>
-internal static class ConstructorDataCreator
-{
-    /// <summary>
-    /// Creates a <see cref="ConstructorData"/> instance from the corresponding <paramref name="constructor"/>.
-    /// </summary>
-    /// <param name="constructor"><see cref="ConstructorInfo"/> object representing the constructor.</param>
-    /// <param name="containingType">Type containing the constructor.</param>
-    /// <param name="availableTypeParameters">A dictionary of available type parameters; the keys represent type parameter names.</param>
-    /// <returns>A <see cref="ConstructorData"/> instance representing the constructor.</returns>
-    internal static ConstructorData CreateFrom(ConstructorInfo constructor, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
-    {
-        return new ConstructorData(
-            constructor,
-            containingType,
-            Helper.GetParametersDictionary(constructor, availableTypeParameters),
-            Helper.GetAttributeData(constructor, availableTypeParameters));
-    }
-}
-
-/// <summary>
-/// Class responsible for creating <see cref="FieldData"/> instances.
-/// </summary>
-internal static class FieldDataCreator
-{
-    /// <summary>
-    /// Creates a <see cref="FieldData"/> instance from the corresponding <paramref name="field"/>.
-    /// </summary>
-    /// <param name="field"><see cref="FieldInfo"/> object representing the field.</param>
-    /// <param name="containingType">Type containing the field.</param>
-    /// <param name="availableTypeParameters">A dictionary of available type parameters; the keys represent type parameter names.</param>
-    /// <returns>A <see cref="FieldData"/> instance representing the field.</returns>
-    internal static FieldData CreateFrom(FieldInfo field, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
-    {
-        return new FieldData(
-            field,
-            containingType,
-            availableTypeParameters,
-            Helper.GetAttributeData(field, availableTypeParameters));
-    }
-}
-
-/// <summary>
-/// Class responsible for creating <see cref="PropertyData"/> instances.
-/// </summary>
-internal static class PropertyDataCreator
-{
-    /// <summary>
-    /// Creates a <see cref="PropertyData"/> instance from the corresponding <paramref name="property"/>.
-    /// </summary>
-    /// <param name="property"><see cref="PropertyInfo"/> object representing the property.</param>
-    /// <param name="containingType">Type containing the property.</param>
-    /// <param name="availableTypeParameters">A dictionary of available type parameters; the keys represent type parameter names.</param>
-    /// <returns>A <see cref="PropertyData"/> instance representing the property.</returns>
-    internal static PropertyData CreateFrom(PropertyInfo property, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
-    {
-        var getterMethod = property.GetMethod is not null
-            ? MethodDataCreator.CreateFrom(property.GetMethod, containingType, availableTypeParameters)
-            : null;
-
-        var setterMethod = property.SetMethod is not null
-            ? MethodDataCreator.CreateFrom(property.SetMethod, containingType, availableTypeParameters)
-            : null;
-
-        return new PropertyData(
-            property,
-            getterMethod,
-            setterMethod,
-            containingType,
-            availableTypeParameters,
-            Helper.GetAttributeData(property, availableTypeParameters));
-    }
-}
-
-/// <summary>
-/// Class responsible for creating <see cref="IndexerData"/> instances.
-/// </summary>
-internal static class IndexerDataCreator
-{
-    /// <summary>
-    /// Creates a <see cref="IndexerData"/> instance from the corresponding <paramref name="propertyInfo"/>.
-    /// </summary>
-    /// <param name="propertyInfo"><see cref="PropertyInfo"/> object representing the indexer.</param>
-    /// <param name="containingType">Type containing the indexer.</param>
-    /// <param name="availableTypeParameters">A dictionary of available type parameters; the keys represent type parameter names.</param>
-    /// <returns>A <see cref="IndexerData"/> instance representing the indexer.</returns>
-    internal static IndexerData CreateFrom(PropertyInfo propertyInfo, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
-    {
-        var getterMethod = propertyInfo.GetMethod is not null
-            ? MethodDataCreator.CreateFrom(propertyInfo.GetMethod, containingType, availableTypeParameters)
-            : null;
-
-        var setterMethod = propertyInfo.SetMethod is not null
-            ? MethodDataCreator.CreateFrom(propertyInfo.SetMethod, containingType, availableTypeParameters)
-            : null;
-
-        return new IndexerData(
-            propertyInfo,
-            getterMethod,
-            setterMethod,
-            containingType,
-            Helper.GetParametersDictionary(propertyInfo, availableTypeParameters),
-            availableTypeParameters,
-            Helper.GetAttributeData(propertyInfo, availableTypeParameters));
-    }
-}
-
-/// <summary>
-/// Class responsible for creating <see cref="MethodData"/> instances.
-/// </summary>
-internal static class MethodDataCreator
-{
-    /// <summary>
-    /// Creates a <see cref="MethodData"/> instance from the corresponding <paramref name="methodInfo"/>.
-    /// </summary>
-    /// <param name="methodInfo"><see cref="MethodInfo"/> object representing the method.</param>
-    /// <param name="containingType">Type containing the method.</param>
-    /// <param name="availableTypeParameters">A dictionary of available type parameters; the keys represent type parameter names.</param>
-    /// <returns>A <see cref="MethodData"/> instance representing the method.</returns>
-    internal static MethodData CreateFrom(MethodInfo methodInfo, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
-    {
-        var declaredTypeParameters = Helper.GetTypeParametersDictionary(methodInfo);
-        var allTypeParameters = availableTypeParameters.Merge(declaredTypeParameters);
-
-        return new MethodData(
-            methodInfo,
-            containingType,
-            Helper.GetParametersDictionary(methodInfo, allTypeParameters),
-            declaredTypeParameters,
-            allTypeParameters,
-            Helper.GetAttributeData(methodInfo, allTypeParameters));
-    }
-}
-
-/// <summary>
-/// Class responsible for creating <see cref="OperatorData"/> instances.
-/// </summary>
-internal static class OperatorDataCreator
-{
-    /// <summary>
-    /// Creates a <see cref="OperatorData"/> instance from the corresponding <paramref name="methodInfo"/>.
-    /// </summary>
-    /// <param name="methodInfo"><see cref="MethodInfo"/> object representing the operator.</param>
-    /// <param name="containingType">Type containing the operator.</param>
-    /// <param name="availableTypeParameters">A dictionary of available type parameters; the keys represent type parameter names.</param>
-    /// <returns>A <see cref="OperatorData"/> instance representing the operator.</returns>
-    internal static OperatorData CreateFrom(MethodInfo methodInfo, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
-    {
-        return new OperatorData(
-            methodInfo,
-            containingType,
-            Helper.GetParametersDictionary(methodInfo, availableTypeParameters),
-            Helper.GetTypeParametersDictionary(methodInfo),
-            availableTypeParameters,
-            Helper.GetAttributeData(methodInfo, availableTypeParameters));
-    }
-}
-
-/// <summary>
-/// Class responsible for creating <see cref="EventData"/> instances.
-/// </summary>
-internal static class EventDataCreator
-{
-    /// <summary>
-    /// Creates a <see cref="EventData"/> instance from the corresponding <paramref name="eventInfo"/>.
-    /// </summary>
-    /// <param name="eventInfo"><see cref="EventInfo"/> object representing the event.</param>
-    /// <param name="containingType">Type containing the event.</param>
-    /// <param name="availableTypeParameters">A dictionary of available type parameters; the keys represent type parameter names.</param>
-    /// <returns>A <see cref="EventData"/> instance representing the event.</returns>
-    internal static EventData CreateFrom(EventInfo eventInfo, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
-    {
-        MethodData? addMethod = null;
-        MethodData? removeMethod = null;
-
-        if (eventInfo.GetAddMethod(nonPublic: true) is MethodInfo addMethodInfo)
-        {
-            addMethod = MethodDataCreator.CreateFrom(addMethodInfo, containingType, availableTypeParameters);
-        }
-
-        if (eventInfo.GetRemoveMethod(nonPublic: true) is MethodInfo removeMethodInfo)
-        {
-            removeMethod = MethodDataCreator.CreateFrom(removeMethodInfo, containingType, availableTypeParameters);
-        }
-
-        return new EventData(
-            eventInfo,
-            addMethod,
-            removeMethod,
-            containingType,
-            availableTypeParameters,
-            Helper.GetAttributeData(eventInfo, availableTypeParameters));
     }
 }
 
