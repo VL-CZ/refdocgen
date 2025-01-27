@@ -123,8 +123,18 @@ internal static class ConstructorDataCreator
     }
 }
 
+/// <summary>
+/// Class responsible for creating <see cref="FieldData"/> instances.
+/// </summary>
 internal static class FieldDataCreator
 {
+    /// <summary>
+    /// Creates a <see cref="FieldData"/> instance from the corresponding <paramref name="field"/>.
+    /// </summary>
+    /// <param name="field"><see cref="FieldInfo"/> object representing the field.</param>
+    /// <param name="containingType">Type containing the field.</param>
+    /// <param name="availableTypeParameters">A dictionary of available type parameters; the keys represent type parameter names.</param>
+    /// <returns>A <see cref="FieldData"/> instance representing the field.</returns>
     internal static FieldData CreateFrom(FieldInfo field, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
     {
         return new FieldData(
@@ -135,8 +145,18 @@ internal static class FieldDataCreator
     }
 }
 
+/// <summary>
+/// Class responsible for creating <see cref="PropertyData"/> instances.
+/// </summary>
 internal static class PropertyDataCreator
 {
+    /// <summary>
+    /// Creates a <see cref="PropertyData"/> instance from the corresponding <paramref name="property"/>.
+    /// </summary>
+    /// <param name="property"><see cref="PropertyInfo"/> object representing the property.</param>
+    /// <param name="containingType">Type containing the property.</param>
+    /// <param name="availableTypeParameters">A dictionary of available type parameters; the keys represent type parameter names.</param>
+    /// <returns>A <see cref="PropertyData"/> instance representing the property.</returns>
     internal static PropertyData CreateFrom(PropertyInfo property, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
     {
         var getterMethod = property.GetMethod is not null
@@ -157,8 +177,18 @@ internal static class PropertyDataCreator
     }
 }
 
+/// <summary>
+/// Class responsible for creating <see cref="IndexerData"/> instances.
+/// </summary>
 internal static class IndexerDataCreator
 {
+    /// <summary>
+    /// Creates a <see cref="IndexerData"/> instance from the corresponding <paramref name="propertyInfo"/>.
+    /// </summary>
+    /// <param name="propertyInfo"><see cref="PropertyInfo"/> object representing the indexer.</param>
+    /// <param name="containingType">Type containing the indexer.</param>
+    /// <param name="availableTypeParameters">A dictionary of available type parameters; the keys represent type parameter names.</param>
+    /// <returns>A <see cref="IndexerData"/> instance representing the indexer.</returns>
     internal static IndexerData CreateFrom(PropertyInfo propertyInfo, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
     {
         var getterMethod = propertyInfo.GetMethod is not null
@@ -180,8 +210,18 @@ internal static class IndexerDataCreator
     }
 }
 
+/// <summary>
+/// Class responsible for creating <see cref="MethodData"/> instances.
+/// </summary>
 internal static class MethodDataCreator
 {
+    /// <summary>
+    /// Creates a <see cref="MethodData"/> instance from the corresponding <paramref name="methodInfo"/>.
+    /// </summary>
+    /// <param name="methodInfo"><see cref="MethodInfo"/> object representing the method.</param>
+    /// <param name="containingType">Type containing the method.</param>
+    /// <param name="availableTypeParameters">A dictionary of available type parameters; the keys represent type parameter names.</param>
+    /// <returns>A <see cref="MethodData"/> instance representing the method.</returns>
     internal static MethodData CreateFrom(MethodInfo methodInfo, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
     {
         var declaredTypeParameters = Helper.GetTypeParametersDictionary(methodInfo);
@@ -197,8 +237,18 @@ internal static class MethodDataCreator
     }
 }
 
+/// <summary>
+/// Class responsible for creating <see cref="OperatorData"/> instances.
+/// </summary>
 internal static class OperatorDataCreator
 {
+    /// <summary>
+    /// Creates a <see cref="OperatorData"/> instance from the corresponding <paramref name="methodInfo"/>.
+    /// </summary>
+    /// <param name="methodInfo"><see cref="MethodInfo"/> object representing the operator.</param>
+    /// <param name="containingType">Type containing the operator.</param>
+    /// <param name="availableTypeParameters">A dictionary of available type parameters; the keys represent type parameter names.</param>
+    /// <returns>A <see cref="OperatorData"/> instance representing the operator.</returns>
     internal static OperatorData CreateFrom(MethodInfo methodInfo, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
     {
         return new OperatorData(
@@ -211,8 +261,18 @@ internal static class OperatorDataCreator
     }
 }
 
+/// <summary>
+/// Class responsible for creating <see cref="EventData"/> instances.
+/// </summary>
 internal static class EventDataCreator
 {
+    /// <summary>
+    /// Creates a <see cref="EventData"/> instance from the corresponding <paramref name="eventInfo"/>.
+    /// </summary>
+    /// <param name="eventInfo"><see cref="EventInfo"/> object representing the event.</param>
+    /// <param name="containingType">Type containing the event.</param>
+    /// <param name="availableTypeParameters">A dictionary of available type parameters; the keys represent type parameter names.</param>
+    /// <returns>A <see cref="EventData"/> instance representing the event.</returns>
     internal static EventData CreateFrom(EventInfo eventInfo, TypeDeclaration containingType, Dictionary<string, TypeParameterData> availableTypeParameters)
     {
         MethodData? addMethod = null;
