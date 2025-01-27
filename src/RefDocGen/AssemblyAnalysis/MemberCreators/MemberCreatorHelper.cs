@@ -120,7 +120,7 @@ internal static class MemberCreatorHelper
     /// </summary>
     /// <param name="parameters">Array of the given member parameters, represented as <see cref="ParameterInfo"/> instances.</param>
     /// <param name="availableTypeParameters">Dictionary of type parameters available in the context, indexed by their names.</param>
-    /// <param name="isExtensionMethod">Indicates whether the member is an extension method (in that case, the 1st parameter requires special handling)./param>
+    /// <param name="isExtensionMethod">Indicates whether the member is an extension method (in that case, the 1st parameter requires special handling).</param>
     /// <returns>
     /// A dictionary of member parameters, indexed by their names.
     /// </returns>

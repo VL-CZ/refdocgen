@@ -1,4 +1,4 @@
-﻿using RefDocGen.CodeElements.Concrete.Members;
+using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types;
 using System.Reflection;
 

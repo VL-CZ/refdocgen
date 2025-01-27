@@ -1,4 +1,4 @@
-﻿using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Members;
 
 namespace RefDocGen.AssemblyAnalysis;
 
