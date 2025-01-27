@@ -13,34 +13,7 @@
         @foreach (var attr in Attributes)
         {
             <div>
-                <samp>
-                    <TypeLink Type="@attr.Type" />
-
-                    @if (attr.ConstructorArguments.Any() || attr.NamedArguments.Any())
-                    {
-                        <span class="text-secondary">(</span>
-                        @foreach (var ctorArg in attr.ConstructorArguments)
-                        {
-                            <span class="text-success">@ctorArg</span>
-                            @if (ctorArg != attr.ConstructorArguments.Last())
-                            {
-                                <span class="text-secondary">, </span>
-                            }
-                        }
-
-                        @if (attr.ConstructorArguments.Any() && attr.NamedArguments.Any())
-                        {
-                            <span class="text-secondary">, </span>
-                        }
-
-                        @foreach (var namedArg in attr.NamedArguments)
-                        {
-                            <TypeLink Type="@namedArg.Name" />
-                            <LiteralValueSuffix Value="@namedArg.Value" />
-                        }
-                        <span class="text-secondary">)</span>
-                    }
-                </samp>
+                <AttributeData Attribute="@attr" />
             </div>
         }
     </div>

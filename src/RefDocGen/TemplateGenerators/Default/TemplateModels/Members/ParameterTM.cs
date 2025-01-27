@@ -15,9 +15,11 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <see langword="null"/> if the parameter has no default value.
 /// </para>
 /// </param>
+/// <param name="Attributes">Array of attributes applied to the parameter.</param>
 public record ParameterTM(
     string Name,
     TypeLinkTM Type,
     string[] Modifiers,
+    AttributeTM[] Attributes,
     string? DefaultValue,
     string? DocComment);

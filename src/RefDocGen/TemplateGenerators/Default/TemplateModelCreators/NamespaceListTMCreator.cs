@@ -6,7 +6,7 @@ using RefDocGen.CodeElements.Abstract.Types.Enum;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Tools;
-using RefDocGen.TemplateGenerators.Tools.TypeName;
+using RefDocGen.TemplateGenerators.Tools.Names;
 
 namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 

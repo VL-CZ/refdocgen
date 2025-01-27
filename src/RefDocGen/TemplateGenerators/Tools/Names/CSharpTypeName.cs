@@ -2,7 +2,7 @@ using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.Tools;
 
-namespace RefDocGen.TemplateGenerators.Tools.TypeName;
+namespace RefDocGen.TemplateGenerators.Tools.Names;
 
 /// <summary>
 /// Static class used for retrieving type names in C# format.

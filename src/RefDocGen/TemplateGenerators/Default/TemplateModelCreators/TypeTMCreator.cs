@@ -8,7 +8,7 @@ using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Tools;
 using RefDocGen.TemplateGenerators.Tools.DocComments.Html;
 using RefDocGen.TemplateGenerators.Tools.Keywords;
-using RefDocGen.TemplateGenerators.Tools.TypeName;
+using RefDocGen.TemplateGenerators.Tools.Names;
 using RefDocGen.Tools;
 using System.Xml.Linq;
 
@@ -160,6 +160,7 @@ internal abstract class TypeTMCreator
             parameter.Name,
             GetTypeLink(parameter.Type),
             modifiers.GetStrings(),
+            GetTemplateModels(parameter.Attributes),
             defaultValue,
             ToHtmlString(parameter.DocComment));
     }
@@ -219,8 +220,12 @@ internal abstract class TypeTMCreator
         string?[] constructorArgumentTMs = attribute.ConstructorArgumentValues.Select(LiteralValueFormatter.Format).ToArray();
         var namedArgumentTMs = attribute.NamedArguments.Select(na => GetFrom(na, attribute)).ToArray();
 
+        var typeLink = new TypeLinkTM(
+                CSharpAttributeName.Of(attribute),
+                typeUrlResolver.GetUrlOf(attribute.Type));
+
         return new AttributeTM(
-               GetTypeLink(attribute.Type),
+               typeLink,
                constructorArgumentTMs,
                namedArgumentTMs);
     }

@@ -25,10 +25,4 @@
         <Folder Include="out\" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Content Update="TemplateGenerators\Default\Templates\Components\AttributeList.razor">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      </Content>
-    </ItemGroup>
-
 </Project>
