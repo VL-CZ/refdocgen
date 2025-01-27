@@ -1,3 +1,4 @@
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using System.Xml.Linq;
 
@@ -42,4 +43,12 @@ public interface ITypeDeclaration : ITypeNameBaseData
     /// Collection of generic type parameters declared in the type, ordered by their index.
     /// </summary>
     IReadOnlyList<ITypeParameterData> TypeParameters { get; }
+
+    /// <summary>
+    /// Collection of attributes applied to the type.
+    /// </summary>
+    /// <remarks>
+    /// Note that the compiler generated attributes are not included.
+    /// </remarks>
+    IReadOnlyList<IAttributeData> Attributes { get; }
 }

@@ -1,5 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.Exception;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
@@ -7,7 +8,7 @@ using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Tools;
 using RefDocGen.TemplateGenerators.Tools.DocComments.Html;
 using RefDocGen.TemplateGenerators.Tools.Keywords;
-using RefDocGen.TemplateGenerators.Tools.TypeName;
+using RefDocGen.TemplateGenerators.Tools.Names;
 using RefDocGen.Tools;
 using System.Xml.Linq;
 
@@ -93,6 +94,18 @@ internal abstract class TypeTMCreator
     }
 
     /// <summary>
+    /// Converts each item of the enumerable into <see cref="AttributeTM"/> instance.
+    /// </summary>
+    /// <param name="attributes">An enumerable of the provided <see cref="IAttributeData" /> to convert.</param>
+    /// <returns>Enumerable of <see cref="AttributeTM"/> instances, corresponding to the provided attributes.</returns>
+    protected AttributeTM[] GetTemplateModels(IEnumerable<IAttributeData> attributes)
+    {
+        return attributes
+                .Select(GetFrom)
+                .ToArray();
+    }
+
+    /// <summary>
     /// Gets the <see cref="TypeLinkTM"/> from the provided <paramref name="type"/>.
     /// </summary>
     /// <param name="type">The provided type.</param>
@@ -147,6 +160,7 @@ internal abstract class TypeTMCreator
             parameter.Name,
             GetTypeLink(parameter.Type),
             modifiers.GetStrings(),
+            GetTemplateModels(parameter.Attributes),
             defaultValue,
             ToHtmlString(parameter.DocComment));
     }
@@ -194,5 +208,41 @@ internal abstract class TypeTMCreator
                 typeUrlResolver.GetUrlOf(exception.Id)
                 ),
             ToHtmlString(exception.DocComment));
+    }
+
+    /// <summary>
+    /// Creates a <see cref="AttributeTM"/> instance based on the provided <see cref="IAttributeData"/> object.
+    /// </summary>
+    /// <param name="attribute">The <see cref="IAttributeData"/> instance representing the attribute.</param>
+    /// <returns>A <see cref="AttributeTM"/> instance based on the provided <paramref name="attribute"/>.</returns>
+    protected AttributeTM GetFrom(IAttributeData attribute)
+    {
+        string?[] constructorArgumentTMs = attribute.ConstructorArgumentValues.Select(LiteralValueFormatter.Format).ToArray();
+        var namedArgumentTMs = attribute.NamedArguments.Select(na => GetFrom(na, attribute)).ToArray();
+
+        var typeLink = new TypeLinkTM(
+                CSharpAttributeName.Of(attribute),
+                typeUrlResolver.GetUrlOf(attribute.Type));
+
+        return new AttributeTM(
+               typeLink,
+               constructorArgumentTMs,
+               namedArgumentTMs);
+    }
+
+    /// <summary>
+    /// Creates a <see cref="NamedAttributeArgumentTM"/> instance based on the provided <see cref="NamedAttributeArgument"/> and <see cref="IAttributeData"/> objects.
+    /// </summary>
+    /// <param name="argument">The <see cref="NamedAttributeArgument"/> instance representing the attribute argument.</param>
+    /// <param name="attribute">The attribute containing the <paramref name="argument"/>.</param>
+    /// <returns>A <see cref="NamedAttributeArgumentTM"/> instance based on the provided <paramref name="argument"/> and <paramref name="attribute"/>.</returns>
+    protected NamedAttributeArgumentTM GetFrom(NamedAttributeArgument argument, IAttributeData attribute)
+    {
+        return new NamedAttributeArgumentTM(
+            new TypeLinkTM(
+                argument.Name,
+                typeUrlResolver.GetUrlOf(attribute.Type.Id, argument.Name)
+            ),
+            LiteralValueFormatter.Format(argument.Value));
     }
 }

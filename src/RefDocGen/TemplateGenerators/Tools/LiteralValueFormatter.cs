@@ -22,6 +22,10 @@ internal class LiteralValueFormatter
         {
             return $"\"{s}\"";
         }
+        else if (literalValue is Type type)
+        {
+            return $"typeof({type})";
+        }
         else if (literalValue is IFormattable f)
         {
             return f.ToString(null, CultureInfo.InvariantCulture);

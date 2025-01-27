@@ -1,6 +1,4 @@
-using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
-
-namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
+namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 
 /// <summary>
 /// Represents the template model for a user-documented exception (using the <c>exception</c> XML tag).

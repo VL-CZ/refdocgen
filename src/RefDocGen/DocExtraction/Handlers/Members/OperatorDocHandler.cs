@@ -25,7 +25,7 @@ internal class OperatorDocHandler : ExecutableMemberDocHandler<OperatorData>
 
         // add type parameter doc comments
         var typeParamElements = memberDocComment.Descendants(XmlDocIdentifiers.TypeParam);
-        TypeParameterDocHelper.Add(typeParamElements, member.TypeParameterDeclarations);
+        TypeParameterDocHelper.Add(typeParamElements, member.TypeParameters);
     }
 
     /// <inheritdoc/>

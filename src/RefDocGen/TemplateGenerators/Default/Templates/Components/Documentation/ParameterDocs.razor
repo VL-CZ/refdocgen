@@ -12,6 +12,12 @@
     <div class="mx-2">
         @foreach (var parameter in Parameters)
         {
+            @foreach (var attr in parameter.Attributes)
+            {
+                <AttributeString Attribute="@attr" />
+                <span> </span>
+            }
+
             <samp>
                 <ParameterName Parameter="@parameter" />
             </samp>

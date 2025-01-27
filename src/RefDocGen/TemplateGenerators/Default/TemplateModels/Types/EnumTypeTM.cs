@@ -13,12 +13,14 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 /// <param name="RemarksDocComment">'remarks' documentation comment for the enum. <c>null</c> if the doc comment is not provided.</param>
 /// <param name="Members">Template models of the enum members.</param>
 /// <param name="SeeAlsoDocComments">Collection of <c>seealso</c> documentation comments for the enum.</param>
+/// <param name="Attributes">Array of attributes applied to the enum.</param>
 public record EnumTypeTM(
     string Id,
     string Name,
     string Namespace,
     string[] Modifiers,
     EnumMemberTM[] Members,
+    AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,
     string[] SeeAlsoDocComments) : ITemplateModelWithId;

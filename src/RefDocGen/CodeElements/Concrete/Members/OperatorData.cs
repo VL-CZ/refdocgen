@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
 using System.Reflection;
@@ -13,11 +14,15 @@ internal class OperatorData : MethodData, IOperatorData
     /// <summary>
     /// Initializes a new instance of the <see cref="OperatorData"/> class.
     /// </summary>
-    /// <param name="methodInfo"><see cref="MethodInfo"/> object representing the operator.</param>
-    /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
-    /// <param name="containingType">Type that contains the member.</param>
-    internal OperatorData(MethodInfo methodInfo, TypeDeclaration containingType, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
-        : base(methodInfo, containingType, availableTypeParameters)
+    /// <inheritdoc path="/param"/>
+    internal OperatorData(
+        MethodInfo methodInfo,
+        TypeDeclaration containingType,
+        IReadOnlyDictionary<string, ParameterData> parameters,
+        IReadOnlyDictionary<string, TypeParameterData> typeParameterDeclarations,
+        IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters,
+        IReadOnlyList<IAttributeData> attributes)
+            : base(methodInfo, containingType, parameters, typeParameterDeclarations, availableTypeParameters, attributes)
     {
         Kind = methodNameToOperatorKind[methodInfo.Name];
     }

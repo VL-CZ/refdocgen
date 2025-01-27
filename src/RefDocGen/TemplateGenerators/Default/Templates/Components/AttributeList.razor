@@ -1,0 +1,20 @@
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Types
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required IEnumerable<AttributeTM> Attributes { get; set; }
+}
+
+@if (Attributes.Any())
+{
+    <h3 class="lead mt-3">Attributes</h3>
+    <div class="mx-2">
+        @foreach (var attr in Attributes)
+        {
+            <div>
+                <AttributeString Attribute="@attr" />
+            </div>
+        }
+    </div>
+}

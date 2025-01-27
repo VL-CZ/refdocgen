@@ -1,0 +1,36 @@
+@using RefDocGen.TemplateGenerators.Default.TemplateModels.Types
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required AttributeTM Attribute { get; set; }
+}
+
+<samp>
+    [<TypeLink Type="@Attribute.Type" />
+
+    @if (Attribute.ConstructorArguments.Any() || Attribute.NamedArguments.Any())
+    {
+        <span class="text-secondary">(</span>
+        @foreach (var ctorArg in Attribute.ConstructorArguments)
+        {
+            <span class="text-success">@ctorArg</span>
+            @if (ctorArg != Attribute.ConstructorArguments.Last())
+            {
+                <span class="text-secondary">, </span>
+            }
+        }
+
+        @if (Attribute.ConstructorArguments.Any() && Attribute.NamedArguments.Any())
+        {
+            <span class="text-secondary">, </span>
+        }
+
+        @foreach (var namedArg in Attribute.NamedArguments)
+        {
+            <TypeLink Type="@namedArg.Name" />
+            <LiteralValueSuffix Value="@namedArg.Value" />
+        }
+        <span class="text-secondary">)</span>
+    }]
+</samp>

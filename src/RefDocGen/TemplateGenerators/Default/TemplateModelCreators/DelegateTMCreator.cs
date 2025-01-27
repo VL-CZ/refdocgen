@@ -32,6 +32,7 @@ internal class DelegateTMCreator : TypeTMCreator
             delegateType.ReturnType.IsVoid,
             GetTemplateModels(delegateType.Parameters),
             GetTemplateModels(delegateType.TypeParameters),
+            GetTemplateModels(delegateType.Attributes),
             ToHtmlString(delegateType.SummaryDocComment),
             ToHtmlString(delegateType.RemarksDocComment),
             ToHtmlString(delegateType.ReturnValueDocComment),

@@ -33,6 +33,7 @@ internal class EnumTMCreator : TypeTMCreator
             enumType.Namespace,
             modifiers.GetStrings(),
             enumMemberTMs,
+            GetTemplateModels(enumType.Attributes),
             ToHtmlString(enumType.SummaryDocComment),
             ToHtmlString(enumType.RemarksDocComment),
             GetHtmlStrings(enumType.SeeAlsoDocComments));
@@ -49,6 +50,7 @@ internal class EnumTMCreator : TypeTMCreator
             enumMember.Id,
             enumMember.Name,
             LiteralValueFormatter.Format(enumMember.Value),
+            GetTemplateModels(enumMember.Attributes),
             ToHtmlString(enumMember.SummaryDocComment),
             ToHtmlString(enumMember.RemarksDocComment),
             GetHtmlStrings(enumMember.SeeAlsoDocComments));

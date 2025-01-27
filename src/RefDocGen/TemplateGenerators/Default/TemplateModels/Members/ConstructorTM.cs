@@ -1,3 +1,5 @@
+using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
+
 namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 
 /// <summary>
@@ -12,10 +14,12 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <param name="Exceptions">
 /// A collection of user-documented exceptions (using the <c>exception</c> XML tag) the constructor might throw.
 /// </param>
+/// <param name="Attributes">Array of attributes applied to the constructor.</param>
 public record ConstructorTM(
     string Id,
     ParameterTM[] Parameters,
     string[] Modifiers,
+    AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,
     string[] SeeAlsoDocComments,

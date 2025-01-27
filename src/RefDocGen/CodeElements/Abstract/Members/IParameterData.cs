@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Xml.Linq;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 
 namespace RefDocGen.CodeElements.Abstract.Members;
@@ -68,4 +69,9 @@ public interface IParameterData
     /// XML doc comment for the parameter.
     /// </summary>
     XElement DocComment { get; }
+
+    /// <summary>
+    /// Collection of attributes applied to the parameter.
+    /// </summary>
+    IReadOnlyList<IAttributeData> Attributes { get; }
 }

@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Members.Enum;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.Enum;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Members.Enum;
@@ -20,7 +21,8 @@ internal class EnumTypeData : TypeDeclaration, IEnumTypeData
     /// Initializes a new instance of the <see cref="EnumTypeData"/> class.
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
-    public EnumTypeData(Type type) : base(type)
+    /// <param name="attributes">Collection of attributes applied to the type.</param>
+    public EnumTypeData(Type type, IReadOnlyList<IAttributeData> attributes) : base(type, attributes)
     {
     }
 
@@ -39,6 +41,7 @@ internal class EnumTypeData : TypeDeclaration, IEnumTypeData
     /// Adds the enum members to the enum.
     /// </summary>
     /// <param name="members">Dictionary containing the enum members; keys are the corresponding member IDs.</param>
+    /// <exception cref="InvalidOperationException">Thrown if the members have already been added.</exception>
     internal void AddMembers(IReadOnlyDictionary<string, EnumMemberData> members)
     {
         if (membersAdded)

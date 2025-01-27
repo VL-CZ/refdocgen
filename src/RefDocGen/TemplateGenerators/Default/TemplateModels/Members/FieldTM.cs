@@ -18,12 +18,14 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <see langword="null"/> if the field has no default value.
 /// </para>
 /// </param>
+/// <param name="Attributes">Array of attributes applied to the field.</param>
 public record FieldTM(
     string Id,
     string Name,
     TypeLinkTM Type,
     string[] Modifiers,
     string? ConstantValue,
+    AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,
     string[] SeeAlsoDocComments);

@@ -26,6 +26,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <see langword="null"/> if the parameter has no default value.
 /// </para>
 /// </param>
+/// <param name="Attributes">Array of attributes applied to the property.</param>
 public record PropertyTM(
     string Id,
     string Name,
@@ -36,6 +37,7 @@ public record PropertyTM(
     string[] GetterModifiers,
     string[] SetterModifiers,
     string? ConstantValue,
+    AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,
     string? ValueDocComment,

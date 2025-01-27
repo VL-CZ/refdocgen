@@ -5,7 +5,7 @@ using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Concrete.Types.Delegate;
 using RefDocGen.CodeElements.Concrete.Types.Enum;
 using RefDocGen.DocExtraction.Tools;
-using RefDocGen.TemplateGenerators.Tools.TypeName;
+using RefDocGen.TemplateGenerators.Tools.Names;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 

@@ -1,9 +1,9 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
-using RefDocGen.Tools;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -20,32 +20,26 @@ internal class MethodData : ExecutableMemberData, IMethodData
     /// Initializes a new instance of the <see cref="MethodData"/> class.
     /// </summary>
     /// <param name="methodInfo"><see cref="System.Reflection.MethodInfo"/> object representing the method.</param>
-    /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
+    /// <param name="typeParameterDeclarations">Collection of the type parameters declared by the method.</param>
+    /// <param name="availableTypeParameters">
+    /// Collection of type parameters declared in the containing type; the keys represent type parameter names.
+    /// Includes <paramref name="typeParameterDeclarations"/>.
+    /// </param>
     /// <param name="containingType">Type that contains the member.</param>
-    internal MethodData(MethodInfo methodInfo, TypeDeclaration containingType, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
-        : base(methodInfo, containingType)
+    /// <param name="attributes">Collection of attributes applied to the method.</param>
+    /// <param name="parameters">Dictionary of method parameters, the keys represent parameter names.</param>
+    internal MethodData(
+        MethodInfo methodInfo,
+        TypeDeclaration containingType,
+        IReadOnlyDictionary<string, ParameterData> parameters,
+        IReadOnlyDictionary<string, TypeParameterData> typeParameterDeclarations,
+        IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters,
+        IReadOnlyList<IAttributeData> attributes) : base(methodInfo, containingType, parameters, attributes)
     {
         MethodInfo = methodInfo;
         ReturnType = methodInfo.ReturnType.GetTypeNameData(availableTypeParameters);
+        TypeParameters = typeParameterDeclarations;
         IsExtensionMethod = MethodInfo.IsDefined(typeof(ExtensionAttribute), true);
-
-        // add type parameters
-        TypeParameterDeclarations = methodInfo.GetGenericArguments()
-                .Select((ga, i) => new TypeParameterData(ga, i, CodeElementKind.Member))
-                .ToDictionary(t => t.Name);
-
-        // add the dicitonaries
-        var allParams = availableTypeParameters
-            .Merge(TypeParameterDeclarations);
-
-        // add parameters
-        Parameters = methodInfo.GetParameters()
-            .Select((p, index) =>
-            {
-                return new ParameterData(
-                    p, allParams, IsExtensionMethod && index == 0);
-            })
-            .ToDictionary(t => t.Name);
     }
 
     /// <inheritdoc/>
@@ -53,10 +47,6 @@ internal class MethodData : ExecutableMemberData, IMethodData
 
     /// <inheritdoc/>
     public override string Name => MemberName.Of(this);
-
-    /// <inheritdoc cref="MethodData(MethodInfo, TypeDeclaration, IReadOnlyDictionary{string, TypeParameterData})"/>
-    internal MethodData(MethodInfo methodInfo, TypeDeclaration containingType) : this(methodInfo, containingType, new Dictionary<string, TypeParameterData>())
-    { }
 
     /// <inheritdoc/>
     public MethodInfo MethodInfo { get; }
@@ -74,15 +64,12 @@ internal class MethodData : ExecutableMemberData, IMethodData
     public bool IsExtensionMethod { get; }
 
     /// <summary>
-    /// Collection of type parameters declared in the member; the keys represent type parameter names.
+    /// Collection of type parameters declared in the method; the keys represent type parameter names.
     /// </summary>
-    internal IReadOnlyDictionary<string, TypeParameterData> TypeParameterDeclarations { get; }
+    internal IReadOnlyDictionary<string, TypeParameterData> TypeParameters { get; }
 
     /// <inheritdoc/>
-    IReadOnlyList<ITypeParameterData> IMethodData.TypeParameters => TypeParameterDeclarations.Values
+    IReadOnlyList<ITypeParameterData> IMethodData.TypeParameters => TypeParameters.Values
         .OrderBy(t => t.Index)
         .ToList();
-
-    /// <inheritdoc/>
-    internal override IReadOnlyDictionary<string, ParameterData> Parameters { get; }
 }

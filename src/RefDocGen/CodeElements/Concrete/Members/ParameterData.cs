@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
@@ -21,12 +22,18 @@ internal class ParameterData : IParameterData
     /// <param name="isExtensionParameter">
     /// <inheritdoc cref="IsExtensionParameter" path="/summary"/>
     /// </param>
-    public ParameterData(ParameterInfo parameterInfo, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters, bool isExtensionParameter = false)
+    /// /// <param name="attributes">Collection of attributes applied to the parameter.</param>
+    public ParameterData(
+        ParameterInfo parameterInfo,
+        IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters,
+        IReadOnlyList<IAttributeData> attributes,
+        bool isExtensionParameter = false)
     {
         ParameterInfo = parameterInfo;
         Type = parameterInfo.ParameterType.GetTypeNameData(availableTypeParameters);
         DocComment = XmlDocElements.EmptyParamWithName(Name);
         IsExtensionParameter = isExtensionParameter;
+        Attributes = attributes;
     }
 
     /// <inheritdoc/>
@@ -61,5 +68,8 @@ internal class ParameterData : IParameterData
 
     /// <inheritdoc/>
     public bool IsExtensionParameter { get; }
+
+    /// <inheritdoc/>
+    public IReadOnlyList<IAttributeData> Attributes { get; }
 }
 

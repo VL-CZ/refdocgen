@@ -6,7 +6,7 @@ using RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Tools;
 using RefDocGen.TemplateGenerators.Tools.DocComments.Html;
 using RefDocGen.TemplateGenerators.Tools.Keywords;
-using RefDocGen.TemplateGenerators.Tools.TypeName;
+using RefDocGen.TemplateGenerators.Tools.Names;
 
 namespace RefDocGen.TemplateGenerators.Default.TemplateModelCreators;
 
@@ -78,10 +78,11 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             GetTemplateModels(type.TypeParameters),
             baseType,
             interfaces,
+            GetTemplateModels(type.Attributes),
             ToHtmlString(type.SummaryDocComment),
             ToHtmlString(type.RemarksDocComment),
             GetHtmlStrings(type.SeeAlsoDocComments)
-            );
+        );
     }
 
     /// <summary>
@@ -97,6 +98,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             constructor.Id,
             GetTemplateModels(constructor.Parameters),
             modifiers.GetStrings(),
+            GetTemplateModels(constructor.Attributes),
             ToHtmlString(constructor.SummaryDocComment),
             ToHtmlString(constructor.RemarksDocComment),
             GetHtmlStrings(constructor.SeeAlsoDocComments),
@@ -139,6 +141,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             GetTypeLink(field.Type),
             modifiers.GetStrings(),
             constantValue,
+            GetTemplateModels(field.Attributes),
             ToHtmlString(field.SummaryDocComment),
             ToHtmlString(field.RemarksDocComment),
             GetHtmlStrings(field.SeeAlsoDocComments));
@@ -185,6 +188,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             getterModifiers.GetStrings(),
             setterModifiers.GetStrings(),
             constantValue,
+            GetTemplateModels(property.Attributes),
             ToHtmlString(property.SummaryDocComment),
             ToHtmlString(property.RemarksDocComment),
             ToHtmlString(property.ValueDocComment),
@@ -223,6 +227,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             modifiers.GetStrings(),
             getterModifiers.GetStrings(),
             setterModifiers.GetStrings(),
+            GetTemplateModels(indexer.Attributes),
             ToHtmlString(indexer.SummaryDocComment),
             ToHtmlString(indexer.RemarksDocComment),
             ToHtmlString(indexer.ValueDocComment),
@@ -247,6 +252,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             GetTypeLink(method.ReturnType),
             method.ReturnType.IsVoid,
             modifiers.GetStrings(),
+            GetTemplateModels(method.Attributes),
             ToHtmlString(method.SummaryDocComment),
             ToHtmlString(method.RemarksDocComment),
             ToHtmlString(method.ReturnValueDocComment),
@@ -291,6 +297,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             returnType,
             operatorData.ReturnType.IsVoid,
             modifiers.GetStrings(),
+            GetTemplateModels(operatorData.Attributes),
             ToHtmlString(operatorData.SummaryDocComment),
             ToHtmlString(operatorData.RemarksDocComment),
             ToHtmlString(operatorData.ReturnValueDocComment),
@@ -313,6 +320,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             GetCallableMemberName(eventData),
             GetTypeLink(eventData.Type),
             modifiers.GetStrings(),
+            GetTemplateModels(eventData.Attributes),
             ToHtmlString(eventData.SummaryDocComment),
             ToHtmlString(eventData.RemarksDocComment),
             GetHtmlStrings(eventData.SeeAlsoDocComments),

@@ -20,6 +20,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Types;
 /// A collection of user-documented exceptions (using the 'exception' XML tag) that the delegate might throw.
 /// </param>
 /// <param name="SeeAlsoDocComments">Collection of <c>seealso</c> documentation comments for the delegate.</param>
+/// <param name="Attributes">Array of attributes applied to the delegate.</param>
 public record DelegateTypeTM(
     string Id,
     string Name,
@@ -29,6 +30,7 @@ public record DelegateTypeTM(
     bool ReturnsVoid,
     ParameterTM[] Parameters,
     TypeParameterTM[] TypeParameters,
+    AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,
     string? ReturnsDocComment,

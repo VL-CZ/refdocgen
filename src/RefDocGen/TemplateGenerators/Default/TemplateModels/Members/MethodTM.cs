@@ -19,6 +19,7 @@ namespace RefDocGen.TemplateGenerators.Default.TemplateModels.Members;
 /// <param name="Exceptions">
 /// A collection of user-documented exceptions (using the <c>exception</c> XML tag) that the method might throw.
 /// </param>
+/// <param name="Attributes">Array of attributes applied to the method.</param>
 public record MethodTM(
     string Id,
     string Name,
@@ -27,6 +28,7 @@ public record MethodTM(
     TypeLinkTM ReturnType,
     bool ReturnsVoid,
     string[] Modifiers,
+    AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,
     string? ReturnsDocComment,

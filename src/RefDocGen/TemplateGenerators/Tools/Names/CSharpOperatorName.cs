@@ -1,7 +1,7 @@
 using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Abstract.Members;
 
-namespace RefDocGen.TemplateGenerators.Tools.TypeName;
+namespace RefDocGen.TemplateGenerators.Tools.Names;
 
 /// <summary>
 /// Static class used for retrieving operator names in C# format.

@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types.TypeName;
@@ -16,9 +17,12 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
     /// <param name="typeParameters">Collection of the type parameters declared in the type; the keys represent type parameter names.</param>
-    protected TypeDeclaration(Type type, IReadOnlyDictionary<string, TypeParameterData> typeParameters) : base(type)
+    /// <param name="attributes">Collection of attributes applied to the type.</param>
+    protected TypeDeclaration(Type type, IReadOnlyDictionary<string, TypeParameterData> typeParameters, IReadOnlyList<IAttributeData> attributes)
+        : base(type)
     {
         TypeParameters = typeParameters;
+        Attributes = attributes;
 
         BaseType = type.BaseType?.GetTypeNameData(typeParameters);
 
@@ -31,8 +35,9 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     /// Initializes a new instance of the <see cref="TypeNameBaseData"/> class with no type parameters.
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
-    protected TypeDeclaration(Type type)
-        : this(type, new Dictionary<string, TypeParameterData>())
+    /// <param name="attributes">Collection of attributes applied to the type.</param>
+    protected TypeDeclaration(Type type, IReadOnlyList<IAttributeData> attributes)
+        : this(type, new Dictionary<string, TypeParameterData>(), attributes)
     {
     }
 
@@ -99,4 +104,7 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     /// </para>
     /// </summary>
     internal XElement? RawDocComment { get; set; }
+
+    /// <inheritdoc/>
+    public IReadOnlyList<IAttributeData> Attributes { get; }
 }

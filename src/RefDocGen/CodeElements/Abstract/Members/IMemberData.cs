@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using System.Reflection;
 using System.Xml.Linq;
 
@@ -65,4 +66,9 @@ public interface IMemberData
     /// </para>
     /// </summary>
     ITypeDeclaration ContainingType { get; }
+
+    /// <summary>
+    /// Collection of attributes applied to the member.
+    /// </summary>
+    IReadOnlyList<IAttributeData> Attributes { get; }
 }
