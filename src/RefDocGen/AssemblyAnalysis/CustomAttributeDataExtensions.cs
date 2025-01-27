@@ -17,7 +17,6 @@ internal static class CustomAttributeDataExtensions
     {
         string[] excludedNamespaces = [
             "System.Runtime.CompilerServices",
-            "System.Diagnostics.CodeAnalysis",
             "System.Diagnostics"]; // exclude attributes for internal usage
 
         Type[] excludedTypes = [
