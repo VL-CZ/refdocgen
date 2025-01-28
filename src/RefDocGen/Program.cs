@@ -37,13 +37,7 @@ public static class Program
 
         await using var htmlRenderer = new HtmlRenderer(serviceProvider, loggerFactory);
 
-        //var templateGenerator = new DefaultTemplateGenerator(projectPath, templatePath, outputDir);
-
-        IDocCommentTransformer docCommentParser = new DefaultDocCommentTransformer(
-                new DocCommentHtmlConfiguration()
-            );
-
-        var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, docCommentParser, outputDir);
+        var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir);
 
         var docGenerator = new DocGenerator(dllPath, docPath, templateGenerator);
         docGenerator.GenerateDoc();

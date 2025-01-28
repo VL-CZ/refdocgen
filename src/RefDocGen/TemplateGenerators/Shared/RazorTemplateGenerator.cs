@@ -12,7 +12,7 @@ using RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
 namespace RefDocGen.TemplateGenerators.Shared;
 
 /// <summary>
-/// Class used for generating Razor templates using the <see cref="ObjectTypeTM"/> as a type template model and <see cref="NamespaceTM"/> as a namespace template model.
+/// Class responsible for generating the Razor templates and populating them with the type data.
 /// </summary>
 /// <typeparam name="TDelegateTemplate">Type of the Razor component representing the delegate type.</typeparam>
 /// <typeparam name="TEnumTemplate">Type of the Razor component representing the enum type.</typeparam>
@@ -36,16 +36,22 @@ internal class RazorTemplateGenerator<
     /// <summary>
     /// The directory, where the generated output will be stored.
     /// </summary>
-    private readonly string outputDir;
+    private readonly string outputDirectory;
 
     /// <summary>
     /// Rendered of the Razor components.
     /// </summary>
     private readonly HtmlRenderer htmlRenderer;
 
-    private readonly string templatesFolder;
+    /// <summary>
+    /// Path to the directory containing the Razor templates, relative to <c>TemplateGenerators</c> folder.
+    /// </summary>
+    private readonly string templatesDirectory;
 
-    private readonly string cssFolder;
+    /// <summary>
+    /// Path to the directory containing static files, relative to <see cref="templatesDirectory"/>.
+    /// </summary>
+    private readonly string staticFilesDirectory;
 
     /// <summary>
     /// Transformer of the XML doc comments into HTML.
@@ -57,19 +63,21 @@ internal class RazorTemplateGenerator<
     /// </summary>
     /// <param name="htmlRenderer">Renderer of the Razor components.</param>
     /// <param name="docCommentTransformer">Transformer of the XML doc comments into HTML.</param>
-    /// <param name="outputDir">The directory, where the generated output will be stored.</param>
+    /// <param name="outputDirectory">The directory, where the generated output will be stored.</param>
+    /// <param name="templatesDirectory">Path to the directory containing the Razor templates, relative to <c>TemplateGenerators</c> folder.</param>
+    /// <param name="staticFilesDirectory">Path to the directory containing static files, relative to <paramref name="templatesDirectory"/>.</param>
     internal RazorTemplateGenerator(
         HtmlRenderer htmlRenderer,
         IDocCommentTransformer docCommentTransformer,
-        string outputDir,
-        string? templatesFolder = null,
-        string? cssFolder = "Static")
+        string outputDirectory,
+        string? templatesDirectory = null,
+        string? staticFilesDirectory = "Static")
     {
-        this.outputDir = outputDir;
+        this.outputDirectory = outputDirectory;
         this.htmlRenderer = htmlRenderer;
         this.docCommentTransformer = docCommentTransformer;
-        this.templatesFolder = templatesFolder;
-        this.cssFolder = cssFolder;
+        this.templatesDirectory = templatesDirectory;
+        this.staticFilesDirectory = staticFilesDirectory;
     }
 
     /// <inheritdoc/>
@@ -82,7 +90,7 @@ internal class RazorTemplateGenerator<
         GenerateDelegateTemplates(typeRegistry.Delegates);
         GenerateNamespaceTemplates(typeRegistry);
 
-        CopyCss();
+        CopyStaticFiles();
     }
 
     /// <summary>
@@ -159,7 +167,7 @@ internal class RazorTemplateGenerator<
     private void GenerateTemplate<TTemplate, TTemplateModel>(TTemplateModel templateModel, string outputFile)
         where TTemplate : IComponent
     {
-        string outputFileName = Path.Join(outputDir, $"{outputFile}.html");
+        string outputFileName = Path.Join(outputDirectory, $"{outputFile}.html");
 
         string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
         {
@@ -178,13 +186,14 @@ internal class RazorTemplateGenerator<
         File.WriteAllText(outputFileName, html);
     }
 
-    private void CopyCss()
+    private void CopyStaticFiles()
     {
-        var fullPath = Path.Combine("TemplateGenerators", templatesFolder, cssFolder);
-        var cssDir = new DirectoryInfo(fullPath);
-        var cssOutputDir = Directory.CreateDirectory(Path.Combine(outputDir, cssFolder));
+        const string baseFolder = "TemplateGenerators";
 
-        foreach (var file in cssDir.GetFiles())
+        var staticFilesDir = new DirectoryInfo(Path.Combine(baseFolder, templatesDirectory, staticFilesDirectory));
+        var cssOutputDir = Directory.CreateDirectory(Path.Combine(outputDirectory, staticFilesDirectory));
+
+        foreach (var file in staticFilesDir.GetFiles())
         {
             string targetFilePath = Path.Combine(cssOutputDir.FullName, file.Name);
             file.CopyTo(targetFilePath, true);

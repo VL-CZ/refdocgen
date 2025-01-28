@@ -21,12 +21,13 @@ internal class DefaultTemplateGenerator : RazorTemplateGenerator<
     /// Initialize a new instance of <see cref="DefaultTemplateGenerator"/> class.
     /// </summary>
     /// <param name="htmlRenderer">Renderer of the Razor components.</param>
-    /// <param name="docCommentTransformer">Transformer of the XML doc comments into HTML.</param>
     /// <param name="outputDir">The directory, where the generated output will be stored.</param>
-    internal DefaultTemplateGenerator(
-        HtmlRenderer htmlRenderer,
-        IDocCommentTransformer docCommentTransformer,
-        string outputDir) : base(htmlRenderer, docCommentTransformer, outputDir, "Default/Templates")
+    internal DefaultTemplateGenerator(HtmlRenderer htmlRenderer, string outputDir)
+        : base(
+            htmlRenderer,
+            new DefaultDocCommentTransformer(new DocCommentHtmlConfiguration()),
+            outputDir,
+            "Default/Templates")
     {
     }
 }
