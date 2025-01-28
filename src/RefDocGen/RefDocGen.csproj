@@ -22,7 +22,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="out\" />
+        <None Update="TemplateGenerators\Default\Templates\Static\styles.css">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

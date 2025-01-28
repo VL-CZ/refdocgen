@@ -3,7 +3,7 @@ using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using RefDocGen.CodeElements.Abstract;
 using RefDocGen.CodeElements.Abstract.Types;
-using RefDocGen.TemplateGenerators.Tools;
+using RefDocGen.TemplateGenerators.Shared.Tools;
 
 namespace RefDocGen.UnitTests.TemplateGenerators.Tools;
 
