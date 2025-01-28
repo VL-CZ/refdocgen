@@ -49,7 +49,7 @@ public static class Program
                 NamespaceDetailTemplate,
                 NamespaceListTemplate,
                 ObjectTypeTemplate
-            >(htmlRenderer, docCommentParser, outputDir);
+            >(htmlRenderer, docCommentParser, outputDir, "Styles");
 
         var docGenerator = new DocGenerator(dllPath, docPath, templateGenerator);
         docGenerator.GenerateDoc();

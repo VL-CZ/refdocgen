@@ -43,6 +43,8 @@ internal class RazorTemplateGenerator<
     /// </summary>
     private readonly HtmlRenderer htmlRenderer;
 
+    private readonly string cssFolder;
+
     /// <summary>
     /// Transformer of the XML doc comments into HTML.
     /// </summary>
@@ -54,11 +56,12 @@ internal class RazorTemplateGenerator<
     /// <param name="htmlRenderer">Renderer of the Razor components.</param>
     /// <param name="docCommentTransformer">Transformer of the XML doc comments into HTML.</param>
     /// <param name="outputDir">The directory, where the generated output will be stored.</param>
-    internal RazorTemplateGenerator(HtmlRenderer htmlRenderer, IDocCommentTransformer docCommentTransformer, string outputDir)
+    internal RazorTemplateGenerator(HtmlRenderer htmlRenderer, IDocCommentTransformer docCommentTransformer, string outputDir, string? cssFolder = null)
     {
         this.outputDir = outputDir;
         this.htmlRenderer = htmlRenderer;
         this.docCommentTransformer = docCommentTransformer;
+        this.cssFolder = cssFolder;
     }
 
     /// <inheritdoc/>
@@ -70,6 +73,8 @@ internal class RazorTemplateGenerator<
         GenerateEnumTemplates(typeRegistry.Enums);
         GenerateDelegateTemplates(typeRegistry.Delegates);
         GenerateNamespaceTemplates(typeRegistry);
+
+        CopyCss();
     }
 
     /// <summary>
@@ -163,5 +168,18 @@ internal class RazorTemplateGenerator<
 
 
         File.WriteAllText(outputFileName, html);
+    }
+
+    private void CopyCss()
+    {
+        var fullPath = Path.Combine("TemplateGenerators", "Default", "Templates", cssFolder);
+        var cssDir = new DirectoryInfo(fullPath);
+        Directory.CreateDirectory(Path.Combine(outputDir, "Styles"));
+
+        foreach (var file in cssDir.GetFiles())
+        {
+            string targetFilePath = Path.Combine(outputDir, "Styles", file.Name);
+            file.CopyTo(targetFilePath, true);
+        }
     }
 }
