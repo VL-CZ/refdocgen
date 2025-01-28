@@ -26,8 +26,7 @@ internal class DefaultTemplateGenerator : RazorTemplateGenerator<
         : base(
             htmlRenderer,
             new DefaultDocCommentTransformer(new DocCommentHtmlConfiguration()),
-            outputDir,
-            "Default/Templates")
+            outputDir)
     {
     }
 }

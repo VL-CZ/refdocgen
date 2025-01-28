@@ -8,6 +8,7 @@ using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
+using RefDocGen.Tools;
 
 namespace RefDocGen.TemplateGenerators.Shared;
 
@@ -34,6 +35,11 @@ internal class RazorTemplateGenerator<
     where TObjectTypeTemplate : IComponent
 {
     /// <summary>
+    /// Namespace prefix of any template generator
+    /// </summary>
+    private const string templateGeneratorsNsPrefix = "RefDocGen.TemplateGenerators.";
+
+    /// <summary>
     /// The directory, where the generated output will be stored.
     /// </summary>
     private readonly string outputDirectory;
@@ -51,7 +57,7 @@ internal class RazorTemplateGenerator<
     /// <summary>
     /// Path to the directory containing static files, relative to <see cref="templatesDirectory"/>.
     /// </summary>
-    private readonly string staticFilesDirectory;
+    private const string staticFilesDirectory = "Static";
 
     /// <summary>
     /// Transformer of the XML doc comments into HTML.
@@ -69,15 +75,13 @@ internal class RazorTemplateGenerator<
     internal RazorTemplateGenerator(
         HtmlRenderer htmlRenderer,
         IDocCommentTransformer docCommentTransformer,
-        string outputDirectory,
-        string? templatesDirectory = null,
-        string? staticFilesDirectory = "Static")
+        string outputDirectory)
     {
         this.outputDirectory = outputDirectory;
         this.htmlRenderer = htmlRenderer;
         this.docCommentTransformer = docCommentTransformer;
-        this.templatesDirectory = templatesDirectory;
-        this.staticFilesDirectory = staticFilesDirectory;
+
+        templatesDirectory = GetTemplatesDirectory();
     }
 
     /// <inheritdoc/>
@@ -90,7 +94,7 @@ internal class RazorTemplateGenerator<
         GenerateDelegateTemplates(typeRegistry.Delegates);
         GenerateNamespaceTemplates(typeRegistry);
 
-        CopyStaticFiles();
+        CopyStaticFilesDirectory();
     }
 
     /// <summary>
@@ -186,17 +190,43 @@ internal class RazorTemplateGenerator<
         File.WriteAllText(outputFileName, html);
     }
 
-    private void CopyStaticFiles()
+    /// <summary>
+    /// Copies the directory containing static files (css, js, etc.) to the output directory.
+    /// </summary>
+    private void CopyStaticFilesDirectory()
     {
         const string baseFolder = "TemplateGenerators";
 
         var staticFilesDir = new DirectoryInfo(Path.Combine(baseFolder, templatesDirectory, staticFilesDirectory));
-        var cssOutputDir = Directory.CreateDirectory(Path.Combine(outputDirectory, staticFilesDirectory));
+        string outputDirPath = Path.Combine(outputDirectory, staticFilesDirectory);
 
-        foreach (var file in staticFilesDir.GetFiles())
+        staticFilesDir.CopyTo(outputDirPath, true);
+    }
+
+    private string GetTemplatesDirectory()
+    {
+        Type[] templateTypes = [
+            typeof(TDelegateTemplate),
+            typeof(TEnumTemplate),
+            typeof(TNamespaceDetailTemplate),
+            typeof(TNamespaceListTemplate),
+            typeof(TObjectTypeTemplate)
+        ];
+
+        string? templatesNs = typeof(TObjectTypeTemplate).Namespace ?? "";
+
+        if (templateTypes.Any(t => t.Namespace != templatesNs))
         {
-            string targetFilePath = Path.Combine(cssOutputDir.FullName, file.Name);
-            file.CopyTo(targetFilePath, true);
+            throw new ArgumentException("Invalid configuration, all 5 templates must be in the same directory.");
         }
+
+        if (!templatesNs.StartsWith(templateGeneratorsNsPrefix, StringComparison.Ordinal))
+        {
+            throw new ArgumentException("Invalid configuration, the templates must be stored in a folder contained in 'RefDocGen/TemplateGenerators' directory.");
+        }
+
+        string relativeTemplateNs = templatesNs[templateGeneratorsNsPrefix.Length..];
+
+        return Path.Combine(relativeTemplateNs.Split('.'));
     }
 }
