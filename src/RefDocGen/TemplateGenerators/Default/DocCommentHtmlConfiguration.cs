@@ -1,4 +1,4 @@
-using RefDocGen.TemplateGenerators.Tools.DocComments.Html;
+using RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
 using System.Xml.Linq;
 
 namespace RefDocGen.TemplateGenerators.Default;

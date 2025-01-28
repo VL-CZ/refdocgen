@@ -22,9 +22,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="TemplateGenerators\Default\Templates\Styles\global.css">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+        <None Update="TemplateGenerators\Default\Templates\Static\styles.css">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

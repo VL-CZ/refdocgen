@@ -2,10 +2,10 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RefDocGen.TemplateGenerators.Default;
-using RefDocGen.TemplateGenerators.Tools.DocComments.Html;
 
 #pragma warning disable IDE0005 // add the namespace containing the Razor templates
 using RefDocGen.TemplateGenerators.Default.Templates;
+using RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
 #pragma warning restore IDE0005
 
 namespace RefDocGen;
@@ -43,13 +43,7 @@ public static class Program
                 new DocCommentHtmlConfiguration()
             );
 
-        var templateGenerator = new RazorTemplateGenerator<
-                DelegateTypeTemplate,
-                EnumTypeTemplate,
-                NamespaceDetailTemplate,
-                NamespaceListTemplate,
-                ObjectTypeTemplate
-            >(htmlRenderer, docCommentParser, outputDir, "Styles");
+        var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, docCommentParser, outputDir);
 
         var docGenerator = new DocGenerator(dllPath, docPath, templateGenerator);
         docGenerator.GenerateDoc();
