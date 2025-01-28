@@ -70,8 +70,6 @@ internal class RazorTemplateGenerator<
     /// <param name="htmlRenderer">Renderer of the Razor components.</param>
     /// <param name="docCommentTransformer">Transformer of the XML doc comments into HTML.</param>
     /// <param name="outputDirectory">The directory, where the generated output will be stored.</param>
-    /// <param name="templatesDirectory">Path to the directory containing the Razor templates, relative to <c>TemplateGenerators</c> folder.</param>
-    /// <param name="staticFilesDirectory">Path to the directory containing static files, relative to <paramref name="templatesDirectory"/>.</param>
     internal RazorTemplateGenerator(
         HtmlRenderer htmlRenderer,
         IDocCommentTransformer docCommentTransformer,
@@ -195,16 +193,34 @@ internal class RazorTemplateGenerator<
     /// </summary>
     private void CopyStaticFilesDirectory()
     {
-        const string baseFolder = "TemplateGenerators";
-
-        var staticFilesDir = new DirectoryInfo(Path.Combine(baseFolder, templatesDirectory, staticFilesDirectory));
+        var staticFilesDir = new DirectoryInfo(Path.Combine(templatesDirectory, staticFilesDirectory));
         string outputDirPath = Path.Combine(outputDirectory, staticFilesDirectory);
 
-        staticFilesDir.CopyTo(outputDirPath, true);
+        if (staticFilesDir.Exists)
+        {
+            staticFilesDir.CopyTo(outputDirPath, true);
+        }
+        else
+        {
+            // TODO: log static files dir not found
+        }
     }
 
+    /// <summary>
+    /// Returns base directory containing the Razor templates and static files.
+    /// </summary>
+    /// <returns>Path to the directory containing the Razor templates and static files.</returns>
+    /// <exception cref="ArgumentException">
+    /// Thrown in 2 cases
+    /// <list type="bullet">
+    /// <item>The templates aren't stored under <c>RefDocGen/TemplateGenerators</c> directory.</item>
+    /// <item>The templates (i.e. the generic type parameters) aren't stored in the same directory.</item>
+    /// </list>
+    /// </exception>
     private string GetTemplatesDirectory()
     {
+        const string baseFolder = "TemplateGenerators";
+
         Type[] templateTypes = [
             typeof(TDelegateTemplate),
             typeof(TEnumTemplate),
@@ -227,6 +243,7 @@ internal class RazorTemplateGenerator<
 
         string relativeTemplateNs = templatesNs[templateGeneratorsNsPrefix.Length..];
 
-        return Path.Combine(relativeTemplateNs.Split('.'));
+        string[] templatePathFragments = [baseFolder, .. relativeTemplateNs.Split('.')];
+        return Path.Combine(templatePathFragments);
     }
 }
