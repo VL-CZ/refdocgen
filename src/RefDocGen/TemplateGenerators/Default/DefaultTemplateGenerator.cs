@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Components.Web;
-using RefDocGen.TemplateGenerators.Default.Templates;
 using RefDocGen.TemplateGenerators.Shared;
 using RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
+
+#pragma warning disable IDE0005 // add the namespace containing the Razor templates
+using RefDocGen.TemplateGenerators.Default.Templates;
+#pragma warning restore IDE0005
 
 namespace RefDocGen.TemplateGenerators.Default;
 
