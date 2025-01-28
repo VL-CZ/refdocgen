@@ -1,14 +1,12 @@
 using Microsoft.AspNetCore.Components.Web;
 using RefDocGen.TemplateGenerators.Default.Templates;
 using RefDocGen.TemplateGenerators.Shared;
-using RefDocGen.TemplateGenerators.Shared.TemplateModels.Namespaces;
-using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
 
 namespace RefDocGen.TemplateGenerators.Default;
 
 /// <summary>
-/// Class used for generating Razor templates using the <see cref="ObjectTypeTM"/> as a type template model and <see cref="NamespaceTM"/> as a namespace template model.
+/// Class used for generating default Razor templates.
 /// </summary>
 internal class DefaultTemplateGenerator : RazorTemplateGenerator<
     DelegateTypeTemplate,
