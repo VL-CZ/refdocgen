@@ -35,9 +35,14 @@ internal class RazorTemplateGenerator<
     where TObjectTypeTemplate : IComponent
 {
     /// <summary>
-    /// Namespace prefix of any template generator
+    /// Namespace prefix of any template generator.
     /// </summary>
     private const string templateGeneratorsNsPrefix = "RefDocGen.TemplateGenerators.";
+
+    /// <summary>
+    /// Identifier of the <c>index</c> page.
+    /// </summary>
+    private const string indexPageId = "index";
 
     /// <summary>
     /// The directory, where the generated output will be stored.
@@ -55,7 +60,7 @@ internal class RazorTemplateGenerator<
     private readonly string templatesDirectory;
 
     /// <summary>
-    /// Path to the directory containing static files, relative to <see cref="templatesDirectory"/>.
+    /// Path to the directory containing static files (typically css and js related to templates), relative to <see cref="templatesDirectory"/>.
     /// </summary>
     private const string staticFilesDirectory = "Static";
 
@@ -137,7 +142,7 @@ internal class RazorTemplateGenerator<
         var namespaceTMs = NamespaceListTMCreator.GetFrom(types);
 
         // namespace list template
-        GenerateTemplate<TNamespaceListTemplate, IEnumerable<NamespaceTM>>(namespaceTMs, "index");
+        GenerateTemplate<TNamespaceListTemplate, IEnumerable<NamespaceTM>>(namespaceTMs, indexPageId);
 
         // namespace detail templates
         GenerateTemplates<TNamespaceDetailTemplate, NamespaceTM>(namespaceTMs);
