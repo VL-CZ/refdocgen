@@ -13,7 +13,8 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// <param name="ValueDocComment"><c>value</c> documentation comment for the property. <c>null</c> if the doc comment is not provided.</param>
 /// <param name="Modifiers">Collection of property modifiers (e.g. public, static, etc.)</param>
 /// <param name="HasGetter">Checks if the property has getter.</param>
-/// <param name="HasSetter">Checks if the property has setter.</param>
+/// <param name="HasSetter">Checks if the property has setter (returns true for init only setters as well).</param>
+/// <param name="IsSetterInitOnly">Checks if the property has init only setter.</param>
 /// <param name="GetterModifiers">Collection of the getter modifiers (possibly empty).</param>
 /// <param name="SetterModifiers">Collection of the setter modifiers (possibly empty).</param>
 /// <param name="SeeAlsoDocComments">Collection of <c>seealso</c> documentation comments for the property.</param>
@@ -33,6 +34,7 @@ public record PropertyTM(
     TypeLinkTM Type,
     bool HasGetter,
     bool HasSetter,
+    bool IsSetterInitOnly,
     string[] Modifiers,
     string[] GetterModifiers,
     string[] SetterModifiers,

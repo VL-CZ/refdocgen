@@ -23,10 +23,11 @@
                             @property.Name
                         </span>
 
-                        <AccessorMethods HasGetter="property.HasGetter"
-                                         HasSetter="property.HasSetter"
-                                         GetterModifiers="property.GetterModifiers"
-                                         SetterModifiers="property.SetterModifiers" />
+                        <AccessorMethods HasGetter="@property.HasGetter"
+                                         HasSetter="@property.HasSetter"
+                                         IsSetterInitOnly="@property.IsSetterInitOnly"
+                                         GetterModifiers="@property.GetterModifiers"
+                                         SetterModifiers="@property.SetterModifiers" />
 
                         <LiteralValueSuffix Value="@property.ConstantValue" />
 

@@ -11,6 +11,9 @@
     public required bool HasSetter { get; set; }
 
     [Parameter]
+    public required bool IsSetterInitOnly { get; set; }
+
+    [Parameter]
     public required string[] SetterModifiers { get; set; }
 }
 
@@ -21,8 +24,12 @@
         ? $"{string.Join(' ', GetterModifiers)} get"
         : string.Empty;
 
+    var setterName = IsSetterInitOnly
+        ? "init"
+        : "set";
+
     var setterWithModifiers = HasSetter
-        ? $"{string.Join(' ', SetterModifiers)} set"
+        ? $"{string.Join(' ', SetterModifiers)} {setterName}"
         : string.Empty;
 }
 
