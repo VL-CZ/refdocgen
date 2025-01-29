@@ -43,7 +43,18 @@ internal class PropertyData : MemberData, IPropertyData
 
         (Getter, Setter) = (getterMethod, setterMethod);
 
+        if (Setter is not null) // check if the setter is 'init' only
+        {
+            var modifiers = Setter.MethodInfo.ReturnParameter.GetRequiredCustomModifiers();
+            IsSetterInitOnly = modifiers.Any(t => t.FullName == initializerAttributeType);
+        }
     }
+
+    /// <summary>
+    /// Fully qualified name of the attribute that marks 'init' setters.
+    /// </summary>
+    /// <seealso href="https://alistairevans.co.uk/2020/11/01/detecting-init-only-properties-with-reflection-in-c-9/"/>
+    private const string initializerAttributeType = "System.Runtime.CompilerServices.IsExternalInit";
 
     /// <inheritdoc/>
     public override string Id => MemberId.Of(this);
@@ -142,4 +153,7 @@ internal class PropertyData : MemberData, IPropertyData
 
     /// <inheritdoc/>
     public bool IsRequired => PropertyInfo.IsDefined(typeof(RequiredMemberAttribute), false);
+
+    /// <inheritdoc/>
+    public bool IsSetterInitOnly { get; }
 }

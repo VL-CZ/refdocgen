@@ -42,4 +42,12 @@ public interface IPropertyData : IValueMemberData, ICallableMemberData
     /// 'value' doc comment for the property.
     /// </summary>
     XElement ValueDocComment { get; }
+
+    /// <summary>
+    /// Indicates whether the <see cref="Setter"/> is only for initialization.
+    /// </summary>
+    /// <remarks>
+    /// If the <see cref="Setter"/> is <c>null</c>, <c>false</c> is returned.
+    /// </remarks>
+    bool IsSetterInitOnly { get; }
 }
