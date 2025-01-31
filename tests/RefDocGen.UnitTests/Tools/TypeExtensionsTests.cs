@@ -1,4 +1,4 @@
-using FluentAssertions;
+using Shouldly;
 using TypeExtensions = RefDocGen.Tools.TypeExtensions;
 
 namespace RefDocGen.UnitTests.Tools;
@@ -16,7 +16,7 @@ public class TypeExtensionsTests
     {
         var result = TypeExtensions.GetBaseElementType(type);
 
-        result.Should().Be(type);
+        result.ShouldBe(type);
     }
 
     [Theory]
@@ -28,7 +28,7 @@ public class TypeExtensionsTests
     {
         var result = TypeExtensions.GetBaseElementType(inputType);
 
-        result.Should().Be(expectedResultType);
+        result.ShouldBe(expectedResultType);
     }
 
     [Theory]
@@ -38,6 +38,6 @@ public class TypeExtensionsTests
     {
         var result = TypeExtensions.GetBaseElementType(inputType);
 
-        result.Should().Be(expectedResultType);
+        result.ShouldBe(expectedResultType);
     }
 }

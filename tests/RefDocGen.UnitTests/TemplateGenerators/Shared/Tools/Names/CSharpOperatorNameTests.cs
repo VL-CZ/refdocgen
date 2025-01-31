@@ -1,11 +1,11 @@
-using FluentAssertions;
 using NSubstitute;
 using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
+using Shouldly;
 
-namespace RefDocGen.UnitTests.TemplateGenerators.Tools.TypeName;
+namespace RefDocGen.UnitTests.TemplateGenerators.Shared.Tools.Names;
 
 /// <summary>
 /// Class containing tests for <see cref="CSharpOperatorName"/> class.
@@ -22,7 +22,7 @@ public class CSharpOperatorNameTests
         operatorData.Kind.Returns(kind);
         operatorData.IsConversionOperator.Returns(false);
 
-        CSharpOperatorName.Of(operatorData).Should().Be(expectedName);
+        CSharpOperatorName.Of(operatorData).ShouldBe(expectedName);
     }
 
     [Fact]
@@ -40,6 +40,6 @@ public class CSharpOperatorNameTests
         operatorData.IsConversionOperator.Returns(true);
         operatorData.ReturnType.Returns(returnType);
 
-        CSharpOperatorName.Of(operatorData).Should().Be("operator DateTime");
+        CSharpOperatorName.Of(operatorData).ShouldBe("operator DateTime");
     }
 }

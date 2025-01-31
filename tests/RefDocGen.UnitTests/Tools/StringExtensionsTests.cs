@@ -1,5 +1,5 @@
-using FluentAssertions;
 using RefDocGen.Tools;
+using Shouldly;
 
 namespace RefDocGen.UnitTests.Tools;
 
@@ -15,7 +15,7 @@ public class StringExtensionsTests
     {
         bool found = StringExtensions.TryGetIndex(s, value, out int index);
 
-        (found, index).Should().Be((true, expectedIndex));
+        (found, index).ShouldBe((true, expectedIndex));
     }
 
     [Theory]
@@ -25,6 +25,6 @@ public class StringExtensionsTests
     {
         bool found = StringExtensions.TryGetIndex(s, value, out int index);
 
-        (found, index).Should().Be((false, -1));
+        (found, index).ShouldBe((false, -1));
     }
 }
