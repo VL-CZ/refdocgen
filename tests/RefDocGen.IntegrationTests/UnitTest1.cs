@@ -8,6 +8,9 @@ using System.Xml.Linq;
 using FluentAssertions;
 using AngleSharp;
 using System.Text.RegularExpressions;
+using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
+using System.Reflection.Metadata;
 
 namespace RefDocGen.IntegrationTests;
 
@@ -61,10 +64,9 @@ public sealed class DocumentationFixture : IDisposable
 
 public class UnitTest1 : IClassFixture<DocumentationFixture>
 {
-    [Fact]
-    public void Test1()
+    private IDocument GetDocument(string name)
     {
-        var userFile = Path.Join("output", "MyLibrary.User.html");
+        var userFile = Path.Join("output", name);
         var fileData = File.ReadAllText(userFile);
 
         // Configure and create a browsing context
@@ -73,11 +75,40 @@ public class UnitTest1 : IClassFixture<DocumentationFixture>
 
         // Load the HTML document directly from the file
         var document = context.OpenAsync((req) => req.Content(fileData)).Result; // TODO
+        return document;
+    }
+
+    private INode GetSignature(IElement memberElement)
+    {
+        return memberElement.FirstChild ?? throw new Exception();
+    }
+
+    private IHtmlDivElement GetDocComment(IElement memberElement)
+    {
+        return memberElement.FindChild<IHtmlDivElement>() ?? throw new Exception();
+    }
+
+    [Fact]
+    public void Test1()
+    {
+        var document = GetDocument("MyLibrary.User.html");
 
         // Access elements using query selectors
         var isAdultMethod = document.GetElementById("IsAdult").FirstChild;
         string content = Regex.Replace(isAdultMethod.TextContent, @"\s+", " ").Trim();
 
         content.Should().Be("public bool IsAdult() #");
+    }
+
+    [Fact]
+    public void Test2()
+    {
+        var document = GetDocument("MyLibrary.User.html");
+
+        // Access elements using query selectors
+        var docComment = document.GetElementById("IsAdult").FindChild<IHtmlDivElement>();
+        string content = Regex.Replace(docComment.TextContent, @"\s+", " ").Trim();
+
+        content.Should().Be("Checks if the user is adult.");
     }
 }
