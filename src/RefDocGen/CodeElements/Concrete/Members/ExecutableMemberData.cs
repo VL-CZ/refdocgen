@@ -45,7 +45,7 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
     public abstract bool OverridesAnotherMember { get; }
 
     /// <inheritdoc/>
-    public override AccessModifier AccessModifier => AccessModifierExtensions.GetAccessModifier(methodBase.IsPrivate, methodBase.IsFamily,
+    public override AccessModifier AccessModifier => AccessModifierHelper.GetAccessModifier(methodBase.IsPrivate, methodBase.IsFamily,
         methodBase.IsAssembly, methodBase.IsPublic, methodBase.IsFamilyAndAssembly, methodBase.IsFamilyOrAssembly);
 
     /// <inheritdoc/>

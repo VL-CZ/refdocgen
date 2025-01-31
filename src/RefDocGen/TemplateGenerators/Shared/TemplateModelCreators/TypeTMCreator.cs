@@ -112,9 +112,11 @@ internal abstract class TypeTMCreator
     /// <returns><see cref="TypeLinkTM"/> corresponding to the provided <paramref name="type"/>.</returns>
     protected TypeLinkTM GetTypeLink(ITypeNameData type)
     {
+        string? url = typeUrlResolver.GetUrlOf(type);
+
         return new TypeLinkTM(
-            CSharpTypeName.Of(type),
-            typeUrlResolver.GetUrlOf(type)
+            CSharpTypeName.Of(type, url is null),
+            url
             );
     }
 

@@ -115,7 +115,7 @@ internal class EventData : MemberData, IEventData
         get
         {
             var accessModifiers = Methods.Select(m => m.AccessModifier);
-            return AccessModifierExtensions.GetTheLeastRestrictive(accessModifiers);
+            return AccessModifierHelper.GetTheLeastRestrictive(accessModifiers);
         }
     }
 

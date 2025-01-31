@@ -42,14 +42,7 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     }
 
     /// <inheritdoc/>
-    public AccessModifier AccessModifier =>
-        AccessModifierExtensions.GetAccessModifier(
-            TypeObject.IsNestedPrivate,
-            TypeObject.IsNestedFamily,
-            TypeObject.IsNestedAssembly || TypeObject.IsNotPublic,
-            TypeObject.IsPublic || TypeObject.IsNestedPublic,
-            TypeObject.IsNestedFamANDAssem,
-            TypeObject.IsNestedFamORAssem);
+    public AccessModifier AccessModifier => AccessModifierHelper.GetAccessModifier(TypeObject);
 
     /// <summary>
     /// Identifier of the type. Consists of fully qualified type name, backtick symbol and type parameters count

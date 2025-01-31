@@ -37,7 +37,7 @@ internal class FieldData : MemberData, IFieldData
     public ITypeNameData Type { get; }
 
     /// <inheritdoc/>
-    public override AccessModifier AccessModifier => AccessModifierExtensions.GetAccessModifier(FieldInfo.IsPrivate, FieldInfo.IsFamily,
+    public override AccessModifier AccessModifier => AccessModifierHelper.GetAccessModifier(FieldInfo.IsPrivate, FieldInfo.IsFamily,
         FieldInfo.IsAssembly, FieldInfo.IsPublic, FieldInfo.IsFamilyAndAssembly, FieldInfo.IsFamilyOrAssembly);
 
     /// <inheritdoc/>

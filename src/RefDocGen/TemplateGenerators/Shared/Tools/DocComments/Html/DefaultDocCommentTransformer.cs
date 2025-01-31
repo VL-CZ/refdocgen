@@ -1,9 +1,5 @@
 using RefDocGen.CodeElements.Abstract;
 using RefDocGen.CodeElements.Abstract.Types;
-using RefDocGen.CodeElements.Concrete;
-using RefDocGen.CodeElements.Concrete.Types;
-using RefDocGen.CodeElements.Concrete.Types.Delegate;
-using RefDocGen.CodeElements.Concrete.Types.Enum;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 using RefDocGen.Tools.Xml;
@@ -26,13 +22,11 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// </summary>
     private readonly IDocCommentHtmlConfiguration htmlConfiguration;
 
-    /// <summary>
-    /// Resolver of the individual type's documentation pages.
-    /// </summary>
-    private TypeUrlResolver typeUrlResolver;
+    /// <inheritdoc cref="TypeUrlResolver"/>
+    private TypeUrlResolver? typeUrlResolver;
 
     /// <inheritdoc cref="TypeRegistry"/>
-    private ITypeRegistry typeRegistry;
+    private ITypeRegistry? typeRegistry;
 
     /// <summary>
     /// An array of parent XML doc comment elements.
@@ -60,32 +54,33 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     {
         this.htmlConfiguration = htmlConfiguration;
         this.typeRegistry = typeRegistry;
-        typeUrlResolver = new(typeRegistry);
+        TypeUrlResolver = new(typeRegistry);
     }
 
     /// <inheritdoc cref="DefaultDocCommentTransformer(IDocCommentHtmlConfiguration, ITypeRegistry)"/>
     internal DefaultDocCommentTransformer(IDocCommentHtmlConfiguration htmlConfiguration)
     {
         this.htmlConfiguration = htmlConfiguration;
-
-        typeRegistry = new TypeRegistry(
-                new Dictionary<string, ObjectTypeData>(),
-                new Dictionary<string, EnumTypeData>(),
-                new Dictionary<string, DelegateTypeData>()
-            );
-
-        typeUrlResolver = new(typeRegistry);
     }
 
     /// <inheritdoc/>
     public ITypeRegistry TypeRegistry
     {
-        get => typeRegistry;
+        get => typeRegistry ?? throw new InvalidOperationException("ERROR: Type registry not set."); // TODO: update
         set
         {
             typeRegistry = value;
-            typeUrlResolver = new(typeRegistry);
+            TypeUrlResolver = new(typeRegistry);
         }
+    }
+
+    /// <summary>
+    /// Resolver of the individual type's documentation pages.
+    /// </summary>
+    private TypeUrlResolver TypeUrlResolver
+    {
+        get => typeUrlResolver ?? throw new InvalidOperationException("ERROR: Type registry not set."); // TODO: update
+        set => typeUrlResolver = value;
     }
 
     /// <inheritdoc/>
@@ -477,7 +472,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
         }
 
         // type documentation found
-        if (typeUrlResolver.GetUrlOf(typeId, memberId) is string targetUrl)
+        if (TypeUrlResolver.GetUrlOf(typeId, memberId) is string targetUrl)
         {
             var result = new XElement(htmlTemplateIfFound);
             var emptyDescendant = result.GetSingleEmptyDescendantOrSelf();
