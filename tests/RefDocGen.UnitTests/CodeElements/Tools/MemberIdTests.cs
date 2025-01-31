@@ -1,10 +1,10 @@
-using FluentAssertions;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types.TypeName;
 using RefDocGen.CodeElements.Tools;
+using Shouldly;
 using System.Reflection;
 
 namespace RefDocGen.UnitTests.CodeElements.Tools;
@@ -19,7 +19,7 @@ public class MemberIdTests
     {
         var method = MockMethodData("Execute", typeof(void), []);
 
-        MemberId.Of(method).Should().Be("Execute");
+        MemberId.Of(method).ShouldBe("Execute");
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public class MemberIdTests
         var param = MockParameter(typeof(string));
         var method = MockMethodData("Execute", typeof(void), [param]);
 
-        MemberId.Of(method).Should().Be("Execute(System.String)");
+        MemberId.Of(method).ShouldBe("Execute(System.String)");
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public class MemberIdTests
         var param = MockParameter(typeof(string), true);
         var method = MockMethodData("Execute", typeof(void), [param]);
 
-        MemberId.Of(method).Should().Be("Execute(System.String@)");
+        MemberId.Of(method).ShouldBe("Execute(System.String@)");
     }
 
     [Fact]
@@ -49,7 +49,7 @@ public class MemberIdTests
         var param = MockParameter(typeof(MemberInfo));
         var method = MockMethodData("Execute", typeof(void), [param], explicitInterfaceType);
 
-        MemberId.Of(method).Should().Be("MyApp#MyInterface#Execute(System.Reflection.MemberInfo)");
+        MemberId.Of(method).ShouldBe("MyApp#MyInterface#Execute(System.Reflection.MemberInfo)");
     }
 
     [Fact]
@@ -63,7 +63,7 @@ public class MemberIdTests
 
         string expectedId = "Execute(System.String,System.Type,System.Int32@,System.Double[])";
 
-        MemberId.Of(method).Should().Be(expectedId);
+        MemberId.Of(method).ShouldBe(expectedId);
     }
 
     [Fact]
@@ -83,7 +83,7 @@ public class MemberIdTests
         operatorData.IsExplicitImplementation.Returns(false);
         operatorData.ExplicitInterfaceType.ReturnsNull();
 
-        MemberId.Of(operatorData).Should().Be("op_Explicit(System.Reflection.MemberInfo)~MyApp.MyClass");
+        MemberId.Of(operatorData).ShouldBe("op_Explicit(System.Reflection.MemberInfo)~MyApp.MyClass");
     }
 
     [Fact]
@@ -98,7 +98,7 @@ public class MemberIdTests
         indexerData.IsExplicitImplementation.Returns(false);
         indexerData.ExplicitInterfaceType.ReturnsNull();
 
-        MemberId.Of(indexerData).Should().Be("Item(System.Int32)");
+        MemberId.Of(indexerData).ShouldBe("Item(System.Int32)");
     }
 
     /// <summary>

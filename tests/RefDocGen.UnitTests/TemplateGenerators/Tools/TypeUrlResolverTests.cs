@@ -1,9 +1,9 @@
-using FluentAssertions;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using RefDocGen.CodeElements.Abstract;
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools;
+using Shouldly;
 
 namespace RefDocGen.UnitTests.TemplateGenerators.Tools;
 
@@ -52,7 +52,7 @@ public class TypeUrlResolverTests
     {
         string? result = typeUrlResolver.GetUrlOf(typeId);
 
-        result.Should().Be(expectedUrl);
+        result.ShouldBe(expectedUrl);
     }
 
     [Theory]
@@ -62,7 +62,7 @@ public class TypeUrlResolverTests
     {
         string? result = typeUrlResolver.GetUrlOf(typeId, memberId);
 
-        result.Should().Be(expectedUrl);
+        result.ShouldBe(expectedUrl);
     }
 
     [Theory]
@@ -72,7 +72,7 @@ public class TypeUrlResolverTests
     {
         string? result = typeUrlResolver.GetUrlOf(typeId);
 
-        result.Should().Be(expectedUrl);
+        result.ShouldBe(expectedUrl);
     }
 
     [Theory]
@@ -82,6 +82,6 @@ public class TypeUrlResolverTests
     {
         string? result = typeUrlResolver.GetUrlOf(typeId, memberId);
 
-        result.Should().Be(expectedUrl);
+        result.ShouldBe(expectedUrl);
     }
 }

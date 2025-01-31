@@ -1,6 +1,6 @@
-using FluentAssertions;
 using NSubstitute;
 using RefDocGen.CodeElements.Concrete.Types.TypeName;
+using Shouldly;
 
 namespace RefDocGen.UnitTests.CodeElements.Concrete.Types;
 
@@ -16,7 +16,7 @@ public class TypeNameDataTests
 
         var typeData = new TypeNameData(mock);
 
-        typeData.ShortName.Should().Be("Person");
+        typeData.ShortName.ShouldBe("Person");
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public class TypeNameDataTests
 
         var typeData = new TypeNameData(typeMock);
 
-        typeData.ShortName.Should().Be("List");
+        typeData.ShortName.ShouldBe("List");
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public class TypeNameDataTests
 
         var typeData = new TypeNameData(mock);
 
-        typeData.FullName.Should().Be("MyApp.Entities.Person");
+        typeData.FullName.ShouldBe("MyApp.Entities.Person");
     }
 
     [Fact]
@@ -50,7 +50,7 @@ public class TypeNameDataTests
 
         var typeData = new TypeNameData(typeMock);
 
-        typeData.FullName.Should().Be("System.Collections.Generic.Dictionary");
+        typeData.FullName.ShouldBe("System.Collections.Generic.Dictionary");
     }
 
     [Theory]
@@ -62,7 +62,7 @@ public class TypeNameDataTests
 
         var type = new TypeNameData(typeMock);
 
-        type.Id.Should().Be(expectedId);
+        type.Id.ShouldBe(expectedId);
     }
 
     [Fact]
@@ -78,7 +78,7 @@ public class TypeNameDataTests
         var typeData = new TypeNameData(typeMock);
         string expectedId = "System.Collection.Generic.Dictionary{System.String,System.Collections.Generic.List{MyApp.Entities.Person}}";
 
-        typeData.Id.Should().Be(expectedId);
+        typeData.Id.ShouldBe(expectedId);
     }
 
     /// <summary>

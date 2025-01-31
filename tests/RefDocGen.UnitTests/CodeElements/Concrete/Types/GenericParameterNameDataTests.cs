@@ -1,8 +1,8 @@
-using FluentAssertions;
 using NSubstitute;
 using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Concrete.Types.TypeName;
+using Shouldly;
 
 namespace RefDocGen.UnitTests.CodeElements.Concrete.Types;
 
@@ -55,7 +55,7 @@ public class GenericTypeParameterNameDataTests
 
         string expectedId = "`1";
 
-        gp.Id.Should().Be(expectedId);
+        gp.Id.ShouldBe(expectedId);
     }
 
     [Fact]
@@ -67,7 +67,7 @@ public class GenericTypeParameterNameDataTests
 
         string expectedId = "`0[]";
 
-        gp.Id.Should().Be(expectedId);
+        gp.Id.ShouldBe(expectedId);
     }
 
     [Fact]
@@ -79,7 +79,7 @@ public class GenericTypeParameterNameDataTests
 
         string expectedId = "`0*";
 
-        gp.Id.Should().Be(expectedId);
+        gp.Id.ShouldBe(expectedId);
     }
 
     [Fact]
@@ -92,6 +92,6 @@ public class GenericTypeParameterNameDataTests
 
         string expectedId = "``0";
 
-        gp.Id.Should().Be(expectedId);
+        gp.Id.ShouldBe(expectedId);
     }
 }

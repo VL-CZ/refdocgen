@@ -1,7 +1,7 @@
-using FluentAssertions;
 using NSubstitute;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
+using Shouldly;
 
 namespace RefDocGen.UnitTests.TemplateGenerators.Tools.TypeName;
 
@@ -20,7 +20,7 @@ public class CSharpTypeNameTests
 
         string? name = CSharpTypeName.GetBuiltInName(typeData);
 
-        name.Should().Be(expectedName);
+        name.ShouldBe(expectedName);
     }
 
     [Theory]
@@ -35,7 +35,7 @@ public class CSharpTypeNameTests
 
         string? name = CSharpTypeName.GetBuiltInName(typeData);
 
-        name.Should().BeNull();
+        name.ShouldBeNull();
     }
 
     [Theory]
@@ -52,7 +52,7 @@ public class CSharpTypeNameTests
 
         string? name = CSharpTypeName.GetBuiltInName(typeData);
 
-        name.Should().Be(expectedName);
+        name.ShouldBe(expectedName);
     }
 
     [Theory]
@@ -66,7 +66,7 @@ public class CSharpTypeNameTests
 
         string? typeName = CSharpTypeName.Of(typeData);
 
-        typeName.Should().Be(expectedName);
+        typeName.ShouldBe(expectedName);
     }
 
     [Fact]
@@ -77,7 +77,7 @@ public class CSharpTypeNameTests
 
         string? typeName = CSharpTypeName.Of(typeData);
 
-        typeName.Should().Be("List<int>");
+        typeName.ShouldBe("List<int>");
     }
 
     [Fact]
@@ -90,7 +90,7 @@ public class CSharpTypeNameTests
 
         string? typeName = CSharpTypeName.Of(typeData);
 
-        typeName.Should().Be("Dictionary<string, List<FileInfo>>");
+        typeName.ShouldBe("Dictionary<string, List<FileInfo>>");
     }
 
     /// <summary>
