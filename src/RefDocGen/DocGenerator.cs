@@ -26,16 +26,23 @@ public class DocGenerator
     private readonly ITemplateGenerator templateGenerator;
 
     /// <summary>
+    /// Minimal visibility of the types and members to include.
+    /// </summary>
+    private readonly AccessModifier minVisibility;
+
+    /// <summary>
     /// Initialize a new instance of <see cref="DocGenerator"/> class.
     /// </summary>
     /// <param name="assemblyPath">Path to the DLL assembly.</param>
     /// <param name="docXmlPath">Path to the XML documentation file.</param>
     /// <param name="templateGenerator">An instance used for generating the templates</param>
-    public DocGenerator(string assemblyPath, string docXmlPath, ITemplateGenerator templateGenerator)
+    /// <param name="minVisibility">Minimal visibility of the types and members to include.</param>
+    public DocGenerator(string assemblyPath, string docXmlPath, ITemplateGenerator templateGenerator, AccessModifier minVisibility)
     {
         this.assemblyPath = assemblyPath;
         this.docXmlPath = docXmlPath;
         this.templateGenerator = templateGenerator;
+        this.minVisibility = minVisibility;
     }
 
     /// <summary>
@@ -43,7 +50,7 @@ public class DocGenerator
     /// </summary>
     public void GenerateDoc()
     {
-        var assemblyAnalyzer = new AssemblyTypeExtractor(assemblyPath, AccessModifier.Family);
+        var assemblyAnalyzer = new AssemblyTypeExtractor(assemblyPath, minVisibility);
         var typeRegistry = assemblyAnalyzer.GetDeclaredTypes();
 
         var docCommentExtractor = new DocCommentExtractor(docXmlPath, typeRegistry);

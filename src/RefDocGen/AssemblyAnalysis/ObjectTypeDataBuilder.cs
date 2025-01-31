@@ -21,8 +21,10 @@ internal class ObjectTypeDataBuilder
     /// <inheritdoc cref="TypeDeclaration.TypeParameters"/>
     private readonly Dictionary<string, TypeParameterData> typeParameters;
 
-
-    private readonly AccessModifier minAccessibility;
+    /// <summary>
+    /// Minimal visibility of the members to include.
+    /// </summary>
+    private readonly AccessModifier minVisibility;
 
     /// <inheritdoc cref="ObjectTypeData.Constructors"/>
     private Dictionary<string, ConstructorData> constructors = [];
@@ -49,14 +51,15 @@ internal class ObjectTypeDataBuilder
     /// Initializes a new instance of <see cref="ObjectTypeDataBuilder"/> class.
     /// </summary>
     /// <param name="type">The type of the object to be built.</param>
-    internal ObjectTypeDataBuilder(Type type, AccessModifier minAccessibility)
+    /// <param name="minVisibility">Minimal visibility of the members to include.</param>
+    internal ObjectTypeDataBuilder(Type type, AccessModifier minVisibility)
     {
         typeParameters = MemberCreatorHelper.CreateTypeParametersDictionary(type);
         var attributeData = MemberCreatorHelper.GetAttributeData(type, typeParameters);
 
         // construct the object type
         this.type = new ObjectTypeData(type, typeParameters, attributeData);
-        this.minAccessibility = minAccessibility;
+        this.minVisibility = minVisibility;
     }
 
     /// <summary>
@@ -68,7 +71,7 @@ internal class ObjectTypeDataBuilder
     {
         this.constructors = constructors
             .Select(c => ConstructorDataCreator.CreateFrom(c, type, typeParameters))
-            .Where(IsAccessible)
+            .Where(IsVisible)
             .ToIdDictionary();
 
         return this;
@@ -83,7 +86,7 @@ internal class ObjectTypeDataBuilder
     {
         this.fields = fields
             .Select(f => FieldDataCreator.CreateFrom(f, type, typeParameters))
-            .Where(IsAccessible)
+            .Where(IsVisible)
             .ToIdDictionary();
 
         return this;
@@ -98,7 +101,7 @@ internal class ObjectTypeDataBuilder
     {
         this.properties = properties
             .Select(p => PropertyDataCreator.CreateFrom(p, type, typeParameters))
-            .Where(IsAccessible)
+            .Where(IsVisible)
             .ToIdDictionary();
 
         return this;
@@ -113,7 +116,7 @@ internal class ObjectTypeDataBuilder
     {
         this.indexers = indexers
             .Select(i => IndexerDataCreator.CreateFrom(i, type, typeParameters))
-            .Where(IsAccessible)
+            .Where(IsVisible)
             .ToIdDictionary();
 
         return this;
@@ -128,7 +131,7 @@ internal class ObjectTypeDataBuilder
     {
         this.methods = methods
             .Select(m => MethodDataCreator.CreateFrom(m, type, typeParameters))
-            .Where(IsAccessible)
+            .Where(IsVisible)
             .ToIdDictionary();
 
         return this;
@@ -143,7 +146,7 @@ internal class ObjectTypeDataBuilder
     {
         this.operators = operators
             .Select(o => OperatorDataCreator.CreateFrom(o, type, typeParameters))
-            .Where(IsAccessible)
+            .Where(IsVisible)
             .ToIdDictionary();
 
         return this;
@@ -158,7 +161,7 @@ internal class ObjectTypeDataBuilder
     {
         this.events = events
             .Select(e => EventDataCreator.CreateFrom(e, type, typeParameters))
-            .Where(IsAccessible)
+            .Where(IsVisible)
             .ToIdDictionary();
 
         return this;
@@ -175,8 +178,15 @@ internal class ObjectTypeDataBuilder
         return type;
     }
 
-    private bool IsAccessible(IMemberData member)
+    /// <summary>
+    /// Checks if the <paramref name="member"/> has at least <see cref="minVisibility"/>.
+    /// </summary>
+    /// <param name="member">The member to check.</param>
+    /// <returns>
+    /// <c>true</c> if the member has at least the visibility determined by <see cref="minVisibility"/>, <c>false</c> otherwise.
+    /// </returns>
+    private bool IsVisible(IMemberData member)
     {
-        return member.AccessModifier.IsAtMostAsRestrictiveAs(minAccessibility);
+        return member.AccessModifier.IsAtMostAsRestrictiveAs(minVisibility);
     }
 }

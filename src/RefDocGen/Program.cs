@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using RefDocGen.CodeElements;
 using RefDocGen.TemplateGenerators.Default;
 
 namespace RefDocGen;
@@ -20,9 +21,9 @@ public static class Program
         string docPath = Path.Join(rootPath, "demo-lib", "MyLibrary.xml");
 
         string projectPath = Path.Join(rootPath, "src", "RefDocGen");
-        //string templatePath = "TemplateGenerators/Default/Templates/Default";
-        //string outputDir = Path.Combine(projectPath, "out");
         string outputDir = Path.Combine(projectPath, "out-razor");
+
+        var minVisibility = AccessModifier.Private;
 
         IServiceCollection services = new ServiceCollection();
         _ = services.AddLogging();
@@ -34,7 +35,7 @@ public static class Program
 
         var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir);
 
-        var docGenerator = new DocGenerator(dllPath, docPath, templateGenerator);
+        var docGenerator = new DocGenerator(dllPath, docPath, templateGenerator, minVisibility);
         docGenerator.GenerateDoc();
 
         Console.WriteLine("Done...");
