@@ -1,6 +1,9 @@
 using RefDocGen.AssemblyAnalysis.MemberCreators;
+using RefDocGen.CodeElements;
+using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Tools;
 using System.Reflection;
 
 namespace RefDocGen.AssemblyAnalysis;
@@ -17,6 +20,9 @@ internal class ObjectTypeDataBuilder
 
     /// <inheritdoc cref="TypeDeclaration.TypeParameters"/>
     private readonly Dictionary<string, TypeParameterData> typeParameters;
+
+
+    private readonly AccessModifier minAccessibility;
 
     /// <inheritdoc cref="ObjectTypeData.Constructors"/>
     private Dictionary<string, ConstructorData> constructors = [];
@@ -43,13 +49,14 @@ internal class ObjectTypeDataBuilder
     /// Initializes a new instance of <see cref="ObjectTypeDataBuilder"/> class.
     /// </summary>
     /// <param name="type">The type of the object to be built.</param>
-    internal ObjectTypeDataBuilder(Type type)
+    internal ObjectTypeDataBuilder(Type type, AccessModifier minAccessibility)
     {
         typeParameters = MemberCreatorHelper.CreateTypeParametersDictionary(type);
         var attributeData = MemberCreatorHelper.GetAttributeData(type, typeParameters);
 
         // construct the object type
         this.type = new ObjectTypeData(type, typeParameters, attributeData);
+        this.minAccessibility = minAccessibility;
     }
 
     /// <summary>
@@ -61,6 +68,7 @@ internal class ObjectTypeDataBuilder
     {
         this.constructors = constructors
             .Select(c => ConstructorDataCreator.CreateFrom(c, type, typeParameters))
+            .Where(IsAccessible)
             .ToIdDictionary();
 
         return this;
@@ -75,6 +83,7 @@ internal class ObjectTypeDataBuilder
     {
         this.fields = fields
             .Select(f => FieldDataCreator.CreateFrom(f, type, typeParameters))
+            .Where(IsAccessible)
             .ToIdDictionary();
 
         return this;
@@ -89,6 +98,7 @@ internal class ObjectTypeDataBuilder
     {
         this.properties = properties
             .Select(p => PropertyDataCreator.CreateFrom(p, type, typeParameters))
+            .Where(IsAccessible)
             .ToIdDictionary();
 
         return this;
@@ -103,6 +113,7 @@ internal class ObjectTypeDataBuilder
     {
         this.indexers = indexers
             .Select(i => IndexerDataCreator.CreateFrom(i, type, typeParameters))
+            .Where(IsAccessible)
             .ToIdDictionary();
 
         return this;
@@ -117,6 +128,7 @@ internal class ObjectTypeDataBuilder
     {
         this.methods = methods
             .Select(m => MethodDataCreator.CreateFrom(m, type, typeParameters))
+            .Where(IsAccessible)
             .ToIdDictionary();
 
         return this;
@@ -131,6 +143,7 @@ internal class ObjectTypeDataBuilder
     {
         this.operators = operators
             .Select(o => OperatorDataCreator.CreateFrom(o, type, typeParameters))
+            .Where(IsAccessible)
             .ToIdDictionary();
 
         return this;
@@ -145,6 +158,7 @@ internal class ObjectTypeDataBuilder
     {
         this.events = events
             .Select(e => EventDataCreator.CreateFrom(e, type, typeParameters))
+            .Where(IsAccessible)
             .ToIdDictionary();
 
         return this;
@@ -159,5 +173,10 @@ internal class ObjectTypeDataBuilder
         // add the members
         type.AddMembers(constructors, fields, properties, methods, operators, indexers, events);
         return type;
+    }
+
+    private bool IsAccessible(IMemberData member)
+    {
+        return member.AccessModifier.IsAtMostAsRestrictiveAs(minAccessibility);
     }
 }

@@ -126,7 +126,7 @@ internal class PropertyData : MemberData, IPropertyData
         get
         {
             var modifiers = Accessors.Select(a => a.AccessModifier);
-            return AccessModifierExtensions.GetTheLeastRestrictive(modifiers);
+            return AccessModifierHelper.GetTheLeastRestrictive(modifiers);
         }
     }
 

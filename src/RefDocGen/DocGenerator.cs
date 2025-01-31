@@ -1,4 +1,5 @@
 using RefDocGen.AssemblyAnalysis;
+using RefDocGen.CodeElements;
 using RefDocGen.DocExtraction;
 using RefDocGen.TemplateGenerators;
 
@@ -42,7 +43,7 @@ public class DocGenerator
     /// </summary>
     public void GenerateDoc()
     {
-        var assemblyAnalyzer = new AssemblyTypeExtractor(assemblyPath);
+        var assemblyAnalyzer = new AssemblyTypeExtractor(assemblyPath, AccessModifier.Family);
         var typeRegistry = assemblyAnalyzer.GetDeclaredTypes();
 
         var docCommentExtractor = new DocCommentExtractor(docXmlPath, typeRegistry);

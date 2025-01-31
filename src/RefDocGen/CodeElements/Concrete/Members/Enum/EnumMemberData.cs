@@ -1,6 +1,7 @@
 using RefDocGen.CodeElements.Abstract.Members.Enum;
 using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Tools;
 using System.Reflection;
 
 namespace RefDocGen.CodeElements.Concrete.Members.Enum;
@@ -27,7 +28,7 @@ internal class EnumMemberData : MemberData, IEnumMemberData
     public FieldInfo FieldInfo { get; }
 
     /// <inheritdoc/>
-    public override AccessModifier AccessModifier => AccessModifierExtensions.GetAccessModifier(
+    public override AccessModifier AccessModifier => AccessModifierHelper.GetAccessModifier(
         FieldInfo.IsPrivate,
         FieldInfo.IsFamily,
         FieldInfo.IsAssembly,
