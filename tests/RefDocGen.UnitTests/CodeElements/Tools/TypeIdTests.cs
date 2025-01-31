@@ -5,6 +5,7 @@ using RefDocGen.CodeElements.Concrete.Types.TypeName;
 using Shouldly;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
+using RefDocGen.UnitTests.Shared;
 
 namespace RefDocGen.UnitTests.CodeElements.Tools;
 
@@ -37,7 +38,7 @@ public class TypeIdTests
         tValueMock.Name.Returns("TValue");
 
         var tMethodTypeMock = Substitute.For<Type>();
-        tValueMock.Name.Returns("TMethodType");
+        tMethodTypeMock.Name.Returns("TMethodType");
 
         availableTypeParameters = new Dictionary<string, TypeParameterData>()
         {
@@ -52,27 +53,27 @@ public class TypeIdTests
     [InlineData("MyApp.Entities", "Person[]", "MyApp.Entities.Person[]")]
     public void Of_ReturnsCorrectData_ForNonGenericType(string typeNamespace, string typeShortName, string expectedId)
     {
-        var typeMock = MockNonGenericType(typeNamespace, typeShortName);
+        var typeMock = MockHelper.MockNonGenericType(typeNamespace, typeShortName);
 
         var type = new TypeNameData(typeMock);
 
-        type.Id.ShouldBe(expectedId);
+        TypeId.Of(type).ShouldBe(expectedId);
     }
 
     [Fact]
     public void Of_ReturnsCorrectData_ForTypeWithTypeParameters()
     {
-        var innerInnerTypeMock = MockNonGenericType("MyApp.Entities", "Person");
+        var innerInnerTypeMock = MockHelper.MockNonGenericType("MyApp.Entities", "Person");
 
-        var innerType2Mock = MockType("System.Collections.Generic", "List`1", [innerInnerTypeMock]);
-        var innerType1Mock = MockNonGenericType("System", "String");
+        var innerType2Mock = MockHelper.MockType("System.Collections.Generic", "List`1", [innerInnerTypeMock]);
+        var innerType1Mock = MockHelper.MockNonGenericType("System", "String");
 
-        var typeMock = MockType("System.Collection.Generic", "Dictionary`2", [innerType1Mock, innerType2Mock]);
+        var typeMock = MockHelper.MockType("System.Collection.Generic", "Dictionary`2", [innerType1Mock, innerType2Mock]);
 
-        var typeData = new TypeNameData(typeMock);
+        var type = new TypeNameData(typeMock);
         string expectedId = "System.Collection.Generic.Dictionary{System.String,System.Collections.Generic.List{MyApp.Entities.Person}}";
 
-        typeData.Id.ShouldBe(expectedId);
+        TypeId.Of(type).ShouldBe(expectedId);
     }
 
     [Fact]
@@ -82,9 +83,9 @@ public class TypeIdTests
         genericParamMock.Name.Returns("TKey");
         genericParamMock.IsGenericParameter.Returns(true);
 
-        var genericParam = new GenericTypeParameterNameData(genericParamMock, availableTypeParameters);
-        var type = MockType("System.Collection.Generic", "List`1", [genericParam]);
+        var typeMock = MockHelper.MockType("System.Collection.Generic", "List`1", [genericParamMock]);
 
+        var type = new TypeNameData(typeMock, availableTypeParameters);
         string expectedId = "System.Collection.Generic.List{`0}";
 
         TypeId.Of(type).ShouldBe(expectedId);
@@ -138,32 +139,5 @@ public class TypeIdTests
         string expectedId = "``0";
 
         TypeId.Of(gp).ShouldBe(expectedId);
-    }
-
-    /// <summary>
-    /// Mock <see cref="ITypeNameData"/> instance and initialize it with the provided data.
-    /// </summary>
-    /// <param name="fullName">Fully qualified name of the type.</param>
-    /// <param name="genericParameters">Generic parameters of the type.</param>
-    /// <returns>Mocked <see cref="ITypeNameData"/> instance.</returns>
-    private ITypeNameData MockTypeNameData(string fullName, ITypeNameData[] genericParameters)
-    {
-        var type = Substitute.For<ITypeNameData>();
-
-        type.FullName.Returns(fullName);
-        type.TypeParameters.Returns(genericParameters);
-        type.HasTypeParameters.Returns(genericParameters.Length > 0);
-
-        return type;
-    }
-
-    /// <summary>
-    /// Mock <see cref="ITypeNameData"/> instance with no type parameters and initialize it with the provided data.
-    /// </summary>
-    /// <param name="fullName">Fully qualified name of the type.</param>
-    /// <returns>Mocked <see cref="ITypeNameData"/> instance.</returns>
-    private ITypeNameData MockTypeNameData(string fullName)
-    {
-        return MockTypeNameData(fullName, []);
     }
 }
