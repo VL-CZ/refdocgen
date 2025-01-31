@@ -85,7 +85,7 @@ internal static class CSharpTypeName
         return typeName;
     }
 
-    /// <inheritdoc cref="Of(ITypeNameData)"/>
+    /// <inheritdoc cref="Of(ITypeNameData, bool)"/>
     internal static string Of(ITypeDeclaration type)
     {
         string typeName = type.ShortName;

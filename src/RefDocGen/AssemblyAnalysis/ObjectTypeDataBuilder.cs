@@ -3,7 +3,6 @@ using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types;
-using RefDocGen.CodeElements.Tools;
 using System.Reflection;
 
 namespace RefDocGen.AssemblyAnalysis;
