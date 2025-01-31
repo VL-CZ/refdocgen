@@ -1,5 +1,5 @@
-using FluentAssertions;
 using RefDocGen.Tools;
+using Shouldly;
 
 namespace RefDocGen.UnitTests.Tools;
 
@@ -26,9 +26,9 @@ public class DictionaryExtensionsTests
         };
     }
 
+    [Fact]
     public void Merge_ReturnsCorrectData_WhenNoDuplicateKeys()
     {
-
         var expectedResult = new Dictionary<int, string>()
         {
             [0] = "a",
@@ -39,9 +39,10 @@ public class DictionaryExtensionsTests
 
         var result = DictionaryExtensions.Merge(dictionary1, dictionary2);
 
-        result.Should().BeEquivalentTo(expectedResult);
+        result.ShouldBe(expectedResult);
     }
 
+    [Fact]
     public void Merge_ReturnsCorrectData_ForDuplicateKeys()
     {
         dictionary1[3] = "newValue"; // add the value
@@ -50,12 +51,12 @@ public class DictionaryExtensionsTests
         {
             [0] = "a",
             [1] = "b",
-            [2] = "c",
             [3] = "newValue",
+            [2] = "c",
         };
 
         var result = DictionaryExtensions.Merge(dictionary1, dictionary2);
 
-        result.Should().BeEquivalentTo(expectedResult);
+        result.ShouldBe(expectedResult);
     }
 }

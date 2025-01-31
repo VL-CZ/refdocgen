@@ -1,5 +1,5 @@
-using FluentAssertions;
 using RefDocGen.DocExtraction.Tools;
+using Shouldly;
 
 namespace RefDocGen.UnitTests.DocExtraction.Tools;
 
@@ -15,7 +15,7 @@ public class MemberSignatureParserTests
 
         var result = MemberSignatureParser.Parse(memberString);
 
-        result.Should().BeEquivalentTo(("MyLibrary.Animal", "weight", ""));
+        result.ShouldBe(("MyLibrary.Animal", "weight", ""));
     }
 
     [Fact]
@@ -25,6 +25,6 @@ public class MemberSignatureParserTests
 
         var result = MemberSignatureParser.Parse(memberString);
 
-        result.Should().BeEquivalentTo(("MyLibrary.Animal", "GenerateAnimalProfile", "(System.String,System.String,System.DateTime)"));
+        result.ShouldBe(("MyLibrary.Animal", "GenerateAnimalProfile", "(System.String,System.String,System.DateTime)"));
     }
 }
