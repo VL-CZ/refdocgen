@@ -5,7 +5,7 @@ using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools;
 using Shouldly;
 
-namespace RefDocGen.UnitTests.TemplateGenerators.Tools;
+namespace RefDocGen.UnitTests.TemplateGenerators.Shared.Tools;
 
 /// <summary>
 /// Class responsible for resolving URL of the type's documentation page.

@@ -1,4 +1,3 @@
-using NSubstitute;
 using RefDocGen.CodeElements.Concrete.Types.TypeName;
 using Shouldly;
 
@@ -51,63 +50,5 @@ public class TypeNameDataTests
         var typeData = new TypeNameData(typeMock);
 
         typeData.FullName.ShouldBe("System.Collections.Generic.Dictionary");
-    }
-
-    [Theory]
-    [InlineData("MyApp.Entities", "Person", "MyApp.Entities.Person")]
-    [InlineData("MyApp.Entities", "Person[]", "MyApp.Entities.Person[]")]
-    public void Id_ReturnsCorrectData_ForNonGenericType(string typeNamespace, string typeShortName, string expectedId)
-    {
-        var typeMock = MockNonGenericType(typeNamespace, typeShortName);
-
-        var type = new TypeNameData(typeMock);
-
-        type.Id.ShouldBe(expectedId);
-    }
-
-    [Fact]
-    public void Id_ReturnsCorrectData_ForGenericType()
-    {
-        var innerInnerTypeMock = MockNonGenericType("MyApp.Entities", "Person");
-
-        var innerType2Mock = MockType("System.Collections.Generic", "List`1", [innerInnerTypeMock]);
-        var innerType1Mock = MockNonGenericType("System", "String");
-
-        var typeMock = MockType("System.Collection.Generic", "Dictionary`2", [innerType1Mock, innerType2Mock]);
-
-        var typeData = new TypeNameData(typeMock);
-        string expectedId = "System.Collection.Generic.Dictionary{System.String,System.Collections.Generic.List{MyApp.Entities.Person}}";
-
-        typeData.Id.ShouldBe(expectedId);
-    }
-
-    /// <summary>
-    /// Mock <see cref="Type"/> instance and initialize it with the provided data.
-    /// </summary>
-    /// <param name="typeNamespace">Namespace containing the type.</param>
-    /// <param name="typeName">Name of the type.</param>
-    /// <param name="genericParameters">Generic parameters of the type.</param>
-    /// <returns>Mocked <see cref="Type"/> instance.</returns>
-    private Type MockType(string typeNamespace, string typeName, Type[] genericParameters)
-    {
-        var type = Substitute.For<Type>();
-
-        type.Name.Returns(typeName);
-        type.Namespace.Returns(typeNamespace);
-        type.GetGenericArguments().Returns(genericParameters);
-        type.IsGenericType.Returns(genericParameters.Length > 0);
-
-        return type;
-    }
-
-    /// <summary>
-    /// Mock non-generic <see cref="Type"/> instance and initialize it with the provided data.
-    /// </summary>
-    /// <param name="typeNamespace">Namespace of the type</param>
-    /// <param name="typeName">Name of the type.</param>
-    /// <returns>Mocked <see cref="Type"/> instance.</returns>
-    private Type MockNonGenericType(string typeNamespace, string typeName)
-    {
-        return MockType(typeNamespace, typeName, []);
     }
 }

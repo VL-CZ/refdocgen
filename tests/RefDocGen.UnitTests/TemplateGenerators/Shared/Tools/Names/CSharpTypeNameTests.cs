@@ -3,7 +3,7 @@ using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 using Shouldly;
 
-namespace RefDocGen.UnitTests.TemplateGenerators.Tools.TypeName;
+namespace RefDocGen.UnitTests.TemplateGenerators.Shared.Tools.Names;
 
 /// <summary>
 /// Class containing tests for <see cref="CSharpTypeName"/> class.
