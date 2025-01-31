@@ -4,7 +4,6 @@ using RefDocGen.CodeElements.Tools;
 using RefDocGen.CodeElements.Concrete.Types.TypeName;
 using Shouldly;
 using RefDocGen.CodeElements.Concrete.Types;
-using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.UnitTests.Shared;
 
 namespace RefDocGen.UnitTests.CodeElements.Tools;
