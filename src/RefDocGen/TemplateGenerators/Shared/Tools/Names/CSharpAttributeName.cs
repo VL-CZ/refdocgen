@@ -29,7 +29,7 @@ internal static class CSharpAttributeName
 
         if (type.HasTypeParameters)
         {
-            string genericParamsString = string.Join(", ", type.TypeParameters.Select(CSharpTypeName.Of));
+            string genericParamsString = string.Join(", ", type.TypeParameters.Select(tp => CSharpTypeName.Of(tp)));
             attributeName += '<' + genericParamsString + '>'; // add generic params to the type name
         }
 
