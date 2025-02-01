@@ -1,16 +1,13 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using RefDocGen.TemplateGenerators.Default.Templates;
 using RefDocGen.TemplateGenerators.Default;
-using RefDocGen.TemplateGenerators.Tools.DocComments.Html;
-using System.Xml.Linq;
-using FluentAssertions;
 using AngleSharp;
 using System.Text.RegularExpressions;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
-using System.Reflection.Metadata;
+using RefDocGen.CodeElements;
+using Shouldly;
 
 namespace RefDocGen.IntegrationTests;
 
@@ -42,19 +39,9 @@ public sealed class DocumentationFixture : IDisposable
 
         using var htmlRenderer = new HtmlRenderer(serviceProvider, loggerFactory);
 
-        IDocCommentTransformer docCommentParser = new DefaultDocCommentTransformer(
-                new DocCommentHtmlConfiguration()
-            );
+        var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir);
 
-        var templateGenerator = new RazorTemplateGenerator<
-                DelegateTypeTemplate,
-                EnumTypeTemplate,
-                NamespaceDetailTemplate,
-                NamespaceListTemplate,
-                ObjectTypeTemplate
-            >(htmlRenderer, docCommentParser, outputDir);
-
-        var generator = new DocGenerator("data/MyLibrary.dll", "data/MyLibrary.xml", templateGenerator);
+        var generator = new DocGenerator("data/MyLibrary.dll", "data/MyLibrary.xml", templateGenerator, AccessModifier.Private);
 
         generator.GenerateDoc();
     }
@@ -97,7 +84,7 @@ public class UnitTest1 : IClassFixture<DocumentationFixture>
         var isAdultMethod = document.GetElementById("IsAdult").FirstChild;
         string content = Regex.Replace(isAdultMethod.TextContent, @"\s+", " ").Trim();
 
-        content.Should().Be("public bool IsAdult() #");
+        content.ShouldBe("public bool IsAdult() #");
     }
 
     [Fact]
@@ -109,6 +96,6 @@ public class UnitTest1 : IClassFixture<DocumentationFixture>
         var docComment = document.GetElementById("IsAdult").FindChild<IHtmlDivElement>();
         string content = Regex.Replace(docComment.TextContent, @"\s+", " ").Trim();
 
-        content.Should().Be("Checks if the user is adult.");
+        content.ShouldBe("Checks if the user is adult.");
     }
 }
