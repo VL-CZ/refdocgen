@@ -8,10 +8,10 @@
 @if (Attributes.Any())
 {
     <h3 class="lead mt-3">Attributes</h3>
-    <div class="mx-2">
+    <div class="mx-2" data-id="attributes-section">
         @foreach (var attr in Attributes)
         {
-            <div>
+            <div data-id="attribute-data">
                 <AttributeString Attribute="@attr" />
             </div>
         }

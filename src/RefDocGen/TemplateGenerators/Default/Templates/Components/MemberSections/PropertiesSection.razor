@@ -11,7 +11,7 @@
         @foreach (var property in Properties)
         {
             <div class="border p-2 mb-2" id="@property.Id">
-                <h6 class="mb-1">
+                <h6 class="mb-1" data-id="member-name">
                     <samp>
                         <span class="text-primary">
                             @string.Join(' ', property.Modifiers)

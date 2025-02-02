@@ -8,7 +8,7 @@
 @if (Parameters.Any())
 {
     <h3 class="lead my-2">Parameters</h3>
-    <div class="mx-2">
+    <div class="mx-2" data-id="parameters-section">
         @foreach (var parameter in Parameters)
         {
             @foreach (var attr in parameter.Attributes)
@@ -17,11 +17,11 @@
                 <span> </span>
             }
 
-            <samp>
+            <samp data-id="paramter-name">
                 <ParameterName Parameter="@parameter" />
             </samp>
 
-            <div class="text-muted mb-2">
+            <div class="text-muted mb-2" data-id="paramter-doc">
                 @if (parameter.DocComment is not null)
                 {
                     <i>@((MarkupString)parameter.DocComment)</i>

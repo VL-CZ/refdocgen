@@ -41,7 +41,7 @@
 
     <div class="container my-4">
 
-        <h1 class="display-4">
+        <h1 class="display-4" data-id="namespace-title">
             <samp>
                 <span class="text-primary">namespace</span>
                 <span class="text-dark">@Model.Name</span>
@@ -53,7 +53,7 @@
         @if (Model.Classes.Any())
         {
             <h2 class="display-5">Classes</h2>
-            <table class="table">
+            <table class="table" data-id="namespace-classes">
                 <tbody>
                     @foreach (var type in Model.Classes)
                     {
@@ -67,7 +67,7 @@
         @if (Model.ValueTypes.Any())
         {
             <h2 class="display-5">Structs</h2>
-            <table class="table">
+            <table class="table" data-id="namespace-valuetypes">
                 <tbody>
                     @foreach (var type in Model.ValueTypes)
                     {
@@ -81,7 +81,7 @@
         @if (Model.Interfaces.Any())
         {
             <h2 class="display-5">Interfaces</h2>
-            <table class="table">
+            <table class="table" data-id="namespace-interfaces">
                 <tbody>
                     @foreach (var type in Model.Interfaces)
                     {
@@ -95,7 +95,7 @@
         @if (Model.Enums.Any())
         {
             <h2 class="display-5">Enums</h2>
-            <table class="table">
+            <table class="table" data-id="namespace-enums">
                 <tbody>
                     @foreach (var type in Model.Enums)
                     {
@@ -109,7 +109,7 @@
         @if (Model.Delegates.Any())
         {
             <h2 class="display-5">Delegates</h2>
-            <table class="table">
+            <table class="table" data-id="namespace-delegates">
                 <tbody>
                     @foreach (var type in Model.Delegates)
                     {

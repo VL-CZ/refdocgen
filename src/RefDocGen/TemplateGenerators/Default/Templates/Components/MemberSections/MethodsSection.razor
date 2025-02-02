@@ -15,7 +15,7 @@
         @foreach (var method in Methods)
         {
             <div class="border p-2 mb-2" id="@method.Id">
-                <h6 class="mb-1">
+                <h6 class="mb-1" data-id="member-name">
                     <samp>
                         <span class="text-primary">
                             @string.Join(' ', method.Modifiers)
