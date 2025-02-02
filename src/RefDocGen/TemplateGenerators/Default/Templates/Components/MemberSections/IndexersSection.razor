@@ -6,11 +6,11 @@
 }
 
 <h2 class="display-5 mt-2">Indexers</h2>
-<div class="row">
+<div class="row" data-id="indexers-section">
     <div class="col-md-12">
         @foreach (var indexer in Indexers)
         {
-            <div class="border p-2 mb-2" id="@indexer.Id">
+            <div class="border p-2 mb-2" id="@indexer.Id" data-id="member-data">
                 <h6 class="mb-1" data-id="member-name">
                     <samp>
                         <span class="text-primary">

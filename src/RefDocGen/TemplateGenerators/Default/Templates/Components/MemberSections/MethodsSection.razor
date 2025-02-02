@@ -8,13 +8,19 @@
     public required string SectionName { get; set; }
 }
 
+@{
+    string memberKind = SectionName == "Operators"
+        ? "operator"
+        : "method";
+}
+
 <h2 class="display-5 mt-2">@SectionName</h2>
-<div class="row">
+<div class="row" data-id="@(memberKind)s-section">
     <div class="col-md-12">
 
         @foreach (var method in Methods)
         {
-            <div class="border p-2 mb-2" id="@method.Id">
+            <div class="border p-2 mb-2" id="@method.Id" data-id="member-data">
                 <h6 class="mb-1" data-id="member-name">
                     <samp>
                         <span class="text-primary">
