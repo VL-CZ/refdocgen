@@ -9,40 +9,68 @@ public class UserPageTests : IClassFixture<DocumentationFixture>
 
     public UserPageTests()
     {
-        document = Shared.GetDocument("MyLibrary.User.html");
+        document = Tools.GetDocument("MyLibrary.User.html");
     }
 
     [Fact]
-    public void IsAdultMethod_ContainsCorrectContent()
+    public void Check_MaxAgeField()
     {
-        // Access elements using query selectors
-        var isAdultMethod = document.GetMember("IsAdult");
+        var maxAgeField = document.GetMember("MaxAge");
 
-        var methodNameElement = isAdultMethod.GetDataId(Shared.MemberName);
-
-        string methodName = Shared.GetMemberNameContent(methodNameElement);
-        methodName.ShouldBe("public bool IsAdult()");
-
-        var summaryDocElement = isAdultMethod.GetDataId(Shared.SummaryDoc);
-        string summaryDoc = Shared.ParseStringContent(summaryDocElement);
-
-        summaryDoc.ShouldBe("Checks if the user is adult.");
-    }
-
-    [Fact]
-    public void MaxAge_ContainsCorrectContent()
-    {
-        // Access elements using query selectors
-        var maxAgeElement = document.GetMember("MaxAge");
-
-        var fieldNameElement = maxAgeElement.GetDataId(Shared.MemberName);
-
-        string fieldName = Shared.GetMemberNameContent(fieldNameElement);
+        string fieldName = Tools.GetMemberNameContent(maxAgeField);
         fieldName.ShouldBe("private const int MaxAge = 150");
 
-        var summaryDocElement = maxAgeElement.GetDataId(Shared.SummaryDoc);
-        string summaryDoc = Shared.ParseStringContent(summaryDocElement);
-
+        string summaryDoc = Tools.GetSummaryDocContent(maxAgeField);
         summaryDoc.ShouldBe("Maximum age of the user.");
+    }
+
+    [Fact]
+    public void Check_AnimalsProperty()
+    {
+        var animalsProperty = document.GetMember("Animals");
+
+        string fieldName = Tools.GetMemberNameContent(animalsProperty);
+        fieldName.ShouldBe("public List<Animal> Animals { get; }");
+
+        string summaryDoc = Tools.GetSummaryDocContent(animalsProperty);
+        summaryDoc.ShouldBe("List of owned animals.");
+    }
+
+    [Fact]
+    public void Check_IsAdultMethod()
+    {
+        var isAdultMethod = document.GetMember("IsAdult");
+
+        string methodName = Tools.GetMemberNameContent(isAdultMethod);
+        methodName.ShouldBe("public bool IsAdult()");
+
+        string summaryDoc = Tools.GetSummaryDocContent(isAdultMethod);
+        summaryDoc.ShouldBe("Checks if the user is adult.");
+
+        string returnTypeName = Tools.GetReturnTypeName(isAdultMethod);
+        returnTypeName.ShouldBe("bool");
+
+        string returnsDoc = Tools.GetReturnsDoc(isAdultMethod);
+        returnsDoc.ShouldBe("True if adult, false otherwise.");
+    }
+
+    [Fact]
+    public void Check_ProcessValuesMethod()
+    {
+        var memberElement = document.GetMember("ProcessValues(System.Int32@,System.Int32@,System.String,System.Int32@,System.Double)");
+
+        string fieldName = Tools.GetMemberNameContent(memberElement);
+        fieldName.ShouldBe("internal static void ProcessValues(in int inValue, ref int refValue, string s1, out int outValue, double d2 = 150)");
+
+        string summaryDoc = Tools.GetSummaryDocContent(memberElement);
+        summaryDoc.ShouldBe("A method with ref, in, and out parameters for testing purposes.");
+
+        var parameters = Tools.GetMemberParameters(memberElement);
+
+        string firstParamName = Tools.GetParameterName(parameters[0]);
+        firstParamName.ShouldBe("in int inValue");
+
+        string firstParamDoc = Tools.GetParameterDoc(parameters[0]);
+        firstParamDoc.ShouldBe("An input value.");
     }
 }

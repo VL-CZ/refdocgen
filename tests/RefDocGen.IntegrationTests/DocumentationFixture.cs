@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RefDocGen.TemplateGenerators.Default;
@@ -40,6 +40,4 @@ public sealed class DocumentationFixture : IDisposable
 
         generator.GenerateDoc();
     }
-
-
 }
