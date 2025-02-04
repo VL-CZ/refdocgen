@@ -6,7 +6,7 @@ using RefDocGen.CodeElements;
 
 namespace RefDocGen.IntegrationTests;
 
-public sealed class DocumentationFixture : IDisposable
+public class DocumentationFixture : IDisposable
 {
     private const string outputDir = "output";
 
@@ -23,6 +23,11 @@ public sealed class DocumentationFixture : IDisposable
     public void Initialize()
     {
         string outputDir = "output";
+
+        if (Directory.Exists(outputDir))
+        {
+            Directory.Delete(outputDir, true);
+        }
 
         Directory.CreateDirectory(outputDir);
 
@@ -41,3 +46,15 @@ public sealed class DocumentationFixture : IDisposable
         generator.GenerateDoc();
     }
 }
+
+
+[CollectionDefinition(Name)]
+public class MyTestCollection : ICollectionFixture<DocumentationFixture>
+{
+    // This class has no code, and is never created. Its purpose is simply
+    // to be the place to apply [CollectionDefinition] and all the
+    // ICollectionFixture<> interfaces.
+    internal const string Name = "Database collection";
+
+}
+

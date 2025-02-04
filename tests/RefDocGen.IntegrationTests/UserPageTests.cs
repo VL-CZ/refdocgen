@@ -3,7 +3,8 @@ using Shouldly;
 
 namespace RefDocGen.IntegrationTests;
 
-public class UserPageTests : IClassFixture<DocumentationFixture>
+[Collection(MyTestCollection.Name)]
+public class UserPageTests : IDisposable
 {
     private readonly IDocument document;
 
@@ -12,8 +13,13 @@ public class UserPageTests : IClassFixture<DocumentationFixture>
         document = Tools.GetDocument("MyLibrary.User.html");
     }
 
+    public void Dispose()
+    {
+        document.Dispose();
+    }
+
     [Fact]
-    public void Check_MaxAgeField()
+    public void Test_MaxAgeField()
     {
         var maxAgeField = document.GetMember("MaxAge");
 
@@ -25,7 +31,7 @@ public class UserPageTests : IClassFixture<DocumentationFixture>
     }
 
     [Fact]
-    public void Check_AnimalsProperty()
+    public void Test_AnimalsProperty()
     {
         var animalsProperty = document.GetMember("Animals");
 
@@ -37,7 +43,7 @@ public class UserPageTests : IClassFixture<DocumentationFixture>
     }
 
     [Fact]
-    public void Check_IsAdultMethod()
+    public void Test_IsAdultMethod()
     {
         var isAdultMethod = document.GetMember("IsAdult");
 
@@ -55,7 +61,7 @@ public class UserPageTests : IClassFixture<DocumentationFixture>
     }
 
     [Fact]
-    public void Check_ProcessValuesMethod()
+    public void Test_ProcessValuesMethod()
     {
         var memberElement = document.GetMember("ProcessValues(System.Int32@,System.Int32@,System.String,System.Int32@,System.Double)");
 

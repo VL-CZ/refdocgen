@@ -35,7 +35,7 @@ internal class Tools
 
     internal static string GetMemberNameContent(IElement memberElement)
     {
-        var memberNameElement = memberElement.GetDataId(MemberName);
+        var memberNameElement = memberElement.GetByDataId(MemberName);
 
         var content = ParseStringContent(memberNameElement);
 
@@ -49,19 +49,19 @@ internal class Tools
 
     internal static string GetSummaryDocContent(IElement memberElement)
     {
-        var summaryDocElement = memberElement.GetDataId(SummaryDoc);
+        var summaryDocElement = memberElement.GetByDataId(SummaryDoc);
         return ParseStringContent(summaryDocElement);
     }
 
     internal static string GetReturnTypeName(IElement memberElement)
     {
-        var returnTypeElement = memberElement.GetDataId(ReturnTypeName);
+        var returnTypeElement = memberElement.GetByDataId(ReturnTypeName);
         return ParseStringContent(returnTypeElement);
     }
 
     internal static string GetReturnsDoc(IElement memberElement)
     {
-        var returnsDocElement = memberElement.GetDataId(ReturnsDoc);
+        var returnsDocElement = memberElement.GetByDataId(ReturnsDoc);
         return ParseStringContent(returnsDocElement);
     }
 
@@ -72,13 +72,13 @@ internal class Tools
 
     internal static string GetParameterName(IElement paramElement)
     {
-        var paramNameElement = paramElement.GetDataId(ParameterName);
+        var paramNameElement = paramElement.GetByDataId(ParameterName);
         return ParseStringContent(paramNameElement);
     }
 
     internal static string GetParameterDoc(IElement paramElement)
     {
-        var paramDocElement = paramElement.GetDataId(ParameterDoc);
+        var paramDocElement = paramElement.GetByDataId(ParameterDoc);
         return ParseStringContent(paramDocElement);
     }
 }

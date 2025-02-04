@@ -15,16 +15,16 @@
         <member name="F:MyLibrary.Animal.weight">
             <summary>
             Animal weight.
-            
+
             Note that this also applies for <see cref="T:MyLibrary.Dog"/>.
             <br/>
-            
+
             See also <see cref="F:MyLibrary.User.username"/>
             <br/>
-            
+
             See also <see cref="M:MyLibrary.Tools.MyCollection`1.Add(`0)"/>
             <br/>
-            
+
             See also <see cref="P:MyLibrary.Tools.MyCollection`1.IsReadOnly"/>
             </summary>
             <remarks>
@@ -58,6 +58,15 @@
             <param name="habitat">Animal's habitat.</param>
             <param name="dateOfBirth">Animal's birthdate.</param>
             <returns>Profile of the animal as a string.</returns>
+        </member>
+        <member name="T:MyLibrary.CyclicDoc.Cycle1">
+            <inheritdoc cref="T:MyLibrary.CyclicDoc.Cycle2"/>
+        </member>
+        <member name="T:MyLibrary.CyclicDoc.Cycle2">
+            <inheritdoc cref="T:MyLibrary.CyclicDoc.Cycle1"/>
+        </member>
+        <member name="T:MyLibrary.CyclicDoc.CycleReference">
+            <inheritdoc cref="T:MyLibrary.CyclicDoc.Cycle1"/>
         </member>
         <member name="T:MyLibrary.Dog">
             <summary>
@@ -147,21 +156,12 @@
         <member name="T:MyLibrary.Hierarchy.ChildChildChild">
             <summary>
             Before parent.
-            <inheritdoc cref="T:MyLibrary.Hierarchy.Parent"/> 
+            <inheritdoc cref="T:MyLibrary.Hierarchy.Parent"/>
             After parent.
             </summary>
         </member>
         <member name="M:MyLibrary.Hierarchy.ChildChildChild.Print(System.Object)">
             <inheritdoc/>
-        </member>
-        <member name="T:MyLibrary.Hierarchy.Cycle1">
-            <inheritdoc cref="T:MyLibrary.Hierarchy.Cycle2"/>
-        </member>
-        <member name="T:MyLibrary.Hierarchy.Cycle2">
-            <inheritdoc cref="T:MyLibrary.Hierarchy.Cycle1"/>
-        </member>
-        <member name="T:MyLibrary.Hierarchy.CycleReference">
-            <inheritdoc cref="T:MyLibrary.Hierarchy.Cycle1"/>
         </member>
         <member name="T:MyLibrary.StringExtensions">
             <summary>
@@ -348,15 +348,15 @@
         <member name="M:MyLibrary.Tools.MySortedList`1.AddRange(System.Collections.Generic.IEnumerable{`0})">
             <inheritdoc/>
         </member>
-        <member name="T:MyLibrary.Tools.MyStringDictionary">
+        <member name="T:MyLibrary.Tools.MyStringCollection">
             <summary>
             Custom string dictionary.
             </summary>
         </member>
-        <member name="M:MyLibrary.Tools.MyStringDictionary.MyLibrary#Tools#IMyDictionary{System#String,System#String}#Add(System.String,System.String)">
+        <member name="M:MyLibrary.Tools.MyStringCollection.Add(System.String)">
             <inheritdoc/>
         </member>
-        <member name="M:MyLibrary.Tools.MyStringDictionary.Get(System.String)">
+        <member name="M:MyLibrary.Tools.MyStringCollection.AddRange(System.Collections.Generic.IEnumerable{System.String})">
             <inheritdoc/>
         </member>
         <member name="T:MyLibrary.Tools.NonGenericCollection">
@@ -520,11 +520,11 @@
         <member name="F:MyLibrary.User.username">
             <summary>
             Name of the user. <c>var name = user.username</c>
-            
+
             <code>
             var name = user.username;
             var userValidator = new UserValidator();
-            
+
             var isValid = userValidator.Validate(name);
             Console.WriteLine($"Valid: {isValid}");
             </code>
@@ -544,12 +544,13 @@
               <item>Second</item>
             </list>
             <see href="http://www.google.com">Google</see>
-            
+
             <see langword="true"/>
             </summary>
             <seealso href="http://www.google.com"/>
             <seealso cref="F:MyLibrary.User.MaxAge">max age constant</seealso>
             <seealso cref="P:System.Reflection.FieldInfo.IsLiteral" />
+            <seealso cref="T:MyLibrary.Tools.Point"/>
             <seealso cref="!:notFound"/>
         </member>
         <member name="M:MyLibrary.User.#ctor">
@@ -566,9 +567,19 @@
         </member>
         <member name="P:MyLibrary.User.Age">
             <summary>
-            Age of the user (nullable).
+            Gets the age of the user (nullable).
             </summary>
-            <value>dd</value>
+            <value>The age of the user.</value>
+        </member>
+        <member name="P:MyLibrary.User.FirstName">
+            <summary>
+            First name of the user.
+            </summary>
+        </member>
+        <member name="P:MyLibrary.User.LastName">
+            <summary>
+            Last name of the user.
+            </summary>
         </member>
         <member name="P:MyLibrary.User.Animals">
             <summary>
