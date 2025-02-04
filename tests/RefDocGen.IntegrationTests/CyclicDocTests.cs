@@ -3,7 +3,7 @@ using Shouldly;
 namespace RefDocGen.IntegrationTests;
 
 [Collection(MyTestCollection.Name)]
-public class CyclidDocTests
+public class CyclicDocTests
 {
     [Theory]
     [InlineData("Cycle1")]

@@ -8,6 +8,7 @@ internal class Tools
 {
     internal const string MemberName = "member-name";
     internal const string SummaryDoc = "summary-doc";
+    internal const string RemarksDoc = "remarks-doc";
     internal const string ReturnTypeName = "return-type-name";
     internal const string ReturnsDoc = "returns-doc";
     internal const string ParameterElement = "parameter-data";
@@ -50,6 +51,12 @@ internal class Tools
     internal static string GetSummaryDocContent(IElement memberElement)
     {
         var summaryDocElement = memberElement.GetByDataId(SummaryDoc);
+        return ParseStringContent(summaryDocElement);
+    }
+
+    internal static string GetRemarksDocContent(IElement memberElement)
+    {
+        var summaryDocElement = memberElement.GetByDataId(RemarksDoc);
         return ParseStringContent(summaryDocElement);
     }
 
