@@ -88,6 +88,11 @@ internal class Tools
         var paramDocElement = paramElement.GetByDataId(ParameterDoc);
         return ParseStringContent(paramDocElement);
     }
+
+    internal static string GetTypeName(IDocument document)
+    {
+        return ParseStringContent(document.GetTypeName());
+    }
 }
 
 

@@ -19,6 +19,13 @@ public class UserPageTests : IDisposable
     }
 
     [Fact]
+    public void Test_ClassName()
+    {
+        string className = Tools.GetTypeName(document);
+        className.ShouldBe("public class User");
+    }
+
+    [Fact]
     public void Test_MaxAgeField()
     {
         var maxAgeField = document.GetMember("MaxAge");
@@ -30,16 +37,20 @@ public class UserPageTests : IDisposable
         summaryDoc.ShouldBe("Maximum age of the user.");
     }
 
-    [Fact]
-    public void Test_AnimalsProperty()
+    [Theory]
+    [InlineData("FirstName", "public string FirstName { get; internal set; }", "First name of the user.")]
+    [InlineData("LastName", "public string LastName { get; init; }", "Last name of the user.")]
+    [InlineData("Animals", "public List<Animal> Animals { get; }", "List of owned animals.")]
+
+    public void Test_Properties(string propertyName, string expectedSignature, string expectedSummaryDoc)
     {
-        var animalsProperty = document.GetMember("Animals");
+        var propertyElement = document.GetMember(propertyName);
 
-        string fieldName = Tools.GetMemberNameContent(animalsProperty);
-        fieldName.ShouldBe("public List<Animal> Animals { get; }");
+        string propertySignature = Tools.GetMemberNameContent(propertyElement);
+        propertySignature.ShouldBe(expectedSignature);
 
-        string summaryDoc = Tools.GetSummaryDocContent(animalsProperty);
-        summaryDoc.ShouldBe("List of owned animals.");
+        string summaryDoc = Tools.GetSummaryDocContent(propertyElement);
+        summaryDoc.ShouldBe(expectedSummaryDoc);
     }
 
     [Fact]
