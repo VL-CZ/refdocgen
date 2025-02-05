@@ -23,7 +23,9 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore -warnaserror
-      - name: Test
-        run: dotnet test --no-build --verbosity normal
+      - name: Unit tests
+        run: dotnet test ./tests/RefDocGen.UnitTests --no-build --verbosity normal
+      - name: Integration tests
+        run: dotnet test ./tests/RefDocGen.IntegrationTests --no-build --verbosity normal
       - name: Check formatting
         run: dotnet format style --verify-no-changes
