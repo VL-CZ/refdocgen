@@ -28,7 +28,7 @@ internal static class Extensions
 
     internal static IElement GetTypeName(this IDocument document)
     {
-        return document.DocumentElement.GetByDataId("type-name");
+        return document.DocumentElement.GetByDataId("type-name-title");
     }
 
     internal static IElement GetTypeDocsSection(this IDocument document)

@@ -15,6 +15,9 @@ internal class Tools
     internal const string ParameterElement = "parameter-data";
     internal const string ParameterName = "parameter-name";
     internal const string ParameterDoc = "parameter-doc";
+    internal const string TypeParamConstraints = "type-param-constraints";
+    internal const string BaseType = "base-type";
+    internal const string ImplementedInterfaces = "implemented-interfaces";
 
     internal static IDocument GetDocument(string name)
     {
@@ -96,9 +99,27 @@ internal class Tools
         return attributes.Select(ParseStringContent).ToArray();
     }
 
+    internal static string[] GetTypeParamConstraints(IElement element)
+    {
+        var attributes = element.GetDataIds(TypeParamConstraints);
+        return attributes.Select(ParseStringContent).ToArray();
+    }
+
     internal static string GetTypeName(IDocument document)
     {
         return ParseStringContent(document.GetTypeName());
+    }
+
+    internal static string GetBaseTypeName(IElement element)
+    {
+        var baseTypeElement = element.GetByDataId(BaseType);
+        return ParseStringContent(baseTypeElement);
+    }
+
+    internal static string GetInterfacesString(IElement element)
+    {
+        var baseTypeElement = element.GetByDataId(ImplementedInterfaces);
+        return ParseStringContent(baseTypeElement);
     }
 }
 
