@@ -3,7 +3,7 @@ using Shouldly;
 
 namespace RefDocGen.IntegrationTests;
 
-[Collection(MyTestCollection.Name)]
+[Collection(DocumentationTestCollection.Name)]
 public class PointPageTests : IDisposable
 {
     private readonly IDocument document;

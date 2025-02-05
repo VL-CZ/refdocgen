@@ -2,7 +2,7 @@ using Shouldly;
 
 namespace RefDocGen.IntegrationTests;
 
-[Collection(MyTestCollection.Name)]
+[Collection(DocumentationTestCollection.Name)]
 public class MemberSignatureTests
 {
     [Theory]
