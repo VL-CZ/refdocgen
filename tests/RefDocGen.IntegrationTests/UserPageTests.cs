@@ -72,6 +72,29 @@ public class UserPageTests : IDisposable
     }
 
     [Fact]
+    public void Test_PrintProfileMethod()
+    {
+        var method = document.GetMember("PrintProfile(System.String)");
+
+        string methodName = Tools.GetMemberNameContent(method);
+        methodName.ShouldBe("public void PrintProfile([NotNull] string format = \"json\")");
+
+        string summaryDoc = Tools.GetSummaryDocContent(method);
+        summaryDoc.ShouldBe("Print user's profile in the given format");
+
+        string[] attributes = Tools.GetAttributes(method);
+        attributes.ShouldBe(["[Obsolete]"]);
+
+        var parameter = Tools.GetMemberParameters(method).Single();
+
+        string paramSignature = Tools.GetParameterName(parameter);
+        paramSignature.ShouldBe("[NotNull] string format = \"json\"");
+
+        string paramDoc = Tools.GetParameterDoc(method);
+        paramDoc.ShouldBe("Format used for printing the profile.");
+    }
+
+    [Fact]
     public void Test_ProcessValuesMethod()
     {
         var memberElement = document.GetMember("ProcessValues(System.Int32@,System.Int32@,System.String,System.Int32@,System.Double)");

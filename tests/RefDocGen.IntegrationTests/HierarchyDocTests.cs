@@ -1,4 +1,3 @@
-using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using Shouldly;
 
 namespace RefDocGen.IntegrationTests;

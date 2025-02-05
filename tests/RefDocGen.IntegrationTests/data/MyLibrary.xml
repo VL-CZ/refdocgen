@@ -22,10 +22,10 @@
             See also <see cref="F:MyLibrary.User.username"/>
             <br/>
             
-            See also <see cref="M:MyLibrary.Tools.MyCollection`1.Add(`0)"/>
+            See also <see cref="M:MyLibrary.Tools.Collections.MyCollection`1.Add(`0)"/>
             <br/>
             
-            See also <see cref="P:MyLibrary.Tools.MyCollection`1.IsReadOnly"/>
+            See also <see cref="P:MyLibrary.Tools.Collections.MyCollection`1.IsReadOnly"/>
             </summary>
             <remarks>
             The weight is in kilograms (kg).
@@ -163,94 +163,68 @@
         <member name="M:MyLibrary.Hierarchy.ChildChildChild.Print(System.Object)">
             <inheritdoc/>
         </member>
-        <member name="T:MyLibrary.StringExtensions">
-            <summary>
-            Extension class for <see cref="T:System.String"/> type.
-            </summary>
-        </member>
-        <member name="M:MyLibrary.StringExtensions.ZipWith(System.String,System.String)">
-            <summary>
-            Zips the two provided strings.
-            </summary>
-            <param name="s1">The first string.</param>
-            <param name="s2">The second string.</param>
-            <returns>A zipped string.</returns>
-            <seealso cref="M:System.Collections.Generic.Dictionary`2.Add(`0,`1)"/>
-        </member>
-        <member name="T:MyLibrary.Tools.ICovariant`1">
-            <summary>
-            An interface with a covariant type.
-            </summary>
-            <typeparam name="T">Covariant type</typeparam>
-        </member>
-        <member name="T:MyLibrary.Tools.IContravariant`1">
-            <summary>
-            An interface with a contravariant type.
-            </summary>
-            <typeparam name="T">Contravariant type</typeparam>
-        </member>
-        <member name="T:MyLibrary.Tools.IMyCollection`1">
+        <member name="T:MyLibrary.Tools.Collections.IMyCollection`1">
             <summary>
             My collection interface.
             </summary>
             <typeparam name="T"></typeparam>
         </member>
-        <member name="M:MyLibrary.Tools.IMyCollection`1.Execute(System.Func{`0,`0})">
+        <member name="M:MyLibrary.Tools.Collections.IMyCollection`1.Execute(System.Func{`0,`0})">
             <summary>
             Execute the given operation on each element.
             </summary>
             <param name="operation">An operation to execute.</param>
         </member>
-        <member name="M:MyLibrary.Tools.IMyCollection`1.AddRange(System.Collections.Generic.IEnumerable{`0})">
+        <member name="M:MyLibrary.Tools.Collections.IMyCollection`1.AddRange(System.Collections.Generic.IEnumerable{`0})">
             <summary>
             Add range of items into the collection.
             </summary>
             <param name="range">Range of items to add.</param>
         </member>
-        <member name="M:MyLibrary.Tools.IMyCollection`1.CanAdd">
+        <member name="M:MyLibrary.Tools.Collections.IMyCollection`1.CanAdd">
             <summary>
             Checks if an item can be added into the collection.
             </summary>
         </member>
-        <member name="T:MyLibrary.Tools.IMyDictionary`2">
+        <member name="T:MyLibrary.Tools.Collections.IMyDictionary`2">
             <summary>
             Interface representing a custom dictionary.
             </summary>
             <typeparam name="TKey">Type of the key.</typeparam>
             <typeparam name="TValue">Type of the value.</typeparam>
         </member>
-        <member name="M:MyLibrary.Tools.IMyDictionary`2.Add(`0,`1)">
+        <member name="M:MyLibrary.Tools.Collections.IMyDictionary`2.Add(`0,`1)">
             <summary>
             Add a key-value pair into the dictionary.
             </summary>
             <param name="key">Key.</param>
             <param name="value">Value.</param>
         </member>
-        <member name="M:MyLibrary.Tools.IMyDictionary`2.Get(`0)">
+        <member name="M:MyLibrary.Tools.Collections.IMyDictionary`2.Get(`0)">
             <summary>
             Get the value by its key.
             </summary>
             <param name="key">Key.</param>
             <returns>Value with the given key.</returns>
         </member>
-        <member name="T:MyLibrary.Tools.MyCollection`1">
+        <member name="T:MyLibrary.Tools.Collections.MyCollection`1">
             <summary>
             Represents a custom collection containing the items of type <typeparamref name="T"/>
             </summary>
             <typeparam name="T">The type of the items in the collection.</typeparam>
         </member>
-        <member name="P:MyLibrary.Tools.MyCollection`1.Count">
+        <member name="P:MyLibrary.Tools.Collections.MyCollection`1.Count">
             <summary>
             Gets the number of elements contained in the collection. <typeparamref name="T"/>
             </summary>
         </member>
-        <member name="P:MyLibrary.Tools.MyCollection`1.IsReadOnly">
+        <member name="P:MyLibrary.Tools.Collections.MyCollection`1.IsReadOnly">
             <summary>
             Gets a value indicating whether the collection is read-only.
             </summary>
             <value>Indicates whether the collection is read-only.</value>
         </member>
-        <member name="M:MyLibrary.Tools.MyCollection`1.Add(`0)">
+        <member name="M:MyLibrary.Tools.Collections.MyCollection`1.Add(`0)">
             <summary>
             Adds an item to the collection.
             </summary>
@@ -258,118 +232,118 @@
             <exception cref="T:System.NotImplementedException"></exception>
             <exception cref="T:System.ArgumentNullException">If the argument is null.</exception>
         </member>
-        <member name="M:MyLibrary.Tools.MyCollection`1.Enumerate">
+        <member name="M:MyLibrary.Tools.Collections.MyCollection`1.Enumerate">
             <summary>
             Enumerate the given collection
             </summary>
             <returns>Tuple containing (index, item)</returns>
         </member>
-        <member name="M:MyLibrary.Tools.MyCollection`1.AddRange(System.Collections.Generic.IEnumerable{`0})">
+        <member name="M:MyLibrary.Tools.Collections.MyCollection`1.AddRange(System.Collections.Generic.IEnumerable{`0})">
             <inheritdoc/>
         </member>
-        <member name="M:MyLibrary.Tools.MyCollection`1.Clear">
+        <member name="M:MyLibrary.Tools.Collections.MyCollection`1.Clear">
             <summary>
             Removes all items from the collection.
             </summary>
         </member>
-        <member name="M:MyLibrary.Tools.MyCollection`1.Contains(`0)">
+        <member name="M:MyLibrary.Tools.Collections.MyCollection`1.Contains(`0)">
             <summary>
         Determines whether the collection contains a specific item.
       </summary><param name="item">The item to locate in the collection.</param><returns>
         <c>true</c> if the item is found; otherwise, <c>false</c>.
       </returns>
         </member>
-        <member name="M:MyLibrary.Tools.MyCollection`1.CopyTo(`0[],System.Int32)">
+        <member name="M:MyLibrary.Tools.Collections.MyCollection`1.CopyTo(`0[],System.Int32)">
             <summary>
             Copies the elements of the collection to an array, starting at a specific array index.
             </summary>
             <param name="array">The one-dimensional array that is the destination of the elements copied from the collection.</param>
             <param name="arrayIndex">The zero-based index in the array at which copying begins.</param>
         </member>
-        <member name="M:MyLibrary.Tools.MyCollection`1.Execute(System.Func{`0,`0})">
+        <member name="M:MyLibrary.Tools.Collections.MyCollection`1.Execute(System.Func{`0,`0})">
             <inheritdoc/>
         </member>
-        <member name="M:MyLibrary.Tools.MyCollection`1.GetEnumerator">
+        <member name="M:MyLibrary.Tools.Collections.MyCollection`1.GetEnumerator">
             <summary>
             Returns an enumerator that iterates through the collection.
             </summary>
             <returns>An enumerator for the collection.</returns>
         </member>
-        <member name="M:MyLibrary.Tools.MyCollection`1.AddGeneric``1(``0)">
+        <member name="M:MyLibrary.Tools.Collections.MyCollection`1.AddGeneric``1(``0)">
             <summary>
             Add a generic item into the collection.
             </summary>
             <typeparam name="T2">Type of the item to add.</typeparam>
             <param name="item">Item to add.</param>
         </member>
-        <member name="M:MyLibrary.Tools.MyCollection`1.Remove(`0)">
+        <member name="M:MyLibrary.Tools.Collections.MyCollection`1.Remove(`0)">
             <summary>
             Removes the first occurrence of a specific item from the collection.
             </summary>
             <param name="item">The item to remove from the collection.</param>
             <returns><c>true</c> if the item was successfully removed; otherwise, <c>false</c>.</returns>
         </member>
-        <member name="M:MyLibrary.Tools.MyCollection`1.System#Collections#IEnumerable#GetEnumerator">
+        <member name="M:MyLibrary.Tools.Collections.MyCollection`1.System#Collections#IEnumerable#GetEnumerator">
             <summary>
             Returns an enumerator that iterates through the collection.
             </summary>
             <returns>An enumerator for the collection.</returns>
         </member>
-        <member name="M:MyLibrary.Tools.MyCollection`1.MyLibrary#Tools#IMyCollection{T}#CanAdd">
+        <member name="M:MyLibrary.Tools.Collections.MyCollection`1.MyLibrary#Tools#Collections#IMyCollection{T}#CanAdd">
             <inheritdoc/>
         </member>
-        <member name="P:MyLibrary.Tools.MyCollection`1.Item(System.Int32)">
+        <member name="P:MyLibrary.Tools.Collections.MyCollection`1.Item(System.Int32)">
             <summary>
             Return an item at the given index.
             </summary>
             <param name="index">An item index.</param>
             <returns>The item at the given index.</returns>
         </member>
-        <member name="P:MyLibrary.Tools.MyCollection`1.Item(System.Index)">
+        <member name="P:MyLibrary.Tools.Collections.MyCollection`1.Item(System.Index)">
             <summary>
             Return an item at the given index.
             </summary>
             <param name="index">An Index struct.</param>
             <returns>The item at the given index.</returns>
         </member>
-        <member name="T:MyLibrary.Tools.MyDictionary`2">
+        <member name="T:MyLibrary.Tools.Collections.MyDictionary`2">
             <summary>
             A simple custom dictionary.
             </summary>
             <typeparam name="TKey">Type of the key.</typeparam>
             <typeparam name="TValue">Type of the value.</typeparam>
         </member>
-        <member name="M:MyLibrary.Tools.MyDictionary`2.Add(`0,`1)">
+        <member name="M:MyLibrary.Tools.Collections.MyDictionary`2.Add(`0,`1)">
             <inheritdoc/>
         </member>
-        <member name="M:MyLibrary.Tools.MyDictionary`2.Get(`0)">
+        <member name="M:MyLibrary.Tools.Collections.MyDictionary`2.Get(`0)">
             <inheritdoc/>
         </member>
-        <member name="M:MyLibrary.Tools.MySortedList`1.AddRange(System.Collections.Generic.IEnumerable{`0})">
+        <member name="M:MyLibrary.Tools.Collections.MySortedList`1.AddRange(System.Collections.Generic.IEnumerable{`0})">
             <inheritdoc/>
         </member>
-        <member name="T:MyLibrary.Tools.MyStringCollection">
+        <member name="T:MyLibrary.Tools.Collections.MyStringCollection">
             <summary>
             Custom string dictionary.
             </summary>
         </member>
-        <member name="M:MyLibrary.Tools.MyStringCollection.Add(System.String)">
+        <member name="M:MyLibrary.Tools.Collections.MyStringCollection.Add(System.String)">
             <inheritdoc/>
         </member>
-        <member name="M:MyLibrary.Tools.MyStringCollection.AddRange(System.Collections.Generic.IEnumerable{System.String})">
+        <member name="M:MyLibrary.Tools.Collections.MyStringCollection.AddRange(System.Collections.Generic.IEnumerable{System.String})">
             <inheritdoc/>
         </member>
-        <member name="T:MyLibrary.Tools.NonGenericCollection">
+        <member name="T:MyLibrary.Tools.Collections.NonGenericCollection">
             <summary>
             Non generic collection class.
             </summary>
         </member>
-        <member name="P:MyLibrary.Tools.NonGenericCollection.System#Collections#ICollection#IsSynchronized">
+        <member name="P:MyLibrary.Tools.Collections.NonGenericCollection.System#Collections#ICollection#IsSynchronized">
             <summary>
             Gets a value indicating whether the collection is thread-safe (synchronized) or not.
             </summary>
         </member>
-        <member name="M:MyLibrary.Tools.NonGenericCollection.Get``1(System.Int32)">
+        <member name="M:MyLibrary.Tools.Collections.NonGenericCollection.Get``1(System.Int32)">
             <summary>
             Get the item at the given index.
             </summary>
@@ -377,7 +351,7 @@
             <param name="index">Index of the item.</param>
             <returns>The item at the given index.</returns>
         </member>
-        <member name="M:MyLibrary.Tools.NonGenericCollection.Add``1(``0)">
+        <member name="M:MyLibrary.Tools.Collections.NonGenericCollection.Add``1(``0)">
             <summary>
             Add a new item.
             </summary>
@@ -484,6 +458,32 @@
             <summary>
             Represents winter.
             </summary>
+        </member>
+        <member name="T:MyLibrary.Tools.StringExtensions">
+            <summary>
+            Extension class for <see cref="T:System.String"/> type.
+            </summary>
+        </member>
+        <member name="M:MyLibrary.Tools.StringExtensions.ZipWith(System.String,System.String)">
+            <summary>
+            Zips the two provided strings.
+            </summary>
+            <param name="s1">The first string.</param>
+            <param name="s2">The second string.</param>
+            <returns>A zipped string.</returns>
+            <seealso cref="M:System.Collections.Generic.Dictionary`2.Add(`0,`1)"/>
+        </member>
+        <member name="T:MyLibrary.Tools.ICovariant`1">
+            <summary>
+            An interface with a covariant type.
+            </summary>
+            <typeparam name="T">Covariant type</typeparam>
+        </member>
+        <member name="T:MyLibrary.Tools.IContravariant`1">
+            <summary>
+            An interface with a contravariant type.
+            </summary>
+            <typeparam name="T">Contravariant type</typeparam>
         </member>
         <member name="T:MyLibrary.Tools.WeatherStation">
             <summary>

@@ -7,6 +7,7 @@ namespace RefDocGen.IntegrationTests;
 internal class Tools
 {
     internal const string MemberName = "member-name";
+    internal const string AttributeData = "attribute-data";
     internal const string SummaryDoc = "summary-doc";
     internal const string RemarksDoc = "remarks-doc";
     internal const string ReturnTypeName = "return-type-name";
@@ -87,6 +88,12 @@ internal class Tools
     {
         var paramDocElement = paramElement.GetByDataId(ParameterDoc);
         return ParseStringContent(paramDocElement);
+    }
+
+    internal static string[] GetAttributes(IElement element)
+    {
+        var attributes = element.GetDataIds(AttributeData);
+        return attributes.Select(ParseStringContent).ToArray();
     }
 
     internal static string GetTypeName(IDocument document)
