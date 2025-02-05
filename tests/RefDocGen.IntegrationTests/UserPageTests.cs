@@ -73,10 +73,23 @@ public class UserPageTests : IDisposable
 
         var parameters = Tools.GetMemberParameters(memberElement);
 
-        string firstParamName = Tools.GetParameterName(parameters[0]);
-        firstParamName.ShouldBe("in int inValue");
+        parameters.Length.ShouldBe(5);
 
-        string firstParamDoc = Tools.GetParameterDoc(parameters[0]);
-        firstParamDoc.ShouldBe("An input value.");
+        List<(string signature, string? doc)> expectedValues = [
+            ("in int inValue", "An input value."),
+            ("ref int refValue", "A reference value."),
+            ("string s1", null),
+            ("out int outValue", "An output value."),
+            ("double d2", null)
+        ];
+
+        for (int i = 0; i < expectedValues.Count; i++)
+        {
+            string paramName = Tools.GetParameterName(parameters[i]);
+            paramName.ShouldBe(expectedValues[i].signature);
+
+            string paramDoc = Tools.GetParameterDoc(parameters[i]);
+            paramDoc.ShouldBe(expectedValues[i].doc);
+        }
     }
 }
