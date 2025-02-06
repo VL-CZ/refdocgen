@@ -49,7 +49,7 @@
     </nav>
 
     <div class="container my-4">
-        <div data-id="type-docs">
+        <div data-id="declared-type-data">
             <DeclaredTypeName TypeName="@Model.Name" TypeKindName="@Model.TypeKindName" Modifiers="@Model.Modifiers" TypeParameters="@Model.TypeParameters" />
 
             <TypeParametersConstraints TypeParameters="@Model.TypeParameters" />
@@ -100,12 +100,12 @@
             <RemarksDoc DocComment="@Model.RemarksDocComment" />
 
             <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
-        </div>
 
-        @if (IsModelDocumented())
-        {
-            <hr />
-        }
+            @if (IsModelDocumented())
+            {
+                <hr />
+            }
+        </div>
 
         @if (Model.Constructors.Any())
         {

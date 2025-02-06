@@ -102,6 +102,12 @@ internal class Tools
         return attributes.Select(ParseStringContent).ToArray();
     }
 
+    internal static string[] GetSeeAlsoDocs(IElement element)
+    {
+        var attributes = element.GetDataIds(SeeAlsoDocs);
+        return attributes.Select(ParseStringContent).ToArray();
+    }
+
     internal static string[] GetTypeParamConstraints(IElement element)
     {
         var attributes = element.GetDataIds(TypeParamConstraints);

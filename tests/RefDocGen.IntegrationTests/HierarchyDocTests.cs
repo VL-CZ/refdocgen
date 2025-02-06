@@ -13,7 +13,7 @@ public class HierarchyDocTests
     {
         using var document = Tools.GetDocument($"MyLibrary.Hierarchy.{typeName}.html");
 
-        var typeDocsSection = document.GetTypeDocsSection();
+        var typeDocsSection = document.GetTypeDataSection();
         var summaryDoc = Tools.GetSummaryDocContent(typeDocsSection);
 
         summaryDoc.ShouldBe(expectedSummaryDoc);

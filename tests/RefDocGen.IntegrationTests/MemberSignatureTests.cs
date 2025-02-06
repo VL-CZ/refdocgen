@@ -20,6 +20,12 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.StringExtensions",
         "ZipWith(System.String,System.String)",
         "public static string ZipWith(this string s1, string s2)")]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection`1",
+        "System#Collections#IEnumerable#GetEnumerator",
+        "IEnumerator IEnumerable.GetEnumerator()")]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection`1",
+        "AddGeneric``1(``0)",
+        "public void AddGeneric<T2>(T2 item)")]
     public void Test_Method_Signature(string pageName, string methodId, string expectedMethodSignature)
     {
         using var document = Tools.GetDocument($"{pageName}.html");
@@ -119,8 +125,26 @@ public class MemberSignatureTests
     }
 
     [Theory]
-    [InlineData("MyLibrary.Animal", "public abstract class Animal")]
+    [InlineData("Spring", "Spring = 0")]
+    [InlineData("Winter", "Winter = 3")]
+    public void Test_Enum_Member_Signature(string methodId, string expectedMethodSignature)
+    {
+        using var document = Tools.GetDocument("MyLibrary.Tools.Season.html");
+
+        var method = document.GetMember(methodId);
+
+        string methodName = Tools.GetMemberNameContent(method);
+        methodName.ShouldBe(expectedMethodSignature);
+    }
+
+}
+
+[Collection(DocumentationTestCollection.Name)]
+public class TypeSignatureTests
+{
+    [Theory]
     [InlineData("MyLibrary.Dog", "public class Dog")]
+    [InlineData("MyLibrary.Animal", "public abstract class Animal")]
     [InlineData("MyLibrary.Tools.Collections.MyDictionary`2", "internal class MyDictionary<TKey, TValue>")]
     [InlineData("MyLibrary.Tools.StringExtensions", "public static class StringExtensions")]
     [InlineData("MyLibrary.Tools.Point", "internal struct Point")]
@@ -142,13 +166,13 @@ public class MemberSignatureTests
 }
 
 [Collection(DocumentationTestCollection.Name)]
-public class GenericConstraintsSignatureTests
+public class TypeDataTests
 {
     [Fact]
     public void Test_Type_Constraints()
     {
         using var document = Tools.GetDocument("MyLibrary.Tools.Collections.MySortedList`1.html");
-        var constraints = Tools.GetTypeParamConstraints(document.GetTypeDocsSection());
+        var constraints = Tools.GetTypeParamConstraints(document.GetTypeDataSection());
 
         constraints.ShouldBe(["where T : IComparable<T>"]);
     }
@@ -168,58 +192,152 @@ public class GenericConstraintsSignatureTests
     public void Test_Complex_Constraints()
     {
         using var document = Tools.GetDocument("MyLibrary.Tools.Collections.MyDictionary`2.html");
-        var constraints = Tools.GetTypeParamConstraints(document.GetTypeDocsSection());
+        var constraints = Tools.GetTypeParamConstraints(document.GetTypeDataSection());
 
         constraints.ShouldBe(["where TKey : class, new(), IComparable, IEquatable<TKey>", "where TValue : struct, IDisposable"]);
     }
-}
 
-[Collection(DocumentationTestCollection.Name)]
-public class BaseTypeNameTests
-{
     [Theory]
     [InlineData("MyLibrary.Animal", "object")]
     [InlineData("MyLibrary.Dog", "Animal")]
     [InlineData("MyLibrary.Tools.Collections.MySortedList`1", "MyCollection<T>")]
-    public void Test_Type_Constraints(string pageName, string expectedBaseType)
+    public void Test_BaseType(string pageName, string expectedBaseType)
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        var baseType = Tools.GetBaseTypeName(document.GetTypeDocsSection());
+        var baseType = Tools.GetBaseTypeName(document.GetTypeDataSection());
 
         baseType.ShouldBe($"Base type: {expectedBaseType}");
     }
-}
 
-
-[Collection(DocumentationTestCollection.Name)]
-public class ImplementedInterfacesTests
-{
     [Theory]
     [InlineData("MyLibrary.Hierarchy.Child", "IChild")]
     [InlineData("MyLibrary.Tools.Collections.IMyCollection`1", "ICollection<T>, IEnumerable<T>, IEnumerable")]
-    public void Test_Type_Constraints(string pageName, string expectedInterfacesImplemented)
+    public void Test_Interfaces(string pageName, string expectedInterfacesImplemented)
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        var baseType = Tools.GetInterfacesString(document.GetTypeDocsSection());
+        var baseType = Tools.GetInterfacesString(document.GetTypeDataSection());
 
         baseType.ShouldBe($"Implements: {expectedInterfacesImplemented}");
+    }
+
+    [Theory]
+    [InlineData("MyLibrary.User", "MyLibrary")]
+    [InlineData("MyLibrary.Tools.Collections.IMyCollection`1", "MyLibrary.Tools.Collections")]
+    public void Test_Namespace(string pageName, string expectedNamespace)
+    {
+        using var document = Tools.GetDocument($"{pageName}.html");
+
+        var baseType = Tools.GetNamespaceString(document.GetTypeDataSection());
+
+        baseType.ShouldBe($"namespace {expectedNamespace}");
     }
 }
 
 [Collection(DocumentationTestCollection.Name)]
-public class TypeNamespaceTests
+public class TypeDocCommentTests
 {
     [Theory]
-    [InlineData("MyLibrary.User", "MyLibrary")]
-    [InlineData("MyLibrary.Tools.Collections.IMyCollection`1", "MyLibrary.Tools.Collections")]
-    public void Test_Type_Constraints(string pageName, string expectedNamespace)
+    [InlineData("MyLibrary.User", "Class representing an user of our app.")]
+    [InlineData("MyLibrary.Tools.Collections.IMyCollection`1", "My collection interface.")]
+    [InlineData("MyLibrary.Tools.Point", "Struct representing a point.")]
+    [InlineData("MyLibrary.Tools.Season", "Represents season of a year.")]
+    [InlineData("MyLibrary.Tools.ObjectPredicate", "Predicate about an object.")]
+    public void Test_Summary(string pageName, string expectedDoc)
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        var baseType = Tools.GetNamespaceString(document.GetTypeDocsSection());
+        var baseType = Tools.GetSummaryDocContent(document.GetTypeDataSection());
 
-        baseType.ShouldBe($"namespace {expectedNamespace}");
+        baseType.ShouldBe(expectedDoc);
+    }
+
+    [Fact]
+    public void Test_RemarksDoc()
+    {
+        using var document = Tools.GetDocument("MyLibrary.Animal.html");
+
+        var baseType = Tools.GetRemarksDocContent(document.GetTypeDataSection());
+
+        baseType.ShouldBe("This class is abstract, use inheritance.");
+    }
+
+    [Theory]
+    [InlineData("MyLibrary.User", new string[] { "Animal" })]
+    [InlineData("MyLibrary.Tools.Collections.MyStringCollection", new string[] { "My collection class", "ICollection<T>" })]
+    public void Test_SeeAlsoDocs(string pageName, string[] expectedDocs)
+    {
+        using var document = Tools.GetDocument($"{pageName}.html");
+
+        var baseType = Tools.GetSeeAlsoDocs(document.GetTypeDataSection());
+
+        baseType.ShouldBe(expectedDocs);
+    }
+
+    [Theory]
+    [InlineData("MyLibrary.Tools.HarvestingSeason", new string[] { "[Flags]" })]
+    [InlineData("MyLibrary.User", new string[] { "[Serializable]", "[JsonSerializable(typeof(MyLibrary.User), GenerationMode = 2)]" })]
+    public void Test_Attributes(string pageName, string[] expectedAttributes)
+    {
+        using var document = Tools.GetDocument($"{pageName}.html");
+
+        var baseType = Tools.GetAttributes(document.GetTypeDataSection());
+
+        baseType.ShouldBe(expectedAttributes);
+    }
+}
+
+[Collection(DocumentationTestCollection.Name)]
+public class MemberDocCommentTests
+{
+    [Theory]
+    [InlineData("MyLibrary.User", "MaxAge", "Maximum age of the user.")]
+    [InlineData("MyLibrary.User", "FirstName", "First name of the user.")]
+    [InlineData("MyLibrary.Animal", "GetAverageLifespan(System.String)", "Static method returning the average lifespan of an animal.")]
+    [InlineData("MyLibrary.Tools.Collections.IMyCollection`1", "AddRange(System.Collections.Generic.IEnumerable{`0})", "Add range of items into the collection.")]
+    [InlineData("MyLibrary.Tools.Season", "Summer", "Represents summer.")]
+    [InlineData("MyLibrary.Tools.WeatherStation", "OnTemperatureChange", "Temperature change event.")]
+    public void Test_Summary(string pageName, string memberId, string expectedDoc)
+    {
+        using var document = Tools.GetDocument($"{pageName}.html");
+
+        var baseType = Tools.GetSummaryDocContent(document.GetMember(memberId));
+
+        baseType.ShouldBe(expectedDoc);
+    }
+
+    [Fact]
+    public void Test_RemarksDoc()
+    {
+        using var document = Tools.GetDocument("MyLibrary.Animal.html");
+
+        var baseType = Tools.GetRemarksDocContent(document.GetTypeDataSection());
+
+        baseType.ShouldBe("This class is abstract, use inheritance.");
+    }
+
+    [Theory]
+    [InlineData("MyLibrary.User", new string[] { "Animal" })]
+    [InlineData("MyLibrary.Tools.Collections.MyStringCollection", new string[] { "My collection class", "ICollection<T>" })]
+    public void Test_SeeAlsoDocs(string pageName, string[] expectedDocs)
+    {
+        using var document = Tools.GetDocument($"{pageName}.html");
+
+        var baseType = Tools.GetSeeAlsoDocs(document.GetTypeDataSection());
+
+        baseType.ShouldBe(expectedDocs);
+    }
+
+    [Theory]
+    [InlineData("MyLibrary.Tools.HarvestingSeason", new string[] { "[Flags]" })]
+    [InlineData("MyLibrary.User", new string[] { "[Serializable]", "[JsonSerializable(typeof(MyLibrary.User), GenerationMode = 2)]" })]
+    public void Test_Attributes(string pageName, string[] expectedAttributes)
+    {
+        using var document = Tools.GetDocument($"{pageName}.html");
+
+        var baseType = Tools.GetAttributes(document.GetTypeDataSection());
+
+        baseType.ShouldBe(expectedAttributes);
     }
 }

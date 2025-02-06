@@ -72,6 +72,7 @@
             <summary>
             Represents a dog; i.e. a specific type of animal.
             </summary>
+            <seealso cref="T:MyLibrary.Animal"/>
         </member>
         <member name="F:MyLibrary.Dog.AverageWeight">
             <summary>
@@ -326,6 +327,8 @@
             <summary>
             Custom string dictionary.
             </summary>
+            <seealso cref="T:MyLibrary.Tools.Collections.MyCollection`1">My collection class</seealso>
+            <seealso cref="T:System.Collections.Generic.ICollection`1"/>
         </member>
         <member name="M:MyLibrary.Tools.Collections.MyStringCollection.Add(System.String)">
             <inheritdoc/>
@@ -360,7 +363,7 @@
         </member>
         <member name="T:MyLibrary.Tools.Point">
             <summary>
-            Struct representing a point
+            Struct representing a point.
             </summary>
         </member>
         <member name="F:MyLibrary.Tools.Point.X">
