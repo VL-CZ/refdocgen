@@ -8,16 +8,19 @@ internal class Tools
 {
     internal const string MemberName = "member-name";
     internal const string AttributeData = "attribute-data";
-    internal const string SummaryDoc = "summary-doc";
-    internal const string RemarksDoc = "remarks-doc";
     internal const string ReturnTypeName = "return-type-name";
-    internal const string ReturnsDoc = "returns-doc";
     internal const string ParameterElement = "parameter-data";
     internal const string ParameterName = "parameter-name";
+    internal const string SummaryDoc = "summary-doc";
+    internal const string RemarksDoc = "remarks-doc";
+    internal const string ReturnsDoc = "returns-doc";
     internal const string ParameterDoc = "parameter-doc";
+    internal const string ValueDoc = "value-doc";
+    internal const string SeeAlsoDocs = "seealso-item";
     internal const string TypeParamConstraints = "type-param-constraints";
     internal const string BaseType = "base-type";
     internal const string ImplementedInterfaces = "implemented-interfaces";
+    internal const string TypeNamespace = "type-namespace";
 
     internal static IDocument GetDocument(string name)
     {
@@ -119,6 +122,12 @@ internal class Tools
     internal static string GetInterfacesString(IElement element)
     {
         var baseTypeElement = element.GetByDataId(ImplementedInterfaces);
+        return ParseStringContent(baseTypeElement);
+    }
+
+    internal static string GetNamespaceString(IElement element)
+    {
+        var baseTypeElement = element.GetByDataId(TypeNamespace);
         return ParseStringContent(baseTypeElement);
     }
 }
