@@ -29,6 +29,15 @@ internal class Tools
     internal const string ExceptionDoc = "exception-doc";
     internal const string DelegateMethod = "delegate-method";
 
+    internal const string NamespaceClasses = "namespace-classes";
+    internal const string NamespaceInterfaces = "namespace-interfaces";
+    internal const string NamespaceDelegates = "namespace-delegates";
+    internal const string NamespaceEnums = "namespace-enums";
+    internal const string NamespaceStructs = "namespace-structs";
+
+    internal const string TypeRowElement = "type-row-element";
+    internal const string TypeRowName = "type-row-name";
+    internal const string TypeRowDoc = "type-row-doc";
 
     internal static IDocument GetDocument(string name)
     {
@@ -185,6 +194,42 @@ internal class Tools
         var baseTypeElement = element.GetByDataId(TypeNamespace);
         return ParseStringContent(baseTypeElement);
     }
+
+    internal static IElement[] GetNamespaceClasses(IDocument document)
+    {
+        return [.. document.DocumentElement.GetByDataId(NamespaceClasses).GetDataIds(TypeRowElement)];
+    }
+
+    internal static IElement[] GetNamespaceInterfaces(IDocument document)
+    {
+        return [.. document.DocumentElement.GetByDataId(NamespaceInterfaces).GetDataIds(TypeRowElement)];
+    }
+
+    internal static IElement[] GetNamespaceDelegates(IDocument document)
+    {
+        return [.. document.DocumentElement.GetByDataId(NamespaceDelegates).GetDataIds(TypeRowElement)];
+    }
+
+    internal static IElement[] GetNamespaceEnums(IDocument document)
+    {
+        return [.. document.DocumentElement.GetByDataId(NamespaceEnums).GetDataIds(TypeRowElement)];
+    }
+
+    internal static IElement[] GetNamespaceStructs(IDocument document)
+    {
+        return [.. document.DocumentElement.GetByDataId(NamespaceStructs).GetDataIds(TypeRowElement)];
+    }
+
+
+    internal static string GetTypeRowName(IElement element)
+    {
+        var baseTypeElement = element.GetByDataId(TypeRowName);
+        return ParseStringContent(baseTypeElement);
+    }
+
+    internal static string GetTypeRowDoc(IElement element)
+    {
+        var baseTypeElement = element.GetByDataId(TypeRowDoc);
+        return ParseStringContent(baseTypeElement);
+    }
 }
-
-
