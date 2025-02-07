@@ -67,6 +67,12 @@ internal class Tools
         return ParseStringContent(summaryDocElement);
     }
 
+    internal static string GetValueDocContent(IElement memberElement)
+    {
+        var summaryDocElement = memberElement.GetByDataId(ValueDoc);
+        return ParseStringContent(summaryDocElement);
+    }
+
     internal static string GetReturnTypeName(IElement memberElement)
     {
         var returnTypeElement = memberElement.GetByDataId(ReturnTypeName);

@@ -631,7 +631,7 @@
             <summary>
             Get dictionary of animals, whose keys are animal type and values are the animals of given type.
             </summary>
-            <returns>Described above</returns>
+            <returns>Dictionary of animals, indexed by their type.</returns>
         </member>
         <member name="M:MyLibrary.User.AddAnimalsByType(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{MyLibrary.Animal}})">
             <summary>

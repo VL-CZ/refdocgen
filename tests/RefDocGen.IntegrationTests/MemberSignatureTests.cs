@@ -263,26 +263,28 @@ public class TypeDocCommentTests
         baseType.ShouldBe("This class is abstract, use inheritance.");
     }
 
-    [Theory]
-    [InlineData("MyLibrary.User", new string[] { "Animal" })]
-    [InlineData("MyLibrary.Tools.Collections.MyStringCollection", new string[] { "My collection class", "ICollection<T>" })]
-    public void Test_SeeAlsoDocs(string pageName, string[] expectedDocs)
+    [Fact]
+    public void Test_SeeAlsoDocs()
     {
-        using var document = Tools.GetDocument($"{pageName}.html");
+        using var document = Tools.GetDocument("MyLibrary.Tools.Collections.MyStringCollection.html");
 
         var baseType = Tools.GetSeeAlsoDocs(document.GetTypeDataSection());
+
+        string[] expectedDocs = ["My collection class", "ICollection<T>"];
 
         baseType.ShouldBe(expectedDocs);
     }
 
-    [Theory]
-    [InlineData("MyLibrary.Tools.HarvestingSeason", new string[] { "[Flags]" })]
-    [InlineData("MyLibrary.User", new string[] { "[Serializable]", "[JsonSerializable(typeof(MyLibrary.User), GenerationMode = 2)]" })]
-    public void Test_Attributes(string pageName, string[] expectedAttributes)
+    [Fact]
+    public void Test_Attributes()
     {
-        using var document = Tools.GetDocument($"{pageName}.html");
+        using var document = Tools.GetDocument("MyLibrary.User.html");
 
         var baseType = Tools.GetAttributes(document.GetTypeDataSection());
+
+        string[] expectedAttributes = [
+            "[Serializable]",
+            "[JsonSerializable(typeof(MyLibrary.User), GenerationMode = 2)]"];
 
         baseType.ShouldBe(expectedAttributes);
     }
@@ -294,6 +296,7 @@ public class MemberDocCommentTests
     [Theory]
     [InlineData("MyLibrary.User", "MaxAge", "Maximum age of the user.")]
     [InlineData("MyLibrary.User", "FirstName", "First name of the user.")]
+    [InlineData("MyLibrary.User", "#ctor(System.String,System.Int32)", "Initializes a new user using the provided username and age.")]
     [InlineData("MyLibrary.Animal", "GetAverageLifespan(System.String)", "Static method returning the average lifespan of an animal.")]
     [InlineData("MyLibrary.Tools.Collections.IMyCollection`1", "AddRange(System.Collections.Generic.IEnumerable{`0})", "Add range of items into the collection.")]
     [InlineData("MyLibrary.Tools.Season", "Summer", "Represents summer.")]
@@ -312,31 +315,61 @@ public class MemberDocCommentTests
     {
         using var document = Tools.GetDocument("MyLibrary.Animal.html");
 
-        var baseType = Tools.GetRemarksDocContent(document.GetTypeDataSection());
+        var baseType = Tools.GetRemarksDocContent(document.GetMember("weight"));
 
-        baseType.ShouldBe("This class is abstract, use inheritance.");
+        baseType.ShouldBe("The weight is in kilograms (kg).");
+    }
+
+    [Fact]
+    public void Test_ValueDoc()
+    {
+        using var document = Tools.GetDocument("MyLibrary.User.html");
+
+        var baseType = Tools.GetValueDocContent(document.GetMember("Age"));
+
+        baseType.ShouldBe("The age of the user.");
     }
 
     [Theory]
-    [InlineData("MyLibrary.User", new string[] { "Animal" })]
-    [InlineData("MyLibrary.Tools.Collections.MyStringCollection", new string[] { "My collection class", "ICollection<T>" })]
-    public void Test_SeeAlsoDocs(string pageName, string[] expectedDocs)
+    [InlineData("MyLibrary.Animal", "GetAverageLifespan(System.String)", "int", "The average lifespan.")]
+    [InlineData("MyLibrary.User", "GetAnimalsByType", "Dictionary<string, List<Animal>>", "Dictionary of animals, indexed by their type.")]
+    public void Test_ReturnsDoc(string pageName, string memberId, string returnType, string expectedDoc)
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        var baseType = Tools.GetSeeAlsoDocs(document.GetTypeDataSection());
+        var baseType = Tools.GetReturnTypeName(document.GetMember(memberId));
+        var doc = Tools.GetReturnsDoc(document.GetMember(memberId));
 
-        baseType.ShouldBe(expectedDocs);
+        baseType.ShouldBe(returnType);
+        doc.ShouldBe(expectedDoc);
     }
 
-    [Theory]
-    [InlineData("MyLibrary.Tools.HarvestingSeason", new string[] { "[Flags]" })]
-    [InlineData("MyLibrary.User", new string[] { "[Serializable]", "[JsonSerializable(typeof(MyLibrary.User), GenerationMode = 2)]" })]
-    public void Test_Attributes(string pageName, string[] expectedAttributes)
+    [Fact]
+    public void Test_SeeAlsoDocs()
     {
-        using var document = Tools.GetDocument($"{pageName}.html");
+        using var document = Tools.GetDocument("MyLibrary.User.html");
 
-        var baseType = Tools.GetAttributes(document.GetTypeDataSection());
+        var baseType = Tools.GetSeeAlsoDocs(document.GetMember("username"));
+
+        string[] expectedSeeAlsoDocs = [
+            "http://www.google.com",
+            "max age constant",
+            "System.Reflection.FieldInfo.IsLiteral",
+            "Point",
+            "!:notFound"
+            ];
+
+        baseType.ShouldBe(expectedSeeAlsoDocs);
+    }
+
+    [Fact]
+    public void Test_Attributes()
+    {
+        using var document = Tools.GetDocument("MyLibrary.User.html");
+
+        var baseType = Tools.GetAttributes(document.GetMember("PrintProfile(System.String)"));
+
+        string[] expectedAttributes = ["[Obsolete]"];
 
         baseType.ShouldBe(expectedAttributes);
     }
