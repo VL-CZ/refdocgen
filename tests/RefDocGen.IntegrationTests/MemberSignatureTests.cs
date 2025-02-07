@@ -619,3 +619,58 @@ public class NamespaceDetailsPageTests : IDisposable
     }
 
 }
+
+[Collection(DocumentationTestCollection.Name)]
+public class NamespaceListPageTests : IDisposable
+{
+    private readonly IDocument document;
+
+    public NamespaceListPageTests()
+    {
+        document = Tools.GetDocument("index.html");
+    }
+
+    public void Dispose()
+    {
+        document.Dispose();
+    }
+
+    [Fact]
+    public void TestNamespaceNames()
+    {
+        var classes = Tools.GetNamespaceNames(document);
+
+        string[] expected = [
+            "MyLibrary",
+            "MyLibrary.CyclicDoc",
+            "MyLibrary.Hierarchy",
+            "MyLibrary.Tools",
+            "MyLibrary.Tools.Collections"
+        ];
+
+        classes.ShouldBe(expected);
+    }
+
+    [Fact]
+    public void TestNamespaceTypes()
+    {
+        var ns = document.GetElementById("MyLibrary.Tools");
+
+        var nsTypes = Tools.GetNamespaceTypeNames(ns);
+
+        string[] expected = [
+            "enum HarvestingSeason",
+            "interface IContravariant<T>",
+            "interface ICovariant<T>",
+            "delegate MyPredicate<T>",
+            "delegate ObjectPredicate",
+            "struct Point",
+            "enum Season",
+            "class StringExtensions",
+            "class WeatherStation"
+        ];
+
+        nsTypes.ShouldBe(expected);
+    }
+
+}

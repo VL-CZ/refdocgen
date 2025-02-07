@@ -39,6 +39,8 @@ internal class Tools
     internal const string TypeRowName = "type-row-name";
     internal const string TypeRowDoc = "type-row-doc";
 
+    internal const string NamespaceName = "namespace-name";
+
     internal static IDocument GetDocument(string name)
     {
         var userFile = Path.Join("output", name);
@@ -104,7 +106,7 @@ internal class Tools
 
     internal static IElement[] GetMemberParameters(IElement memberElement)
     {
-        return [.. memberElement.GetDataIds(ParameterElement)];
+        return [.. memberElement.GetByDataIds(ParameterElement)];
     }
 
     internal static string GetParameterName(IElement paramElement)
@@ -121,7 +123,7 @@ internal class Tools
 
     internal static IElement[] GetTypeParameters(IElement memberElement)
     {
-        return [.. memberElement.GetDataIds(TypeParameterElement)];
+        return [.. memberElement.GetByDataIds(TypeParameterElement)];
     }
 
     internal static string GetTypeParameterName(IElement typeParamElement)
@@ -139,19 +141,19 @@ internal class Tools
 
     internal static string[] GetAttributes(IElement element)
     {
-        var attributes = element.GetDataIds(AttributeData);
+        var attributes = element.GetByDataIds(AttributeData);
         return attributes.Select(ParseStringContent).ToArray();
     }
 
     internal static string[] GetSeeAlsoDocs(IElement element)
     {
-        var attributes = element.GetDataIds(SeeAlsoDocs);
+        var attributes = element.GetByDataIds(SeeAlsoDocs);
         return attributes.Select(ParseStringContent).ToArray();
     }
 
     internal static IElement[] GetExceptions(IElement element)
     {
-        return [.. element.GetDataIds(ExceptionData)];
+        return [.. element.GetByDataIds(ExceptionData)];
     }
 
     internal static string GetExceptionType(IElement paramElement)
@@ -168,7 +170,7 @@ internal class Tools
 
     internal static string[] GetTypeParamConstraints(IElement element)
     {
-        var attributes = element.GetDataIds(TypeParamConstraints);
+        var attributes = element.GetByDataIds(TypeParamConstraints);
         return attributes.Select(ParseStringContent).ToArray();
     }
 
@@ -197,29 +199,39 @@ internal class Tools
 
     internal static IElement[] GetNamespaceClasses(IDocument document)
     {
-        return [.. document.DocumentElement.GetByDataId(NamespaceClasses).GetDataIds(TypeRowElement)];
+        return [.. document.DocumentElement.GetByDataId(NamespaceClasses).GetByDataIds(TypeRowElement)];
     }
 
     internal static IElement[] GetNamespaceInterfaces(IDocument document)
     {
-        return [.. document.DocumentElement.GetByDataId(NamespaceInterfaces).GetDataIds(TypeRowElement)];
+        return [.. document.DocumentElement.GetByDataId(NamespaceInterfaces).GetByDataIds(TypeRowElement)];
     }
 
     internal static IElement[] GetNamespaceDelegates(IDocument document)
     {
-        return [.. document.DocumentElement.GetByDataId(NamespaceDelegates).GetDataIds(TypeRowElement)];
+        return [.. document.DocumentElement.GetByDataId(NamespaceDelegates).GetByDataIds(TypeRowElement)];
     }
 
     internal static IElement[] GetNamespaceEnums(IDocument document)
     {
-        return [.. document.DocumentElement.GetByDataId(NamespaceEnums).GetDataIds(TypeRowElement)];
+        return [.. document.DocumentElement.GetByDataId(NamespaceEnums).GetByDataIds(TypeRowElement)];
     }
 
     internal static IElement[] GetNamespaceStructs(IDocument document)
     {
-        return [.. document.DocumentElement.GetByDataId(NamespaceStructs).GetDataIds(TypeRowElement)];
+        return [.. document.DocumentElement.GetByDataId(NamespaceStructs).GetByDataIds(TypeRowElement)];
     }
 
+    internal static string[] GetNamespaceNames(IDocument document)
+    {
+        var namespaceNames = document.DocumentElement.GetByDataIds(NamespaceName);
+        return namespaceNames.Select(ParseStringContent).ToArray();
+    }
+
+    internal static string[] GetNamespaceTypeNames(IElement element)
+    {
+        return element.GetByDataIds(TypeRowElement).Select(GetTypeRowName).ToArray();
+    }
 
     internal static string GetTypeRowName(IElement element)
     {

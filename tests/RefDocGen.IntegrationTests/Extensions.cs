@@ -15,7 +15,7 @@ internal static class Extensions
             ?? throw new ArgumentException("Not found");
     }
 
-    internal static IHtmlCollection<IElement> GetDataIds(this IElement element, string attributeValue)
+    internal static IHtmlCollection<IElement> GetByDataIds(this IElement element, string attributeValue)
     {
         return element.QuerySelectorAll($"[data-id={attributeValue}]");
     }
