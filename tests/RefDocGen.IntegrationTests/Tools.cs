@@ -27,6 +27,7 @@ internal class Tools
     internal const string ExceptionData = "exception-data";
     internal const string ExceptionType = "exception-type";
     internal const string ExceptionDoc = "exception-doc";
+    internal const string DelegateMethod = "delegate-method";
 
 
     internal static IDocument GetDocument(string name)

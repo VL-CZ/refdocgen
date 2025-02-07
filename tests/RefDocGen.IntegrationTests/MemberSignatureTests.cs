@@ -136,6 +136,16 @@ public class MemberSignatureTests
         methodName.ShouldBe(expectedMethodSignature);
     }
 
+    [Fact]
+    public void Test_Delegate_Method_Signature()
+    {
+        using var document = Tools.GetDocument("MyLibrary.Tools.MyPredicate`1.html");
+
+        var delegateMethod = document.DocumentElement.GetByDataId(Tools.DelegateMethod);
+
+        string methodName = Tools.GetMemberNameContent(delegateMethod);
+        methodName.ShouldBe("internal delegate bool MyPredicate<T>(T obj)");
+    }
 }
 
 [Collection(DocumentationTestCollection.Name)]
@@ -303,6 +313,7 @@ public class MemberDocCommentTests
     [InlineData("MyLibrary.Tools.Collections.MyCollection`1",
         "System#Collections#IEnumerable#GetEnumerator",
         "Returns an enumerator that iterates through the collection.")]
+    [InlineData("MyLibrary.Tools.MyPredicate`1", "delegate-method", "Predicate about a generic type T.")]
     public void Test_Summary(string pageName, string memberId, string expectedDoc)
     {
         using var document = Tools.GetDocument($"{pageName}.html");
