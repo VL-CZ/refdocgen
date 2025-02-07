@@ -101,7 +101,6 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.Point", "op_UnaryNegation(MyLibrary.Tools.Point)", "public static Point operator -(Point point)")]
     [InlineData("MyLibrary.Tools.Point", "op_Explicit(MyLibrary.Tools.Point)~System.Numerics.Vector2", "public static explicit operator Vector2(Point point)")]
     [InlineData("MyLibrary.Tools.Point", "op_Implicit(System.Numerics.Vector2)~MyLibrary.Tools.Point", "public static implicit operator Point(Vector2 vector)")]
-
     public void Test_Operator_Signature(string pageName, string methodId, string expectedMethodSignature)
     {
         using var document = Tools.GetDocument($"{pageName}.html");
@@ -301,6 +300,9 @@ public class MemberDocCommentTests
     [InlineData("MyLibrary.Tools.Collections.IMyCollection`1", "AddRange(System.Collections.Generic.IEnumerable{`0})", "Add range of items into the collection.")]
     [InlineData("MyLibrary.Tools.Season", "Summer", "Represents summer.")]
     [InlineData("MyLibrary.Tools.WeatherStation", "OnTemperatureChange", "Temperature change event.")]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection`1",
+        "System#Collections#IEnumerable#GetEnumerator",
+        "Returns an enumerator that iterates through the collection.")]
     public void Test_Summary(string pageName, string memberId, string expectedDoc)
     {
         using var document = Tools.GetDocument($"{pageName}.html");
@@ -333,6 +335,7 @@ public class MemberDocCommentTests
     [Theory]
     [InlineData("MyLibrary.Animal", "GetAverageLifespan(System.String)", "int", "The average lifespan.")]
     [InlineData("MyLibrary.User", "GetAnimalsByType", "Dictionary<string, List<Animal>>", "Dictionary of animals, indexed by their type.")]
+    [InlineData("MyLibrary.Tools.Point", "op_Equality(MyLibrary.Tools.Point,MyLibrary.Tools.Point)", "bool", "Are the 2 points equal?")]
     public void Test_ReturnsDoc(string pageName, string memberId, string returnType, string expectedDoc)
     {
         using var document = Tools.GetDocument($"{pageName}.html");
@@ -361,7 +364,11 @@ public class MemberDocCommentTests
 
         baseType.ShouldBe(expectedSeeAlsoDocs);
     }
+}
 
+[Collection(DocumentationTestCollection.Name)]
+public class MemberDataTests
+{
     [Fact]
     public void Test_Attributes()
     {
@@ -372,5 +379,146 @@ public class MemberDocCommentTests
         string[] expectedAttributes = ["[Obsolete]"];
 
         baseType.ShouldBe(expectedAttributes);
+    }
+
+    [Fact]
+    public void Test_Exceptions()
+    {
+        using var document = Tools.GetDocument("MyLibrary.Tools.Collections.MyCollection`1.html");
+
+        var exceptions = Tools.GetExceptions(document.GetMember("Add(`0)"));
+
+        exceptions.Length.ShouldBe(2);
+
+        var e1type = Tools.GetExceptionType(exceptions[0]);
+        var e1doc = Tools.GetExceptionDoc(exceptions[0]);
+
+        var e2type = Tools.GetExceptionType(exceptions[1]);
+        var e2doc = Tools.GetExceptionDoc(exceptions[1]);
+
+        e1type.ShouldBe("System.NotImplementedException");
+        e1doc.ShouldBeEmpty();
+
+        e2type.ShouldBe("System.ArgumentNullException");
+        e2doc.ShouldBe("If the argument is null.");
+    }
+}
+
+[Collection(DocumentationTestCollection.Name)]
+public class ParameterDocCommentTests
+{
+    [Theory]
+    [InlineData("MyLibrary.Animal", "GetAverageLifespan(System.String)", "string species", "The species of the animal.")]
+    [InlineData("MyLibrary.Tools.Point", "op_UnaryNegation(MyLibrary.Tools.Point)", "Point point", "The provided point.")]
+    [InlineData("MyLibrary.Tools.WeatherStation", "#ctor(MyLibrary.Tools.Point)", "Point location", "Location of the weather station.")]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "Item(System.Index)", "Index index", "An Index struct.")]
+    [InlineData(
+        "MyLibrary.User",
+        "AddAnimalsByType(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{MyLibrary.Animal}})",
+        "Dictionary<string, List<Animal>> animals",
+        "Animals to add. Key: animal type, Value: list of animals of the given type.")]
+    public void Test_SingleParameter(string pageName, string memberId, string parameterSignature, string expectedDoc)
+    {
+        using var document = Tools.GetDocument($"{pageName}.html");
+
+        var parameters = Tools.GetMemberParameters(document.GetMember(memberId));
+
+        parameters.Length.ShouldBe(1);
+
+        var paramSignature = Tools.GetParameterName(parameters[0]);
+        paramSignature.ShouldBe(parameterSignature);
+
+        var paramDoc = Tools.GetParameterDoc(parameters[0]);
+        paramDoc.ShouldBe(expectedDoc);
+    }
+
+    [Fact]
+    public void Test_MethodWithManyParameters()
+    {
+        using var document = Tools.GetDocument("MyLibrary.User.html");
+        var memberElement = document.GetMember("ProcessValues(System.Int32@,System.Int32@,System.String,System.Int32@,System.Double)");
+
+        var parameters = Tools.GetMemberParameters(memberElement);
+
+        parameters.Length.ShouldBe(5);
+
+        List<(string signature, string? doc)> expectedValues = [
+            ("in int inValue", "An input value."),
+            ("ref int refValue", "A reference value."),
+            ("string s1", ""),
+            ("out int outValue", "An output value."),
+            ("double d2", "")
+        ];
+
+        for (int i = 0; i < expectedValues.Count; i++)
+        {
+            string paramName = Tools.GetParameterName(parameters[i]);
+            paramName.ShouldBe(expectedValues[i].signature);
+
+            string paramDoc = Tools.GetParameterDoc(parameters[i]);
+            paramDoc.ShouldBe(expectedValues[i].doc);
+        }
+    }
+}
+
+[Collection(DocumentationTestCollection.Name)]
+public class TypeParameterDocCommentTests
+{
+    [Theory]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "T", "The type of the items in the collection.")]
+    [InlineData("MyLibrary.Tools.MyPredicate`1", "T", "The type of the object.")]
+    public void Test_SingleTypeParameter(string pageName, string parameterSignature, string expectedDoc)
+    {
+        using var document = Tools.GetDocument($"{pageName}.html");
+
+        var parameters = Tools.GetTypeParameters(document.GetTypeDataSection());
+
+        parameters.Length.ShouldBe(1);
+
+        var paramSignature = Tools.GetTypeParameterName(parameters[0]);
+        paramSignature.ShouldBe(parameterSignature);
+
+        var paramDoc = Tools.GetTypeParameterDoc(parameters[0]);
+        paramDoc.ShouldBe(expectedDoc);
+    }
+
+    [Fact]
+    public void Test_MethodWithTypeParameter()
+    {
+        using var document = Tools.GetDocument("MyLibrary.Tools.Collections.MyCollection`1.html");
+
+        var parameters = Tools.GetTypeParameters(document.GetMember("AddGeneric``1(``0)"));
+
+        parameters.Length.ShouldBe(1);
+
+        var paramSignature = Tools.GetTypeParameterName(parameters[0]);
+        paramSignature.ShouldBe("T2");
+
+        var paramDoc = Tools.GetTypeParameterDoc(parameters[0]);
+        paramDoc.ShouldBe("Type of the item to add.");
+    }
+
+    [Fact]
+    public void Test_MultipleTypeParameters()
+    {
+        using var document = Tools.GetDocument("MyLibrary.Tools.Collections.IMyDictionary`2.html");
+
+        var parameters = Tools.GetTypeParameters(document.GetTypeDataSection());
+
+        parameters.Length.ShouldBe(2);
+
+        var paramSignature1 = Tools.GetTypeParameterName(parameters[0]);
+        paramSignature1.ShouldBe("TKey");
+
+        var paramDoc1 = Tools.GetTypeParameterDoc(parameters[0]);
+        paramDoc1.ShouldBe("Type of the key.");
+
+        var paramSignature2 = Tools.GetTypeParameterName(parameters[1]);
+        paramSignature2.ShouldBe("TValue");
+
+        var paramDoc2 = Tools.GetTypeParameterDoc(parameters[1]);
+        paramDoc2.ShouldBe("Type of the value.");
+
+
     }
 }

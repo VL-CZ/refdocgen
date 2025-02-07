@@ -11,16 +11,23 @@ internal class Tools
     internal const string ReturnTypeName = "return-type-name";
     internal const string ParameterElement = "parameter-data";
     internal const string ParameterName = "parameter-name";
+    internal const string ParameterDoc = "parameter-doc";
+    internal const string TypeParameterElement = "type-parameter-data";
+    internal const string TypeParameterName = "type-parameter-name";
+    internal const string TypeParameterDoc = "type-parameter-doc";
     internal const string SummaryDoc = "summary-doc";
     internal const string RemarksDoc = "remarks-doc";
     internal const string ReturnsDoc = "returns-doc";
-    internal const string ParameterDoc = "parameter-doc";
     internal const string ValueDoc = "value-doc";
     internal const string SeeAlsoDocs = "seealso-item";
     internal const string TypeParamConstraints = "type-param-constraints";
     internal const string BaseType = "base-type";
     internal const string ImplementedInterfaces = "implemented-interfaces";
     internal const string TypeNamespace = "type-namespace";
+    internal const string ExceptionData = "exception-data";
+    internal const string ExceptionType = "exception-type";
+    internal const string ExceptionDoc = "exception-doc";
+
 
     internal static IDocument GetDocument(string name)
     {
@@ -102,6 +109,24 @@ internal class Tools
         return ParseStringContent(paramDocElement);
     }
 
+    internal static IElement[] GetTypeParameters(IElement memberElement)
+    {
+        return [.. memberElement.GetDataIds(TypeParameterElement)];
+    }
+
+    internal static string GetTypeParameterName(IElement typeParamElement)
+    {
+        var typeParamNameElement = typeParamElement.GetByDataId(TypeParameterName);
+        return ParseStringContent(typeParamNameElement);
+    }
+
+    internal static string GetTypeParameterDoc(IElement typeParamElement)
+    {
+        var typeParamDocElement = typeParamElement.GetByDataId(TypeParameterDoc);
+        return ParseStringContent(typeParamDocElement);
+    }
+
+
     internal static string[] GetAttributes(IElement element)
     {
         var attributes = element.GetDataIds(AttributeData);
@@ -112,6 +137,23 @@ internal class Tools
     {
         var attributes = element.GetDataIds(SeeAlsoDocs);
         return attributes.Select(ParseStringContent).ToArray();
+    }
+
+    internal static IElement[] GetExceptions(IElement element)
+    {
+        return [.. element.GetDataIds(ExceptionData)];
+    }
+
+    internal static string GetExceptionType(IElement paramElement)
+    {
+        var paramNameElement = paramElement.GetByDataId(ExceptionType);
+        return ParseStringContent(paramNameElement);
+    }
+
+    internal static string GetExceptionDoc(IElement paramElement)
+    {
+        var paramDocElement = paramElement.GetByDataId(ExceptionDoc);
+        return ParseStringContent(paramDocElement);
     }
 
     internal static string[] GetTypeParamConstraints(IElement element)

@@ -15,16 +15,16 @@
         <member name="F:MyLibrary.Animal.weight">
             <summary>
             Animal weight.
-            
+
             Note that this also applies for <see cref="T:MyLibrary.Dog"/>.
             <br/>
-            
+
             See also <see cref="F:MyLibrary.User.username"/>
             <br/>
-            
+
             See also <see cref="M:MyLibrary.Tools.Collections.MyCollection`1.Add(`0)"/>
             <br/>
-            
+
             See also <see cref="P:MyLibrary.Tools.Collections.MyCollection`1.IsReadOnly"/>
             </summary>
             <remarks>
@@ -157,7 +157,7 @@
         <member name="T:MyLibrary.Hierarchy.ChildChildChild">
             <summary>
             Before parent.
-            <inheritdoc cref="T:MyLibrary.Hierarchy.Parent"/> 
+            <inheritdoc cref="T:MyLibrary.Hierarchy.Parent"/>
             After parent.
             </summary>
         </member>
@@ -498,10 +498,11 @@
             Location of the weather station
             </summary>
         </member>
-        <member name="M:MyLibrary.Tools.WeatherStation.#ctor">
+        <member name="M:MyLibrary.Tools.WeatherStation.#ctor(MyLibrary.Tools.Point)">
             <summary>
             Weather station constructor
             </summary>
+            <param name="location">Location of the weather station.</param>
         </member>
         <member name="E:MyLibrary.Tools.WeatherStation.OnTemperatureChange">
             <summary>
@@ -523,11 +524,11 @@
         <member name="F:MyLibrary.User.username">
             <summary>
             Name of the user. <c>var name = user.username</c>
-            
+
             <code>
             var name = user.username;
             var userValidator = new UserValidator();
-            
+
             var isValid = userValidator.Validate(name);
             Console.WriteLine($"Valid: {isValid}");
             </code>
@@ -547,7 +548,7 @@
               <item>Second</item>
             </list>
             <see href="http://www.google.com">Google</see>
-            
+
             <see langword="true"/>
             </summary>
             <seealso href="http://www.google.com"/>
@@ -559,7 +560,7 @@
         <member name="M:MyLibrary.User.#ctor">
             <summary>
             Default constructor.
-            </summary>  
+            </summary>
         </member>
         <member name="M:MyLibrary.User.#ctor(System.String,System.Int32)">
             <summary>
