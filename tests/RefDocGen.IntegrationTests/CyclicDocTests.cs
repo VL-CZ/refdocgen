@@ -9,7 +9,7 @@ public class CyclicDocTests
     [InlineData("Cycle1")]
     [InlineData("Cycle2")]
     [InlineData("CycleReference")]
-    public void Test_Cycle1(string typeName)
+    public void Test_Cycle(string typeName)
     {
         using var document = Tools.GetDocument($"MyLibrary.CyclicDoc.{typeName}.html");
 

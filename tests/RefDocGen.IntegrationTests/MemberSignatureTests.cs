@@ -168,7 +168,7 @@ public class TypeSignatureTests
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        var typeNameElement = document.GetTypeName();
+        var typeNameElement = document.GetTypeSignature();
 
         string typeName = Tools.ParseStringContent(typeNameElement);
         typeName.ShouldBe(expectedTypeSignature);

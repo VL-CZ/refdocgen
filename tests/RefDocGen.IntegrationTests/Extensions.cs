@@ -31,15 +31,13 @@ internal static class Extensions
             ?? throw new ArgumentException("Not found");
     }
 
-    internal static IElement GetTypeName(this IDocument document)
+    internal static IElement GetTypeSignature(this IDocument document)
     {
-        return document.DocumentElement.GetByDataIdOrDefault("type-name-title")
-            ?? throw new ArgumentException("Not found");
+        return GetByDataId(document.DocumentElement, DataId.DeclaredTypeSignature);
     }
 
     internal static IElement GetTypeDataSection(this IDocument document)
     {
-        return document.DocumentElement.GetByDataIdOrDefault("declared-type-data")
-            ?? throw new ArgumentException("Not found");
+        return GetByDataId(document.DocumentElement, DataId.TypeDataSection);
     }
 }
