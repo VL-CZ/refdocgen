@@ -73,7 +73,7 @@ internal class NamespaceListTMCreator
             }
         }
 
-        return namespaceTemplateModels;
+        return namespaceTemplateModels.OrderBy(n => n.Name);
     }
 
     /// <summary>
