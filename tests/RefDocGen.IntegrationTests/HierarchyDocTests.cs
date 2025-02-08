@@ -14,7 +14,7 @@ public class HierarchyDocTests
         using var document = Tools.GetDocument($"MyLibrary.Hierarchy.{typeName}.html");
 
         var typeDocsSection = document.GetTypeDataSection();
-        var summaryDoc = Tools.GetSummaryDocContent(typeDocsSection);
+        string summaryDoc = Tools.GetSummaryDocContent(typeDocsSection);
 
         summaryDoc.ShouldBe(expectedSummaryDoc);
     }
@@ -29,9 +29,9 @@ public class HierarchyDocTests
         var handleMethod = document.GetMember("Handle(System.Object)");
         var parameter = Tools.GetMemberParameters(handleMethod).First();
 
-        var summaryDoc = Tools.GetSummaryDocContent(handleMethod);
-        var returnsDoc = Tools.GetReturnsDoc(handleMethod);
-        var paramDoc = Tools.GetParameterDoc(parameter);
+        string summaryDoc = Tools.GetSummaryDocContent(handleMethod);
+        string returnsDoc = Tools.GetReturnsDoc(handleMethod);
+        string paramDoc = Tools.GetParameterDoc(parameter);
 
         summaryDoc.ShouldBe("Handle the object.");
         paramDoc.ShouldBe("The object to handle.");
@@ -49,15 +49,15 @@ public class HierarchyDocTests
         var handleMethod = document.GetMember("Print(System.Object)");
         var parameter = Tools.GetMemberParameters(handleMethod).First();
 
-        var summaryDoc = Tools.GetSummaryDocContent(handleMethod);
-        var paramDoc = Tools.GetParameterDoc(parameter);
+        string summaryDoc = Tools.GetSummaryDocContent(handleMethod);
+        string paramDoc = Tools.GetParameterDoc(parameter);
 
         summaryDoc.ShouldBe(expectedSummaryDoc);
         paramDoc.ShouldBe(expectedParamDoc);
 
         if (expectedRemarksDoc is not null)
         {
-            var remarksDoc = Tools.GetRemarksDocContent(handleMethod);
+            string remarksDoc = Tools.GetRemarksDocContent(handleMethod);
             remarksDoc.ShouldBe(expectedRemarksDoc);
         }
     }
@@ -69,7 +69,7 @@ public class HierarchyDocTests
 
         var handleMethod = document.GetMember("PrintData");
 
-        var summaryDoc = Tools.GetSummaryDocContent(handleMethod);
+        string summaryDoc = Tools.GetSummaryDocContent(handleMethod);
 
         summaryDoc.ShouldBe("IChild Print the object.");
     }

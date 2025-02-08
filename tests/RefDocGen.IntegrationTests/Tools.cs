@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace RefDocGen.IntegrationTests;
 
-internal enum XmlDocElement
+internal enum DataId
 {
     MemberName,
     AttributeData,
@@ -41,42 +41,42 @@ internal enum XmlDocElement
 
 internal static class XmlDocElementExtensions
 {
-    internal static string ToXmlString(this XmlDocElement element)
+    internal static string GetString(this DataId dataId)
     {
-        return element switch
+        return dataId switch
         {
-            XmlDocElement.MemberName => "member-name",
-            XmlDocElement.AttributeData => "attribute-data",
-            XmlDocElement.ReturnTypeName => "return-type-name",
-            XmlDocElement.ParameterElement => "parameter-data",
-            XmlDocElement.ParameterName => "parameter-name",
-            XmlDocElement.ParameterDoc => "parameter-doc",
-            XmlDocElement.TypeParameterElement => "type-parameter-data",
-            XmlDocElement.TypeParameterName => "type-parameter-name",
-            XmlDocElement.TypeParameterDoc => "type-parameter-doc",
-            XmlDocElement.SummaryDoc => "summary-doc",
-            XmlDocElement.RemarksDoc => "remarks-doc",
-            XmlDocElement.ReturnsDoc => "returns-doc",
-            XmlDocElement.ValueDoc => "value-doc",
-            XmlDocElement.SeeAlsoDocs => "seealso-item",
-            XmlDocElement.TypeParamConstraints => "type-param-constraints",
-            XmlDocElement.BaseType => "base-type",
-            XmlDocElement.ImplementedInterfaces => "implemented-interfaces",
-            XmlDocElement.TypeNamespace => "type-namespace",
-            XmlDocElement.ExceptionData => "exception-data",
-            XmlDocElement.ExceptionType => "exception-type",
-            XmlDocElement.ExceptionDoc => "exception-doc",
-            XmlDocElement.DelegateMethod => "delegate-method",
-            XmlDocElement.NamespaceClasses => "namespace-classes",
-            XmlDocElement.NamespaceInterfaces => "namespace-interfaces",
-            XmlDocElement.NamespaceDelegates => "namespace-delegates",
-            XmlDocElement.NamespaceEnums => "namespace-enums",
-            XmlDocElement.NamespaceStructs => "namespace-structs",
-            XmlDocElement.TypeRowElement => "type-row-element",
-            XmlDocElement.TypeRowName => "type-row-name",
-            XmlDocElement.TypeRowDoc => "type-row-doc",
-            XmlDocElement.NamespaceName => "namespace-name",
-            _ => throw new ArgumentOutOfRangeException(nameof(element), element, null)
+            DataId.MemberName => "member-name",
+            DataId.AttributeData => "attribute-data",
+            DataId.ReturnTypeName => "return-type-name",
+            DataId.ParameterElement => "parameter-data",
+            DataId.ParameterName => "parameter-name",
+            DataId.ParameterDoc => "parameter-doc",
+            DataId.TypeParameterElement => "type-parameter-data",
+            DataId.TypeParameterName => "type-parameter-name",
+            DataId.TypeParameterDoc => "type-parameter-doc",
+            DataId.SummaryDoc => "summary-doc",
+            DataId.RemarksDoc => "remarks-doc",
+            DataId.ReturnsDoc => "returns-doc",
+            DataId.ValueDoc => "value-doc",
+            DataId.SeeAlsoDocs => "seealso-item",
+            DataId.TypeParamConstraints => "type-param-constraints",
+            DataId.BaseType => "base-type",
+            DataId.ImplementedInterfaces => "implemented-interfaces",
+            DataId.TypeNamespace => "type-namespace",
+            DataId.ExceptionData => "exception-data",
+            DataId.ExceptionType => "exception-type",
+            DataId.ExceptionDoc => "exception-doc",
+            DataId.DelegateMethod => "delegate-method",
+            DataId.NamespaceClasses => "namespace-classes",
+            DataId.NamespaceInterfaces => "namespace-interfaces",
+            DataId.NamespaceDelegates => "namespace-delegates",
+            DataId.NamespaceEnums => "namespace-enums",
+            DataId.NamespaceStructs => "namespace-structs",
+            DataId.TypeRowElement => "type-row-element",
+            DataId.TypeRowName => "type-row-name",
+            DataId.TypeRowDoc => "type-row-doc",
+            DataId.NamespaceName => "namespace-name",
+            _ => throw new ArgumentOutOfRangeException(nameof(dataId), dataId, null)
         };
     }
 }
@@ -86,8 +86,8 @@ internal class Tools
 {
     internal static IDocument GetDocument(string name)
     {
-        var userFile = Path.Join("output", name);
-        var fileData = File.ReadAllText(userFile);
+        string userFile = Path.Join("output", name);
+        string fileData = File.ReadAllText(userFile);
 
         // Configure and create a browsing context
         var config = Configuration.Default;
@@ -105,8 +105,8 @@ internal class Tools
 
     internal static string GetMemberNameContent(IElement memberElement)
     {
-        var memberNameElement = memberElement.GetByDataId(XmlDocElement.MemberName);
-        var content = ParseStringContent(memberNameElement);
+        var memberNameElement = memberElement.GetByDataId(DataId.MemberName);
+        string content = ParseStringContent(memberNameElement);
 
         if (content.EndsWith(" #", StringComparison.InvariantCulture)) // remove the anchor tag
         {
@@ -116,100 +116,120 @@ internal class Tools
         return content;
     }
 
+    private static string GetParsedContent(IElement element, DataId dataId)
+    {
+        var targetElement = element.GetByDataId(dataId);
+        return ParseStringContent(targetElement);
+    }
+
     internal static string GetSummaryDocContent(IElement memberElement)
     {
-        var summaryDocElement = memberElement.GetByDataId(XmlDocElement.SummaryDoc);
-        return ParseStringContent(summaryDocElement);
+        return GetParsedContent(memberElement, DataId.SummaryDoc);
     }
 
     internal static string GetRemarksDocContent(IElement memberElement)
     {
-        var summaryDocElement = memberElement.GetByDataId(XmlDocElement.RemarksDoc);
-        return ParseStringContent(summaryDocElement);
+        return GetParsedContent(memberElement, DataId.RemarksDoc);
     }
 
     internal static string GetValueDocContent(IElement memberElement)
     {
-        var summaryDocElement = memberElement.GetByDataId(XmlDocElement.ValueDoc);
-        return ParseStringContent(summaryDocElement);
+        return GetParsedContent(memberElement, DataId.ValueDoc);
     }
 
     internal static string GetReturnTypeName(IElement memberElement)
     {
-        var returnTypeElement = memberElement.GetByDataId(XmlDocElement.ReturnTypeName);
-        return ParseStringContent(returnTypeElement);
+        return GetParsedContent(memberElement, DataId.ReturnTypeName);
     }
 
     internal static string GetReturnsDoc(IElement memberElement)
     {
-        var returnsDocElement = memberElement.GetByDataId(XmlDocElement.ReturnsDoc);
-        return ParseStringContent(returnsDocElement);
-    }
-
-    internal static IElement[] GetMemberParameters(IElement memberElement)
-    {
-        return [.. memberElement.GetByDataIds(XmlDocElement.ParameterElement)];
+        return GetParsedContent(memberElement, DataId.ReturnsDoc);
     }
 
     internal static string GetParameterName(IElement paramElement)
     {
-        var paramNameElement = paramElement.GetByDataId(XmlDocElement.ParameterName);
-        return ParseStringContent(paramNameElement);
+        return GetParsedContent(paramElement, DataId.ParameterName);
     }
 
     internal static string GetParameterDoc(IElement paramElement)
     {
-        var paramDocElement = paramElement.GetByDataId(XmlDocElement.ParameterDoc);
-        return ParseStringContent(paramDocElement);
-    }
-
-    internal static IElement[] GetTypeParameters(IElement memberElement)
-    {
-        return [.. memberElement.GetByDataIds(XmlDocElement.TypeParameterElement)];
+        return GetParsedContent(paramElement, DataId.ParameterDoc);
     }
 
     internal static string GetTypeParameterName(IElement typeParamElement)
     {
-        var typeParamNameElement = typeParamElement.GetByDataId(XmlDocElement.TypeParameterName);
-        return ParseStringContent(typeParamNameElement);
+        return GetParsedContent(typeParamElement, DataId.TypeParameterName);
     }
 
     internal static string GetTypeParameterDoc(IElement typeParamElement)
     {
-        var typeParamDocElement = typeParamElement.GetByDataId(XmlDocElement.TypeParameterDoc);
-        return ParseStringContent(typeParamDocElement);
-    }
-
-    internal static string[] GetAttributes(IElement element)
-    {
-        return element.GetByDataIds(XmlDocElement.AttributeData).Select(ParseStringContent).ToArray();
-    }
-
-    internal static string[] GetSeeAlsoDocs(IElement element)
-    {
-        return element.GetByDataIds(XmlDocElement.SeeAlsoDocs).Select(ParseStringContent).ToArray();
-    }
-
-    internal static IElement[] GetExceptions(IElement element)
-    {
-        return [.. element.GetByDataIds(XmlDocElement.ExceptionData)];
+        return GetParsedContent(typeParamElement, DataId.TypeParameterDoc);
     }
 
     internal static string GetExceptionType(IElement paramElement)
     {
-        var paramNameElement = paramElement.GetByDataId(XmlDocElement.ExceptionType);
-        return ParseStringContent(paramNameElement);
+        return GetParsedContent(paramElement, DataId.ExceptionType);
     }
 
     internal static string GetExceptionDoc(IElement paramElement)
     {
-        var paramDocElement = paramElement.GetByDataId(XmlDocElement.ExceptionDoc);
-        return ParseStringContent(paramDocElement);
+        return GetParsedContent(paramElement, DataId.ExceptionDoc);
+    }
+
+    internal static string GetBaseTypeName(IElement element)
+    {
+        return GetParsedContent(element, DataId.BaseType);
+    }
+
+    internal static string GetInterfacesString(IElement element)
+    {
+        return GetParsedContent(element, DataId.ImplementedInterfaces);
+    }
+
+    internal static string GetNamespaceString(IElement element)
+    {
+        return GetParsedContent(element, DataId.TypeNamespace);
+    }
+
+    internal static string GetTypeRowName(IElement element)
+    {
+        return GetParsedContent(element, DataId.TypeRowName);
+    }
+
+    internal static string GetTypeRowDoc(IElement element)
+    {
+        return GetParsedContent(element, DataId.TypeRowDoc);
+    }
+
+    internal static IElement[] GetMemberParameters(IElement memberElement)
+    {
+        return [.. memberElement.GetByDataIds(DataId.ParameterElement)];
+    }
+
+    internal static IElement[] GetTypeParameters(IElement memberElement)
+    {
+        return [.. memberElement.GetByDataIds(DataId.TypeParameterElement)];
+    }
+
+    internal static string[] GetAttributes(IElement element)
+    {
+        return element.GetByDataIds(DataId.AttributeData).Select(ParseStringContent).ToArray();
+    }
+
+    internal static string[] GetSeeAlsoDocs(IElement element)
+    {
+        return element.GetByDataIds(DataId.SeeAlsoDocs).Select(ParseStringContent).ToArray();
+    }
+
+    internal static IElement[] GetExceptions(IElement element)
+    {
+        return [.. element.GetByDataIds(DataId.ExceptionData)];
     }
 
     internal static string[] GetTypeParamConstraints(IElement element)
     {
-        return element.GetByDataIds(XmlDocElement.TypeParamConstraints).Select(ParseStringContent).ToArray();
+        return element.GetByDataIds(DataId.TypeParamConstraints).Select(ParseStringContent).ToArray();
     }
 
     internal static string GetTypeName(IDocument document)
@@ -217,69 +237,39 @@ internal class Tools
         return ParseStringContent(document.GetTypeName());
     }
 
-    internal static string GetBaseTypeName(IElement element)
-    {
-        var baseTypeElement = element.GetByDataId(XmlDocElement.BaseType);
-        return ParseStringContent(baseTypeElement);
-    }
-
-    internal static string GetInterfacesString(IElement element)
-    {
-        var baseTypeElement = element.GetByDataId(XmlDocElement.ImplementedInterfaces);
-        return ParseStringContent(baseTypeElement);
-    }
-
-    internal static string GetNamespaceString(IElement element)
-    {
-        var baseTypeElement = element.GetByDataId(XmlDocElement.TypeNamespace);
-        return ParseStringContent(baseTypeElement);
-    }
-
     internal static IElement[] GetNamespaceClasses(IDocument document)
     {
-        return [.. document.DocumentElement.GetByDataId(XmlDocElement.NamespaceClasses).GetByDataIds(XmlDocElement.TypeRowElement)];
+        return [.. document.DocumentElement.GetByDataId(DataId.NamespaceClasses).GetByDataIds(DataId.TypeRowElement)];
     }
 
     internal static IElement[] GetNamespaceInterfaces(IDocument document)
     {
-        return [.. document.DocumentElement.GetByDataId(XmlDocElement.NamespaceInterfaces).GetByDataIds(XmlDocElement.TypeRowElement)];
+        return [.. document.DocumentElement.GetByDataId(DataId.NamespaceInterfaces).GetByDataIds(DataId.TypeRowElement)];
     }
 
     internal static IElement[] GetNamespaceDelegates(IDocument document)
     {
-        return [.. document.DocumentElement.GetByDataId(XmlDocElement.NamespaceDelegates).GetByDataIds(XmlDocElement.TypeRowElement)];
+        return [.. document.DocumentElement.GetByDataId(DataId.NamespaceDelegates).GetByDataIds(DataId.TypeRowElement)];
     }
 
     internal static IElement[] GetNamespaceEnums(IDocument document)
     {
-        return [.. document.DocumentElement.GetByDataId(XmlDocElement.NamespaceEnums).GetByDataIds(XmlDocElement.TypeRowElement)];
+        return [.. document.DocumentElement.GetByDataId(DataId.NamespaceEnums).GetByDataIds(DataId.TypeRowElement)];
     }
 
     internal static IElement[] GetNamespaceStructs(IDocument document)
     {
-        return [.. document.DocumentElement.GetByDataId(XmlDocElement.NamespaceStructs).GetByDataIds(XmlDocElement.TypeRowElement)];
+        return [.. document.DocumentElement.GetByDataId(DataId.NamespaceStructs).GetByDataIds(DataId.TypeRowElement)];
     }
 
     internal static string[] GetNamespaceNames(IDocument document)
     {
-        return document.DocumentElement.GetByDataIds(XmlDocElement.NamespaceName).Select(ParseStringContent).ToArray();
+        return document.DocumentElement.GetByDataIds(DataId.NamespaceName).Select(ParseStringContent).ToArray();
     }
 
     internal static string[] GetNamespaceTypeNames(IElement element)
     {
-        return element.GetByDataIds(XmlDocElement.TypeRowElement).Select(GetTypeRowName).ToArray();
-    }
-
-    internal static string GetTypeRowName(IElement element)
-    {
-        var baseTypeElement = element.GetByDataId(XmlDocElement.TypeRowName);
-        return ParseStringContent(baseTypeElement);
-    }
-
-    internal static string GetTypeRowDoc(IElement element)
-    {
-        var baseTypeElement = element.GetByDataId(XmlDocElement.TypeRowDoc);
-        return ParseStringContent(baseTypeElement);
+        return element.GetByDataIds(DataId.TypeRowElement).Select(GetTypeRowName).ToArray();
     }
 }
 

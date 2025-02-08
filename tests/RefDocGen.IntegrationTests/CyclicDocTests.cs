@@ -14,6 +14,6 @@ public class CyclicDocTests
         using var document = Tools.GetDocument($"MyLibrary.CyclicDoc.{typeName}.html");
 
         var typeDocsSection = document.GetTypeDataSection();
-        typeDocsSection.GetByDataIdOrDefault(Tools.SummaryDoc).ShouldBeNull();
+        typeDocsSection.GetByDataIdOrDefault(DataId.SummaryDoc).ShouldBeNull();
     }
 }

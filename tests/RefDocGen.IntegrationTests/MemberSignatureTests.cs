@@ -142,7 +142,7 @@ public class MemberSignatureTests
     {
         using var document = Tools.GetDocument("MyLibrary.Tools.MyPredicate`1.html");
 
-        var delegateMethod = document.DocumentElement.GetByDataId(Tools.DelegateMethod);
+        var delegateMethod = document.DocumentElement.GetByDataId(DataId.DelegateMethod);
 
         string methodName = Tools.GetMemberNameContent(delegateMethod);
         methodName.ShouldBe("internal delegate bool MyPredicate<T>(T obj)");
@@ -182,7 +182,7 @@ public class TypeDataTests
     public void Test_Type_Constraints()
     {
         using var document = Tools.GetDocument("MyLibrary.Tools.Collections.MySortedList`1.html");
-        var constraints = Tools.GetTypeParamConstraints(document.GetTypeDataSection());
+        string[] constraints = Tools.GetTypeParamConstraints(document.GetTypeDataSection());
 
         constraints.ShouldBe(["where T : IComparable<T>"]);
     }
@@ -193,7 +193,7 @@ public class TypeDataTests
         using var document = Tools.GetDocument("MyLibrary.Tools.Collections.MyCollection`1.html");
         var method = document.GetMember("AddGeneric``1(``0)");
 
-        var constraints = Tools.GetTypeParamConstraints(method);
+        string[] constraints = Tools.GetTypeParamConstraints(method);
 
         constraints.ShouldBe(["where T2 : class"]);
     }
@@ -202,7 +202,7 @@ public class TypeDataTests
     public void Test_Complex_Constraints()
     {
         using var document = Tools.GetDocument("MyLibrary.Tools.Collections.MyDictionary`2.html");
-        var constraints = Tools.GetTypeParamConstraints(document.GetTypeDataSection());
+        string[] constraints = Tools.GetTypeParamConstraints(document.GetTypeDataSection());
 
         constraints.ShouldBe(["where TKey : class, new(), IComparable, IEquatable<TKey>", "where TValue : struct, IDisposable"]);
     }
@@ -215,7 +215,7 @@ public class TypeDataTests
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        var baseType = Tools.GetBaseTypeName(document.GetTypeDataSection());
+        string baseType = Tools.GetBaseTypeName(document.GetTypeDataSection());
 
         baseType.ShouldBe($"Base type: {expectedBaseType}");
     }
@@ -227,7 +227,7 @@ public class TypeDataTests
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        var baseType = Tools.GetInterfacesString(document.GetTypeDataSection());
+        string baseType = Tools.GetInterfacesString(document.GetTypeDataSection());
 
         baseType.ShouldBe($"Implements: {expectedInterfacesImplemented}");
     }
@@ -239,7 +239,7 @@ public class TypeDataTests
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        var baseType = Tools.GetNamespaceString(document.GetTypeDataSection());
+        string baseType = Tools.GetNamespaceString(document.GetTypeDataSection());
 
         baseType.ShouldBe($"namespace {expectedNamespace}");
     }
@@ -258,7 +258,7 @@ public class TypeDocCommentTests
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        var baseType = Tools.GetSummaryDocContent(document.GetTypeDataSection());
+        string baseType = Tools.GetSummaryDocContent(document.GetTypeDataSection());
 
         baseType.ShouldBe(expectedDoc);
     }
@@ -268,7 +268,7 @@ public class TypeDocCommentTests
     {
         using var document = Tools.GetDocument("MyLibrary.Animal.html");
 
-        var baseType = Tools.GetRemarksDocContent(document.GetTypeDataSection());
+        string baseType = Tools.GetRemarksDocContent(document.GetTypeDataSection());
 
         baseType.ShouldBe("This class is abstract, use inheritance.");
     }
@@ -278,7 +278,7 @@ public class TypeDocCommentTests
     {
         using var document = Tools.GetDocument("MyLibrary.Tools.Collections.MyStringCollection.html");
 
-        var baseType = Tools.GetSeeAlsoDocs(document.GetTypeDataSection());
+        string[] baseType = Tools.GetSeeAlsoDocs(document.GetTypeDataSection());
 
         string[] expectedDocs = ["My collection class", "ICollection<T>"];
 
@@ -290,7 +290,7 @@ public class TypeDocCommentTests
     {
         using var document = Tools.GetDocument("MyLibrary.User.html");
 
-        var baseType = Tools.GetAttributes(document.GetTypeDataSection());
+        string[] baseType = Tools.GetAttributes(document.GetTypeDataSection());
 
         string[] expectedAttributes = [
             "[Serializable]",
@@ -319,7 +319,7 @@ public class MemberDocCommentTests
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        var baseType = Tools.GetSummaryDocContent(document.GetMember(memberId));
+        string baseType = Tools.GetSummaryDocContent(document.GetMember(memberId));
 
         baseType.ShouldBe(expectedDoc);
     }
@@ -329,7 +329,7 @@ public class MemberDocCommentTests
     {
         using var document = Tools.GetDocument("MyLibrary.Animal.html");
 
-        var baseType = Tools.GetRemarksDocContent(document.GetMember("weight"));
+        string baseType = Tools.GetRemarksDocContent(document.GetMember("weight"));
 
         baseType.ShouldBe("The weight is in kilograms (kg).");
     }
@@ -339,7 +339,7 @@ public class MemberDocCommentTests
     {
         using var document = Tools.GetDocument("MyLibrary.User.html");
 
-        var baseType = Tools.GetValueDocContent(document.GetMember("Age"));
+        string baseType = Tools.GetValueDocContent(document.GetMember("Age"));
 
         baseType.ShouldBe("The age of the user.");
     }
@@ -352,8 +352,8 @@ public class MemberDocCommentTests
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        var baseType = Tools.GetReturnTypeName(document.GetMember(memberId));
-        var doc = Tools.GetReturnsDoc(document.GetMember(memberId));
+        string baseType = Tools.GetReturnTypeName(document.GetMember(memberId));
+        string doc = Tools.GetReturnsDoc(document.GetMember(memberId));
 
         baseType.ShouldBe(returnType);
         doc.ShouldBe(expectedDoc);
@@ -364,7 +364,7 @@ public class MemberDocCommentTests
     {
         using var document = Tools.GetDocument("MyLibrary.User.html");
 
-        var baseType = Tools.GetSeeAlsoDocs(document.GetMember("username"));
+        string[] baseType = Tools.GetSeeAlsoDocs(document.GetMember("username"));
 
         string[] expectedSeeAlsoDocs = [
             "http://www.google.com",
@@ -386,7 +386,7 @@ public class MemberDataTests
     {
         using var document = Tools.GetDocument("MyLibrary.User.html");
 
-        var baseType = Tools.GetAttributes(document.GetMember("PrintProfile(System.String)"));
+        string[] baseType = Tools.GetAttributes(document.GetMember("PrintProfile(System.String)"));
 
         string[] expectedAttributes = ["[Obsolete]"];
 
@@ -402,11 +402,11 @@ public class MemberDataTests
 
         exceptions.Length.ShouldBe(2);
 
-        var e1type = Tools.GetExceptionType(exceptions[0]);
-        var e1doc = Tools.GetExceptionDoc(exceptions[0]);
+        string e1type = Tools.GetExceptionType(exceptions[0]);
+        string e1doc = Tools.GetExceptionDoc(exceptions[0]);
 
-        var e2type = Tools.GetExceptionType(exceptions[1]);
-        var e2doc = Tools.GetExceptionDoc(exceptions[1]);
+        string e2type = Tools.GetExceptionType(exceptions[1]);
+        string e2doc = Tools.GetExceptionDoc(exceptions[1]);
 
         e1type.ShouldBe("System.NotImplementedException");
         e1doc.ShouldBeEmpty();
@@ -437,10 +437,10 @@ public class ParameterDocCommentTests
 
         parameters.Length.ShouldBe(1);
 
-        var paramSignature = Tools.GetParameterName(parameters[0]);
+        string paramSignature = Tools.GetParameterName(parameters[0]);
         paramSignature.ShouldBe(parameterSignature);
 
-        var paramDoc = Tools.GetParameterDoc(parameters[0]);
+        string paramDoc = Tools.GetParameterDoc(parameters[0]);
         paramDoc.ShouldBe(expectedDoc);
     }
 
@@ -487,10 +487,10 @@ public class TypeParameterDocCommentTests
 
         parameters.Length.ShouldBe(1);
 
-        var paramSignature = Tools.GetTypeParameterName(parameters[0]);
+        string paramSignature = Tools.GetTypeParameterName(parameters[0]);
         paramSignature.ShouldBe(parameterSignature);
 
-        var paramDoc = Tools.GetTypeParameterDoc(parameters[0]);
+        string paramDoc = Tools.GetTypeParameterDoc(parameters[0]);
         paramDoc.ShouldBe(expectedDoc);
     }
 
@@ -503,10 +503,10 @@ public class TypeParameterDocCommentTests
 
         parameters.Length.ShouldBe(1);
 
-        var paramSignature = Tools.GetTypeParameterName(parameters[0]);
+        string paramSignature = Tools.GetTypeParameterName(parameters[0]);
         paramSignature.ShouldBe("T2");
 
-        var paramDoc = Tools.GetTypeParameterDoc(parameters[0]);
+        string paramDoc = Tools.GetTypeParameterDoc(parameters[0]);
         paramDoc.ShouldBe("Type of the item to add.");
     }
 
@@ -519,16 +519,16 @@ public class TypeParameterDocCommentTests
 
         parameters.Length.ShouldBe(2);
 
-        var paramSignature1 = Tools.GetTypeParameterName(parameters[0]);
+        string paramSignature1 = Tools.GetTypeParameterName(parameters[0]);
         paramSignature1.ShouldBe("TKey");
 
-        var paramDoc1 = Tools.GetTypeParameterDoc(parameters[0]);
+        string paramDoc1 = Tools.GetTypeParameterDoc(parameters[0]);
         paramDoc1.ShouldBe("Type of the key.");
 
-        var paramSignature2 = Tools.GetTypeParameterName(parameters[1]);
+        string paramSignature2 = Tools.GetTypeParameterName(parameters[1]);
         paramSignature2.ShouldBe("TValue");
 
-        var paramDoc2 = Tools.GetTypeParameterDoc(parameters[1]);
+        string paramDoc2 = Tools.GetTypeParameterDoc(parameters[1]);
         paramDoc2.ShouldBe("Type of the value.");
 
 
@@ -557,8 +557,8 @@ public class NamespaceDetailsPageTests : IDisposable
 
         classes.Length.ShouldBe(2);
 
-        var class1Name = Tools.GetTypeRowName(classes[0]);
-        var class2Name = Tools.GetTypeRowName(classes[1]);
+        string class1Name = Tools.GetTypeRowName(classes[0]);
+        string class2Name = Tools.GetTypeRowName(classes[1]);
 
         class1Name.ShouldBe("class StringExtensions");
         class2Name.ShouldBe("class WeatherStation");
@@ -571,7 +571,7 @@ public class NamespaceDetailsPageTests : IDisposable
 
         structs.Length.ShouldBe(1);
 
-        var structName = Tools.GetTypeRowName(structs[0]);
+        string structName = Tools.GetTypeRowName(structs[0]);
 
         structName.ShouldBe("struct Point");
     }
@@ -583,8 +583,8 @@ public class NamespaceDetailsPageTests : IDisposable
 
         interfaces.Length.ShouldBe(2);
 
-        var interface1Name = Tools.GetTypeRowName(interfaces[0]);
-        var interface2Name = Tools.GetTypeRowName(interfaces[1]);
+        string interface1Name = Tools.GetTypeRowName(interfaces[0]);
+        string interface2Name = Tools.GetTypeRowName(interfaces[1]);
 
         interface1Name.ShouldBe("interface IContravariant<T>");
         interface2Name.ShouldBe("interface ICovariant<T>");
@@ -597,8 +597,8 @@ public class NamespaceDetailsPageTests : IDisposable
 
         enums.Length.ShouldBe(2);
 
-        var enum1Name = Tools.GetTypeRowName(enums[0]);
-        var enum2Name = Tools.GetTypeRowName(enums[1]);
+        string enum1Name = Tools.GetTypeRowName(enums[0]);
+        string enum2Name = Tools.GetTypeRowName(enums[1]);
 
         enum1Name.ShouldBe("enum HarvestingSeason");
         enum2Name.ShouldBe("enum Season");
@@ -611,8 +611,8 @@ public class NamespaceDetailsPageTests : IDisposable
 
         delegates.Length.ShouldBe(2);
 
-        var delegate1Name = Tools.GetTypeRowName(delegates[0]);
-        var delegate2Name = Tools.GetTypeRowName(delegates[1]);
+        string delegate1Name = Tools.GetTypeRowName(delegates[0]);
+        string delegate2Name = Tools.GetTypeRowName(delegates[1]);
 
         delegate1Name.ShouldBe("delegate MyPredicate<T>");
         delegate2Name.ShouldBe("delegate ObjectPredicate");
@@ -638,7 +638,7 @@ public class NamespaceListPageTests : IDisposable
     [Fact]
     public void TestNamespaceNames()
     {
-        var classes = Tools.GetNamespaceNames(document);
+        string[] classes = Tools.GetNamespaceNames(document);
 
         string[] expected = [
             "namespace MyLibrary",
@@ -656,7 +656,7 @@ public class NamespaceListPageTests : IDisposable
     {
         var ns = document.GetElementById("MyLibrary.Tools");
 
-        var nsTypes = Tools.GetNamespaceTypeNames(ns);
+        string[] nsTypes = Tools.GetNamespaceTypeNames(ns);
 
         string[] expected = [
             "enum HarvestingSeason",

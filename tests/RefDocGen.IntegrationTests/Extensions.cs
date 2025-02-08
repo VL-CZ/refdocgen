@@ -9,15 +9,20 @@ internal static class Extensions
         return element.QuerySelector($"[data-id={dataId}]");
     }
 
-    internal static IElement GetByDataId(this IElement element, XmlDocElement dataId)
+    internal static IElement? GetByDataIdOrDefault(this IElement element, DataId dataId)
     {
-        return element.GetByDataIdOrDefault(dataId.ToXmlString())
+        return GetByDataIdOrDefault(element, dataId.GetString());
+    }
+
+    internal static IElement GetByDataId(this IElement element, DataId dataId)
+    {
+        return element.GetByDataIdOrDefault(dataId)
             ?? throw new ArgumentException("Not found");
     }
 
-    internal static IHtmlCollection<IElement> GetByDataIds(this IElement element, XmlDocElement dataId)
+    internal static IHtmlCollection<IElement> GetByDataIds(this IElement element, DataId dataId)
     {
-        return element.QuerySelectorAll($"[data-id={dataId.ToXmlString()}]");
+        return element.QuerySelectorAll($"[data-id={dataId.GetString()}]");
     }
 
     internal static IElement GetMember(this IDocument document, string memberId)
@@ -28,11 +33,13 @@ internal static class Extensions
 
     internal static IElement GetTypeName(this IDocument document)
     {
-        return document.DocumentElement.GetByDataIdOrDefault("type-name-title");
+        return document.DocumentElement.GetByDataIdOrDefault("type-name-title")
+            ?? throw new ArgumentException("Not found");
     }
 
     internal static IElement GetTypeDataSection(this IDocument document)
     {
-        return document.DocumentElement.GetByDataIdOrDefault("declared-type-data");
+        return document.DocumentElement.GetByDataIdOrDefault("declared-type-data")
+            ?? throw new ArgumentException("Not found");
     }
 }
