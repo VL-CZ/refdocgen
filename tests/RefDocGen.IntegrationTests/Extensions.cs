@@ -9,15 +9,15 @@ internal static class Extensions
         return element.QuerySelector($"[data-id={dataId}]");
     }
 
-    internal static IElement GetByDataId(this IElement element, string dataId)
+    internal static IElement GetByDataId(this IElement element, XmlDocElement dataId)
     {
-        return element.GetByDataIdOrDefault(dataId)
+        return element.GetByDataIdOrDefault(dataId.ToXmlString())
             ?? throw new ArgumentException("Not found");
     }
 
-    internal static IHtmlCollection<IElement> GetByDataIds(this IElement element, string attributeValue)
+    internal static IHtmlCollection<IElement> GetByDataIds(this IElement element, XmlDocElement dataId)
     {
-        return element.QuerySelectorAll($"[data-id={attributeValue}]");
+        return element.QuerySelectorAll($"[data-id={dataId.ToXmlString()}]");
     }
 
     internal static IElement GetMember(this IDocument document, string memberId)
@@ -28,11 +28,11 @@ internal static class Extensions
 
     internal static IElement GetTypeName(this IDocument document)
     {
-        return document.DocumentElement.GetByDataId("type-name-title");
+        return document.DocumentElement.GetByDataIdOrDefault("type-name-title");
     }
 
     internal static IElement GetTypeDataSection(this IDocument document)
     {
-        return document.DocumentElement.GetByDataId("declared-type-data");
+        return document.DocumentElement.GetByDataIdOrDefault("declared-type-data");
     }
 }
