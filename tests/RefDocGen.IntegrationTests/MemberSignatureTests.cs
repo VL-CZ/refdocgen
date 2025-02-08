@@ -641,11 +641,11 @@ public class NamespaceListPageTests : IDisposable
         var classes = Tools.GetNamespaceNames(document);
 
         string[] expected = [
-            "MyLibrary",
-            "MyLibrary.CyclicDoc",
-            "MyLibrary.Hierarchy",
-            "MyLibrary.Tools",
-            "MyLibrary.Tools.Collections"
+            "namespace MyLibrary",
+            "namespace MyLibrary.CyclicDoc",
+            "namespace MyLibrary.Hierarchy",
+            "namespace MyLibrary.Tools",
+            "namespace MyLibrary.Tools.Collections"
         ];
 
         classes.ShouldBe(expected);

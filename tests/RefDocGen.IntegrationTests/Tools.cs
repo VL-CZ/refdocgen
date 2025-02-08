@@ -4,6 +4,81 @@ using System.Text.RegularExpressions;
 
 namespace RefDocGen.IntegrationTests;
 
+internal enum XmlDocElement
+{
+    MemberName,
+    AttributeData,
+    ReturnTypeName,
+    ParameterElement,
+    ParameterName,
+    ParameterDoc,
+    TypeParameterElement,
+    TypeParameterName,
+    TypeParameterDoc,
+    SummaryDoc,
+    RemarksDoc,
+    ReturnsDoc,
+    ValueDoc,
+    SeeAlsoDocs,
+    TypeParamConstraints,
+    BaseType,
+    ImplementedInterfaces,
+    TypeNamespace,
+    ExceptionData,
+    ExceptionType,
+    ExceptionDoc,
+    DelegateMethod,
+    NamespaceClasses,
+    NamespaceInterfaces,
+    NamespaceDelegates,
+    NamespaceEnums,
+    NamespaceStructs,
+    TypeRowElement,
+    TypeRowName,
+    TypeRowDoc,
+    NamespaceName
+}
+
+internal static class XmlDocElementExtensions
+{
+    internal static string ToXmlString(this XmlDocElement element) => element switch
+    {
+        XmlDocElement.MemberName => "member-name",
+        XmlDocElement.AttributeData => "attribute-data",
+        XmlDocElement.ReturnTypeName => "return-type-name",
+        XmlDocElement.ParameterElement => "parameter-data",
+        XmlDocElement.ParameterName => "parameter-name",
+        XmlDocElement.ParameterDoc => "parameter-doc",
+        XmlDocElement.TypeParameterElement => "type-parameter-data",
+        XmlDocElement.TypeParameterName => "type-parameter-name",
+        XmlDocElement.TypeParameterDoc => "type-parameter-doc",
+        XmlDocElement.SummaryDoc => "summary-doc",
+        XmlDocElement.RemarksDoc => "remarks-doc",
+        XmlDocElement.ReturnsDoc => "returns-doc",
+        XmlDocElement.ValueDoc => "value-doc",
+        XmlDocElement.SeeAlsoDocs => "seealso-item",
+        XmlDocElement.TypeParamConstraints => "type-param-constraints",
+        XmlDocElement.BaseType => "base-type",
+        XmlDocElement.ImplementedInterfaces => "implemented-interfaces",
+        XmlDocElement.TypeNamespace => "type-namespace",
+        XmlDocElement.ExceptionData => "exception-data",
+        XmlDocElement.ExceptionType => "exception-type",
+        XmlDocElement.ExceptionDoc => "exception-doc",
+        XmlDocElement.DelegateMethod => "delegate-method",
+        XmlDocElement.NamespaceClasses => "namespace-classes",
+        XmlDocElement.NamespaceInterfaces => "namespace-interfaces",
+        XmlDocElement.NamespaceDelegates => "namespace-delegates",
+        XmlDocElement.NamespaceEnums => "namespace-enums",
+        XmlDocElement.NamespaceStructs => "namespace-structs",
+        XmlDocElement.TypeRowElement => "type-row-element",
+        XmlDocElement.TypeRowName => "type-row-name",
+        XmlDocElement.TypeRowDoc => "type-row-doc",
+        XmlDocElement.NamespaceName => "namespace-name",
+        _ => throw new ArgumentOutOfRangeException(nameof(element), element, null)
+    };
+}
+
+
 internal class Tools
 {
     internal const string MemberName = "member-name";
