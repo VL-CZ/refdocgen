@@ -25,7 +25,7 @@ internal class Tools
         return Regex.Replace(element.TextContent, @"\s+", " ").Trim();
     }
 
-    internal static string GetMemberNameContent(IElement memberElement)
+    internal static string GetMemberSignature(IElement memberElement)
     {
         var memberNameElement = memberElement.GetByDataId(DataId.MemberName);
         string content = ParseStringContent(memberNameElement);
@@ -154,9 +154,9 @@ internal class Tools
         return element.GetByDataIds(DataId.TypeParamConstraints).Select(ParseStringContent).ToArray();
     }
 
-    internal static string GetTypeName(IDocument document)
+    internal static string GetTypeSignature(IDocument document)
     {
-        return ParseStringContent(document.GetTypeSignature());
+        return ParseStringContent(document.GetTypeSignatureElement());
     }
 
     internal static IElement[] GetNamespaceClasses(IDocument document)

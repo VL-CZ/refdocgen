@@ -9,11 +9,11 @@ public class CyclicDocTests
     [InlineData("Cycle1")]
     [InlineData("Cycle2")]
     [InlineData("CycleReference")]
-    public void Test_Cycle(string typeName)
+    public void Test_Cyclic_InheritDoc(string typeName)
     {
         using var document = Tools.GetDocument($"MyLibrary.CyclicDoc.{typeName}.html");
 
-        var typeDocsSection = document.GetTypeDataSection();
-        typeDocsSection.GetByDataIdOrDefault(DataId.SummaryDoc).ShouldBeNull();
+        var typeDataSection = document.GetTypeDataSection();
+        typeDataSection.GetByDataIdOrDefault(DataId.SummaryDoc).ShouldBeNull(); // no summary doc should be present.
     }
 }

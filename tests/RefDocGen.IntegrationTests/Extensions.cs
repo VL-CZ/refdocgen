@@ -31,7 +31,7 @@ internal static class Extensions
             ?? throw new ArgumentException("Not found");
     }
 
-    internal static IElement GetTypeSignature(this IDocument document)
+    internal static IElement GetTypeSignatureElement(this IDocument document)
     {
         return GetByDataId(document.DocumentElement, DataId.DeclaredTypeSignature);
     }

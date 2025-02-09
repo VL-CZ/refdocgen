@@ -27,14 +27,14 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.Collections.MyCollection`1",
         "AddGeneric``1(``0)",
         "public void AddGeneric<T2>(T2 item)")]
-    public void Test_Method_Signature(string pageName, string methodId, string expectedMethodSignature)
+    public void Test_Method_Signature(string pageName, string methodId, string expectedSignature)
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
         var method = document.GetMember(methodId);
 
-        string methodName = Tools.GetMemberNameContent(method);
-        methodName.ShouldBe(expectedMethodSignature);
+        string signature = Tools.GetMemberSignature(method);
+        signature.ShouldBe(expectedSignature);
     }
 
     [Theory]
@@ -46,10 +46,10 @@ public class MemberSignatureTests
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        var method = document.GetMember(fieldId);
+        var field = document.GetMember(fieldId);
 
-        string methodName = Tools.GetMemberNameContent(method);
-        methodName.ShouldBe(expectedSignature);
+        string signature = Tools.GetMemberSignature(field);
+        signature.ShouldBe(expectedSignature);
     }
 
     [Theory]
@@ -60,41 +60,41 @@ public class MemberSignatureTests
         "MyLibrary.Tools.Collections.NonGenericCollection",
         "System#Collections#ICollection#IsSynchronized",
         "bool ICollection.IsSynchronized { get; }")]
-    public void Test_Property_Signature(string pageName, string fieldId, string expectedSignature)
+    public void Test_Property_Signature(string pageName, string propetyId, string expectedSignature)
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        var method = document.GetMember(fieldId);
+        var property = document.GetMember(propetyId);
 
-        string methodName = Tools.GetMemberNameContent(method);
-        methodName.ShouldBe(expectedSignature);
+        string signature = Tools.GetMemberSignature(property);
+        signature.ShouldBe(expectedSignature);
     }
 
     [Theory]
     [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "Item(System.Int32)", "public T this[int index] { get; private set; }")]
     [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "Item(System.Index)", "public T this[Index index] { get; private set; }")]
-    public void Test_Indexer_Signature(string pageName, string fieldId, string expectedSignature)
+    public void Test_Indexer_Signature(string pageName, string indexerId, string expectedSignature)
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        var method = document.GetMember(fieldId);
+        var indexer = document.GetMember(indexerId);
 
-        string methodName = Tools.GetMemberNameContent(method);
-        methodName.ShouldBe(expectedSignature);
+        string signature = Tools.GetMemberSignature(indexer);
+        signature.ShouldBe(expectedSignature);
     }
 
     [Theory]
     [InlineData("MyLibrary.User", "#ctor", "public User()")]
     [InlineData("MyLibrary.User", "#ctor(System.String,System.Int32)", "public User(string username, int age)")]
     [InlineData("MyLibrary.Tools.Point", "#ctor(System.Double,System.Double)", "internal Point(double x, double y)")]
-    public void Test_Constructor_Signature(string pageName, string methodId, string expectedMethodSignature)
+    public void Test_Constructor_Signature(string pageName, string constructorId, string expectedSignature)
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        var method = document.GetMember(methodId);
+        var constructor = document.GetMember(constructorId);
 
-        string methodName = Tools.GetMemberNameContent(method);
-        methodName.ShouldBe(expectedMethodSignature);
+        string signature = Tools.GetMemberSignature(constructor);
+        signature.ShouldBe(expectedSignature);
     }
 
     [Theory]
@@ -102,39 +102,39 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.Point", "op_UnaryNegation(MyLibrary.Tools.Point)", "public static Point operator -(Point point)")]
     [InlineData("MyLibrary.Tools.Point", "op_Explicit(MyLibrary.Tools.Point)~System.Numerics.Vector2", "public static explicit operator Vector2(Point point)")]
     [InlineData("MyLibrary.Tools.Point", "op_Implicit(System.Numerics.Vector2)~MyLibrary.Tools.Point", "public static implicit operator Point(Vector2 vector)")]
-    public void Test_Operator_Signature(string pageName, string methodId, string expectedMethodSignature)
+    public void Test_Operator_Signature(string pageName, string operatorId, string expectedSignature)
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        var method = document.GetMember(methodId);
+        var operatorMember = document.GetMember(operatorId);
 
-        string methodName = Tools.GetMemberNameContent(method);
-        methodName.ShouldBe(expectedMethodSignature);
+        string signature = Tools.GetMemberSignature(operatorMember);
+        signature.ShouldBe(expectedSignature);
     }
 
     [Theory]
     [InlineData("MyLibrary.Tools.WeatherStation", "OnTemperatureChange", "public event Action OnTemperatureChange")]
-    public void Test_Event_Signature(string pageName, string methodId, string expectedMethodSignature)
+    public void Test_Event_Signature(string pageName, string eventId, string expectedSignature)
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        var method = document.GetMember(methodId);
+        var eventMember = document.GetMember(eventId);
 
-        string methodName = Tools.GetMemberNameContent(method);
-        methodName.ShouldBe(expectedMethodSignature);
+        string signature = Tools.GetMemberSignature(eventMember);
+        signature.ShouldBe(expectedSignature);
     }
 
     [Theory]
     [InlineData("Spring", "Spring = 0")]
     [InlineData("Winter", "Winter = 3")]
-    public void Test_Enum_Member_Signature(string methodId, string expectedMethodSignature)
+    public void Test_Enum_Member_Signature(string enumMemberId, string expectedSignature)
     {
         using var document = Tools.GetDocument("MyLibrary.Tools.Season.html");
 
-        var method = document.GetMember(methodId);
+        var enumMember = document.GetMember(enumMemberId);
 
-        string methodName = Tools.GetMemberNameContent(method);
-        methodName.ShouldBe(expectedMethodSignature);
+        string signature = Tools.GetMemberSignature(enumMember);
+        signature.ShouldBe(expectedSignature);
     }
 
     [Fact]
@@ -144,8 +144,8 @@ public class MemberSignatureTests
 
         var delegateMethod = document.DocumentElement.GetByDataId(DataId.DelegateMethod);
 
-        string methodName = Tools.GetMemberNameContent(delegateMethod);
-        methodName.ShouldBe("internal delegate bool MyPredicate<T>(T obj)");
+        string signature = Tools.GetMemberSignature(delegateMethod);
+        signature.ShouldBe("internal delegate bool MyPredicate<T>(T obj)");
     }
 }
 
@@ -164,14 +164,13 @@ public class TypeSignatureTests
     [InlineData("MyLibrary.Tools.Season", "internal enum Season")]
     [InlineData("MyLibrary.Tools.ObjectPredicate", "internal delegate ObjectPredicate")]
     [InlineData("MyLibrary.Tools.MyPredicate`1", "internal delegate MyPredicate<T>")]
-    public void Test_Type_Signature(string pageName, string expectedTypeSignature)
+    public void Test_Type_Signature(string pageName, string expectedSignature)
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        var typeNameElement = document.GetTypeSignature();
+        string signature = Tools.GetTypeSignature(document);
 
-        string typeName = Tools.ParseStringContent(typeNameElement);
-        typeName.ShouldBe(expectedTypeSignature);
+        signature.ShouldBe(expectedSignature);
     }
 }
 
@@ -227,9 +226,9 @@ public class TypeDataTests
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        string baseType = Tools.GetInterfacesString(document.GetTypeDataSection());
+        string interfaces = Tools.GetInterfacesString(document.GetTypeDataSection());
 
-        baseType.ShouldBe($"Implements: {expectedInterfacesImplemented}");
+        interfaces.ShouldBe($"Implements: {expectedInterfacesImplemented}");
     }
 
     [Theory]
@@ -239,9 +238,9 @@ public class TypeDataTests
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        string baseType = Tools.GetNamespaceString(document.GetTypeDataSection());
+        string ns = Tools.GetNamespaceString(document.GetTypeDataSection());
 
-        baseType.ShouldBe($"namespace {expectedNamespace}");
+        ns.ShouldBe($"namespace {expectedNamespace}");
     }
 }
 
@@ -258,9 +257,9 @@ public class TypeDocCommentTests
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        string baseType = Tools.GetSummaryDocContent(document.GetTypeDataSection());
+        string summaryDoc = Tools.GetSummaryDocContent(document.GetTypeDataSection());
 
-        baseType.ShouldBe(expectedDoc);
+        summaryDoc.ShouldBe(expectedDoc);
     }
 
     [Fact]
@@ -268,9 +267,9 @@ public class TypeDocCommentTests
     {
         using var document = Tools.GetDocument("MyLibrary.Animal.html");
 
-        string baseType = Tools.GetRemarksDocContent(document.GetTypeDataSection());
+        string remarksDoc = Tools.GetRemarksDocContent(document.GetTypeDataSection());
 
-        baseType.ShouldBe("This class is abstract, use inheritance.");
+        remarksDoc.ShouldBe("This class is abstract, use inheritance.");
     }
 
     [Fact]
@@ -278,11 +277,11 @@ public class TypeDocCommentTests
     {
         using var document = Tools.GetDocument("MyLibrary.Tools.Collections.MyStringCollection.html");
 
-        string[] baseType = Tools.GetSeeAlsoDocs(document.GetTypeDataSection());
+        string[] seeAlsoDocs = Tools.GetSeeAlsoDocs(document.GetTypeDataSection());
 
         string[] expectedDocs = ["My collection class", "System.Collections.Generic.ICollection`1"]; // TODO: update to ICollection<T>
 
-        baseType.ShouldBe(expectedDocs);
+        seeAlsoDocs.ShouldBe(expectedDocs);
     }
 
     [Fact]
@@ -290,13 +289,13 @@ public class TypeDocCommentTests
     {
         using var document = Tools.GetDocument("MyLibrary.User.html");
 
-        string[] baseType = Tools.GetAttributes(document.GetTypeDataSection());
+        string[] attributes = Tools.GetAttributes(document.GetTypeDataSection());
 
         string[] expectedAttributes = [
             "[Serializable]",
             "[JsonSerializable(typeof(MyLibrary.User), GenerationMode = 2)]"];
 
-        baseType.ShouldBe(expectedAttributes);
+        attributes.ShouldBe(expectedAttributes);
     }
 }
 
@@ -319,9 +318,9 @@ public class MemberDocCommentTests
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        string baseType = Tools.GetSummaryDocContent(document.GetMember(memberId));
+        string summaryDoc = Tools.GetSummaryDocContent(document.GetMember(memberId));
 
-        baseType.ShouldBe(expectedDoc);
+        summaryDoc.ShouldBe(expectedDoc);
     }
 
     [Fact]
@@ -329,9 +328,9 @@ public class MemberDocCommentTests
     {
         using var document = Tools.GetDocument("MyLibrary.Animal.html");
 
-        string baseType = Tools.GetRemarksDocContent(document.GetMember("weight"));
+        string remarksDoc = Tools.GetRemarksDocContent(document.GetMember("weight"));
 
-        baseType.ShouldBe("The weight is in kilograms (kg).");
+        remarksDoc.ShouldBe("The weight is in kilograms (kg).");
     }
 
     [Fact]
@@ -339,24 +338,24 @@ public class MemberDocCommentTests
     {
         using var document = Tools.GetDocument("MyLibrary.User.html");
 
-        string baseType = Tools.GetValueDocContent(document.GetMember("Age"));
+        string valueDoc = Tools.GetValueDocContent(document.GetMember("Age"));
 
-        baseType.ShouldBe("The age of the user.");
+        valueDoc.ShouldBe("The age of the user.");
     }
 
     [Theory]
     [InlineData("MyLibrary.Animal", "GetAverageLifespan(System.String)", "int", "The average lifespan.")]
     [InlineData("MyLibrary.User", "GetAnimalsByType", "Dictionary<string, List<Animal>>", "Dictionary of animals, indexed by their type.")]
     [InlineData("MyLibrary.Tools.Point", "op_Equality(MyLibrary.Tools.Point,MyLibrary.Tools.Point)", "bool", "Are the 2 points equal?")]
-    public void Test_ReturnsDoc(string pageName, string memberId, string returnType, string expectedDoc)
+    public void Test_ReturnsDoc(string pageName, string memberId, string expectedReturnType, string expectedDoc)
     {
         using var document = Tools.GetDocument($"{pageName}.html");
 
-        string baseType = Tools.GetReturnTypeName(document.GetMember(memberId));
-        string doc = Tools.GetReturnsDoc(document.GetMember(memberId));
+        string returnType = Tools.GetReturnTypeName(document.GetMember(memberId));
+        string returnsDoc = Tools.GetReturnsDoc(document.GetMember(memberId));
 
-        baseType.ShouldBe(returnType);
-        doc.ShouldBe(expectedDoc);
+        returnType.ShouldBe(expectedReturnType);
+        returnsDoc.ShouldBe(expectedDoc);
     }
 
     [Fact]
@@ -364,9 +363,9 @@ public class MemberDocCommentTests
     {
         using var document = Tools.GetDocument("MyLibrary.User.html");
 
-        string[] baseType = Tools.GetSeeAlsoDocs(document.GetMember("username"));
+        string[] seeAlsoDocs = Tools.GetSeeAlsoDocs(document.GetMember("username"));
 
-        string[] expectedSeeAlsoDocs = [
+        string[] expectedDocs = [
             "http://www.google.com",
             "max age constant",
             "System.Reflection.FieldInfo.IsLiteral",
@@ -374,7 +373,7 @@ public class MemberDocCommentTests
             "!:notFound"
             ];
 
-        baseType.ShouldBe(expectedSeeAlsoDocs);
+        seeAlsoDocs.ShouldBe(expectedDocs);
     }
 }
 
@@ -386,11 +385,11 @@ public class MemberDataTests
     {
         using var document = Tools.GetDocument("MyLibrary.User.html");
 
-        string[] baseType = Tools.GetAttributes(document.GetMember("PrintProfile(System.String)"));
+        string[] attributes = Tools.GetAttributes(document.GetMember("PrintProfile(System.String)"));
 
         string[] expectedAttributes = ["[Obsolete]"];
 
-        baseType.ShouldBe(expectedAttributes);
+        attributes.ShouldBe(expectedAttributes);
     }
 
     [Fact]
