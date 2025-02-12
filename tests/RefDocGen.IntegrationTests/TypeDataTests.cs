@@ -1,14 +1,17 @@
-﻿using RefDocGen.IntegrationTests.Fixtures;
+using RefDocGen.IntegrationTests.Fixtures;
 using RefDocGen.IntegrationTests.Tools;
 using Shouldly;
 
 namespace RefDocGen.IntegrationTests;
 
+/// <summary>
+/// This class contains tests of any type-related data, excluding the docuemntation.
+/// </summary>
 [Collection(DocumentationTestCollection.Name)]
 public class TypeDataTests
 {
     [Fact]
-    public void Test_Type_Constraints()
+    public void TypeConstraints_Match()
     {
         using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MySortedList`1.html");
         string[] constraints = TypePageTools.GetTypeParamConstraints(document.GetTypeDataSection());
@@ -17,7 +20,7 @@ public class TypeDataTests
     }
 
     [Fact]
-    public void Test_Method_Constraints()
+    public void MethodConstraints_Match()
     {
         using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MyCollection`1.html");
         var method = document.GetMemberElement("AddGeneric``1(``0)");
@@ -28,7 +31,7 @@ public class TypeDataTests
     }
 
     [Fact]
-    public void Test_Complex_Constraints()
+    public void ComplexConstraints_Match()
     {
         using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MyDictionary`2.html");
         string[] constraints = TypePageTools.GetTypeParamConstraints(document.GetTypeDataSection());
@@ -40,7 +43,7 @@ public class TypeDataTests
     [InlineData("MyLibrary.Animal", "object")]
     [InlineData("MyLibrary.Dog", "Animal")]
     [InlineData("MyLibrary.Tools.Collections.MySortedList`1", "MyCollection<T>")]
-    public void Test_BaseType(string pageName, string expectedBaseType)
+    public void BaseType_Matches(string pageName, string expectedBaseType)
     {
         using var document = DocumentationTools.GetPage($"{pageName}.html");
 
@@ -52,7 +55,7 @@ public class TypeDataTests
     [Theory]
     [InlineData("MyLibrary.Hierarchy.Child", "IChild")]
     [InlineData("MyLibrary.Tools.Collections.IMyCollection`1", "ICollection<T>, IEnumerable<T>, IEnumerable")]
-    public void Test_Interfaces(string pageName, string expectedInterfacesImplemented)
+    public void Interfaces_Match(string pageName, string expectedInterfacesImplemented)
     {
         using var document = DocumentationTools.GetPage($"{pageName}.html");
 
@@ -64,12 +67,26 @@ public class TypeDataTests
     [Theory]
     [InlineData("MyLibrary.User", "MyLibrary")]
     [InlineData("MyLibrary.Tools.Collections.IMyCollection`1", "MyLibrary.Tools.Collections")]
-    public void Test_Namespace(string pageName, string expectedNamespace)
+    public void Namespace_Matches(string pageName, string expectedNamespace)
     {
         using var document = DocumentationTools.GetPage($"{pageName}.html");
 
         string ns = TypePageTools.GetNamespaceString(document.GetTypeDataSection());
 
         ns.ShouldBe($"namespace {expectedNamespace}");
+    }
+
+    [Fact]
+    public void Attributes_Match()
+    {
+        using var document = DocumentationTools.GetPage("MyLibrary.User.html");
+
+        string[] attributes = TypePageTools.GetAttributes(document.GetTypeDataSection());
+
+        string[] expectedAttributes = [
+            "[Serializable]",
+            "[JsonSerializable(typeof(MyLibrary.User), GenerationMode = 2)]"];
+
+        attributes.ShouldBe(expectedAttributes);
     }
 }

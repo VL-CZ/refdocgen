@@ -1,16 +1,19 @@
-﻿using RefDocGen.IntegrationTests.Fixtures;
+using RefDocGen.IntegrationTests.Fixtures;
 using RefDocGen.IntegrationTests.Tools;
 using Shouldly;
 
 namespace RefDocGen.IntegrationTests;
 
+/// <summary>
+/// This class contains tests for the 'Type parameters' section - i.e. the individual parameter signatures and doc comments.
+/// </summary>
 [Collection(DocumentationTestCollection.Name)]
-public class TypeParameterDocCommentTests
+public class TypeParameterSectionTests
 {
     [Theory]
     [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "T", "The type of the items in the collection.")]
     [InlineData("MyLibrary.Tools.MyPredicate`1", "T", "The type of the object.")]
-    public void Test_SingleTypeParameter(string pageName, string parameterSignature, string expectedDoc)
+    public void TypeSection_WithSingleTypeParameter_Matches(string pageName, string parameterSignature, string expectedDoc)
     {
         using var document = DocumentationTools.GetPage($"{pageName}.html");
 
@@ -26,7 +29,7 @@ public class TypeParameterDocCommentTests
     }
 
     [Fact]
-    public void Test_MethodWithTypeParameter()
+    public void MethodSection_WithSingleTypeParameter_Matches()
     {
         using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MyCollection`1.html");
 
@@ -42,7 +45,7 @@ public class TypeParameterDocCommentTests
     }
 
     [Fact]
-    public void Test_MultipleTypeParameters()
+    public void Section_WithMultipleTypeParameter_Matches()
     {
         using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.IMyDictionary`2.html");
 

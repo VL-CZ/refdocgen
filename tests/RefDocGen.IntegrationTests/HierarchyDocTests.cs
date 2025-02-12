@@ -4,6 +4,9 @@ using Shouldly;
 
 namespace RefDocGen.IntegrationTests;
 
+/// <summary>
+/// This class tests the documentation inheritance (i.e. that <c>&lt;inheritdoc /&gt;</c> elements are correctly resolved).
+/// </summary>
 [Collection(DocumentationTestCollection.Name)]
 public class HierarchyDocTests
 {
@@ -11,7 +14,7 @@ public class HierarchyDocTests
     [InlineData("Child", "Parent class.")]
     [InlineData("ChildChild", "IChild Print the object.")]
     [InlineData("ChildChildChild", "Before parent. Parent class. After parent.")]
-    public void Test_ClassName(string typeName, string expectedSummaryDoc)
+    public void Type_SummaryDoc_Matches(string typeName, string expectedSummaryDoc)
     {
         using var document = DocumentationTools.GetPage($"MyLibrary.Hierarchy.{typeName}.html");
 
@@ -24,7 +27,7 @@ public class HierarchyDocTests
     [Theory]
     [InlineData("Child")]
     [InlineData("ChildChild")]
-    public void Test_Handle_Method(string typeName)
+    public void HandleMethod_Docs_Match(string typeName)
     {
         using var document = DocumentationTools.GetPage($"MyLibrary.Hierarchy.{typeName}.html");
 
@@ -44,7 +47,7 @@ public class HierarchyDocTests
     [InlineData("Child", "IChild Print the object.", "Object to print.")]
     [InlineData("ChildChild", "ChildChild Print", "Object to print.", "IChild Print the object. Object to print.")]
     [InlineData("ChildChildChild", "ChildChild Print", "Object to print.", "IChild Print the object. Object to print.")]
-    public void Test_Print_Method(string typeName, string expectedSummaryDoc, string expectedParamDoc, string? expectedRemarksDoc = null)
+    public void PrintMethod_Docs_Match(string typeName, string expectedSummaryDoc, string expectedParamDoc, string? expectedRemarksDoc = null)
     {
         using var document = DocumentationTools.GetPage($"MyLibrary.Hierarchy.{typeName}.html");
 
@@ -65,7 +68,7 @@ public class HierarchyDocTests
     }
 
     [Fact]
-    public void Test_PrintDataMethod()
+    public void PrintDataMethod_SummaryDoc_Matches()
     {
         using var document = DocumentationTools.GetPage("MyLibrary.Hierarchy.ChildChild.html");
 

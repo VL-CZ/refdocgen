@@ -1,11 +1,14 @@
-﻿using RefDocGen.IntegrationTests.Fixtures;
+using RefDocGen.IntegrationTests.Fixtures;
 using RefDocGen.IntegrationTests.Tools;
 using Shouldly;
 
 namespace RefDocGen.IntegrationTests;
 
+/// <summary>
+/// This class contains tests for the 'Parameters' section - i.e. the individual parameter signatures and doc comments.
+/// </summary>
 [Collection(DocumentationTestCollection.Name)]
-public class ParameterDocCommentTests
+public class ParameterSectionTests
 {
     [Theory]
     [InlineData("MyLibrary.Animal", "GetAverageLifespan(System.String)", "string species", "The species of the animal.")]
@@ -17,7 +20,7 @@ public class ParameterDocCommentTests
         "AddAnimalsByType(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{MyLibrary.Animal}})",
         "Dictionary<string, List<Animal>> animals",
         "Animals to add. Key: animal type, Value: list of animals of the given type.")]
-    public void Test_SingleParameter(string pageName, string memberId, string parameterSignature, string expectedDoc)
+    public void Section_WithSingleParameter_Matches(string pageName, string memberId, string parameterSignature, string expectedDoc)
     {
         using var document = DocumentationTools.GetPage($"{pageName}.html");
 
@@ -33,7 +36,7 @@ public class ParameterDocCommentTests
     }
 
     [Fact]
-    public void Test_MethodWithManyParameters()
+    public void Section_WithMultipleParameter_Matches()
     {
         using var document = DocumentationTools.GetPage("MyLibrary.User.html");
         var memberElement = document.GetMemberElement("ProcessValues(System.Int32@,System.Int32@,System.String,System.Int32@,System.Double)");
@@ -42,7 +45,7 @@ public class ParameterDocCommentTests
 
         parameters.Length.ShouldBe(5);
 
-        List<(string signature, string? doc)> expectedValues = [
+        (string signature, string doc)[] expectedValues = [
             ("in int inValue", "An input value."),
             ("ref int refValue", "A reference value."),
             ("string s1", ""),
@@ -50,7 +53,7 @@ public class ParameterDocCommentTests
             ("double d2", "")
         ];
 
-        for (int i = 0; i < expectedValues.Count; i++)
+        for (int i = 0; i < expectedValues.Length; i++)
         {
             string paramName = TypePageTools.GetParameterName(parameters[i]);
             paramName.ShouldBe(expectedValues[i].signature);

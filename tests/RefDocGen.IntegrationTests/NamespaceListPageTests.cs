@@ -5,9 +5,15 @@ using Shouldly;
 
 namespace RefDocGen.IntegrationTests;
 
+/// <summary>
+/// This class contains tests for 'namespace list' page.
+/// </summary>
 [Collection(DocumentationTestCollection.Name)]
 public class NamespaceListPageTests : IDisposable
 {
+    /// <summary>
+    /// The HTML page representing the namespace list.
+    /// </summary>
     private readonly IDocument document;
 
     public NamespaceListPageTests()
@@ -21,7 +27,7 @@ public class NamespaceListPageTests : IDisposable
     }
 
     [Fact]
-    public void TestNamespaceNames()
+    public void NamespaceNames_Match()
     {
         string[] classes = NamespacePageTools.GetNamespaceNames(document);
 
@@ -37,7 +43,7 @@ public class NamespaceListPageTests : IDisposable
     }
 
     [Fact]
-    public void TestNamespaceTypes()
+    public void NamespaceTypeNames_Match()
     {
         var ns = document.GetElementById("MyLibrary.Tools");
 

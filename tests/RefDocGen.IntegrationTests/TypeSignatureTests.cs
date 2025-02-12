@@ -1,9 +1,12 @@
-﻿using RefDocGen.IntegrationTests.Fixtures;
+using RefDocGen.IntegrationTests.Fixtures;
 using RefDocGen.IntegrationTests.Tools;
 using Shouldly;
 
 namespace RefDocGen.IntegrationTests;
 
+/// <summary>
+/// This class contains tests of type signatures (including classes, generic classes, interfaces, enums, etc.).
+/// </summary>
 [Collection(DocumentationTestCollection.Name)]
 public class TypeSignatureTests
 {
@@ -19,7 +22,7 @@ public class TypeSignatureTests
     [InlineData("MyLibrary.Tools.Season", "internal enum Season")]
     [InlineData("MyLibrary.Tools.ObjectPredicate", "internal delegate ObjectPredicate")]
     [InlineData("MyLibrary.Tools.MyPredicate`1", "internal delegate MyPredicate<T>")]
-    public void Test_Type_Signature(string pageName, string expectedSignature)
+    public void TypeSignature_Matches(string pageName, string expectedSignature)
     {
         using var document = DocumentationTools.GetPage($"{pageName}.html");
 

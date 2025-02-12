@@ -4,6 +4,9 @@ using Shouldly;
 
 namespace RefDocGen.IntegrationTests;
 
+/// <summary>
+/// This class contains tests of various member documentation comments.
+/// </summary>
 [Collection(DocumentationTestCollection.Name)]
 public class MemberDocCommentTests
 {
@@ -29,7 +32,7 @@ public class MemberDocCommentTests
     }
 
     [Fact]
-    public void Test_RemarksDoc()
+    public void RemarksDoc_Matches()
     {
         using var document = DocumentationTools.GetPage("MyLibrary.Animal.html");
 
@@ -39,7 +42,7 @@ public class MemberDocCommentTests
     }
 
     [Fact]
-    public void Test_ValueDoc()
+    public void ValueDoc_Matches()
     {
         using var document = DocumentationTools.GetPage("MyLibrary.User.html");
 
@@ -52,7 +55,7 @@ public class MemberDocCommentTests
     [InlineData("MyLibrary.Animal", "GetAverageLifespan(System.String)", "int", "The average lifespan.")]
     [InlineData("MyLibrary.User", "GetAnimalsByType", "Dictionary<string, List<Animal>>", "Dictionary of animals, indexed by their type.")]
     [InlineData("MyLibrary.Tools.Point", "op_Equality(MyLibrary.Tools.Point,MyLibrary.Tools.Point)", "bool", "Are the 2 points equal?")]
-    public void Test_ReturnsDoc(string pageName, string memberId, string expectedReturnType, string expectedDoc)
+    public void ReturnsDoc_Matches(string pageName, string memberId, string expectedReturnType, string expectedDoc)
     {
         using var document = DocumentationTools.GetPage($"{pageName}.html");
 
@@ -64,7 +67,7 @@ public class MemberDocCommentTests
     }
 
     [Fact]
-    public void Test_SeeAlsoDocs()
+    public void SeeAlsoDocs_Match()
     {
         using var document = DocumentationTools.GetPage("MyLibrary.User.html");
 

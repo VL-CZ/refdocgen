@@ -1,9 +1,12 @@
-﻿using RefDocGen.IntegrationTests.Fixtures;
+using RefDocGen.IntegrationTests.Fixtures;
 using RefDocGen.IntegrationTests.Tools;
 using Shouldly;
 
 namespace RefDocGen.IntegrationTests;
 
+/// <summary>
+/// This class contains tests of various type documentation comments.
+/// </summary>
 [Collection(DocumentationTestCollection.Name)]
 public class TypeDocCommentTests
 {
@@ -13,7 +16,7 @@ public class TypeDocCommentTests
     [InlineData("MyLibrary.Tools.Point", "Struct representing a point.")]
     [InlineData("MyLibrary.Tools.Season", "Represents season of a year.")]
     [InlineData("MyLibrary.Tools.ObjectPredicate", "Predicate about an object.")]
-    public void Test_Summary(string pageName, string expectedDoc)
+    public void SummaryDoc_Matches(string pageName, string expectedDoc)
     {
         using var document = DocumentationTools.GetPage($"{pageName}.html");
 
@@ -23,7 +26,7 @@ public class TypeDocCommentTests
     }
 
     [Fact]
-    public void Test_RemarksDoc()
+    public void RemarksDoc_Matches()
     {
         using var document = DocumentationTools.GetPage("MyLibrary.Animal.html");
 
@@ -33,7 +36,7 @@ public class TypeDocCommentTests
     }
 
     [Fact]
-    public void Test_SeeAlsoDocs()
+    public void SeeAlsoDocs_Match()
     {
         using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MyStringCollection.html");
 
@@ -42,19 +45,5 @@ public class TypeDocCommentTests
         string[] expectedDocs = ["My collection class", "System.Collections.Generic.ICollection`1"]; // TODO: update to ICollection<T>
 
         seeAlsoDocs.ShouldBe(expectedDocs);
-    }
-
-    [Fact]
-    public void Test_Attributes()
-    {
-        using var document = DocumentationTools.GetPage("MyLibrary.User.html");
-
-        string[] attributes = TypePageTools.GetAttributes(document.GetTypeDataSection());
-
-        string[] expectedAttributes = [
-            "[Serializable]",
-            "[JsonSerializable(typeof(MyLibrary.User), GenerationMode = 2)]"];
-
-        attributes.ShouldBe(expectedAttributes);
     }
 }

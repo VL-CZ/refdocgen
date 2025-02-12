@@ -6,13 +6,19 @@ using RefDocGen.CodeElements;
 
 namespace RefDocGen.IntegrationTests.Fixtures;
 
+/// <summary>
+/// Fixture responsible for setting up and tearing down the reference documentation for testing purposes.
+/// </summary>
 public class DocumentationFixture : IDisposable
 {
+    /// <summary>
+    /// Directory, where the reference documentation is generated.
+    /// </summary>
     private const string outputDir = "output";
 
     public DocumentationFixture()
     {
-        Initialize();
+        GenerateDoc();
     }
 
     public void Dispose()
@@ -21,10 +27,11 @@ public class DocumentationFixture : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    public void Initialize()
+    /// <summary>
+    /// Generates the reference documentation.
+    /// </summary>
+    public void GenerateDoc()
     {
-        string outputDir = "output";
-
         if (Directory.Exists(outputDir))
         {
             Directory.Delete(outputDir, true);
@@ -49,13 +56,17 @@ public class DocumentationFixture : IDisposable
 }
 
 
+/// <summary>
+/// Marks the collection of tests that use the <see cref="DocumentationFixture"/>.
+/// </summary>
 [CollectionDefinition(Name)]
+#pragma warning disable CA1711
 public class DocumentationTestCollection : ICollectionFixture<DocumentationFixture>
 {
-    // This class has no code, and is never created. Its purpose is simply
-    // to be the place to apply [CollectionDefinition] and all the
-    // ICollectionFixture<> interfaces.
-    internal const string Name = "Documentation test collection";
-
+    /// <summary>
+    /// Name of this test collection.
+    /// </summary>
+    internal const string Name = "documentation-test-collection";
 }
 
+#pragma warning restore CA1711

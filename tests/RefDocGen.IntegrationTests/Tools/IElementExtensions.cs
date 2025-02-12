@@ -1,4 +1,4 @@
-﻿using AngleSharp.Dom;
+using AngleSharp.Dom;
 using System.Text.RegularExpressions;
 
 namespace RefDocGen.IntegrationTests.Tools;

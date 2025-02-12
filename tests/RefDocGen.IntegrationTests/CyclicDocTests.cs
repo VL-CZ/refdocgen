@@ -4,6 +4,9 @@ using Shouldly;
 
 namespace RefDocGen.IntegrationTests;
 
+/// <summary>
+/// This class tests that cyclic inheritdocs are resolved as null.
+/// </summary>
 [Collection(DocumentationTestCollection.Name)]
 public class CyclicDocTests
 {
@@ -11,7 +14,7 @@ public class CyclicDocTests
     [InlineData("Cycle1")]
     [InlineData("Cycle2")]
     [InlineData("CycleReference")]
-    public void Test_Cyclic_InheritDoc(string typeName)
+    public void Check_That_No_SummaryDoc_Is_Present(string typeName)
     {
         using var document = DocumentationTools.GetPage($"MyLibrary.CyclicDoc.{typeName}.html");
 

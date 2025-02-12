@@ -4,6 +4,9 @@ using Shouldly;
 
 namespace RefDocGen.IntegrationTests;
 
+/// <summary>
+/// This class tests that attributes and exceptions are present in the resulting documentation at member level.
+/// </summary>
 [Collection(DocumentationTestCollection.Name)]
 public class MemberDataTests
 {

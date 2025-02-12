@@ -4,6 +4,9 @@ using Shouldly;
 
 namespace RefDocGen.IntegrationTests;
 
+/// <summary>
+/// This class contains tests of member signatures (including methods, fields, properties, etc.).
+/// </summary>
 [Collection(DocumentationTestCollection.Name)]
 public class MemberSignatureTests
 {
@@ -28,7 +31,7 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.Collections.MyCollection`1",
         "AddGeneric``1(``0)",
         "public void AddGeneric<T2>(T2 item)")]
-    public void Test_Method_Signature(string pageName, string methodId, string expectedSignature)
+    public void MethodSignature_Matches(string pageName, string methodId, string expectedSignature)
     {
         using var document = DocumentationTools.GetPage($"{pageName}.html");
 
@@ -43,7 +46,7 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.User", "MaxAge", "private const int MaxAge = 150")]
     [InlineData("MyLibrary.Animal", "weight", "private int weight")]
     [InlineData("MyLibrary.Tools.WeatherStation", "location", "private readonly Point location")]
-    public void Test_Field_Signature(string pageName, string fieldId, string expectedSignature)
+    public void FieldSignature_Matches(string pageName, string fieldId, string expectedSignature)
     {
         using var document = DocumentationTools.GetPage($"{pageName}.html");
 
@@ -61,11 +64,11 @@ public class MemberSignatureTests
         "MyLibrary.Tools.Collections.NonGenericCollection",
         "System#Collections#ICollection#IsSynchronized",
         "bool ICollection.IsSynchronized { get; }")]
-    public void Test_Property_Signature(string pageName, string propetyId, string expectedSignature)
+    public void PropertySignature_Matches(string pageName, string propertyId, string expectedSignature)
     {
         using var document = DocumentationTools.GetPage($"{pageName}.html");
 
-        var property = document.GetMemberElement(propetyId);
+        var property = document.GetMemberElement(propertyId);
 
         string signature = TypePageTools.GetMemberSignature(property);
         signature.ShouldBe(expectedSignature);
@@ -74,7 +77,7 @@ public class MemberSignatureTests
     [Theory]
     [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "Item(System.Int32)", "public T this[int index] { get; private set; }")]
     [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "Item(System.Index)", "public T this[Index index] { get; private set; }")]
-    public void Test_Indexer_Signature(string pageName, string indexerId, string expectedSignature)
+    public void IndexerSignature_Matches(string pageName, string indexerId, string expectedSignature)
     {
         using var document = DocumentationTools.GetPage($"{pageName}.html");
 
@@ -88,7 +91,7 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.User", "#ctor", "public User()")]
     [InlineData("MyLibrary.User", "#ctor(System.String,System.Int32)", "public User(string username, int age)")]
     [InlineData("MyLibrary.Tools.Point", "#ctor(System.Double,System.Double)", "internal Point(double x, double y)")]
-    public void Test_Constructor_Signature(string pageName, string constructorId, string expectedSignature)
+    public void ConstructorSignature_Matches(string pageName, string constructorId, string expectedSignature)
     {
         using var document = DocumentationTools.GetPage($"{pageName}.html");
 
@@ -103,7 +106,7 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.Point", "op_UnaryNegation(MyLibrary.Tools.Point)", "public static Point operator -(Point point)")]
     [InlineData("MyLibrary.Tools.Point", "op_Explicit(MyLibrary.Tools.Point)~System.Numerics.Vector2", "public static explicit operator Vector2(Point point)")]
     [InlineData("MyLibrary.Tools.Point", "op_Implicit(System.Numerics.Vector2)~MyLibrary.Tools.Point", "public static implicit operator Point(Vector2 vector)")]
-    public void Test_Operator_Signature(string pageName, string operatorId, string expectedSignature)
+    public void OperatorSignature_Matches(string pageName, string operatorId, string expectedSignature)
     {
         using var document = DocumentationTools.GetPage($"{pageName}.html");
 
@@ -115,7 +118,7 @@ public class MemberSignatureTests
 
     [Theory]
     [InlineData("MyLibrary.Tools.WeatherStation", "OnTemperatureChange", "public event Action OnTemperatureChange")]
-    public void Test_Event_Signature(string pageName, string eventId, string expectedSignature)
+    public void EventSignature_Matches(string pageName, string eventId, string expectedSignature)
     {
         using var document = DocumentationTools.GetPage($"{pageName}.html");
 
@@ -128,7 +131,7 @@ public class MemberSignatureTests
     [Theory]
     [InlineData("Spring", "Spring = 0")]
     [InlineData("Winter", "Winter = 3")]
-    public void Test_Enum_Member_Signature(string enumMemberId, string expectedSignature)
+    public void EnumMemberSignature_Matches(string enumMemberId, string expectedSignature)
     {
         using var document = DocumentationTools.GetPage("MyLibrary.Tools.Season.html");
 
@@ -139,7 +142,7 @@ public class MemberSignatureTests
     }
 
     [Fact]
-    public void Test_Delegate_Method_Signature()
+    public void DelegateMethodSignature_Matches()
     {
         using var document = DocumentationTools.GetPage("MyLibrary.Tools.MyPredicate`1.html");
 
