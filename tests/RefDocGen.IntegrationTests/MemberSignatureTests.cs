@@ -30,7 +30,7 @@ public class MemberSignatureTests
         "public void AddGeneric<T2>(T2 item)")]
     public void Test_Method_Signature(string pageName, string methodId, string expectedSignature)
     {
-        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
+        using var document = DocumentationTools.GetPage($"{pageName}.html");
 
         var method = document.GetMemberElement(methodId);
 
@@ -45,7 +45,7 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.WeatherStation", "location", "private readonly Point location")]
     public void Test_Field_Signature(string pageName, string fieldId, string expectedSignature)
     {
-        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
+        using var document = DocumentationTools.GetPage($"{pageName}.html");
 
         var field = document.GetMemberElement(fieldId);
 
@@ -63,7 +63,7 @@ public class MemberSignatureTests
         "bool ICollection.IsSynchronized { get; }")]
     public void Test_Property_Signature(string pageName, string propetyId, string expectedSignature)
     {
-        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
+        using var document = DocumentationTools.GetPage($"{pageName}.html");
 
         var property = document.GetMemberElement(propetyId);
 
@@ -76,7 +76,7 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "Item(System.Index)", "public T this[Index index] { get; private set; }")]
     public void Test_Indexer_Signature(string pageName, string indexerId, string expectedSignature)
     {
-        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
+        using var document = DocumentationTools.GetPage($"{pageName}.html");
 
         var indexer = document.GetMemberElement(indexerId);
 
@@ -90,7 +90,7 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.Point", "#ctor(System.Double,System.Double)", "internal Point(double x, double y)")]
     public void Test_Constructor_Signature(string pageName, string constructorId, string expectedSignature)
     {
-        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
+        using var document = DocumentationTools.GetPage($"{pageName}.html");
 
         var constructor = document.GetMemberElement(constructorId);
 
@@ -105,7 +105,7 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.Point", "op_Implicit(System.Numerics.Vector2)~MyLibrary.Tools.Point", "public static implicit operator Point(Vector2 vector)")]
     public void Test_Operator_Signature(string pageName, string operatorId, string expectedSignature)
     {
-        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
+        using var document = DocumentationTools.GetPage($"{pageName}.html");
 
         var operatorMember = document.GetMemberElement(operatorId);
 
@@ -117,7 +117,7 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.WeatherStation", "OnTemperatureChange", "public event Action OnTemperatureChange")]
     public void Test_Event_Signature(string pageName, string eventId, string expectedSignature)
     {
-        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
+        using var document = DocumentationTools.GetPage($"{pageName}.html");
 
         var eventMember = document.GetMemberElement(eventId);
 
@@ -130,7 +130,7 @@ public class MemberSignatureTests
     [InlineData("Winter", "Winter = 3")]
     public void Test_Enum_Member_Signature(string enumMemberId, string expectedSignature)
     {
-        using var document = TypePageTools.GetDocumentationPage("MyLibrary.Tools.Season.html");
+        using var document = DocumentationTools.GetPage("MyLibrary.Tools.Season.html");
 
         var enumMember = document.GetMemberElement(enumMemberId);
 
@@ -141,7 +141,7 @@ public class MemberSignatureTests
     [Fact]
     public void Test_Delegate_Method_Signature()
     {
-        using var document = TypePageTools.GetDocumentationPage("MyLibrary.Tools.MyPredicate`1.html");
+        using var document = DocumentationTools.GetPage("MyLibrary.Tools.MyPredicate`1.html");
 
         var delegateMethod = document.DocumentElement.GetByDataId(DataId.DelegateMethod);
 

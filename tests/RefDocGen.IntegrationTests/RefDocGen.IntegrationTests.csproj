@@ -7,7 +7,7 @@
         <AnalysisMode>recommended</AnalysisMode>
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
-        <NoWarn>IDE0058</NoWarn>
+        <NoWarn>IDE0058,CA1707</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>

@@ -12,7 +12,7 @@ public class TypeParameterDocCommentTests
     [InlineData("MyLibrary.Tools.MyPredicate`1", "T", "The type of the object.")]
     public void Test_SingleTypeParameter(string pageName, string parameterSignature, string expectedDoc)
     {
-        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
+        using var document = DocumentationTools.GetPage($"{pageName}.html");
 
         var parameters = TypePageTools.GetTypeParameters(document.GetTypeDataSection());
 
@@ -28,7 +28,7 @@ public class TypeParameterDocCommentTests
     [Fact]
     public void Test_MethodWithTypeParameter()
     {
-        using var document = TypePageTools.GetDocumentationPage("MyLibrary.Tools.Collections.MyCollection`1.html");
+        using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MyCollection`1.html");
 
         var parameters = TypePageTools.GetTypeParameters(document.GetMemberElement("AddGeneric``1(``0)"));
 
@@ -44,7 +44,7 @@ public class TypeParameterDocCommentTests
     [Fact]
     public void Test_MultipleTypeParameters()
     {
-        using var document = TypePageTools.GetDocumentationPage("MyLibrary.Tools.Collections.IMyDictionary`2.html");
+        using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.IMyDictionary`2.html");
 
         var parameters = TypePageTools.GetTypeParameters(document.GetTypeDataSection());
 

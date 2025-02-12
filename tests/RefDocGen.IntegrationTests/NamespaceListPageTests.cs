@@ -1,4 +1,4 @@
-﻿using AngleSharp.Dom;
+using AngleSharp.Dom;
 using RefDocGen.IntegrationTests.Fixtures;
 using RefDocGen.IntegrationTests.Tools;
 using Shouldly;
@@ -12,7 +12,7 @@ public class NamespaceListPageTests : IDisposable
 
     public NamespaceListPageTests()
     {
-        document = TypePageTools.GetDocumentationPage("index.html");
+        document = DocumentationTools.GetPage("index.html");
     }
 
     public void Dispose()
@@ -23,7 +23,7 @@ public class NamespaceListPageTests : IDisposable
     [Fact]
     public void TestNamespaceNames()
     {
-        string[] classes = TypePageTools.GetNamespaceNames(document);
+        string[] classes = NamespacePageTools.GetNamespaceNames(document);
 
         string[] expected = [
             "namespace MyLibrary",
@@ -41,7 +41,7 @@ public class NamespaceListPageTests : IDisposable
     {
         var ns = document.GetElementById("MyLibrary.Tools");
 
-        string[] nsTypes = TypePageTools.GetNamespaceTypeNames(ns);
+        string[] nsTypes = NamespacePageTools.GetNamespaceTypeNames(ns);
 
         string[] expected = [
             "enum HarvestingSeason",

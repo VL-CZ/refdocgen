@@ -13,7 +13,7 @@ public class CyclicDocTests
     [InlineData("CycleReference")]
     public void Test_Cyclic_InheritDoc(string typeName)
     {
-        using var document = TypePageTools.GetDocumentationPage($"MyLibrary.CyclicDoc.{typeName}.html");
+        using var document = DocumentationTools.GetPage($"MyLibrary.CyclicDoc.{typeName}.html");
 
         var typeDataSection = document.GetTypeDataSection();
         typeDataSection.GetByDataIdOrDefault(DataId.SummaryDoc).ShouldBeNull(); // no summary doc should be present.

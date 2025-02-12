@@ -18,6 +18,7 @@ public class DocumentationFixture : IDisposable
     public void Dispose()
     {
         Directory.Delete(outputDir, true);
+        GC.SuppressFinalize(this);
     }
 
     public void Initialize()

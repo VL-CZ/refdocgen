@@ -19,7 +19,7 @@ public class ParameterDocCommentTests
         "Animals to add. Key: animal type, Value: list of animals of the given type.")]
     public void Test_SingleParameter(string pageName, string memberId, string parameterSignature, string expectedDoc)
     {
-        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
+        using var document = DocumentationTools.GetPage($"{pageName}.html");
 
         var parameters = TypePageTools.GetMemberParameters(document.GetMemberElement(memberId));
 
@@ -35,7 +35,7 @@ public class ParameterDocCommentTests
     [Fact]
     public void Test_MethodWithManyParameters()
     {
-        using var document = TypePageTools.GetDocumentationPage("MyLibrary.User.html");
+        using var document = DocumentationTools.GetPage("MyLibrary.User.html");
         var memberElement = document.GetMemberElement("ProcessValues(System.Int32@,System.Int32@,System.String,System.Int32@,System.Double)");
 
         var parameters = TypePageTools.GetMemberParameters(memberElement);

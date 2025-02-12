@@ -15,7 +15,7 @@ public class TypeDocCommentTests
     [InlineData("MyLibrary.Tools.ObjectPredicate", "Predicate about an object.")]
     public void Test_Summary(string pageName, string expectedDoc)
     {
-        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
+        using var document = DocumentationTools.GetPage($"{pageName}.html");
 
         string summaryDoc = TypePageTools.GetSummaryDoc(document.GetTypeDataSection());
 
@@ -25,7 +25,7 @@ public class TypeDocCommentTests
     [Fact]
     public void Test_RemarksDoc()
     {
-        using var document = TypePageTools.GetDocumentationPage("MyLibrary.Animal.html");
+        using var document = DocumentationTools.GetPage("MyLibrary.Animal.html");
 
         string remarksDoc = TypePageTools.GetRemarksDoc(document.GetTypeDataSection());
 
@@ -35,7 +35,7 @@ public class TypeDocCommentTests
     [Fact]
     public void Test_SeeAlsoDocs()
     {
-        using var document = TypePageTools.GetDocumentationPage("MyLibrary.Tools.Collections.MyStringCollection.html");
+        using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MyStringCollection.html");
 
         string[] seeAlsoDocs = TypePageTools.GetSeeAlsoDocs(document.GetTypeDataSection());
 
@@ -47,7 +47,7 @@ public class TypeDocCommentTests
     [Fact]
     public void Test_Attributes()
     {
-        using var document = TypePageTools.GetDocumentationPage("MyLibrary.User.html");
+        using var document = DocumentationTools.GetPage("MyLibrary.User.html");
 
         string[] attributes = TypePageTools.GetAttributes(document.GetTypeDataSection());
 

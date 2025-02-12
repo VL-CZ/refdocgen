@@ -1,4 +1,4 @@
-﻿using RefDocGen.IntegrationTests.Fixtures;
+using RefDocGen.IntegrationTests.Fixtures;
 using RefDocGen.IntegrationTests.Tools;
 using Shouldly;
 
@@ -19,9 +19,9 @@ public class MemberDocCommentTests
         "System#Collections#IEnumerable#GetEnumerator",
         "Returns an enumerator that iterates through the collection.")]
     [InlineData("MyLibrary.Tools.MyPredicate`1", "delegate-method", "Predicate about a generic type T.")]
-    public void Test_Summary(string pageName, string memberId, string expectedDoc)
+    public void SummaryDoc_Matches(string pageName, string memberId, string expectedDoc)
     {
-        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
+        using var document = DocumentationTools.GetPage($"{pageName}.html");
 
         string summaryDoc = TypePageTools.GetSummaryDoc(document.GetMemberElement(memberId));
 
@@ -31,7 +31,7 @@ public class MemberDocCommentTests
     [Fact]
     public void Test_RemarksDoc()
     {
-        using var document = TypePageTools.GetDocumentationPage("MyLibrary.Animal.html");
+        using var document = DocumentationTools.GetPage("MyLibrary.Animal.html");
 
         string remarksDoc = TypePageTools.GetRemarksDoc(document.GetMemberElement("weight"));
 
@@ -41,7 +41,7 @@ public class MemberDocCommentTests
     [Fact]
     public void Test_ValueDoc()
     {
-        using var document = TypePageTools.GetDocumentationPage("MyLibrary.User.html");
+        using var document = DocumentationTools.GetPage("MyLibrary.User.html");
 
         string valueDoc = TypePageTools.GetValueDoc(document.GetMemberElement("Age"));
 
@@ -54,7 +54,7 @@ public class MemberDocCommentTests
     [InlineData("MyLibrary.Tools.Point", "op_Equality(MyLibrary.Tools.Point,MyLibrary.Tools.Point)", "bool", "Are the 2 points equal?")]
     public void Test_ReturnsDoc(string pageName, string memberId, string expectedReturnType, string expectedDoc)
     {
-        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
+        using var document = DocumentationTools.GetPage($"{pageName}.html");
 
         string returnType = TypePageTools.GetReturnTypeName(document.GetMemberElement(memberId));
         string returnsDoc = TypePageTools.GetReturnsDoc(document.GetMemberElement(memberId));
@@ -66,7 +66,7 @@ public class MemberDocCommentTests
     [Fact]
     public void Test_SeeAlsoDocs()
     {
-        using var document = TypePageTools.GetDocumentationPage("MyLibrary.User.html");
+        using var document = DocumentationTools.GetPage("MyLibrary.User.html");
 
         string[] seeAlsoDocs = TypePageTools.GetSeeAlsoDocs(document.GetMemberElement("username"));
 

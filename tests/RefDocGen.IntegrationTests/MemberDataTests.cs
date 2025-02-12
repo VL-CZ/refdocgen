@@ -1,4 +1,4 @@
-﻿using RefDocGen.IntegrationTests.Fixtures;
+using RefDocGen.IntegrationTests.Fixtures;
 using RefDocGen.IntegrationTests.Tools;
 using Shouldly;
 
@@ -8,9 +8,9 @@ namespace RefDocGen.IntegrationTests;
 public class MemberDataTests
 {
     [Fact]
-    public void Test_Attributes()
+    public void Attributes_Match()
     {
-        using var document = TypePageTools.GetDocumentationPage("MyLibrary.User.html");
+        using var document = DocumentationTools.GetPage("MyLibrary.User.html");
 
         string[] attributes = TypePageTools.GetAttributes(document.GetMemberElement("PrintProfile(System.String)"));
 
@@ -20,9 +20,9 @@ public class MemberDataTests
     }
 
     [Fact]
-    public void Test_Exceptions()
+    public void Exceptions_Match()
     {
-        using var document = TypePageTools.GetDocumentationPage("MyLibrary.Tools.Collections.MyCollection`1.html");
+        using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MyCollection`1.html");
 
         var exceptions = TypePageTools.GetExceptions(document.GetMemberElement("Add(`0)"));
 
