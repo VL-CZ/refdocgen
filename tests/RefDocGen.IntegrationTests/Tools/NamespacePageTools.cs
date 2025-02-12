@@ -86,5 +86,4 @@ internal class NamespacePageTools
     {
         return [.. element.GetByDataIds(DataId.TypeRowElement).Select(GetTypeRowName)];
     }
-
 }

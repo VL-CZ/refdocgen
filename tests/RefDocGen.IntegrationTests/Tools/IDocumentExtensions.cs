@@ -8,7 +8,7 @@ namespace RefDocGen.IntegrationTests.Tools;
 internal static class IDocumentExtensions
 {
     /// <summary>
-    /// Gets an element representing the member data.
+    /// Gets an element representing the member by its ID.
     /// </summary>
     /// <param name="document">The document to search in.</param>
     /// <param name="memberId">ID of the member to search.</param>
@@ -28,5 +28,18 @@ internal static class IDocumentExtensions
     internal static IElement GetTypeDataSection(this IDocument document)
     {
         return document.DocumentElement.GetByDataId(DataId.TypeDataSection);
+    }
+
+    /// <summary>
+    /// Gets an element representing the namespace by its ID.
+    /// </summary>
+    /// <param name="document">The document to search in.</param>
+    /// <param name="namespaceId">ID of the namespace to search.</param>
+    /// <returns>An HTML element representing the namespace with the given ID, an exception is thrown if no such element exists.</returns>
+    /// <exception cref="ArgumentException">Thrown if there's no namespace found with the given <paramref name="namespaceId"/>.</exception>
+    internal static IElement GetNamespaceElement(this IDocument document, string namespaceId)
+    {
+        return document.GetElementById(namespaceId)
+            ?? throw new ArgumentException($"Namespace '{namespaceId}' not found");
     }
 }

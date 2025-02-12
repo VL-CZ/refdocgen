@@ -24,7 +24,6 @@ public class DocumentationFixture : IDisposable
     public void Dispose()
     {
         Directory.Delete(outputDir, true);
-        GC.SuppressFinalize(this);
     }
 
     /// <summary>
@@ -47,10 +46,9 @@ public class DocumentationFixture : IDisposable
 
         using var htmlRenderer = new HtmlRenderer(serviceProvider, loggerFactory);
 
-        var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir);
+        var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir); // use default template generator
 
         var generator = new DocGenerator("data/MyLibrary.dll", "data/MyLibrary.xml", templateGenerator, AccessModifier.Private);
-
         generator.GenerateDoc();
     }
 }

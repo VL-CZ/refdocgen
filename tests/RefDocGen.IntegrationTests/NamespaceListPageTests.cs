@@ -45,7 +45,7 @@ public class NamespaceListPageTests : IDisposable
     [Fact]
     public void NamespaceTypeNames_Match()
     {
-        var ns = document.GetElementById("MyLibrary.Tools");
+        var ns = document.GetNamespaceElement("MyLibrary.Tools");
 
         string[] nsTypes = NamespacePageTools.GetNamespaceTypeNames(ns);
 
