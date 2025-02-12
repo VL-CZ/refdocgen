@@ -9,8 +9,8 @@
     var typeUrl = $"./{Type.Id}.html";
 }
 
-<tr>
-    <td class="w-50">
+<tr data-id="type-row-element">
+    <td class="w-50" data-id="type-row-name">
         <samp>
             <a href="@typeUrl" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
                 <span class="text-primary">
@@ -20,7 +20,7 @@
             </a>
         </samp>
     </td>
-    <td class="text-muted">
+    <td class="text-muted" data-id="type-row-doc">
         <i>@Type.DocComment</i>
     </td>
 </tr>

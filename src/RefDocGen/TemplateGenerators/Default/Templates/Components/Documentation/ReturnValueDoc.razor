@@ -10,11 +10,11 @@
 }
 
 <h3 class="lead my-2">Returns</h3>
-<div class="mx-2">
-    <samp>
+<div class="mx-2" data-id="returns-section">
+    <samp data-id="return-type-name">
         <TypeLink Type="@Type" />
     </samp>
-    <div class="text-muted">
+    <div class="text-muted" data-id="returns-doc">
         @if (DocComment is not null)
         {
             <i>@((MarkupString)DocComment)</i>

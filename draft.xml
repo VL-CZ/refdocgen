@@ -1,0 +1,14 @@
+<config>
+    <paragraphElement>
+        <p></p>
+    </paragraphElement>
+    <bulletListElement>
+        <ul class="my-class"></ul>
+    </bulletListElement>
+    <codeBlockElement>
+        <pre>
+            <code>
+            </code>
+        </pre>
+    </codeBlockElement>
+</config>

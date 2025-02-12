@@ -52,25 +52,27 @@
         {
             var namespaceUrl = $"./{ns.Id}.html";
 
-            <h1 class="display-6">
-                <samp>
-                    <a href="@namespaceUrl" class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
-                        <span class="text-primary">namespace</span>
-                        <span class="text-dark">@ns.Name</span>
-                    </a>
-                </samp>
-            </h1>
+            <div data-id="namespace-section" id="@ns.Id">
+                <h1 class="display-6" data-id="namespace-name">
+                    <samp>
+                        <a href="@namespaceUrl" class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
+                            <span class="text-primary">namespace</span>
+                            <span class="text-dark">@ns.Name</span>
+                        </a>
+                    </samp>
+                </h1>
 
-            <hr />
+                <hr />
 
-            <table class="table">
-                <tbody>
-                    @foreach (var type in ns.AllTypes)
-                    {
-                        <TypeNameRow Type="@type" />
-                    }
-                </tbody>
-            </table>
+                <table class="table">
+                    <tbody data-id="namespace-types">
+                        @foreach (var type in ns.AllTypes)
+                        {
+                            <TypeNameRow Type="@type" />
+                        }
+                    </tbody>
+                </table>
+            </div>
         }
 
     </div>

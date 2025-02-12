@@ -49,62 +49,63 @@
     </nav>
 
     <div class="container my-4">
+        <div data-id="declared-type-data">
+            <DeclaredTypeName TypeName="@Model.Name" TypeKindName="@Model.TypeKindName" Modifiers="@Model.Modifiers" TypeParameters="@Model.TypeParameters" />
 
-        <DeclaredTypeName TypeName="@Model.Name" TypeKindName="@Model.TypeKindName" Modifiers="@Model.Modifiers" TypeParameters="@Model.TypeParameters" />
+            <TypeParametersConstraints TypeParameters="@Model.TypeParameters" />
 
-        <TypeParametersConstraints TypeParameters="@Model.TypeParameters" />
+            <NamespaceLink Namespace="@Model.Namespace" />
 
-        <NamespaceLink Namespace="@Model.Namespace" />
+            <!-- Base type name -->
+            @if (Model.BaseType is not null)
+            {
+                <div data-id="base-type">
+                    <i>Base type:&nbsp;</i>
+                    <samp class="text-secondary">
+                        <TypeLink Type="@Model.BaseType" />
+                    </samp>
+                </div>
+            }
 
-        <!-- Base type name -->
-        @if (Model.BaseType is not null)
-        {
-            <div>
-                <i>Base type:&nbsp;</i>
-                <samp class="text-secondary">
-                    <TypeLink Type="@Model.BaseType" />
-                </samp>
-            </div>
-        }
-
-        <!-- Implemented interfaces -->
-        @if (Model.ImplementedInterfaces.Any())
-        {
-            <div>
-                <i>Implements:&nbsp;</i>
-                <samp class="text-secondary">
-                    @foreach (var iface in Model.ImplementedInterfaces)
-                    {
-                        <TypeLink Type="@iface" />
-
-                        @if (iface != Model.ImplementedInterfaces.Last())
+            <!-- Implemented interfaces -->
+            @if (Model.ImplementedInterfaces.Any())
+            {
+                <div data-id="implemented-interfaces">
+                    <i>Implements:&nbsp;</i>
+                    <samp>
+                        @foreach (var iface in Model.ImplementedInterfaces)
                         {
-                            <span>, </span>
+                            <TypeLink Type="@iface" />
+
+                            @if (iface != Model.ImplementedInterfaces.Last())
+                            {
+                                <span>, </span>
+                            }
                         }
-                    }
-                </samp>
-            </div>
-        }
+                    </samp>
+                </div>
+            }
 
-        <hr />
-
-        <!-- Doc comments -->
-        <SummaryDoc DocComment="@Model.SummaryDocComment" />
-
-        <!-- Type parameter doc comments -->
-        <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
-
-        <AttributeList Attributes="@Model.Attributes" />
-
-        <!-- Remarks doc comment -->
-        <RemarksDoc DocComment="@Model.RemarksDocComment" />
-
-        <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
-
-        @if (IsModelDocumented())
-        {
             <hr />
-        }
+
+            <!-- Doc comments -->
+            <SummaryDoc DocComment="@Model.SummaryDocComment" />
+
+            <!-- Type parameter doc comments -->
+            <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
+
+            <AttributeList Attributes="@Model.Attributes" />
+
+            <!-- Remarks doc comment -->
+            <RemarksDoc DocComment="@Model.RemarksDocComment" />
+
+            <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
+
+            @if (IsModelDocumented())
+            {
+                <hr />
+            }
+        </div>
 
         @if (Model.Constructors.Any())
         {

@@ -7,12 +7,12 @@
 
 @if (DocComments.Any())
 {
-    <div class="mt-3">
+    <div class="mt-3" data-id="seealso-section">
         <div class="lead">See also</div>
 
         @foreach (var comment in DocComments)
         {
-            <div class="text-muted">
+            <div class="text-muted" data-id="seealso-item">
                 <i>
                     @((MarkupString)comment)
                 </i>

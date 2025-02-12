@@ -48,33 +48,35 @@
 
     <div class="container my-4">
 
-        <DeclaredTypeName TypeName="@Model.Name" TypeKindName="delegate" Modifiers="@Model.Modifiers" TypeParameters="@Model.TypeParameters" />
+        <div data-id="declared-type-data">
+            <DeclaredTypeName TypeName="@Model.Name" TypeKindName="delegate" Modifiers="@Model.Modifiers" TypeParameters="@Model.TypeParameters" />
 
-        <TypeParametersConstraints TypeParameters="@Model.TypeParameters" />
+            <TypeParametersConstraints TypeParameters="@Model.TypeParameters" />
 
-        <NamespaceLink Namespace="@Model.Namespace" />
+            <NamespaceLink Namespace="@Model.Namespace" />
 
-        <hr />
-
-        <SummaryDoc DocComment="@Model.SummaryDocComment" />
-
-        <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
-
-        <AttributeList Attributes="@Model.Attributes" />
-
-        <RemarksDoc DocComment="@Model.RemarksDocComment" />
-
-        <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
-
-        @if (IsModelDocumented())
-        {
             <hr />
-        }
+
+            <SummaryDoc DocComment="@Model.SummaryDocComment" />
+
+            <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
+
+            <AttributeList Attributes="@Model.Attributes" />
+
+            <RemarksDoc DocComment="@Model.RemarksDocComment" />
+
+            <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
+
+            @if (IsModelDocumented())
+            {
+                <hr />
+            }
+        </div>
 
         <div class="row">
             <div class="col-md-12">
-                <div class="border p-2 mb-2">
-                    <h6 class="mb-1">
+                <div class="border p-2 mb-2" data-id="delegate-method" id="delegate-method">
+                    <h6 class="mb-1" data-id="member-name">
                         <samp>
                             <span class="text-primary">@string.Join(' ', Model.Modifiers) delegate</span>
 

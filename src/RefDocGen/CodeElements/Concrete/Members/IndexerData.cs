@@ -1,6 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types.Attribute;
-using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
 using System.Reflection;
@@ -31,7 +30,6 @@ internal class IndexerData : PropertyData, IIndexerData
             : base(propertyInfo, getterMethod, setterMethod, containingType, availableTypeParameters, attributes)
     {
         Parameters = parameters;
-        ExplicitInterfaceType = Tools.ExplicitInterfaceType.Of((IPropertyData)this);
     }
 
     /// <inheritdoc/>
@@ -41,9 +39,6 @@ internal class IndexerData : PropertyData, IIndexerData
     /// Dictionary of index parameters, the keys represent parameter names.
     /// </summary>
     internal IReadOnlyDictionary<string, ParameterData> Parameters { get; }
-
-    /// <inheritdoc/>
-    public override ITypeNameData? ExplicitInterfaceType { get; }
 
     /// <inheritdoc/>
     IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters.Values

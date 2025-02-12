@@ -39,9 +39,9 @@ internal class PropertyData : MemberData, IPropertyData
     {
         PropertyInfo = propertyInfo;
         Type = propertyInfo.PropertyType.GetTypeNameData(availableTypeParameters);
-        ExplicitInterfaceType = Tools.ExplicitInterfaceType.Of(this);
-
         (Getter, Setter) = (getterMethod, setterMethod);
+
+        ExplicitInterfaceType = Tools.ExplicitInterfaceType.Of(this);
 
         if (Setter is not null) // check if the setter is 'init' only
         {
@@ -146,7 +146,7 @@ internal class PropertyData : MemberData, IPropertyData
     public bool IsExplicitImplementation => ExplicitInterfaceType is not null;
 
     /// <inheritdoc/>
-    public virtual ITypeNameData? ExplicitInterfaceType { get; }
+    public ITypeNameData? ExplicitInterfaceType { get; }
 
     /// <inheritdoc/>
     public object? ConstantValue => DBNull.Value;
