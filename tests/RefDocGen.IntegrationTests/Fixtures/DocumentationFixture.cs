@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using RefDocGen.TemplateGenerators.Default;
 using RefDocGen.CodeElements;
 
-namespace RefDocGen.IntegrationTests;
+namespace RefDocGen.IntegrationTests.Fixtures;
 
 public class DocumentationFixture : IDisposable
 {

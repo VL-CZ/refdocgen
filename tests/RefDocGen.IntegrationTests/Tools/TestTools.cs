@@ -2,29 +2,53 @@ using AngleSharp;
 using AngleSharp.Dom;
 using System.Text.RegularExpressions;
 
-namespace RefDocGen.IntegrationTests;
+namespace RefDocGen.IntegrationTests.Tools;
 
-internal class Tools
+/// <summary>
+/// A class that contains additional 'tool' methods shared between all tests.
+/// </summary>
+internal class TestTools
 {
-    internal static IDocument GetDocument(string name)
+    /// <summary>
+    /// Gets a documentation page represented as <see cref="IDocument"/>.
+    /// </summary>
+    /// <param name="name">Name of the page to select.</param>
+    /// <returns>The documentation page with the given <paramref name="name"/>, represented as <see cref="IDocument"/>.</returns>
+    internal static IDocument GetDocumentationPage(string name)
     {
-        string userFile = Path.Join("output", name);
-        string fileData = File.ReadAllText(userFile);
+        string file = Path.Join("output", name);
+        string fileData = File.ReadAllText(file);
 
         // Configure and create a browsing context
         var config = Configuration.Default;
         var context = BrowsingContext.New(config);
 
         // Load the HTML document directly from the file
-        var document = context.OpenAsync((req) => req.Content(fileData)).Result; // TODO
+        var document = context.OpenAsync((req) => req.Content(fileData)).Result;
         return document;
     }
 
+    /// <summary>
+    /// Parses the content of the HTML element and returns it as a string.
+    /// </summary>
+    /// <param name="element"></param>
+    /// <returns>Parsed textual content of the HTML element.</returns>
+    /// <remarks>
+    /// <list type="bullet">
+    /// <item>Firstly, only the textual content is selected - i.e. no child tags are present in the output</item>
+    /// <item>Then, all continouos whitespace substrings are replaced by a single space character.</item>
+    /// </list>
+    /// </remarks>
     internal static string ParseStringContent(IElement element)
     {
         return Regex.Replace(element.TextContent, @"\s+", " ").Trim();
     }
 
+    /// <summary>
+    /// Gets signature of the member.
+    /// </summary>
+    /// <param name="memberElement">The HTML element representing the member.</param>
+    /// <returns></returns>
     internal static string GetMemberSignature(IElement memberElement)
     {
         var memberNameElement = memberElement.GetByDataId(DataId.MemberName);
@@ -38,23 +62,35 @@ internal class Tools
         return content;
     }
 
+    /// <summary>
+    /// Gets parsed textual content of the element with the given <paramref name="dataId"/>.
+    /// </summary>
+    /// <param name="element">The provided HTML element to search in for the <paramref name="dataId"/> element.</param>
+    /// <param name="dataId">The data-id to search for.</param>
+    /// <returns>Parsed textual content of the HTML element with the given <paramref name="dataId"/>.</returns>
+    /// <seealso cref="ParseStringContent(IElement)"/>
     private static string GetParsedContent(IElement element, DataId dataId)
     {
         var targetElement = element.GetByDataId(dataId);
         return ParseStringContent(targetElement);
     }
 
-    internal static string GetSummaryDocContent(IElement memberElement)
+    /// <summary>
+    /// Gets the <c>summary</c> doc comment of the type/member.
+    /// </summary>
+    /// <param name="element">The HTML element representing the type/member.</param>
+    /// <returns><c>summary</c> doc comment of the type/member.</returns>
+    internal static string GetSummaryDoc(IElement element)
     {
-        return GetParsedContent(memberElement, DataId.SummaryDoc);
+        return GetParsedContent(element, DataId.SummaryDoc);
     }
 
-    internal static string GetRemarksDocContent(IElement memberElement)
+    internal static string GetRemarksDoc(IElement element)
     {
-        return GetParsedContent(memberElement, DataId.RemarksDoc);
+        return GetParsedContent(element, DataId.RemarksDoc);
     }
 
-    internal static string GetValueDocContent(IElement memberElement)
+    internal static string GetValueDoc(IElement memberElement)
     {
         return GetParsedContent(memberElement, DataId.ValueDoc);
     }
@@ -156,7 +192,7 @@ internal class Tools
 
     internal static string GetTypeSignature(IDocument document)
     {
-        return ParseStringContent(document.GetTypeSignatureElement());
+        return ParseStringContent(document.DocumentElement.GetByDataId(DataId.DeclaredTypeSignature));
     }
 
     internal static IElement[] GetNamespaceClasses(IDocument document)
