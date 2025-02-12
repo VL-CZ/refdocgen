@@ -10,9 +10,9 @@ public class MemberDataTests
     [Fact]
     public void Test_Attributes()
     {
-        using var document = TestTools.GetDocumentationPage("MyLibrary.User.html");
+        using var document = TypePageTools.GetDocumentationPage("MyLibrary.User.html");
 
-        string[] attributes = TestTools.GetAttributes(document.GetMemberElement("PrintProfile(System.String)"));
+        string[] attributes = TypePageTools.GetAttributes(document.GetMemberElement("PrintProfile(System.String)"));
 
         string[] expectedAttributes = ["[Obsolete]"];
 
@@ -22,17 +22,17 @@ public class MemberDataTests
     [Fact]
     public void Test_Exceptions()
     {
-        using var document = TestTools.GetDocumentationPage("MyLibrary.Tools.Collections.MyCollection`1.html");
+        using var document = TypePageTools.GetDocumentationPage("MyLibrary.Tools.Collections.MyCollection`1.html");
 
-        var exceptions = TestTools.GetExceptions(document.GetMemberElement("Add(`0)"));
+        var exceptions = TypePageTools.GetExceptions(document.GetMemberElement("Add(`0)"));
 
         exceptions.Length.ShouldBe(2);
 
-        string e1type = TestTools.GetExceptionType(exceptions[0]);
-        string e1doc = TestTools.GetExceptionDoc(exceptions[0]);
+        string e1type = TypePageTools.GetExceptionType(exceptions[0]);
+        string e1doc = TypePageTools.GetExceptionDoc(exceptions[0]);
 
-        string e2type = TestTools.GetExceptionType(exceptions[1]);
-        string e2doc = TestTools.GetExceptionDoc(exceptions[1]);
+        string e2type = TypePageTools.GetExceptionType(exceptions[1]);
+        string e2doc = TypePageTools.GetExceptionDoc(exceptions[1]);
 
         e1type.ShouldBe("System.NotImplementedException");
         e1doc.ShouldBeEmpty();

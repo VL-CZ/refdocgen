@@ -1,11 +1,12 @@
 using AngleSharp.Dom;
+using System.Text.RegularExpressions;
 
 namespace RefDocGen.IntegrationTests.Tools;
 
 /// <summary>
-/// Class containing extension methods for the objects from <c>AngleSharp.Dom</c> namespace.
+/// Class containing extension methods for the <see cref="IElement"/> interface.
 /// </summary>
-internal static class DomExtensions
+internal static class IElementExtensions
 {
     /// <summary>
     /// Gets an element by its <c>data-id</c> value.
@@ -45,6 +46,41 @@ internal static class DomExtensions
         return element.QuerySelectorAll($"[data-id={dataId.GetString()}]");
     }
 
+    /// <summary>
+    /// Parses the content of the HTML element and returns it as a string.
+    /// </summary>
+    /// <param name="element"></param>
+    /// <returns>Parsed textual content of the HTML element.</returns>
+    /// <remarks>
+    /// <list type="bullet">
+    /// <item>Firstly, only the textual content is selected - i.e. no child tags are present in the output</item>
+    /// <item>Then, all continouos whitespace substrings are replaced by a single space character.</item>
+    /// </list>
+    /// </remarks>
+    internal static string GetParsedContent(this IElement element)
+    {
+        return Regex.Replace(element.TextContent, @"\s+", " ").Trim();
+    }
+
+    /// <summary>
+    /// Gets parsed textual content of the element with the given <paramref name="dataId"/>.
+    /// </summary>
+    /// <param name="element">The provided HTML to search for the <paramref name="dataId"/> element.</param>
+    /// <param name="dataId">The data-id to search for.</param>
+    /// <returns>Parsed textual content of the HTML element with the given <paramref name="dataId"/>.</returns>
+    /// <seealso cref="GetParsedContent(IElement)"/>
+    private static string GetParsedContent(this IElement element, DataId dataId)
+    {
+        var targetElement = element.GetByDataId(dataId);
+        return targetElement.GetParsedContent();
+    }
+}
+
+/// <summary>
+/// Class containing extension methods for the <see cref="IDocument"/> interface.
+/// </summary>
+internal static class IDocumentExtensions
+{
     /// <summary>
     /// Gets an element representing the member data.
     /// </summary>

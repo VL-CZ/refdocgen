@@ -19,26 +19,26 @@ public class ParameterDocCommentTests
         "Animals to add. Key: animal type, Value: list of animals of the given type.")]
     public void Test_SingleParameter(string pageName, string memberId, string parameterSignature, string expectedDoc)
     {
-        using var document = TestTools.GetDocumentationPage($"{pageName}.html");
+        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
 
-        var parameters = TestTools.GetMemberParameters(document.GetMemberElement(memberId));
+        var parameters = TypePageTools.GetMemberParameters(document.GetMemberElement(memberId));
 
         parameters.Length.ShouldBe(1);
 
-        string paramSignature = TestTools.GetParameterName(parameters[0]);
+        string paramSignature = TypePageTools.GetParameterName(parameters[0]);
         paramSignature.ShouldBe(parameterSignature);
 
-        string paramDoc = TestTools.GetParameterDoc(parameters[0]);
+        string paramDoc = TypePageTools.GetParameterDoc(parameters[0]);
         paramDoc.ShouldBe(expectedDoc);
     }
 
     [Fact]
     public void Test_MethodWithManyParameters()
     {
-        using var document = TestTools.GetDocumentationPage("MyLibrary.User.html");
+        using var document = TypePageTools.GetDocumentationPage("MyLibrary.User.html");
         var memberElement = document.GetMemberElement("ProcessValues(System.Int32@,System.Int32@,System.String,System.Int32@,System.Double)");
 
-        var parameters = TestTools.GetMemberParameters(memberElement);
+        var parameters = TypePageTools.GetMemberParameters(memberElement);
 
         parameters.Length.ShouldBe(5);
 
@@ -52,10 +52,10 @@ public class ParameterDocCommentTests
 
         for (int i = 0; i < expectedValues.Count; i++)
         {
-            string paramName = TestTools.GetParameterName(parameters[i]);
+            string paramName = TypePageTools.GetParameterName(parameters[i]);
             paramName.ShouldBe(expectedValues[i].signature);
 
-            string paramDoc = TestTools.GetParameterDoc(parameters[i]);
+            string paramDoc = TypePageTools.GetParameterDoc(parameters[i]);
             paramDoc.ShouldBe(expectedValues[i].doc);
         }
     }

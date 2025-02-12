@@ -12,7 +12,7 @@ public class NamespaceListPageTests : IDisposable
 
     public NamespaceListPageTests()
     {
-        document = TestTools.GetDocumentationPage("index.html");
+        document = TypePageTools.GetDocumentationPage("index.html");
     }
 
     public void Dispose()
@@ -23,7 +23,7 @@ public class NamespaceListPageTests : IDisposable
     [Fact]
     public void TestNamespaceNames()
     {
-        string[] classes = TestTools.GetNamespaceNames(document);
+        string[] classes = TypePageTools.GetNamespaceNames(document);
 
         string[] expected = [
             "namespace MyLibrary",
@@ -41,7 +41,7 @@ public class NamespaceListPageTests : IDisposable
     {
         var ns = document.GetElementById("MyLibrary.Tools");
 
-        string[] nsTypes = TestTools.GetNamespaceTypeNames(ns);
+        string[] nsTypes = TypePageTools.GetNamespaceTypeNames(ns);
 
         string[] expected = [
             "enum HarvestingSeason",

@@ -30,11 +30,11 @@ public class MemberSignatureTests
         "public void AddGeneric<T2>(T2 item)")]
     public void Test_Method_Signature(string pageName, string methodId, string expectedSignature)
     {
-        using var document = TestTools.GetDocumentationPage($"{pageName}.html");
+        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
 
         var method = document.GetMemberElement(methodId);
 
-        string signature = TestTools.GetMemberSignature(method);
+        string signature = TypePageTools.GetMemberSignature(method);
         signature.ShouldBe(expectedSignature);
     }
 
@@ -45,11 +45,11 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.WeatherStation", "location", "private readonly Point location")]
     public void Test_Field_Signature(string pageName, string fieldId, string expectedSignature)
     {
-        using var document = TestTools.GetDocumentationPage($"{pageName}.html");
+        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
 
         var field = document.GetMemberElement(fieldId);
 
-        string signature = TestTools.GetMemberSignature(field);
+        string signature = TypePageTools.GetMemberSignature(field);
         signature.ShouldBe(expectedSignature);
     }
 
@@ -63,11 +63,11 @@ public class MemberSignatureTests
         "bool ICollection.IsSynchronized { get; }")]
     public void Test_Property_Signature(string pageName, string propetyId, string expectedSignature)
     {
-        using var document = TestTools.GetDocumentationPage($"{pageName}.html");
+        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
 
         var property = document.GetMemberElement(propetyId);
 
-        string signature = TestTools.GetMemberSignature(property);
+        string signature = TypePageTools.GetMemberSignature(property);
         signature.ShouldBe(expectedSignature);
     }
 
@@ -76,11 +76,11 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "Item(System.Index)", "public T this[Index index] { get; private set; }")]
     public void Test_Indexer_Signature(string pageName, string indexerId, string expectedSignature)
     {
-        using var document = TestTools.GetDocumentationPage($"{pageName}.html");
+        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
 
         var indexer = document.GetMemberElement(indexerId);
 
-        string signature = TestTools.GetMemberSignature(indexer);
+        string signature = TypePageTools.GetMemberSignature(indexer);
         signature.ShouldBe(expectedSignature);
     }
 
@@ -90,11 +90,11 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.Point", "#ctor(System.Double,System.Double)", "internal Point(double x, double y)")]
     public void Test_Constructor_Signature(string pageName, string constructorId, string expectedSignature)
     {
-        using var document = TestTools.GetDocumentationPage($"{pageName}.html");
+        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
 
         var constructor = document.GetMemberElement(constructorId);
 
-        string signature = TestTools.GetMemberSignature(constructor);
+        string signature = TypePageTools.GetMemberSignature(constructor);
         signature.ShouldBe(expectedSignature);
     }
 
@@ -105,11 +105,11 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.Point", "op_Implicit(System.Numerics.Vector2)~MyLibrary.Tools.Point", "public static implicit operator Point(Vector2 vector)")]
     public void Test_Operator_Signature(string pageName, string operatorId, string expectedSignature)
     {
-        using var document = TestTools.GetDocumentationPage($"{pageName}.html");
+        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
 
         var operatorMember = document.GetMemberElement(operatorId);
 
-        string signature = TestTools.GetMemberSignature(operatorMember);
+        string signature = TypePageTools.GetMemberSignature(operatorMember);
         signature.ShouldBe(expectedSignature);
     }
 
@@ -117,11 +117,11 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.WeatherStation", "OnTemperatureChange", "public event Action OnTemperatureChange")]
     public void Test_Event_Signature(string pageName, string eventId, string expectedSignature)
     {
-        using var document = TestTools.GetDocumentationPage($"{pageName}.html");
+        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
 
         var eventMember = document.GetMemberElement(eventId);
 
-        string signature = TestTools.GetMemberSignature(eventMember);
+        string signature = TypePageTools.GetMemberSignature(eventMember);
         signature.ShouldBe(expectedSignature);
     }
 
@@ -130,22 +130,22 @@ public class MemberSignatureTests
     [InlineData("Winter", "Winter = 3")]
     public void Test_Enum_Member_Signature(string enumMemberId, string expectedSignature)
     {
-        using var document = TestTools.GetDocumentationPage("MyLibrary.Tools.Season.html");
+        using var document = TypePageTools.GetDocumentationPage("MyLibrary.Tools.Season.html");
 
         var enumMember = document.GetMemberElement(enumMemberId);
 
-        string signature = TestTools.GetMemberSignature(enumMember);
+        string signature = TypePageTools.GetMemberSignature(enumMember);
         signature.ShouldBe(expectedSignature);
     }
 
     [Fact]
     public void Test_Delegate_Method_Signature()
     {
-        using var document = TestTools.GetDocumentationPage("MyLibrary.Tools.MyPredicate`1.html");
+        using var document = TypePageTools.GetDocumentationPage("MyLibrary.Tools.MyPredicate`1.html");
 
         var delegateMethod = document.DocumentElement.GetByDataId(DataId.DelegateMethod);
 
-        string signature = TestTools.GetMemberSignature(delegateMethod);
+        string signature = TypePageTools.GetMemberSignature(delegateMethod);
         signature.ShouldBe("internal delegate bool MyPredicate<T>(T obj)");
     }
 }

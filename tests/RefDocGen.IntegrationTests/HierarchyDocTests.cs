@@ -13,10 +13,10 @@ public class HierarchyDocTests
     [InlineData("ChildChildChild", "Before parent. Parent class. After parent.")]
     public void Test_ClassName(string typeName, string expectedSummaryDoc)
     {
-        using var document = TestTools.GetDocumentationPage($"MyLibrary.Hierarchy.{typeName}.html");
+        using var document = TypePageTools.GetDocumentationPage($"MyLibrary.Hierarchy.{typeName}.html");
 
         var typeDataSection = document.GetTypeDataSection();
-        string summaryDoc = TestTools.GetSummaryDoc(typeDataSection);
+        string summaryDoc = TypePageTools.GetSummaryDoc(typeDataSection);
 
         summaryDoc.ShouldBe(expectedSummaryDoc);
     }
@@ -26,14 +26,14 @@ public class HierarchyDocTests
     [InlineData("ChildChild")]
     public void Test_Handle_Method(string typeName)
     {
-        using var document = TestTools.GetDocumentationPage($"MyLibrary.Hierarchy.{typeName}.html");
+        using var document = TypePageTools.GetDocumentationPage($"MyLibrary.Hierarchy.{typeName}.html");
 
         var handleMethod = document.GetMemberElement("Handle(System.Object)");
-        var parameter = TestTools.GetMemberParameters(handleMethod).First();
+        var parameter = TypePageTools.GetMemberParameters(handleMethod).First();
 
-        string summaryDoc = TestTools.GetSummaryDoc(handleMethod);
-        string returnsDoc = TestTools.GetReturnsDoc(handleMethod);
-        string paramDoc = TestTools.GetParameterDoc(parameter);
+        string summaryDoc = TypePageTools.GetSummaryDoc(handleMethod);
+        string returnsDoc = TypePageTools.GetReturnsDoc(handleMethod);
+        string paramDoc = TypePageTools.GetParameterDoc(parameter);
 
         summaryDoc.ShouldBe("Handle the object.");
         paramDoc.ShouldBe("The object to handle.");
@@ -46,20 +46,20 @@ public class HierarchyDocTests
     [InlineData("ChildChildChild", "ChildChild Print", "Object to print.", "IChild Print the object. Object to print.")]
     public void Test_Print_Method(string typeName, string expectedSummaryDoc, string expectedParamDoc, string? expectedRemarksDoc = null)
     {
-        using var document = TestTools.GetDocumentationPage($"MyLibrary.Hierarchy.{typeName}.html");
+        using var document = TypePageTools.GetDocumentationPage($"MyLibrary.Hierarchy.{typeName}.html");
 
         var handleMethod = document.GetMemberElement("Print(System.Object)");
-        var parameter = TestTools.GetMemberParameters(handleMethod).First();
+        var parameter = TypePageTools.GetMemberParameters(handleMethod).First();
 
-        string summaryDoc = TestTools.GetSummaryDoc(handleMethod);
-        string paramDoc = TestTools.GetParameterDoc(parameter);
+        string summaryDoc = TypePageTools.GetSummaryDoc(handleMethod);
+        string paramDoc = TypePageTools.GetParameterDoc(parameter);
 
         summaryDoc.ShouldBe(expectedSummaryDoc);
         paramDoc.ShouldBe(expectedParamDoc);
 
         if (expectedRemarksDoc is not null)
         {
-            string remarksDoc = TestTools.GetRemarksDoc(handleMethod);
+            string remarksDoc = TypePageTools.GetRemarksDoc(handleMethod);
             remarksDoc.ShouldBe(expectedRemarksDoc);
         }
     }
@@ -67,11 +67,11 @@ public class HierarchyDocTests
     [Fact]
     public void Test_PrintDataMethod()
     {
-        using var document = TestTools.GetDocumentationPage("MyLibrary.Hierarchy.ChildChild.html");
+        using var document = TypePageTools.GetDocumentationPage("MyLibrary.Hierarchy.ChildChild.html");
 
         var handleMethod = document.GetMemberElement("PrintData");
 
-        string summaryDoc = TestTools.GetSummaryDoc(handleMethod);
+        string summaryDoc = TypePageTools.GetSummaryDoc(handleMethod);
 
         summaryDoc.ShouldBe("IChild Print the object.");
     }

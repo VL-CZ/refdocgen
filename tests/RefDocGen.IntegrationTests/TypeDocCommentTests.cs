@@ -15,9 +15,9 @@ public class TypeDocCommentTests
     [InlineData("MyLibrary.Tools.ObjectPredicate", "Predicate about an object.")]
     public void Test_Summary(string pageName, string expectedDoc)
     {
-        using var document = TestTools.GetDocumentationPage($"{pageName}.html");
+        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
 
-        string summaryDoc = TestTools.GetSummaryDoc(document.GetTypeDataSection());
+        string summaryDoc = TypePageTools.GetSummaryDoc(document.GetTypeDataSection());
 
         summaryDoc.ShouldBe(expectedDoc);
     }
@@ -25,9 +25,9 @@ public class TypeDocCommentTests
     [Fact]
     public void Test_RemarksDoc()
     {
-        using var document = TestTools.GetDocumentationPage("MyLibrary.Animal.html");
+        using var document = TypePageTools.GetDocumentationPage("MyLibrary.Animal.html");
 
-        string remarksDoc = TestTools.GetRemarksDoc(document.GetTypeDataSection());
+        string remarksDoc = TypePageTools.GetRemarksDoc(document.GetTypeDataSection());
 
         remarksDoc.ShouldBe("This class is abstract, use inheritance.");
     }
@@ -35,9 +35,9 @@ public class TypeDocCommentTests
     [Fact]
     public void Test_SeeAlsoDocs()
     {
-        using var document = TestTools.GetDocumentationPage("MyLibrary.Tools.Collections.MyStringCollection.html");
+        using var document = TypePageTools.GetDocumentationPage("MyLibrary.Tools.Collections.MyStringCollection.html");
 
-        string[] seeAlsoDocs = TestTools.GetSeeAlsoDocs(document.GetTypeDataSection());
+        string[] seeAlsoDocs = TypePageTools.GetSeeAlsoDocs(document.GetTypeDataSection());
 
         string[] expectedDocs = ["My collection class", "System.Collections.Generic.ICollection`1"]; // TODO: update to ICollection<T>
 
@@ -47,9 +47,9 @@ public class TypeDocCommentTests
     [Fact]
     public void Test_Attributes()
     {
-        using var document = TestTools.GetDocumentationPage("MyLibrary.User.html");
+        using var document = TypePageTools.GetDocumentationPage("MyLibrary.User.html");
 
-        string[] attributes = TestTools.GetAttributes(document.GetTypeDataSection());
+        string[] attributes = TypePageTools.GetAttributes(document.GetTypeDataSection());
 
         string[] expectedAttributes = [
             "[Serializable]",

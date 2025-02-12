@@ -21,9 +21,9 @@ public class MemberDocCommentTests
     [InlineData("MyLibrary.Tools.MyPredicate`1", "delegate-method", "Predicate about a generic type T.")]
     public void Test_Summary(string pageName, string memberId, string expectedDoc)
     {
-        using var document = TestTools.GetDocumentationPage($"{pageName}.html");
+        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
 
-        string summaryDoc = TestTools.GetSummaryDoc(document.GetMemberElement(memberId));
+        string summaryDoc = TypePageTools.GetSummaryDoc(document.GetMemberElement(memberId));
 
         summaryDoc.ShouldBe(expectedDoc);
     }
@@ -31,9 +31,9 @@ public class MemberDocCommentTests
     [Fact]
     public void Test_RemarksDoc()
     {
-        using var document = TestTools.GetDocumentationPage("MyLibrary.Animal.html");
+        using var document = TypePageTools.GetDocumentationPage("MyLibrary.Animal.html");
 
-        string remarksDoc = TestTools.GetRemarksDoc(document.GetMemberElement("weight"));
+        string remarksDoc = TypePageTools.GetRemarksDoc(document.GetMemberElement("weight"));
 
         remarksDoc.ShouldBe("The weight is in kilograms (kg).");
     }
@@ -41,9 +41,9 @@ public class MemberDocCommentTests
     [Fact]
     public void Test_ValueDoc()
     {
-        using var document = TestTools.GetDocumentationPage("MyLibrary.User.html");
+        using var document = TypePageTools.GetDocumentationPage("MyLibrary.User.html");
 
-        string valueDoc = TestTools.GetValueDoc(document.GetMemberElement("Age"));
+        string valueDoc = TypePageTools.GetValueDoc(document.GetMemberElement("Age"));
 
         valueDoc.ShouldBe("The age of the user.");
     }
@@ -54,10 +54,10 @@ public class MemberDocCommentTests
     [InlineData("MyLibrary.Tools.Point", "op_Equality(MyLibrary.Tools.Point,MyLibrary.Tools.Point)", "bool", "Are the 2 points equal?")]
     public void Test_ReturnsDoc(string pageName, string memberId, string expectedReturnType, string expectedDoc)
     {
-        using var document = TestTools.GetDocumentationPage($"{pageName}.html");
+        using var document = TypePageTools.GetDocumentationPage($"{pageName}.html");
 
-        string returnType = TestTools.GetReturnTypeName(document.GetMemberElement(memberId));
-        string returnsDoc = TestTools.GetReturnsDoc(document.GetMemberElement(memberId));
+        string returnType = TypePageTools.GetReturnTypeName(document.GetMemberElement(memberId));
+        string returnsDoc = TypePageTools.GetReturnsDoc(document.GetMemberElement(memberId));
 
         returnType.ShouldBe(expectedReturnType);
         returnsDoc.ShouldBe(expectedDoc);
@@ -66,9 +66,9 @@ public class MemberDocCommentTests
     [Fact]
     public void Test_SeeAlsoDocs()
     {
-        using var document = TestTools.GetDocumentationPage("MyLibrary.User.html");
+        using var document = TypePageTools.GetDocumentationPage("MyLibrary.User.html");
 
-        string[] seeAlsoDocs = TestTools.GetSeeAlsoDocs(document.GetMemberElement("username"));
+        string[] seeAlsoDocs = TypePageTools.GetSeeAlsoDocs(document.GetMemberElement("username"));
 
         string[] expectedDocs = [
             "http://www.google.com",
