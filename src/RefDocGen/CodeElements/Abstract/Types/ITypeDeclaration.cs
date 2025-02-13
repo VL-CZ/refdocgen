@@ -1,6 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
-using System.Diagnostics;
 using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Abstract.Types;
@@ -57,4 +56,6 @@ public interface ITypeDeclaration : ITypeNameBaseData
     /// Indicates whether the type is nested member of some other type.
     /// </summary>
     bool IsNested { get; }
+
+    ITypeDeclaration? DeclaringType { get; }
 }

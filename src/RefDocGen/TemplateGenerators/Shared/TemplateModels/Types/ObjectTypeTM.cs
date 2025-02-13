@@ -37,6 +37,7 @@ public record ObjectTypeTM(
     MethodTM[] Operators,
     IndexerTM[] Indexers,
     EventTM[] Events,
+    TypeLinkTM[] NestedTypes,
     TypeParameterTM[] TypeParameters,
     TypeLinkTM? BaseType,
     TypeLinkTM[] ImplementedInterfaces,

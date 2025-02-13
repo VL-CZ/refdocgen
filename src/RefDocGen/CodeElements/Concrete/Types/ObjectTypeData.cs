@@ -107,6 +107,8 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
     /// <inheritdoc/>
     internal override IReadOnlyDictionary<string, MemberData> AllMembers { get; private protected set; } = new Dictionary<string, MemberData>();
 
+    public IEnumerable<ITypeDeclaration> NestedTypes { get; private set; } = [];
+
     /// <summary>
     /// Adds the members to the type.
     /// </summary>
@@ -141,7 +143,8 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
         IReadOnlyDictionary<string, MethodData> methods,
         IReadOnlyDictionary<string, OperatorData> operators,
         IReadOnlyDictionary<string, IndexerData> indexers,
-        IReadOnlyDictionary<string, EventData> events)
+        IReadOnlyDictionary<string, EventData> events,
+        IEnumerable<TypeDeclaration> nestedTypes)
     {
         if (membersAdded)
         {
@@ -155,6 +158,7 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
         Operators = operators;
         Indexers = indexers;
         Events = events;
+        NestedTypes = nestedTypes;
 
         AllMembers = ((IEnumerable<MemberData>)Constructors.Values)
             .Concat(Fields.Values)

@@ -7,6 +7,8 @@ using RefDocGen.TemplateGenerators.Shared.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
+using RefDocGen.CodeElements.Tools;
+using System.Reflection.Metadata.Ecma335;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 
@@ -33,6 +35,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         var operators = type.Operators.Select(GetFrom).ToArray();
         var indexers = type.Indexers.Select(GetFrom).ToArray();
         var events = type.Events.Select(GetFrom).ToArray();
+        var nestedTypes = type.NestedTypes.Select(GetTypeLink).ToArray(); // TODO
 
         var baseType = type.BaseType is not null
             ? GetTypeLink(type.BaseType)
@@ -75,6 +78,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             operators,
             indexers,
             events,
+            nestedTypes,
             GetTemplateModels(type.TypeParameters),
             baseType,
             interfaces,

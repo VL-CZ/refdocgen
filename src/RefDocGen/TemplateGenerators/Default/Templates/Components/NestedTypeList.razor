@@ -1,0 +1,19 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required IEnumerable<TypeLinkTM> NestedTypes { get; set; }
+}
+
+@if (NestedTypes.Any())
+{
+    <h3 class="lead mt-3">Nested types</h3>
+    <div class="mx-2" data-id="nested-types-section">
+        @foreach (var type in NestedTypes)
+        {
+            <div data-id="attribute-data">
+                <TypeLink Type="@type" />
+            </div>
+        }
+    </div>
+}

@@ -46,6 +46,8 @@ internal class ObjectTypeDataBuilder
     /// <inheritdoc cref="ObjectTypeData.Events"/>
     private Dictionary<string, EventData> events = [];
 
+    private TypeDeclaration[] nestedTypes = [];
+
     /// <summary>
     /// Initializes a new instance of <see cref="ObjectTypeDataBuilder"/> class.
     /// </summary>
@@ -53,11 +55,6 @@ internal class ObjectTypeDataBuilder
     /// <param name="minVisibility">Minimal visibility of the members to include.</param>
     internal ObjectTypeDataBuilder(Type type, AccessModifier minVisibility)
     {
-        if (type.Name.Contains("Enumerator"))
-        {
-            int x = 0;
-        }
-
         typeParameters = MemberCreatorHelper.CreateTypeParametersDictionary(type);
         var attributeData = MemberCreatorHelper.GetAttributeData(type, typeParameters);
 
@@ -172,13 +169,30 @@ internal class ObjectTypeDataBuilder
     }
 
     /// <summary>
+    /// Adds nested types to the object being built.
+    /// </summary>
+    /// <param name="nestedTypes">An enumerable of object events.</param>
+    /// <returns>The current <see cref="ObjectTypeDataBuilder"/> instance.</returns>
+    internal ObjectTypeDataBuilder AddNestedTypes(IEnumerable<TypeDeclaration> nestedTypes)
+    {
+        this.nestedTypes = nestedTypes.ToArray();
+
+        foreach (var nestedType in nestedTypes)
+        {
+            nestedType.DeclaringType = type;
+        }
+
+        return this;
+    }
+
+    /// <summary>
     /// Builds the object type using the provided members.
     /// </summary>
     /// <returns>An <see cref="ObjectTypeData"/> instance containing the provided members.</returns>
     internal ObjectTypeData Build()
     {
         // add the members
-        type.AddMembers(constructors, fields, properties, methods, operators, indexers, events);
+        type.AddMembers(constructors, fields, properties, methods, operators, indexers, events, nestedTypes);
         return type;
     }
 

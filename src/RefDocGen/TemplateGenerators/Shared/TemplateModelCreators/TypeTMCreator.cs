@@ -120,6 +120,16 @@ internal abstract class TypeTMCreator
             );
     }
 
+    /// <inheritdoc cref="GetTypeLink(ITypeNameData)"/>
+    protected TypeLinkTM GetTypeLink(ITypeDeclaration type)
+    {
+        string? url = typeUrlResolver.GetUrlOf(type.Id);
+
+        return new TypeLinkTM(
+            CSharpTypeName.Of(type),
+            url);
+    }
+
     /// <summary>
     /// Creates a <see cref="ParameterTM"/> instance based on the provided <see cref="IParameterData"/> object.
     /// </summary>
