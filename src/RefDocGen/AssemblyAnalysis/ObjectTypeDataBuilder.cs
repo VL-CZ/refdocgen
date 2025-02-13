@@ -53,6 +53,11 @@ internal class ObjectTypeDataBuilder
     /// <param name="minVisibility">Minimal visibility of the members to include.</param>
     internal ObjectTypeDataBuilder(Type type, AccessModifier minVisibility)
     {
+        if (type.Name.Contains("Enumerator"))
+        {
+            int x = 0;
+        }
+
         typeParameters = MemberCreatorHelper.CreateTypeParametersDictionary(type);
         var attributeData = MemberCreatorHelper.GetAttributeData(type, typeParameters);
 

@@ -17,14 +17,22 @@ internal class TypeId
     /// <returns>The ID of the given <paramref name="type"/></returns>
     internal static string Of(ITypeDeclaration type)
     {
-        string name = type.FullName;
+        string id = type.FullName;
+
+        if (type.TypeObject.IsNested)
+        {
+            id = type.TypeObject.DeclaringType.GetTypeNameData().TypeDeclarationId + "." + type.ShortName;
+        }
 
         if (type.HasTypeParameters)
         {
-            name = name + '`' + type.TypeParameters.Count;
+            if (!type.TypeObject.IsNested)
+            {
+                id = id + '`' + type.TypeParameters.Count;
+            }
         }
 
-        return name;
+        return id;
     }
 
     /// <inheritdoc cref="Of(ITypeDeclaration)"/>

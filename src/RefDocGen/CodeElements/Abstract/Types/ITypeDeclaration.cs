@@ -1,5 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
+using System.Diagnostics;
 using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Abstract.Types;
@@ -51,4 +52,9 @@ public interface ITypeDeclaration : ITypeNameBaseData
     /// Note that the compiler generated attributes are not included.
     /// </remarks>
     IReadOnlyList<IAttributeData> Attributes { get; }
+
+    /// <summary>
+    /// Indicates whether the type is nested member of some other type.
+    /// </summary>
+    bool IsNested { get; }
 }
