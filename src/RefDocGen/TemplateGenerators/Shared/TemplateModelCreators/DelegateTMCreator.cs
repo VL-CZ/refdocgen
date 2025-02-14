@@ -25,7 +25,7 @@ internal class DelegateTMCreator : TypeTMCreator
 
         return new DelegateTypeTM(
             delegateType.Id,
-            delegateType.ShortName,
+            GetTypeName(delegateType),
             delegateType.Namespace,
             modifiers.GetStrings(),
             GetTypeLink(delegateType.ReturnType),

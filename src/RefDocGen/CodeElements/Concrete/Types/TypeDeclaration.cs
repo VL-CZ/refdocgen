@@ -93,6 +93,7 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     /// <inheritdoc/>
     IEnumerable<IMemberData> ITypeDeclaration.AllMembers => AllMembers.Values;
 
+    /// <inheritdoc/>
     public IEnumerable<ITypeDeclaration> NestedTypes { get; private protected set; } = [];
 
     /// <summary>
@@ -107,7 +108,9 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     /// <inheritdoc/>
     public IReadOnlyList<IAttributeData> Attributes { get; }
 
+    /// <inheritdoc/>
     public bool IsNested => DeclaringType is not null;
 
+    /// <inheritdoc/>
     public ITypeDeclaration? DeclaringType { get; internal set; }
 }

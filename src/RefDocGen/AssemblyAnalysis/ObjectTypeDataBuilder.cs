@@ -178,14 +178,14 @@ internal class ObjectTypeDataBuilder
     /// </summary>
     /// <param name="nestedTypes">An enumerable of object events.</param>
     /// <returns>The current <see cref="ObjectTypeDataBuilder"/> instance.</returns>
-    internal ObjectTypeDataBuilder AddNestedTypes(IEnumerable<ObjectTypeData> nestedTypes)
+    internal ObjectTypeDataBuilder AddNestedObjectTypes(IEnumerable<ObjectTypeData> nestedTypes)
     {
-        this.nestedObjectTypes = nestedTypes.ToArray();
-
         foreach (var nestedType in nestedTypes)
         {
             nestedType.DeclaringType = type;
         }
+
+        nestedObjectTypes = nestedTypes.ToArray();
 
         return this;
     }
@@ -197,12 +197,13 @@ internal class ObjectTypeDataBuilder
     /// <returns>The current <see cref="ObjectTypeDataBuilder"/> instance.</returns>
     internal ObjectTypeDataBuilder AddNestedDelegates(IEnumerable<DelegateTypeData> nestedTypes)
     {
-        this.nestedDelegates = nestedTypes.ToArray();
 
         foreach (var nestedType in nestedTypes)
         {
             nestedType.DeclaringType = type;
         }
+
+        this.nestedDelegates = nestedTypes.ToArray();
 
         return this;
     }
@@ -214,12 +215,12 @@ internal class ObjectTypeDataBuilder
     /// <returns>The current <see cref="ObjectTypeDataBuilder"/> instance.</returns>
     internal ObjectTypeDataBuilder AddNestedEnums(IEnumerable<EnumTypeData> nestedTypes)
     {
-        this.nestedEnums = nestedTypes.ToArray();
-
         foreach (var nestedType in nestedTypes)
         {
             nestedType.DeclaringType = type;
         }
+
+        this.nestedEnums = nestedTypes.ToArray();
 
         return this;
     }

@@ -2,17 +2,21 @@
 
 @code {
     [Parameter]
-    public required IEnumerable<TypeLinkTM> NestedTypes { get; set; }
+    public required IEnumerable<NestedTypeLinkTM> NestedTypes { get; set; }
 }
 
 @if (NestedTypes.Any())
 {
     <h3 class="lead mt-3">Nested types</h3>
     <div class="mx-2" data-id="nested-types-section">
-        @foreach (var type in NestedTypes)
+        @foreach (var nestedType in NestedTypes)
         {
-            <div data-id="attribute-data">
-                <TypeLink Type="@type" />
+            <div data-id="nested-type-data">
+                <samp>
+                    <span class="text-primary">@nestedType.TypeKindName</span>
+                    <span> </span>
+                    <TypeLink Type="@nestedType.TypeLink" />
+                </samp>
             </div>
         }
     </div>

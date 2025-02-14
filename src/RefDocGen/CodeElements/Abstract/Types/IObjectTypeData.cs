@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Abstract.Types.Delegate;
 using RefDocGen.CodeElements.Abstract.Types.Enum;
 
 namespace RefDocGen.CodeElements.Abstract.Types;
@@ -69,4 +70,10 @@ public interface IObjectTypeData : ITypeDeclaration
     /// Collection of indexers contained in the type.
     /// </summary>
     IEnumerable<IEventData> Events { get; }
+
+    IEnumerable<IObjectTypeData> NestedObjectTypes { get; }
+
+    IEnumerable<IDelegateTypeData> NestedDelegates { get; }
+
+    IEnumerable<IEnumTypeData> NestedEnums { get; }
 }
