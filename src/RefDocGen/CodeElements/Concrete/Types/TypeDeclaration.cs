@@ -1,3 +1,4 @@
+using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
@@ -88,6 +89,11 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     /// Dictionary of all members declared in the type; keys are the corresponding member IDs.
     /// </summary>
     internal abstract IReadOnlyDictionary<string, MemberData> AllMembers { get; private protected set; }
+
+    /// <inheritdoc/>
+    IEnumerable<IMemberData> ITypeDeclaration.AllMembers => AllMembers.Values;
+
+    public IEnumerable<ITypeDeclaration> NestedTypes { get; private protected set; } = [];
 
     /// <summary>
     /// Raw doc comment provided to the type.

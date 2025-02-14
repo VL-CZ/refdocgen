@@ -3,6 +3,8 @@ using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Concrete.Types.Delegate;
+using RefDocGen.CodeElements.Concrete.Types.Enum;
 using System.Reflection;
 
 namespace RefDocGen.AssemblyAnalysis;
@@ -46,7 +48,10 @@ internal class ObjectTypeDataBuilder
     /// <inheritdoc cref="ObjectTypeData.Events"/>
     private Dictionary<string, EventData> events = [];
 
-    private TypeDeclaration[] nestedTypes = [];
+    private ObjectTypeData[] nestedObjectTypes = [];
+    private DelegateTypeData[] nestedDelegates = [];
+    private EnumTypeData[] nestedEnums = [];
+
 
     /// <summary>
     /// Initializes a new instance of <see cref="ObjectTypeDataBuilder"/> class.
@@ -173,9 +178,43 @@ internal class ObjectTypeDataBuilder
     /// </summary>
     /// <param name="nestedTypes">An enumerable of object events.</param>
     /// <returns>The current <see cref="ObjectTypeDataBuilder"/> instance.</returns>
-    internal ObjectTypeDataBuilder AddNestedTypes(IEnumerable<TypeDeclaration> nestedTypes)
+    internal ObjectTypeDataBuilder AddNestedTypes(IEnumerable<ObjectTypeData> nestedTypes)
     {
-        this.nestedTypes = nestedTypes.ToArray();
+        this.nestedObjectTypes = nestedTypes.ToArray();
+
+        foreach (var nestedType in nestedTypes)
+        {
+            nestedType.DeclaringType = type;
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// Adds nested delegates to the object being built.
+    /// </summary>
+    /// <param name="nestedTypes">An enumerable containing the delegates nested in the type.</param>
+    /// <returns>The current <see cref="ObjectTypeDataBuilder"/> instance.</returns>
+    internal ObjectTypeDataBuilder AddNestedDelegates(IEnumerable<DelegateTypeData> nestedTypes)
+    {
+        this.nestedDelegates = nestedTypes.ToArray();
+
+        foreach (var nestedType in nestedTypes)
+        {
+            nestedType.DeclaringType = type;
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// Adds nested delegates to the object being built.
+    /// </summary>
+    /// <param name="nestedTypes">An enumerable containing the delegates nested in the type.</param>
+    /// <returns>The current <see cref="ObjectTypeDataBuilder"/> instance.</returns>
+    internal ObjectTypeDataBuilder AddNestedEnums(IEnumerable<EnumTypeData> nestedTypes)
+    {
+        this.nestedEnums = nestedTypes.ToArray();
 
         foreach (var nestedType in nestedTypes)
         {
@@ -192,7 +231,7 @@ internal class ObjectTypeDataBuilder
     internal ObjectTypeData Build()
     {
         // add the members
-        type.AddMembers(constructors, fields, properties, methods, operators, indexers, events, nestedTypes);
+        type.AddMembers(constructors, fields, properties, methods, operators, indexers, events, nestedObjectTypes, nestedDelegates, nestedEnums);
         return type;
     }
 

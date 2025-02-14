@@ -127,10 +127,20 @@ internal class AssemblyTypeExtractor
             .GetEvents(bindingFlags)
             .Where(e => !e.IsCompilerGenerated());
 
-        var nestedTypes = type
+        var nestedObjectTypes = type
             .GetNestedTypes(bindingFlags)
-            .Where(f => !f.IsCompilerGenerated())
+            .Where(f => !f.IsCompilerGenerated() && !f.IsEnum && !f.IsDelegate())
             .Select(ConstructObjectType);
+
+        var nestedDelegaets = type
+            .GetNestedTypes(bindingFlags)
+            .Where(f => !f.IsCompilerGenerated() && f.IsDelegate())
+            .Select(ConstructDelegate);
+
+        var nestedEnums = type
+            .GetNestedTypes(bindingFlags)
+            .Where(f => !f.IsCompilerGenerated() && f.IsEnum)
+            .Select(ConstructEnum);
 
         // build the object type
         var objectType = new ObjectTypeDataBuilder(type, minVisibility)
@@ -141,7 +151,9 @@ internal class AssemblyTypeExtractor
             .AddMethods(methods)
             .AddOperators(operators)
             .AddEvents(events)
-            .AddNestedTypes(nestedTypes)
+            .AddNestedTypes(nestedObjectTypes)
+            .AddNestedDelegates(nestedDelegaets)
+            .AddNestedEnums(nestedEnums)
             .Build();
 
         return objectType;
