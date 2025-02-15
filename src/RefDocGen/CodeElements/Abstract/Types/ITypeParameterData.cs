@@ -59,4 +59,6 @@ public interface ITypeParameterData
     /// Returns kind of the code element (type / member) where the type parameter is declared.
     /// </summary>
     CodeElementKind DeclaredAt { get; }
+
+    bool IsInherited { get; }
 }

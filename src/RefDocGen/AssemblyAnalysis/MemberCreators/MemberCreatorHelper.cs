@@ -2,6 +2,7 @@ using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Concrete.Types.Attribute;
+using RefDocGen.Tools;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -48,7 +49,22 @@ internal static class MemberCreatorHelper
     /// </returns>
     internal static Dictionary<string, TypeParameterData> CreateTypeParametersDictionary(Type type)
     {
-        return GetTypeParametersDictionary(type.GetGenericArguments(), CodeElementKind.Type);
+        var allGeneric = type.GetGenericArguments();
+
+        var inherited = Array.Empty<Type>();
+
+        if (type.DeclaringType is not null)
+        {
+            var parentArgs = type.DeclaringType.GetGenericArguments().Select(x => x.Name);
+            inherited = allGeneric.Where(g => parentArgs.Contains(g.Name)).ToArray();
+        }
+
+        var nonInherited = allGeneric.Except(inherited).ToArray();
+
+        var dict = GetTypeParametersDictionary(nonInherited, CodeElementKind.Type);
+        var inheritedDict = GetTypeParametersDictionary(inherited, CodeElementKind.Type, true);
+
+        return dict.Merge(inheritedDict);
     }
 
     /// <summary>
@@ -108,10 +124,10 @@ internal static class MemberCreatorHelper
     /// <returns>
     /// A dictionary of type parameters, indexed by their names.
     /// </returns>
-    private static Dictionary<string, TypeParameterData> GetTypeParametersDictionary(Type[] typeParameters, CodeElementKind codeElementKind)
+    private static Dictionary<string, TypeParameterData> GetTypeParametersDictionary(Type[] typeParameters, CodeElementKind codeElementKind, bool areInherited = false)
     {
         return typeParameters
-            .Select((ga, i) => new TypeParameterData(ga, i, codeElementKind))
+            .Select((ga, i) => new TypeParameterData(ga, i, codeElementKind, areInherited))
             .ToDictionary(t => t.Name);
     }
 

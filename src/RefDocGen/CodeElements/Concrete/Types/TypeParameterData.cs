@@ -18,11 +18,12 @@ internal class TypeParameterData : ITypeParameterData
     /// <param name="type"><see cref="Type"/> object representing the type parameter.</param>
     /// <param name="index">Index of the parameter in the declaring type's parameter collection.</param>
     /// <param name="declaredAt">Kind of the code elements, where the type parameter is declared.</param>
-    public TypeParameterData(Type type, int index, CodeElementKind declaredAt)
+    public TypeParameterData(Type type, int index, CodeElementKind declaredAt, bool isInherited)
     {
         TypeObject = type;
         Index = index;
         DeclaredAt = declaredAt;
+        IsInherited = isInherited;
 
         DocComment = XmlDocElements.EmptyTypeParamWithName(Name);
 
@@ -80,4 +81,7 @@ internal class TypeParameterData : ITypeParameterData
 
     /// <inheritdoc/>
     public CodeElementKind DeclaredAt { get; }
+
+    /// <inheritdoc/>
+    public bool IsInherited { get; }
 }
