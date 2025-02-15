@@ -19,17 +19,14 @@ internal class TypeId
     {
         string id = type.FullName;
 
-        if (type.TypeObject.IsNested)
+        if (type.DeclaringType is not null)
         {
-            id = type.TypeObject.DeclaringType.GetTypeNameData().TypeDeclarationId + "." + type.ShortName;
+            id = $"{type.DeclaringType.Id}.{type.ShortName}";
         }
 
         if (type.HasTypeParameters)
         {
-            if (!type.TypeObject.IsNested)
-            {
-                id = id + '`' + type.TypeParameters.Count;
-            }
+            id = $"{id}`{type.TypeParameters.Count}";
         }
 
         return id;

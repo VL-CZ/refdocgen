@@ -19,7 +19,7 @@ internal class ObjectTypeDataBuilder
     /// </summary>
     private readonly ObjectTypeData type;
 
-    /// <inheritdoc cref="TypeDeclaration.AllTypeParameters"/>
+    /// <inheritdoc cref="TypeDeclaration.TypeParameters"/>
     private readonly Dictionary<string, TypeParameterData> allTypeParameters;
 
     /// <summary>
@@ -66,8 +66,9 @@ internal class ObjectTypeDataBuilder
         var attributeData = MemberCreatorHelper.GetAttributeData(type, allTypeParameters);
 
         // construct the object type
+        var typeParameters = MemberCreatorHelper.CreateTypeParametersDictionary(type, false);
 
-        this.type = new ObjectTypeData(type, allTypeParameters, attributeData);
+        this.type = new ObjectTypeData(type, typeParameters, attributeData);
     }
 
     /// <summary>

@@ -45,26 +45,30 @@ internal static class MemberCreatorHelper
     /// </summary>
     /// <param name="type">The type containing the type parameters.</param>
     /// <returns>
-    /// <inheritdoc cref="TypeDeclaration.AllTypeParameters" path="/summary"/>
+    /// <inheritdoc cref="TypeDeclaration.TypeParameters" path="/summary"/>
     /// </returns>
-    internal static Dictionary<string, TypeParameterData> CreateTypeParametersDictionary(Type type)
+    internal static Dictionary<string, TypeParameterData> CreateTypeParametersDictionary(Type type, bool includeInherited = true)
     {
-        var allGeneric = type.GetGenericArguments();
-
-        var inherited = Array.Empty<Type>();
-
-        if (type.DeclaringType is not null)
+        if (includeInherited)
         {
-            var parentArgs = type.DeclaringType.GetGenericArguments().Select(x => x.Name);
-            inherited = allGeneric.Where(g => parentArgs.Contains(g.Name)).ToArray();
+            return GetTypeParametersDictionary(type.GetGenericArguments(), CodeElementKind.Type);
         }
+        else
+        {
+            var allGeneric = type.GetGenericArguments();
 
-        var nonInherited = allGeneric.Except(inherited).ToArray();
+            var inherited = Array.Empty<Type>();
 
-        var inheritedDict = GetTypeParametersDictionary(inherited, CodeElementKind.Type, true);
-        var dict = GetTypeParametersDictionary(nonInherited, CodeElementKind.Type, false, inheritedDict.Count);
+            if (type.DeclaringType is not null)
+            {
+                var parentArgs = type.DeclaringType.GetGenericArguments().Select(x => x.Name);
+                inherited = allGeneric.Where(g => parentArgs.Contains(g.Name)).ToArray();
+            }
 
-        return inheritedDict.Merge(dict);
+            var nonInherited = allGeneric.Except(inherited).ToArray();
+
+            return GetTypeParametersDictionary(nonInherited, CodeElementKind.Type);
+        }
     }
 
     /// <summary>
@@ -124,11 +128,10 @@ internal static class MemberCreatorHelper
     /// <returns>
     /// A dictionary of type parameters, indexed by their names.
     /// </returns>
-    private static Dictionary<string, TypeParameterData> GetTypeParametersDictionary(Type[] typeParameters,
-        CodeElementKind codeElementKind, bool areInherited = false, int startIndex = 0)
+    private static Dictionary<string, TypeParameterData> GetTypeParametersDictionary(Type[] typeParameters, CodeElementKind codeElementKind)
     {
         return typeParameters
-            .Select((ga, i) => new TypeParameterData(ga, i + startIndex, codeElementKind, areInherited))
+            .Select((ga, i) => new TypeParameterData(ga, i, codeElementKind))
             .ToDictionary(t => t.Name);
     }
 
