@@ -38,6 +38,10 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             ? GetTypeLink(type.BaseType)
             : null;
 
+        var declaringType = type.DeclaringType is not null
+            ? GetTypeLink(type.DeclaringType)
+            : null;
+
         var interfaces = type.Interfaces.Select(GetTypeLink).ToArray();
 
         List<Keyword> modifiers = [type.AccessModifier.ToKeyword()];
@@ -80,6 +84,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             baseType,
             interfaces,
             GetTemplateModels(type.Attributes),
+            declaringType,
             ToHtmlString(type.SummaryDocComment),
             ToHtmlString(type.RemarksDocComment),
             GetHtmlStrings(type.SeeAlsoDocComments)

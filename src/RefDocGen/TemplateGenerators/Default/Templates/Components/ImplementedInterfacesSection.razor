@@ -1,0 +1,25 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required TypeLinkTM[] ImplementedInterfaces { get; set; }
+}
+
+<!-- Implemented interfaces -->
+@if (ImplementedInterfaces.Any())
+{
+    <div data-id="implemented-interfaces">
+        <i>Implements:&nbsp;</i>
+        <samp>
+            @foreach (var iface in ImplementedInterfaces)
+            {
+                <TypeLink Type="@iface" />
+
+                @if (iface != ImplementedInterfaces.Last())
+                {
+                    <span>, </span>
+                }
+            }
+        </samp>
+    </div>
+}

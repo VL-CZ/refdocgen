@@ -42,6 +42,7 @@ public record ObjectTypeTM(
     TypeLinkTM? BaseType,
     TypeLinkTM[] ImplementedInterfaces,
     AttributeTM[] Attributes,
+    TypeLinkTM? DeclaringType,
     string? SummaryDocComment,
     string? RemarksDocComment,
     string[] SeeAlsoDocComments) : ITemplateModelWithId;

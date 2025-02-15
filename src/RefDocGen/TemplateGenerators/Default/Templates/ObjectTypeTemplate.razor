@@ -5,12 +5,12 @@
     public required ObjectTypeTM Model { get; set; }
 
     /// <summary>
-    /// Checks if the model has any (summary, remarks,...) doc comments.
+    /// Checks if the model has any additional (remarks, type parameters, etc.) doc comments other than 'summary'.
     /// </summary>
     /// <returns>Boolean indicating whether the model is documented.</returns>
-    private bool IsModelDocumented()
+    private bool HasAdditionalDocs()
     {
-        return Model.SummaryDocComment is not null || Model.RemarksDocComment is not null || Model.SeeAlsoDocComments.Any() || Model.TypeParameters.Any();
+        return Model.RemarksDocComment is not null || Model.SeeAlsoDocComments.Any() || Model.TypeParameters.Any() || Model.Attributes.Any();
     }
 }
 
@@ -56,40 +56,21 @@
 
             <NamespaceLink Namespace="@Model.Namespace" />
 
-            <!-- Base type name -->
-            @if (Model.BaseType is not null)
-            {
-                <div data-id="base-type">
-                    <i>Base type:&nbsp;</i>
-                    <samp class="text-secondary">
-                        <TypeLink Type="@Model.BaseType" />
-                    </samp>
-                </div>
-            }
+            <BaseTypeSection BaseType="@Model.BaseType" />
 
-            <!-- Implemented interfaces -->
-            @if (Model.ImplementedInterfaces.Any())
-            {
-                <div data-id="implemented-interfaces">
-                    <i>Implements:&nbsp;</i>
-                    <samp>
-                        @foreach (var iface in Model.ImplementedInterfaces)
-                        {
-                            <TypeLink Type="@iface" />
+            <ImplementedInterfacesSection ImplementedInterfaces="@Model.ImplementedInterfaces" />
 
-                            @if (iface != Model.ImplementedInterfaces.Last())
-                            {
-                                <span>, </span>
-                            }
-                        }
-                    </samp>
-                </div>
-            }
+            <DeclaringTypeSection DeclaringType="@Model.DeclaringType" />
 
             <hr />
 
             <!-- Doc comments -->
             <SummaryDoc DocComment="@Model.SummaryDocComment" />
+
+            @if (!String.IsNullOrEmpty(Model.SummaryDocComment))
+            {
+                <hr />
+            }
 
             <!-- Type parameter doc comments -->
             <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
@@ -103,7 +84,7 @@
 
             <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
 
-            @if (IsModelDocumented())
+            @if (HasAdditionalDocs())
             {
                 <hr />
             }
