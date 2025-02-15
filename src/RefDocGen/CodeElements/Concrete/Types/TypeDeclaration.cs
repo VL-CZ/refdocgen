@@ -22,7 +22,10 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     protected TypeDeclaration(Type type, IReadOnlyDictionary<string, TypeParameterData> typeParameters, IReadOnlyList<IAttributeData> attributes)
         : base(type)
     {
-        TypeParameters = typeParameters;
+        AllTypeParameters = typeParameters;
+
+        TypeParameters =
+
         Attributes = attributes;
 
         BaseType = type.BaseType?.GetTypeNameData(typeParameters);
@@ -77,11 +80,17 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     /// <summary>
     /// Collection of type parameters declared in this type; the keys represent type parameter names.
     /// </summary>
+    public IReadOnlyDictionary<string, TypeParameterData> AllTypeParameters { get; }
+
+    /// <summary>
+    /// Collection of type parameters declared in this type; the keys represent type parameter names.
+    /// </summary>
     public IReadOnlyDictionary<string, TypeParameterData> TypeParameters { get; }
 
     /// <inheritdoc/>
     IReadOnlyList<ITypeParameterData> ITypeDeclaration.TypeParameters =>
         TypeParameters.Values
+        .Where(t => !t.IsInherited)
         .OrderBy(t => t.Index)
         .ToList();
 

@@ -45,7 +45,7 @@ internal static class MemberCreatorHelper
     /// </summary>
     /// <param name="type">The type containing the type parameters.</param>
     /// <returns>
-    /// <inheritdoc cref="TypeDeclaration.TypeParameters" path="/summary"/>
+    /// <inheritdoc cref="TypeDeclaration.AllTypeParameters" path="/summary"/>
     /// </returns>
     internal static Dictionary<string, TypeParameterData> CreateTypeParametersDictionary(Type type)
     {
@@ -61,10 +61,10 @@ internal static class MemberCreatorHelper
 
         var nonInherited = allGeneric.Except(inherited).ToArray();
 
-        var dict = GetTypeParametersDictionary(nonInherited, CodeElementKind.Type);
         var inheritedDict = GetTypeParametersDictionary(inherited, CodeElementKind.Type, true);
+        var dict = GetTypeParametersDictionary(nonInherited, CodeElementKind.Type, false, inheritedDict.Count);
 
-        return dict.Merge(inheritedDict);
+        return inheritedDict.Merge(dict);
     }
 
     /// <summary>
@@ -124,10 +124,11 @@ internal static class MemberCreatorHelper
     /// <returns>
     /// A dictionary of type parameters, indexed by their names.
     /// </returns>
-    private static Dictionary<string, TypeParameterData> GetTypeParametersDictionary(Type[] typeParameters, CodeElementKind codeElementKind, bool areInherited = false)
+    private static Dictionary<string, TypeParameterData> GetTypeParametersDictionary(Type[] typeParameters,
+        CodeElementKind codeElementKind, bool areInherited = false, int startIndex = 0)
     {
         return typeParameters
-            .Select((ga, i) => new TypeParameterData(ga, i, codeElementKind, areInherited))
+            .Select((ga, i) => new TypeParameterData(ga, i + startIndex, codeElementKind, areInherited))
             .ToDictionary(t => t.Name);
     }
 

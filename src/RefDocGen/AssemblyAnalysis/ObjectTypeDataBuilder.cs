@@ -19,8 +19,8 @@ internal class ObjectTypeDataBuilder
     /// </summary>
     private readonly ObjectTypeData type;
 
-    /// <inheritdoc cref="TypeDeclaration.TypeParameters"/>
-    private readonly Dictionary<string, TypeParameterData> typeParameters;
+    /// <inheritdoc cref="TypeDeclaration.AllTypeParameters"/>
+    private readonly Dictionary<string, TypeParameterData> allTypeParameters;
 
     /// <summary>
     /// Minimal visibility of the members to include.
@@ -60,12 +60,14 @@ internal class ObjectTypeDataBuilder
     /// <param name="minVisibility">Minimal visibility of the members to include.</param>
     internal ObjectTypeDataBuilder(Type type, AccessModifier minVisibility)
     {
-        typeParameters = MemberCreatorHelper.CreateTypeParametersDictionary(type);
-        var attributeData = MemberCreatorHelper.GetAttributeData(type, typeParameters);
+        this.minVisibility = minVisibility;
+
+        allTypeParameters = MemberCreatorHelper.CreateTypeParametersDictionary(type);
+        var attributeData = MemberCreatorHelper.GetAttributeData(type, allTypeParameters);
 
         // construct the object type
-        this.type = new ObjectTypeData(type, typeParameters, attributeData);
-        this.minVisibility = minVisibility;
+
+        this.type = new ObjectTypeData(type, allTypeParameters, attributeData);
     }
 
     /// <summary>
@@ -76,7 +78,7 @@ internal class ObjectTypeDataBuilder
     internal ObjectTypeDataBuilder AddConstructors(IEnumerable<ConstructorInfo> constructors)
     {
         this.constructors = constructors
-            .Select(c => ConstructorDataCreator.CreateFrom(c, type, typeParameters))
+            .Select(c => ConstructorDataCreator.CreateFrom(c, type, allTypeParameters))
             .Where(IsVisible)
             .ToIdDictionary();
 
@@ -91,7 +93,7 @@ internal class ObjectTypeDataBuilder
     internal ObjectTypeDataBuilder AddFields(IEnumerable<FieldInfo> fields)
     {
         this.fields = fields
-            .Select(f => FieldDataCreator.CreateFrom(f, type, typeParameters))
+            .Select(f => FieldDataCreator.CreateFrom(f, type, allTypeParameters))
             .Where(IsVisible)
             .ToIdDictionary();
 
@@ -106,7 +108,7 @@ internal class ObjectTypeDataBuilder
     internal ObjectTypeDataBuilder AddProperties(IEnumerable<PropertyInfo> properties)
     {
         this.properties = properties
-            .Select(p => PropertyDataCreator.CreateFrom(p, type, typeParameters))
+            .Select(p => PropertyDataCreator.CreateFrom(p, type, allTypeParameters))
             .Where(IsVisible)
             .ToIdDictionary();
 
@@ -121,7 +123,7 @@ internal class ObjectTypeDataBuilder
     internal ObjectTypeDataBuilder AddIndexers(IEnumerable<PropertyInfo> indexers)
     {
         this.indexers = indexers
-            .Select(i => IndexerDataCreator.CreateFrom(i, type, typeParameters))
+            .Select(i => IndexerDataCreator.CreateFrom(i, type, allTypeParameters))
             .Where(IsVisible)
             .ToIdDictionary();
 
@@ -136,7 +138,7 @@ internal class ObjectTypeDataBuilder
     internal ObjectTypeDataBuilder AddMethods(IEnumerable<MethodInfo> methods)
     {
         this.methods = methods
-            .Select(m => MethodDataCreator.CreateFrom(m, type, typeParameters))
+            .Select(m => MethodDataCreator.CreateFrom(m, type, allTypeParameters))
             .Where(IsVisible)
             .ToIdDictionary();
 
@@ -151,7 +153,7 @@ internal class ObjectTypeDataBuilder
     internal ObjectTypeDataBuilder AddOperators(IEnumerable<MethodInfo> operators)
     {
         this.operators = operators
-            .Select(o => OperatorDataCreator.CreateFrom(o, type, typeParameters))
+            .Select(o => OperatorDataCreator.CreateFrom(o, type, allTypeParameters))
             .Where(IsVisible)
             .ToIdDictionary();
 
@@ -166,7 +168,7 @@ internal class ObjectTypeDataBuilder
     internal ObjectTypeDataBuilder AddEvents(IEnumerable<EventInfo> events)
     {
         this.events = events
-            .Select(e => EventDataCreator.CreateFrom(e, type, typeParameters))
+            .Select(e => EventDataCreator.CreateFrom(e, type, allTypeParameters))
             .Where(IsVisible)
             .ToIdDictionary();
 

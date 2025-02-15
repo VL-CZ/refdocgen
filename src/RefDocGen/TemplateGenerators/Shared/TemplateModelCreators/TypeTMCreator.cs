@@ -77,7 +77,6 @@ internal abstract class TypeTMCreator
     protected TypeParameterTM[] GetTemplateModels(IEnumerable<ITypeParameterData> typeParameters)
     {
         return typeParameters
-                .Where(tp => !tp.IsInherited)
                 .Select(GetFrom)
                 .ToArray();
     }
