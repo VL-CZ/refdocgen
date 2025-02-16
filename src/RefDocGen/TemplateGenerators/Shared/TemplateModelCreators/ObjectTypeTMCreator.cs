@@ -407,6 +407,6 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         nestedTypes.AddRange(type.NestedObjectTypes.Select(d => new NestedTypeLinkTM("class", GetTypeLink(d))));
         nestedTypes.AddRange(type.NestedEnums.Select(d => new NestedTypeLinkTM("enum", GetTypeLink(d))));
 
-        return nestedTypes.ToArray();
+        return [.. nestedTypes];
     }
 }
