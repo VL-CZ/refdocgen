@@ -111,6 +111,7 @@ internal class AssemblyTypeExtractor
     /// <returns><see cref="ObjectTypeData"/> object representing the type.</returns>
     private ObjectTypeData ConstructObjectType(Type type)
     {
+        // get members
         var constructors = type
             .GetConstructors(bindingFlags)
             .Where(c => !c.IsCompilerGenerated());
@@ -141,22 +142,24 @@ internal class AssemblyTypeExtractor
             .GetEvents(bindingFlags)
             .Where(e => !e.IsCompilerGenerated());
 
-        var nestedObjectTypes = type
+        // get nested types
+        var allNestedTypes = type
             .GetNestedTypes(bindingFlags)
-            .Where(f => !f.IsCompilerGenerated() && !f.IsEnum && !f.IsDelegate())
-            .Select(ConstructObjectType)
-            .ToArray();
+            .Where(f => !f.IsCompilerGenerated());
 
-        var nestedDelegates = type
-            .GetNestedTypes(bindingFlags)
-            .Where(f => !f.IsCompilerGenerated() && f.IsDelegate())
+        var nestedDelegates = allNestedTypes
+            .Where(t => t.IsDelegate())
             .Select(ConstructDelegate)
             .ToArray();
 
-        var nestedEnums = type
-            .GetNestedTypes(bindingFlags)
-            .Where(f => !f.IsCompilerGenerated() && f.IsEnum)
+        var nestedEnums = allNestedTypes
+            .Where(t => t.IsEnum)
             .Select(ConstructEnum)
+            .ToArray();
+
+        var nestedObjectTypes = allNestedTypes
+            .Where(t => !t.IsEnum && !t.IsDelegate())
+            .Select(ConstructObjectType)
             .ToArray();
 
         // build the object type
