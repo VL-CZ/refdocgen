@@ -85,22 +85,17 @@ internal static class CSharpTypeName
         return typeName;
     }
 
-    /// <summary>
-    /// Get the name of the given type in C# format.
-    /// </summary>
-    /// <param name="type">The type, whose name is retrieved.</param>
-    /// <param name="includeGenericParams">Indicates whether the generic parameters should be included in the type name.</param>
-    /// <returns>Name of the type formatted according to C# conventions.</returns>
-    internal static string Of(ITypeDeclaration type, bool includeGenericParams = true)
+    /// <inheritdoc cref="Of(ITypeNameData, bool)"/>
+    internal static string Of(ITypeDeclaration type)
     {
         string typeName = type.ShortName;
 
-        if (type.DeclaringType is not null)
+        if (type.DeclaringType is not null) // for nested types, add containing type name
         {
             typeName = $"{Of(type.DeclaringType)}.{typeName}";
         }
 
-        if (includeGenericParams && type.HasTypeParameters)
+        if (type.HasTypeParameters)
         {
             string genericParamsString = string.Join(", ", type.TypeParameters.Select(tp => tp.Name));
             typeName += '<' + genericParamsString + '>'; // add generic params to the type name

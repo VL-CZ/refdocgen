@@ -71,9 +71,18 @@ public interface IObjectTypeData : ITypeDeclaration
     /// </summary>
     IEnumerable<IEventData> Events { get; }
 
+    /// <summary>
+    /// Collection of nested object types contained in the type.
+    /// </summary>
     IEnumerable<IObjectTypeData> NestedObjectTypes { get; }
 
+    /// <summary>
+    /// Collection of nested delegate types contained in the type.
+    /// </summary>
     IEnumerable<IDelegateTypeData> NestedDelegates { get; }
 
+    /// <summary>
+    /// Collection of nested enum types contained in the type.
+    /// </summary>
     IEnumerable<IEnumTypeData> NestedEnums { get; }
 }

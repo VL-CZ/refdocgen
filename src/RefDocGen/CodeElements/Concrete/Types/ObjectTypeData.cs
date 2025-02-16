@@ -143,6 +143,15 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
     /// <param name="events">
     /// <inheritdoc cref="Events"/>
     /// </param>
+    /// <param name="nestedObjectTypes">
+    /// <inheritdoc cref="NestedObjectTypes"/>
+    /// </param>
+    /// <param name="nestedDelegates">
+    /// <inheritdoc cref="NestedDelegates"/>
+    /// </param>
+    /// <param name="nestedEnums">
+    /// <inheritdoc cref="NestedEnums"/>
+    /// </param>
     /// <exception cref="InvalidOperationException">
     /// Thrown if the members have already been added.
     /// </exception>

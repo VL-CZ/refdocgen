@@ -53,14 +53,29 @@ public interface ITypeDeclaration : ITypeNameBaseData
     /// </remarks>
     IReadOnlyList<IAttributeData> Attributes { get; }
 
+    /// <summary>
+    /// Collection of all members declared in the type.
+    /// </summary>
+    /// <remarks>
+    /// Note that nested types aren't included, see <see cref="NestedTypes" />
+    /// </remarks>
     IEnumerable<IMemberData> AllMembers { get; }
 
+    /// <summary>
+    /// Collection of all nested types declared in the type.
+    /// </summary>
     IEnumerable<ITypeDeclaration> NestedTypes { get; }
 
     /// <summary>
-    /// Indicates whether the type is nested member of some other type.
+    /// Indicates whether the type is a nested type.
     /// </summary>
     bool IsNested { get; }
 
+    /// <summary>
+    /// The type that contains declaration of this type.
+    /// <para>
+    /// <c>null</c> if the type is not nested.
+    /// </para>
+    /// </summary>
     ITypeDeclaration? DeclaringType { get; }
 }

@@ -48,10 +48,14 @@ internal class ObjectTypeDataBuilder
     /// <inheritdoc cref="ObjectTypeData.Events"/>
     private Dictionary<string, EventData> events = [];
 
+    /// <inheritdoc cref="ObjectTypeData.NestedObjectTypes"/>
     private ObjectTypeData[] nestedObjectTypes = [];
-    private DelegateTypeData[] nestedDelegates = [];
-    private EnumTypeData[] nestedEnums = [];
 
+    /// <inheritdoc cref="ObjectTypeData.NestedDelegates"/>
+    private DelegateTypeData[] nestedDelegates = [];
+
+    /// <inheritdoc cref="ObjectTypeData.NestedEnums"/>
+    private EnumTypeData[] nestedEnums = [];
 
     /// <summary>
     /// Initializes a new instance of <see cref="ObjectTypeDataBuilder"/> class.
@@ -67,7 +71,6 @@ internal class ObjectTypeDataBuilder
 
         // construct the object type
         var typeParameters = MemberCreatorHelper.CreateTypeParametersDictionary(type, false);
-
         this.type = new ObjectTypeData(type, typeParameters, attributeData);
     }
 
@@ -189,7 +192,6 @@ internal class ObjectTypeDataBuilder
         }
 
         nestedObjectTypes = nestedTypes.ToArray();
-
         return this;
     }
 
@@ -200,14 +202,12 @@ internal class ObjectTypeDataBuilder
     /// <returns>The current <see cref="ObjectTypeDataBuilder"/> instance.</returns>
     internal ObjectTypeDataBuilder AddNestedDelegates(IEnumerable<DelegateTypeData> nestedTypes)
     {
-
         foreach (var nestedType in nestedTypes)
         {
             nestedType.DeclaringType = type;
         }
 
-        this.nestedDelegates = nestedTypes.ToArray();
-
+        nestedDelegates = nestedTypes.ToArray();
         return this;
     }
 
@@ -223,8 +223,7 @@ internal class ObjectTypeDataBuilder
             nestedType.DeclaringType = type;
         }
 
-        this.nestedEnums = nestedTypes.ToArray();
-
+        nestedEnums = nestedTypes.ToArray();
         return this;
     }
 
