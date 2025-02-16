@@ -1,4 +1,6 @@
 using RefDocGen.CodeElements;
+using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Concrete.Types.Enum;
 
 namespace RefDocGen.TemplateGenerators.Shared.Tools;
 

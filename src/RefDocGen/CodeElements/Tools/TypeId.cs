@@ -19,9 +19,9 @@ internal class TypeId
     {
         string id = type.FullName;
 
-        if (type.DeclaringType is not null)
+        if (type.ContainingType is not null)
         {
-            id = $"{type.DeclaringType.Id}.{type.ShortName}";
+            id = $"{type.ContainingType.Id}.{type.ShortName}";
         }
 
         if (type.HasTypeParameters)

@@ -95,9 +95,9 @@ internal static class CSharpTypeName
     {
         string typeName = type.ShortName;
 
-        if (type.DeclaringType is not null)
+        if (type.ContainingType is not null)
         {
-            typeName = $"{Of(type.DeclaringType)}.{typeName}";
+            typeName = $"{Of(type.ContainingType)}.{typeName}";
         }
 
         if (includeGenericParams && type.HasTypeParameters)

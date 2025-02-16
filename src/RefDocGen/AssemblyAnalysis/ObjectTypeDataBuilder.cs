@@ -188,7 +188,7 @@ internal class ObjectTypeDataBuilder
     {
         foreach (var nestedType in nestedTypes)
         {
-            nestedType.DeclaringType = type;
+            nestedType.ContainingType = type;
         }
 
         nestedObjectTypes = nestedTypes.ToArray();
@@ -204,7 +204,7 @@ internal class ObjectTypeDataBuilder
     {
         foreach (var nestedType in nestedTypes)
         {
-            nestedType.DeclaringType = type;
+            nestedType.ContainingType = type;
         }
 
         nestedDelegates = nestedTypes.ToArray();
@@ -220,7 +220,7 @@ internal class ObjectTypeDataBuilder
     {
         foreach (var nestedType in nestedTypes)
         {
-            nestedType.DeclaringType = type;
+            nestedType.ContainingType = type;
         }
 
         nestedEnums = nestedTypes.ToArray();

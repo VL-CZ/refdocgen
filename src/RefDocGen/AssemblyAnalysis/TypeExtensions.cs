@@ -16,6 +16,6 @@ internal static class TypeExtensions
     /// <returns><c>true</c> if the type's visibility is at least equal to <paramref name="minVisibility"/>, <c>false</c> otherwise.</returns>
     internal static bool IsVisible(this Type type, AccessModifier minVisibility)
     {
-        return AccessModifierHelper.GetAccessModifier(t).IsAtMostAsRestrictiveAs(minVisibility);
+        return AccessModifierHelper.GetAccessModifier(type).IsAtMostAsRestrictiveAs(minVisibility);
     }
 }

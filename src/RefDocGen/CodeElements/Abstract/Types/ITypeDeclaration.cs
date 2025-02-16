@@ -72,10 +72,10 @@ public interface ITypeDeclaration : ITypeNameBaseData
     bool IsNested { get; }
 
     /// <summary>
-    /// The type that contains declaration of this type.
+    /// The type that contains the declaration of this type.
     /// <para>
     /// <c>null</c> if the type is not nested.
     /// </para>
     /// </summary>
-    ITypeDeclaration? DeclaringType { get; }
+    ITypeDeclaration? ContainingType { get; }
 }
