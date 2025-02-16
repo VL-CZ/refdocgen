@@ -43,12 +43,32 @@ internal static class MemberCreatorHelper
     /// Creates a dictionary of type parameters declared in the given type, indexed by their names.
     /// </summary>
     /// <param name="type">The type containing the type parameters.</param>
+    /// <param name="includeInherited">Indicates whether the type parameters inherited from the containing type should be included.</param>
     /// <returns>
     /// <inheritdoc cref="TypeDeclaration.TypeParameters" path="/summary"/>
     /// </returns>
-    internal static Dictionary<string, TypeParameterData> CreateTypeParametersDictionary(Type type)
+    internal static Dictionary<string, TypeParameterData> CreateTypeParametersDictionary(Type type, bool includeInherited = true)
     {
-        return GetTypeParametersDictionary(type.GetGenericArguments(), CodeElementKind.Type);
+        if (includeInherited)
+        {
+            return GetTypeParametersDictionary(type.GetGenericArguments(), CodeElementKind.Type);
+        }
+        else
+        {
+            var allTypeParams = type.GetGenericArguments();
+
+            var inheritedTypeParams = Array.Empty<Type>();
+
+            if (type.DeclaringType is not null)
+            {
+                var parentTypeParams = type.DeclaringType.GetGenericArguments().Select(x => x.Name);
+                inheritedTypeParams = allTypeParams.Where(g => parentTypeParams.Contains(g.Name)).ToArray();
+            }
+
+            var nonInheritedTypeParams = allTypeParams.Except(inheritedTypeParams).ToArray();
+
+            return GetTypeParametersDictionary(nonInheritedTypeParams, CodeElementKind.Type);
+        }
     }
 
     /// <summary>

@@ -1,3 +1,4 @@
+using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using System.Xml.Linq;
@@ -51,4 +52,30 @@ public interface ITypeDeclaration : ITypeNameBaseData
     /// Note that the compiler generated attributes are not included.
     /// </remarks>
     IReadOnlyList<IAttributeData> Attributes { get; }
+
+    /// <summary>
+    /// Collection of all members declared in the type.
+    /// </summary>
+    /// <remarks>
+    /// Note that nested types aren't included, see <see cref="NestedTypes" />
+    /// </remarks>
+    IEnumerable<IMemberData> AllMembers { get; }
+
+    /// <summary>
+    /// Collection of all nested types declared in the type.
+    /// </summary>
+    IEnumerable<ITypeDeclaration> NestedTypes { get; }
+
+    /// <summary>
+    /// Indicates whether the type is a nested type.
+    /// </summary>
+    bool IsNested { get; }
+
+    /// <summary>
+    /// The type that contains the declaration of this type.
+    /// <para>
+    /// <c>null</c> if the type is not nested.
+    /// </para>
+    /// </summary>
+    ITypeDeclaration? DeclaringType { get; }
 }

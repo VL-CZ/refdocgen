@@ -26,7 +26,7 @@ internal abstract class TypeNameBaseData : ITypeNameBaseData
     public abstract string Id { get; }
 
     /// <inheritdoc/>
-    public string ShortName
+    public virtual string ShortName
     {
         get
         {

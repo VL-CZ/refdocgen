@@ -1,3 +1,4 @@
+using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
@@ -89,6 +90,12 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     /// </summary>
     internal abstract IReadOnlyDictionary<string, MemberData> AllMembers { get; private protected set; }
 
+    /// <inheritdoc/>
+    IEnumerable<IMemberData> ITypeDeclaration.AllMembers => AllMembers.Values;
+
+    /// <inheritdoc/>
+    public IEnumerable<ITypeDeclaration> NestedTypes { get; private protected set; } = [];
+
     /// <summary>
     /// Raw doc comment provided to the type.
     ///
@@ -100,4 +107,10 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
 
     /// <inheritdoc/>
     public IReadOnlyList<IAttributeData> Attributes { get; }
+
+    /// <inheritdoc/>
+    public bool IsNested => DeclaringType is not null;
+
+    /// <inheritdoc/>
+    public ITypeDeclaration? DeclaringType { get; internal set; }
 }

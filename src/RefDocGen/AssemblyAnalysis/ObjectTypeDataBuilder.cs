@@ -3,6 +3,8 @@ using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Concrete.Types.Delegate;
+using RefDocGen.CodeElements.Concrete.Types.Enum;
 using System.Reflection;
 
 namespace RefDocGen.AssemblyAnalysis;
@@ -18,7 +20,7 @@ internal class ObjectTypeDataBuilder
     private readonly ObjectTypeData type;
 
     /// <inheritdoc cref="TypeDeclaration.TypeParameters"/>
-    private readonly Dictionary<string, TypeParameterData> typeParameters;
+    private readonly Dictionary<string, TypeParameterData> allTypeParameters;
 
     /// <summary>
     /// Minimal visibility of the members to include.
@@ -46,6 +48,15 @@ internal class ObjectTypeDataBuilder
     /// <inheritdoc cref="ObjectTypeData.Events"/>
     private Dictionary<string, EventData> events = [];
 
+    /// <inheritdoc cref="ObjectTypeData.NestedObjectTypes"/>
+    private ObjectTypeData[] nestedObjectTypes = [];
+
+    /// <inheritdoc cref="ObjectTypeData.NestedDelegates"/>
+    private DelegateTypeData[] nestedDelegates = [];
+
+    /// <inheritdoc cref="ObjectTypeData.NestedEnums"/>
+    private EnumTypeData[] nestedEnums = [];
+
     /// <summary>
     /// Initializes a new instance of <see cref="ObjectTypeDataBuilder"/> class.
     /// </summary>
@@ -53,12 +64,14 @@ internal class ObjectTypeDataBuilder
     /// <param name="minVisibility">Minimal visibility of the members to include.</param>
     internal ObjectTypeDataBuilder(Type type, AccessModifier minVisibility)
     {
-        typeParameters = MemberCreatorHelper.CreateTypeParametersDictionary(type);
-        var attributeData = MemberCreatorHelper.GetAttributeData(type, typeParameters);
+        this.minVisibility = minVisibility;
+
+        allTypeParameters = MemberCreatorHelper.CreateTypeParametersDictionary(type);
+        var attributeData = MemberCreatorHelper.GetAttributeData(type, allTypeParameters);
 
         // construct the object type
+        var typeParameters = MemberCreatorHelper.CreateTypeParametersDictionary(type, false);
         this.type = new ObjectTypeData(type, typeParameters, attributeData);
-        this.minVisibility = minVisibility;
     }
 
     /// <summary>
@@ -69,7 +82,7 @@ internal class ObjectTypeDataBuilder
     internal ObjectTypeDataBuilder AddConstructors(IEnumerable<ConstructorInfo> constructors)
     {
         this.constructors = constructors
-            .Select(c => ConstructorDataCreator.CreateFrom(c, type, typeParameters))
+            .Select(c => ConstructorDataCreator.CreateFrom(c, type, allTypeParameters))
             .Where(IsVisible)
             .ToIdDictionary();
 
@@ -84,7 +97,7 @@ internal class ObjectTypeDataBuilder
     internal ObjectTypeDataBuilder AddFields(IEnumerable<FieldInfo> fields)
     {
         this.fields = fields
-            .Select(f => FieldDataCreator.CreateFrom(f, type, typeParameters))
+            .Select(f => FieldDataCreator.CreateFrom(f, type, allTypeParameters))
             .Where(IsVisible)
             .ToIdDictionary();
 
@@ -99,7 +112,7 @@ internal class ObjectTypeDataBuilder
     internal ObjectTypeDataBuilder AddProperties(IEnumerable<PropertyInfo> properties)
     {
         this.properties = properties
-            .Select(p => PropertyDataCreator.CreateFrom(p, type, typeParameters))
+            .Select(p => PropertyDataCreator.CreateFrom(p, type, allTypeParameters))
             .Where(IsVisible)
             .ToIdDictionary();
 
@@ -114,7 +127,7 @@ internal class ObjectTypeDataBuilder
     internal ObjectTypeDataBuilder AddIndexers(IEnumerable<PropertyInfo> indexers)
     {
         this.indexers = indexers
-            .Select(i => IndexerDataCreator.CreateFrom(i, type, typeParameters))
+            .Select(i => IndexerDataCreator.CreateFrom(i, type, allTypeParameters))
             .Where(IsVisible)
             .ToIdDictionary();
 
@@ -129,7 +142,7 @@ internal class ObjectTypeDataBuilder
     internal ObjectTypeDataBuilder AddMethods(IEnumerable<MethodInfo> methods)
     {
         this.methods = methods
-            .Select(m => MethodDataCreator.CreateFrom(m, type, typeParameters))
+            .Select(m => MethodDataCreator.CreateFrom(m, type, allTypeParameters))
             .Where(IsVisible)
             .ToIdDictionary();
 
@@ -144,7 +157,7 @@ internal class ObjectTypeDataBuilder
     internal ObjectTypeDataBuilder AddOperators(IEnumerable<MethodInfo> operators)
     {
         this.operators = operators
-            .Select(o => OperatorDataCreator.CreateFrom(o, type, typeParameters))
+            .Select(o => OperatorDataCreator.CreateFrom(o, type, allTypeParameters))
             .Where(IsVisible)
             .ToIdDictionary();
 
@@ -159,10 +172,58 @@ internal class ObjectTypeDataBuilder
     internal ObjectTypeDataBuilder AddEvents(IEnumerable<EventInfo> events)
     {
         this.events = events
-            .Select(e => EventDataCreator.CreateFrom(e, type, typeParameters))
+            .Select(e => EventDataCreator.CreateFrom(e, type, allTypeParameters))
             .Where(IsVisible)
             .ToIdDictionary();
 
+        return this;
+    }
+
+    /// <summary>
+    /// Adds nested types to the object being built.
+    /// </summary>
+    /// <param name="nestedTypes">An enumerable of object events.</param>
+    /// <returns>The current <see cref="ObjectTypeDataBuilder"/> instance.</returns>
+    internal ObjectTypeDataBuilder AddNestedObjectTypes(IEnumerable<ObjectTypeData> nestedTypes)
+    {
+        foreach (var nestedType in nestedTypes)
+        {
+            nestedType.DeclaringType = type;
+        }
+
+        nestedObjectTypes = nestedTypes.ToArray();
+        return this;
+    }
+
+    /// <summary>
+    /// Adds nested delegates to the object being built.
+    /// </summary>
+    /// <param name="nestedTypes">An enumerable containing the delegates nested in the type.</param>
+    /// <returns>The current <see cref="ObjectTypeDataBuilder"/> instance.</returns>
+    internal ObjectTypeDataBuilder AddNestedDelegates(IEnumerable<DelegateTypeData> nestedTypes)
+    {
+        foreach (var nestedType in nestedTypes)
+        {
+            nestedType.DeclaringType = type;
+        }
+
+        nestedDelegates = nestedTypes.ToArray();
+        return this;
+    }
+
+    /// <summary>
+    /// Adds nested delegates to the object being built.
+    /// </summary>
+    /// <param name="nestedTypes">An enumerable containing the delegates nested in the type.</param>
+    /// <returns>The current <see cref="ObjectTypeDataBuilder"/> instance.</returns>
+    internal ObjectTypeDataBuilder AddNestedEnums(IEnumerable<EnumTypeData> nestedTypes)
+    {
+        foreach (var nestedType in nestedTypes)
+        {
+            nestedType.DeclaringType = type;
+        }
+
+        nestedEnums = nestedTypes.ToArray();
         return this;
     }
 
@@ -173,7 +234,7 @@ internal class ObjectTypeDataBuilder
     internal ObjectTypeData Build()
     {
         // add the members
-        type.AddMembers(constructors, fields, properties, methods, operators, indexers, events);
+        type.AddMembers(constructors, fields, properties, methods, operators, indexers, events, nestedObjectTypes, nestedDelegates, nestedEnums);
         return type;
     }
 

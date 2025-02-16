@@ -29,7 +29,7 @@ internal class EnumTMCreator : TypeTMCreator
 
         return new EnumTypeTM(
             enumType.Id,
-            enumType.ShortName,
+            GetTypeName(enumType),
             enumType.Namespace,
             modifiers.GetStrings(),
             enumMemberTMs,

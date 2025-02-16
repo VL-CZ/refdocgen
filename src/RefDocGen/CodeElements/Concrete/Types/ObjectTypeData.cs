@@ -1,6 +1,8 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.Attribute;
+using RefDocGen.CodeElements.Abstract.Types.Delegate;
+using RefDocGen.CodeElements.Abstract.Types.Enum;
 using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete.Types.Enum;
 
@@ -107,6 +109,15 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
     /// <inheritdoc/>
     internal override IReadOnlyDictionary<string, MemberData> AllMembers { get; private protected set; } = new Dictionary<string, MemberData>();
 
+    /// <inheritdoc/>
+    public IEnumerable<IObjectTypeData> NestedObjectTypes { get; private set; } = [];
+
+    /// <inheritdoc/>
+    public IEnumerable<IDelegateTypeData> NestedDelegates { get; private set; } = [];
+
+    /// <inheritdoc/>
+    public IEnumerable<IEnumTypeData> NestedEnums { get; private set; } = [];
+
     /// <summary>
     /// Adds the members to the type.
     /// </summary>
@@ -131,6 +142,15 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
     /// <param name="events">
     /// <inheritdoc cref="Events"/>
     /// </param>
+    /// <param name="nestedObjectTypes">
+    /// <inheritdoc cref="NestedObjectTypes"/>
+    /// </param>
+    /// <param name="nestedDelegates">
+    /// <inheritdoc cref="NestedDelegates"/>
+    /// </param>
+    /// <param name="nestedEnums">
+    /// <inheritdoc cref="NestedEnums"/>
+    /// </param>
     /// <exception cref="InvalidOperationException">
     /// Thrown if the members have already been added.
     /// </exception>
@@ -141,7 +161,10 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
         IReadOnlyDictionary<string, MethodData> methods,
         IReadOnlyDictionary<string, OperatorData> operators,
         IReadOnlyDictionary<string, IndexerData> indexers,
-        IReadOnlyDictionary<string, EventData> events)
+        IReadOnlyDictionary<string, EventData> events,
+        IEnumerable<IObjectTypeData> nestedObjectTypes,
+        IEnumerable<IDelegateTypeData> nestedDelegates,
+        IEnumerable<IEnumTypeData> nestedEnums)
     {
         if (membersAdded)
         {
@@ -155,6 +178,9 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
         Operators = operators;
         Indexers = indexers;
         Events = events;
+        NestedObjectTypes = nestedObjectTypes;
+        NestedDelegates = nestedDelegates;
+        NestedEnums = nestedEnums;
 
         AllMembers = ((IEnumerable<MemberData>)Constructors.Values)
             .Concat(Fields.Values)
@@ -164,6 +190,10 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
             .Concat(Indexers.Values)
             .Concat(Events.Values)
             .ToDictionary(m => m.Id);
+
+        NestedTypes = ((IEnumerable<ITypeDeclaration>)NestedObjectTypes)
+            .Concat(NestedDelegates)
+            .Concat(NestedEnums);
 
         membersAdded = true;
     }

@@ -1,0 +1,34 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required IEnumerable<TypeNameTM> NestedTypes { get; set; }
+}
+
+@if (NestedTypes.Any())
+{
+    <h3 class="lead mt-3">Nested types</h3>
+    <div class="mx-2" data-id="nested-types-section">
+        @foreach (var nestedType in NestedTypes)
+        {
+            var nestedTypeUrl = $"./{nestedType.Id}.html";
+
+            <div data-id="nested-type-data">
+                <samp data-id="nested-type-name">
+                    <a href="@nestedTypeUrl" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover">
+                        <span class="text-primary">
+                            @nestedType.TypeKindName
+                        </span>
+                        @nestedType.Name
+                    </a>
+                </samp>
+                <div class="text-muted mb-2" data-id="summary-doc">
+                    @if (nestedType.DocComment is not null)
+                    {
+                        <i>@((MarkupString)nestedType.DocComment)</i>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}

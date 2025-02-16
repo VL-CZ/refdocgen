@@ -93,7 +93,7 @@ internal class NamespaceListTMCreator
     /// <returns>A <see cref="TypeNameTM"/> instance based on the provided <paramref name="enumData"/>.</returns>
     private static TypeNameTM GetFrom(IEnumTypeData enumData)
     {
-        return new TypeNameTM(enumData.Id, "enum", enumData.ShortName, enumData.SummaryDocComment.Value);
+        return new TypeNameTM(enumData.Id, "enum", CSharpTypeName.Of(enumData), enumData.SummaryDocComment.Value);
     }
 
     /// <summary>

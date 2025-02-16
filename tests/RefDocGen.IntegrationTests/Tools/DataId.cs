@@ -24,6 +24,7 @@ internal enum DataId
     BaseType,
     ImplementedInterfaces,
     TypeNamespace,
+    DeclaringType,
     ExceptionData,
     ExceptionType,
     ExceptionDoc,
@@ -38,7 +39,9 @@ internal enum DataId
     TypeRowDoc,
     NamespaceName,
     DeclaredTypeSignature,
-    TypeDataSection
+    TypeDataSection,
+    NestedTypeData,
+    NestedTypeName
 }
 
 /// <summary>
@@ -88,6 +91,9 @@ internal static class DataIdExtensions
             DataId.NamespaceName => "namespace-name",
             DataId.DeclaredTypeSignature => "type-name-title",
             DataId.TypeDataSection => "declared-type-data",
+            DataId.DeclaringType => "declaring-type",
+            DataId.NestedTypeData => "nested-type-data",
+            DataId.NestedTypeName => "nested-type-name",
             _ => throw new ArgumentException($"The provided DataId '{dataId}' has no string representation.")
         };
     }

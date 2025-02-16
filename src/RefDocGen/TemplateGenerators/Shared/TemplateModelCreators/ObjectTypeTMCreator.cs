@@ -38,6 +38,10 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             ? GetTypeLink(type.BaseType)
             : null;
 
+        var declaringType = type.DeclaringType is not null
+            ? GetTypeLink(type.DeclaringType)
+            : null;
+
         var interfaces = type.Interfaces.Select(GetTypeLink).ToArray();
 
         List<Keyword> modifiers = [type.AccessModifier.ToKeyword()];
@@ -64,7 +68,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
 
         return new ObjectTypeTM(
             type.Id,
-            type.ShortName,
+            GetTypeName(type),
             type.Namespace,
             type.Kind.GetName(),
             modifiers.GetStrings(),
@@ -75,10 +79,12 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             operators,
             indexers,
             events,
+            GetNestedTypes(type),
             GetTemplateModels(type.TypeParameters),
             baseType,
             interfaces,
             GetTemplateModels(type.Attributes),
+            declaringType,
             ToHtmlString(type.SummaryDocComment),
             ToHtmlString(type.RemarksDocComment),
             GetHtmlStrings(type.SeeAlsoDocComments)
@@ -392,5 +398,32 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         {
             return member.Name;
         }
+    }
+
+    /// <summary>
+    /// Gets a collection of nested types contained in the <paramref name="type"/>.
+    /// </summary>
+    /// <param name="type">The provided type.</param>
+    /// <returns>A collection of nested types contained in the <paramref name="type"/>.</returns>
+    private TypeNameTM[] GetNestedTypes(IObjectTypeData type)
+    {
+        var nestedTypes = new List<TypeNameTM>();
+
+        nestedTypes.AddRange(type.NestedObjectTypes.Select(t => GetFrom(t, t.Kind.GetName())));
+        nestedTypes.AddRange(type.NestedDelegates.Select(d => GetFrom(d, "delegate"))); // TODO: use constants
+        nestedTypes.AddRange(type.NestedEnums.Select(d => GetFrom(d, "enum")));
+
+        return [.. nestedTypes];
+    }
+
+    /// <summary>
+    /// Creates a <see cref="TypeNameTM"/> instance representing a nested type based on the provided <see cref="ITypeDeclaration"/> object.
+    /// </summary>
+    /// <param name="type">The <see cref="ITypeDeclaration"/> instance representing the nested type.</param>
+    /// <param name="typeKindName">Name of the type kind.</param>
+    /// <returns>A <see cref="TypeNameTM"/> instance based on the provided <paramref name="type"/>.</returns>
+    private TypeNameTM GetFrom(ITypeDeclaration type, string typeKindName)
+    {
+        return new TypeNameTM(type.Id, typeKindName, CSharpTypeName.Of(type), ToHtmlString(type.SummaryDocComment));
     }
 }

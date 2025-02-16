@@ -120,6 +120,16 @@ internal abstract class TypeTMCreator
             );
     }
 
+    /// <inheritdoc cref="GetTypeLink(ITypeNameData)"/>
+    protected TypeLinkTM GetTypeLink(ITypeDeclaration type)
+    {
+        string? url = typeUrlResolver.GetUrlOf(type.Id);
+
+        return new TypeLinkTM(
+            CSharpTypeName.Of(type),
+            url);
+    }
+
     /// <summary>
     /// Creates a <see cref="ParameterTM"/> instance based on the provided <see cref="IParameterData"/> object.
     /// </summary>
@@ -246,5 +256,15 @@ internal abstract class TypeTMCreator
                 typeUrlResolver.GetUrlOf(attribute.Type.Id, argument.Name)
             ),
             LiteralValueFormatter.Format(argument.Value));
+    }
+
+    /// <summary>
+    /// Gets the C# name of the type, excluding its generic parameters.
+    /// </summary>
+    /// <param name="type">The provided type.</param>
+    /// <returns>C# name of the provided type.</returns>
+    protected string GetTypeName(ITypeDeclaration type)
+    {
+        return CSharpTypeName.Of(type, false);
     }
 }

@@ -23,6 +23,17 @@ public class MemberDataTests
     }
 
     [Fact]
+    public void TypeConstraints_Match()
+    {
+        using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MyCollection`1.html");
+        var method = document.GetMemberElement("AddGeneric``1(``0)");
+
+        string[] constraints = TypePageTools.GetTypeParamConstraints(method);
+
+        constraints.ShouldBe(["where T2 : class"]);
+    }
+
+    [Fact]
     public void Exceptions_Match()
     {
         using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MyCollection`1.html");

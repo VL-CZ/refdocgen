@@ -11,7 +11,7 @@ namespace RefDocGen.IntegrationTests;
 public class TypeDataTests
 {
     [Fact]
-    public void TypeConstraints_Match()
+    public void SingleTypeConstraint_Matches()
     {
         using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MySortedList`1.html");
         string[] constraints = TypePageTools.GetTypeParamConstraints(document.GetTypeDataSection());
@@ -20,18 +20,7 @@ public class TypeDataTests
     }
 
     [Fact]
-    public void MethodConstraints_Match()
-    {
-        using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MyCollection`1.html");
-        var method = document.GetMemberElement("AddGeneric``1(``0)");
-
-        string[] constraints = TypePageTools.GetTypeParamConstraints(method);
-
-        constraints.ShouldBe(["where T2 : class"]);
-    }
-
-    [Fact]
-    public void ComplexConstraints_Match()
+    public void ComplexTypeConstraints_Match()
     {
         using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MyDictionary`2.html");
         string[] constraints = TypePageTools.GetTypeParamConstraints(document.GetTypeDataSection());
@@ -76,6 +65,18 @@ public class TypeDataTests
         ns.ShouldBe($"namespace {expectedNamespace}");
     }
 
+    [Theory]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection`1.MyCollectionEnumerator", "MyCollection<T>")]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection`1.GenericEnumerator`1", "MyCollection<T>")]
+    public void DeclaringType_Matches(string pageName, string expectedDeclaringType)
+    {
+        using var document = DocumentationTools.GetPage($"{pageName}.html");
+
+        string declaringType = TypePageTools.GetDeclaringTypeName(document.GetTypeDataSection());
+
+        declaringType.ShouldBe($"Declaring type: {expectedDeclaringType}");
+    }
+
     [Fact]
     public void Attributes_Match()
     {
@@ -88,5 +89,30 @@ public class TypeDataTests
             "[JsonSerializable(typeof(MyLibrary.User), GenerationMode = 2)]"];
 
         attributes.ShouldBe(expectedAttributes);
+    }
+
+    [Fact]
+    public void NestedTypes_Match()
+    {
+        using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MyCollection`1.html");
+
+        var nestedTypeElements = TypePageTools.GetNestedTypes(document.GetTypeDataSection());
+
+        (string typeName, string summaryDoc)[] expectedNestedTypes = [
+            ("class MyCollection<T>.GenericEnumerator<T2>", "Generic collection enumerator."),
+            ("class MyCollection<T>.MyCollectionEnumerator", "Custom collection enumerator."),
+            ("enum MyCollection<T>.Status", "Status of the collection.")];
+
+        int index = 0;
+        foreach (var typeElement in nestedTypeElements)
+        {
+            string typeName = TypePageTools.GetNestedTypeName(typeElement);
+            string summaryDoc = TypePageTools.GetSummaryDoc(typeElement);
+
+            typeName.ShouldBe(expectedNestedTypes[index].typeName);
+            summaryDoc.ShouldBe(expectedNestedTypes[index].summaryDoc);
+
+            index++;
+        }
     }
 }
