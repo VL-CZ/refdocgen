@@ -121,21 +121,21 @@ internal class TypePageTools
     /// <summary>
     /// Gets the type of the exception.
     /// </summary>
-    /// <param name="paramElement">The HTML element representing the exception.</param>
+    /// <param name="element">The HTML element representing the exception.</param>
     /// <returns>The exception type.</returns>
-    internal static string GetExceptionType(IElement paramElement)
+    internal static string GetExceptionType(IElement element)
     {
-        return paramElement.GetParsedContent(DataId.ExceptionType);
+        return element.GetParsedContent(DataId.ExceptionType);
     }
 
     /// <summary>
     /// Gets the <c>exception</c> doc comment of the exception.
     /// </summary>
-    /// <param name="paramElement">The HTML element representing the exception.</param>
+    /// <param name="element">The HTML element representing the exception.</param>
     /// <returns><c>exception</c> doc comment of the exception.</returns>
-    internal static string GetExceptionDoc(IElement paramElement)
+    internal static string GetExceptionDoc(IElement element)
     {
-        return paramElement.GetParsedContent(DataId.ExceptionDoc);
+        return element.GetParsedContent(DataId.ExceptionDoc);
     }
 
     /// <summary>
@@ -146,6 +146,16 @@ internal class TypePageTools
     internal static string GetBaseTypeName(IElement element)
     {
         return element.GetParsedContent(DataId.BaseType);
+    }
+
+    /// <summary>
+    /// Gets the name of the type's declaring type.
+    /// </summary>
+    /// <param name="element">The HTML element representing the type.</param>
+    /// <returns>The declaring type name.</returns>
+    internal static string GetDeclaringTypeName(IElement element)
+    {
+        return element.GetParsedContent(DataId.DeclaringType);
     }
 
     /// <summary>
@@ -166,6 +176,16 @@ internal class TypePageTools
     internal static string GetNamespaceString(IElement element)
     {
         return element.GetParsedContent(DataId.TypeNamespace);
+    }
+
+    /// <summary>
+    /// Gets the name of the nested type.
+    /// </summary>
+    /// <param name="element">The HTML element representing the nested type.</param>
+    /// <returns>Name of the nested type.</returns>
+    internal static string GetNestedTypeName(IElement element)
+    {
+        return element.GetParsedContent(DataId.NestedTypeName);
     }
 
     /// <summary>
@@ -216,6 +236,16 @@ internal class TypePageTools
     internal static IElement[] GetExceptions(IElement element)
     {
         return [.. element.GetByDataIds(DataId.ExceptionData)];
+    }
+
+    /// <summary>
+    /// Gets the nested types of the member.
+    /// </summary>
+    /// <param name="element">The HTML element representing the type.</param>
+    /// <returns>An array of nested type HTML elements.</returns>
+    internal static IElement[] GetNestedTypes(IElement element)
+    {
+        return [.. element.GetByDataIds(DataId.NestedTypeData)];
     }
 
     /// <summary>

@@ -109,8 +109,8 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     public IReadOnlyList<IAttributeData> Attributes { get; }
 
     /// <inheritdoc/>
-    public bool IsNested => ContainingType is not null;
+    public bool IsNested => DeclaringType is not null;
 
     /// <inheritdoc/>
-    public ITypeDeclaration? ContainingType { get; internal set; }
+    public ITypeDeclaration? DeclaringType { get; internal set; }
 }

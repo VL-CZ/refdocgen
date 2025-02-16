@@ -38,8 +38,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             ? GetTypeLink(type.BaseType)
             : null;
 
-        var declaringType = type.ContainingType is not null
-            ? GetTypeLink(type.ContainingType)
+        var declaringType = type.DeclaringType is not null
+            ? GetTypeLink(type.DeclaringType)
             : null;
 
         var interfaces = type.Interfaces.Select(GetTypeLink).ToArray();

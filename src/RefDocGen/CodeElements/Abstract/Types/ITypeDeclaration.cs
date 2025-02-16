@@ -77,5 +77,5 @@ public interface ITypeDeclaration : ITypeNameBaseData
     /// <c>null</c> if the type is not nested.
     /// </para>
     /// </summary>
-    ITypeDeclaration? ContainingType { get; }
+    ITypeDeclaration? DeclaringType { get; }
 }
