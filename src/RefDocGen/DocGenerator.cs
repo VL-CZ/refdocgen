@@ -50,7 +50,7 @@ public class DocGenerator
     /// </summary>
     public void GenerateDoc()
     {
-        var assemblyAnalyzer = new AssemblyTypeExtractor(assemblyPath, minVisibility);
+        var assemblyAnalyzer = new AssemblyTypeExtractor(assemblyPath, minVisibility, MemberInheritance.NonObject);
         var typeRegistry = assemblyAnalyzer.GetDeclaredTypes();
 
         var docCommentExtractor = new DocCommentExtractor(docXmlPath, typeRegistry);

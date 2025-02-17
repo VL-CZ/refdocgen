@@ -10,6 +10,13 @@ using RefDocGen.Tools;
 
 namespace RefDocGen.AssemblyAnalysis;
 
+enum MemberInheritance
+{
+    None,
+    All,
+    NonObject
+}
+
 /// <summary>
 /// Class responsible for extracting type information from a selected assembly.
 /// </summary>
@@ -35,6 +42,8 @@ internal class AssemblyTypeExtractor
     /// </summary>
     private readonly AccessModifier minVisibility;
 
+    private readonly bool excludeObjectMethods;
+
     /// <summary>
     /// Collection of all nested object types.
     /// </summary>
@@ -55,10 +64,16 @@ internal class AssemblyTypeExtractor
     /// </summary>
     /// <param name="assemblyPath">The path to the DLL assembly file</param>
     /// <param name="minVisibility">Minimal visibility of the types and members to include.</param>
-    internal AssemblyTypeExtractor(string assemblyPath, AccessModifier minVisibility)
+    internal AssemblyTypeExtractor(string assemblyPath, AccessModifier minVisibility, MemberInheritance memberInheritance)
     {
         this.assemblyPath = assemblyPath;
         this.minVisibility = minVisibility;
+
+        bindingFlags = memberInheritance == MemberInheritance.None
+            ? BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly
+            : BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
+
+        excludeObjectMethods = memberInheritance == MemberInheritance.NonObject;
     }
 
     /// <summary>

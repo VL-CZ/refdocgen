@@ -24,6 +24,11 @@ internal abstract class MemberData : IMemberData
         MemberInfo = memberInfo;
         ContainingType = containingType;
         Attributes = attributes;
+
+        if (containingType.TypeObject != memberInfo.DeclaringType)
+        {
+            SummaryDocComment = new("inheritdoc");
+        }
     }
 
     /// <inheritdoc/>
