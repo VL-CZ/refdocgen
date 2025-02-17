@@ -16,6 +16,7 @@ public class TypeDocCommentTests
     [InlineData("MyLibrary.Tools.Point", "Struct representing a point.")]
     [InlineData("MyLibrary.Tools.Season", "Represents season of a year.")]
     [InlineData("MyLibrary.Tools.ObjectPredicate", "Predicate about an object.")]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection`1.MyCollectionEnumerator", "Custom collection enumerator.")]
     public void SummaryDoc_Matches(string pageName, string expectedDoc)
     {
         using var document = DocumentationTools.GetPage($"{pageName}.html");

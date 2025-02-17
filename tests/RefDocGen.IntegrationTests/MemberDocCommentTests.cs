@@ -22,6 +22,7 @@ public class MemberDocCommentTests
         "System#Collections#IEnumerable#GetEnumerator",
         "Returns an enumerator that iterates through the collection.")]
     [InlineData("MyLibrary.Tools.MyPredicate`1", "delegate-method", "Predicate about a generic type T.")]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection`1.MyCollectionEnumerator", "Reset", "Resets the enumerator.")]
     public void SummaryDoc_Matches(string pageName, string memberId, string expectedDoc)
     {
         using var document = DocumentationTools.GetPage($"{pageName}.html");
