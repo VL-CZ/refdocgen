@@ -71,4 +71,6 @@ public interface IMemberData
     /// Collection of attributes applied to the member.
     /// </summary>
     IReadOnlyList<IAttributeData> Attributes { get; }
+
+    bool IsInherited { get; }
 }

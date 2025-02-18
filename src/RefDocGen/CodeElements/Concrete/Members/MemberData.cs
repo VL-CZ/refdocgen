@@ -27,7 +27,8 @@ internal abstract class MemberData : IMemberData
 
         if (containingType.TypeObject != memberInfo.DeclaringType)
         {
-            SummaryDocComment = new("inheritdoc");
+            RawDocComment = new("inheritdoc");
+            IsInherited = true;
         }
     }
 
@@ -42,6 +43,9 @@ internal abstract class MemberData : IMemberData
 
     /// <inheritdoc/>
     public abstract bool IsStatic { get; }
+
+    /// <inheritdoc/>
+    public bool IsInherited { get; }
 
     /// <inheritdoc/>
     public XElement SummaryDocComment { get; internal set; } = XmlDocElements.EmptySummary;

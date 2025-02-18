@@ -157,6 +157,11 @@ internal class AssemblyTypeExtractor
             .GetEvents(bindingFlags)
             .Where(e => !e.IsCompilerGenerated());
 
+        if (excludeObjectMethods)
+        {
+            methods = methods.Where(m => m.DeclaringType != typeof(object) && m.DeclaringType != typeof(ValueType));
+        }
+
         // get nested types
         var allNestedTypes = type
             .GetNestedTypes(bindingFlags)
