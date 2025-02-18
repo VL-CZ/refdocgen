@@ -265,7 +265,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             ToHtmlString(method.RemarksDocComment),
             ToHtmlString(method.ReturnValueDocComment),
             GetHtmlStrings(method.SeeAlsoDocComments),
-            GetTemplateModels(method.DocumentedExceptions));
+            GetTemplateModels(method.DocumentedExceptions),
+            method.InheritedFrom is not null ? GetTypeLink(method.InheritedFrom) : null);
     }
 
     /// <summary>
@@ -310,7 +311,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             ToHtmlString(operatorData.RemarksDocComment),
             ToHtmlString(operatorData.ReturnValueDocComment),
             GetHtmlStrings(operatorData.SeeAlsoDocComments),
-            GetTemplateModels(operatorData.DocumentedExceptions));
+            GetTemplateModels(operatorData.DocumentedExceptions),
+            null); // TODO
     }
 
     /// <summary>

@@ -1,7 +1,9 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.Attribute;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Tools;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Xml.Linq;
@@ -29,6 +31,7 @@ internal abstract class MemberData : IMemberData
         {
             RawDocComment = new("inheritdoc");
             IsInherited = true;
+            InheritedFrom = memberInfo.DeclaringType?.GetTypeNameData();
         }
     }
 
@@ -46,6 +49,9 @@ internal abstract class MemberData : IMemberData
 
     /// <inheritdoc/>
     public bool IsInherited { get; }
+
+    /// <inheritdoc/>
+    public ITypeNameData? InheritedFrom { get; }
 
     /// <inheritdoc/>
     public XElement SummaryDocComment { get; internal set; } = XmlDocElements.EmptySummary;

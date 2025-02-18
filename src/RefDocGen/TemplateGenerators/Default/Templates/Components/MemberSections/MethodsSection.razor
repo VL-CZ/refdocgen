@@ -41,6 +41,14 @@
 
                 <SummaryDoc DocComment="@method.SummaryDocComment" />
 
+                @if (method.InheritedFrom is not null)
+                {
+                    <div>
+                        Inherited from:
+                        <TypeLink Type="@method.InheritedFrom" />
+                    </div>
+                }
+
                 <TypeParameterDocs TypeParameters="@method.TypeParameters" />
 
                 <ParameterDocs Parameters="@method.Parameters" />

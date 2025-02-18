@@ -1,5 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.Attribute;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using System.Reflection;
 using System.Xml.Linq;
 
@@ -73,4 +74,6 @@ public interface IMemberData
     IReadOnlyList<IAttributeData> Attributes { get; }
 
     bool IsInherited { get; }
+
+    ITypeNameData? InheritedFrom { get; }
 }

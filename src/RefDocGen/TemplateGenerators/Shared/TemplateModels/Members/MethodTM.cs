@@ -33,4 +33,5 @@ public record MethodTM(
     string? RemarksDocComment,
     string? ReturnsDocComment,
     string[] SeeAlsoDocComments,
-    ExceptionTM[] Exceptions);
+    ExceptionTM[] Exceptions,
+    TypeLinkTM? InheritedFrom);
