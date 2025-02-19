@@ -20,6 +20,10 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// A collection of user-documented exceptions (using the <c>exception</c> XML tag) that the method might throw.
 /// </param>
 /// <param name="Attributes">Array of attributes applied to the method.</param>
+/// <param name="InheritedFrom">
+/// If the method is inherited, this represents the type from which it originates.
+/// <c>null</c> if the method is not inherited.
+/// </param>
 public record MethodTM(
     string Id,
     string Name,

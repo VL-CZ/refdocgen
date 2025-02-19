@@ -16,6 +16,10 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// A collection of user-documented exceptions (using the <c>exception</c> XML tag) that the event might throw.
 /// </param>
 /// <param name="Attributes">Array of attributes applied to the event.</param>
+/// <param name="InheritedFrom">
+/// If the event is inherited, this represents the type from which it originates.
+/// <c>null</c> if the event is not inherited.
+/// </param>
 public record EventTM(
     string Id,
     string Name,
@@ -25,4 +29,5 @@ public record EventTM(
     string? SummaryDocComment,
     string? RemarksDocComment,
     string[] SeeAlsoDocComments,
-    ExceptionTM[] Exceptions);
+    ExceptionTM[] Exceptions,
+    TypeLinkTM? InheritedFrom);

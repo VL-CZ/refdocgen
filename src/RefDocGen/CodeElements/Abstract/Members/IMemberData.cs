@@ -73,7 +73,14 @@ public interface IMemberData
     /// </summary>
     IReadOnlyList<IAttributeData> Attributes { get; }
 
+    /// <summary>
+    /// Indicates whether the member is inhertied from another type.
+    /// </summary>
     bool IsInherited { get; }
 
+    /// <summary>
+    /// If the member is inherited, this represents the type from which it originates.
+    /// <c>null</c> if the member is not inherited.
+    /// </summary>
     ITypeNameData? InheritedFrom { get; }
 }

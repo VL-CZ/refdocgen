@@ -131,6 +131,32 @@ internal abstract class TypeTMCreator
     }
 
     /// <summary>
+    /// Gets the <see cref="TypeLinkTM"/> from the provided <paramref name="type"/> or <see langword="null"/> if the type is <see langword="null"/>.
+    /// </summary>
+    /// <param name="type">The provided type.</param>
+    /// <returns><see cref="TypeLinkTM"/> corresponding to the provided <paramref name="type"/>. <see langword="null"/> if the provided <paramref name="type"/> is <see langword="null"/>.</returns>
+    protected TypeLinkTM? GetTypeLinkOrNull(ITypeNameData? type)
+    {
+        if (type is null)
+        {
+            return null;
+        }
+
+        return GetTypeLink(type);
+    }
+
+    /// <inheritdoc cref="GetTypeLinkOrNull(ITypeNameData?)"/>
+    protected TypeLinkTM? GetTypeLinkOrNull(ITypeDeclaration? type)
+    {
+        if (type is null)
+        {
+            return null;
+        }
+
+        return GetTypeLink(type);
+    }
+
+    /// <summary>
     /// Creates a <see cref="ParameterTM"/> instance based on the provided <see cref="IParameterData"/> object.
     /// </summary>
     /// <param name="parameter">The <see cref="IParameterData"/> instance representing the parameter.</param>

@@ -43,9 +43,11 @@
 
                 @if (method.InheritedFrom is not null)
                 {
-                    <div>
-                        Inherited from:
-                        <TypeLink Type="@method.InheritedFrom" />
+                    <div class="text-muted">
+                        <i>
+                            Inherited from
+                            <TypeLink Type="@method.InheritedFrom" />
+                        </i>
                     </div>
                 }
 
