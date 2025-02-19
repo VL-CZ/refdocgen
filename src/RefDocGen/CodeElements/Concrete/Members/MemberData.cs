@@ -29,7 +29,6 @@ internal abstract class MemberData : IMemberData
 
         if (containingType.TypeObject != memberInfo.DeclaringType)
         {
-            RawDocComment = new("inheritdoc");
             IsInherited = true;
             InheritedFrom = memberInfo.DeclaringType?.GetTypeNameData();
         }

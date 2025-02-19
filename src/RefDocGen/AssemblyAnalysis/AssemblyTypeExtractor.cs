@@ -10,13 +10,6 @@ using RefDocGen.Tools;
 
 namespace RefDocGen.AssemblyAnalysis;
 
-enum MemberInheritance
-{
-    None,
-    All,
-    NonObject
-}
-
 /// <summary>
 /// Class responsible for extracting type information from a selected assembly.
 /// </summary>
@@ -42,20 +35,23 @@ internal class AssemblyTypeExtractor
     /// </summary>
     private readonly AccessModifier minVisibility;
 
+    /// <summary>
+    /// Indicates whether the methods inherited from <see cref="object"/> and <see cref="ValueType"/> types should be included in the types.
+    /// </summary>
     private readonly bool excludeObjectMethods;
 
     /// <summary>
-    /// Collection of all nested object types.
+    /// Collection of all declared nested object types.
     /// </summary>
     private readonly List<ObjectTypeData> allNestedObjectTypes = [];
 
     /// <summary>
-    /// Collection of all nested delegate types.
+    /// Collection of all declared nested delegate types.
     /// </summary>
     private readonly List<DelegateTypeData> allNestedDelegates = [];
 
     /// <summary>
-    /// Collection of all nested enum types.
+    /// Collection of all declared nested enum types.
     /// </summary>
     private readonly List<EnumTypeData> allNestedEnums = [];
 
@@ -64,16 +60,19 @@ internal class AssemblyTypeExtractor
     /// </summary>
     /// <param name="assemblyPath">The path to the DLL assembly file</param>
     /// <param name="minVisibility">Minimal visibility of the types and members to include.</param>
-    internal AssemblyTypeExtractor(string assemblyPath, AccessModifier minVisibility, MemberInheritance memberInheritance)
+    /// <param name="inheritMembers">Indicates whether the types should contain inherited members as well.</param>
+    internal AssemblyTypeExtractor(string assemblyPath, AccessModifier minVisibility, MemberInheritance inheritMembers)
     {
         this.assemblyPath = assemblyPath;
         this.minVisibility = minVisibility;
 
-        bindingFlags = memberInheritance == MemberInheritance.None
-            ? BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly
-            : BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
+        var defaultBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
 
-        excludeObjectMethods = memberInheritance == MemberInheritance.NonObject;
+        bindingFlags = inheritMembers == MemberInheritance.None
+            ? defaultBindingFlags | BindingFlags.DeclaredOnly
+            : defaultBindingFlags;
+
+        excludeObjectMethods = inheritMembers == MemberInheritance.NonObject;
     }
 
     /// <summary>
@@ -157,7 +156,7 @@ internal class AssemblyTypeExtractor
             .GetEvents(bindingFlags)
             .Where(e => !e.IsCompilerGenerated());
 
-        if (excludeObjectMethods)
+        if (excludeObjectMethods) // exclude methods inherited from 'object' and 'ValueType' types (if desired)
         {
             methods = methods.Where(m => m.DeclaringType != typeof(object) && m.DeclaringType != typeof(ValueType));
         }
