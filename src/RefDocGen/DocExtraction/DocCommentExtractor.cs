@@ -8,6 +8,7 @@ using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.DocExtraction.Handlers.InheritDoc;
+using System.Reflection.Metadata;
 
 namespace RefDocGen.DocExtraction;
 
@@ -16,7 +17,6 @@ namespace RefDocGen.DocExtraction;
 /// </summary>
 internal class DocCommentExtractor
 {
-
     /// <summary>
     /// Registry of the declared types, to which the documentation comments will be added.
     /// </summary>
@@ -147,6 +147,20 @@ internal class DocCommentExtractor
 
         // resolve 'cref' inheritdoc comments
         ResolveCrefInheritDocs();
+
+        foreach (var member in typeRegistry.AllTypes.Values.SelectMany(t => t.AllMembers.Values))
+        {
+            if (member.IsInherited)
+            {
+                member.RawDocComment = new XElement("member", new XElement("inheritdoc"));
+                memberInheritDocHandler.Resolve(member);
+
+                if (member.RawDocComment?.Nodes().Any() ?? false)
+                {
+                    AddMemberDocComment("M", $"{member.ContainingType.Id}.{member.Id}", member.RawDocComment);
+                }
+            }
+        }
     }
 
     /// <summary>
