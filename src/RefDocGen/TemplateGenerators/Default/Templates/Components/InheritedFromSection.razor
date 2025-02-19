@@ -1,0 +1,16 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required TypeLinkTM? OriginalType { get; set; }
+}
+
+@if (OriginalType is not null)
+{
+    <div class="text-muted ms-4 mb-2">
+        <i>
+            Inherited from
+            <TypeLink Type="@OriginalType" />
+        </i>
+    </div>
+}

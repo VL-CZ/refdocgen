@@ -39,17 +39,9 @@
 
                 <TypeParametersConstraints TypeParameters="@method.TypeParameters" />
 
-                <SummaryDoc DocComment="@method.SummaryDocComment" />
+                <InheritedFromSection OriginalType="@method.InheritedFrom" />
 
-                @if (method.InheritedFrom is not null)
-                {
-                    <div class="text-muted">
-                        <i>
-                            Inherited from
-                            <TypeLink Type="@method.InheritedFrom" />
-                        </i>
-                    </div>
-                }
+                <SummaryDoc DocComment="@method.SummaryDocComment" />
 
                 <TypeParameterDocs TypeParameters="@method.TypeParameters" />
 
