@@ -25,7 +25,7 @@ internal static class ExplicitInterfaceType
             return null; // the member isn't explicitly declared
         }
 
-        var declaringType = member.MemberInfo.DeclaringType;
+        var declaringType = member.ContainingType.TypeObject;
 
         if (declaringType is null || declaringType.IsInterface)
         {

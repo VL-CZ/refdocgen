@@ -89,4 +89,10 @@ internal abstract class MemberData : IMemberData
     /// For further info, see the table at <see href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/#id-strings"/>.
     /// </remarks>
     internal abstract string MemberKindId { get; }
+
+    /// <inheritdoc/>
+    public override string? ToString()
+    {
+        return $"{MemberKindId}:{ContainingType}.{Id}";
+    }
 }
