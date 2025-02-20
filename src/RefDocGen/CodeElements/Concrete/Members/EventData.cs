@@ -121,4 +121,7 @@ internal class EventData : MemberData, IEventData
 
     /// <inheritdoc/>
     public override bool IsStatic => Methods.All(m => m.IsStatic);
+
+    /// <inheritdoc/>
+    internal override string MemberKindId => "E";
 }

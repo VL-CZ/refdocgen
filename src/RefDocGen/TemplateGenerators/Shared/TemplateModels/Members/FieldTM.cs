@@ -19,6 +19,10 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// </para>
 /// </param>
 /// <param name="Attributes">Array of attributes applied to the field.</param>
+/// <param name="InheritedFrom">
+/// If the field is inherited, this represents the type from which it originates.
+/// <c>null</c> if the field is not inherited.
+/// </param>
 public record FieldTM(
     string Id,
     string Name,
@@ -28,4 +32,5 @@ public record FieldTM(
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,
-    string[] SeeAlsoDocComments);
+    string[] SeeAlsoDocComments,
+    TypeLinkTM? InheritedFrom);

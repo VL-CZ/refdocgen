@@ -189,6 +189,16 @@ internal class TypePageTools
     }
 
     /// <summary>
+    /// Gets the string indicating from which type this member was inherited.
+    /// </summary>
+    /// <param name="element">The HTML element representing the type.</param>
+    /// <returns>The declaring type name.</returns>
+    internal static string GetInheritedFromString(IElement element)
+    {
+        return element.GetParsedContent(DataId.InheritedFrom);
+    }
+
+    /// <summary>
     /// Gets the parameters of the member.
     /// </summary>
     /// <param name="memberElement">The HTML element representing the member.</param>

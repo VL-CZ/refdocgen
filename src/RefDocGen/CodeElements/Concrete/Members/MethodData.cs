@@ -58,7 +58,7 @@ internal class MethodData : ExecutableMemberData, IMethodData
     public XElement ReturnValueDocComment { get; internal set; } = XmlDocElements.EmptyReturns;
 
     /// <inheritdoc/>
-    public override bool OverridesAnotherMember => !MethodInfo.Equals(MethodInfo.GetBaseDefinition());
+    public override bool OverridesAnotherMember => !MethodInfo.Equals(MethodInfo.GetBaseDefinition()) && !IsInherited; // TODO
 
     /// <inheritdoc/>
     public bool IsExtensionMethod { get; }

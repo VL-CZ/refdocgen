@@ -1,7 +1,9 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.Attribute;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Tools;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Xml.Linq;
@@ -24,6 +26,12 @@ internal abstract class MemberData : IMemberData
         MemberInfo = memberInfo;
         ContainingType = containingType;
         Attributes = attributes;
+
+        if (containingType.TypeObject != memberInfo.DeclaringType)
+        {
+            IsInherited = true;
+            InheritedFrom = memberInfo.DeclaringType?.GetTypeNameData();
+        }
     }
 
     /// <inheritdoc/>
@@ -37,6 +45,12 @@ internal abstract class MemberData : IMemberData
 
     /// <inheritdoc/>
     public abstract bool IsStatic { get; }
+
+    /// <inheritdoc/>
+    public bool IsInherited { get; }
+
+    /// <inheritdoc/>
+    public ITypeNameData? InheritedFrom { get; }
 
     /// <inheritdoc/>
     public XElement SummaryDocComment { get; internal set; } = XmlDocElements.EmptySummary;
@@ -67,4 +81,18 @@ internal abstract class MemberData : IMemberData
     /// </para>
     /// </summary>
     internal XElement? RawDocComment { get; set; }
+
+    /// <summary>
+    /// ID of the member kind.
+    /// </summary>
+    /// <remarks>
+    /// For further info, see the table at <see href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/#id-strings"/>.
+    /// </remarks>
+    internal abstract string MemberKindId { get; }
+
+    /// <inheritdoc/>
+    public override string? ToString()
+    {
+        return $"{MemberKindId}:{ContainingType}.{Id}";
+    }
 }

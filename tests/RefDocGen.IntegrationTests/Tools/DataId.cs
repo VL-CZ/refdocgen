@@ -41,7 +41,8 @@ internal enum DataId
     DeclaredTypeSignature,
     TypeDataSection,
     NestedTypeData,
-    NestedTypeName
+    NestedTypeName,
+    InheritedFrom
 }
 
 /// <summary>
@@ -94,6 +95,7 @@ internal static class DataIdExtensions
             DataId.DeclaringType => "declaring-type",
             DataId.NestedTypeData => "nested-type-data",
             DataId.NestedTypeName => "nested-type-name",
+            DataId.InheritedFrom => "inherited-from",
             _ => throw new ArgumentException($"The provided DataId '{dataId}' has no string representation.")
         };
     }

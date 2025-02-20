@@ -36,17 +36,22 @@ internal class AssemblyTypeExtractor
     private readonly AccessModifier minVisibility;
 
     /// <summary>
-    /// Collection of all nested object types.
+    /// Indicates whether the methods inherited from <see cref="object"/> and <see cref="ValueType"/> types should be included in the types.
+    /// </summary>
+    private readonly bool excludeObjectMethods;
+
+    /// <summary>
+    /// Collection of all declared nested object types.
     /// </summary>
     private readonly List<ObjectTypeData> allNestedObjectTypes = [];
 
     /// <summary>
-    /// Collection of all nested delegate types.
+    /// Collection of all declared nested delegate types.
     /// </summary>
     private readonly List<DelegateTypeData> allNestedDelegates = [];
 
     /// <summary>
-    /// Collection of all nested enum types.
+    /// Collection of all declared nested enum types.
     /// </summary>
     private readonly List<EnumTypeData> allNestedEnums = [];
 
@@ -55,10 +60,19 @@ internal class AssemblyTypeExtractor
     /// </summary>
     /// <param name="assemblyPath">The path to the DLL assembly file</param>
     /// <param name="minVisibility">Minimal visibility of the types and members to include.</param>
-    internal AssemblyTypeExtractor(string assemblyPath, AccessModifier minVisibility)
+    /// <param name="memberInheritanceMode">Specifies which inherited members should be included in types.</param>
+    internal AssemblyTypeExtractor(string assemblyPath, AccessModifier minVisibility, MemberInheritanceMode memberInheritanceMode)
     {
         this.assemblyPath = assemblyPath;
         this.minVisibility = minVisibility;
+
+        var defaultBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
+
+        bindingFlags = memberInheritanceMode == MemberInheritanceMode.None
+            ? defaultBindingFlags | BindingFlags.DeclaredOnly
+            : defaultBindingFlags;
+
+        excludeObjectMethods = memberInheritanceMode == MemberInheritanceMode.NonObject;
     }
 
     /// <summary>
@@ -141,6 +155,11 @@ internal class AssemblyTypeExtractor
         var events = type
             .GetEvents(bindingFlags)
             .Where(e => !e.IsCompilerGenerated());
+
+        if (excludeObjectMethods) // exclude methods inherited from 'object' and 'ValueType' types (if requested)
+        {
+            methods = methods.Where(m => m.DeclaringType != typeof(object) && m.DeclaringType != typeof(ValueType));
+        }
 
         // get nested types
         var allNestedTypes = type

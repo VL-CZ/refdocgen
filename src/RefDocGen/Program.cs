@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using RefDocGen.AssemblyAnalysis;
 using RefDocGen.CodeElements;
 using RefDocGen.TemplateGenerators.Default;
 
@@ -24,6 +25,7 @@ public static class Program
         string outputDir = Path.Combine(projectPath, "out-razor");
 
         var minVisibility = AccessModifier.Private;
+        var memberInheritanceMode = MemberInheritanceMode.NonObject;
 
         IServiceCollection services = new ServiceCollection();
         _ = services.AddLogging();
@@ -35,7 +37,7 @@ public static class Program
 
         var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir);
 
-        var docGenerator = new DocGenerator(dllPath, docPath, templateGenerator, minVisibility);
+        var docGenerator = new DocGenerator(dllPath, docPath, templateGenerator, minVisibility, memberInheritanceMode);
         docGenerator.GenerateDoc();
 
         Console.WriteLine("Done...");

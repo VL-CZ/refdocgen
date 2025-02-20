@@ -33,6 +33,19 @@ public class MemberDataTests
         constraints.ShouldBe(["where T2 : class"]);
     }
 
+    [Theory]
+    [InlineData("MyLibrary.Dog", "Owner", "Animal")]
+    [InlineData("MyLibrary.Tools.Collections.MySortedList`1", "Contains(`0)", "MyCollection<T>")]
+    public void InheritedFromString_Matches(string pageName, string memberId, string expectedInheritedFromTypeName)
+    {
+        using var document = DocumentationTools.GetPage($"{pageName}.html");
+
+        var member = document.GetMemberElement(memberId);
+        string inheritedFrom = TypePageTools.GetInheritedFromString(member);
+
+        inheritedFrom.ShouldBe($"Inherited from {expectedInheritedFromTypeName}");
+    }
+
     [Fact]
     public void Exceptions_Match()
     {

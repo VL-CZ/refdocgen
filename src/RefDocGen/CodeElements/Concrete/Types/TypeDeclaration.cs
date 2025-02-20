@@ -113,4 +113,10 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
 
     /// <inheritdoc/>
     public ITypeDeclaration? DeclaringType { get; internal set; }
+
+    /// <inheritdoc/>
+    public override string? ToString()
+    {
+        return $"T:{Id}";
+    }
 }

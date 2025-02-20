@@ -156,4 +156,7 @@ internal class PropertyData : MemberData, IPropertyData
 
     /// <inheritdoc/>
     public bool IsSetterInitOnly { get; }
+
+    /// <inheritdoc/>
+    internal override string MemberKindId => "P";
 }

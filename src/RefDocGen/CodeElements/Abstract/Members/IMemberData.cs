@@ -1,5 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.Attribute;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using System.Reflection;
 using System.Xml.Linq;
 
@@ -71,4 +72,15 @@ public interface IMemberData
     /// Collection of attributes applied to the member.
     /// </summary>
     IReadOnlyList<IAttributeData> Attributes { get; }
+
+    /// <summary>
+    /// Indicates whether the member is inhertied from another type.
+    /// </summary>
+    bool IsInherited { get; }
+
+    /// <summary>
+    /// If the member is inherited, this represents the type from which it originates.
+    /// <c>null</c> if the member is not inherited.
+    /// </summary>
+    ITypeNameData? InheritedFrom { get; }
 }

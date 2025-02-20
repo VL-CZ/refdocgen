@@ -28,6 +28,10 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// </para>
 /// </param>
 /// <param name="Attributes">Array of attributes applied to the property.</param>
+/// <param name="InheritedFrom">
+/// If the property is inherited, this represents the type from which it originates.
+/// <c>null</c> if the property is not inherited.
+/// </param>
 public record PropertyTM(
     string Id,
     string Name,
@@ -44,4 +48,5 @@ public record PropertyTM(
     string? RemarksDocComment,
     string? ValueDocComment,
     string[] SeeAlsoDocComments,
-    ExceptionTM[] Exceptions);
+    ExceptionTM[] Exceptions,
+    TypeLinkTM? InheritedFrom);

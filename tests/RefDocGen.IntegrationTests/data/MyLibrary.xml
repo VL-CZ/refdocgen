@@ -376,7 +376,7 @@
         </member>
         <member name="T:MyLibrary.Tools.Collections.MyStringCollection">
             <summary>
-            Custom string dictionary.
+            Custom string collection.
             </summary>
             <seealso cref="T:MyLibrary.Tools.Collections.MyCollection`1">My collection class</seealso>
             <seealso cref="T:System.Collections.Generic.ICollection`1"/>
