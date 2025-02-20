@@ -56,4 +56,7 @@ internal class FieldData : MemberData, IFieldData
 
     /// <inheritdoc/>
     public bool IsRequired => FieldInfo.IsDefined(typeof(RequiredMemberAttribute), false);
+
+    /// <inheritdoc/>
+    internal override string MemberKindId => "F";
 }

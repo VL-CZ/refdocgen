@@ -41,4 +41,7 @@ internal class EnumMemberData : MemberData, IEnumMemberData
 
     /// <inheritdoc/>
     public object Value { get; }
+
+    /// <inheritdoc/>
+    internal override string MemberKindId => "F";
 }

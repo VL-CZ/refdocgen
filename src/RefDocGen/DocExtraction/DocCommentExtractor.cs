@@ -8,7 +8,6 @@ using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.CodeElements.Concrete;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.DocExtraction.Handlers.InheritDoc;
-using System.Reflection.Metadata;
 
 namespace RefDocGen.DocExtraction;
 
@@ -157,7 +156,7 @@ internal class DocCommentExtractor
 
                 if (member.RawDocComment?.Nodes().Any() ?? false)
                 {
-                    AddMemberDocComment("M", $"{member.ContainingType.Id}.{member.Id}", member.RawDocComment);
+                    AddMemberDocComment(member.MemberKindId, $"{member.ContainingType.Id}.{member.Id}", member.RawDocComment);
                 }
             }
         }
@@ -225,10 +224,10 @@ internal class DocCommentExtractor
     /// <summary>
     /// Add the doc comment to the corresponding type member.
     /// </summary>
-    /// <param name="memberTypeId">Identifier of the member type.</param>
+    /// <param name="memberKindId">Identifier of the member kind.</param>
     /// <param name="fullMemberName">Fully qualified name of the member.</param>
     /// <param name="docCommentNode">XML node of the doc comment for the given type member.</param>
-    private void AddMemberDocComment(string memberTypeId, string fullMemberName, XElement docCommentNode)
+    private void AddMemberDocComment(string memberKindId, string fullMemberName, XElement docCommentNode)
     {
         (string typeName, string memberName, string paramsString) = MemberSignatureParser.Parse(fullMemberName);
 
@@ -243,19 +242,19 @@ internal class DocCommentExtractor
                 inheritDocMembers.Add(member);
             }
 
-            if (memberTypeId == CodeElementId.Method && memberName == ConstructorData.DefaultName) // the member is a constructor
+            if (memberKindId == CodeElementId.Method && memberName == ConstructorData.DefaultName) // the member is a constructor
             {
                 constructorDocHandler.AddDocumentation(type, memberId, docCommentNode);
             }
-            if (memberTypeId == CodeElementId.Method && OperatorData.MethodNames.Contains(memberName)) // an operator
+            if (memberKindId == CodeElementId.Method && OperatorData.MethodNames.Contains(memberName)) // an operator
             {
                 operatorDocHandler.AddDocumentation(type, memberId, docCommentNode);
             }
-            if (memberTypeId == CodeElementId.Property && type.Indexers.ContainsKey(memberId)) // an indexer
+            if (memberKindId == CodeElementId.Property && type.Indexers.ContainsKey(memberId)) // an indexer
             {
                 indexerDocHandler.AddDocumentation(type, memberId, docCommentNode);
             }
-            else if (memberDocHandlers.TryGetValue(memberTypeId, out var handler))
+            else if (memberDocHandlers.TryGetValue(memberKindId, out var handler))
             {
                 handler.AddDocumentation(type, memberId, docCommentNode);
             }

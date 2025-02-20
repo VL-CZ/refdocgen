@@ -81,4 +81,12 @@ internal abstract class MemberData : IMemberData
     /// </para>
     /// </summary>
     internal XElement? RawDocComment { get; set; }
+
+    /// <summary>
+    /// ID of the member kind.
+    /// </summary>
+    /// <remarks>
+    /// For further info, see the table at <see href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/#id-strings"/>.
+    /// </remarks>
+    internal abstract string MemberKindId { get; }
 }
