@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RefDocGen.TemplateGenerators.Default;
 using RefDocGen.CodeElements;
+using RefDocGen.AssemblyAnalysis;
 
 namespace RefDocGen.IntegrationTests.Fixtures;
 
@@ -48,7 +49,7 @@ public class DocumentationFixture : IDisposable
 
         var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir); // use default template generator
 
-        var generator = new DocGenerator("data/MyLibrary.dll", "data/MyLibrary.xml", templateGenerator, AccessModifier.Private);
+        var generator = new DocGenerator("data/MyLibrary.dll", "data/MyLibrary.xml", templateGenerator, AccessModifier.Private, MemberInheritanceMode.NonObject);
         generator.GenerateDoc();
     }
 }
