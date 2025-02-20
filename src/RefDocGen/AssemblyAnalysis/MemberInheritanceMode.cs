@@ -3,7 +3,7 @@ namespace RefDocGen.AssemblyAnalysis;
 /// <summary>
 /// Defines the inheritance rules for members.
 /// </summary>
-internal enum MemberInheritance
+public enum MemberInheritanceMode
 {
     /// <summary>
     /// Do not inherit any members.

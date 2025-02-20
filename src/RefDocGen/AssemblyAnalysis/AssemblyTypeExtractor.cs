@@ -60,19 +60,19 @@ internal class AssemblyTypeExtractor
     /// </summary>
     /// <param name="assemblyPath">The path to the DLL assembly file</param>
     /// <param name="minVisibility">Minimal visibility of the types and members to include.</param>
-    /// <param name="inheritMembers">Indicates whether the types should contain inherited members as well.</param>
-    internal AssemblyTypeExtractor(string assemblyPath, AccessModifier minVisibility, MemberInheritance inheritMembers)
+    /// <param name="memberInheritanceMode">Specifies which inherited members should be included in types.</param>
+    internal AssemblyTypeExtractor(string assemblyPath, AccessModifier minVisibility, MemberInheritanceMode memberInheritanceMode)
     {
         this.assemblyPath = assemblyPath;
         this.minVisibility = minVisibility;
 
         var defaultBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
 
-        bindingFlags = inheritMembers == MemberInheritance.None
+        bindingFlags = memberInheritanceMode == MemberInheritanceMode.None
             ? defaultBindingFlags | BindingFlags.DeclaredOnly
             : defaultBindingFlags;
 
-        excludeObjectMethods = inheritMembers == MemberInheritance.NonObject;
+        excludeObjectMethods = memberInheritanceMode == MemberInheritanceMode.NonObject;
     }
 
     /// <summary>
@@ -156,7 +156,7 @@ internal class AssemblyTypeExtractor
             .GetEvents(bindingFlags)
             .Where(e => !e.IsCompilerGenerated());
 
-        if (excludeObjectMethods) // exclude methods inherited from 'object' and 'ValueType' types (if desired)
+        if (excludeObjectMethods) // exclude methods inherited from 'object' and 'ValueType' types (if requested)
         {
             methods = methods.Where(m => m.DeclaringType != typeof(object) && m.DeclaringType != typeof(ValueType));
         }
