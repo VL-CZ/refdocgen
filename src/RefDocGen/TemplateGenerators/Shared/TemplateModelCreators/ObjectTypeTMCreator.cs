@@ -255,6 +255,10 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     {
         var modifiers = GetCallableMemberModifiers(method);
 
+        var baseTypeLink = method.BaseDefinitionType is null
+            ? null
+            : new TypeLinkTM(CSharpTypeName.Of(method.BaseDefinitionType) + "." + method.Name, typeUrlResolver.GetUrlOf(method.BaseDefinitionType.TypeDeclarationId, method.Id));
+
         return new MethodTM(
             method.Id,
             GetCallableMemberName(method),
@@ -269,7 +273,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             ToHtmlString(method.ReturnValueDocComment),
             GetHtmlStrings(method.SeeAlsoDocComments),
             GetTemplateModels(method.DocumentedExceptions),
-            GetTypeLinkOrNull(method.InheritedFrom));
+            GetTypeLinkOrNull(method.InheritedFrom),
+            baseTypeLink);
     }
 
     /// <summary>
@@ -315,7 +320,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             ToHtmlString(operatorData.ReturnValueDocComment),
             GetHtmlStrings(operatorData.SeeAlsoDocComments),
             GetTemplateModels(operatorData.DocumentedExceptions),
-            GetTypeLinkOrNull(operatorData.InheritedFrom));
+            GetTypeLinkOrNull(operatorData.InheritedFrom),
+            null);
     }
 
     /// <summary>

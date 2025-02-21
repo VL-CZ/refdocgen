@@ -38,4 +38,5 @@ public record MethodTM(
     string? ReturnsDocComment,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions,
-    TypeLinkTM? InheritedFrom);
+    TypeLinkTM? InheritedFrom,
+    TypeLinkTM? BaseDeclaringType);

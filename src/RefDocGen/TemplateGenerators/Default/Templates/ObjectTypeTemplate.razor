@@ -10,7 +10,7 @@
     /// <returns>Boolean indicating whether the model is documented.</returns>
     private bool HasAdditionalDocs()
     {
-        return Model.RemarksDocComment is not null || Model.SeeAlsoDocComments.Any() || Model.TypeParameters.Any() || Model.Attributes.Any();
+        return Model.TypeParameters.Any() || Model.Attributes.Any() || Model.NestedTypes.Any() || Model.RemarksDocComment is not null || Model.SeeAlsoDocComments.Any();
     }
 }
 

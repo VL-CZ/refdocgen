@@ -1,0 +1,16 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required TypeLinkTM? BaseType { get; set; }
+}
+
+@if (BaseType is not null)
+{
+    <div class="text-primary ms-4 mb-2" data-id="inherited-from">
+        <i>
+            Overrides 
+            <TypeLink Type="@BaseType" />
+        </i>
+    </div>
+}

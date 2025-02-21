@@ -40,6 +40,11 @@ internal class MethodData : ExecutableMemberData, IMethodData
         ReturnType = methodInfo.ReturnType.GetTypeNameData(availableTypeParameters);
         TypeParameters = typeParameterDeclarations;
         IsExtensionMethod = MethodInfo.IsDefined(typeof(ExtensionAttribute), true);
+
+        if (OverridesAnotherMember)
+        {
+            BaseDefinitionType = methodInfo.GetBaseDefinition().DeclaringType?.GetTypeNameData();
+        }
     }
 
     /// <inheritdoc/>
@@ -62,6 +67,8 @@ internal class MethodData : ExecutableMemberData, IMethodData
 
     /// <inheritdoc/>
     public bool IsExtensionMethod { get; }
+
+    public ITypeNameData? BaseDefinitionType { get; }
 
     /// <summary>
     /// Collection of type parameters declared in the method; the keys represent type parameter names.
