@@ -44,6 +44,12 @@ internal class EventData : MemberData, IEventData
 
         this.addMethod = addMethod;
         this.removeMethod = removeMethod;
+
+        var baseDeclarationType = Methods.Select(m => m.BaseDefinitionType).SingleOrDefault();
+        if (baseDeclarationType is not null)
+        {
+            BaseDefinitionType = baseDeclarationType;
+        }
     }
 
     /// <inheritdoc/>
@@ -121,6 +127,9 @@ internal class EventData : MemberData, IEventData
 
     /// <inheritdoc/>
     public override bool IsStatic => Methods.All(m => m.IsStatic);
+
+    /// <inheritdoc/>
+    public ITypeNameData? BaseDefinitionType { get; }
 
     /// <inheritdoc/>
     internal override string MemberKindId => "E";

@@ -41,7 +41,7 @@ internal class IndexerData : PropertyData, IIndexerData
     internal IReadOnlyDictionary<string, ParameterData> Parameters { get; }
 
     /// <inheritdoc/>
-    IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters.Values
+    IReadOnlyList<IParameterData> IParametricMemberData.Parameters => Parameters.Values
         .OrderBy(p => p.Position)
         .ToList();
 }

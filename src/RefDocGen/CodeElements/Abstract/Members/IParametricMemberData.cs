@@ -6,11 +6,10 @@ namespace RefDocGen.CodeElements.Abstract.Members;
 /// Note that properties are excluded from this definition.
 /// </para>
 /// </summary>
-public interface IExecutableMemberData : ICallableMemberData
+public interface IParametricMemberData : IMemberData
 {
     /// <summary>
     /// Readonly list of the member parameters, indexed by their position.
     /// </summary>
     IReadOnlyList<IParameterData> Parameters { get; }
-
 }

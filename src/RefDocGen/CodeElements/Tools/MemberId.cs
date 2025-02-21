@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Concrete.Members;
 
 namespace RefDocGen.CodeElements.Tools;
 
@@ -7,20 +8,6 @@ namespace RefDocGen.CodeElements.Tools;
 /// </summary>
 internal class MemberId
 {
-    /// <summary>
-    /// Get the ID of the given <paramref name="member"/>
-    /// </summary>
-    /// <param name="member">The member, whose ID is returned.</param>
-    /// <returns>The ID of the given <paramref name="member"/></returns>
-    internal static string Of(IExecutableMemberData member)
-    {
-        string id = Of((ICallableMemberData)member); // get the ID without parameters
-
-        id += GetParameterString(member.Parameters); // append parameters string
-
-        return id;
-    }
-
     /// <summary>
     /// Get the ID of the given <paramref name="member"/>
     /// </summary>
@@ -35,6 +22,20 @@ internal class MemberId
             id = member.ExplicitInterfaceType.Id + '.' + id;
             id = id.Replace('.', '#');
         }
+
+        return id;
+    }
+
+    /// <summary>
+    /// Get the ID of the given <paramref name="indexer"/>
+    /// </summary>
+    /// <param name="indexer">The indexer, whose ID is returned.</param>
+    /// <returns>The ID of the given <paramref name="indexer"/></returns>
+    internal static string Of(IIndexerData indexer)
+    {
+        string id = Of((ICallableMemberData)indexer); // get the ID without parameters
+
+        id += GetParameterListId(indexer.Parameters); // append parameters string
 
         return id;
     }
@@ -55,7 +56,7 @@ internal class MemberId
             id += $"``{typeParamsCount}";
         }
 
-        id += GetParameterString(method.Parameters); // append parameters string
+        id += GetParameterListId(method.Parameters); // append parameters string
 
         return id;
     }
@@ -75,11 +76,21 @@ internal class MemberId
     }
 
     /// <summary>
+    /// Get the ID of the given <paramref name="constructor"/>
+    /// </summary>
+    /// <param name="constructor">The constructor, whose ID is returned.</param>
+    /// <returns>The ID of the given <paramref name="constructor"/></returns>
+    internal static string Of(IConstructorData constructor)
+    {
+        return ConstructorData.DefaultName + GetParameterListId(constructor.Parameters);
+    }
+
+    /// <summary>
     /// Get the ID of the given parameters list.
     /// </summary>
     /// <param name="parameters">The list of parameters, whose ID is returned.</param>
-    /// <returns>The ID of the given <paramref name="parameters"/> list.</returns>
-    private static string GetParameterString(IReadOnlyList<IParameterData> parameters)
+    /// <returns>The ID of the given <paramref name="parameters"/> list enclosed in parentheses. An empty string is returned if there are no parameters.</returns>
+    private static string GetParameterListId(IReadOnlyList<IParameterData> parameters)
     {
         if (parameters.Count == 0)
         {

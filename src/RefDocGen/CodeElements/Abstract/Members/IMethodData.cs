@@ -8,7 +8,7 @@ namespace RefDocGen.CodeElements.Abstract.Members;
 /// <summary>
 /// Represents data of a method.
 /// </summary>
-public interface IMethodData : IExecutableMemberData
+public interface IMethodData : IParametricMemberData, ICallableMemberData
 {
     /// <summary>
     /// <see cref="System.Reflection.MethodInfo"/> object representing the method.

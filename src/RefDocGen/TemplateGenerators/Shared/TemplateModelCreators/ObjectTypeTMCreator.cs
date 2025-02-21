@@ -98,7 +98,12 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="ConstructorTM"/> instance based on the provided <paramref name="constructor"/>.</returns>
     private ConstructorTM GetFrom(IConstructorData constructor)
     {
-        var modifiers = GetCallableMemberModifiers(constructor);
+        List<Keyword> modifiers = [constructor.AccessModifier.ToKeyword()];
+
+        if (constructor.IsStatic)
+        {
+            modifiers.Add(Keyword.Static);
+        }
 
         return new ConstructorTM(
             constructor.Id,

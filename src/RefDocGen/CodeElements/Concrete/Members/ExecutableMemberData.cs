@@ -1,11 +1,9 @@
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types.Attribute;
 using RefDocGen.CodeElements.Abstract.Types.Exception;
-using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace RefDocGen.CodeElements.Concrete.Members;
 
@@ -13,7 +11,7 @@ namespace RefDocGen.CodeElements.Concrete.Members;
 /// Class representing data of an executable member (i.e. method or a constructor).
 /// Note that properties are excluded from this definition.
 /// </summary>
-internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
+internal abstract class ExecutableMemberData : MemberData, IParametricMemberData
 {
     /// <summary>
     /// <see cref="MethodBase"/> object representing the member.
@@ -39,35 +37,11 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
     }
 
     /// <inheritdoc/>
-    public override string Id => MemberId.Of(this);
-
-    /// <inheritdoc/>
-    public abstract bool OverridesAnotherMember { get; }
-
-    /// <inheritdoc/>
     public override AccessModifier AccessModifier => AccessModifierHelper.GetAccessModifier(methodBase.IsPrivate, methodBase.IsFamily,
         methodBase.IsAssembly, methodBase.IsPublic, methodBase.IsFamilyAndAssembly, methodBase.IsFamilyOrAssembly);
 
     /// <inheritdoc/>
     public override bool IsStatic => methodBase.IsStatic;
-
-    /// <inheritdoc/>
-    public bool IsOverridable => methodBase.IsVirtual && !methodBase.IsFinal;
-
-    /// <inheritdoc/>
-    public bool IsAbstract => methodBase.IsAbstract;
-
-    /// <inheritdoc/>
-    public bool IsFinal => methodBase.IsFinal;
-
-    /// <inheritdoc/>
-    public bool IsAsync => methodBase.GetCustomAttribute(typeof(AsyncStateMachineAttribute)) != null;
-
-    /// <inheritdoc/>
-    public bool IsSealed => OverridesAnotherMember && IsFinal;
-
-    /// <inheritdoc/>
-    public bool IsVirtual => methodBase.IsVirtual;
 
     /// <summary>
     /// Dictionary of method parameters, the keys represents parameter names.
@@ -75,21 +49,12 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
     internal IReadOnlyDictionary<string, ParameterData> Parameters { get; }
 
     /// <inheritdoc/>
-    IReadOnlyList<IParameterData> IExecutableMemberData.Parameters => Parameters.Values
+    IReadOnlyList<IParameterData> IParametricMemberData.Parameters => Parameters.Values
         .OrderBy(p => p.Position)
         .ToList();
 
     /// <inheritdoc/>
     public IEnumerable<IExceptionDocumentation> DocumentedExceptions { get; internal set; } = [];
-
-    /// <inheritdoc/>
-    public bool IsExplicitImplementation => ExplicitInterfaceType is not null;
-
-    /// <inheritdoc/>
-    public virtual ITypeNameData? ExplicitInterfaceType => Tools.ExplicitInterfaceType.Of(this);
-
-    /// <inheritdoc/>
-    public abstract ITypeNameData? BaseDefinitionType { get; }
 
     /// <inheritdoc/>
     internal override string MemberKindId => "M";

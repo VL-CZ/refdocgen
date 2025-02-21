@@ -58,11 +58,36 @@ internal class MethodData : ExecutableMemberData, IMethodData
     public XElement ReturnValueDocComment { get; internal set; } = XmlDocElements.EmptyReturns;
 
     /// <inheritdoc/>
-    public override bool OverridesAnotherMember => !MethodInfo.Equals(MethodInfo.GetBaseDefinition()) && !IsInherited; // TODO
+    public bool OverridesAnotherMember => !MethodInfo.Equals(MethodInfo.GetBaseDefinition()) && !IsInherited; // TODO
+
+    /// <inheritdoc/>
+    public bool IsOverridable => MethodInfo.IsVirtual && !MethodInfo.IsFinal;
+
+    /// <inheritdoc/>
+    public bool IsAbstract => MethodInfo.IsAbstract;
+
+    /// <inheritdoc/>
+    public bool IsFinal => MethodInfo.IsFinal;
+
+    /// <inheritdoc/>
+    public bool IsAsync => MethodInfo.GetCustomAttribute(typeof(AsyncStateMachineAttribute)) != null;
+
+    /// <inheritdoc/>
+    public bool IsSealed => OverridesAnotherMember && IsFinal;
+
+    /// <inheritdoc/>
+    public bool IsVirtual => MethodInfo.IsVirtual;
 
     /// <inheritdoc/>
     public bool IsExtensionMethod { get; }
 
+    /// <inheritdoc/>
+    public bool IsExplicitImplementation => ExplicitInterfaceType is not null;
+
+    /// <inheritdoc/>
+    public ITypeNameData? ExplicitInterfaceType => Tools.ExplicitInterfaceType.Of(this);
+
+    /// <inheritdoc/>
     public ITypeNameData? BaseDefinitionType { get; }
 
     /// <summary>

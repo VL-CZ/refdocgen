@@ -1,8 +1,8 @@
 using System.Reflection;
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types.Attribute;
-using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Tools;
 
 namespace RefDocGen.CodeElements.Concrete.Members;
 
@@ -33,17 +33,11 @@ internal class ConstructorData : ExecutableMemberData, IConstructorData
     }
 
     /// <inheritdoc/>
+    public override string Id => MemberId.Of(this);
+
+    /// <inheritdoc/>
     public ConstructorInfo ConstructorInfo { get; }
 
     /// <inheritdoc/>
-    public override bool OverridesAnotherMember => false;
-
-    /// <inheritdoc/>
     public override string Name => DefaultName;
-
-    /// <inheritdoc/>
-    public override ITypeNameData? ExplicitInterfaceType => null; // the constructors can't be explicitly declared
-
-    /// <inheritdoc/>
-    public override ITypeNameData? BaseDefinitionType => null; // the constructors can't be overriden
 }
