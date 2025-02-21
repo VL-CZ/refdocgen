@@ -73,4 +73,6 @@ public interface ICallableMemberData : IMemberData
     /// For further info, see <see href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/interfaces/explicit-interface-implementation"/>
     /// </remarks>
     ITypeNameData? ExplicitInterfaceType { get; }
+
+    ITypeNameData? BaseDefinitionType { get; }
 }

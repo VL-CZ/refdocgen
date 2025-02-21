@@ -29,6 +29,4 @@ public interface IMethodData : IExecutableMemberData
     /// Collection of generic type parameters declared in the method.
     /// </summary>
     IReadOnlyList<ITypeParameterData> TypeParameters { get; }
-
-    ITypeNameData? BaseDefinitionType { get; }
 }

@@ -89,5 +89,8 @@ internal abstract class ExecutableMemberData : MemberData, IExecutableMemberData
     public virtual ITypeNameData? ExplicitInterfaceType => Tools.ExplicitInterfaceType.Of(this);
 
     /// <inheritdoc/>
+    public abstract ITypeNameData? BaseDefinitionType { get; }
+
+    /// <inheritdoc/>
     internal override string MemberKindId => "M";
 }

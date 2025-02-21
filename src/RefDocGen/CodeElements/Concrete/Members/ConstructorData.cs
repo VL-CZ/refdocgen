@@ -43,4 +43,7 @@ internal class ConstructorData : ExecutableMemberData, IConstructorData
 
     /// <inheritdoc/>
     public override ITypeNameData? ExplicitInterfaceType => null; // the constructors can't be explicitly declared
+
+    /// <inheritdoc/>
+    public override ITypeNameData? BaseDefinitionType => null; // the constructors can't be overriden
 }
