@@ -18,7 +18,7 @@ internal static class ExplicitInterfaceType
     /// <c>null</c>, if the member is not explicitly declared.
     /// </para>
     /// </returns>
-    internal static ITypeNameData? Of(IParametricMemberData member)
+    internal static ITypeNameData? Of(IParameterizedMemberData member)
     {
         if (!member.MemberInfo.Name.Contains('.'))
         {

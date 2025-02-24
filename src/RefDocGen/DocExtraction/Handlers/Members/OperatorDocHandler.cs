@@ -10,7 +10,7 @@ namespace RefDocGen.DocExtraction.Handlers.Members;
 /// <summary>
 /// Class responsible for handling and adding XML doc comments to the corresponding operators.
 /// </summary>
-internal class OperatorDocHandler : ExecutableMemberDocHandler<OperatorData>
+internal class OperatorDocHandler : MethodLikeMemberDocHandler<OperatorData>
 {
     /// <inheritdoc/>
     protected override void AddRemainingComments(OperatorData member, XElement memberDocComment)

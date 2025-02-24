@@ -8,10 +8,9 @@ using System.Reflection;
 namespace RefDocGen.CodeElements.Concrete.Members;
 
 /// <summary>
-/// Class representing data of an executable member (i.e. method or a constructor).
-/// Note that properties are excluded from this definition.
+/// Represents data of a method-like type member (such as a method or a constructor).
 /// </summary>
-internal abstract class ExecutableMemberData : MemberData, IParametricMemberData
+internal abstract class MethodLikeMemberData : MemberData, IParameterizedMemberData
 {
     /// <summary>
     /// <see cref="MethodBase"/> object representing the member.
@@ -19,13 +18,13 @@ internal abstract class ExecutableMemberData : MemberData, IParametricMemberData
     private readonly MethodBase methodBase;
 
     /// <summary>
-    /// Create new <see cref="ExecutableMemberData"/> instance.
+    /// Create new <see cref="MethodLikeMemberData"/> instance.
     /// </summary>
     /// <param name="methodBase"><see cref="MethodBase"/> object representing the member.</param>
     /// <param name="containingType">Type that contains the member.</param>
     /// <param name="attributes">Collection of attributes applied to the member.</param>
     /// <param name="parameters">Dictionary of member parameters, the keys represent parameter names.</param>
-    protected ExecutableMemberData(
+    protected MethodLikeMemberData(
         MethodBase methodBase,
         TypeDeclaration containingType,
         IReadOnlyDictionary<string, ParameterData> parameters,
@@ -49,7 +48,7 @@ internal abstract class ExecutableMemberData : MemberData, IParametricMemberData
     internal IReadOnlyDictionary<string, ParameterData> Parameters { get; }
 
     /// <inheritdoc/>
-    IReadOnlyList<IParameterData> IParametricMemberData.Parameters => Parameters.Values
+    IReadOnlyList<IParameterData> IParameterizedMemberData.Parameters => Parameters.Values
         .OrderBy(p => p.Position)
         .ToList();
 

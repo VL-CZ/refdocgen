@@ -6,7 +6,7 @@ namespace RefDocGen.CodeElements.Abstract.Members;
 /// <summary>
 /// Represents data of a constructor.
 /// </summary>
-public interface IConstructorData : IParametricMemberData
+public interface IConstructorData : IParameterizedMemberData
 {
     /// <summary>
     /// <see cref="System.Reflection.ConstructorInfo"/> object representing the constructor.

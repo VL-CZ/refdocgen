@@ -4,8 +4,15 @@ using RefDocGen.CodeElements.Abstract.Types.TypeName;
 namespace RefDocGen.CodeElements.Abstract.Members;
 
 /// <summary>
-/// Represents data of a callable type member (such as a method, property or a constructor).
+/// Represents data of a callable type member (such as a method, property or an event).
+///
+/// <para>
+/// Note that these members can typically be declared in an interface or possibly overriden by child classes.
+/// </para>
 /// </summary>
+/// <remarks>
+/// Note that constructors and fields are excluded from this definition.
+/// </remarks>
 public interface ICallableMemberData : IMemberData
 {
     /// <summary>
@@ -74,5 +81,9 @@ public interface ICallableMemberData : IMemberData
     /// </remarks>
     ITypeNameData? ExplicitInterfaceType { get; }
 
-    ITypeNameData? BaseDefinitionType { get; }
+    /// <summary>
+    /// If the member overrides another member, this property returns the base type that originally declared the member.
+    /// <c>null</c> is returned if the member doesn't override anything.
+    /// </summary>
+    ITypeNameData? BaseDeclaringType { get; }
 }

@@ -260,9 +260,9 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     {
         var modifiers = GetCallableMemberModifiers(method);
 
-        var baseTypeLink = method.BaseDefinitionType is null
+        var baseTypeLink = method.BaseDeclaringType is null
             ? null
-            : new TypeLinkTM(CSharpTypeName.Of(method.BaseDefinitionType) + "." + method.Name, typeUrlResolver.GetUrlOf(method.BaseDefinitionType.TypeDeclarationId, method.Id));
+            : new TypeLinkTM(CSharpTypeName.Of(method.BaseDeclaringType) + "." + method.Name, typeUrlResolver.GetUrlOf(method.BaseDeclaringType.TypeDeclarationId, method.Id));
 
         return new MethodTM(
             method.Id,

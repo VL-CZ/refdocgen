@@ -7,14 +7,12 @@ using RefDocGen.CodeElements.Concrete.Types;
 namespace RefDocGen.DocExtraction.Handlers.Members;
 
 /// <summary>
-/// Abstract class responsible for handling and adding XML doc comments to the corresponding executable type members.
-/// <para>
-/// See also <seealso cref="ExecutableMemberData"/> class.
-/// </para>
+/// Abstract class responsible for handling and adding XML doc comments to the corresponding method-like type members.
 /// </summary>
 /// <typeparam name="T">Type of the member to which the doc is assigned.</typeparam>
-internal abstract class ExecutableMemberDocHandler<T> : MemberDocHandler<ObjectTypeData, T>
-    where T : ExecutableMemberData
+/// <seealso cref="MethodLikeMemberData"/>
+internal abstract class MethodLikeMemberDocHandler<T> : MemberDocHandler<ObjectTypeData, T>
+    where T : MethodLikeMemberData
 {
     /// <inheritdoc/>
     protected override void AddRemainingComments(T member, XElement memberDocComment)

@@ -14,7 +14,7 @@ namespace RefDocGen.CodeElements.Concrete.Members;
 /// <summary>
 /// Class representing data of a method.
 /// </summary>
-internal class MethodData : ExecutableMemberData, IMethodData
+internal class MethodData : MethodLikeMemberData, IMethodData
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="MethodData"/> class.
@@ -40,6 +40,11 @@ internal class MethodData : ExecutableMemberData, IMethodData
         ReturnType = methodInfo.ReturnType.GetTypeNameData(availableTypeParameters);
         TypeParameters = typeParameterDeclarations;
         IsExtensionMethod = MethodInfo.IsDefined(typeof(ExtensionAttribute), true);
+
+        if (OverridesAnotherMember)
+        {
+            BaseDeclaringType = methodInfo.GetBaseDefinition().DeclaringType?.GetTypeNameData();
+        }
     }
 
     /// <inheritdoc/>
@@ -58,7 +63,7 @@ internal class MethodData : ExecutableMemberData, IMethodData
     public XElement ReturnValueDocComment { get; internal set; } = XmlDocElements.EmptyReturns;
 
     /// <inheritdoc/>
-    public bool OverridesAnotherMember => !MethodInfo.Equals(MethodInfo.GetBaseDefinition()) && !IsInherited; // TODO
+    public bool OverridesAnotherMember => !MethodInfo.Equals(MethodInfo.GetBaseDefinition()) && !IsInherited;
 
     /// <inheritdoc/>
     public bool IsOverridable => MethodInfo.IsVirtual && !MethodInfo.IsFinal;
@@ -88,7 +93,7 @@ internal class MethodData : ExecutableMemberData, IMethodData
     public ITypeNameData? ExplicitInterfaceType => Tools.ExplicitInterfaceType.Of(this);
 
     /// <inheritdoc/>
-    public ITypeNameData? BaseDefinitionType { get; }
+    public ITypeNameData? BaseDeclaringType { get; }
 
     /// <summary>
     /// Collection of type parameters declared in the method; the keys represent type parameter names.

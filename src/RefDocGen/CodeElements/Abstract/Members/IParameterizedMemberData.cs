@@ -1,12 +1,12 @@
 namespace RefDocGen.CodeElements.Abstract.Members;
 
 /// <summary>
-/// Represents data of an executable type member, i.e. method, constructor or an indexer.
-/// <para>
-/// Note that properties are excluded from this definition.
-/// </para>
+/// Represents data of a type member that may have parameters (such as a method, constructor or indexer).
 /// </summary>
-public interface IParametricMemberData : IMemberData
+/// <remarks>
+/// Note that properties are excluded from this definition.
+/// </remarks>
+public interface IParameterizedMemberData : IMemberData
 {
     /// <summary>
     /// Readonly list of the member parameters, indexed by their position.

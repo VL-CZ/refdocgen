@@ -49,12 +49,7 @@ internal class PropertyData : MemberData, IPropertyData
             IsSetterInitOnly = modifiers.Any(t => t.FullName == initializerAttributeType);
         }
 
-        var baseDeclarationType = Accessors.Select(a => a.BaseDefinitionType).SingleOrDefault();
-
-        if (baseDeclarationType is not null)
-        {
-            BaseDefinitionType = baseDeclarationType;
-        }
+        BaseDeclaringType = Accessors.Select(a => a.BaseDeclaringType).SingleOrDefault();
     }
 
     /// <summary>
@@ -165,7 +160,7 @@ internal class PropertyData : MemberData, IPropertyData
     public bool IsSetterInitOnly { get; }
 
     /// <inheritdoc/>
-    public ITypeNameData? BaseDefinitionType { get; }
+    public ITypeNameData? BaseDeclaringType { get; }
 
     /// <inheritdoc/>
     internal override string MemberKindId => "P";

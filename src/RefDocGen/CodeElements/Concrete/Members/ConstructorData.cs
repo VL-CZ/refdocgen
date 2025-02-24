@@ -9,7 +9,7 @@ namespace RefDocGen.CodeElements.Concrete.Members;
 /// <summary>
 /// Class representing data of a constructor.
 /// </summary>
-internal class ConstructorData : ExecutableMemberData, IConstructorData
+internal class ConstructorData : MethodLikeMemberData, IConstructorData
 {
     /// <summary>
     /// The default name for constructor method in the XML documentation files.
