@@ -24,6 +24,10 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// If the method is inherited, this represents the type from which it originates.
 /// <c>null</c> if the method is not inherited.
 /// </param>
+/// <param name="BaseDeclaringType">
+/// If the method overrides another member, this property returns the base type that originally declared the member.
+/// <c>null</c> is returned if the member doesn't override anything.
+/// </param>
 public record MethodTM(
     string Id,
     string Name,
@@ -38,4 +42,5 @@ public record MethodTM(
     string? ReturnsDocComment,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions,
-    TypeLinkTM? InheritedFrom);
+    TypeLinkTM? InheritedFrom,
+    TypeLinkTM? BaseDeclaringType);

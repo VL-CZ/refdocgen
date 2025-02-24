@@ -26,6 +26,10 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// If the indexer is inherited, this represents the type from which it originates.
 /// <c>null</c> if the indexer is not inherited.
 /// </param>
+/// <param name="BaseDeclaringType">
+/// If the indexer overrides another member, this property returns the base type that originally declared the member.
+/// <c>null</c> if the member doesn't override anything.
+/// </param>
 public record IndexerTM(
     string Id,
     TypeLinkTM Type,
@@ -42,4 +46,5 @@ public record IndexerTM(
     string? ValueDocComment,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions,
-    TypeLinkTM? InheritedFrom);
+    TypeLinkTM? InheritedFrom,
+    TypeLinkTM? BaseDeclaringType);

@@ -14,7 +14,7 @@ namespace RefDocGen.CodeElements.Concrete.Members;
 /// <summary>
 /// Class representing data of a method.
 /// </summary>
-internal class MethodData : ExecutableMemberData, IMethodData
+internal class MethodData : MethodLikeMemberData, IMethodData
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="MethodData"/> class.
@@ -40,6 +40,11 @@ internal class MethodData : ExecutableMemberData, IMethodData
         ReturnType = methodInfo.ReturnType.GetTypeNameData(availableTypeParameters);
         TypeParameters = typeParameterDeclarations;
         IsExtensionMethod = MethodInfo.IsDefined(typeof(ExtensionAttribute), true);
+
+        if (OverridesAnotherMember)
+        {
+            BaseDeclaringType = methodInfo.GetBaseDefinition().DeclaringType?.GetTypeNameData();
+        }
     }
 
     /// <inheritdoc/>
@@ -58,10 +63,37 @@ internal class MethodData : ExecutableMemberData, IMethodData
     public XElement ReturnValueDocComment { get; internal set; } = XmlDocElements.EmptyReturns;
 
     /// <inheritdoc/>
-    public override bool OverridesAnotherMember => !MethodInfo.Equals(MethodInfo.GetBaseDefinition()) && !IsInherited; // TODO
+    public bool OverridesAnotherMember => !MethodInfo.Equals(MethodInfo.GetBaseDefinition()) && !IsInherited;
+
+    /// <inheritdoc/>
+    public bool IsOverridable => MethodInfo.IsVirtual && !MethodInfo.IsFinal;
+
+    /// <inheritdoc/>
+    public bool IsAbstract => MethodInfo.IsAbstract;
+
+    /// <inheritdoc/>
+    public bool IsFinal => MethodInfo.IsFinal;
+
+    /// <inheritdoc/>
+    public bool IsAsync => MethodInfo.GetCustomAttribute(typeof(AsyncStateMachineAttribute)) != null;
+
+    /// <inheritdoc/>
+    public bool IsSealed => OverridesAnotherMember && IsFinal;
+
+    /// <inheritdoc/>
+    public bool IsVirtual => MethodInfo.IsVirtual;
 
     /// <inheritdoc/>
     public bool IsExtensionMethod { get; }
+
+    /// <inheritdoc/>
+    public bool IsExplicitImplementation => ExplicitInterfaceType is not null;
+
+    /// <inheritdoc/>
+    public ITypeNameData? ExplicitInterfaceType => Tools.ExplicitInterfaceType.Of(this);
+
+    /// <inheritdoc/>
+    public ITypeNameData? BaseDeclaringType { get; }
 
     /// <summary>
     /// Collection of type parameters declared in the method; the keys represent type parameter names.

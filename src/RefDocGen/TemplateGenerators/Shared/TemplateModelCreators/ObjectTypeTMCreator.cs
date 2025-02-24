@@ -98,7 +98,12 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="ConstructorTM"/> instance based on the provided <paramref name="constructor"/>.</returns>
     private ConstructorTM GetFrom(IConstructorData constructor)
     {
-        var modifiers = GetCallableMemberModifiers(constructor);
+        List<Keyword> modifiers = [constructor.AccessModifier.ToKeyword()];
+
+        if (constructor.IsStatic)
+        {
+            modifiers.Add(Keyword.Static);
+        }
 
         return new ConstructorTM(
             constructor.Id,
@@ -202,7 +207,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             ToHtmlString(property.ValueDocComment),
             GetHtmlStrings(property.SeeAlsoDocComments),
             GetTemplateModels(property.DocumentedExceptions),
-            GetTypeLinkOrNull(property.InheritedFrom));
+            GetTypeLinkOrNull(property.InheritedFrom),
+            GetTypeMemberLinkOrNull(property.BaseDeclaringType, property));
     }
 
     /// <summary>
@@ -243,7 +249,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             ToHtmlString(indexer.ValueDocComment),
             GetHtmlStrings(indexer.SeeAlsoDocComments),
             GetTemplateModels(indexer.DocumentedExceptions),
-            GetTypeLinkOrNull(indexer.InheritedFrom));
+            GetTypeLinkOrNull(indexer.InheritedFrom),
+            GetTypeMemberLinkOrNull(indexer.BaseDeclaringType, indexer));
     }
 
     /// <summary>
@@ -269,7 +276,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             ToHtmlString(method.ReturnValueDocComment),
             GetHtmlStrings(method.SeeAlsoDocComments),
             GetTemplateModels(method.DocumentedExceptions),
-            GetTypeLinkOrNull(method.InheritedFrom));
+            GetTypeLinkOrNull(method.InheritedFrom),
+            GetTypeMemberLinkOrNull(method.BaseDeclaringType, method));
     }
 
     /// <summary>
@@ -315,7 +323,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             ToHtmlString(operatorData.ReturnValueDocComment),
             GetHtmlStrings(operatorData.SeeAlsoDocComments),
             GetTemplateModels(operatorData.DocumentedExceptions),
-            GetTypeLinkOrNull(operatorData.InheritedFrom));
+            GetTypeLinkOrNull(operatorData.InheritedFrom),
+            GetTypeMemberLinkOrNull(operatorData.BaseDeclaringType, operatorData));
     }
 
     /// <summary>
@@ -338,7 +347,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             ToHtmlString(eventData.RemarksDocComment),
             GetHtmlStrings(eventData.SeeAlsoDocComments),
             GetTemplateModels(eventData.DocumentedExceptions),
-            GetTypeLinkOrNull(eventData.InheritedFrom));
+            GetTypeLinkOrNull(eventData.InheritedFrom),
+            GetTypeMemberLinkOrNull(eventData.BaseDeclaringType, eventData));
     }
 
     /// <summary>

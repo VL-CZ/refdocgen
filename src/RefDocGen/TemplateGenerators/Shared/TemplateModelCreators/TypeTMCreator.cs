@@ -157,6 +157,24 @@ internal abstract class TypeTMCreator
     }
 
     /// <summary>
+    /// Gets the <see cref="TypeLinkTM"/> of the provided type member.
+    /// </summary>
+    /// <param name="type">The provided type containing the member.</param>
+    /// <param name="member">The member for which the URL is returned.</param>
+    /// <returns><see cref="TypeLinkTM"/> corresponding to the provided <paramref name="type"/> and <paramref name="member"/>. <see langword="null"/> if the provided <paramref name="type"/> is <see langword="null"/>.</returns>
+    protected TypeLinkTM? GetTypeMemberLinkOrNull(ITypeNameData? type, IMemberData member)
+    {
+        if (type is null)
+        {
+            return null;
+        }
+
+        return new TypeLinkTM(
+            CSharpTypeName.Of(type) + "." + member.Name,
+            typeUrlResolver.GetUrlOf(type.TypeDeclarationId, member.Id));
+    }
+
+    /// <summary>
     /// Creates a <see cref="ParameterTM"/> instance based on the provided <see cref="IParameterData"/> object.
     /// </summary>
     /// <param name="parameter">The <see cref="IParameterData"/> instance representing the parameter.</param>

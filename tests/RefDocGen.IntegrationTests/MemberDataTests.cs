@@ -46,6 +46,20 @@ public class MemberDataTests
         inheritedFrom.ShouldBe($"Inherited from {expectedInheritedFromTypeName}");
     }
 
+    [Theory]
+    [InlineData("MyLibrary.Dog", "GetSound", "Animal.GetSound")]
+    [InlineData("MyLibrary.Hierarchy.ChildChild", "Handle(System.Object)", "Parent.Handle")]
+    [InlineData("MyLibrary.Tools.Collections.MySortedList`1", "AddRange(System.Collections.Generic.IEnumerable{`0})", "MyCollection<T>.AddRange")]
+    public void OverridesString_Matches(string pageName, string memberId, string expectedOverridenMemberName)
+    {
+        using var document = DocumentationTools.GetPage($"{pageName}.html");
+
+        var member = document.GetMemberElement(memberId);
+        string overrides = TypePageTools.GetOverridenMember(member);
+
+        overrides.ShouldBe($"Overrides {expectedOverridenMemberName}");
+    }
+
     [Fact]
     public void Exceptions_Match()
     {

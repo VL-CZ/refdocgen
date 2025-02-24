@@ -18,7 +18,7 @@ internal static class MemberCreatorHelper
     /// <param name="method">The method containing the paramters.</param>
     /// <param name="availableTypeParameters">Dictionary of type parameters available in the context of the method, indexed by their names.</param>
     /// <returns>
-    /// <inheritdoc cref="ExecutableMemberData.Parameters" path="/summary"/>
+    /// <inheritdoc cref="MethodLikeMemberData.Parameters" path="/summary"/>
     /// </returns>
     internal static Dictionary<string, ParameterData> CreateParametersDictionary(MethodBase method, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
     {

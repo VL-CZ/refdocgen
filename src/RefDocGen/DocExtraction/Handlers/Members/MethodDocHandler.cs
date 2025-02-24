@@ -10,7 +10,7 @@ namespace RefDocGen.DocExtraction.Handlers.Members;
 /// <summary>
 /// Class responsible for handling and adding XML doc comments to the corresponding methods.
 /// </summary>
-internal class MethodDocHandler : ExecutableMemberDocHandler<MethodData>
+internal class MethodDocHandler : MethodLikeMemberDocHandler<MethodData>
 {
     /// <inheritdoc/>
     protected override IReadOnlyDictionary<string, MethodData> GetMembers(ObjectTypeData type)

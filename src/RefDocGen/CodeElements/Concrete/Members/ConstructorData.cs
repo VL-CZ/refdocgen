@@ -1,15 +1,15 @@
 using System.Reflection;
 using RefDocGen.CodeElements.Abstract.Members;
 using RefDocGen.CodeElements.Abstract.Types.Attribute;
-using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
+using RefDocGen.CodeElements.Tools;
 
 namespace RefDocGen.CodeElements.Concrete.Members;
 
 /// <summary>
 /// Class representing data of a constructor.
 /// </summary>
-internal class ConstructorData : ExecutableMemberData, IConstructorData
+internal class ConstructorData : MethodLikeMemberData, IConstructorData
 {
     /// <summary>
     /// The default name for constructor method in the XML documentation files.
@@ -33,14 +33,11 @@ internal class ConstructorData : ExecutableMemberData, IConstructorData
     }
 
     /// <inheritdoc/>
+    public override string Id => MemberId.Of(this);
+
+    /// <inheritdoc/>
     public ConstructorInfo ConstructorInfo { get; }
 
     /// <inheritdoc/>
-    public override bool OverridesAnotherMember => false;
-
-    /// <inheritdoc/>
     public override string Name => DefaultName;
-
-    /// <inheritdoc/>
-    public override ITypeNameData? ExplicitInterfaceType => null; // the constructors can't be explicitly declared
 }

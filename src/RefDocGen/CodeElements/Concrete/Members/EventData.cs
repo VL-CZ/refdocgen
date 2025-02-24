@@ -38,12 +38,14 @@ internal class EventData : MemberData, IEventData
         IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters,
         IReadOnlyList<IAttributeData> attributes) : base(eventInfo, containingType, attributes)
     {
+        this.addMethod = addMethod;
+        this.removeMethod = removeMethod;
+
         EventInfo = eventInfo;
         Type = eventInfo.EventHandlerType?.GetTypeNameData(availableTypeParameters)
             ?? throw new ArgumentException("Cannot obtain event handler type.");
 
-        this.addMethod = addMethod;
-        this.removeMethod = removeMethod;
+        BaseDeclaringType = Methods.Select(m => m.BaseDeclaringType).Distinct().FirstOrDefault();
     }
 
     /// <inheritdoc/>
@@ -121,6 +123,9 @@ internal class EventData : MemberData, IEventData
 
     /// <inheritdoc/>
     public override bool IsStatic => Methods.All(m => m.IsStatic);
+
+    /// <inheritdoc/>
+    public ITypeNameData? BaseDeclaringType { get; }
 
     /// <inheritdoc/>
     internal override string MemberKindId => "E";
