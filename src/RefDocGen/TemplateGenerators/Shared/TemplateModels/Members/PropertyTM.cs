@@ -32,6 +32,10 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// If the property is inherited, this represents the type from which it originates.
 /// <c>null</c> if the property is not inherited.
 /// </param>
+/// <param name="BaseDeclaringType">
+/// If the property overrides another member, this property returns the base type that originally declared the member.
+/// <c>null</c> if the member doesn't override anything.
+/// </param>
 public record PropertyTM(
     string Id,
     string Name,
@@ -49,4 +53,5 @@ public record PropertyTM(
     string? ValueDocComment,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions,
-    TypeLinkTM? InheritedFrom);
+    TypeLinkTM? InheritedFrom,
+    TypeLinkTM? BaseDeclaringType);

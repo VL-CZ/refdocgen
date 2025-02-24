@@ -20,6 +20,10 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// If the event is inherited, this represents the type from which it originates.
 /// <c>null</c> if the event is not inherited.
 /// </param>
+/// <param name="BaseDeclaringType">
+/// If the event overrides another member, this property returns the base type that originally declared the member.
+/// <c>null</c> is returned if the member doesn't override anything.
+/// </param>
 public record EventTM(
     string Id,
     string Name,
@@ -30,4 +34,5 @@ public record EventTM(
     string? RemarksDocComment,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions,
-    TypeLinkTM? InheritedFrom);
+    TypeLinkTM? InheritedFrom,
+    TypeLinkTM? BaseDeclaringType);
