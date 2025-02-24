@@ -49,7 +49,7 @@ internal class PropertyData : MemberData, IPropertyData
             IsSetterInitOnly = modifiers.Any(t => t.FullName == initializerAttributeType);
         }
 
-        BaseDeclaringType = Accessors.Select(a => a.BaseDeclaringType).SingleOrDefault();
+        BaseDeclaringType = Accessors.Select(a => a.BaseDeclaringType).Distinct().FirstOrDefault();
     }
 
     /// <summary>

@@ -191,11 +191,21 @@ internal class TypePageTools
     /// <summary>
     /// Gets the string indicating from which type this member was inherited.
     /// </summary>
-    /// <param name="element">The HTML element representing the type.</param>
+    /// <param name="element">The HTML element representing the member.</param>
     /// <returns>The declaring type name.</returns>
     internal static string GetInheritedFromString(IElement element)
     {
         return element.GetParsedContent(DataId.InheritedFrom);
+    }
+
+    /// <summary>
+    /// Gets the string indicating which member is overriden.
+    /// </summary>
+    /// <param name="element">The HTML element representing the type member.</param>
+    /// <returns>The overriden member name.</returns>
+    internal static string GetOverridenMember(IElement element)
+    {
+        return element.GetParsedContent(DataId.OverridenMember);
     }
 
     /// <summary>

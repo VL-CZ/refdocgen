@@ -45,7 +45,7 @@ internal class EventData : MemberData, IEventData
         Type = eventInfo.EventHandlerType?.GetTypeNameData(availableTypeParameters)
             ?? throw new ArgumentException("Cannot obtain event handler type.");
 
-        BaseDeclaringType = Methods.Select(m => m.BaseDeclaringType).SingleOrDefault();
+        BaseDeclaringType = Methods.Select(m => m.BaseDeclaringType).Distinct().FirstOrDefault();
     }
 
     /// <inheritdoc/>
