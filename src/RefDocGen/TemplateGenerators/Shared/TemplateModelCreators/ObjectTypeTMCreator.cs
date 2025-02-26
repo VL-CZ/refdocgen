@@ -34,14 +34,6 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         var indexers = type.Indexers.Select(GetFrom).ToArray();
         var events = type.Events.Select(GetFrom).ToArray();
 
-        var baseType = type.BaseType is not null
-            ? GetTypeLink(type.BaseType)
-            : null;
-
-        var declaringType = type.DeclaringType is not null
-            ? GetTypeLink(type.DeclaringType)
-            : null;
-
         var interfaces = type.Interfaces.Select(GetTypeLink).ToArray();
 
         List<Keyword> modifiers = [type.AccessModifier.ToKeyword()];
@@ -277,7 +269,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             GetHtmlStrings(method.SeeAlsoDocComments),
             GetTemplateModels(method.DocumentedExceptions),
             GetTypeLinkOrNull(method.InheritedFrom),
-            GetTypeMemberLinkOrNull(method.BaseDeclaringType, method));
+            GetTypeMemberLinkOrNull(method.BaseDeclaringType, method),
+            GetTypeMemberLinkOrNull(method.ExplicitInterfaceType, method));
     }
 
     /// <summary>
@@ -324,7 +317,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             GetHtmlStrings(operatorData.SeeAlsoDocComments),
             GetTemplateModels(operatorData.DocumentedExceptions),
             GetTypeLinkOrNull(operatorData.InheritedFrom),
-            GetTypeMemberLinkOrNull(operatorData.BaseDeclaringType, operatorData));
+            GetTypeMemberLinkOrNull(operatorData.BaseDeclaringType, operatorData),
+            GetTypeMemberLinkOrNull(operatorData.ExplicitInterfaceType, operatorData));
     }
 
     /// <summary>

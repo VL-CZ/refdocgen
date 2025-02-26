@@ -1,0 +1,16 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required TypeLinkTM? InterfaceType { get; set; }
+}
+
+@if (InterfaceType is not null)
+{
+    <div class="text-primary ms-4 mb-2" data-id="explicitly-implemented-member">
+        <i>
+            Explicitly implements
+            <TypeLink Type="@InterfaceType" />
+        </i>
+    </div>
+}

@@ -43,4 +43,5 @@ public record MethodTM(
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions,
     TypeLinkTM? InheritedFrom,
-    TypeLinkTM? BaseDeclaringType);
+    TypeLinkTM? BaseDeclaringType,
+    TypeLinkTM? ExplicitInterfaceType);
