@@ -272,7 +272,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             GetTemplateModels(method.DocumentedExceptions),
             GetTypeLinkOrNull(method.InheritedFrom),
             GetTypeMemberLinkOrNull(method.BaseDeclaringType, method),
-            GetTypeMemberLinkOrNull(method.ExplicitInterfaceType, method));
+            GetTypeMemberLinkOrNull(method.ExplicitInterfaceType, method),
+            method.ImplementedInterfaces.Select(i => GetTypeMemberLinkOrNull(i, method)).ToArray());
     }
 
     /// <summary>
@@ -320,7 +321,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             GetTemplateModels(operatorData.DocumentedExceptions),
             GetTypeLinkOrNull(operatorData.InheritedFrom),
             GetTypeMemberLinkOrNull(operatorData.BaseDeclaringType, operatorData),
-            GetTypeMemberLinkOrNull(operatorData.ExplicitInterfaceType, operatorData));
+            GetTypeMemberLinkOrNull(operatorData.ExplicitInterfaceType, operatorData),
+            []);
     }
 
     /// <summary>

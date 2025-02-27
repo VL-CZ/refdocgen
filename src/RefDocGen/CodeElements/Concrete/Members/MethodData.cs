@@ -45,6 +45,18 @@ internal class MethodData : MethodLikeMemberData, IMethodData
         {
             BaseDeclaringType = methodInfo.GetBaseDefinition().DeclaringType?.GetTypeNameData();
         }
+
+        if (ContainingType is ObjectTypeData { Kind: TypeKind.Class })
+        {
+            foreach (var interfaceType in ContainingType.Interfaces)
+            {
+                var interfaceMap = ContainingType.TypeObject.GetInterfaceMap(interfaceType.TypeObject);
+                if (interfaceMap.TargetMethods.Contains(MethodInfo))
+                {
+                    ImplementedInterfaces = [.. ImplementedInterfaces, interfaceType];
+                }
+            }
+        }
     }
 
     /// <inheritdoc/>
@@ -104,4 +116,7 @@ internal class MethodData : MethodLikeMemberData, IMethodData
     IReadOnlyList<ITypeParameterData> IMethodData.TypeParameters => TypeParameters.Values
         .OrderBy(t => t.Index)
         .ToList();
+
+    /// <inheritdoc/>
+    public IEnumerable<ITypeNameData> ImplementedInterfaces { get; } = [];
 }

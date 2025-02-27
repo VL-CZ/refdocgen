@@ -29,4 +29,6 @@ public interface IMethodData : IParameterizedMemberData, ICallableMemberData
     /// Collection of generic type parameters declared in the method.
     /// </summary>
     IReadOnlyList<ITypeParameterData> TypeParameters { get; }
+
+    IEnumerable<ITypeNameData> ImplementedInterfaces { get; }
 }

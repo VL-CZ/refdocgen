@@ -48,4 +48,5 @@ public record MethodTM(
     ExceptionTM[] Exceptions,
     TypeLinkTM? InheritedFrom,
     TypeLinkTM? BaseDeclaringType,
-    TypeLinkTM? ExplicitInterfaceType);
+    TypeLinkTM? ExplicitInterfaceType,
+    TypeLinkTM[] Interfaces);

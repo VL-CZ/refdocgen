@@ -44,6 +44,19 @@
 
                 <ExplicitlyImplementsSection InterfaceType="@method.ExplicitInterfaceType" />
 
+                @if (method.Interfaces.Any())
+                {
+                    @foreach (var iface in method.Interfaces)
+                    {
+                        <div class="text-primary ms-4 mb-2" data-id="explicitly-implemented-member">
+                            <i>
+                                Implements
+                                <TypeLink Type="@iface" />
+                            </i>
+                        </div>
+                    }
+                }
+
                 <SummaryDoc DocComment="@method.SummaryDocComment" />
 
                 <TypeParameterDocs TypeParameters="@method.TypeParameters" />
