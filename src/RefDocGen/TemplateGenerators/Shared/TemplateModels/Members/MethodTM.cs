@@ -25,8 +25,12 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// <c>null</c> if the method is not inherited.
 /// </param>
 /// <param name="BaseDeclaringType">
-/// If the method overrides another member, this property returns the base type that originally declared the member.
-/// <c>null</c> is returned if the member doesn't override anything.
+/// If the method overrides another member, the base type that originally declared the method is returned.
+/// <c>null</c> if the method doesn't override anything.
+/// </param>
+/// <param name="ExplicitInterfaceType">
+/// If the method is an explicit implementation, the type of the interface that explicitly declared the method is returned.
+/// <c>null</c> if the method is not an explicit implementation.
 /// </param>
 public record MethodTM(
     string Id,

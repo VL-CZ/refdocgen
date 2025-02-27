@@ -200,7 +200,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             GetHtmlStrings(property.SeeAlsoDocComments),
             GetTemplateModels(property.DocumentedExceptions),
             GetTypeLinkOrNull(property.InheritedFrom),
-            GetTypeMemberLinkOrNull(property.BaseDeclaringType, property));
+            GetTypeMemberLinkOrNull(property.BaseDeclaringType, property),
+            GetTypeMemberLinkOrNull(property.ExplicitInterfaceType, property));
     }
 
     /// <summary>
@@ -242,7 +243,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             GetHtmlStrings(indexer.SeeAlsoDocComments),
             GetTemplateModels(indexer.DocumentedExceptions),
             GetTypeLinkOrNull(indexer.InheritedFrom),
-            GetTypeMemberLinkOrNull(indexer.BaseDeclaringType, indexer));
+            GetTypeMemberLinkOrNull(indexer.BaseDeclaringType, indexer),
+            GetTypeMemberLinkOrNull(indexer.ExplicitInterfaceType, indexer));
     }
 
     /// <summary>
@@ -342,7 +344,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             GetHtmlStrings(eventData.SeeAlsoDocComments),
             GetTemplateModels(eventData.DocumentedExceptions),
             GetTypeLinkOrNull(eventData.InheritedFrom),
-            GetTypeMemberLinkOrNull(eventData.BaseDeclaringType, eventData));
+            GetTypeMemberLinkOrNull(eventData.BaseDeclaringType, eventData),
+            GetTypeMemberLinkOrNull(eventData.ExplicitInterfaceType, eventData));
     }
 
     /// <summary>
