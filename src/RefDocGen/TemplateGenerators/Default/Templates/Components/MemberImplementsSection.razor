@@ -1,0 +1,19 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required TypeLinkTM[] ImplementedInterfaces { get; set; }
+}
+
+@if (ImplementedInterfaces.Any())
+{
+    @foreach (var iface in ImplementedInterfaces)
+    {
+        <div class="text-primary ms-4 mb-2" data-id="member-implements">
+            <i>
+                Implements
+                <TypeLink Type="@iface" />
+            </i>
+        </div>
+    }
+}

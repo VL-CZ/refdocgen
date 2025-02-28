@@ -32,6 +32,9 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// If the method is an explicit implementation, the type of the interface that explicitly declared the method is returned.
 /// <c>null</c> if the method is not an explicit implementation.
 /// </param>
+/// <param name="ImplementedInterfaces">
+/// Returns the types of the interfaces, whose part of contract this method implements.
+/// </param>
 public record MethodTM(
     string Id,
     string Name,
@@ -49,4 +52,4 @@ public record MethodTM(
     TypeLinkTM? InheritedFrom,
     TypeLinkTM? BaseDeclaringType,
     TypeLinkTM? ExplicitInterfaceType,
-    TypeLinkTM[] Interfaces);
+    TypeLinkTM[] ImplementedInterfaces);

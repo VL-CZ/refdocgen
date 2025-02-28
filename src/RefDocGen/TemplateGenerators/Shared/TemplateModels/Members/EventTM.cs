@@ -28,6 +28,9 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// If the event is an explicit implementation, the type of the interface that explicitly declared it is returned.
 /// <c>null</c> if the event is not an explicit implementation.
 /// </param>
+/// <param name="ImplementedInterfaces">
+/// Returns the types of the interfaces, whose part of contract this event implements.
+/// </param>
 public record EventTM(
     string Id,
     string Name,
@@ -40,4 +43,5 @@ public record EventTM(
     ExceptionTM[] Exceptions,
     TypeLinkTM? InheritedFrom,
     TypeLinkTM? BaseDeclaringType,
-    TypeLinkTM? ExplicitInterfaceType);
+    TypeLinkTM? ExplicitInterfaceType,
+    TypeLinkTM[] ImplementedInterfaces);

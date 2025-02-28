@@ -34,6 +34,9 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// If the indexer is an explicit implementation, the type of the interface that explicitly declared it is returned.
 /// <c>null</c> if the indexer is not an explicit implementation.
 /// </param>
+/// <param name="ImplementedInterfaces">
+/// Returns the types of the interfaces, whose part of contract this indexer implements.
+/// </param>
 public record IndexerTM(
     string Id,
     TypeLinkTM Type,
@@ -52,4 +55,5 @@ public record IndexerTM(
     ExceptionTM[] Exceptions,
     TypeLinkTM? InheritedFrom,
     TypeLinkTM? BaseDeclaringType,
-    TypeLinkTM? ExplicitInterfaceType);
+    TypeLinkTM? ExplicitInterfaceType,
+    TypeLinkTM[] ImplementedInterfaces);

@@ -40,6 +40,9 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// If the property is an explicit implementation, the type of the interface that explicitly declared the property is returned.
 /// <c>null</c> if the property is not an explicit implementation.
 /// </param>
+/// <param name="ImplementedInterfaces">
+/// Returns the types of the interfaces, whose part of contract this property implements.
+/// </param>
 public record PropertyTM(
     string Id,
     string Name,
@@ -59,4 +62,5 @@ public record PropertyTM(
     ExceptionTM[] Exceptions,
     TypeLinkTM? InheritedFrom,
     TypeLinkTM? BaseDeclaringType,
-    TypeLinkTM? ExplicitInterfaceType);
+    TypeLinkTM? ExplicitInterfaceType,
+    TypeLinkTM[] ImplementedInterfaces);

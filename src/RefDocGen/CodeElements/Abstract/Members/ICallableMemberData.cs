@@ -86,4 +86,6 @@ public interface ICallableMemberData : IMemberData
     /// <c>null</c> is returned if the member doesn't override anything.
     /// </summary>
     ITypeNameData? BaseDeclaringType { get; }
+
+    IEnumerable<ITypeNameData> ImplementedInterfaces { get; }
 }
