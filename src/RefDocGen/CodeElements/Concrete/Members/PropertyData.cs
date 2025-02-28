@@ -4,6 +4,7 @@ using RefDocGen.CodeElements.Abstract.Types.Exception;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.CodeElements.Tools;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 using RefDocGen.Tools.Xml;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -161,6 +162,9 @@ internal class PropertyData : MemberData, IPropertyData
 
     /// <inheritdoc/>
     public ITypeNameData? BaseDeclaringType { get; }
+
+    /// <inheritdoc/>
+    public IEnumerable<ITypeNameData> ImplementedInterfaces => Accessors.SelectMany(a => a.ImplementedInterfaces).Distinct();
 
     /// <inheritdoc/>
     internal override string MemberKindId => "P";

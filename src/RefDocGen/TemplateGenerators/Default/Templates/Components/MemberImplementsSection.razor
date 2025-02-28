@@ -2,12 +2,12 @@
 
 @code {
     [Parameter]
-    public required TypeLinkTM[] ImplementedInterfaces { get; set; }
+    public required TypeLinkTM[] Interfaces { get; set; }
 }
 
-@if (ImplementedInterfaces.Any())
+@if (Interfaces.Any())
 {
-    @foreach (var iface in ImplementedInterfaces)
+    @foreach (var iface in Interfaces)
     {
         <div class="text-primary ms-4 mb-2" data-id="member-implements">
             <i>

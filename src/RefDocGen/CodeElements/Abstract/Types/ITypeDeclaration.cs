@@ -78,4 +78,9 @@ public interface ITypeDeclaration : ITypeNameBaseData
     /// </para>
     /// </summary>
     ITypeDeclaration? DeclaringType { get; }
+
+    /// <summary>
+    /// Indicates whether the type is an interface or not.
+    /// </summary>
+    bool IsInterface { get; }
 }
