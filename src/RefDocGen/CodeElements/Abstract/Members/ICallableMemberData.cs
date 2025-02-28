@@ -86,4 +86,10 @@ public interface ICallableMemberData : IMemberData
     /// <c>null</c> is returned if the member doesn't override anything.
     /// </summary>
     ITypeNameData? BaseDeclaringType { get; }
+
+    /// <summary>
+    /// Returns the interface types, whose part of contract is implemented by this member.
+    /// Note that explicitly implemented interfaces are not included (see <see cref="ExplicitInterfaceType"/>).
+    /// </summary>
+    IEnumerable<ITypeNameData> ImplementedInterfaces { get; }
 }

@@ -163,5 +163,8 @@ internal class PropertyData : MemberData, IPropertyData
     public ITypeNameData? BaseDeclaringType { get; }
 
     /// <inheritdoc/>
+    public IEnumerable<ITypeNameData> ImplementedInterfaces => Accessors.SelectMany(a => a.ImplementedInterfaces).Distinct();
+
+    /// <inheritdoc/>
     internal override string MemberKindId => "P";
 }

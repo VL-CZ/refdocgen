@@ -195,7 +195,7 @@ internal class TypePageTools
     /// <returns>The declaring type name.</returns>
     internal static string GetInheritedFromString(IElement element)
     {
-        return element.GetParsedContent(DataId.InheritedFrom);
+        return element.GetParsedContent(DataId.MemberInheritedFrom);
     }
 
     /// <summary>
@@ -205,7 +205,27 @@ internal class TypePageTools
     /// <returns>The overriden member name.</returns>
     internal static string GetOverridenMember(IElement element)
     {
-        return element.GetParsedContent(DataId.OverridenMember);
+        return element.GetParsedContent(DataId.MemberOverrides);
+    }
+
+    /// <summary>
+    /// Gets the string indicating which interface is explicitly implemented.
+    /// </summary>
+    /// <param name="element">The HTML element representing the type member.</param>
+    /// <returns>The name of the explicitly implemented interface.</returns>
+    internal static string GetExplicitlyImplementedInterface(IElement element)
+    {
+        return element.GetParsedContent(DataId.MemberExplicitlyImplements);
+    }
+
+    /// <summary>
+    /// Gets the strings indicating which interfaces are implemented by the member.
+    /// </summary>
+    /// <param name="element">The HTML element representing the type member.</param>
+    /// <returns>The name of the implemented interfaces.</returns>
+    internal static string[] GetImplementedInterfaces(IElement element)
+    {
+        return element.GetByDataIds(DataId.MemberImplements).Select(i => i.GetParsedContent()).ToArray();
     }
 
     /// <summary>

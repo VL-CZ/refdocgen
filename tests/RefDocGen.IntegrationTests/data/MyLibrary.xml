@@ -387,6 +387,11 @@
         <member name="M:MyLibrary.Tools.Collections.MyStringCollection.AddRange(System.Collections.Generic.IEnumerable{System.String})">
             <inheritdoc/>
         </member>
+        <member name="T:MyLibrary.Tools.Collections.INonGenericCollection">
+            <summary>
+            Non generic collection interface.
+            </summary>
+        </member>
         <member name="T:MyLibrary.Tools.Collections.NonGenericCollection">
             <summary>
             Non generic collection class.

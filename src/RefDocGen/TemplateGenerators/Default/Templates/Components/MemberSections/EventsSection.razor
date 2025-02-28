@@ -27,9 +27,13 @@
                     </samp>
                 </h6>
 
-                <InheritedFromSection OriginalType="@e.InheritedFrom" />
+                <MemberInheritedFrom OriginalType="@e.InheritedFrom" />
 
-                <OverridesSection BaseType="@e.BaseDeclaringType" />
+                <MemberOverrides BaseType="@e.BaseDeclaringType" />
+
+                <MemberExplicitlyImplements Interface="@e.ExplicitInterfaceType" />
+
+                <MemberImplements Interfaces="@e.ImplementedInterfaces" />
 
                 <SummaryDoc DocComment="@e.SummaryDocComment" />
 

@@ -115,6 +115,9 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     public ITypeDeclaration? DeclaringType { get; internal set; }
 
     /// <inheritdoc/>
+    public virtual bool IsInterface => false;
+
+    /// <inheritdoc/>
     public override string? ToString()
     {
         return $"T:{Id}";

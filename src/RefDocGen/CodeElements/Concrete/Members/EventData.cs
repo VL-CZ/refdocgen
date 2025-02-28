@@ -129,4 +129,7 @@ internal class EventData : MemberData, IEventData
 
     /// <inheritdoc/>
     internal override string MemberKindId => "E";
+
+    /// <inheritdoc/>
+    public IEnumerable<ITypeNameData> ImplementedInterfaces => Methods.SelectMany(m => m.ImplementedInterfaces).Distinct();
 }

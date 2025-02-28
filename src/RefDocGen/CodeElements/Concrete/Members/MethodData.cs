@@ -41,9 +41,25 @@ internal class MethodData : MethodLikeMemberData, IMethodData
         TypeParameters = typeParameterDeclarations;
         IsExtensionMethod = MethodInfo.IsDefined(typeof(ExtensionAttribute), true);
 
-        if (OverridesAnotherMember)
+        if (OverridesAnotherMember) // set base declaring type
         {
             BaseDeclaringType = methodInfo.GetBaseDefinition().DeclaringType?.GetTypeNameData();
+        }
+
+        if (!ContainingType.IsInterface && !IsExplicitImplementation)
+        {
+            var interfaceTypes = new List<ITypeNameData>();
+
+            foreach (var interfaceType in ContainingType.Interfaces)
+            {
+                var interfaceMap = ContainingType.TypeObject.GetInterfaceMap(interfaceType.TypeObject);
+                if (interfaceMap.TargetMethods.Contains(MethodInfo))
+                {
+                    interfaceTypes.Add(interfaceType);
+                }
+            }
+
+            ImplementedInterfaces = interfaceTypes; // set implemented interfaces
         }
     }
 
@@ -104,4 +120,7 @@ internal class MethodData : MethodLikeMemberData, IMethodData
     IReadOnlyList<ITypeParameterData> IMethodData.TypeParameters => TypeParameters.Values
         .OrderBy(t => t.Index)
         .ToList();
+
+    /// <inheritdoc/>
+    public IEnumerable<ITypeNameData> ImplementedInterfaces { get; } = [];
 }

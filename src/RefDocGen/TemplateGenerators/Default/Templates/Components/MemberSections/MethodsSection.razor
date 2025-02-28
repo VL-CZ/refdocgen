@@ -17,7 +17,6 @@
 <h2 class="display-5 mt-2">@SectionName</h2>
 <div class="row" data-id="@(memberKind)s-section">
     <div class="col-md-12">
-
         @foreach (var method in Methods)
         {
             <div class="border p-2 mb-2" id="@method.Id" data-id="member-data">
@@ -39,9 +38,13 @@
 
                 <TypeParametersConstraints TypeParameters="@method.TypeParameters" />
 
-                <InheritedFromSection OriginalType="@method.InheritedFrom" />
+                <MemberInheritedFrom OriginalType="@method.InheritedFrom" />
 
-                <OverridesSection BaseType="@method.BaseDeclaringType" />
+                <MemberOverrides BaseType="@method.BaseDeclaringType" />
+
+                <MemberExplicitlyImplements Interface="@method.ExplicitInterfaceType" />
+
+                <MemberImplements Interfaces="@method.ImplementedInterfaces" />
 
                 <SummaryDoc DocComment="@method.SummaryDocComment" />
 

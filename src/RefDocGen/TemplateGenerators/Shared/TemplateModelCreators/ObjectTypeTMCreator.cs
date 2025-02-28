@@ -7,6 +7,7 @@ using RefDocGen.TemplateGenerators.Shared.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
+using RefDocGen.CodeElements.Abstract.Types.TypeName;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 
@@ -33,14 +34,6 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         var operators = type.Operators.Select(GetFrom).ToArray();
         var indexers = type.Indexers.Select(GetFrom).ToArray();
         var events = type.Events.Select(GetFrom).ToArray();
-
-        var baseType = type.BaseType is not null
-            ? GetTypeLink(type.BaseType)
-            : null;
-
-        var declaringType = type.DeclaringType is not null
-            ? GetTypeLink(type.DeclaringType)
-            : null;
 
         var interfaces = type.Interfaces.Select(GetTypeLink).ToArray();
 
@@ -208,7 +201,9 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             GetHtmlStrings(property.SeeAlsoDocComments),
             GetTemplateModels(property.DocumentedExceptions),
             GetTypeLinkOrNull(property.InheritedFrom),
-            GetTypeMemberLinkOrNull(property.BaseDeclaringType, property));
+            GetTypeMemberLinkOrNull(property.BaseDeclaringType, property),
+            GetTypeMemberLinkOrNull(property.ExplicitInterfaceType, property),
+            GetInterfacesImplemented(property));
     }
 
     /// <summary>
@@ -250,7 +245,9 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             GetHtmlStrings(indexer.SeeAlsoDocComments),
             GetTemplateModels(indexer.DocumentedExceptions),
             GetTypeLinkOrNull(indexer.InheritedFrom),
-            GetTypeMemberLinkOrNull(indexer.BaseDeclaringType, indexer));
+            GetTypeMemberLinkOrNull(indexer.BaseDeclaringType, indexer),
+            GetTypeMemberLinkOrNull(indexer.ExplicitInterfaceType, indexer),
+            GetInterfacesImplemented(indexer));
     }
 
     /// <summary>
@@ -277,7 +274,9 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             GetHtmlStrings(method.SeeAlsoDocComments),
             GetTemplateModels(method.DocumentedExceptions),
             GetTypeLinkOrNull(method.InheritedFrom),
-            GetTypeMemberLinkOrNull(method.BaseDeclaringType, method));
+            GetTypeMemberLinkOrNull(method.BaseDeclaringType, method),
+            GetTypeMemberLinkOrNull(method.ExplicitInterfaceType, method),
+            GetInterfacesImplemented(method));
     }
 
     /// <summary>
@@ -324,7 +323,9 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             GetHtmlStrings(operatorData.SeeAlsoDocComments),
             GetTemplateModels(operatorData.DocumentedExceptions),
             GetTypeLinkOrNull(operatorData.InheritedFrom),
-            GetTypeMemberLinkOrNull(operatorData.BaseDeclaringType, operatorData));
+            GetTypeMemberLinkOrNull(operatorData.BaseDeclaringType, operatorData),
+            GetTypeMemberLinkOrNull(operatorData.ExplicitInterfaceType, operatorData),
+            GetInterfacesImplemented(operatorData));
     }
 
     /// <summary>
@@ -348,7 +349,9 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             GetHtmlStrings(eventData.SeeAlsoDocComments),
             GetTemplateModels(eventData.DocumentedExceptions),
             GetTypeLinkOrNull(eventData.InheritedFrom),
-            GetTypeMemberLinkOrNull(eventData.BaseDeclaringType, eventData));
+            GetTypeMemberLinkOrNull(eventData.BaseDeclaringType, eventData),
+            GetTypeMemberLinkOrNull(eventData.ExplicitInterfaceType, eventData),
+            GetInterfacesImplemented(eventData));
     }
 
     /// <summary>
@@ -440,5 +443,44 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     private TypeNameTM GetFrom(ITypeDeclaration type, string typeKindName)
     {
         return new TypeNameTM(type.Id, typeKindName, CSharpTypeName.Of(type), ToHtmlString(type.SummaryDocComment));
+    }
+
+    /// <summary>
+    /// Gets the <see cref="TypeLinkTM"/> of the provided type member.
+    /// </summary>
+    /// <param name="type">The provided type containing the member.</param>
+    /// <param name="member">The member for which the URL is returned.</param>
+    /// <returns><see cref="TypeLinkTM"/> corresponding to the provided <paramref name="type"/> and <paramref name="member"/>.</returns>
+    private TypeLinkTM? GetTypeMemberLink(ITypeNameData type, IMemberData member)
+    {
+        return new TypeLinkTM(
+            CSharpTypeName.Of(type) + "." + member.Name,
+            typeUrlResolver.GetUrlOf(type.TypeDeclarationId, member.Id));
+    }
+
+    /// <summary>
+    /// Gets the <see cref="TypeLinkTM"/> of the provided type member.
+    /// </summary>
+    /// <param name="type">The provided type containing the member.</param>
+    /// <param name="member">The member for which the URL is returned.</param>
+    /// <returns><see cref="TypeLinkTM"/> corresponding to the provided <paramref name="type"/> and <paramref name="member"/>. <see langword="null"/> if the provided <paramref name="type"/> is <see langword="null"/>.</returns>
+    private TypeLinkTM? GetTypeMemberLinkOrNull(ITypeNameData? type, IMemberData member)
+    {
+        if (type is null)
+        {
+            return null;
+        }
+
+        return GetTypeMemberLink(type, member);
+    }
+
+    /// <summary>
+    /// Returns the types of the interfaces, whose part of contract the member implements.
+    /// </summary>
+    /// <param name="member">The provided member.</param>
+    /// <returns>The types of the interfaces, whose part of contract the member implements.</returns>
+    private TypeLinkTM[] GetInterfacesImplemented(ICallableMemberData member)
+    {
+        return [.. member.ImplementedInterfaces.Select(i => GetTypeMemberLink(i, member))];
     }
 }

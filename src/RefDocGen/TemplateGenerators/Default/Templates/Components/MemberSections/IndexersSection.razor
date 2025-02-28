@@ -39,9 +39,13 @@
                     </samp>
                 </h6>
 
-                <InheritedFromSection OriginalType="@indexer.InheritedFrom" />
+                <MemberInheritedFrom OriginalType="@indexer.InheritedFrom" />
 
-                <OverridesSection BaseType="@indexer.BaseDeclaringType" />
+                <MemberOverrides BaseType="@indexer.BaseDeclaringType" />
+
+                <MemberExplicitlyImplements Interface="@indexer.ExplicitInterfaceType" />
+
+                <MemberImplements Interfaces="@indexer.ImplementedInterfaces" />
 
                 <SummaryDoc DocComment="@indexer.SummaryDocComment" />
 

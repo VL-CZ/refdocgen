@@ -63,6 +63,15 @@ internal class TypeUrlResolver
     /// </param>
     internal string? GetUrlOf(string typeId, string? memberId = null)
     {
+        if (memberId is not null)
+        {
+            int lastHashIndex = memberId.LastIndexOf('#');
+            if (lastHashIndex > 0 && lastHashIndex < memberId.Length - 1) // remove explicit interface type (if present) from the ID string
+            {
+                memberId = memberId[(lastHashIndex + 1)..];
+            }
+        }
+
         if (typeRegistry.GetDeclaredType(typeId) is not null) // the type is found in the type registry
         {
             string uriEncodedType = Uri.EscapeDataString(typeId);
@@ -81,9 +90,7 @@ internal class TypeUrlResolver
         {
             if (memberId is not null) // append member string
             {
-                int parenthesisIndex = memberId.IndexOf('(');
-
-                if (parenthesisIndex != -1)
+                if (memberId.TryGetIndex('(', out int parenthesisIndex)) // remove parameters string (if present)
                 {
                     memberId = memberId[..parenthesisIndex];
                 }

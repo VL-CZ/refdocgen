@@ -118,6 +118,9 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
     /// <inheritdoc/>
     public IEnumerable<IEnumTypeData> NestedEnums { get; private set; } = [];
 
+    /// <inheritdoc/>
+    public override bool IsInterface => Kind == TypeKind.Interface;
+
     /// <summary>
     /// Adds the members to the type.
     /// </summary>
