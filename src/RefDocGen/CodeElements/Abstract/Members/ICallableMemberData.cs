@@ -87,5 +87,9 @@ public interface ICallableMemberData : IMemberData
     /// </summary>
     ITypeNameData? BaseDeclaringType { get; }
 
+    /// <summary>
+    /// Returns the interface types, whose part of contract is implemented by this member.
+    /// Note that explicitly implemented interfaces are not included (see <see cref="ExplicitInterfaceType"/>).
+    /// </summary>
     IEnumerable<ITypeNameData> ImplementedInterfaces { get; }
 }

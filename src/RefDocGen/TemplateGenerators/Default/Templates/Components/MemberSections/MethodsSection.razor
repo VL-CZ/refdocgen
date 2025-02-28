@@ -38,13 +38,13 @@
 
                 <TypeParametersConstraints TypeParameters="@method.TypeParameters" />
 
-                <InheritedFromSection OriginalType="@method.InheritedFrom" />
+                <MemberInheritedFrom OriginalType="@method.InheritedFrom" />
 
-                <OverridesSection BaseType="@method.BaseDeclaringType" />
+                <MemberOverrides BaseType="@method.BaseDeclaringType" />
 
-                <ExplicitlyImplementsSection InterfaceType="@method.ExplicitInterfaceType" />
+                <MemberExplicitlyImplements Interface="@method.ExplicitInterfaceType" />
 
-                <MemberImplementsSection Interfaces="@method.ImplementedInterfaces" />
+                <MemberImplements Interfaces="@method.ImplementedInterfaces" />
 
                 <SummaryDoc DocComment="@method.SummaryDocComment" />
 

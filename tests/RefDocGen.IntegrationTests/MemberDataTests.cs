@@ -60,6 +60,34 @@ public class MemberDataTests
         overrides.ShouldBe($"Overrides {expectedOverridenMemberName}");
     }
 
+    [Theory]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "System#Collections#IEnumerable#GetEnumerator", "IEnumerable.GetEnumerator")]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "MyLibrary#Tools#Collections#IMyCollection{T}#CanAdd", "IMyCollection<T>.CanAdd")]
+    [InlineData("MyLibrary.Tools.Collections.NonGenericCollection", "System#Collections#ICollection#IsSynchronized", "ICollection.IsSynchronized")]
+    public void ExplicitlyImplementedInterface_Matches(string pageName, string memberId, string expectedExplicitInterface)
+    {
+        using var document = DocumentationTools.GetPage($"{pageName}.html");
+
+        var member = document.GetMemberElement(memberId);
+        string explicitInterface = TypePageTools.GetExplicitlyImplementedInterface(member);
+
+        explicitInterface.ShouldBe($"Explicitly implements {expectedExplicitInterface}");
+    }
+
+    [Theory]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "Count", "ICollection<T>.Count")]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "Add(`0)", "ICollection<T>.Add")]
+    [InlineData("MyLibrary.Tools.Collections.MyStringCollection", "Add(System.String)", "ICollection<string>.Add")]
+    public void SingleImplementedInterface_Matches(string pageName, string memberId, string expectedInterface)
+    {
+        using var document = DocumentationTools.GetPage($"{pageName}.html");
+
+        var member = document.GetMemberElement(memberId);
+        string[] interfaces = TypePageTools.GetImplementedInterfaces(member);
+
+        interfaces.ShouldBe([$"Implements {expectedInterface}"]);
+    }
+
     [Fact]
     public void Exceptions_Match()
     {

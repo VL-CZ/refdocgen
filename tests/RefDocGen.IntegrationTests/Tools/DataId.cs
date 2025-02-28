@@ -42,8 +42,10 @@ internal enum DataId
     TypeDataSection,
     NestedTypeData,
     NestedTypeName,
-    InheritedFrom,
-    OverridenMember
+    MemberInheritedFrom,
+    MemberOverrides,
+    MemberExplicitlyImplements,
+    MemberImplements
 }
 
 /// <summary>
@@ -96,8 +98,10 @@ internal static class DataIdExtensions
             DataId.DeclaringType => "declaring-type",
             DataId.NestedTypeData => "nested-type-data",
             DataId.NestedTypeName => "nested-type-name",
-            DataId.InheritedFrom => "inherited-from",
-            DataId.OverridenMember => "overriden-member",
+            DataId.MemberInheritedFrom => "member-inherited-from",
+            DataId.MemberOverrides => "member-overrides",
+            DataId.MemberExplicitlyImplements => "member-explicitly-implements",
+            DataId.MemberImplements => "member-implements",
             _ => throw new ArgumentException($"The provided DataId '{dataId}' has no string representation.")
         };
     }
