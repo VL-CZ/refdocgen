@@ -89,6 +89,17 @@ public class MemberDataTests
     }
 
     [Fact]
+    public void MultipleImplementedInterfaces_Match()
+    {
+        using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.NonGenericCollection.html");
+
+        var member = document.GetMemberElement("Count");
+        string[] interfaces = TypePageTools.GetImplementedInterfaces(member);
+
+        interfaces.ShouldBe(["Implements ICollection.Count", "Implements INonGenericCollection.Count"]);
+    }
+
+    [Fact]
     public void Exceptions_Match()
     {
         using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MyCollection`1.html");
