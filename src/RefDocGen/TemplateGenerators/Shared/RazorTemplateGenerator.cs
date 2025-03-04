@@ -1,3 +1,4 @@
+using Markdig;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using RefDocGen.CodeElements.Abstract;
@@ -43,7 +44,7 @@ internal class RazorTemplateGenerator<
     /// <summary>
     /// Identifier of the <c>index</c> page.
     /// </summary>
-    private const string indexPageId = "index";
+    private const string indexPageId = "api";
 
     /// <summary>
     /// The directory, where the generated output will be stored.
@@ -261,13 +262,20 @@ internal class RazorTemplateGenerator<
 
         foreach (var file in Directory.GetFiles(staticFilesFolder))
         {
-            string outputFileName = Path.Join(outputDirectory, new FileInfo(file).Name);
+            var fileText = File.ReadAllText(file);
+            if (file.EndsWith(".md"))
+            {
+                var md = File.ReadAllText(file);
+                fileText = Markdown.ToHtml(md);
+            }
+
+            string outputFileName = Path.Join(outputDirectory, new FileInfo(file).Name.Split('.').First() + ".html");
 
             string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
             {
                 var paramDictionary = new Dictionary<string, object?>()
                 {
-                    ["Contents"] = File.ReadAllText(file)
+                    ["Contents"] = fileText
                 };
 
                 var parameters = ParameterView.FromDictionary(paramDictionary);

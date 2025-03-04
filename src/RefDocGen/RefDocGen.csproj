@@ -17,6 +17,7 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
+        <PackageReference Include="Markdig" Version="0.40.0" />
         <InternalsVisibleTo Include="RefDocGen.UnitTests" />
         <InternalsVisibleTo Include="RefDocGen.IntegrationTests" />
     </ItemGroup>
