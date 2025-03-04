@@ -4,6 +4,7 @@ using RefDocGen.CodeElements.Abstract;
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.Delegate;
 using RefDocGen.CodeElements.Abstract.Types.Enum;
+using RefDocGen.TemplateGenerators.Default.Templates;
 using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
@@ -47,7 +48,7 @@ internal class RazorTemplateGenerator<
     /// <summary>
     /// The directory, where the generated output will be stored.
     /// </summary>
-    private readonly string outputDirectory;
+    internal readonly string outputDirectory;
 
     /// <summary>
     /// Rendered of the Razor components.
@@ -98,6 +99,8 @@ internal class RazorTemplateGenerator<
         GenerateNamespaceTemplates(typeRegistry);
 
         CopyStaticFilesDirectory();
+
+        CopyStaticPages();
     }
 
     /// <summary>
@@ -250,5 +253,31 @@ internal class RazorTemplateGenerator<
 
         string[] templatePathFragments = [baseFolder, .. relativeTemplateNs.Split('.')];
         return Path.Combine(templatePathFragments);
+    }
+
+    private void CopyStaticPages()
+    {
+        var staticFilesFolder = "C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\demo-lib\\pages";
+
+        foreach (var file in Directory.GetFiles(staticFilesFolder))
+        {
+            string outputFileName = Path.Join(outputDirectory, new FileInfo(file).Name);
+
+            string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
+            {
+                var paramDictionary = new Dictionary<string, object?>()
+                {
+                    ["Contents"] = File.ReadAllText(file)
+                };
+
+                var parameters = ParameterView.FromDictionary(paramDictionary);
+                var output = await htmlRenderer.RenderComponentAsync<Template>(parameters);
+
+                return output.ToHtmlString();
+            }).Result;
+
+
+            File.WriteAllText(outputFileName, html);
+        }
     }
 }
