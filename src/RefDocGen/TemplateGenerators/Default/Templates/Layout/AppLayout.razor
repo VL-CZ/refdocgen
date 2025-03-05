@@ -1,12 +1,6 @@
 @inherits LayoutComponentBase
 
-
-@code {
-    [CascadingParameter] public string Data { get; set; }
-}
-
 <!DOCTYPE html>
-<CascadingValue Value="Data">
     <html lang="en">
 
     <head>
@@ -26,8 +20,6 @@
     <body>
         <MenuComponent />
 
-        <h1>@Data</h1>
-
         <div class="container my-4">
             @Body
         </div>
@@ -37,4 +29,3 @@
                 integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </body>
 </html>
-</CascadingValue>

@@ -274,9 +274,12 @@ internal class RazorTemplateGenerator<
 
             string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
             {
+                string[] values = ["index", "api", "contact", "faq"];
+
                 var paramDictionary = new Dictionary<string, object?>()
                 {
-                    ["Contents"] = fileText
+                    ["Contents"] = fileText,
+                    ["Pages"] = values
                 };
 
                 var parameters = ParameterView.FromDictionary(paramDictionary);

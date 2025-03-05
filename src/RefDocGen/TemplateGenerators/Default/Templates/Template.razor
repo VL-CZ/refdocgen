@@ -4,11 +4,12 @@
     [Parameter]
     public required string Contents { get; set; }
 
-    public string Data = "Welcome to My Console App!";
+    [Parameter]
+    public required string[] Pages { get; set; }
 }
 
 
-<CascadingValue Value="Data">
+<CascadingValue Value="Pages">
     <LayoutView Layout="typeof(AppLayout)">
         @((MarkupString)Contents)
     </LayoutView>
