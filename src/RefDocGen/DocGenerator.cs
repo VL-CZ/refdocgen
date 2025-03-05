@@ -2,7 +2,6 @@ using RefDocGen.AssemblyAnalysis;
 using RefDocGen.CodeElements;
 using RefDocGen.DocExtraction;
 using RefDocGen.TemplateGenerators;
-using RefDocGen.Tools;
 
 namespace RefDocGen;
 
