@@ -147,6 +147,7 @@ internal class RazorTemplateGenerator<
 
         // namespace list template
         GenerateTemplate<TNamespaceListTemplate, IEnumerable<NamespaceTM>>(namespaceTMs, indexPageId);
+        GenerateTemplate<TNamespaceListTemplate, IEnumerable<NamespaceTM>>(namespaceTMs, "index"); // TODO: remove
 
         // namespace detail templates
         GenerateTemplates<TNamespaceDetailTemplate, NamespaceTM>(namespaceTMs);

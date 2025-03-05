@@ -3,8 +3,13 @@
 @code {
     [Parameter]
     public required string Contents { get; set; }
+
+    public string Data = "Welcome to My Console App!";
 }
 
-<LayoutView Layout="typeof(AppLayout)">
-    @((MarkupString)Contents)
-</LayoutView>
+
+<CascadingValue Value="Data">
+    <LayoutView Layout="typeof(AppLayout)">
+        @((MarkupString)Contents)
+    </LayoutView>
+</CascadingValue>
