@@ -279,9 +279,10 @@ internal class RazorTemplateGenerator<
         var staticFilesFolder = "C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\demo-lib\\pages";
         bool staticFile = false;
 
-        if (File.Exists(Path.Join(staticFilesFolder, "custom-styles.css")))
+        if (File.Exists(Path.Join(staticFilesFolder, "css/styles.css")))
         {
-            File.Copy(Path.Join(staticFilesFolder, "custom-styles.css"), Path.Join(outputDirectory, "custom-styles.css"), true);
+            Directory.CreateDirectory(Path.Join(outputDirectory, "css"));
+            File.Copy(Path.Join(staticFilesFolder, "css/styles.css"), Path.Join(outputDirectory, "css/styles.css"), true);
             staticFile = true;
         }
 
