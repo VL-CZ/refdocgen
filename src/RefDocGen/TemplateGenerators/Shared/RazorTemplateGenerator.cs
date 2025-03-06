@@ -66,6 +66,8 @@ internal class RazorTemplateGenerator<
     /// </summary>
     private const string staticFilesDirectory = "Static";
 
+    private readonly List<string> staticPages = ["index", "api"];
+
     /// <summary>
     /// Transformer of the XML doc comments into HTML.
     /// </summary>
@@ -93,6 +95,7 @@ internal class RazorTemplateGenerator<
     public void GenerateTemplates(ITypeRegistry typeRegistry)
     {
         docCommentTransformer.TypeRegistry = typeRegistry;
+        GetStaticPages();
 
         GenerateObjectTypeTemplates(typeRegistry.ObjectTypes);
         GenerateEnumTemplates(typeRegistry.Enums);
@@ -185,7 +188,8 @@ internal class RazorTemplateGenerator<
         {
             var paramDictionary = new Dictionary<string, object?>()
             {
-                ["Model"] = templateModel
+                ["Model"] = templateModel,
+                ["Pages"] = staticPages.ToArray()
             };
 
             var parameters = ParameterView.FromDictionary(paramDictionary);
@@ -257,6 +261,19 @@ internal class RazorTemplateGenerator<
         return Path.Combine(templatePathFragments);
     }
 
+    private void GetStaticPages()
+    {
+        var staticFilesFolder = "C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\demo-lib\\pages";
+
+        foreach (var file in Directory.GetFiles(staticFilesFolder))
+        {
+            if (file.EndsWith(".md") || file.EndsWith(".html"))
+            {
+                staticPages.Add(new FileInfo(file).Name.Split('.').First());
+            }
+        }
+    }
+
     private void CopyStaticPages()
     {
         var staticFilesFolder = "C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\demo-lib\\pages";
@@ -274,12 +291,10 @@ internal class RazorTemplateGenerator<
 
             string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
             {
-                string[] values = ["index", "api", "contact", "faq"];
-
                 var paramDictionary = new Dictionary<string, object?>()
                 {
                     ["Contents"] = fileText,
-                    ["Pages"] = values
+                    ["Pages"] = staticPages.ToArray()
                 };
 
                 var parameters = ParameterView.FromDictionary(paramDictionary);

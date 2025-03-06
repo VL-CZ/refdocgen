@@ -4,6 +4,9 @@
     [Parameter]
     public required EnumTypeTM Model { get; set; }
 
+    [Parameter]
+    public required string[] Pages { get; set; }
+
     /// <summary>
     /// Checks if the model has any (summary, remarks,...) doc comments.
     /// </summary>
@@ -14,9 +17,8 @@
     }
 }
 
-<LayoutView Layout="typeof(AppLayout)">
-    <div class="container my-4">
-
+<CascadingValue Value="Pages">
+    <LayoutView Layout="typeof(AppLayout)">
         <div data-id="declared-type-data">
             <DeclaredTypeName TypeName="@Model.Name" TypeKindName="enum" Modifiers="@Model.Modifiers" />
 
@@ -69,5 +71,5 @@
                 }
             </div>
         </div>
-    </div>
-</LayoutView>
+    </LayoutView>
+</CascadingValue>

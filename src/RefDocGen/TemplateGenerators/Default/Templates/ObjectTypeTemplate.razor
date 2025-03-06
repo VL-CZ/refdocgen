@@ -4,6 +4,9 @@
     [Parameter]
     public required ObjectTypeTM Model { get; set; }
 
+    [Parameter]
+    public required string[] Pages { get; set; }
+
     /// <summary>
     /// Checks if the model has any additional (remarks, type parameters, etc.) doc comments other than 'summary'.
     /// </summary>
@@ -14,8 +17,8 @@
     }
 }
 
-<LayoutView Layout="typeof(AppLayout)">
-    <div class="container my-4">
+<CascadingValue Value="Pages">
+    <LayoutView Layout="typeof(AppLayout)">
         <div data-id="declared-type-data">
             <DeclaredTypeName TypeName="@Model.Name" TypeKindName="@Model.TypeKindName" Modifiers="@Model.Modifiers" TypeParameters="@Model.TypeParameters" />
 
@@ -91,6 +94,5 @@
         {
             <MethodsSection Methods="@Model.Operators" SectionName="Operators" />
         }
-
-    </div>
-</LayoutView>
+    </LayoutView>
+</CascadingValue>

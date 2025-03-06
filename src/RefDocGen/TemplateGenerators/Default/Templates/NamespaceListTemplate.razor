@@ -3,10 +3,13 @@
 @code {
     [Parameter]
     public required IEnumerable<NamespaceTM> Model { get; set; }
+
+    [Parameter]
+    public required string[] Pages { get; set; }
 }
 
-<LayoutView Layout="typeof(AppLayout)">
-    <div class="container my-4">
+<CascadingValue Value="Pages">
+    <LayoutView Layout="typeof(AppLayout)">
 
         <h1 class="display-4">
             <samp>
@@ -41,6 +44,5 @@
                 </table>
             </div>
         }
-
-    </div>
-</LayoutView>
+    </LayoutView>
+</CascadingValue>

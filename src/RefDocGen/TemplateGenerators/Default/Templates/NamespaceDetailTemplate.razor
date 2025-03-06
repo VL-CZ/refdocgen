@@ -3,10 +3,13 @@
 @code {
     [Parameter]
     public required NamespaceTM Model { get; set; }
+
+    [Parameter]
+    public required string[] Pages { get; set; }
 }
 
-<LayoutView Layout="typeof(AppLayout)">
-    <div class="container my-4">
+<CascadingValue Value="Pages">
+    <LayoutView Layout="typeof(AppLayout)">
 
         <h1 class="display-4" data-id="namespace-title">
             <samp>
@@ -85,6 +88,5 @@
                 </tbody>
             </table>
         }
-
-    </div>
-</LayoutView>
+    </LayoutView>
+</CascadingValue>
