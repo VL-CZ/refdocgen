@@ -6,11 +6,16 @@
 
     [Parameter]
     public required string[] Pages { get; set; }
+
+    [Parameter]
+    public required bool CustomStyles { get; set; }
 }
 
 
 <CascadingValue Value="Pages">
-    <LayoutView Layout="typeof(AppLayout)">
-        @((MarkupString)Contents)
-    </LayoutView>
+    <CascadingValue Value="CustomStyles">
+        <LayoutView Layout="typeof(AppLayout)">
+            @((MarkupString)Contents)
+        </LayoutView>
+    </CascadingValue>
 </CascadingValue>

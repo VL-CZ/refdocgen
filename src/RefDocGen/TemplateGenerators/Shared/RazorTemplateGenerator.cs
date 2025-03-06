@@ -277,34 +277,50 @@ internal class RazorTemplateGenerator<
     private void CopyStaticPages()
     {
         var staticFilesFolder = "C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\demo-lib\\pages";
+        bool staticFile = false;
+
+        if (File.Exists(Path.Join(staticFilesFolder, "custom-styles.css")))
+        {
+            File.Copy(Path.Join(staticFilesFolder, "custom-styles.css"), Path.Join(outputDirectory, "custom-styles.css"), true);
+            staticFile = true;
+        }
 
         foreach (var file in Directory.GetFiles(staticFilesFolder))
         {
-            var fileText = File.ReadAllText(file);
-            if (file.EndsWith(".md"))
+            if (file.EndsWith(".md") || file.EndsWith(".html"))
             {
-                var md = File.ReadAllText(file);
-                fileText = Markdown.ToHtml(md);
-            }
 
-            string outputFileName = Path.Join(outputDirectory, new FileInfo(file).Name.Split('.').First() + ".html");
-
-            string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
-            {
-                var paramDictionary = new Dictionary<string, object?>()
+                var fileText = File.ReadAllText(file);
+                if (file.EndsWith(".md"))
                 {
-                    ["Contents"] = fileText,
-                    ["Pages"] = staticPages.ToArray()
-                };
+                    var md = File.ReadAllText(file);
+                    fileText = Markdown.ToHtml(md);
+                }
 
-                var parameters = ParameterView.FromDictionary(paramDictionary);
-                var output = await htmlRenderer.RenderComponentAsync<Template>(parameters);
+                string outputFileName = Path.Join(outputDirectory, new FileInfo(file).Name.Split('.').First() + ".html");
 
-                return output.ToHtmlString();
-            }).Result;
+                string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
+                {
+                    var paramDictionary = new Dictionary<string, object?>()
+                    {
+                        ["Contents"] = fileText,
+                        ["Pages"] = staticPages.ToArray(),
+                        ["CustomStyles"] = staticFile
+                    };
+
+                    var parameters = ParameterView.FromDictionary(paramDictionary);
+                    var output = await htmlRenderer.RenderComponentAsync<Template>(parameters);
+
+                    return output.ToHtmlString();
+                }).Result;
 
 
-            File.WriteAllText(outputFileName, html);
+                File.WriteAllText(outputFileName, html);
+            }
+            else if (file.EndsWith(".js") || file.EndsWith(".css"))
+            {
+                File.Copy(file, Path.Join(outputDirectory, Path.GetFileName(file)), true);
+            }
         }
     }
 }
