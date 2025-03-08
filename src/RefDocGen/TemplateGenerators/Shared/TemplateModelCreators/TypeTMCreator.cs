@@ -54,7 +54,7 @@ internal abstract class TypeTMCreator
     /// <returns>Collection of raw HTML string representation of the <paramref name="elements"/>.</returns>
     protected string[] GetHtmlStrings(IEnumerable<XElement> elements)
     {
-        return elements.Select(ToHtmlString).WhereNotNull().ToArray();
+        return [.. elements.Select(ToHtmlString).WhereNotNull()];
     }
 
     /// <summary>
@@ -64,9 +64,7 @@ internal abstract class TypeTMCreator
     /// <returns>Enumerable of <see cref="ParameterTM"/> instances, corresponding to the provided parameters.</returns>
     protected ParameterTM[] GetTemplateModels(IEnumerable<IParameterData> parameters)
     {
-        return parameters
-                .Select(GetFrom)
-                .ToArray();
+        return [.. parameters.Select(GetFrom)];
     }
 
     /// <summary>
@@ -76,9 +74,7 @@ internal abstract class TypeTMCreator
     /// <returns>Enumerable of <see cref="TypeParameterTM"/> instances, corresponding to the provided type parameters.</returns>
     protected TypeParameterTM[] GetTemplateModels(IEnumerable<ITypeParameterData> typeParameters)
     {
-        return typeParameters
-                .Select(GetFrom)
-                .ToArray();
+        return [.. typeParameters.Select(GetFrom)];
     }
 
     /// <summary>
@@ -88,9 +84,7 @@ internal abstract class TypeTMCreator
     /// <returns>Enumerable of <see cref="ExceptionTM"/> instances, corresponding to the provided exceptions.</returns>
     protected ExceptionTM[] GetTemplateModels(IEnumerable<IExceptionDocumentation> exceptions)
     {
-        return exceptions
-                .Select(GetFrom)
-                .ToArray();
+        return [.. exceptions.Select(GetFrom)];
     }
 
     /// <summary>
@@ -100,9 +94,7 @@ internal abstract class TypeTMCreator
     /// <returns>Enumerable of <see cref="AttributeTM"/> instances, corresponding to the provided attributes.</returns>
     protected AttributeTM[] GetTemplateModels(IEnumerable<IAttributeData> attributes)
     {
-        return attributes
-                .Select(GetFrom)
-                .ToArray();
+        return [.. attributes.Select(GetFrom)];
     }
 
     /// <summary>
@@ -255,7 +247,7 @@ internal abstract class TypeTMCreator
     /// <returns>A <see cref="AttributeTM"/> instance based on the provided <paramref name="attribute"/>.</returns>
     protected AttributeTM GetFrom(IAttributeData attribute)
     {
-        string?[] constructorArgumentTMs = attribute.ConstructorArgumentValues.Select(LiteralValueFormatter.Format).ToArray();
+        string?[] constructorArgumentTMs = [.. attribute.ConstructorArgumentValues.Select(LiteralValueFormatter.Format)];
         var namedArgumentTMs = attribute.NamedArguments.Select(na => GetFrom(na, attribute)).ToArray();
 
         var typeLink = new TypeLinkTM(

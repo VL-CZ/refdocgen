@@ -18,13 +18,9 @@ internal class AttributeData : IAttributeData
         CustomAttributeData = attr;
         Type = attr.AttributeType.GetTypeNameData(availableTypeParameters);
 
-        ConstructorArgumentValues = attr.ConstructorArguments
-            .Select(a => a.Value)
-            .ToArray();
+        ConstructorArgumentValues = [.. attr.ConstructorArguments.Select(a => a.Value)];
 
-        NamedArguments = attr.NamedArguments
-            .Select(a => new NamedAttributeArgument(a.MemberName, a.TypedValue.Value))
-            .ToArray();
+        NamedArguments = [.. attr.NamedArguments.Select(a => new NamedAttributeArgument(a.MemberName, a.TypedValue.Value))];
     }
 
     /// <inheritdoc/>

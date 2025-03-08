@@ -153,7 +153,7 @@ internal abstract class InheritDocHandler<TNode>
     /// <returns>List of nested inheritdoc elements contained in <paramref name="node"/>.</returns>
     protected IReadOnlyList<XElement> GetNestedInheritDocs(TNode node)
     {
-        return GetRawDocumentation(node).GetInheritDocs(InheritDocKind).ToList();
+        return [.. GetRawDocumentation(node).GetInheritDocs(InheritDocKind)];
     }
 
     /// <summary>

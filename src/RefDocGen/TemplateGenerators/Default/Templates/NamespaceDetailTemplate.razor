@@ -5,7 +5,7 @@
     public required NamespaceTM Model { get; set; }
 
     [Parameter]
-    public required string[] Pages { get; set; }
+    public required (string, string)[] Pages { get; set; }
 }
 
 <CascadingValue Value="Pages">

@@ -5,7 +5,7 @@
     public required EnumTypeTM Model { get; set; }
 
     [Parameter]
-    public required string[] Pages { get; set; }
+    public required (string, string)[] Pages { get; set; }
 
     /// <summary>
     /// Checks if the model has any (summary, remarks,...) doc comments.

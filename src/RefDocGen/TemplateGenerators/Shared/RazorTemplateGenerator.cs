@@ -9,6 +9,7 @@ using RefDocGen.TemplateGenerators.Default.Templates;
 using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
+using RefDocGen.TemplateGenerators.Shared.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
 using RefDocGen.Tools;
 
@@ -66,7 +67,7 @@ internal class RazorTemplateGenerator<
     /// </summary>
     private const string staticFilesDirectory = "Static";
 
-    private readonly List<string> staticPages = ["index", "api"];
+    private readonly List<(string, string)> staticPages = [("API", "api.html")];
 
     /// <summary>
     /// Transformer of the XML doc comments into HTML.
@@ -95,7 +96,8 @@ internal class RazorTemplateGenerator<
     public void GenerateTemplates(ITypeRegistry typeRegistry)
     {
         docCommentTransformer.TypeRegistry = typeRegistry;
-        GetStaticPages();
+
+        CopyStaticPages();
 
         GenerateObjectTypeTemplates(typeRegistry.ObjectTypes);
         GenerateEnumTemplates(typeRegistry.Enums);
@@ -104,7 +106,6 @@ internal class RazorTemplateGenerator<
 
         CopyStaticFilesDirectory();
 
-        CopyStaticPages();
     }
 
     /// <summary>
@@ -261,67 +262,117 @@ internal class RazorTemplateGenerator<
         return Path.Combine(templatePathFragments);
     }
 
-    private void GetStaticPages()
-    {
-        var staticFilesFolder = "C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\demo-lib\\pages";
-
-        foreach (var file in Directory.GetFiles(staticFilesFolder))
-        {
-            if (file.EndsWith(".md") || file.EndsWith(".html"))
-            {
-                staticPages.Add(new FileInfo(file).Name.Split('.').First());
-            }
-        }
-    }
-
     private void CopyStaticPages()
     {
-        var staticFilesFolder = "C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\demo-lib\\pages";
-        bool staticFile = false;
+        var cssFile = new StaticPageResolver().GetCssFile();
 
-        if (File.Exists(Path.Join(staticFilesFolder, "css/styles.css")))
+        if (cssFile is not null)
         {
-            Directory.CreateDirectory(Path.Join(outputDirectory, "css"));
-            File.Copy(Path.Join(staticFilesFolder, "css/styles.css"), Path.Join(outputDirectory, "css/styles.css"), true);
-            staticFile = true;
+            var outputPath = Path.Join(outputDirectory, StaticPageResolver.cssFile);
+
+            var dir = Path.GetDirectoryName(outputPath);
+
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            File.Copy(cssFile.FullName, outputPath, true);
         }
 
-        foreach (var file in Directory.GetFiles(staticFilesFolder))
+        var pages = new StaticPageResolver().GetStaticPages();
+
+        foreach (var page in pages)
         {
-            if (file.EndsWith(".md") || file.EndsWith(".html"))
+            var outputPath = Path.Combine(outputDirectory, page.DirectoryPath);
+            var dir = Directory.CreateDirectory(outputPath);
+
+            var outputFile = Path.Combine(outputPath, $"{page.Name}.html");
+
+            string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
             {
-
-                var fileText = File.ReadAllText(file);
-                if (file.EndsWith(".md"))
+                var paramDictionary = new Dictionary<string, object?>()
                 {
-                    var md = File.ReadAllText(file);
-                    fileText = Markdown.ToHtml(md);
-                }
+                    ["Contents"] = page.Html,
+                    ["Pages"] = staticPages.ToArray(),
+                    ["CustomStyles"] = cssFile is not null ? StaticPageResolver.cssFile : null
+                };
 
-                string outputFileName = Path.Join(outputDirectory, new FileInfo(file).Name.Split('.').First() + ".html");
+                var parameters = ParameterView.FromDictionary(paramDictionary);
+                var output = await htmlRenderer.RenderComponentAsync<Template>(parameters);
 
-                string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
-                {
-                    var paramDictionary = new Dictionary<string, object?>()
-                    {
-                        ["Contents"] = fileText,
-                        ["Pages"] = staticPages.ToArray(),
-                        ["CustomStyles"] = staticFile
-                    };
-
-                    var parameters = ParameterView.FromDictionary(paramDictionary);
-                    var output = await htmlRenderer.RenderComponentAsync<Template>(parameters);
-
-                    return output.ToHtmlString();
-                }).Result;
+                return output.ToHtmlString();
+            }).Result;
 
 
-                File.WriteAllText(outputFileName, html);
-            }
-            else if (file.EndsWith(".js") || file.EndsWith(".css"))
-            {
-                File.Copy(file, Path.Join(outputDirectory, Path.GetFileName(file)), true);
-            }
+            File.WriteAllText(outputFile, html);
+
         }
+
+        var otherFiles = new StaticPageResolver().GetOtherFiles();
+
+        foreach (var file in otherFiles)
+        {
+            var relativePath = Path.GetRelativePath("C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\demo-lib\\pages", file.FullName);
+            var outputPath = Path.Join(outputDirectory, relativePath);
+
+            var dir = Path.GetDirectoryName(outputPath);
+
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            File.Copy(file.FullName, outputPath, true);
+        }
+
+
+        //string staticFilesFolder = "C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\demo-lib\\pages";
+        //bool staticFile = false;
+
+        //if (File.Exists(Path.Join(staticFilesFolder, "css/styles.css")))
+        //{
+        //    _ = Directory.CreateDirectory(Path.Join(outputDirectory, "css"));
+        //    File.Copy(Path.Join(staticFilesFolder, "css/styles.css"), Path.Join(outputDirectory, "css/styles.css"), true);
+        //    staticFile = true;
+        //}
+
+        //foreach (string file in Directory.GetFiles(staticFilesFolder))
+        //{
+        //    if (file.EndsWith(".md") || file.EndsWith(".html"))
+        //    {
+
+        //        string fileText = File.ReadAllText(file);
+        //        if (file.EndsWith(".md"))
+        //        {
+        //            string md = File.ReadAllText(file);
+        //            fileText = Markdown.ToHtml(md);
+        //        }
+
+        //        string outputFileName = Path.Join(outputDirectory, new FileInfo(file).Name.Split('.').First() + ".html");
+
+        //        string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
+        //        {
+        //            var paramDictionary = new Dictionary<string, object?>()
+        //            {
+        //                ["Contents"] = fileText,
+        //                ["Pages"] = staticPages.ToArray(),
+        //                ["CustomStyles"] = staticFile
+        //            };
+
+        //            var parameters = ParameterView.FromDictionary(paramDictionary);
+        //            var output = await htmlRenderer.RenderComponentAsync<Template>(parameters);
+
+        //            return output.ToHtmlString();
+        //        }).Result;
+
+
+        //        File.WriteAllText(outputFileName, html);
+        //    }
+        //    else if (file.EndsWith(".js") || file.EndsWith(".css"))
+        //    {
+        //        File.Copy(file, Path.Join(outputDirectory, Path.GetFileName(file)), true);
+        //    }
+        //}
     }
 }
