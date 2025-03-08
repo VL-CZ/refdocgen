@@ -15,16 +15,29 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <ul class="navbar-nav">
 
-                @foreach (var p in Pages)
-                {
-                    var urlFragments = Enumerable.Repeat("..", NestingLevel).Append(p.Item2).ToArray();
-                    var pagePath = Path.Combine(urlFragments);
+                    @foreach (var p in Pages)
+                    {
+                        var urlFragments = Enumerable.Repeat("..", NestingLevel).Append(p.Item2).ToArray();
+                        var pagePath = Path.Combine(urlFragments);
 
-                    <div class="navbar-nav">
-                        <a class="nav-link" href="@pagePath">@p.Item1</a>
-                    </div>
-                }
+                        <li class="nav-item">
+                            <a class="nav-link" href="@pagePath">@p.Item1</a>
+                        </li>
+                    }
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Tutorial
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="./tutorial/1)-installation.html">1) Installation</a></li>
+                            <li><a class="dropdown-item" href="./tutorial/2)-usage.html">2) Usage</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
             </div>
         </div>
     </nav>
