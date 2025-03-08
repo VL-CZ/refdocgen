@@ -84,7 +84,7 @@ internal class StaticPageResolver
         foreach (string filePath in Directory.GetFiles(staticFilesFolder, "*", SearchOption.AllDirectories))
         {
             var file = new FileInfo(filePath);
-            if (file.Extension is ".js" or ".json")
+            if (file.Extension is ".js" or ".json" or ".jpg" or ".png" or ".gif" or ".mp4")
             {
                 files.Add(file);
             }

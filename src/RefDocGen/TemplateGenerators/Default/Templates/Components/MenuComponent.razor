@@ -2,6 +2,8 @@
 
 @code {
     [CascadingParameter] public (string, string)[] Pages { get; set; } = [];
+
+    [CascadingParameter] public int NestingLevel { get; set; } = 0;
 }
 
 
@@ -16,8 +18,11 @@
 
                 @foreach (var p in Pages)
                 {
+                    var urlFragments = Enumerable.Repeat("..", NestingLevel).Append(p.Item2).ToArray();
+                    var pagePath = Path.Combine(urlFragments);
+
                     <div class="navbar-nav">
-                        <a class="nav-link" href="@p.Item2">@p.Item1</a>
+                        <a class="nav-link" href="@pagePath">@p.Item1</a>
                     </div>
                 }
             </div>
