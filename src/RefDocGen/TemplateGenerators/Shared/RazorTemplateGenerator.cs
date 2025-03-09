@@ -6,6 +6,7 @@ using RefDocGen.CodeElements.Abstract.Types.Delegate;
 using RefDocGen.CodeElements.Abstract.Types.Enum;
 using RefDocGen.TemplateGenerators.Default.Templates;
 using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools;
@@ -66,7 +67,7 @@ internal class RazorTemplateGenerator<
     /// </summary>
     private const string staticFilesDirectory = "Static";
 
-    private List<(string, string)> staticPages = [("API", "api.html")];
+    private List<MenuItemTM> staticPages = [new("API", "./api.html")];
 
     /// <summary>
     /// Transformer of the XML doc comments into HTML.
@@ -283,7 +284,7 @@ internal class RazorTemplateGenerator<
 
         var newPages = pages.Where(p => p.DirectoryPath == ".")
             .Select(p => p.Name)
-            .Select(p => (p.Replace("-", " ").Capitalize(), $"./{p}.html"));
+            .Select(p => new MenuItemTM(p.Replace("-", " ").Capitalize(), $"./{p}.html"));
 
         staticPages.AddRange(newPages);
 

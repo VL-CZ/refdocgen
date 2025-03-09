@@ -1,3 +1,4 @@
+using AngleSharp;
 using Markdig;
 
 namespace RefDocGen.TemplateGenerators.Shared.Tools;
@@ -26,6 +27,8 @@ internal class StaticPageResolver
                     string md = File.ReadAllText(filePath);
                     fileText = Markdown.ToHtml(md);
                 }
+
+                fileText = ResolveLinks(fileText);
 
                 string pageDir = Path.GetRelativePath(staticFilesFolder, file.DirectoryName ?? staticFilesFolder);
 
@@ -91,5 +94,27 @@ internal class StaticPageResolver
         }
 
         return files;
+    }
+
+    private string ResolveLinks(string html)
+    {
+        var config = Configuration.Default;
+        var context = BrowsingContext.New(config);
+
+        // Load the HTML document directly from the file
+        var document = context.OpenAsync((req) => req.Content(html)).Result;
+
+        var links = document.QuerySelectorAll("a[href]");
+
+        foreach (var link in links)
+        {
+            if (link.GetAttribute("href") is string hrefValue && hrefValue.EndsWith(".md"))
+            {
+                string resolved = hrefValue[..^3] + ".html";
+                link.SetAttribute("href", resolved);
+            }
+        }
+
+        return document.DocumentElement.OuterHtml;
     }
 }
