@@ -67,7 +67,7 @@ internal class RazorTemplateGenerator<
     /// </summary>
     private const string staticFilesDirectory = "Static";
 
-    private List<MenuItemTM> staticPages = [new("API", "./api.html")];
+    private MenuTM menuItems = new([], []);
 
     /// <summary>
     /// Transformer of the XML doc comments into HTML.
@@ -190,7 +190,7 @@ internal class RazorTemplateGenerator<
             var paramDictionary = new Dictionary<string, object?>()
             {
                 ["Model"] = templateModel,
-                ["Pages"] = staticPages.ToArray()
+                ["MenuItems"] = menuItems
             };
 
             var parameters = ParameterView.FromDictionary(paramDictionary);
@@ -262,6 +262,44 @@ internal class RazorTemplateGenerator<
         return Path.Combine(templatePathFragments);
     }
 
+    private IEnumerable<MenuPage> ToPages(IEnumerable<StaticPage> pages)
+    {
+        return pages
+            .Select(p => new MenuPage(p.Name.Replace("-", " ").Capitalize(), $"{Path.Combine(p.DirectoryPath, p.Name)}.html"));
+    }
+
+    private void SetMenuItems(IEnumerable<StaticPage> pages)
+    {
+        List<MenuPage> menuPages = [new("API", "api.html")];
+
+        var newPages = ToPages(pages.Where(p => p.DirectoryPath == "."));
+
+        menuPages.AddRange(newPages);
+
+        if (menuPages.SingleOrDefault(p => p.PageName == "Index") is MenuPage indexPage)
+        {
+            menuPages.Remove(indexPage);
+            indexPage = indexPage with { PageName = "Home" };
+            menuPages.Insert(0, indexPage);
+        }
+
+        List<MenuFolder> menuFolders = [];
+
+        var lookup = pages.Where(p => p.DirectoryPath != ".")
+            .ToLookup(p => p.DirectoryPath);
+
+        foreach (var dir in lookup)
+        {
+            var dirName = dir.Key.Replace("-", " ").Capitalize();
+
+            var dirPages = ToPages(dir);
+
+            menuFolders.Add(new(dirName, [.. dirPages]));
+        }
+
+        menuItems = new([.. menuPages], [.. menuFolders]);
+    }
+
     private void CopyStaticPages()
     {
         var cssFile = new StaticPageResolver().GetCssFile();
@@ -282,11 +320,7 @@ internal class RazorTemplateGenerator<
 
         var pages = new StaticPageResolver().GetStaticPages();
 
-        var newPages = pages.Where(p => p.DirectoryPath == ".")
-            .Select(p => p.Name)
-            .Select(p => new MenuItemTM(p.Replace("-", " ").Capitalize(), $"./{p}.html"));
-
-        staticPages.AddRange(newPages);
+        SetMenuItems(pages);
 
         foreach (var page in pages)
         {
@@ -303,7 +337,7 @@ internal class RazorTemplateGenerator<
                 var paramDictionary = new Dictionary<string, object?>()
                 {
                     ["Contents"] = page.Html,
-                    ["Pages"] = staticPages.ToArray(),
+                    ["MenuItems"] = menuItems,
                     ["CustomStyles"] = cssFile is not null ? StaticPageResolver.cssFile : null,
                     ["NestingLevel"] = nestingLevel
                 };

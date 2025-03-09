@@ -1,13 +1,13 @@
 @inherits ComponentBase
 
 @code {
-    [CascadingParameter] public MenuItemTM[] Pages { get; set; } = [];
+    [CascadingParameter] public required MenuTM MenuItems { get; set; }
 
     [CascadingParameter] public int NestingLevel { get; set; } = 0;
 }
 
 
-<CascadingValue Value="Pages">
+<CascadingValue Value="MenuItems">
     <nav class="navbar navbar-expand-lg sticky-top bg-dark" data-bs-theme="dark">
         <div class="container">
             <a class="navbar-brand" href="./index.html">Project name</a>
@@ -17,9 +17,13 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <ul class="navbar-nav">
 
-                    @foreach (var p in Pages)
+                    @{
+                        var nestingUrl = Enumerable.Repeat("..", NestingLevel);
+                    }
+
+                    @foreach (var p in MenuItems.Pages)
                     {
-                        var urlFragments = Enumerable.Repeat("..", NestingLevel).Append(p.Url).ToArray();
+                        var urlFragments = nestingUrl.Append(p.Url).ToArray();
                         var pagePath = Path.Combine(urlFragments);
 
                         <li class="nav-item">
@@ -27,16 +31,28 @@
                         </li>
                     }
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Tutorial
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="./tutorial/1)-installation.html">1) Installation</a></li>
-                            <li><a class="dropdown-item" href="./tutorial/2)-usage.html">2) Usage</a></li>
-                        </ul>
-                    </li>
+                    @foreach (var f in MenuItems.Folders)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                @f.Name
+                            </a>
+                            <ul class="dropdown-menu">
 
+                                @foreach (var p in f.Pages)
+                                {
+                                    var urlFragments = nestingUrl.Append(p.Url).ToArray();
+                                    var pagePath = Path.Combine(urlFragments);
+
+                                    <li>
+                                        <a class="dropdown-item" href="@pagePath">
+                                            @p.PageName
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>

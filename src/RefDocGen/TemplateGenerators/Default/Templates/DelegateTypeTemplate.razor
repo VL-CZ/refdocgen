@@ -5,7 +5,7 @@
     public required DelegateTypeTM Model { get; set; }
 
     [Parameter]
-    public required MenuItemTM[] Pages { get; set; }
+    public required MenuTM MenuItems { get; set; }
 
     /// <summary>
     /// Checks if the model has any (summary, remarks,...) doc comments.
@@ -17,7 +17,7 @@
     }
 }
 
-<CascadingValue Value="Pages">
+<CascadingValue Value="MenuItems">
     <LayoutView Layout="typeof(AppLayout)">
         <div data-id="declared-type-data">
             <DeclaredTypeName TypeName="@Model.Name" TypeKindName="delegate" Modifiers="@Model.Modifiers" TypeParameters="@Model.TypeParameters" />

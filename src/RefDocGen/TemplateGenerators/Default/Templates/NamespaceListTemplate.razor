@@ -5,10 +5,10 @@
     public required IEnumerable<NamespaceTM> Model { get; set; }
 
     [Parameter]
-    public required MenuItemTM[] Pages { get; set; }
+    public required MenuTM MenuItems { get; set; }
 }
 
-<CascadingValue Value="Pages">
+<CascadingValue Value="MenuItems">
     <LayoutView Layout="typeof(AppLayout)">
 
         <h1 class="display-4">
