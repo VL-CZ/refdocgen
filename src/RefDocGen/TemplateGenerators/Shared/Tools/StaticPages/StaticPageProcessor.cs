@@ -31,7 +31,7 @@ internal class StaticPageProcessor
     /// <summary>
     /// Path to the CSS file, relative to <see cref="staticPagesDirectory"/>.
     /// </summary>
-    internal static readonly string cssFile = Path.Join("css", "styles.css");
+    internal static readonly string cssFilePath = Path.Join("css", "styles.css");
 
     /// <summary>
     /// Initializes a new instance of <see cref="StaticPageProcessor"/> class.
@@ -78,7 +78,7 @@ internal class StaticPageProcessor
     /// <returns>A <see cref="FileInfo"/> object representing the user provided CSS file.</returns>
     internal FileInfo GetCssFile()
     {
-        string cssPath = Path.Join(staticPagesDirectory, cssFile);
+        string cssPath = Path.Join(staticPagesDirectory, cssFilePath);
         return new FileInfo(cssPath);
     }
 

@@ -4,7 +4,6 @@ using RefDocGen.CodeElements.Abstract;
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.Delegate;
 using RefDocGen.CodeElements.Abstract.Types.Enum;
-using RefDocGen.TemplateGenerators.Default.Templates;
 using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Namespaces;
@@ -69,7 +68,7 @@ internal class RazorTemplateGenerator<
     /// </summary>
     private const string staticTemplateFilesDirectory = "Static";
 
-    private TopMenuTM menuItems = TopMenuTMCreator.Default;
+    private TopMenuDataTM menuItems = TopMenuTMCreator.Default;
 
     private string? staticPagesDirectory;
 
@@ -79,7 +78,8 @@ internal class RazorTemplateGenerator<
     private readonly IDocCommentTransformer docCommentTransformer;
 
     /// <summary>
-    /// Initialize a new instance of <see cref="RazorTemplateGenerator{TDelegateTemplate, TEnumTemplate, TNamespaceDetailTemplate, TNamespaceListTemplate, TObjectTypeTemplate}"/> class.
+    /// Initialize a new instance of
+    /// <see cref="RazorTemplateGenerator{TDelegateTemplate, TEnumTemplate, TNamespaceDetailTemplate, TNamespaceListTemplate, TObjectTypeTemplate, TStaticPageTemplate}"/> class.
     /// </summary>
     /// <param name="htmlRenderer">Renderer of the Razor components.</param>
     /// <param name="docCommentTransformer">Transformer of the XML doc comments into HTML.</param>
@@ -100,7 +100,6 @@ internal class RazorTemplateGenerator<
     public void GenerateTemplates(ITypeRegistry typeRegistry)
     {
         docCommentTransformer.TypeRegistry = typeRegistry;
-
         staticPagesDirectory = "C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\demo-lib\\pages";
 
         CopyStaticPages();
@@ -111,7 +110,6 @@ internal class RazorTemplateGenerator<
         GenerateNamespaceTemplates(typeRegistry);
 
         CopyStaticTemplateFilesDirectory();
-
     }
 
     /// <summary>
@@ -280,11 +278,11 @@ internal class RazorTemplateGenerator<
         var pages = pageProcessor.GetStaticPages();
         var cssFile = pageProcessor.GetCssFile();
 
-        menuItems = new TopMenuTMCreator().CreateFrom(pages);
+        menuItems = new TopMenuTMCreator().CreateFrom(pages); // get menu items based on the static pages
 
-        pageProcessor.CopyNonPageFiles(outputDirectory);
+        pageProcessor.CopyNonPageFiles(outputDirectory); // copy non-page files
 
-        foreach (var page in pages)
+        foreach (var page in pages) // wrap each page in the static page template and copy it into the output directory
         {
             string outputPath = Path.Combine(outputDirectory, page.PageDirectory);
             var dir = Directory.CreateDirectory(outputPath);
@@ -297,12 +295,12 @@ internal class RazorTemplateGenerator<
                 {
                     ["Contents"] = page.HtmlBody,
                     ["MenuItems"] = menuItems,
-                    ["CustomStyles"] = cssFile is not null ? StaticPageProcessor.cssFile : null,
+                    ["CustomStyles"] = cssFile.Exists ? StaticPageProcessor.cssFilePath : null,
                     ["NestingLevel"] = page.FolderDepth
                 };
 
                 var parameters = ParameterView.FromDictionary(paramDictionary);
-                var output = await htmlRenderer.RenderComponentAsync<Template>(parameters);
+                var output = await htmlRenderer.RenderComponentAsync<TStaticPageTemplate>(parameters);
 
                 return output.ToHtmlString();
             }).Result;

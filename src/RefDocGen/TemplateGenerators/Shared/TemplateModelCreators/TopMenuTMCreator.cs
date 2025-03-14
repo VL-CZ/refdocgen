@@ -6,14 +6,19 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 
 internal class TopMenuTMCreator
 {
-    internal static TopMenuTM Default => new([new("API", "api.html")], []);
+    internal static TopMenuDataTM Default => new([new("API", "api.html")], []);
+
+    private string GetPageName(string pageName)
+    {
+        return pageName.Replace("-", " ").Capitalize();
+    }
 
     private MenuPageLinkTM ToPage(StaticPage p)
     {
-        return new MenuPageLinkTM(p.PageName.Replace("-", " ").Capitalize(), $"{Path.Combine(p.PageDirectory, p.PageName)}.html");
+        return new MenuPageLinkTM(GetPageName(p.PageName), $"{Path.Combine(p.PageDirectory, p.PageName)}.html");
     }
 
-    internal TopMenuTM CreateFrom(IEnumerable<StaticPage> pages)
+    internal TopMenuDataTM CreateFrom(IEnumerable<StaticPage> pages)
     {
         List<MenuPageLinkTM> menuPages = [new("API", "api.html")];
 
@@ -35,7 +40,7 @@ internal class TopMenuTMCreator
 
         foreach (var dir in lookup)
         {
-            var dirName = dir.Key.Replace("-", " ").Capitalize();
+            string dirName = GetPageName(dir.Key);
 
             var dirPages = dir.Select(ToPage);
 
