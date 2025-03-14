@@ -306,7 +306,7 @@ internal class RazorTemplateGenerator<
 
         if (cssFile is not null)
         {
-            string outputPath = Path.Join(outputDirectory, StaticPageResolver.cssFile);
+            string outputPath = Path.Join(outputDirectory, StaticPageProcessor.cssFile);
 
             string? dir = Path.GetDirectoryName(outputPath);
 
@@ -338,7 +338,7 @@ internal class RazorTemplateGenerator<
                 {
                     ["Contents"] = page.Html,
                     ["MenuItems"] = menuItems,
-                    ["CustomStyles"] = cssFile is not null ? StaticPageResolver.cssFile : null,
+                    ["CustomStyles"] = cssFile is not null ? StaticPageProcessor.cssFile : null,
                     ["NestingLevel"] = nestingLevel
                 };
 
