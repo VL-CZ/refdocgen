@@ -1,3 +1,4 @@
+@using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu
 @inherits ComponentBase
 
 @code {
@@ -5,7 +6,7 @@
     public required EnumTypeTM Model { get; set; }
 
     [Parameter]
-    public required MenuTM MenuItems { get; set; }
+    public required TopMenuTM MenuItems { get; set; }
 
     /// <summary>
     /// Checks if the model has any (summary, remarks,...) doc comments.

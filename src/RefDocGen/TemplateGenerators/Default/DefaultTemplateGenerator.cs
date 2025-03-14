@@ -16,7 +16,8 @@ internal class DefaultTemplateGenerator : RazorTemplateGenerator<
     EnumTypeTemplate,
     NamespaceDetailTemplate,
     NamespaceListTemplate,
-    ObjectTypeTemplate>
+    ObjectTypeTemplate,
+    Template>
 {
     /// <summary>
     /// Initialize a new instance of <see cref="DefaultTemplateGenerator"/> class.

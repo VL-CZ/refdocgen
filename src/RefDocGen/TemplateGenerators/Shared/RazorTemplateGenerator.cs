@@ -6,11 +6,11 @@ using RefDocGen.CodeElements.Abstract.Types.Delegate;
 using RefDocGen.CodeElements.Abstract.Types.Enum;
 using RefDocGen.TemplateGenerators.Default.Templates;
 using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
-using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
-using RefDocGen.TemplateGenerators.Shared.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
+using RefDocGen.TemplateGenerators.Shared.Tools.StaticPages;
 using RefDocGen.Tools;
 
 namespace RefDocGen.TemplateGenerators.Shared;
@@ -28,7 +28,8 @@ internal class RazorTemplateGenerator<
         TEnumTemplate,
         TNamespaceDetailTemplate,
         TNamespaceListTemplate,
-        TObjectTypeTemplate
+        TObjectTypeTemplate,
+        TStaticPageTemplate
     > : ITemplateGenerator
 
     where TDelegateTemplate : IComponent
@@ -36,6 +37,7 @@ internal class RazorTemplateGenerator<
     where TNamespaceDetailTemplate : IComponent
     where TNamespaceListTemplate : IComponent
     where TObjectTypeTemplate : IComponent
+    where TStaticPageTemplate : IComponent
 {
     /// <summary>
     /// Namespace prefix of any template generator.
@@ -65,9 +67,11 @@ internal class RazorTemplateGenerator<
     /// <summary>
     /// Path to the directory containing static files (typically css and js related to templates), relative to <see cref="templatesDirectory"/>.
     /// </summary>
-    private const string staticFilesDirectory = "Static";
+    private const string staticTemplateFilesDirectory = "Static";
 
-    private MenuTM menuItems = new([], []);
+    private TopMenuTM menuItems = TopMenuTMCreator.Default;
+
+    private string? staticPagesDirectory;
 
     /// <summary>
     /// Transformer of the XML doc comments into HTML.
@@ -97,6 +101,8 @@ internal class RazorTemplateGenerator<
     {
         docCommentTransformer.TypeRegistry = typeRegistry;
 
+        staticPagesDirectory = "C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\demo-lib\\pages";
+
         CopyStaticPages();
 
         GenerateObjectTypeTemplates(typeRegistry.ObjectTypes);
@@ -104,7 +110,7 @@ internal class RazorTemplateGenerator<
         GenerateDelegateTemplates(typeRegistry.Delegates);
         GenerateNamespaceTemplates(typeRegistry);
 
-        CopyStaticFilesDirectory();
+        CopyStaticTemplateFilesDirectory();
 
     }
 
@@ -204,12 +210,12 @@ internal class RazorTemplateGenerator<
     }
 
     /// <summary>
-    /// Copies the directory containing static files (css, js, etc.) to the output directory.
+    /// Copies the directory containing static template files (css, js, etc.) to the output directory.
     /// </summary>
-    private void CopyStaticFilesDirectory()
+    private void CopyStaticTemplateFilesDirectory()
     {
-        var staticFilesDir = new DirectoryInfo(Path.Combine(templatesDirectory, staticFilesDirectory));
-        string outputDirPath = Path.Combine(outputDirectory, staticFilesDirectory);
+        var staticFilesDir = new DirectoryInfo(Path.Combine(templatesDirectory, staticTemplateFilesDirectory));
+        string outputDirPath = Path.Combine(outputDirectory, staticTemplateFilesDirectory);
 
         if (staticFilesDir.Exists)
         {
@@ -262,84 +268,37 @@ internal class RazorTemplateGenerator<
         return Path.Combine(templatePathFragments);
     }
 
-    private IEnumerable<MenuPage> ToPages(IEnumerable<StaticPage> pages)
-    {
-        return pages
-            .Select(p => new MenuPage(p.Name.Replace("-", " ").Capitalize(), $"{Path.Combine(p.DirectoryPath, p.Name)}.html"));
-    }
-
-    private void SetMenuItems(IEnumerable<StaticPage> pages)
-    {
-        List<MenuPage> menuPages = [new("API", "api.html")];
-
-        var newPages = ToPages(pages.Where(p => p.DirectoryPath == "."));
-
-        menuPages.AddRange(newPages);
-
-        if (menuPages.SingleOrDefault(p => p.PageName == "Index") is MenuPage indexPage)
-        {
-            menuPages.Remove(indexPage);
-            indexPage = indexPage with { PageName = "Home" };
-            menuPages.Insert(0, indexPage);
-        }
-
-        List<MenuFolder> menuFolders = [];
-
-        var lookup = pages.Where(p => p.DirectoryPath != ".")
-            .ToLookup(p => p.DirectoryPath);
-
-        foreach (var dir in lookup)
-        {
-            var dirName = dir.Key.Replace("-", " ").Capitalize();
-
-            var dirPages = ToPages(dir);
-
-            menuFolders.Add(new(dirName, [.. dirPages]));
-        }
-
-        menuItems = new([.. menuPages], [.. menuFolders]);
-    }
-
     private void CopyStaticPages()
     {
-        var cssFile = new StaticPageResolver().GetCssFile();
-
-        if (cssFile is not null)
+        if (staticPagesDirectory is null)
         {
-            string outputPath = Path.Join(outputDirectory, StaticPageProcessor.cssFile);
-
-            string? dir = Path.GetDirectoryName(outputPath);
-
-            if (!Directory.Exists(dir))
-            {
-                _ = Directory.CreateDirectory(dir);
-            }
-
-            File.Copy(cssFile.FullName, outputPath, true);
+            return;
         }
 
-        var pages = new StaticPageResolver().GetStaticPages();
+        var pageProcessor = new StaticPageProcessor(staticPagesDirectory);
 
-        SetMenuItems(pages);
+        var pages = pageProcessor.GetStaticPages();
+        var cssFile = pageProcessor.GetCssFile();
+
+        menuItems = new TopMenuTMCreator().CreateFrom(pages);
+
+        pageProcessor.CopyNonPageFiles(outputDirectory);
 
         foreach (var page in pages)
         {
-            string outputPath = Path.Combine(outputDirectory, page.DirectoryPath);
-            int nestingLevel = page.DirectoryPath == "."
-                ? 0
-                : page.DirectoryPath.Count(c => c == Path.DirectorySeparatorChar) + 1;
+            string outputPath = Path.Combine(outputDirectory, page.PageDirectory);
             var dir = Directory.CreateDirectory(outputPath);
 
-            string outputFile = Path.Combine(outputPath, $"{page.Name}.html");
+            string outputFile = Path.Combine(outputPath, $"{page.PageName}.html");
 
             string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
             {
                 var paramDictionary = new Dictionary<string, object?>()
                 {
-                    ["Contents"] = page.Html,
+                    ["Contents"] = page.HtmlBody,
                     ["MenuItems"] = menuItems,
                     ["CustomStyles"] = cssFile is not null ? StaticPageProcessor.cssFile : null,
-                    ["NestingLevel"] = nestingLevel
+                    ["NestingLevel"] = page.FolderDepth
                 };
 
                 var parameters = ParameterView.FromDictionary(paramDictionary);
@@ -349,23 +308,6 @@ internal class RazorTemplateGenerator<
             }).Result;
 
             File.WriteAllText(outputFile, html);
-        }
-
-        var otherFiles = new StaticPageResolver().GetOtherFiles();
-
-        foreach (var file in otherFiles)
-        {
-            string relativePath = Path.GetRelativePath("C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\demo-lib\\pages", file.FullName);
-            string outputPath = Path.Join(outputDirectory, relativePath);
-
-            string? dir = Path.GetDirectoryName(outputPath);
-
-            if (!Directory.Exists(dir))
-            {
-                _ = Directory.CreateDirectory(dir);
-            }
-
-            File.Copy(file.FullName, outputPath, true);
         }
     }
 }

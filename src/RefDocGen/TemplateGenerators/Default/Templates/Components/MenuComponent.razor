@@ -1,7 +1,8 @@
+@using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu
 @inherits ComponentBase
 
 @code {
-    [CascadingParameter] public required MenuTM MenuItems { get; set; }
+    [CascadingParameter] public required TopMenuTM MenuItems { get; set; }
 
     [CascadingParameter] public int NestingLevel { get; set; } = 0;
 }

@@ -1,9 +1,7 @@
 using AngleSharp;
 using Markdig;
 
-namespace RefDocGen.TemplateGenerators.Shared.Tools;
-
-internal record StaticPage(string DirectoryPath, string Name, string Html);
+namespace RefDocGen.TemplateGenerators.Shared.Tools.StaticPages;
 
 /// <summary>
 /// Class responsible for handling all user-provided static pages.
@@ -137,3 +135,4 @@ internal class StaticPageProcessor
 
         return document.DocumentElement.OuterHtml;
     }
+}
