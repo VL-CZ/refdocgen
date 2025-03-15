@@ -17,7 +17,7 @@ internal class DefaultTemplateGenerator : RazorTemplateGenerator<
     NamespaceDetailTemplate,
     NamespaceListTemplate,
     ObjectTypeTemplate,
-    Template>
+    StaticPageTemplate>
 {
     /// <summary>
     /// Initialize a new instance of <see cref="DefaultTemplateGenerator"/> class.
