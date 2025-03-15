@@ -68,7 +68,7 @@ internal class RazorTemplateGenerator<
     /// </summary>
     private const string staticTemplateFilesDirectory = "Static";
 
-    private TopMenuDataTM menuItems = TopMenuTMCreator.Default;
+    private TopMenuDataTM menuItems = TopMenuTMCreator.DefaultMenuData;
 
     private string? staticPagesDirectory;
 
@@ -266,9 +266,12 @@ internal class RazorTemplateGenerator<
         return Path.Combine(templatePathFragments);
     }
 
+    /// <summary>
+    /// Copies and processes the static pages created by user and adds them into the documentation.
+    /// </summary>
     private void CopyStaticPages()
     {
-        if (staticPagesDirectory is null)
+        if (staticPagesDirectory is null) // no static pages directory specified -> return
         {
             return;
         }
