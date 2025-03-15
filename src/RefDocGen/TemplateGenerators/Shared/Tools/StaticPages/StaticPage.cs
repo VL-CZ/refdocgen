@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace RefDocGen.TemplateGenerators.Shared.Tools.StaticPages;
 
 /// <summary>
@@ -25,4 +27,9 @@ internal record StaticPage(string PageDirectory, string PageName, string HtmlBod
             return PageDirectory.Count(c => c == Path.DirectorySeparatorChar) + 1;
         }
     }
+
+    /// <summary>
+    /// Indicates whether the page is an 'index' page.
+    /// </summary>
+    internal bool IsIndexPage => FolderDepth == 0 && PageName.Equals("index", StringComparison.OrdinalIgnoreCase);
 }

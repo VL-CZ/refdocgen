@@ -20,7 +20,7 @@ internal class TopMenuTMCreator
     private static readonly MenuPageLinkTM homeMenuPage = new("Home", "index.html");
 
     /// <summary>
-    /// Default menu data.
+    /// Default top menu data - containing just the link to the 'API' page.
     /// </summary>
     internal static TopMenuDataTM DefaultMenuData => new([apiMenuPage], []);
 
@@ -53,12 +53,11 @@ internal class TopMenuTMCreator
     {
         List<MenuPageLinkTM> menuPages = [apiMenuPage];
 
-        var newPages = pages.Where(p => p.FolderDepth == 0).Select(ToMenuPage);
-        menuPages.AddRange(newPages); // add menu pages, corresponding to the files in the static pages folder
+        var newPages = pages.Where(p => p.FolderDepth == 0 && !p.IsIndexPage).Select(ToMenuPage);
+        menuPages.AddRange(newPages); // add menu pages (except the index page), corresponding to the files in the static pages folder
 
-        if (menuPages.SingleOrDefault(p => p.Url == "index") is MenuPageLinkTM indexPage) // check for index page
+        if (pages.SingleOrDefault(p => p.IsIndexPage) is StaticPage page) // check for index page
         {
-            _ = menuPages.Remove(indexPage);
             menuPages.Insert(0, homeMenuPage);
         }
 
@@ -71,7 +70,7 @@ internal class TopMenuTMCreator
         foreach (var dir in directoryLookup) // add menu folder, corresponding to directories
         {
             string dirName = GetPageName(dir.Key);
-            var dirPages = dir.Select(ToMenuPage);
+            var dirPages = dir.OrderBy(page => page.PageName).Select(ToMenuPage);
             menuFolders.Add(new(dirName, [.. dirPages]));
         }
 
