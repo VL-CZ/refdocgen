@@ -6,7 +6,7 @@
     public required string Contents { get; set; }
 
     [Parameter]
-    public required TopMenuDataTM MenuItems { get; set; }
+    public required TopMenuDataTM TopMenuData { get; set; }
 
     [Parameter]
     public required string CustomStyles { get; set; }
@@ -16,7 +16,7 @@
 }
 
 
-<CascadingValue Value="MenuItems">
+<CascadingValue Value="TopMenuData">
     <CascadingValue Value="CustomStyles">
         <CascadingValue Value="NestingLevel">
             <LayoutView Layout="typeof(AppLayout)">

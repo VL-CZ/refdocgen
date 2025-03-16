@@ -2,13 +2,13 @@
 @inherits ComponentBase
 
 @code {
-    [CascadingParameter] public required TopMenuDataTM MenuItems { get; set; }
+    [CascadingParameter] public required TopMenuDataTM TopMenuData { get; set; }
 
     [CascadingParameter] public int NestingLevel { get; set; } = 0;
 }
 
 
-<CascadingValue Value="MenuItems">
+<CascadingValue Value="TopMenuData">
     <nav class="navbar navbar-expand-lg sticky-top bg-dark" data-bs-theme="dark">
         <div class="container">
             <a class="navbar-brand" href="./index.html">Project name</a>
@@ -22,7 +22,7 @@
                         var nestingUrl = Enumerable.Repeat("..", NestingLevel);
                     }
 
-                    @foreach (var p in MenuItems.Pages)
+                    @foreach (var p in TopMenuData.Pages)
                     {
                         var urlFragments = nestingUrl.Append(p.Url).ToArray();
                         var pagePath = Path.Combine(urlFragments);
@@ -32,7 +32,7 @@
                         </li>
                     }
 
-                    @foreach (var f in MenuItems.Folders)
+                    @foreach (var f in TopMenuData.Folders)
                     {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

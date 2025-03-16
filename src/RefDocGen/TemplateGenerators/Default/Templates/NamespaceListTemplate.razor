@@ -6,10 +6,10 @@
     public required IEnumerable<NamespaceTM> Model { get; set; }
 
     [Parameter]
-    public required TopMenuDataTM MenuItems { get; set; }
+    public required TopMenuDataTM TopMenuData { get; set; }
 }
 
-<CascadingValue Value="MenuItems">
+<CascadingValue Value="TopMenuData">
     <LayoutView Layout="typeof(AppLayout)">
 
         <h1 class="display-4">

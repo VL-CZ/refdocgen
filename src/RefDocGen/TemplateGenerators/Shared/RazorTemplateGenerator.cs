@@ -212,7 +212,7 @@ internal class RazorTemplateGenerator<
             var paramDictionary = new Dictionary<string, object?>()
             {
                 ["Model"] = templateModel,
-                ["MenuItems"] = topMenuData
+                ["TopMenuData"] = topMenuData
             };
 
             var parameters = ParameterView.FromDictionary(paramDictionary);
@@ -320,7 +320,7 @@ internal class RazorTemplateGenerator<
                 var paramDictionary = new Dictionary<string, object?>()
                 {
                     ["Contents"] = page.HtmlBody,
-                    ["MenuItems"] = topMenuData,
+                    ["TopMenuData"] = topMenuData,
                     ["CustomStyles"] = cssFile.Exists ? StaticPageProcessor.cssFilePath : null,
                     ["NestingLevel"] = page.FolderDepth
                 };
