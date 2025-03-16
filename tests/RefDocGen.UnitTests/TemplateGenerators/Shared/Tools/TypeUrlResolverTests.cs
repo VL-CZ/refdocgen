@@ -8,11 +8,8 @@ using Shouldly;
 namespace RefDocGen.UnitTests.TemplateGenerators.Shared.Tools;
 
 /// <summary>
-/// Class responsible for resolving URL of the type's documentation page.
+/// Class containing tests for <see cref="TypeUrlResolver"/> class.
 /// </summary>
-/// <remarks>
-/// Creates links to both same assembly and standard library types.
-/// </remarks>
 public class TypeUrlResolverTests
 {
     /// <summary>

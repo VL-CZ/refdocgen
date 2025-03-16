@@ -41,7 +41,11 @@ internal class TopMenuTMCreator
     /// <returns>A <see cref="MenuPageLinkTM"/> object representing the page.</returns>
     private MenuPageLinkTM ToMenuPage(StaticPage page)
     {
-        return new MenuPageLinkTM(GetPageName(page.PageName), $"{Path.Combine(page.PageDirectory, page.PageName)}.html");
+        string url = page.FolderDepth == 0
+            ? page.PageName
+            : Path.Combine(page.PageDirectory, page.PageName);
+
+        return new MenuPageLinkTM(GetPageName(page.PageName), $"{url}.html");
     }
 
     /// <summary>

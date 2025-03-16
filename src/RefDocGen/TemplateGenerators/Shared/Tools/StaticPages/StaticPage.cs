@@ -1,5 +1,3 @@
-using System.Globalization;
-
 namespace RefDocGen.TemplateGenerators.Shared.Tools.StaticPages;
 
 /// <summary>
