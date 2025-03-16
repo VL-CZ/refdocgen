@@ -11,6 +11,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Include="StaticPagesTests.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="AngleSharp" Version="1.2.0" />
         <PackageReference Include="coverlet.collector" Version="6.0.4">
             <PrivateAssets>all</PrivateAssets>
@@ -43,6 +47,21 @@
         </None>
         <None Update="data\MyLibrary.xml">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="data\static-pages\css\styles.css">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="data\static-pages\folder\anotherPage.html">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="data\static-pages\helloworld.js">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="data\static-pages\htmlPage.html">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="data\static-pages\markdownPage.md">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 

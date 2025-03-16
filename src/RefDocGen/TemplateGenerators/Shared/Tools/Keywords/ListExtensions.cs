@@ -12,6 +12,6 @@ internal static class ListExtensions
     /// <returns>An array of keywords converted into string representation.</returns>
     internal static string[] GetStrings(this List<Keyword> keywords)
     {
-        return keywords.Select(k => k.GetString()).ToArray();
+        return [.. keywords.Select(k => k.GetString())];
     }
 }

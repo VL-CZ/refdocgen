@@ -27,9 +27,7 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
 
         BaseType = type.BaseType?.GetTypeNameData(typeParameters);
 
-        Interfaces = type.GetInterfaces()
-            .Select(i => i.GetTypeNameData(typeParameters))
-            .ToArray();
+        Interfaces = [.. type.GetInterfaces().Select(i => i.GetTypeNameData(typeParameters))];
     }
 
     /// <summary>

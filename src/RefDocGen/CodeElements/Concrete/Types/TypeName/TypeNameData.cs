@@ -26,10 +26,9 @@ internal class TypeNameData : TypeNameBaseData, ITypeNameData
     /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
     internal TypeNameData(Type type, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters) : base(type)
     {
-        TypeParameters = TypeObject
+        TypeParameters = [.. TypeObject
             .GetGenericArguments()
-            .Select(t => t.GetTypeNameData(availableTypeParameters))
-            .ToArray();
+            .Select(t => t.GetTypeNameData(availableTypeParameters))];
     }
 
     /// <summary>

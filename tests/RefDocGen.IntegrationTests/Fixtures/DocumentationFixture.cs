@@ -17,6 +17,11 @@ public class DocumentationFixture : IDisposable
     /// </summary>
     private const string outputDir = "output";
 
+    /// <summary>
+    /// Path to the directory containing user-created static pages
+    /// </summary>
+    private readonly string staticPagesDirectory = Path.Join("data", "static-pages");
+
     public DocumentationFixture()
     {
         GenerateDoc();
@@ -47,7 +52,7 @@ public class DocumentationFixture : IDisposable
 
         using var htmlRenderer = new HtmlRenderer(serviceProvider, loggerFactory);
 
-        var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir); // use default template generator
+        var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir, staticPagesDirectory); // use the default template generator
 
         var generator = new DocGenerator("data/MyLibrary.dll", "data/MyLibrary.xml", templateGenerator, AccessModifier.Private, MemberInheritanceMode.NonObject);
         generator.GenerateDoc();

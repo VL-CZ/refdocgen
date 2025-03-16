@@ -1,8 +1,12 @@
+@using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu
 @inherits ComponentBase
 
 @code {
     [Parameter]
     public required EnumTypeTM Model { get; set; }
+
+    [Parameter]
+    public required TopMenuDataTM TopMenuData { get; set; }
 
     /// <summary>
     /// Checks if the model has any (summary, remarks,...) doc comments.
@@ -14,28 +18,8 @@
     }
 }
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@Model.Name</title>
-
-    <!-- Custom global CSS -->
-    <link href="./Static/styles.css" rel="stylesheet" />
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-</head>
-
-<body>
-    <MenuComponent />
-
-    <div class="container my-4">
-
+<CascadingValue Value="TopMenuData">
+    <LayoutView Layout="typeof(AppLayout)">
         <div data-id="declared-type-data">
             <DeclaredTypeName TypeName="@Model.Name" TypeKindName="enum" Modifiers="@Model.Modifiers" />
 
@@ -88,10 +72,5 @@
                 }
             </div>
         </div>
-    </div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
-</html>
+    </LayoutView>
+</CascadingValue>

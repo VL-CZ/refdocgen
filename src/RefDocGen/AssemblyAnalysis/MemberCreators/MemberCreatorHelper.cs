@@ -62,7 +62,7 @@ internal static class MemberCreatorHelper
             if (type.DeclaringType is not null)
             {
                 var parentTypeParams = type.DeclaringType.GetGenericArguments().Select(x => x.Name);
-                inheritedTypeParams = allTypeParams.Where(g => parentTypeParams.Contains(g.Name)).ToArray();
+                inheritedTypeParams = [.. allTypeParams.Where(g => parentTypeParams.Contains(g.Name))];
             }
 
             var nonInheritedTypeParams = allTypeParams.Except(inheritedTypeParams).ToArray();
@@ -114,10 +114,9 @@ internal static class MemberCreatorHelper
     /// <remarks>Compiler generated attributes are excluded from the result.</remarks>
     private static AttributeData[] GetAttributeData(IEnumerable<CustomAttributeData> attributes, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
     {
-        return attributes
+        return [.. attributes
             .Where(a => !a.IsCompilerGenerated())
-            .Select(a => new AttributeData(a, availableTypeParameters))
-            .ToArray();
+            .Select(a => new AttributeData(a, availableTypeParameters))];
     }
 
     /// <summary>

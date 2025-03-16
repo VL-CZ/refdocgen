@@ -191,7 +191,7 @@ internal class ObjectTypeDataBuilder
             nestedType.DeclaringType = type;
         }
 
-        nestedObjectTypes = nestedTypes.ToArray();
+        nestedObjectTypes = [.. nestedTypes];
         return this;
     }
 
@@ -207,7 +207,7 @@ internal class ObjectTypeDataBuilder
             nestedType.DeclaringType = type;
         }
 
-        nestedDelegates = nestedTypes.ToArray();
+        nestedDelegates = [.. nestedTypes];
         return this;
     }
 
@@ -223,7 +223,7 @@ internal class ObjectTypeDataBuilder
             nestedType.DeclaringType = type;
         }
 
-        nestedEnums = nestedTypes.ToArray();
+        nestedEnums = [.. nestedTypes];
         return this;
     }
 

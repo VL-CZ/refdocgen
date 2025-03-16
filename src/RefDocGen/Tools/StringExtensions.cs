@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace RefDocGen.Tools;
 
 /// <summary>
@@ -24,5 +26,20 @@ internal static class StringExtensions
             index = -1;
             return false;
         }
+    }
+
+    /// <summary>
+    /// Capitalizes the first letter of the string.
+    /// </summary>
+    /// <param name="str">The provided string.</param>
+    /// <returns>The provided string with the first letter capitalized.</returns>
+    internal static string Capitalize(this string str)
+    {
+        if (string.IsNullOrEmpty(str))
+        {
+            return str;
+        }
+
+        return $"{char.ToUpper(str[0], CultureInfo.InvariantCulture)}{str[1..]}";
     }
 }

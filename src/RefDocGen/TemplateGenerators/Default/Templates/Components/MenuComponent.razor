@@ -1,15 +1,61 @@
+@using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu
 @inherits ComponentBase
 
-<nav class="navbar navbar-expand-lg sticky-top bg-dark" data-bs-theme="dark">
-    <div class="container">
-        <a class="navbar-brand" href="#">Project name</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link" href="./index.html">Home</a>
+@code {
+    [CascadingParameter] public required TopMenuDataTM TopMenuData { get; set; }
+
+    [CascadingParameter] public int NestingLevel { get; set; } = 0;
+}
+
+
+<CascadingValue Value="TopMenuData">
+    <nav class="navbar navbar-expand-lg sticky-top bg-dark" data-bs-theme="dark">
+        <div class="container">
+            <a class="navbar-brand" href="./index.html">Project name</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <ul class="navbar-nav">
+
+                    @{
+                        var nestingUrl = Enumerable.Repeat("..", NestingLevel);
+                    }
+
+                    @foreach (var p in TopMenuData.Pages)
+                    {
+                        var urlFragments = nestingUrl.Append(p.Url).ToArray();
+                        var pagePath = Path.Combine(urlFragments);
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="@pagePath">@p.PageName</a>
+                        </li>
+                    }
+
+                    @foreach (var f in TopMenuData.Folders)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                @f.Name
+                            </a>
+                            <ul class="dropdown-menu">
+
+                                @foreach (var p in f.Pages)
+                                {
+                                    var urlFragments = nestingUrl.Append(p.Url).ToArray();
+                                    var pagePath = Path.Combine(urlFragments);
+
+                                    <li>
+                                        <a class="dropdown-item" href="@pagePath">
+                                            @p.PageName
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                </ul>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
+</CascadingValue>

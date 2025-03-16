@@ -5,9 +5,11 @@ using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.Delegate;
 using RefDocGen.CodeElements.Abstract.Types.Enum;
 using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
+using RefDocGen.TemplateGenerators.Shared.Tools.StaticPages;
 using RefDocGen.Tools;
 
 namespace RefDocGen.TemplateGenerators.Shared;
@@ -20,12 +22,14 @@ namespace RefDocGen.TemplateGenerators.Shared;
 /// <typeparam name="TNamespaceDetailTemplate">Type of the Razor component representing the namespace detail.</typeparam>
 /// <typeparam name="TNamespaceListTemplate">Type of the Razor component representing the namespace list.</typeparam>
 /// <typeparam name="TObjectTypeTemplate">Type of the Razor component representing the object type.</typeparam>
+/// <typeparam name="TStaticPageTemplate">Type of the Razor component representing the static page template.</typeparam>
 internal class RazorTemplateGenerator<
         TDelegateTemplate,
         TEnumTemplate,
         TNamespaceDetailTemplate,
         TNamespaceListTemplate,
-        TObjectTypeTemplate
+        TObjectTypeTemplate,
+        TStaticPageTemplate
     > : ITemplateGenerator
 
     where TDelegateTemplate : IComponent
@@ -33,6 +37,7 @@ internal class RazorTemplateGenerator<
     where TNamespaceDetailTemplate : IComponent
     where TNamespaceListTemplate : IComponent
     where TObjectTypeTemplate : IComponent
+    where TStaticPageTemplate : IComponent
 {
     /// <summary>
     /// Namespace prefix of any template generator.
@@ -42,12 +47,17 @@ internal class RazorTemplateGenerator<
     /// <summary>
     /// Identifier of the <c>index</c> page.
     /// </summary>
-    private const string indexPageId = "index";
+    private const string indexPageId = "api";
+
+    /// <summary>
+    /// Path to the directory containing static files (typically css and js related to templates), relative to <see cref="templatesDirectory"/>.
+    /// </summary>
+    private const string staticTemplateFilesDirectory = "Static";
 
     /// <summary>
     /// The directory, where the generated output will be stored.
     /// </summary>
-    private readonly string outputDirectory;
+    internal readonly string outputDirectory;
 
     /// <summary>
     /// Rendered of the Razor components.
@@ -60,9 +70,14 @@ internal class RazorTemplateGenerator<
     private readonly string templatesDirectory;
 
     /// <summary>
-    /// Path to the directory containing static files (typically css and js related to templates), relative to <see cref="templatesDirectory"/>.
+    /// An object representing the links and folders contained in the top menu.
     /// </summary>
-    private const string staticFilesDirectory = "Static";
+    private TopMenuDataTM topMenuData = TopMenuTMCreator.DefaultMenuData;
+
+    /// <summary>
+    /// Path to the directory containing the static pages created by user. <c>null</c>, if the directory is not specified.
+    /// </summary>
+    private readonly string? staticPagesDirectory;
 
     /// <summary>
     /// Transformer of the XML doc comments into HTML.
@@ -70,19 +85,28 @@ internal class RazorTemplateGenerator<
     private readonly IDocCommentTransformer docCommentTransformer;
 
     /// <summary>
-    /// Initialize a new instance of <see cref="RazorTemplateGenerator{TDelegateTemplate, TEnumTemplate, TNamespaceDetailTemplate, TNamespaceListTemplate, TObjectTypeTemplate}"/> class.
+    /// Indicates whether there's an 'index' page defined by the user.
+    /// </summary>
+    private bool isUserDefinedIndexPage;
+
+    /// <summary>
+    /// Initialize a new instance of
+    /// <see cref="RazorTemplateGenerator{TDelegateTemplate, TEnumTemplate, TNamespaceDetailTemplate, TNamespaceListTemplate, TObjectTypeTemplate, TStaticPageTemplate}"/> class.
     /// </summary>
     /// <param name="htmlRenderer">Renderer of the Razor components.</param>
     /// <param name="docCommentTransformer">Transformer of the XML doc comments into HTML.</param>
     /// <param name="outputDirectory">The directory, where the generated output will be stored.</param>
+    /// <param name="staticPagesDirectory">Path to the directory containing the static pages created by user. <c>null</c> indicates that the directory is not specified.</param>
     internal RazorTemplateGenerator(
         HtmlRenderer htmlRenderer,
         IDocCommentTransformer docCommentTransformer,
-        string outputDirectory)
+        string outputDirectory,
+        string? staticPagesDirectory = null)
     {
-        this.outputDirectory = outputDirectory;
         this.htmlRenderer = htmlRenderer;
         this.docCommentTransformer = docCommentTransformer;
+        this.outputDirectory = outputDirectory;
+        this.staticPagesDirectory = staticPagesDirectory;
 
         templatesDirectory = GetTemplatesDirectory();
     }
@@ -92,12 +116,14 @@ internal class RazorTemplateGenerator<
     {
         docCommentTransformer.TypeRegistry = typeRegistry;
 
+        CopyStaticPages();
+
         GenerateObjectTypeTemplates(typeRegistry.ObjectTypes);
         GenerateEnumTemplates(typeRegistry.Enums);
         GenerateDelegateTemplates(typeRegistry.Delegates);
         GenerateNamespaceTemplates(typeRegistry);
 
-        CopyStaticFilesDirectory();
+        CopyStaticTemplateFilesDirectory();
     }
 
     /// <summary>
@@ -144,6 +170,11 @@ internal class RazorTemplateGenerator<
         // namespace list template
         GenerateTemplate<TNamespaceListTemplate, IEnumerable<NamespaceTM>>(namespaceTMs, indexPageId);
 
+        if (!isUserDefinedIndexPage)
+        {
+            GenerateTemplate<TNamespaceListTemplate, IEnumerable<NamespaceTM>>(namespaceTMs, "index"); // TODO: update
+        }
+
         // namespace detail templates
         GenerateTemplates<TNamespaceDetailTemplate, NamespaceTM>(namespaceTMs);
     }
@@ -180,7 +211,8 @@ internal class RazorTemplateGenerator<
         {
             var paramDictionary = new Dictionary<string, object?>()
             {
-                ["Model"] = templateModel
+                ["Model"] = templateModel,
+                ["TopMenuData"] = topMenuData
             };
 
             var parameters = ParameterView.FromDictionary(paramDictionary);
@@ -194,12 +226,12 @@ internal class RazorTemplateGenerator<
     }
 
     /// <summary>
-    /// Copies the directory containing static files (css, js, etc.) to the output directory.
+    /// Copies the directory containing static template files (css, js, etc.) to the output directory.
     /// </summary>
-    private void CopyStaticFilesDirectory()
+    private void CopyStaticTemplateFilesDirectory()
     {
-        var staticFilesDir = new DirectoryInfo(Path.Combine(templatesDirectory, staticFilesDirectory));
-        string outputDirPath = Path.Combine(outputDirectory, staticFilesDirectory);
+        var staticFilesDir = new DirectoryInfo(Path.Combine(templatesDirectory, staticTemplateFilesDirectory));
+        string outputDirPath = Path.Combine(outputDirectory, staticTemplateFilesDirectory);
 
         if (staticFilesDir.Exists)
         {
@@ -250,5 +282,56 @@ internal class RazorTemplateGenerator<
 
         string[] templatePathFragments = [baseFolder, .. relativeTemplateNs.Split('.')];
         return Path.Combine(templatePathFragments);
+    }
+
+    /// <summary>
+    /// Copies and processes the static pages created by user and adds them into the documentation.
+    /// </summary>
+    private void CopyStaticPages()
+    {
+        if (staticPagesDirectory is null) // no static pages directory specified -> return
+        {
+            return;
+        }
+
+        var pageProcessor = new StaticPageProcessor(staticPagesDirectory);
+
+        var pages = pageProcessor.GetStaticPages();
+        var cssFile = pageProcessor.GetCssFile();
+
+        topMenuData = new TopMenuTMCreator().CreateFrom(pages); // get menu items based on the static pages
+
+        pageProcessor.CopyNonPageFiles(outputDirectory); // copy non-page files
+
+        if (pages.Any(p => p.IsIndexPage))
+        {
+            isUserDefinedIndexPage = true; // mark user-defined 'index' page
+        }
+
+        foreach (var page in pages) // wrap each page in the static page template and copy it into the output directory
+        {
+            string outputPath = Path.Combine(outputDirectory, page.PageDirectory);
+            var dir = Directory.CreateDirectory(outputPath);
+
+            string outputFile = Path.Combine(outputPath, $"{page.PageName}.html");
+
+            string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
+            {
+                var paramDictionary = new Dictionary<string, object?>()
+                {
+                    ["Contents"] = page.HtmlBody,
+                    ["TopMenuData"] = topMenuData,
+                    ["CustomStyles"] = cssFile.Exists ? StaticPageProcessor.cssFilePath : null,
+                    ["NestingLevel"] = page.FolderDepth
+                };
+
+                var parameters = ParameterView.FromDictionary(paramDictionary);
+                var output = await htmlRenderer.RenderComponentAsync<TStaticPageTemplate>(parameters);
+
+                return output.ToHtmlString();
+            }).Result;
+
+            File.WriteAllText(outputFile, html);
+        }
     }
 }
