@@ -21,6 +21,16 @@ internal static class IDocumentExtensions
     }
 
     /// <summary>
+    /// Gets an element representing the page body.
+    /// </summary>
+    /// <param name="document">The document to search in.</param>
+    /// <returns>An HTML element representing the page body.</returns>
+    internal static IElement GetPageBody(this IDocument document)
+    {
+        return document.DocumentElement.GetByDataId(DataId.PageBody);
+    }
+
+    /// <summary>
     /// Gets a section of the page representing the type data.
     /// </summary>
     /// <param name="document">The document to search in.</param>

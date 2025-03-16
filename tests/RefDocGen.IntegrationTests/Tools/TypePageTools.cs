@@ -225,7 +225,7 @@ internal class TypePageTools
     /// <returns>The name of the implemented interfaces.</returns>
     internal static string[] GetImplementedInterfaces(IElement element)
     {
-        return element.GetByDataIds(DataId.MemberImplements).Select(i => i.GetParsedContent()).ToArray();
+        return [.. element.GetByDataIds(DataId.MemberImplements).Select(i => i.GetParsedContent())];
     }
 
     /// <summary>
@@ -255,7 +255,7 @@ internal class TypePageTools
     /// <returns>An array of attribute names.</returns>
     internal static string[] GetAttributes(IElement element)
     {
-        return element.GetByDataIds(DataId.AttributeData).Select(e => e.GetParsedContent()).ToArray();
+        return [.. element.GetByDataIds(DataId.AttributeData).Select(e => e.GetParsedContent())];
     }
 
     /// <summary>
@@ -265,7 +265,7 @@ internal class TypePageTools
     /// <returns>An array of <c>seealso</c> doc comments.</returns>
     internal static string[] GetSeeAlsoDocs(IElement element)
     {
-        return element.GetByDataIds(DataId.SeeAlsoDocs).Select(e => e.GetParsedContent()).ToArray();
+        return [.. element.GetByDataIds(DataId.SeeAlsoDocs).Select(e => e.GetParsedContent())];
     }
 
     /// <summary>
@@ -295,7 +295,7 @@ internal class TypePageTools
     /// <returns>An array of type parameter constraint strings.</returns>
     internal static string[] GetTypeParamConstraints(IElement element)
     {
-        return element.GetByDataIds(DataId.TypeParamConstraints).Select(e => e.GetParsedContent()).ToArray();
+        return [.. element.GetByDataIds(DataId.TypeParamConstraints).Select(e => e.GetParsedContent())];
     }
 
     /// <summary>

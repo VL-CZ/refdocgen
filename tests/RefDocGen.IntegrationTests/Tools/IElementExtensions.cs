@@ -49,7 +49,7 @@ internal static class IElementExtensions
     /// <summary>
     /// Parses the content of the HTML element and returns it as a string.
     /// </summary>
-    /// <param name="element"></param>
+    /// <param name="element">The element, whose HTML content is being parsed.</param>
     /// <returns>Parsed textual content of the HTML element.</returns>
     /// <remarks>
     /// <list type="bullet">
@@ -60,6 +60,16 @@ internal static class IElementExtensions
     internal static string GetParsedContent(this IElement element)
     {
         return Regex.Replace(element.TextContent, @"\s+", " ").Trim();
+    }
+
+    /// <summary>
+    /// Normalizes the inner HTML of the element and returns it as a string.
+    /// </summary>
+    /// <param name="element">The element, whose inner HTML is to be normalized.</param>
+    /// <returns>Normalized textual content of the HTML element - i.e.  withall continouos whitespace substrings being replaced by a single space character.</returns>
+    internal static string GetNormalizedInnerHtml(this IElement element)
+    {
+        return Regex.Replace(element.InnerHtml, @"\s+", " ").Trim();
     }
 
     /// <summary>
