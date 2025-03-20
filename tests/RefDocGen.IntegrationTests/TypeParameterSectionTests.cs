@@ -15,7 +15,7 @@ public class TypeParameterSectionTests
     [InlineData("MyLibrary.Tools.MyPredicate`1", "T", "The type of the object.")]
     public void TypeSection_WithSingleTypeParameter_Matches(string pageName, string parameterSignature, string expectedDoc)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         var parameters = TypePageTools.GetTypeParameters(document.GetTypeDataSection());
 
@@ -31,7 +31,7 @@ public class TypeParameterSectionTests
     [Fact]
     public void MethodSection_WithSingleTypeParameter_Matches()
     {
-        using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MyCollection`1.html");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.Tools.Collections.MyCollection`1.html");
 
         var parameters = TypePageTools.GetTypeParameters(document.GetMemberElement("AddGeneric``1(``0)"));
 
@@ -47,7 +47,7 @@ public class TypeParameterSectionTests
     [Fact]
     public void Section_WithMultipleTypeParameter_Matches()
     {
-        using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.IMyDictionary`2.html");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.Tools.Collections.IMyDictionary`2.html");
 
         var parameters = TypePageTools.GetTypeParameters(document.GetTypeDataSection());
 

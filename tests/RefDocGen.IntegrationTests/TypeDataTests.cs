@@ -13,7 +13,7 @@ public class TypeDataTests
     [Fact]
     public void SingleTypeConstraint_Matches()
     {
-        using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MySortedList`1.html");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.Tools.Collections.MySortedList`1.html");
         string[] constraints = TypePageTools.GetTypeParamConstraints(document.GetTypeDataSection());
 
         constraints.ShouldBe(["where T : IComparable<T>"]);
@@ -22,7 +22,7 @@ public class TypeDataTests
     [Fact]
     public void ComplexTypeConstraints_Match()
     {
-        using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MyDictionary`2.html");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.Tools.Collections.MyDictionary`2.html");
         string[] constraints = TypePageTools.GetTypeParamConstraints(document.GetTypeDataSection());
 
         constraints.ShouldBe(["where TKey : class, new(), IComparable, IEquatable<TKey>", "where TValue : struct, IDisposable"]);
@@ -34,7 +34,7 @@ public class TypeDataTests
     [InlineData("MyLibrary.Tools.Collections.MySortedList`1", "MyCollection<T>")]
     public void BaseType_Matches(string pageName, string expectedBaseType)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         string baseType = TypePageTools.GetBaseTypeName(document.GetTypeDataSection());
 
@@ -46,7 +46,7 @@ public class TypeDataTests
     [InlineData("MyLibrary.Tools.Collections.IMyCollection`1", "ICollection<T>, IEnumerable<T>, IEnumerable")]
     public void Interfaces_Match(string pageName, string expectedInterfacesImplemented)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         string interfaces = TypePageTools.GetInterfacesString(document.GetTypeDataSection());
 
@@ -58,7 +58,7 @@ public class TypeDataTests
     [InlineData("MyLibrary.Tools.Collections.IMyCollection`1", "MyLibrary.Tools.Collections")]
     public void Namespace_Matches(string pageName, string expectedNamespace)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         string ns = TypePageTools.GetNamespaceString(document.GetTypeDataSection());
 
@@ -70,7 +70,7 @@ public class TypeDataTests
     [InlineData("MyLibrary.Tools.Collections.MyCollection`1.GenericEnumerator`1", "MyCollection<T>")]
     public void DeclaringType_Matches(string pageName, string expectedDeclaringType)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         string declaringType = TypePageTools.GetDeclaringTypeName(document.GetTypeDataSection());
 
@@ -80,7 +80,7 @@ public class TypeDataTests
     [Fact]
     public void Attributes_Match()
     {
-        using var document = DocumentationTools.GetPage("MyLibrary.User.html");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.User.html");
 
         string[] attributes = TypePageTools.GetAttributes(document.GetTypeDataSection());
 
@@ -94,7 +94,7 @@ public class TypeDataTests
     [Fact]
     public void NestedTypes_Match()
     {
-        using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MyCollection`1.html");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.Tools.Collections.MyCollection`1.html");
 
         var nestedTypeElements = TypePageTools.GetNestedTypes(document.GetTypeDataSection());
 

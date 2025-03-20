@@ -33,7 +33,7 @@ public class TopMenuTMCreatorTests
 
         var menuItems = topMenuTMCreator.CreateFrom([page]);
 
-        menuItems.Pages.ShouldBe([new("API", "api.html"), new("Custom page", "custom-page.html")]);
+        menuItems.Pages.ShouldBe([new("API", "api/index.html"), new("Custom page", "custom-page.html")]);
         menuItems.Folders.ShouldBeEmpty();
     }
 
@@ -44,7 +44,7 @@ public class TopMenuTMCreatorTests
 
         var menuItems = topMenuTMCreator.CreateFrom([page]);
 
-        menuItems.Pages.ShouldBe([new("Home", "index.html"), new("API", "api.html")]);
+        menuItems.Pages.ShouldBe([new("Home", "index.html"), new("API", "api/index.html")]);
         menuItems.Folders.ShouldBeEmpty();
     }
 
@@ -63,7 +63,7 @@ public class TopMenuTMCreatorTests
         var menuItems = topMenuTMCreator.CreateFrom(pages);
 
         menuItems.Pages.ShouldBe([
-            new("API", "api.html"),
+            new("API", "api/index.html"),
             new("Contact", "contact.html"),
             new("FAQ", "FAQ.html")
             ]);

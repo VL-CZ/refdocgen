@@ -26,7 +26,7 @@ public class MemberDocCommentTests
     [InlineData("MyLibrary.Tools.Collections.MyCollection`1.MyCollectionEnumerator", "Reset", "Resets the enumerator.")]
     public void SummaryDoc_Matches(string pageName, string memberId, string expectedDoc)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         string summaryDoc = TypePageTools.GetSummaryDoc(document.GetMemberElement(memberId));
 
@@ -36,7 +36,7 @@ public class MemberDocCommentTests
     [Fact]
     public void RemarksDoc_Matches()
     {
-        using var document = DocumentationTools.GetPage("MyLibrary.Animal.html");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.Animal.html");
 
         string remarksDoc = TypePageTools.GetRemarksDoc(document.GetMemberElement("weight"));
 
@@ -46,7 +46,7 @@ public class MemberDocCommentTests
     [Fact]
     public void ValueDoc_Matches()
     {
-        using var document = DocumentationTools.GetPage("MyLibrary.User.html");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.User.html");
 
         string valueDoc = TypePageTools.GetValueDoc(document.GetMemberElement("Age"));
 
@@ -59,7 +59,7 @@ public class MemberDocCommentTests
     [InlineData("MyLibrary.Tools.Point", "op_Equality(MyLibrary.Tools.Point,MyLibrary.Tools.Point)", "bool", "Are the 2 points equal?")]
     public void ReturnsDoc_Matches(string pageName, string memberId, string expectedReturnType, string expectedDoc)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         string returnType = TypePageTools.GetReturnTypeName(document.GetMemberElement(memberId));
         string returnsDoc = TypePageTools.GetReturnsDoc(document.GetMemberElement(memberId));
@@ -71,7 +71,7 @@ public class MemberDocCommentTests
     [Fact]
     public void SeeAlsoDocs_Match()
     {
-        using var document = DocumentationTools.GetPage("MyLibrary.User.html");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.User.html");
 
         string[] seeAlsoDocs = TypePageTools.GetSeeAlsoDocs(document.GetMemberElement("username"));
 

@@ -18,7 +18,7 @@ public class NamespaceDetailsPageTests : IDisposable
 
     public NamespaceDetailsPageTests()
     {
-        document = DocumentationTools.GetPage("MyLibrary.Tools.html");
+        document = DocumentationTools.GetApiPage("MyLibrary.Tools.html");
     }
 
     public void Dispose()
