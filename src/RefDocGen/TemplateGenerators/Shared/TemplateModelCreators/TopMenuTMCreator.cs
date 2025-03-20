@@ -12,7 +12,7 @@ internal class TopMenuTMCreator
     /// <summary>
     /// 'API' menu page.
     /// </summary>
-    private static readonly MenuPageLinkTM apiMenuPage = new("API", "api.html");
+    private static readonly MenuPageLinkTM apiMenuPage = new("API", "api/index.html");
 
     /// <summary>
     /// 'Home' menu page.
