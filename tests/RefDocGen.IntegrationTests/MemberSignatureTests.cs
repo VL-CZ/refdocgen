@@ -33,7 +33,7 @@ public class MemberSignatureTests
         "public void AddGeneric<T2>(T2 item)")]
     public void MethodSignature_Matches(string pageName, string methodId, string expectedSignature)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         var method = document.GetMemberElement(methodId);
 
@@ -48,7 +48,7 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.WeatherStation", "location", "private readonly Point location")]
     public void FieldSignature_Matches(string pageName, string fieldId, string expectedSignature)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         var field = document.GetMemberElement(fieldId);
 
@@ -66,7 +66,7 @@ public class MemberSignatureTests
         "bool ICollection.IsSynchronized { get; }")]
     public void PropertySignature_Matches(string pageName, string propertyId, string expectedSignature)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         var property = document.GetMemberElement(propertyId);
 
@@ -79,7 +79,7 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "Item(System.Index)", "public T this[Index index] { get; private set; }")]
     public void IndexerSignature_Matches(string pageName, string indexerId, string expectedSignature)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         var indexer = document.GetMemberElement(indexerId);
 
@@ -93,7 +93,7 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.Point", "#ctor(System.Double,System.Double)", "internal Point(double x, double y)")]
     public void ConstructorSignature_Matches(string pageName, string constructorId, string expectedSignature)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         var constructor = document.GetMemberElement(constructorId);
 
@@ -108,7 +108,7 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.Point", "op_Implicit(System.Numerics.Vector2)~MyLibrary.Tools.Point", "public static implicit operator Point(Vector2 vector)")]
     public void OperatorSignature_Matches(string pageName, string operatorId, string expectedSignature)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         var operatorMember = document.GetMemberElement(operatorId);
 
@@ -120,7 +120,7 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Tools.WeatherStation", "OnTemperatureChange", "public event Action OnTemperatureChange")]
     public void EventSignature_Matches(string pageName, string eventId, string expectedSignature)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         var eventMember = document.GetMemberElement(eventId);
 
@@ -133,7 +133,7 @@ public class MemberSignatureTests
     [InlineData("Winter", "Winter = 3")]
     public void EnumMemberSignature_Matches(string enumMemberId, string expectedSignature)
     {
-        using var document = DocumentationTools.GetPage("MyLibrary.Tools.Season.html");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.Tools.Season.html");
 
         var enumMember = document.GetMemberElement(enumMemberId);
 
@@ -144,7 +144,7 @@ public class MemberSignatureTests
     [Fact]
     public void DelegateMethodSignature_Matches()
     {
-        using var document = DocumentationTools.GetPage("MyLibrary.Tools.MyPredicate`1.html");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.Tools.MyPredicate`1.html");
 
         var delegateMethod = document.DocumentElement.GetByDataId(DataId.DelegateMethod);
 

@@ -47,7 +47,7 @@ internal class RazorTemplateGenerator<
     /// <summary>
     /// Identifier of the <c>index</c> page.
     /// </summary>
-    private const string indexPageId = "api";
+    private const string indexPageId = "index";
 
     /// <summary>
     /// Path to the directory containing static files (typically css and js related to templates), relative to <see cref="templatesDirectory"/>.
@@ -55,9 +55,19 @@ internal class RazorTemplateGenerator<
     private const string staticTemplateFilesDirectory = "Static";
 
     /// <summary>
+    /// Path to the default index page, redirecting to API page.
+    /// </summary>
+    private readonly string defaultIndexPage;
+
+    /// <summary>
     /// The directory, where the generated output will be stored.
     /// </summary>
     internal readonly string outputDirectory;
+
+    /// <summary>
+    /// The directory, where the generated output API pages will be stored.
+    /// </summary>
+    private readonly string outputApiDirectory;
 
     /// <summary>
     /// Rendered of the Razor components.
@@ -108,6 +118,9 @@ internal class RazorTemplateGenerator<
         this.outputDirectory = outputDirectory;
         this.staticPagesDirectory = staticPagesDirectory;
 
+        outputApiDirectory = Path.Join(outputDirectory, "api");
+        defaultIndexPage = Path.Join("TemplateGenerators", "Shared", "StaticData", "defaultIndexPage.html");
+
         templatesDirectory = GetTemplatesDirectory();
     }
 
@@ -115,6 +128,8 @@ internal class RazorTemplateGenerator<
     public void GenerateTemplates(ITypeRegistry typeRegistry)
     {
         docCommentTransformer.TypeRegistry = typeRegistry;
+
+        _ = Directory.CreateDirectory(outputApiDirectory);
 
         CopyStaticPages();
 
@@ -170,9 +185,10 @@ internal class RazorTemplateGenerator<
         // namespace list template
         GenerateTemplate<TNamespaceListTemplate, IEnumerable<NamespaceTM>>(namespaceTMs, indexPageId);
 
-        if (!isUserDefinedIndexPage)
+        if (!isUserDefinedIndexPage) // no user-specified 'index' page -> add the default one redirecting to API page.
         {
-            GenerateTemplate<TNamespaceListTemplate, IEnumerable<NamespaceTM>>(namespaceTMs, "index"); // TODO: update
+            string outputIndexPage = Path.Join(outputDirectory, indexPageId + ".html");
+            File.Copy(defaultIndexPage, outputIndexPage, true);
         }
 
         // namespace detail templates
@@ -205,7 +221,7 @@ internal class RazorTemplateGenerator<
     private void GenerateTemplate<TTemplate, TTemplateModel>(TTemplateModel templateModel, string outputFile)
         where TTemplate : IComponent
     {
-        string outputFileName = Path.Join(outputDirectory, $"{outputFile}.html");
+        string outputFileName = Path.Join(outputApiDirectory, $"{outputFile}.html");
 
         string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
         {
@@ -231,7 +247,7 @@ internal class RazorTemplateGenerator<
     private void CopyStaticTemplateFilesDirectory()
     {
         var staticFilesDir = new DirectoryInfo(Path.Combine(templatesDirectory, staticTemplateFilesDirectory));
-        string outputDirPath = Path.Combine(outputDirectory, staticTemplateFilesDirectory);
+        string outputDirPath = Path.Combine(outputApiDirectory, staticTemplateFilesDirectory);
 
         if (staticFilesDir.Exists)
         {

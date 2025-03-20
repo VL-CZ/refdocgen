@@ -24,7 +24,7 @@ public class TypeSignatureTests
     [InlineData("MyLibrary.Tools.MyPredicate`1", "internal delegate MyPredicate<T>")]
     public void TypeSignature_Matches(string pageName, string expectedSignature)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         string signature = TypePageTools.GetTypeSignature(document);
 

@@ -19,7 +19,7 @@ public class TypeDocCommentTests
     [InlineData("MyLibrary.Tools.Collections.MyCollection`1.MyCollectionEnumerator", "Custom collection enumerator.")]
     public void SummaryDoc_Matches(string pageName, string expectedDoc)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         string summaryDoc = TypePageTools.GetSummaryDoc(document.GetTypeDataSection());
 
@@ -29,7 +29,7 @@ public class TypeDocCommentTests
     [Fact]
     public void RemarksDoc_Matches()
     {
-        using var document = DocumentationTools.GetPage("MyLibrary.Animal.html");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.Animal.html");
 
         string remarksDoc = TypePageTools.GetRemarksDoc(document.GetTypeDataSection());
 
@@ -39,7 +39,7 @@ public class TypeDocCommentTests
     [Fact]
     public void SeeAlsoDocs_Match()
     {
-        using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MyStringCollection.html");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.Tools.Collections.MyStringCollection.html");
 
         string[] seeAlsoDocs = TypePageTools.GetSeeAlsoDocs(document.GetTypeDataSection());
 
