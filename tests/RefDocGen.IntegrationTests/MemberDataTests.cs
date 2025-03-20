@@ -13,7 +13,7 @@ public class MemberDataTests
     [Fact]
     public void Attributes_Match()
     {
-        using var document = DocumentationTools.GetPage("MyLibrary.User.html");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.User.html");
 
         string[] attributes = TypePageTools.GetAttributes(document.GetMemberElement("PrintProfile(System.String)"));
 
@@ -25,7 +25,7 @@ public class MemberDataTests
     [Fact]
     public void TypeConstraints_Match()
     {
-        using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MyCollection`1.html");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.Tools.Collections.MyCollection`1.html");
         var method = document.GetMemberElement("AddGeneric``1(``0)");
 
         string[] constraints = TypePageTools.GetTypeParamConstraints(method);
@@ -38,7 +38,7 @@ public class MemberDataTests
     [InlineData("MyLibrary.Tools.Collections.MySortedList`1", "Contains(`0)", "MyCollection<T>")]
     public void InheritedFromString_Matches(string pageName, string memberId, string expectedInheritedFromTypeName)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         var member = document.GetMemberElement(memberId);
         string inheritedFrom = TypePageTools.GetInheritedFromString(member);
@@ -52,7 +52,7 @@ public class MemberDataTests
     [InlineData("MyLibrary.Tools.Collections.MySortedList`1", "AddRange(System.Collections.Generic.IEnumerable{`0})", "MyCollection<T>.AddRange")]
     public void OverridesString_Matches(string pageName, string memberId, string expectedOverridenMemberName)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         var member = document.GetMemberElement(memberId);
         string overrides = TypePageTools.GetOverridenMember(member);
@@ -66,7 +66,7 @@ public class MemberDataTests
     [InlineData("MyLibrary.Tools.Collections.NonGenericCollection", "System#Collections#ICollection#IsSynchronized", "ICollection.IsSynchronized")]
     public void ExplicitlyImplementedInterface_Matches(string pageName, string memberId, string expectedExplicitInterface)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         var member = document.GetMemberElement(memberId);
         string explicitInterface = TypePageTools.GetExplicitlyImplementedInterface(member);
@@ -80,7 +80,7 @@ public class MemberDataTests
     [InlineData("MyLibrary.Tools.Collections.MyStringCollection", "Add(System.String)", "ICollection<string>.Add")]
     public void SingleImplementedInterface_Matches(string pageName, string memberId, string expectedInterface)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         var member = document.GetMemberElement(memberId);
         string[] interfaces = TypePageTools.GetImplementedInterfaces(member);
@@ -91,7 +91,7 @@ public class MemberDataTests
     [Fact]
     public void MultipleImplementedInterfaces_Match()
     {
-        using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.NonGenericCollection.html");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.Tools.Collections.NonGenericCollection.html");
 
         var member = document.GetMemberElement("Count");
         string[] interfaces = TypePageTools.GetImplementedInterfaces(member);
@@ -102,7 +102,7 @@ public class MemberDataTests
     [Fact]
     public void Exceptions_Match()
     {
-        using var document = DocumentationTools.GetPage("MyLibrary.Tools.Collections.MyCollection`1.html");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.Tools.Collections.MyCollection`1.html");
 
         var exceptions = TypePageTools.GetExceptions(document.GetMemberElement("Add(`0)"));
 

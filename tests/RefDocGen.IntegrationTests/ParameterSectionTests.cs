@@ -22,7 +22,7 @@ public class ParameterSectionTests
         "Animals to add. Key: animal type, Value: list of animals of the given type.")]
     public void Section_WithSingleParameter_Matches(string pageName, string memberId, string parameterSignature, string expectedDoc)
     {
-        using var document = DocumentationTools.GetPage($"{pageName}.html");
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         var parameters = TypePageTools.GetMemberParameters(document.GetMemberElement(memberId));
 
@@ -38,7 +38,7 @@ public class ParameterSectionTests
     [Fact]
     public void Section_WithMultipleParameter_Matches()
     {
-        using var document = DocumentationTools.GetPage("MyLibrary.User.html");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.User.html");
         var memberElement = document.GetMemberElement("ProcessValues(System.Int32@,System.Int32@,System.String,System.Int32@,System.Double)");
 
         var parameters = TypePageTools.GetMemberParameters(memberElement);
