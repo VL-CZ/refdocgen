@@ -92,6 +92,8 @@ internal class RazorTemplateGenerator<
     /// </summary>
     private bool isUserDefinedIndexPage;
 
+    private string[] versions = [];
+
     /// <summary>
     /// Initialize a new instance of
     /// <see cref="RazorTemplateGenerator{TDelegateTemplate, TEnumTemplate, TNamespaceDetailTemplate, TNamespaceListTemplate, TObjectTypeTemplate, TStaticPageTemplate}"/> class.
@@ -138,10 +140,15 @@ internal class RazorTemplateGenerator<
             File.WriteAllText(versionsFile.FullName, "");
         }
 
-        versions.Versions.Add(version);
+        if (!versions.Versions.Contains(version))
+        {
+            versions.Versions.Add(version);
+        }
 
         var serialized = JsonSerializer.Serialize(versions);
         File.WriteAllText(versionsFile.FullName, serialized);
+
+        this.versions = [.. versions.Versions];
 
         // -----------------
 
@@ -241,7 +248,7 @@ internal class RazorTemplateGenerator<
             var paramDictionary = new Dictionary<string, object?>()
             {
                 ["Model"] = templateModel,
-                ["TopMenuData"] = topMenuData
+                ["TopMenuData"] = topMenuData,
             };
 
             var parameters = ParameterView.FromDictionary(paramDictionary);
@@ -351,7 +358,8 @@ internal class RazorTemplateGenerator<
                     ["Contents"] = page.HtmlBody,
                     ["TopMenuData"] = topMenuData,
                     ["CustomStyles"] = cssFile.Exists ? StaticPageProcessor.cssFilePath : null,
-                    ["NestingLevel"] = page.FolderDepth
+                    ["NestingLevel"] = page.FolderDepth,
+                    ["Versions"] = versions
                 };
 
                 var parameters = ParameterView.FromDictionary(paramDictionary);
