@@ -12,8 +12,7 @@ demo-lib
 refdocgen-lib
 
 # Output folder
-out-razor/
-out-refdocgen/
+out-*/
 
 # User-specific files
 *.rsuser

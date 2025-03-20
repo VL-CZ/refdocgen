@@ -15,7 +15,7 @@ using System.Text.Json;
 
 namespace RefDocGen.TemplateGenerators.Shared;
 
-record VersionFile(List<string> Versions);
+record DocVersion(string Version, List<string> Pages);
 
 /// <summary>
 /// Class responsible for generating the Razor templates and populating them with the type data.
@@ -92,7 +92,9 @@ internal class RazorTemplateGenerator<
     /// </summary>
     private bool isUserDefinedIndexPage;
 
-    private string[] versions = [];
+    private List<DocVersion> versions = [];
+
+    private List<string> pagesGenerated = [];
 
     /// <summary>
     /// Initialize a new instance of
@@ -128,27 +130,15 @@ internal class RazorTemplateGenerator<
 
         _ = Directory.CreateDirectory(outputDirectory);
 
-        var versions = new VersionFile([]);
-
         if (versionsFile.Exists)
         {
             var json = File.ReadAllText(versionsFile.FullName);
-            versions = JsonSerializer.Deserialize<VersionFile>(json);
+            versions = JsonSerializer.Deserialize<List<DocVersion>>(json);
         }
         else
         {
             File.WriteAllText(versionsFile.FullName, "");
         }
-
-        if (!versions.Versions.Contains(version))
-        {
-            versions.Versions.Add(version);
-        }
-
-        var serialized = JsonSerializer.Serialize(versions);
-        File.WriteAllText(versionsFile.FullName, serialized);
-
-        this.versions = [.. versions.Versions];
 
         // -----------------
 
@@ -160,6 +150,12 @@ internal class RazorTemplateGenerator<
         GenerateNamespaceTemplates(typeRegistry);
 
         CopyStaticTemplateFilesDirectory();
+
+        // --------------
+
+        versions.Add(new(version, pagesGenerated));
+        var serialized = JsonSerializer.Serialize(versions);
+        File.WriteAllText(versionsFile.FullName, serialized);
     }
 
     /// <summary>
@@ -259,6 +255,7 @@ internal class RazorTemplateGenerator<
 
 
         File.WriteAllText(outputFileName, html);
+        pagesGenerated.Add(outputFile);
     }
 
     /// <summary>
@@ -359,7 +356,7 @@ internal class RazorTemplateGenerator<
                     ["TopMenuData"] = topMenuData,
                     ["CustomStyles"] = cssFile.Exists ? StaticPageProcessor.cssFilePath : null,
                     ["NestingLevel"] = page.FolderDepth,
-                    ["Versions"] = versions
+                    ["Versions"] = versions.Select(dv => dv.Version).ToArray()
                 };
 
                 var parameters = ParameterView.FromDictionary(paramDictionary);
@@ -369,6 +366,7 @@ internal class RazorTemplateGenerator<
             }).Result;
 
             File.WriteAllText(outputFile, html);
+            pagesGenerated.Add(page.PageName);
         }
     }
 }
