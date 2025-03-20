@@ -11,8 +11,11 @@ using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.Tools.StaticPages;
 using RefDocGen.Tools;
+using System.Text.Json;
 
 namespace RefDocGen.TemplateGenerators.Shared;
+
+record VersionFile(List<string> Versions);
 
 /// <summary>
 /// Class responsible for generating the Razor templates and populating them with the type data.
@@ -57,7 +60,7 @@ internal class RazorTemplateGenerator<
     /// <summary>
     /// The directory, where the generated output will be stored.
     /// </summary>
-    internal readonly string outputDirectory;
+    internal string outputDirectory;
 
     /// <summary>
     /// Rendered of the Razor components.
@@ -115,6 +118,32 @@ internal class RazorTemplateGenerator<
     public void GenerateTemplates(ITypeRegistry typeRegistry)
     {
         docCommentTransformer.TypeRegistry = typeRegistry;
+
+        string version = "v1.2";
+
+        var versionsFile = new FileInfo(Path.Join(outputDirectory, "versions.json"));
+        outputDirectory = Path.Join(outputDirectory, version);
+
+        _ = Directory.CreateDirectory(outputDirectory);
+
+        var versions = new VersionFile([]);
+
+        if (versionsFile.Exists)
+        {
+            var json = File.ReadAllText(versionsFile.FullName);
+            versions = JsonSerializer.Deserialize<VersionFile>(json);
+        }
+        else
+        {
+            File.WriteAllText(versionsFile.FullName, "");
+        }
+
+        versions.Versions.Add(version);
+
+        var serialized = JsonSerializer.Serialize(versions);
+        File.WriteAllText(versionsFile.FullName, serialized);
+
+        // -----------------
 
         CopyStaticPages();
 

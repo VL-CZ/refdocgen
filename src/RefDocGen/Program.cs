@@ -22,7 +22,7 @@ public static class Program
         string docPath = Path.Join(rootPath, "demo-lib", "MyLibrary.xml");
 
         string projectPath = Path.Join(rootPath, "src", "RefDocGen");
-        string outputDir = Path.Combine(projectPath, "out-razor");
+        string outputDir = Path.Combine(projectPath, "out-versions");
         string staticPagesDir = "C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\demo-lib\\pages";
 
         var minVisibility = AccessModifier.Private;

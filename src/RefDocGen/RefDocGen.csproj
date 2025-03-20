@@ -24,6 +24,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Update="TemplateGenerators\Default\Templates\Static\script.js.css">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Update="TemplateGenerators\Default\Templates\Static\styles.css">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
