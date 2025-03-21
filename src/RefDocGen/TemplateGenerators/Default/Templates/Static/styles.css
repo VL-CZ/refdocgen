@@ -38,5 +38,5 @@ h6:hover .anchor-link {
 }
 
 #version-list {
-    visibility: hidden;
+    display: none;
 }

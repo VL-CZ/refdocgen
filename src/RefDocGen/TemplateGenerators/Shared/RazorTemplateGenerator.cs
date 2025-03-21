@@ -138,7 +138,7 @@ internal class RazorTemplateGenerator<
     {
         docCommentTransformer.TypeRegistry = typeRegistry;
 
-        currentVersion = "v1.3";
+        currentVersion = "v1.5";
 
         var versionsFile = new FileInfo(Path.Join(outputDirectory, "versions.json"));
         outputDirectory = Path.Join(outputDirectory, currentVersion);
@@ -283,7 +283,7 @@ internal class RazorTemplateGenerator<
     private void CopyStaticTemplateFilesDirectory()
     {
         var staticFilesDir = new DirectoryInfo(Path.Combine(templatesDirectory, staticTemplateFilesDirectory));
-        string outputDirPath = Path.Combine(outputApiDirectory, staticTemplateFilesDirectory);
+        string outputDirPath = Path.Combine(outputDirectory, staticTemplateFilesDirectory);
 
         if (staticFilesDir.Exists)
         {
