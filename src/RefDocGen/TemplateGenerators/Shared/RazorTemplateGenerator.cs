@@ -138,7 +138,7 @@ internal class RazorTemplateGenerator<
     {
         docCommentTransformer.TypeRegistry = typeRegistry;
 
-        currentVersion = "v1.5";
+        currentVersion = "v1.1";
 
         var versionsFile = new FileInfo(Path.Join(outputDirectory, "versions.json"));
         outputDirectory = Path.Join(outputDirectory, currentVersion);
@@ -264,6 +264,7 @@ internal class RazorTemplateGenerator<
             {
                 ["Model"] = templateModel,
                 ["TopMenuData"] = topMenuData,
+                ["Versions"] = GetVersions("api", outputFile)
             };
 
             var parameters = ParameterView.FromDictionary(paramDictionary);
@@ -391,11 +392,16 @@ internal class RazorTemplateGenerator<
         }
     }
 
-    private string[] GetVersions(StaticPage page)
+    private string[] GetVersions(string pageDirectory, string pageName)
     {
-        var pageName = $"{page.PageDirectory}/{page.PageName}.html";
-        var vv = versions.Where(v => v.Pages.Contains(pageName)).Select(v => v.Version);
+        var pageFullName = $"{pageDirectory}/{pageName}.html";
+        var vv = versions.Where(v => v.Pages.Contains(pageFullName)).Select(v => v.Version);
 
         return [.. vv, currentVersion];
+    }
+
+    private string[] GetVersions(StaticPage page)
+    {
+        return GetVersions(page.PageDirectory, page.PageName);
     }
 }

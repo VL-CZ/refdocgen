@@ -8,6 +8,9 @@
     [Parameter]
     public required TopMenuDataTM TopMenuData { get; set; }
 
+    [Parameter]
+    public required string[] Versions { get; set; }
+
     /// <summary>
     /// Checks if the model has any (summary, remarks,...) doc comments.
     /// </summary>
@@ -19,62 +22,63 @@
 }
 
 <CascadingValue Value="TopMenuData">
-    <LayoutView Layout="typeof(AppLayout)">
-        <div data-id="declared-type-data">
-            <DeclaredTypeName TypeName="@Model.Name" TypeKindName="delegate" Modifiers="@Model.Modifiers" TypeParameters="@Model.TypeParameters" />
+    <CascadingValue Value="Versions">
+        <LayoutView Layout="typeof(AppLayout)">
+            <div data-id="declared-type-data">
+                <DeclaredTypeName TypeName="@Model.Name" TypeKindName="delegate" Modifiers="@Model.Modifiers" TypeParameters="@Model.TypeParameters" />
 
-            <TypeParametersConstraints TypeParameters="@Model.TypeParameters" />
+                <TypeParametersConstraints TypeParameters="@Model.TypeParameters" />
 
-            <NamespaceLink Namespace="@Model.Namespace" />
+                <NamespaceLink Namespace="@Model.Namespace" />
 
-            <hr />
-
-            <SummaryDoc DocComment="@Model.SummaryDocComment" />
-
-            <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
-
-            <AttributeList Attributes="@Model.Attributes" />
-
-            <RemarksDoc DocComment="@Model.RemarksDocComment" />
-
-            <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
-
-            @if (IsModelDocumented())
-            {
                 <hr />
-            }
-        </div>
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="border p-2 mb-2" data-id="delegate-method" id="delegate-method">
-                    <h6 class="mb-1" data-id="member-name">
-                        <samp>
-                            <span class="text-primary">@string.Join(' ', Model.Modifiers) delegate</span>
+                <SummaryDoc DocComment="@Model.SummaryDocComment" />
 
-                            <TypeLink Type="@Model.ReturnType" />
+                <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
 
-                            <span class="text-dark">
-                                @Model.Name
-                            </span><TypeParametersString TypeParameters="@Model.TypeParameters" /><ParametersString Parameters="@Model.Parameters" />
+                <AttributeList Attributes="@Model.Attributes" />
 
-                        </samp>
-                    </h6>
+                <RemarksDoc DocComment="@Model.RemarksDocComment" />
 
-                    <SummaryDoc DocComment="@Model.SummaryDocComment" />
+                <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
 
-                    <ParameterDocs Parameters="@Model.Parameters" />
+                @if (IsModelDocumented())
+                {
+                    <hr />
+                }
+            </div>
 
-                    @if (!Model.ReturnsVoid)
-                    {
-                        <ReturnValueDoc DocComment="@Model.ReturnsDocComment" Type="@Model.ReturnType" />
-                    }
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="border p-2 mb-2" data-id="delegate-method" id="delegate-method">
+                        <h6 class="mb-1" data-id="member-name">
+                            <samp>
+                                <span class="text-primary">@string.Join(' ', Model.Modifiers) delegate</span>
 
-                    <ExceptionDocs Exceptions="@Model.Exceptions" />
+                                <TypeLink Type="@Model.ReturnType" />
 
-                    <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
+                                <span class="text-dark">
+                                    @Model.Name
+                                </span><TypeParametersString TypeParameters="@Model.TypeParameters" /><ParametersString Parameters="@Model.Parameters" />
+                            </samp>
+                        </h6>
+
+                        <SummaryDoc DocComment="@Model.SummaryDocComment" />
+
+                        <ParameterDocs Parameters="@Model.Parameters" />
+
+                        @if (!Model.ReturnsVoid)
+                        {
+                            <ReturnValueDoc DocComment="@Model.ReturnsDocComment" Type="@Model.ReturnType" />
+                        }
+
+                        <ExceptionDocs Exceptions="@Model.Exceptions" />
+
+                        <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
+                    </div>
                 </div>
             </div>
-        </div>
-    </LayoutView>
+        </LayoutView>
+    </CascadingValue>
 </CascadingValue>
