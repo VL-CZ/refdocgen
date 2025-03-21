@@ -36,3 +36,7 @@ html {
 h6:hover .anchor-link {
     visibility: visible;
 }
+
+#version-list {
+    visibility: hidden;
+}

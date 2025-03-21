@@ -65,12 +65,12 @@ internal class RazorTemplateGenerator<
     /// <summary>
     /// The directory, where the generated output will be stored.
     /// </summary>
-    internal readonly string outputDirectory;
+    private string outputDirectory;
 
     /// <summary>
     /// The directory, where the generated output API pages will be stored.
     /// </summary>
-    private readonly string outputApiDirectory;
+    private string outputApiDirectory;
 
     /// <summary>
     /// Rendered of the Razor components.
@@ -104,6 +104,8 @@ internal class RazorTemplateGenerator<
 
     private List<DocVersion> versions = [];
 
+    private string currentVersion;
+
     private List<string> pagesGenerated = [];
 
     /// <summary>
@@ -136,10 +138,11 @@ internal class RazorTemplateGenerator<
     {
         docCommentTransformer.TypeRegistry = typeRegistry;
 
-        string version = "v1.2";
+        currentVersion = "v1.3";
 
         var versionsFile = new FileInfo(Path.Join(outputDirectory, "versions.json"));
-        outputDirectory = Path.Join(outputDirectory, version);
+        outputDirectory = Path.Join(outputDirectory, currentVersion);
+        outputApiDirectory = Path.Join(outputDirectory, "api");
 
         _ = Directory.CreateDirectory(outputDirectory);
 
@@ -166,7 +169,7 @@ internal class RazorTemplateGenerator<
 
         // --------------
 
-        versions.Add(new(version, pagesGenerated));
+        versions.Add(new(currentVersion, pagesGenerated));
         var serialized = JsonSerializer.Serialize(versions);
         File.WriteAllText(versionsFile.FullName, serialized);
     }
@@ -251,6 +254,8 @@ internal class RazorTemplateGenerator<
     private void GenerateTemplate<TTemplate, TTemplateModel>(TTemplateModel templateModel, string outputFile)
         where TTemplate : IComponent
     {
+        _ = Directory.CreateDirectory(outputApiDirectory);
+
         string outputFileName = Path.Join(outputApiDirectory, $"{outputFile}.html");
 
         string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
@@ -269,7 +274,7 @@ internal class RazorTemplateGenerator<
 
 
         File.WriteAllText(outputFileName, html);
-        pagesGenerated.Add(outputFile);
+        pagesGenerated.Add($"api/{outputFile}.html");
     }
 
     /// <summary>
@@ -362,6 +367,8 @@ internal class RazorTemplateGenerator<
 
             string outputFile = Path.Combine(outputPath, $"{page.PageName}.html");
 
+            var versions = GetVersions(page);
+
             string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
             {
                 var paramDictionary = new Dictionary<string, object?>()
@@ -370,7 +377,7 @@ internal class RazorTemplateGenerator<
                     ["TopMenuData"] = topMenuData,
                     ["CustomStyles"] = cssFile.Exists ? StaticPageProcessor.cssFilePath : null,
                     ["NestingLevel"] = page.FolderDepth,
-                    ["Versions"] = versions.Select(dv => dv.Version).ToArray()
+                    ["Versions"] = versions
                 };
 
                 var parameters = ParameterView.FromDictionary(paramDictionary);
@@ -380,7 +387,15 @@ internal class RazorTemplateGenerator<
             }).Result;
 
             File.WriteAllText(outputFile, html);
-            pagesGenerated.Add(page.PageName);
+            pagesGenerated.Add($"{page.PageDirectory}/{page.PageName}.html");
         }
+    }
+
+    private string[] GetVersions(StaticPage page)
+    {
+        var pageName = $"{page.PageDirectory}/{page.PageName}.html";
+        var vv = versions.Where(v => v.Pages.Contains(pageName)).Select(v => v.Version);
+
+        return [.. vv, currentVersion];
     }
 }
