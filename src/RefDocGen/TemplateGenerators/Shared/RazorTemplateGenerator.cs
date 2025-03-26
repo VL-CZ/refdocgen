@@ -1,3 +1,5 @@
+using AngleSharp;
+using AngleSharp.Dom;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using RefDocGen.CodeElements.Abstract;
@@ -258,13 +260,16 @@ internal class RazorTemplateGenerator<
 
         string outputFileName = Path.Join(outputApiDirectory, $"{outputFile}.html");
 
+        var versions = GetVersions("api", outputFile);
+        UpdateOlderFiles(outputFileName, versions);
+
         string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
         {
             var paramDictionary = new Dictionary<string, object?>()
             {
                 ["Model"] = templateModel,
                 ["TopMenuData"] = topMenuData,
-                ["Versions"] = GetVersions("api", outputFile)
+                ["Versions"] = versions
             };
 
             var parameters = ParameterView.FromDictionary(paramDictionary);
@@ -370,6 +375,8 @@ internal class RazorTemplateGenerator<
 
             var versions = GetVersions(page);
 
+            UpdateOlderFiles(outputFile, versions);
+
             string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
             {
                 var paramDictionary = new Dictionary<string, object?>()
@@ -403,5 +410,32 @@ internal class RazorTemplateGenerator<
     private string[] GetVersions(StaticPage page)
     {
         return GetVersions(page.PageDirectory, page.PageName);
+    }
+
+    private void UpdateOlderFiles(string fileName, string[] versions)
+    {
+        foreach (var v in versions)
+        {
+            if (v == currentVersion)
+            {
+                continue;
+            }
+
+            var versionFile = fileName.Replace(currentVersion, v);
+
+            string htmlContent = File.ReadAllText(versionFile);
+
+            // Create a new browsing context (configurations for AngleSharp)
+            var config = Configuration.Default.WithDefaultLoader();
+
+            // Parse the HTML content using AngleSharp's context
+            var context = BrowsingContext.New(config);
+            using var document = context.OpenAsync(req => req.Content(htmlContent)).Result;
+
+            var versionList = document.GetElementById("version-list");
+            versionList.InnerHtml = JsonSerializer.Serialize(versions);
+
+            File.WriteAllText(versionFile, document.Text());
+        }
     }
 }

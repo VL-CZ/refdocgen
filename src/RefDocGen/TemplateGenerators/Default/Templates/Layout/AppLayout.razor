@@ -14,14 +14,15 @@
 <!DOCTYPE html>
 <html lang="en">
 
-        @{
+@{
     string templateStylesUrl = UrlHelper.GetRelativeUrl("Static/styles.css", NestingLevel);
-    string scriptUri = UrlHelper.GetRelativeUrl("Static/script.js", NestingLevel);
+    string scriptUrl = UrlHelper.GetRelativeUrl("Static/script.js", NestingLevel);
 }
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Reference documentation</title>
 
     <!-- Custom global CSS -->
@@ -54,14 +55,14 @@
             <div class="container">
                 <div class="dropup">
                     <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown button
+                        @Versions[^1]
                     </button>
-                    <ul id="version-list">
-                        @foreach (var v in Versions)
-                        {
-                            <li>@v</li>
-                        }
-                    </ul>
+                    <div id="current-version">
+                        @Versions[^1]
+                    </div>
+                    <div id="version-list">
+                        @JsonSerializer.Serialize(Versions)
+                    </div>
                     <ul class="dropdown-menu" id="version-selector">
                     </ul>
                 </div>
@@ -75,6 +76,6 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <!-- Custom script -->
-    <script src="@scriptUri"></script>
+    <script src="@scriptUrl"></script>
 </body>
 </html>
