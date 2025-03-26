@@ -140,7 +140,7 @@ internal class RazorTemplateGenerator<
     {
         docCommentTransformer.TypeRegistry = typeRegistry;
 
-        currentVersion = "v1.1";
+        currentVersion = "v1.2";
 
         var versionsFile = new FileInfo(Path.Join(outputDirectory, "versions.json"));
         outputDirectory = Path.Join(outputDirectory, currentVersion);
@@ -435,7 +435,7 @@ internal class RazorTemplateGenerator<
             var versionList = document.GetElementById("version-list");
             versionList.InnerHtml = JsonSerializer.Serialize(versions);
 
-            File.WriteAllText(versionFile, document.Text());
+            File.WriteAllText(versionFile, document.ToHtml());
         }
     }
 }
