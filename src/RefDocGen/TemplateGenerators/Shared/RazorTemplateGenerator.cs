@@ -1,5 +1,3 @@
-using AngleSharp;
-using AngleSharp.Dom;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using RefDocGen.CodeElements.Abstract;
@@ -11,13 +9,11 @@ using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
+using RefDocGen.TemplateGenerators.Shared.Tools.DocVersioning;
 using RefDocGen.TemplateGenerators.Shared.Tools.StaticPages;
 using RefDocGen.Tools;
-using System.Text.Json;
 
 namespace RefDocGen.TemplateGenerators.Shared;
-
-record DocVersion(string Version, List<string> Pages);
 
 /// <summary>
 /// Class responsible for generating the Razor templates and populating them with the type data.
@@ -70,11 +66,6 @@ internal class RazorTemplateGenerator<
     private string outputDirectory;
 
     /// <summary>
-    /// The directory, where the generated output API pages will be stored.
-    /// </summary>
-    private string outputApiDirectory;
-
-    /// <summary>
     /// Rendered of the Razor components.
     /// </summary>
     private readonly HtmlRenderer htmlRenderer;
@@ -104,11 +95,25 @@ internal class RazorTemplateGenerator<
     /// </summary>
     private bool isUserDefinedIndexPage;
 
-    private List<DocVersion> versions = [];
+    /// <summary>
+    /// Current version of the documentation being generated. <see langword="null"/> if the version is not specified.
+    /// </summary>
+    private readonly string? docVersion;
 
-    private string currentVersion;
+    /// <summary>
+    /// Set of paths of all generated pages in the current doc version, relative to <see cref="outputDirectory"/>.
+    /// </summary>
+    private readonly HashSet<string> pagesGenerated = [];
 
-    private List<string> pagesGenerated = [];
+    /// <summary>
+    /// Manager of the documentation version.
+    /// </summary>
+    private DocVersionManager? versionManager;
+
+    /// <summary>
+    /// The directory, where the generated output API pages will be stored.
+    /// </summary>
+    private string OutputApiDirectory => Path.Join(outputDirectory, "api");
 
     /// <summary>
     /// Initialize a new instance of
@@ -118,21 +123,23 @@ internal class RazorTemplateGenerator<
     /// <param name="docCommentTransformer">Transformer of the XML doc comments into HTML.</param>
     /// <param name="outputDirectory">The directory, where the generated output will be stored.</param>
     /// <param name="staticPagesDirectory">Path to the directory containing the static pages created by user. <c>null</c> indicates that the directory is not specified.</param>
+    /// <param name="docVersion">Version of the documentation (e.g. 'v1.0'). Pass <c>null</c> if no specific version should be generated.</param>
     internal RazorTemplateGenerator(
         HtmlRenderer htmlRenderer,
         IDocCommentTransformer docCommentTransformer,
         string outputDirectory,
-        string? staticPagesDirectory = null)
+        string? staticPagesDirectory = null,
+        string? docVersion = null)
     {
         this.htmlRenderer = htmlRenderer;
         this.docCommentTransformer = docCommentTransformer;
         this.outputDirectory = outputDirectory;
         this.staticPagesDirectory = staticPagesDirectory;
+        this.docVersion = docVersion;
 
-        outputApiDirectory = Path.Join(outputDirectory, "api");
         defaultIndexPage = Path.Join("TemplateGenerators", "Shared", "StaticData", "defaultIndexPage.html");
-
         templatesDirectory = GetTemplatesDirectory();
+
     }
 
     /// <inheritdoc/>
@@ -140,25 +147,15 @@ internal class RazorTemplateGenerator<
     {
         docCommentTransformer.TypeRegistry = typeRegistry;
 
-        currentVersion = "v1.2";
-
-        var versionsFile = new FileInfo(Path.Join(outputDirectory, "versions.json"));
-        outputDirectory = Path.Join(outputDirectory, currentVersion);
-        outputApiDirectory = Path.Join(outputDirectory, "api");
-
-        _ = Directory.CreateDirectory(outputDirectory);
-
-        if (versionsFile.Exists)
+        if (docVersion is not null) // a specific version of documentation is being generated
         {
-            var json = File.ReadAllText(versionsFile.FullName);
-            versions = JsonSerializer.Deserialize<List<DocVersion>>(json);
-        }
-        else
-        {
-            File.WriteAllText(versionsFile.FullName, "");
-        }
+            string rootOutputDirectory = outputDirectory;
 
-        // -----------------
+            outputDirectory = Path.Join(outputDirectory, docVersion); // set output directory
+            _ = Directory.CreateDirectory(outputDirectory);
+
+            versionManager = new(rootOutputDirectory, docVersion);
+        }
 
         CopyStaticPages();
 
@@ -169,11 +166,8 @@ internal class RazorTemplateGenerator<
 
         CopyStaticTemplateFilesDirectory();
 
-        // --------------
-
-        versions.Add(new(currentVersion, pagesGenerated));
-        var serialized = JsonSerializer.Serialize(versions);
-        File.WriteAllText(versionsFile.FullName, serialized);
+        versionManager?.UpdateOlderVersions(pagesGenerated);
+        versionManager?.SaveCurrentVersionData(pagesGenerated);
     }
 
     /// <summary>
@@ -256,12 +250,12 @@ internal class RazorTemplateGenerator<
     private void GenerateTemplate<TTemplate, TTemplateModel>(TTemplateModel templateModel, string outputFile)
         where TTemplate : IComponent
     {
-        _ = Directory.CreateDirectory(outputApiDirectory);
+        _ = Directory.CreateDirectory(OutputApiDirectory);
 
-        string outputFileName = Path.Join(outputApiDirectory, $"{outputFile}.html");
+        string outputFileName = Path.Join(OutputApiDirectory, $"{outputFile}.html");
 
-        var versions = GetVersions("api", outputFile);
-        UpdateOlderFiles(outputFileName, versions);
+        string pagePath = Path.GetRelativePath(outputDirectory, outputFileName);
+        string[]? versions = versionManager?.GetVersions(pagePath);
 
         string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
         {
@@ -280,7 +274,7 @@ internal class RazorTemplateGenerator<
 
 
         File.WriteAllText(outputFileName, html);
-        pagesGenerated.Add($"api/{outputFile}.html");
+        _ = pagesGenerated.Add(pagePath);
     }
 
     /// <summary>
@@ -372,10 +366,9 @@ internal class RazorTemplateGenerator<
             var dir = Directory.CreateDirectory(outputPath);
 
             string outputFile = Path.Combine(outputPath, $"{page.PageName}.html");
+            string pagePath = Path.GetRelativePath(outputDirectory, outputFile);
 
-            var versions = GetVersions(page);
-
-            UpdateOlderFiles(outputFile, versions);
+            string[]? versions = versionManager?.GetVersions(pagePath);
 
             string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
             {
@@ -395,47 +388,8 @@ internal class RazorTemplateGenerator<
             }).Result;
 
             File.WriteAllText(outputFile, html);
-            pagesGenerated.Add($"{page.PageDirectory}/{page.PageName}.html");
-        }
-    }
 
-    private string[] GetVersions(string pageDirectory, string pageName)
-    {
-        var pageFullName = $"{pageDirectory}/{pageName}.html";
-        var vv = versions.Where(v => v.Pages.Contains(pageFullName)).Select(v => v.Version);
-
-        return [.. vv, currentVersion];
-    }
-
-    private string[] GetVersions(StaticPage page)
-    {
-        return GetVersions(page.PageDirectory, page.PageName);
-    }
-
-    private void UpdateOlderFiles(string fileName, string[] versions)
-    {
-        foreach (var v in versions)
-        {
-            if (v == currentVersion)
-            {
-                continue;
-            }
-
-            var versionFile = fileName.Replace(currentVersion, v);
-
-            string htmlContent = File.ReadAllText(versionFile);
-
-            // Create a new browsing context (configurations for AngleSharp)
-            var config = Configuration.Default.WithDefaultLoader();
-
-            // Parse the HTML content using AngleSharp's context
-            var context = BrowsingContext.New(config);
-            using var document = context.OpenAsync(req => req.Content(htmlContent)).Result;
-
-            var versionList = document.GetElementById("version-list");
-            versionList.InnerHtml = JsonSerializer.Serialize(versions);
-
-            File.WriteAllText(versionFile, document.ToHtml());
+            _ = pagesGenerated.Add(pagePath);
         }
     }
 }

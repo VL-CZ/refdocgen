@@ -25,12 +25,14 @@ internal class DefaultTemplateGenerator : RazorTemplateGenerator<
     /// <param name="htmlRenderer">Renderer of the Razor components.</param>
     /// <param name="outputDir">The directory, where the generated output will be stored.</param>
     /// <param name="staticPagesDirectory">Path to the directory containing the static pages created by user. <c>null</c> indicates that the directory is not specified.</param>
-    internal DefaultTemplateGenerator(HtmlRenderer htmlRenderer, string outputDir, string? staticPagesDirectory = null)
+    /// <param name="docVersion">Version of the documentation (e.g. 'v1.0'). Pass <c>null</c> if no specific version should be generated.</param>
+    internal DefaultTemplateGenerator(HtmlRenderer htmlRenderer, string outputDir, string? staticPagesDirectory = null, string? docVersion = null)
         : base(
             htmlRenderer,
             new DefaultDocCommentTransformer(new DocCommentHtmlConfiguration()),
             outputDir,
-            staticPagesDirectory)
+            staticPagesDirectory,
+            docVersion)
     {
     }
 }

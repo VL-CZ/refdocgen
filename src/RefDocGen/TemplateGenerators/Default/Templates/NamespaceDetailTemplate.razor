@@ -9,7 +9,7 @@
     public required TopMenuDataTM TopMenuData { get; set; }
 
     [Parameter]
-    public required string[] Versions { get; set; }
+    public required string[]? Versions { get; set; }
 }
 
 <CascadingValue Value="TopMenuData">

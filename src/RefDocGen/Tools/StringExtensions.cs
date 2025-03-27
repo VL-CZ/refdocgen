@@ -42,4 +42,14 @@ internal static class StringExtensions
 
         return $"{char.ToUpper(str[0], CultureInfo.InvariantCulture)}{str[1..]}";
     }
+
+    /// <summary>
+    /// Converts the path to its corresponding URL format.
+    /// </summary>
+    /// <param name="path">The provided path.</param>
+    /// <returns>URL equivalent of the <paramref name="path"/>.</returns>
+    internal static string ToUrlPath(this string path)
+    {
+        return path.Replace(Path.DirectorySeparatorChar, '/');
+    }
 }

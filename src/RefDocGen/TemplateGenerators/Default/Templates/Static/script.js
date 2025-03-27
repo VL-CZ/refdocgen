@@ -1,7 +1,7 @@
 function main() {
     // Get the original <ul> and its <li> items
     const versionsJson = document.getElementById('version-list').innerText;
-    const versionItems = JSON.parse(versionsJson);
+    const versionItems = JSON.parse(versionsJson).reverse();
 
     const currentVersion = document.getElementById('current-version').innerText.trim();
 
