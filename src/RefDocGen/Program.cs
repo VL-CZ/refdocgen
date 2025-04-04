@@ -22,8 +22,9 @@ public static class Program
         string docPath = Path.Join(rootPath, "demo-lib", "MyLibrary.xml");
 
         string projectPath = Path.Join(rootPath, "src", "RefDocGen");
-        string outputDir = Path.Combine(projectPath, "out-razor");
+        string outputDir = Path.Combine(projectPath, "out-versions");
         string staticPagesDir = "C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\demo-lib\\pages";
+        string? version = "v1.1";
 
         var minVisibility = AccessModifier.Private;
         var memberInheritanceMode = MemberInheritanceMode.NonObject;
@@ -36,7 +37,7 @@ public static class Program
 
         await using var htmlRenderer = new HtmlRenderer(serviceProvider, loggerFactory);
 
-        var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir, staticPagesDir);
+        var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir, staticPagesDir, version);
 
         var docGenerator = new DocGenerator(dllPath, docPath, templateGenerator, minVisibility, memberInheritanceMode);
         docGenerator.GenerateDoc();

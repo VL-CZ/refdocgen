@@ -7,87 +7,92 @@
 
     [Parameter]
     public required TopMenuDataTM TopMenuData { get; set; }
+
+    [Parameter]
+    public required string[]? Versions { get; set; }
 }
 
 <CascadingValue Value="TopMenuData">
-    <LayoutView Layout="typeof(AppLayout)">
+    <CascadingValue Value="Versions">
+        <LayoutView Layout="typeof(AppLayout)">
 
-        <h1 class="display-4" data-id="namespace-title">
-            <samp>
-                <span class="text-primary">namespace</span>
-                <span class="text-dark">@Model.Name</span>
-            </samp>
-        </h1>
-        <hr />
+            <h1 class="display-4" data-id="namespace-title">
+                <samp>
+                    <span class="text-primary">namespace</span>
+                    <span class="text-dark">@Model.Name</span>
+                </samp>
+            </h1>
+            <hr />
 
-        <!-- Classes -->
-        @if (Model.Classes.Any())
-        {
-            <h2 class="display-5">Classes</h2>
-            <table class="table" data-id="namespace-classes">
-                <tbody>
-                    @foreach (var type in Model.Classes)
-                    {
-                        <TypeNameRow Type="@type" />
-                    }
-                </tbody>
-            </table>
-        }
+            <!-- Classes -->
+            @if (Model.Classes.Any())
+            {
+                <h2 class="display-5">Classes</h2>
+                <table class="table" data-id="namespace-classes">
+                    <tbody>
+                        @foreach (var type in Model.Classes)
+                        {
+                            <TypeNameRow Type="@type" />
+                        }
+                    </tbody>
+                </table>
+            }
 
-        <!-- Structures -->
-        @if (Model.ValueTypes.Any())
-        {
-            <h2 class="display-5">Structs</h2>
-            <table class="table" data-id="namespace-structs">
-                <tbody>
-                    @foreach (var type in Model.ValueTypes)
-                    {
-                        <TypeNameRow Type="@type" />
-                    }
-                </tbody>
-            </table>
-        }
+            <!-- Structures -->
+            @if (Model.ValueTypes.Any())
+            {
+                <h2 class="display-5">Structs</h2>
+                <table class="table" data-id="namespace-structs">
+                    <tbody>
+                        @foreach (var type in Model.ValueTypes)
+                        {
+                            <TypeNameRow Type="@type" />
+                        }
+                    </tbody>
+                </table>
+            }
 
-        <!-- Interfaces -->
-        @if (Model.Interfaces.Any())
-        {
-            <h2 class="display-5">Interfaces</h2>
-            <table class="table" data-id="namespace-interfaces">
-                <tbody>
-                    @foreach (var type in Model.Interfaces)
-                    {
-                        <TypeNameRow Type="@type" />
-                    }
-                </tbody>
-            </table>
-        }
+            <!-- Interfaces -->
+            @if (Model.Interfaces.Any())
+            {
+                <h2 class="display-5">Interfaces</h2>
+                <table class="table" data-id="namespace-interfaces">
+                    <tbody>
+                        @foreach (var type in Model.Interfaces)
+                        {
+                            <TypeNameRow Type="@type" />
+                        }
+                    </tbody>
+                </table>
+            }
 
-        <!-- Enums -->
-        @if (Model.Enums.Any())
-        {
-            <h2 class="display-5">Enums</h2>
-            <table class="table" data-id="namespace-enums">
-                <tbody>
-                    @foreach (var type in Model.Enums)
-                    {
-                        <TypeNameRow Type="@type" />
-                    }
-                </tbody>
-            </table>
-        }
+            <!-- Enums -->
+            @if (Model.Enums.Any())
+            {
+                <h2 class="display-5">Enums</h2>
+                <table class="table" data-id="namespace-enums">
+                    <tbody>
+                        @foreach (var type in Model.Enums)
+                        {
+                            <TypeNameRow Type="@type" />
+                        }
+                    </tbody>
+                </table>
+            }
 
-        <!-- Delegates -->
-        @if (Model.Delegates.Any())
-        {
-            <h2 class="display-5">Delegates</h2>
-            <table class="table" data-id="namespace-delegates">
-                <tbody>
-                    @foreach (var type in Model.Delegates)
-                    {
-                        <TypeNameRow Type="@type" />
-                    }
-                </tbody>
-            </table>
-        }
-    </LayoutView>
+            <!-- Delegates -->
+            @if (Model.Delegates.Any())
+            {
+                <h2 class="display-5">Delegates</h2>
+                <table class="table" data-id="namespace-delegates">
+                    <tbody>
+                        @foreach (var type in Model.Delegates)
+                        {
+                            <TypeNameRow Type="@type" />
+                        }
+                    </tbody>
+                </table>
+            }
+        </LayoutView>
+    </CascadingValue>
 </CascadingValue>

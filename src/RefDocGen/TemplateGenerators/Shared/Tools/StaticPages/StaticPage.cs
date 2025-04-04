@@ -30,4 +30,9 @@ internal record StaticPage(string PageDirectory, string PageName, string HtmlBod
     /// Indicates whether the page is an 'index' page.
     /// </summary>
     internal bool IsIndexPage => FolderDepth == 0 && PageName.Equals("index", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// Full name of the page file, relative to the static files directory (without extension).
+    /// </summary>
+    internal string FullName => Path.Join(PageDirectory, PageName);
 }

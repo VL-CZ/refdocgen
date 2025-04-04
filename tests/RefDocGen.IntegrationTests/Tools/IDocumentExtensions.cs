@@ -8,6 +8,16 @@ namespace RefDocGen.IntegrationTests.Tools;
 internal static class IDocumentExtensions
 {
     /// <summary>
+    /// ID of the 'Current version' element
+    /// </summary>
+    private const string currentVersion = "current-version";
+
+    /// <summary>
+    /// ID of the 'Version list' element
+    /// </summary>
+    private const string versionList = "version-list";
+
+    /// <summary>
     /// Gets an element representing the member by its ID.
     /// </summary>
     /// <param name="document">The document to search in.</param>
@@ -38,6 +48,28 @@ internal static class IDocumentExtensions
     internal static IElement GetTypeDataSection(this IDocument document)
     {
         return document.DocumentElement.GetByDataId(DataId.TypeDataSection);
+    }
+
+    /// <summary>
+    /// Gets available versions of the page.
+    /// </summary>
+    /// <param name="document">The provided page.</param>
+    /// <returns>String describing the available versions of the page.</returns>
+    internal static string GetVersionList(this IDocument document)
+    {
+        return document.GetElementById(versionList)?.TextContent
+            ?? throw new ArgumentException($"Version list not found");
+    }
+
+    /// <summary>
+    /// Gets the current version of the page.
+    /// </summary>
+    /// <param name="document">The provided page.</param>
+    /// <returns>The version of the page.</returns>
+    internal static string GetCurrentVersion(this IDocument document)
+    {
+        return document.GetElementById(currentVersion)?.TextContent
+            ?? throw new ArgumentException($"Current version not found");
     }
 
     /// <summary>

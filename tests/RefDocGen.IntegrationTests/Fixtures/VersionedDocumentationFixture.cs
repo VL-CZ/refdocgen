@@ -8,21 +8,21 @@ using RefDocGen.AssemblyAnalysis;
 namespace RefDocGen.IntegrationTests.Fixtures;
 
 /// <summary>
-/// Fixture responsible for setting up and tearing down the reference documentation for testing purposes.
+/// Fixture responsible for setting up and tearing down the reference documentation consisting of multiple versions.
 /// </summary>
-public class DocumentationFixture : IDisposable
+public class VersionedDocumentationFixture : IDisposable
 {
     /// <summary>
     /// Directory, where the reference documentation is generated.
     /// </summary>
-    private const string outputDir = "output";
+    internal const string outputDir = "output-versions";
 
     /// <summary>
     /// Path to the directory containing user-created static pages
     /// </summary>
     private readonly string staticPagesDirectory = Path.Join("data", "static-pages");
 
-    public DocumentationFixture()
+    public VersionedDocumentationFixture()
     {
         GenerateDoc();
     }
@@ -52,9 +52,14 @@ public class DocumentationFixture : IDisposable
 
         using var htmlRenderer = new HtmlRenderer(serviceProvider, loggerFactory);
 
-        var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir, staticPagesDirectory); // use the default template generator
+        string[] versions = ["v1.0", "v1.1", "v2.0"];
 
-        var generator = new DocGenerator("data/MyLibrary.dll", "data/MyLibrary.xml", templateGenerator, AccessModifier.Private, MemberInheritanceMode.NonObject);
-        generator.GenerateDoc();
+        foreach (string version in versions)
+        {
+            var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir, staticPagesDirectory, version); // use the default template generator
+
+            var generator = new DocGenerator("data/MyLibrary.dll", "data/MyLibrary.xml", templateGenerator, AccessModifier.Private, MemberInheritanceMode.NonObject);
+            generator.GenerateDoc();
+        }
     }
 }

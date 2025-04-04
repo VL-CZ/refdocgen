@@ -9,6 +9,7 @@ using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
+using RefDocGen.TemplateGenerators.Shared.Tools.DocVersioning;
 using RefDocGen.TemplateGenerators.Shared.Tools.StaticPages;
 using RefDocGen.Tools;
 
@@ -62,12 +63,7 @@ internal class RazorTemplateGenerator<
     /// <summary>
     /// The directory, where the generated output will be stored.
     /// </summary>
-    internal readonly string outputDirectory;
-
-    /// <summary>
-    /// The directory, where the generated output API pages will be stored.
-    /// </summary>
-    private readonly string outputApiDirectory;
+    private string outputDirectory;
 
     /// <summary>
     /// Rendered of the Razor components.
@@ -100,6 +96,26 @@ internal class RazorTemplateGenerator<
     private bool isUserDefinedIndexPage;
 
     /// <summary>
+    /// Current version of the documentation being generated. <see langword="null"/> if the version is not specified.
+    /// </summary>
+    private readonly string? docVersion;
+
+    /// <summary>
+    /// Set of paths of all generated pages in the current doc version, relative to <see cref="outputDirectory"/>.
+    /// </summary>
+    private readonly HashSet<string> pagesGenerated = [];
+
+    /// <summary>
+    /// Manager of the documentation version.
+    /// </summary>
+    private DocVersionManager? versionManager;
+
+    /// <summary>
+    /// The directory, where the generated output API pages will be stored.
+    /// </summary>
+    private string OutputApiDirectory => Path.Join(outputDirectory, "api");
+
+    /// <summary>
     /// Initialize a new instance of
     /// <see cref="RazorTemplateGenerator{TDelegateTemplate, TEnumTemplate, TNamespaceDetailTemplate, TNamespaceListTemplate, TObjectTypeTemplate, TStaticPageTemplate}"/> class.
     /// </summary>
@@ -107,21 +123,23 @@ internal class RazorTemplateGenerator<
     /// <param name="docCommentTransformer">Transformer of the XML doc comments into HTML.</param>
     /// <param name="outputDirectory">The directory, where the generated output will be stored.</param>
     /// <param name="staticPagesDirectory">Path to the directory containing the static pages created by user. <c>null</c> indicates that the directory is not specified.</param>
+    /// <param name="docVersion">Version of the documentation (e.g. 'v1.0'). Pass <c>null</c> if no specific version should be generated.</param>
     internal RazorTemplateGenerator(
         HtmlRenderer htmlRenderer,
         IDocCommentTransformer docCommentTransformer,
         string outputDirectory,
-        string? staticPagesDirectory = null)
+        string? staticPagesDirectory = null,
+        string? docVersion = null)
     {
         this.htmlRenderer = htmlRenderer;
         this.docCommentTransformer = docCommentTransformer;
         this.outputDirectory = outputDirectory;
         this.staticPagesDirectory = staticPagesDirectory;
+        this.docVersion = docVersion;
 
-        outputApiDirectory = Path.Join(outputDirectory, "api");
         defaultIndexPage = Path.Join("TemplateGenerators", "Shared", "StaticData", "defaultIndexPage.html");
-
         templatesDirectory = GetTemplatesDirectory();
+
     }
 
     /// <inheritdoc/>
@@ -129,7 +147,15 @@ internal class RazorTemplateGenerator<
     {
         docCommentTransformer.TypeRegistry = typeRegistry;
 
-        _ = Directory.CreateDirectory(outputApiDirectory);
+        if (docVersion is not null) // a specific version of documentation is being generated
+        {
+            string rootOutputDirectory = outputDirectory;
+
+            outputDirectory = Path.Join(outputDirectory, docVersion); // set output directory
+            _ = Directory.CreateDirectory(outputDirectory);
+
+            versionManager = new(rootOutputDirectory, docVersion);
+        }
 
         CopyStaticPages();
 
@@ -139,6 +165,9 @@ internal class RazorTemplateGenerator<
         GenerateNamespaceTemplates(typeRegistry);
 
         CopyStaticTemplateFilesDirectory();
+
+        versionManager?.UpdateOlderVersions(pagesGenerated);
+        versionManager?.SaveCurrentVersionData(pagesGenerated);
     }
 
     /// <summary>
@@ -221,14 +250,20 @@ internal class RazorTemplateGenerator<
     private void GenerateTemplate<TTemplate, TTemplateModel>(TTemplateModel templateModel, string outputFile)
         where TTemplate : IComponent
     {
-        string outputFileName = Path.Join(outputApiDirectory, $"{outputFile}.html");
+        _ = Directory.CreateDirectory(OutputApiDirectory);
+
+        string outputFileName = Path.Join(OutputApiDirectory, $"{outputFile}.html");
+
+        string pagePath = Path.GetRelativePath(outputDirectory, outputFileName);
+        string[]? versions = versionManager?.GetVersions(pagePath);
 
         string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
         {
             var paramDictionary = new Dictionary<string, object?>()
             {
                 ["Model"] = templateModel,
-                ["TopMenuData"] = topMenuData
+                ["TopMenuData"] = topMenuData,
+                ["Versions"] = versions
             };
 
             var parameters = ParameterView.FromDictionary(paramDictionary);
@@ -239,6 +274,7 @@ internal class RazorTemplateGenerator<
 
 
         File.WriteAllText(outputFileName, html);
+        _ = pagesGenerated.Add(pagePath);
     }
 
     /// <summary>
@@ -247,7 +283,7 @@ internal class RazorTemplateGenerator<
     private void CopyStaticTemplateFilesDirectory()
     {
         var staticFilesDir = new DirectoryInfo(Path.Combine(templatesDirectory, staticTemplateFilesDirectory));
-        string outputDirPath = Path.Combine(outputApiDirectory, staticTemplateFilesDirectory);
+        string outputDirPath = Path.Combine(outputDirectory, staticTemplateFilesDirectory);
 
         if (staticFilesDir.Exists)
         {
@@ -330,6 +366,9 @@ internal class RazorTemplateGenerator<
             var dir = Directory.CreateDirectory(outputPath);
 
             string outputFile = Path.Combine(outputPath, $"{page.PageName}.html");
+            string pagePath = Path.GetRelativePath(outputDirectory, outputFile);
+
+            string[]? versions = versionManager?.GetVersions(pagePath);
 
             string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
             {
@@ -338,7 +377,8 @@ internal class RazorTemplateGenerator<
                     ["Contents"] = page.HtmlBody,
                     ["TopMenuData"] = topMenuData,
                     ["CustomStyles"] = cssFile.Exists ? StaticPageProcessor.cssFilePath : null,
-                    ["NestingLevel"] = page.FolderDepth
+                    ["NestingLevel"] = page.FolderDepth,
+                    ["Versions"] = versions
                 };
 
                 var parameters = ParameterView.FromDictionary(paramDictionary);
@@ -348,6 +388,8 @@ internal class RazorTemplateGenerator<
             }).Result;
 
             File.WriteAllText(outputFile, html);
+
+            _ = pagesGenerated.Add(pagePath);
         }
     }
 }

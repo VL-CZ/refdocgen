@@ -7,11 +7,11 @@
         <AnalysisMode>recommended</AnalysisMode>
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
-        <NoWarn>IDE0058,CA1707,CA1816</NoWarn>
+        <NoWarn>IDE0058,CA1707,CA1816,IDE0305</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
-      <None Include="StaticPagesTests.cs" />
+        <None Include="StaticPagesTests.cs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -49,19 +49,19 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="data\static-pages\css\styles.css">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="data\static-pages\folder\anotherPage.html">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="data\static-pages\helloworld.js">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="data\static-pages\htmlPage.html">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="data\static-pages\markdownPage.md">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 

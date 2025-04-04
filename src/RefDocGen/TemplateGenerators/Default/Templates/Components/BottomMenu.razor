@@ -1,0 +1,25 @@
+@using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required string[] Versions { get; set; }
+}
+
+<nav class="navbar fixed-bottom bg-body-tertiary">
+    <div class="container">
+        <div class="dropup">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @Versions[^1]
+            </button>
+            <div id="current-version">
+                @Versions[^1]
+            </div>
+            <div id="version-list">
+                @JsonSerializer.Serialize(Versions)
+            </div>
+            <ul class="dropdown-menu" id="version-selector" data-id="version-selector">
+            </ul>
+        </div>
+    </div>
+</nav>
