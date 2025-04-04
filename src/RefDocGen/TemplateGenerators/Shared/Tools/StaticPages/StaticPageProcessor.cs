@@ -133,6 +133,6 @@ internal class StaticPageProcessor
             }
         }
 
-        return document.Body.InnerHtml;
+        return document.Body?.InnerHtml ?? "";
     }
 }
