@@ -119,6 +119,9 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
             XmlDocIdentifiers.List => TransformListElement(element),
             XmlDocIdentifiers.Item => TransformListItemElement(element),
             XmlDocIdentifiers.InlineCode => TransformInlineCodeElement(element),
+            XmlDocIdentifiers.Term => TransformTermElement(element),
+            XmlDocIdentifiers.Description => TransformDescriptionElement(element),
+            XmlDocIdentifiers.ListHeader => TransformListHeaderElement(element),
             XmlDocIdentifiers.CodeBlock => TransformCodeBlockElement(element),
             XmlDocIdentifiers.Example => TransformExampleElement(element),
             XmlDocIdentifiers.See => TransformSeeElement(element),
@@ -255,6 +258,36 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     protected virtual XElement TransformListItemElement(XElement element)
     {
         return CopyChildNodes(element, htmlConfiguration.ListItemElement);
+    }
+
+    /// <summary>
+    /// Transforms the <c>&lt;term&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;term&gt;</c> element to transform.</param>
+    /// <returns>The HTML representation of the <c>&lt;term&gt;</c> element.</returns>
+    protected virtual XElement TransformTermElement(XElement element)
+    {
+        return CopyChildNodes(element, htmlConfiguration.TermElement);
+    }
+
+    /// <summary>
+    /// Transforms the <c>&lt;description&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;description&gt;</c> element to transform.</param>
+    /// <returns>The HTML representation of the <c>&lt;description&gt;</c> element.</returns>
+    protected virtual XElement TransformDescriptionElement(XElement element)
+    {
+        return CopyChildNodes(element, htmlConfiguration.DescriptionElement);
+    }
+
+    /// <summary>
+    /// Transforms the <c>&lt;listheader&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;listheader&gt;</c> element to transform.</param>
+    /// <returns>The HTML representation of the <c>&lt;listheader&gt;</c> element.</returns>
+    protected virtual XElement TransformListHeaderElement(XElement element)
+    {
+        return CopyChildNodes(element, htmlConfiguration.ListHeaderElement);
     }
 
     /// <summary>

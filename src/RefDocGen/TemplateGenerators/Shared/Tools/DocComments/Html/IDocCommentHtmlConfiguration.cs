@@ -33,6 +33,21 @@ internal interface IDocCommentHtmlConfiguration
     XElement InlineCodeElement { get; }
 
     /// <summary>
+    /// The HTML representation of the <c>&lt;term&gt;</c> element.
+    /// </summary>
+    XElement TermElement { get; }
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;description&gt;</c> element.
+    /// </summary>
+    XElement DescriptionElement { get; }
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;listheader&gt;</c> element.
+    /// </summary>
+    XElement ListHeaderElement { get; }
+
+    /// <summary>
     /// The HTML representation of the <c>&lt;code&gt;</c> element.
     /// </summary>
     XElement CodeBlockElement { get; }

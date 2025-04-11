@@ -60,4 +60,15 @@ internal class DocCommentHtmlConfiguration : IDocCommentHtmlConfiguration
 
     /// <inheritdoc />
     public virtual XElement SeeAlsoCrefNotFoundElement => new("code");
+
+    /// <inheritdoc />
+    public XElement TermElement => new("b");
+
+    /// <inheritdoc />
+    public XElement DescriptionElement => new("span",
+        " ",
+        new XElement("span"));
+
+    /// <inheritdoc />
+    public XElement ListHeaderElement => new("th");
 }

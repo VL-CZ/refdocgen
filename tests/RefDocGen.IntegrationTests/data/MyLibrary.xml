@@ -593,7 +593,10 @@
             </para>
             <list type="bullet">
               <item>ABC</item>
-              <item>DEF</item>
+              <item>
+                <term>ddd</term> 
+                <description>DEF</description>
+              </item>
             </list>
             <list type="number">
               <item>First</item>

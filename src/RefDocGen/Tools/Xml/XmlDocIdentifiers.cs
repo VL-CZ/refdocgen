@@ -98,6 +98,21 @@ internal static class XmlDocIdentifiers
     public const string Item = "item";
 
     /// <summary>
+    /// Represents the 'term' identifier.
+    /// </summary>
+    public const string Term = "term";
+
+    /// <summary>
+    /// Represents the 'description' identifier.
+    /// </summary>
+    public const string Description = "description";
+
+    /// <summary>
+    /// Represents the 'description' identifier.
+    /// </summary>
+    public const string ListHeader = "listheader";
+
+    /// <summary>
     /// Represents the 'c' identifier.
     /// </summary>
     public const string InlineCode = "c";
