@@ -7,6 +7,8 @@ using System.Xml.Linq;
 
 namespace RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
 
+enum ListType { List, Table };
+
 /// <summary>
 /// Class responsible for transforming the XML doc comments into HTML.
 /// </summary>
@@ -16,6 +18,8 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <c>div</c> element name.
     /// </summary>
     private const string div = "div";
+
+    private Stack<ListType> visitedLists = new();
 
     /// <summary>
     /// Configuration for transforming the XML elements into HTML.
@@ -106,6 +110,20 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// </remarks>
     private void TransformToHtml(XElement element)
     {
+        bool isList = element.Name.ToString() == XmlDocIdentifiers.List;
+
+        if (isList && element.Attribute("type") is XAttribute listType)
+        {
+            if (listType?.Value.ToString() == "table") // todo
+            {
+                visitedLists.Push(ListType.Table);
+            }
+            else
+            {
+                visitedLists.Push(ListType.List);
+            }
+        }
+
         // firstly transform the children
         foreach (var child in element.Elements())
         {
@@ -136,6 +154,11 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
         {
             // replace the element by HTML representation
             element.ReplaceDataBy(transformedElement);
+        }
+
+        if (isList)
+        {
+            visitedLists.Pop();
         }
     }
 
@@ -242,7 +265,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
         {
             ["bullet"] = htmlConfiguration.BulletListElement,
             ["number"] = htmlConfiguration.NumberListElement,
-            ["table"] = htmlConfiguration.BulletListElement, // TODO: add 
+            ["table"] = htmlConfiguration.TableListElement,
         };
 
         return types.TryGetValue(listType, out var newElement)
@@ -257,7 +280,14 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <returns>The HTML representation of the <c>&lt;item&gt;</c> element.</returns>
     protected virtual XElement TransformListItemElement(XElement element)
     {
-        return CopyChildNodes(element, htmlConfiguration.ListItemElement);
+        if (visitedLists.Peek() == ListType.List)
+        {
+            return CopyChildNodes(element, htmlConfiguration.ListItemElement);
+        }
+        else
+        {
+            return CopyChildNodes(element, htmlConfiguration.TableItemElement);
+        }
     }
 
     /// <summary>
@@ -267,7 +297,14 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <returns>The HTML representation of the <c>&lt;term&gt;</c> element.</returns>
     protected virtual XElement TransformTermElement(XElement element)
     {
-        return CopyChildNodes(element, htmlConfiguration.TermElement);
+        if (visitedLists.Peek() == ListType.List)
+        {
+            return CopyChildNodes(element, htmlConfiguration.ListTermElement);
+        }
+        else
+        {
+            return CopyChildNodes(element, htmlConfiguration.TableTermElement);
+        }
     }
 
     /// <summary>
@@ -277,7 +314,14 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <returns>The HTML representation of the <c>&lt;description&gt;</c> element.</returns>
     protected virtual XElement TransformDescriptionElement(XElement element)
     {
-        return CopyChildNodes(element, htmlConfiguration.DescriptionElement);
+        if (visitedLists.Peek() == ListType.List)
+        {
+            return CopyChildNodes(element, htmlConfiguration.ListDescriptionElement);
+        }
+        else
+        {
+            return CopyChildNodes(element, htmlConfiguration.TableDescriptionElement);
+        }
     }
 
     /// <summary>

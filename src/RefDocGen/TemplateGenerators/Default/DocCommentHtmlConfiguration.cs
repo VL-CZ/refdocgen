@@ -65,10 +65,19 @@ internal class DocCommentHtmlConfiguration : IDocCommentHtmlConfiguration
     public XElement TermElement => new("b");
 
     /// <inheritdoc />
-    public XElement DescriptionElement => new("span",
-        " ",
-        new XElement("span"));
+    public XElement ListHeaderElement => new("thead");
 
-    /// <inheritdoc />
-    public XElement ListHeaderElement => new("th");
+    public XElement TableListElement => new("table", new XAttribute("class", "table"));
+
+    public XElement TableItemElement => new("tr");
+
+    public XElement ListTermElement => new("b");
+
+    public XElement ListDescriptionElement => new("span",
+                                                    " ",
+                                                    new XElement("span"));
+
+    public XElement TableTermElement => new("td", new XElement("b"));
+
+    public XElement TableDescriptionElement => new("td");
 }

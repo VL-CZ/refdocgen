@@ -602,13 +602,22 @@
               <item>First</item>
               <item>Second</item>
             </list>
-            <list type="table">
-              <item>First</item>
-              <item>Second</item>
-            </list>
-            <see href="http://www.google.com">Google</see>
             
-            <see langword="true"/>
+            <list type="table">
+            <listheader>
+            <term>name</term>
+            <term>age</term>
+            </listheader>
+            <item>
+            <term>John Smith</term>
+            <description>10</description>
+            </item>
+            <item>
+            <term>Jane Anderson</term>
+            <description>15</description>
+            </item>
+            </list>
+            <see href="http://www.google.com">Google</see> <see langword="true"/>
             </summary>
             <seealso href="http://www.google.com"/>
             <seealso cref="F:MyLibrary.User.MaxAge">max age constant</seealso>

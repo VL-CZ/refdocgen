@@ -23,29 +23,49 @@ internal interface IDocCommentHtmlConfiguration
     XElement NumberListElement { get; }
 
     /// <summary>
+    /// The HTML representation of the <c>&lt;list type="table"&gt;</c> element.
+    /// </summary>
+    XElement TableListElement { get; }
+
+    /// <summary>
     /// The HTML representation of the <c>&lt;item&gt;</c> element.
     /// </summary>
     XElement ListItemElement { get; }
 
     /// <summary>
-    /// The HTML representation of the <c>&lt;c&gt;</c> element.
+    /// The HTML representation of the <c>&lt;item&gt;</c> element.
     /// </summary>
-    XElement InlineCodeElement { get; }
+    XElement TableItemElement { get; }
 
     /// <summary>
     /// The HTML representation of the <c>&lt;term&gt;</c> element.
     /// </summary>
-    XElement TermElement { get; }
+    XElement ListTermElement { get; }
 
     /// <summary>
     /// The HTML representation of the <c>&lt;description&gt;</c> element.
     /// </summary>
-    XElement DescriptionElement { get; }
+    XElement ListDescriptionElement { get; }
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;term&gt;</c> element.
+    /// </summary>
+    XElement TableTermElement { get; }
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;description&gt;</c> element.
+    /// </summary>
+    XElement TableDescriptionElement { get; }
 
     /// <summary>
     /// The HTML representation of the <c>&lt;listheader&gt;</c> element.
     /// </summary>
     XElement ListHeaderElement { get; }
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;c&gt;</c> element.
+    /// </summary>
+    XElement InlineCodeElement { get; }
 
     /// <summary>
     /// The HTML representation of the <c>&lt;code&gt;</c> element.
