@@ -23,9 +23,44 @@ internal interface IDocCommentHtmlConfiguration
     XElement NumberListElement { get; }
 
     /// <summary>
-    /// The HTML representation of the <c>&lt;item&gt;</c> element.
+    /// The HTML representation of the <c>&lt;list type="table"&gt;</c> element.
+    /// </summary>
+    XElement TableListElement { get; }
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;item&gt;</c> element contained in a non-table list.
     /// </summary>
     XElement ListItemElement { get; }
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;item&gt;</c> element contained in a table list.
+    /// </summary>
+    XElement TableItemElement { get; }
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;term&gt;</c> element contained in a non-table list.
+    /// </summary>
+    XElement ListTermElement { get; }
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;description&gt;</c> element contained in a non-table list.
+    /// </summary>
+    XElement ListDescriptionElement { get; }
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;term&gt;</c> element contained in a table list.
+    /// </summary>
+    XElement TableTermElement { get; }
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;description&gt;</c> element contained in a table list.
+    /// </summary>
+    XElement TableDescriptionElement { get; }
+
+    /// <summary>
+    /// The HTML representation of the <c>&lt;listheader&gt;</c> element.
+    /// </summary>
+    XElement ListHeaderElement { get; }
 
     /// <summary>
     /// The HTML representation of the <c>&lt;c&gt;</c> element.

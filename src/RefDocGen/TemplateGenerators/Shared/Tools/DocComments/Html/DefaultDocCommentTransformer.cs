@@ -18,6 +18,11 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     private const string div = "div";
 
     /// <summary>
+    /// Stack of visited &lt;list&gt; elements.
+    /// </summary>
+    private readonly Stack<ListType> visitedLists = new();
+
+    /// <summary>
     /// Configuration for transforming the XML elements into HTML.
     /// </summary>
     private readonly IDocCommentHtmlConfiguration htmlConfiguration;
@@ -106,6 +111,13 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// </remarks>
     private void TransformToHtml(XElement element)
     {
+        bool isList = element.Name.ToString() == XmlDocIdentifiers.List;
+
+        if (isList)
+        {
+            MarkListAsVisited(element);
+        }
+
         // firstly transform the children
         foreach (var child in element.Elements())
         {
@@ -119,6 +131,9 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
             XmlDocIdentifiers.List => TransformListElement(element),
             XmlDocIdentifiers.Item => TransformListItemElement(element),
             XmlDocIdentifiers.InlineCode => TransformInlineCodeElement(element),
+            XmlDocIdentifiers.Term => TransformTermElement(element),
+            XmlDocIdentifiers.Description => TransformDescriptionElement(element),
+            XmlDocIdentifiers.ListHeader => TransformListHeaderElement(element),
             XmlDocIdentifiers.CodeBlock => TransformCodeBlockElement(element),
             XmlDocIdentifiers.Example => TransformExampleElement(element),
             XmlDocIdentifiers.See => TransformSeeElement(element),
@@ -134,6 +149,23 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
             // replace the element by HTML representation
             element.ReplaceDataBy(transformedElement);
         }
+
+        if (isList) // pop the visited list element
+        {
+            _ = visitedLists.Pop();
+        }
+    }
+
+    /// <summary>
+    /// Marks the list element as visited.
+    /// </summary>
+    /// <param name="listElement">The &lt;list&gt; element.</param>
+    private void MarkListAsVisited(XElement listElement)
+    {
+        bool isTable = listElement.Attribute("type")?.Value == "table";
+        var listType = isTable ? ListType.Table : ListType.NonTable;
+
+        visitedLists.Push(listType);
     }
 
     /// <summary>
@@ -239,7 +271,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
         {
             ["bullet"] = htmlConfiguration.BulletListElement,
             ["number"] = htmlConfiguration.NumberListElement,
-            ["table"] = htmlConfiguration.BulletListElement, // TODO: add 
+            ["table"] = htmlConfiguration.TableListElement,
         };
 
         return types.TryGetValue(listType, out var newElement)
@@ -254,7 +286,58 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <returns>The HTML representation of the <c>&lt;item&gt;</c> element.</returns>
     protected virtual XElement TransformListItemElement(XElement element)
     {
-        return CopyChildNodes(element, htmlConfiguration.ListItemElement);
+        if (visitedLists.Peek() == ListType.NonTable)
+        {
+            return CopyChildNodes(element, htmlConfiguration.ListItemElement);
+        }
+        else
+        {
+            return CopyChildNodes(element, htmlConfiguration.TableItemElement);
+        }
+    }
+
+    /// <summary>
+    /// Transforms the <c>&lt;term&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;term&gt;</c> element to transform.</param>
+    /// <returns>The HTML representation of the <c>&lt;term&gt;</c> element.</returns>
+    protected virtual XElement TransformTermElement(XElement element)
+    {
+        if (visitedLists.Peek() == ListType.NonTable)
+        {
+            return CopyChildNodes(element, htmlConfiguration.ListTermElement);
+        }
+        else
+        {
+            return CopyChildNodes(element, htmlConfiguration.TableTermElement);
+        }
+    }
+
+    /// <summary>
+    /// Transforms the <c>&lt;description&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;description&gt;</c> element to transform.</param>
+    /// <returns>The HTML representation of the <c>&lt;description&gt;</c> element.</returns>
+    protected virtual XElement TransformDescriptionElement(XElement element)
+    {
+        if (visitedLists.Peek() == ListType.NonTable)
+        {
+            return CopyChildNodes(element, htmlConfiguration.ListDescriptionElement);
+        }
+        else
+        {
+            return CopyChildNodes(element, htmlConfiguration.TableDescriptionElement);
+        }
+    }
+
+    /// <summary>
+    /// Transforms the <c>&lt;listheader&gt;</c> element to its HTML representation.
+    /// </summary>
+    /// <param name="element">The <c>&lt;listheader&gt;</c> element to transform.</param>
+    /// <returns>The HTML representation of the <c>&lt;listheader&gt;</c> element.</returns>
+    protected virtual XElement TransformListHeaderElement(XElement element)
+    {
+        return CopyChildNodes(element, htmlConfiguration.ListHeaderElement);
     }
 
     /// <summary>
