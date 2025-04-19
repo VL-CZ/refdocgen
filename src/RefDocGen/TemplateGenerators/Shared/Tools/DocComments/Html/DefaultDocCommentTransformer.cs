@@ -7,8 +7,6 @@ using System.Xml.Linq;
 
 namespace RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
 
-enum ListType { List, Table };
-
 /// <summary>
 /// Class responsible for transforming the XML doc comments into HTML.
 /// </summary>
@@ -19,7 +17,10 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// </summary>
     private const string div = "div";
 
-    private Stack<ListType> visitedLists = new();
+    /// <summary>
+    /// Stack of visited &lt;list&gt; elements.
+    /// </summary>
+    private readonly Stack<ListType> visitedLists = new();
 
     /// <summary>
     /// Configuration for transforming the XML elements into HTML.
@@ -112,16 +113,9 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     {
         bool isList = element.Name.ToString() == XmlDocIdentifiers.List;
 
-        if (isList && element.Attribute("type") is XAttribute listType)
+        if (isList)
         {
-            if (listType?.Value.ToString() == "table") // todo
-            {
-                visitedLists.Push(ListType.Table);
-            }
-            else
-            {
-                visitedLists.Push(ListType.List);
-            }
+            MarkListAsVisited(element);
         }
 
         // firstly transform the children
@@ -156,10 +150,22 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
             element.ReplaceDataBy(transformedElement);
         }
 
-        if (isList)
+        if (isList) // pop the visited list element
         {
-            visitedLists.Pop();
+            _ = visitedLists.Pop();
         }
+    }
+
+    /// <summary>
+    /// Marks the list element as visited.
+    /// </summary>
+    /// <param name="listElement">The &lt;list&gt; element.</param>
+    private void MarkListAsVisited(XElement listElement)
+    {
+        bool isTable = listElement.Attribute("type")?.Value == "table";
+        var listType = isTable ? ListType.Table : ListType.NonTable;
+
+        visitedLists.Push(listType);
     }
 
     /// <summary>
@@ -280,7 +286,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <returns>The HTML representation of the <c>&lt;item&gt;</c> element.</returns>
     protected virtual XElement TransformListItemElement(XElement element)
     {
-        if (visitedLists.Peek() == ListType.List)
+        if (visitedLists.Peek() == ListType.NonTable)
         {
             return CopyChildNodes(element, htmlConfiguration.ListItemElement);
         }
@@ -297,7 +303,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <returns>The HTML representation of the <c>&lt;term&gt;</c> element.</returns>
     protected virtual XElement TransformTermElement(XElement element)
     {
-        if (visitedLists.Peek() == ListType.List)
+        if (visitedLists.Peek() == ListType.NonTable)
         {
             return CopyChildNodes(element, htmlConfiguration.ListTermElement);
         }
@@ -314,7 +320,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <returns>The HTML representation of the <c>&lt;description&gt;</c> element.</returns>
     protected virtual XElement TransformDescriptionElement(XElement element)
     {
-        if (visitedLists.Peek() == ListType.List)
+        if (visitedLists.Peek() == ListType.NonTable)
         {
             return CopyChildNodes(element, htmlConfiguration.ListDescriptionElement);
         }
