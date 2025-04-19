@@ -7,7 +7,7 @@
 
 @if (TypeParameters.Any())
 {
-    <span class="text-dark">&lt;</span>
+    <span>&lt;</span>
 
     @foreach (var p in TypeParameters)
     {
@@ -24,9 +24,9 @@
 
         @if (p != TypeParameters[^1])
         {
-            <span class="text-dark">, </span>
+            <span>, </span>
         }
     }
 
-    <span class="text-dark">&gt;</span>
+    <span>&gt;</span>
 }
