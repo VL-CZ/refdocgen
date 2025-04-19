@@ -67,7 +67,7 @@ internal class DocCommentHtmlConfiguration : IDocCommentHtmlConfiguration
     /// <inheritdoc />
     public XElement ListHeaderElement => new("thead");
 
-    public XElement TableListElement => new("table", new XAttribute("class", "table"));
+    public XElement TableListElement => new("table", new XAttribute("class", "table w-auto"));
 
     public XElement TableItemElement => new("tr");
 
@@ -77,7 +77,7 @@ internal class DocCommentHtmlConfiguration : IDocCommentHtmlConfiguration
                                                     " ",
                                                     new XElement("span"));
 
-    public XElement TableTermElement => new("td", new XElement("b"));
+    public XElement TableTermElement => new("td", new XAttribute("class", "text-muted"), new XElement("b"));
 
-    public XElement TableDescriptionElement => new("td");
+    public XElement TableDescriptionElement => new("td", new XAttribute("class", "text-muted"));
 }
