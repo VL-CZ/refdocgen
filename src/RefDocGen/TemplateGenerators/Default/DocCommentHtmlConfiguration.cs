@@ -40,7 +40,7 @@ internal class DocCommentHtmlConfiguration : IDocCommentHtmlConfiguration
     /// <inheritdoc />
     public virtual XElement SeeCrefElement =>
         new("a",
-            new XAttribute("class", "link-primary link-offset-2 link-underline-opacity-50 link-underline-opacity-100-hover")
+            new XAttribute("class", "link-offset-2 link-underline-opacity-50 link-underline-opacity-100-hover")
         );
 
     /// <inheritdoc />
