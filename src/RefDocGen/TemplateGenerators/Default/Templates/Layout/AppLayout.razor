@@ -25,6 +25,11 @@
 
     <title>Reference documentation</title>
 
+    <script>
+        const savedTheme = localStorage.getItem('refdocgen-theme') || "light"; // get the saved theme
+        document.documentElement.setAttribute('data-bs-theme', savedTheme); // set the 'data-bs-theme' attribute
+    </script>
+
     <!-- Custom global CSS -->
     <link href="@templateStylesUrl" rel="stylesheet" />
 
@@ -39,10 +44,9 @@
         <!-- Custom global CSS -->
         <link href="@customStylesUrl" rel="stylesheet" />
     }
-
 </head>
 
-<body data-bs-theme="light">
+<body>
     <MenuComponent NestingLevel="@NestingLevel" />
 
     <div class="container my-4" data-id="page-body">

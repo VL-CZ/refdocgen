@@ -40,23 +40,17 @@ function main() {
     }
 
     // TODO
-    const currentTheme = document.getElementById('theme-switcher');
-    const htmlElement = document.body;
+    const themeSwitcher = document.getElementById('theme-switcher');
 
-    currentTheme.addEventListener('click', function () {
+    themeSwitcher.addEventListener('click', function () {
+        const htmlElement = document.documentElement;
+
         const currentTheme = htmlElement.getAttribute('data-bs-theme');
         const newTheme = currentTheme === 'light' ? 'dark' : 'light';
         htmlElement.setAttribute('data-bs-theme', newTheme);
 
-        localStorage.setItem('theme', newTheme);
+        localStorage.setItem('refdocgen-theme', newTheme);
     });
-
-    const savedTheme = localStorage.getItem('theme');
-
-    if (savedTheme) {
-        htmlElement.setAttribute('data-bs-theme', savedTheme);
-    }
-
 }
 
 window.addEventListener('load', main);
