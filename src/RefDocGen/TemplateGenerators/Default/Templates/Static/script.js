@@ -1,4 +1,5 @@
-function main() {
+
+function fetchVersions() {
     // Get the original <ul> and its <li> items
 
     const versionListElement = document.getElementById('version-list');
@@ -38,19 +39,26 @@ function main() {
             newUl.appendChild(newLi);
         });
     }
+}
 
-    // TODO
+function switchTheme() {
+    const htmlElement = document.documentElement;
+
+    const currentTheme = htmlElement.getAttribute('data-bs-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    htmlElement.setAttribute('data-bs-theme', newTheme);
+
+    localStorage.setItem('refdocgen-theme', newTheme);
+}
+
+function main() {
+
+    // fetch versions
+    fetchVersions();
+
+    // switch theme on click
     const themeSwitcher = document.getElementById('theme-switcher');
-
-    themeSwitcher.addEventListener('click', function () {
-        const htmlElement = document.documentElement;
-
-        const currentTheme = htmlElement.getAttribute('data-bs-theme');
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        htmlElement.setAttribute('data-bs-theme', newTheme);
-
-        localStorage.setItem('refdocgen-theme', newTheme);
-    });
+    themeSwitcher.addEventListener('click', switchTheme);
 }
 
 window.addEventListener('load', main);
