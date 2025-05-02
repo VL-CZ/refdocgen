@@ -13717,6 +13717,7 @@ textarea.form-control-lg {
 
 html {
     scroll-padding-top: 60px;
+    padding-bottom: 50px;
 }
 
 /* Style the anchor link */

@@ -21,6 +21,12 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 /// </param>
 /// <param name="SeeAlsoDocComments">Collection of <c>seealso</c> documentation comments for the delegate.</param>
 /// <param name="Attributes">Array of attributes applied to the delegate.</param>
+/// <param name="DeclaringType">
+/// The type that contains the declaration of this type.
+/// <para>
+/// <c>null</c> if the type is not nested.
+/// </para>
+/// </param>
 public record DelegateTypeTM(
     string Id,
     string Name,
@@ -31,6 +37,7 @@ public record DelegateTypeTM(
     ParameterTM[] Parameters,
     TypeParameterTM[] TypeParameters,
     AttributeTM[] Attributes,
+    TypeLinkTM? DeclaringType,
     string? SummaryDocComment,
     string? RemarksDocComment,
     string? ReturnsDocComment,
