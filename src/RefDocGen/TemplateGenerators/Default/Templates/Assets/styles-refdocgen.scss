@@ -1,0 +1,117 @@
+@use "bootstrap.css";
+
+.refdocgen-text-primary {
+  @extend .text-body-emphasis;
+}
+
+.refdocgen-link-primary {
+  @extend .link-body-emphasis;
+  @extend .refdocgen-link;
+}
+
+.refdocgen-link {
+  @extend .link-offset-2;
+  @extend .link-underline-opacity-0;
+  @extend .link-underline-opacity-75-hover;
+}
+
+// Light theme styles
+[data-bs-theme="light"] {
+  .refdocgen-text-secondary {
+    @extend .text-secondary;
+  }
+
+  .refdocgen-text-tertiary {
+    @extend .text-primary;
+  }
+
+  .refdocgen-text-green {
+    @extend .text-success;
+  }
+
+  .refdocgen-link-secondary {
+    @extend .link-secondary;
+    @extend .refdocgen-link;
+  }
+
+  .menu-bg {
+    @extend .bg-body-secondary;
+  }
+}
+
+// Dark theme styles
+[data-bs-theme="dark"] {
+  .refdocgen-text-secondary {
+    @extend .text-warning-emphasis;
+  }
+
+  .refdocgen-text-tertiary {
+    @extend .text-primary-emphasis;
+  }
+
+  .refdocgen-text-green {
+    @extend .text-success-emphasis;
+  }
+
+  .refdocgen-link-secondary {
+    @extend .link-warning;
+    @extend .text-warning-emphasis;
+    @extend .refdocgen-link;
+  }
+
+  .menu-bg {
+    @extend .bg-body-tertiary;
+  }
+
+  .anchor-link {
+    @extend .text-success-emphasis;
+  }
+}
+
+.display-1 {
+  font-size: 4rem !important;
+}
+
+.display-2 {
+  font-size: 3.5rem !important;
+}
+
+.display-3 {
+  font-size: 3rem !important;
+}
+
+.display-4 {
+  font-size: 2.5rem !important;
+}
+
+.display-5 {
+  font-size: 2rem !important;
+}
+
+.display-6 {
+  font-size: 1.5rem !important;
+}
+
+html {
+  scroll-padding-top: 60px;
+  padding-bottom: 50px;
+}
+
+/* Style the anchor link */
+.anchor-link {
+  visibility: hidden;
+  font-size: 1.25rem;
+  @extend .link-underline-opacity-0;
+  @extend .link-opacity-75;
+  @extend .link-success;
+}
+
+/* Reveal the anchor link on hover */
+h6:hover .anchor-link {
+  visibility: visible;
+}
+
+#version-list,
+#current-version {
+  display: none;
+}
