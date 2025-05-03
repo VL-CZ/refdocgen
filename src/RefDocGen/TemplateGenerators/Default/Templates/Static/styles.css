@@ -7634,13 +7634,13 @@ textarea.form-control-lg {
         text-decoration-color: RGBA(86, 94, 100, var(--bs-link-underline-opacity, 1)) !important;
     }
 
-.link-success {
+.link-success, .anchor-link {
     color: RGBA(var(--bs-success-rgb), var(--bs-link-opacity, 1)) !important;
     -webkit-text-decoration-color: RGBA(var(--bs-success-rgb), var(--bs-link-underline-opacity, 1)) !important;
     text-decoration-color: RGBA(var(--bs-success-rgb), var(--bs-link-underline-opacity, 1)) !important;
 }
 
-    .link-success:hover, .link-success:focus {
+    .link-success:hover, .anchor-link:hover, .link-success:focus, .anchor-link:focus {
         color: RGBA(20, 108, 67, var(--bs-link-opacity, 1)) !important;
         -webkit-text-decoration-color: RGBA(20, 108, 67, var(--bs-link-underline-opacity, 1)) !important;
         text-decoration-color: RGBA(20, 108, 67, var(--bs-link-underline-opacity, 1)) !important;
@@ -9262,7 +9262,7 @@ textarea.form-control-lg {
     color: rgba(var(--bs-secondary-rgb), var(--bs-text-opacity)) !important;
 }
 
-.text-success {
+.text-success, [data-bs-theme=light] .refdocgen-text-green {
     --bs-text-opacity: 1;
     color: rgba(var(--bs-success-rgb), var(--bs-text-opacity)) !important;
 }
@@ -9366,7 +9366,7 @@ textarea.form-control-lg {
     color: var(--bs-secondary-text-emphasis) !important;
 }
 
-.text-success-emphasis, [data-bs-theme=dark] .text-success {
+.text-success-emphasis, [data-bs-theme=dark] .refdocgen-text-green, [data-bs-theme=dark] .anchor-link {
     color: var(--bs-success-text-emphasis) !important;
 }
 
@@ -9414,7 +9414,7 @@ textarea.form-control-lg {
     --bs-link-opacity: 0.5;
 }
 
-.link-opacity-75 {
+.link-opacity-75, .anchor-link {
     --bs-link-opacity: 0.75;
 }
 
@@ -9508,7 +9508,7 @@ textarea.form-control-lg {
     text-decoration-color: rgba(var(--bs-link-color-rgb), var(--bs-link-underline-opacity, 1)) !important;
 }
 
-.link-underline-opacity-0, .refdocgen-link, .refdocgen-link-primary, [data-bs-theme=light] .refdocgen-link-secondary, [data-bs-theme=dark] .refdocgen-link-secondary {
+.link-underline-opacity-0, .refdocgen-link, .refdocgen-link-primary, [data-bs-theme=light] .refdocgen-link-secondary, [data-bs-theme=dark] .refdocgen-link-secondary, .anchor-link {
     --bs-link-underline-opacity: 0;
 }
 
