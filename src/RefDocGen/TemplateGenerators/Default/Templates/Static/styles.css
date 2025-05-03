@@ -3397,7 +3397,7 @@ textarea.form-control-lg {
     opacity: var(--bs-btn-disabled-opacity);
 }
 
-.btn-primary, [data-bs-theme=light] .custom-button {
+.btn-primary {
     --bs-btn-color: #fff;
     --bs-btn-bg: #0d6efd;
     --bs-btn-border-color: #0d6efd;
@@ -3465,7 +3465,7 @@ textarea.form-control-lg {
     --bs-btn-disabled-border-color: #0dcaf0;
 }
 
-.btn-warning, [data-bs-theme=dark] .custom-button {
+.btn-warning {
     --bs-btn-color: #000;
     --bs-btn-bg: #ffc107;
     --bs-btn-border-color: #ffc107;
@@ -4845,7 +4845,7 @@ textarea.form-control-lg {
             overflow-y: visible;
         }
 
-.navbar-dark, [data-bs-theme=light] .custom-navbar,
+.navbar-dark,
 .navbar[data-bs-theme=dark] {
     --bs-navbar-color: rgba(255, 255, 255, 0.55);
     --bs-navbar-hover-color: rgba(255, 255, 255, 0.75);
@@ -7622,13 +7622,13 @@ textarea.form-control-lg {
         text-decoration-color: RGBA(10, 88, 202, var(--bs-link-underline-opacity, 1)) !important;
     }
 
-.link-secondary {
+.link-secondary, [data-bs-theme=light] .refdocgen-link-secondary {
     color: RGBA(var(--bs-secondary-rgb), var(--bs-link-opacity, 1)) !important;
     -webkit-text-decoration-color: RGBA(var(--bs-secondary-rgb), var(--bs-link-underline-opacity, 1)) !important;
     text-decoration-color: RGBA(var(--bs-secondary-rgb), var(--bs-link-underline-opacity, 1)) !important;
 }
 
-    .link-secondary:hover, .link-secondary:focus {
+    .link-secondary:hover, [data-bs-theme=light] .refdocgen-link-secondary:hover, .link-secondary:focus, [data-bs-theme=light] .refdocgen-link-secondary:focus {
         color: RGBA(86, 94, 100, var(--bs-link-opacity, 1)) !important;
         -webkit-text-decoration-color: RGBA(86, 94, 100, var(--bs-link-underline-opacity, 1)) !important;
         text-decoration-color: RGBA(86, 94, 100, var(--bs-link-underline-opacity, 1)) !important;
@@ -7646,25 +7646,25 @@ textarea.form-control-lg {
         text-decoration-color: RGBA(20, 108, 67, var(--bs-link-underline-opacity, 1)) !important;
     }
 
-.link-info, [data-bs-theme=dark] .link-primary {
+.link-info {
     color: RGBA(var(--bs-info-rgb), var(--bs-link-opacity, 1)) !important;
     -webkit-text-decoration-color: RGBA(var(--bs-info-rgb), var(--bs-link-underline-opacity, 1)) !important;
     text-decoration-color: RGBA(var(--bs-info-rgb), var(--bs-link-underline-opacity, 1)) !important;
 }
 
-    .link-info:hover, [data-bs-theme=dark] .link-primary:hover, .link-info:focus, [data-bs-theme=dark] .link-primary:focus {
+    .link-info:hover, .link-info:focus {
         color: RGBA(61, 213, 243, var(--bs-link-opacity, 1)) !important;
         -webkit-text-decoration-color: RGBA(61, 213, 243, var(--bs-link-underline-opacity, 1)) !important;
         text-decoration-color: RGBA(61, 213, 243, var(--bs-link-underline-opacity, 1)) !important;
     }
 
-.link-warning, [data-bs-theme=dark] .link-secondary {
+.link-warning, [data-bs-theme=dark] .refdocgen-link-secondary {
     color: RGBA(var(--bs-warning-rgb), var(--bs-link-opacity, 1)) !important;
     -webkit-text-decoration-color: RGBA(var(--bs-warning-rgb), var(--bs-link-underline-opacity, 1)) !important;
     text-decoration-color: RGBA(var(--bs-warning-rgb), var(--bs-link-underline-opacity, 1)) !important;
 }
 
-    .link-warning:hover, [data-bs-theme=dark] .link-secondary:hover, .link-warning:focus, [data-bs-theme=dark] .link-secondary:focus {
+    .link-warning:hover, [data-bs-theme=dark] .refdocgen-link-secondary:hover, .link-warning:focus, [data-bs-theme=dark] .refdocgen-link-secondary:focus {
         color: RGBA(255, 205, 57, var(--bs-link-opacity, 1)) !important;
         -webkit-text-decoration-color: RGBA(255, 205, 57, var(--bs-link-underline-opacity, 1)) !important;
         text-decoration-color: RGBA(255, 205, 57, var(--bs-link-underline-opacity, 1)) !important;
@@ -7706,13 +7706,13 @@ textarea.form-control-lg {
         text-decoration-color: RGBA(26, 30, 33, var(--bs-link-underline-opacity, 1)) !important;
     }
 
-.link-body-emphasis {
+.link-body-emphasis, .refdocgen-link-primary {
     color: RGBA(var(--bs-emphasis-color-rgb), var(--bs-link-opacity, 1)) !important;
     -webkit-text-decoration-color: RGBA(var(--bs-emphasis-color-rgb), var(--bs-link-underline-opacity, 1)) !important;
     text-decoration-color: RGBA(var(--bs-emphasis-color-rgb), var(--bs-link-underline-opacity, 1)) !important;
 }
 
-    .link-body-emphasis:hover, .link-body-emphasis:focus {
+    .link-body-emphasis:hover, .refdocgen-link-primary:hover, .link-body-emphasis:focus, .refdocgen-link-primary:focus {
         color: RGBA(var(--bs-emphasis-color-rgb), var(--bs-link-opacity, 0.75)) !important;
         -webkit-text-decoration-color: RGBA(var(--bs-emphasis-color-rgb), var(--bs-link-underline-opacity, 0.75)) !important;
         text-decoration-color: RGBA(var(--bs-emphasis-color-rgb), var(--bs-link-underline-opacity, 0.75)) !important;
@@ -9252,12 +9252,12 @@ textarea.form-control-lg {
 }
 
 /* rtl:end:remove */
-.text-primary {
+.text-primary, [data-bs-theme=light] .refdocgen-text-tertiary {
     --bs-text-opacity: 1;
     color: rgba(var(--bs-primary-rgb), var(--bs-text-opacity)) !important;
 }
 
-.text-secondary {
+.text-secondary, [data-bs-theme=light] .refdocgen-text-secondary {
     --bs-text-opacity: 1;
     color: rgba(var(--bs-secondary-rgb), var(--bs-text-opacity)) !important;
 }
@@ -9332,7 +9332,7 @@ textarea.form-control-lg {
     color: var(--bs-tertiary-color) !important;
 }
 
-.text-body-emphasis {
+.text-body-emphasis, .refdocgen-text-primary {
     --bs-text-opacity: 1;
     color: var(--bs-emphasis-color) !important;
 }
@@ -9358,7 +9358,7 @@ textarea.form-control-lg {
     --bs-text-opacity: 1;
 }
 
-.text-primary-emphasis, [data-bs-theme=dark] .text-primary {
+.text-primary-emphasis, [data-bs-theme=dark] .refdocgen-text-tertiary {
     color: var(--bs-primary-text-emphasis) !important;
 }
 
@@ -9374,7 +9374,7 @@ textarea.form-control-lg {
     color: var(--bs-info-text-emphasis) !important;
 }
 
-.text-warning-emphasis, [data-bs-theme=dark] .text-secondary, [data-bs-theme=dark] .link-secondary {
+.text-warning-emphasis, [data-bs-theme=dark] .refdocgen-text-secondary, [data-bs-theme=dark] .refdocgen-link-secondary {
     color: var(--bs-warning-text-emphasis) !important;
 }
 
@@ -9438,7 +9438,7 @@ textarea.form-control-lg {
     text-underline-offset: 0.125em !important;
 }
 
-.link-offset-2 {
+.link-offset-2, .refdocgen-link, .refdocgen-link-primary, [data-bs-theme=light] .refdocgen-link-secondary, [data-bs-theme=dark] .refdocgen-link-secondary {
     text-underline-offset: 0.25em !important;
 }
 
@@ -9508,7 +9508,7 @@ textarea.form-control-lg {
     text-decoration-color: rgba(var(--bs-link-color-rgb), var(--bs-link-underline-opacity, 1)) !important;
 }
 
-.link-underline-opacity-0 {
+.link-underline-opacity-0, .refdocgen-link, .refdocgen-link-primary, [data-bs-theme=light] .refdocgen-link-secondary, [data-bs-theme=dark] .refdocgen-link-secondary {
     --bs-link-underline-opacity: 0;
 }
 
@@ -9544,7 +9544,7 @@ textarea.form-control-lg {
     --bs-link-underline-opacity: 0.75;
 }
 
-.link-underline-opacity-75-hover:hover {
+.link-underline-opacity-75-hover:hover, .refdocgen-link:hover, .refdocgen-link-primary:hover, [data-bs-theme=light] .refdocgen-link-secondary:hover, [data-bs-theme=dark] .refdocgen-link-secondary:hover {
     --bs-link-underline-opacity: 0.75;
 }
 
@@ -9556,7 +9556,7 @@ textarea.form-control-lg {
     --bs-link-underline-opacity: 1;
 }
 
-.bg-primary, [data-bs-theme=light] .custom-navbar {
+.bg-primary {
     --bs-bg-opacity: 1;
     background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important;
 }
@@ -9616,12 +9616,12 @@ textarea.form-control-lg {
     background-color: transparent !important;
 }
 
-.bg-body-secondary, [data-bs-theme=light] .top-menu {
+.bg-body-secondary, [data-bs-theme=light] .menu-bg {
     --bs-bg-opacity: 1;
     background-color: rgba(var(--bs-secondary-bg-rgb), var(--bs-bg-opacity)) !important;
 }
 
-.bg-body-tertiary, [data-bs-theme=dark] .custom-navbar, [data-bs-theme=dark] .top-menu {
+.bg-body-tertiary, [data-bs-theme=dark] .menu-bg {
     --bs-bg-opacity: 1;
     background-color: rgba(var(--bs-tertiary-bg-rgb), var(--bs-bg-opacity)) !important;
 }
@@ -13731,7 +13731,8 @@ h6:hover .anchor-link {
     visibility: visible;
 }
 
-#version-list, #current-version {
+#version-list,
+#current-version {
     display: none;
 }
 
