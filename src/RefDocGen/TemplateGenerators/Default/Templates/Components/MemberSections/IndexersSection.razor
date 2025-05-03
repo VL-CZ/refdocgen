@@ -13,7 +13,7 @@
             <div class="border p-2 mb-2" id="@indexer.Id" data-id="member-data">
                 <h6 class="mb-1" data-id="member-name">
                     <samp>
-                        <span class="text-primary">
+                        <span class="refdocgen-text-tertiary">
                             @string.Join(' ', indexer.Modifiers)
                         </span>
 
@@ -23,7 +23,7 @@
                         {
                             var lastParam = indexer.Parameters.Last();
 
-                            <span> this</span>
+                            <span class="refdocgen-text-primary"> this</span>
 
                             <ParametersString Parameters=indexer.Parameters Prefix="[" Suffix="]" />
 

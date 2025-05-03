@@ -22,13 +22,13 @@
             <div class="border p-2 mb-2" id="@method.Id" data-id="member-data">
                 <h6 class="mb-1" data-id="member-name">
                     <samp>
-                        <span class="text-primary">
+                        <span class="refdocgen-text-tertiary">
                             @string.Join(' ', method.Modifiers)
                         </span>
 
                         <TypeLink Type="@method.ReturnType" />
 
-                        <span>
+                        <span class="refdocgen-text-primary">
                             @method.Name
                         </span><TypeParametersString TypeParameters="@method.TypeParameters" /><ParametersString Parameters="@method.Parameters" />
 
