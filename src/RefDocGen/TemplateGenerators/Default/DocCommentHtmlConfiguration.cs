@@ -11,7 +11,6 @@ internal class DocCommentHtmlConfiguration : IDocCommentHtmlConfiguration
 {
     /// <inheritdoc />
     public virtual XElement ParagraphElement => new XElement("div").WithClass("refdocgen-paragraph");
-    //, new XAttribute("class", "refdocgen-paragraph"), new XAttribute("class", "mx-2"));
 
     /// <inheritdoc />
     public virtual XElement BulletListElement => new XElement("ul").WithClass("refdocgen-bullet-list");
@@ -41,9 +40,6 @@ internal class DocCommentHtmlConfiguration : IDocCommentHtmlConfiguration
 
     /// <inheritdoc />
     public virtual XElement SeeCrefElement => new XElement("a").WithClass("refdocgen-see-cref");
-    //new("a",
-    //    new XAttribute("class", "link-offset-2 link-underline-opacity-50 link-underline-opacity-100-hover")
-    //);
 
     /// <inheritdoc />
     public virtual XElement SeeHrefElement => new XElement("a").WithClass("refdocgen-see-href");
@@ -68,7 +64,6 @@ internal class DocCommentHtmlConfiguration : IDocCommentHtmlConfiguration
 
     /// <inheritdoc />
     public virtual XElement TableListElement => new XElement("table").WithClass("refdocgen-table");
-    //, new XAttribute("class", "table w-auto"));
 
     /// <inheritdoc />
     public virtual XElement TableItemElement => new XElement("tr").WithClass("refdocgen-table-item");
@@ -83,10 +78,7 @@ internal class DocCommentHtmlConfiguration : IDocCommentHtmlConfiguration
 
     /// <inheritdoc />
     public XElement TableTermElement => new XElement("td").WithClass("refdocgen-table-term");
-    //new XAttribute("class", "text-muted")
-    //new XAttribute("class", "text-muted")
 
     /// <inheritdoc />
     public XElement TableDescriptionElement => new XElement("td").WithClass("refdocgen-table-element");
-    //new XAttribute("class", "text-muted")
 }

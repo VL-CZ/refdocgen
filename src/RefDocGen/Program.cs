@@ -24,7 +24,7 @@ public static class Program
         string projectPath = Path.Join(rootPath, "src", "RefDocGen");
         string outputDir = Path.Combine(projectPath, "out-versions");
         string staticPagesDir = "C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\demo-lib\\pages";
-        string? version = "v1.8";
+        string? version = "v1.9";
 
         var minVisibility = AccessModifier.Private;
         var memberInheritanceMode = MemberInheritanceMode.NonObject;
