@@ -31,14 +31,14 @@
         document.documentElement.setAttribute('data-bs-theme', savedTheme); // set the 'data-bs-theme' attribute
     </script>
 
-    <!-- Custom global CSS -->
+    <!-- Global CSS (Bootstrap + custom styles) -->
     <link href="@stylesUrl" rel="stylesheet" />
 
     @if (CustomStyles is not null)
     {
         string customStylesUrl = UrlHelper.GetRelativeUrl(CustomStyles, NestingLevel);
 
-        <!-- Custom global CSS -->
+        <!-- Custom CSS for static pages -->
         <link href="@customStylesUrl" rel="stylesheet" />
     }
 </head>
@@ -58,7 +58,7 @@
     <!-- Bootstrap JS -->
     <script src="@boostrapJsUrl"></script>
 
-    <!-- Custom script -->
+    <!-- Custom JS -->
     <script src="@customJsUrl"></script>
 </body>
 </html>
