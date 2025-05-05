@@ -7,26 +7,26 @@
 
 @if (TypeParameters.Any())
 {
-    <span class="text-dark">&lt;</span>
+    <span>&lt;</span>
 
     @foreach (var p in TypeParameters)
     {
         @if (p.Modifiers.Any())
         {
-            <span class="text-primary">
+            <span class="refdocgen-text-tertiary">
                 @string.Join(' ', p.Modifiers)
             </span>
             <span> </span>
         }
-        <span class="text-secondary">
+        <span class="refdocgen-text-secondary">
             @p.Name
         </span>
 
         @if (p != TypeParameters[^1])
         {
-            <span class="text-dark">, </span>
+            <span>, </span>
         }
     }
 
-    <span class="text-dark">&gt;</span>
+    <span>&gt;</span>
 }

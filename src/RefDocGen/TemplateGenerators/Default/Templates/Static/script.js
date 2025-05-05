@@ -1,38 +1,64 @@
-function main() {
+
+function fetchVersions() {
     // Get the original <ul> and its <li> items
-    const versionsJson = document.getElementById('version-list').innerText;
-    const versionItems = JSON.parse(versionsJson).reverse();
 
-    const currentVersion = document.getElementById('current-version').innerText.trim();
+    const versionListElement = document.getElementById('version-list');
 
-    // Create a new <ul> element
-    const newUl = document.getElementById('version-selector');
+    if (versionListElement) {
 
-    // Loop through each version and create a new <li> with a <a> inside
-    versionItems.forEach(item => {
-        const versionText = item.trim(); // Get the version text
-        const newLi = document.createElement('li');
-        const newA = document.createElement('a');
+        const versionsJson = versionListElement.innerText;
+        const versionItems = JSON.parse(versionsJson).reverse();
 
-        // Set the href and class for the <a> tag
-        newA.classList.add('dropdown-item');
+        const currentVersion = document.getElementById('current-version').innerText.trim();
 
-        const currentUrl = window.location.href;
-        const newUrl = currentUrl.replace(currentVersion, versionText);
+        // Create a new <ul> element
+        const newUl = document.getElementById('version-selector');
 
-        newA.href = newUrl;
+        // Loop through each version and create a new <li> with a <a> inside
+        versionItems.forEach(item => {
+            const versionText = item.trim(); // Get the version text
+            const newLi = document.createElement('li');
+            const newA = document.createElement('a');
 
-        newA.textContent = versionText;
+            // Set the href and class for the <a> tag
+            newA.classList.add('dropdown-item');
 
-        if (versionText === currentVersion) {
-            newA.textContent += " (Current)";
-        }
+            const currentUrl = window.location.href;
+            const newUrl = currentUrl.replace(currentVersion, versionText);
 
-        // Append the <a> to the <li> and the <li> to the new <ul>
-        newLi.appendChild(newA);
-        newUl.appendChild(newLi);
-    });
+            newA.href = newUrl;
 
+            newA.textContent = versionText;
+
+            if (versionText === currentVersion) {
+                newA.textContent += " (Current)";
+            }
+
+            // Append the <a> to the <li> and the <li> to the new <ul>
+            newLi.appendChild(newA);
+            newUl.appendChild(newLi);
+        });
+    }
+}
+
+function switchTheme() {
+    const htmlElement = document.documentElement;
+
+    const currentTheme = htmlElement.getAttribute('data-bs-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    htmlElement.setAttribute('data-bs-theme', newTheme);
+
+    localStorage.setItem('refdocgen-theme', newTheme);
+}
+
+function main() {
+
+    // fetch versions
+    fetchVersions();
+
+    // switch theme on click
+    const themeSwitcher = document.getElementById('theme-switcher');
+    themeSwitcher.addEventListener('click', switchTheme);
 }
 
 window.addEventListener('load', main);

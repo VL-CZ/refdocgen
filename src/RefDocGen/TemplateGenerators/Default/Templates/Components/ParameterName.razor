@@ -8,7 +8,7 @@
 
 @if (Parameter.Modifiers.Any())
 {
-    <span class="text-primary">
+    <span class="refdocgen-text-tertiary">
         @string.Join(' ', Parameter.Modifiers)
     </span>
     <span> </span>
@@ -16,6 +16,6 @@
 
 <TypeLink Type="@Parameter.Type" />
 
-<span class="text-dark">
+<span>
     @Parameter.Name
 </span>

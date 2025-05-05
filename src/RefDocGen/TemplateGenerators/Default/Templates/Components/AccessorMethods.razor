@@ -17,7 +17,7 @@
     public required string[] SetterModifiers { get; set; }
 }
 
-<span class="text-secondary"> { </span>
+<span> { </span>
 
 @{
     var getterWithModifiers = HasGetter
@@ -35,15 +35,15 @@
 
 @if (HasGetter)
 {
-    <span class="text-primary">
-        @getterWithModifiers<span class="text-secondary">; </span>
+    <span class="refdocgen-text-tertiary">
+        @getterWithModifiers<span class="text-body">; </span>
     </span>
 }
 @if (HasSetter)
 {
-    <span class="text-primary">
-        @setterWithModifiers<span class="text-secondary">; </span>
+    <span class="refdocgen-text-tertiary">
+        @setterWithModifiers<span class="text-body">; </span>
     </span>
 }
 
-<span class="text-secondary"> }</span>
+<span> }</span>

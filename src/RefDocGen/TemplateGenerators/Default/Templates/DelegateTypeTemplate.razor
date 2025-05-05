@@ -31,6 +31,8 @@
 
                 <NamespaceLink Namespace="@Model.Namespace" />
 
+                <DeclaringTypeSection DeclaringType="@Model.DeclaringType" />
+
                 <hr />
 
                 <SummaryDoc DocComment="@Model.SummaryDocComment" />
@@ -54,11 +56,11 @@
                     <div class="border p-2 mb-2" data-id="delegate-method" id="delegate-method">
                         <h6 class="mb-1" data-id="member-name">
                             <samp>
-                                <span class="text-primary">@string.Join(' ', Model.Modifiers) delegate</span>
+                                <span class="refdocgen-text-tertiary">@string.Join(' ', Model.Modifiers) delegate</span>
 
                                 <TypeLink Type="@Model.ReturnType" />
 
-                                <span class="text-dark">
+                                <span>
                                     @Model.Name
                                 </span><TypeParametersString TypeParameters="@Model.TypeParameters" /><ParametersString Parameters="@Model.Parameters" />
                             </samp>

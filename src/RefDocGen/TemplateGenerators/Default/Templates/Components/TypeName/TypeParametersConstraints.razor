@@ -15,9 +15,10 @@
     {
         <h6 class="mx-3" data-id="type-param-constraints">
             <samp>
-                <span class="text-primary">where</span>
-                <span class="text-secondary">@tp.Name : </span>
-                <span class="text-primary">@string.Join(", ", tp.SpecialConstraints)</span>
+                <span class="refdocgen-text-tertiary">where</span>
+                <span class="refdocgen-text-secondary">@tp.Name</span>
+                <span> : </span>
+                <span class="refdocgen-text-tertiary">@string.Join(", ", tp.SpecialConstraints)</span>
 
                 @if (tp.TypeConstraints.Any())
                 {
@@ -25,7 +26,7 @@
 
                     @if (tp.SpecialConstraints.Any())
                     {
-                        <span class="text-primary">, </span>
+                        <span class="refdocgen-text-tertiary">, </span>
                     }
 
                     foreach (var constraint in tp.TypeConstraints)
