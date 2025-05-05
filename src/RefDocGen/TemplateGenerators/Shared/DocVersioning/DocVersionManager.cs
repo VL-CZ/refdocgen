@@ -2,7 +2,7 @@ using AngleSharp;
 using RefDocGen.Tools;
 using System.Text.Json;
 
-namespace RefDocGen.TemplateGenerators.Shared.Tools.DocVersioning;
+namespace RefDocGen.TemplateGenerators.Shared.DocVersioning;
 
 /// <summary>
 /// Class responsible for managing different versions of the documentation.

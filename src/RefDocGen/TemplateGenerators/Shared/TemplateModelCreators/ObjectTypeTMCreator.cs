@@ -4,10 +4,10 @@ using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Shared.Tools;
-using RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
+using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 
@@ -451,7 +451,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <param name="type">The provided type containing the member.</param>
     /// <param name="member">The member for which the URL is returned.</param>
     /// <returns><see cref="TypeLinkTM"/> corresponding to the provided <paramref name="type"/> and <paramref name="member"/>.</returns>
-    private TypeLinkTM? GetTypeMemberLink(ITypeNameData type, IMemberData member)
+    private TypeLinkTM GetTypeMemberLink(ITypeNameData type, IMemberData member)
     {
         return new TypeLinkTM(
             CSharpTypeName.Of(type) + "." + member.Name,

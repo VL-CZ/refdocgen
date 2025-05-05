@@ -1,6 +1,6 @@
 using System.Xml.Linq;
 
-namespace RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
+namespace RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 
 /// <summary>
 /// Defines the HTML representations for the XML doc comment elements.

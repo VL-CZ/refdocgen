@@ -1,4 +1,4 @@
-namespace RefDocGen.TemplateGenerators.Shared.Tools.StaticPages;
+namespace RefDocGen.TemplateGenerators.Shared.StaticPages;
 
 /// <summary>
 /// Represents a static page created by user.

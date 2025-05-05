@@ -1,11 +1,12 @@
 using RefDocGen.CodeElements.Abstract;
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.DocExtraction.Tools;
+using RefDocGen.TemplateGenerators.Shared.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 
-namespace RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
+namespace RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 
 /// <summary>
 /// Class responsible for transforming the XML doc comments into HTML.

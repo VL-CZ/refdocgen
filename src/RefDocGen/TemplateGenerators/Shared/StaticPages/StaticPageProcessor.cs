@@ -1,7 +1,7 @@
 using AngleSharp;
 using Markdig;
 
-namespace RefDocGen.TemplateGenerators.Shared.Tools.StaticPages;
+namespace RefDocGen.TemplateGenerators.Shared.StaticPages;
 
 /// <summary>
 /// Class responsible for handling all user-provided static pages.

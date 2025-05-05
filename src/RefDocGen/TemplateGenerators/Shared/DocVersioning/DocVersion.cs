@@ -1,4 +1,4 @@
-namespace RefDocGen.TemplateGenerators.Shared.Tools.DocVersioning;
+namespace RefDocGen.TemplateGenerators.Shared.DocVersioning;
 
 /// <summary>
 /// Represents a certain version of the documentation.

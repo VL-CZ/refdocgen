@@ -1,4 +1,4 @@
-namespace RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
+namespace RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 
 /// <summary>
 /// Type of the list.
