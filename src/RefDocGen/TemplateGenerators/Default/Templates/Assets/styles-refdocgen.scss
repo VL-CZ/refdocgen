@@ -1,5 +1,8 @@
-@use "bootstrap.css";
+@use "bootstrap-5.3.5-dist.css";
 
+// Compile by running `sass Assets/styles-refdocgen.scss Static/styles.css --style=compressed` from parent folder
+
+// Common styles for light & dark theme
 .refdocgen-text-primary {
   @extend .text-body-emphasis;
 }
@@ -68,6 +71,7 @@
   }
 }
 
+// Headings
 .display-1 {
   font-size: 4rem !important;
 }
@@ -97,7 +101,7 @@ html {
   padding-bottom: 50px;
 }
 
-/* Style the anchor link */
+// Anchor link
 .anchor-link {
   visibility: hidden;
   font-size: 1.25rem;
@@ -106,11 +110,11 @@ html {
   @extend .link-success;
 }
 
-/* Reveal the anchor link on hover */
 h6:hover .anchor-link {
   visibility: visible;
 }
 
+// Version-related elements
 #version-list,
 #current-version {
   display: none;
