@@ -1,3 +1,4 @@
+using RefDocGen.TemplateGenerators.Shared.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
 using System.Xml.Linq;
 
@@ -9,16 +10,17 @@ namespace RefDocGen.TemplateGenerators.Default;
 internal class DocCommentHtmlConfiguration : IDocCommentHtmlConfiguration
 {
     /// <inheritdoc />
-    public virtual XElement ParagraphElement => new("div", new XAttribute("class", "mx-2"));
+    public virtual XElement ParagraphElement => new XElement("div").WithClass("refdocgen-paragraph");
+    //, new XAttribute("class", "refdocgen-paragraph"), new XAttribute("class", "mx-2"));
 
     /// <inheritdoc />
-    public virtual XElement BulletListElement => new("ul");
+    public virtual XElement BulletListElement => new XElement("ul").WithClass("refdocgen-bullet-list");
 
     /// <inheritdoc />
-    public virtual XElement NumberListElement => new("ol");
+    public virtual XElement NumberListElement => new XElement("ol").WithClass("refdocgen-number-list");
 
     /// <inheritdoc />
-    public virtual XElement ListItemElement => new("li");
+    public virtual XElement ListItemElement => new XElement("li").WithClass("refdocgen-list-item");
 
     /// <inheritdoc />
     public virtual XElement InlineCodeElement => new("code");

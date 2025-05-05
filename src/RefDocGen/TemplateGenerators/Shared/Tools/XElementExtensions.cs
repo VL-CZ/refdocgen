@@ -41,4 +41,16 @@ internal static class XElementExtensions
         target.Name = source.Name;
         target.ReplaceAll(source.Attributes(), source.Nodes());
     }
+
+    /// <summary>
+    /// Adds a 'class' attribute to an XML element.
+    /// </summary>
+    /// <param name="element">The XML element.</param>
+    /// <param name="className">Value of the 'class' attribute to add.</param>
+    /// <returns></returns>
+    internal static XElement WithClass(this XElement element, string className)
+    {
+        element.SetAttributeValue("class", className);
+        return element;
+    }
 }
