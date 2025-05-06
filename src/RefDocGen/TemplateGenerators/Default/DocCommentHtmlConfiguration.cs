@@ -69,12 +69,10 @@ internal class DocCommentHtmlConfiguration : IDocCommentHtmlConfiguration
     public virtual XElement TableItemElement => new XElement("tr").WithClass("refdocgen-table-item");
 
     /// <inheritdoc />
-    public virtual XElement ListTermElement => new XElement("b").WithClass("refdocgen-list-term");
+    public virtual XElement ListTermElement => new XElement("span").WithClass("refdocgen-list-term");
 
     /// <inheritdoc />
-    public XElement ListDescriptionElement => new("span",
-                                                    " ",
-                                                    new XElement("span").WithClass("refdocgen-list-description"));
+    public XElement ListDescriptionElement => new XElement("span").WithClass("refdocgen-list-description");
 
     /// <inheritdoc />
     public XElement TableTermElement => new XElement("td").WithClass("refdocgen-table-term");

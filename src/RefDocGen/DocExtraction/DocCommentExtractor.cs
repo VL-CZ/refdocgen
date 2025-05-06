@@ -110,8 +110,8 @@ internal class DocCommentExtractor
         typeInheritDocHandler = new(typeRegistry);
         crefInheritDocHandler = new(typeRegistry);
 
-        // load the document
-        xmlDocument = XDocument.Load(docXmlPath);
+        // load the document (preserve the whitespace, as the documentation is to be converted into HTML)
+        xmlDocument = XDocument.Load(docXmlPath, LoadOptions.PreserveWhitespace);
     }
 
     /// <summary>

@@ -86,6 +86,10 @@
     @extend .fw-bold;
 }
 
+.refdocgen-list-term {
+    @extend .fw-bold;
+}
+
 .refdocgen-table-element {
     @extend .text-body-secondary;
 }
