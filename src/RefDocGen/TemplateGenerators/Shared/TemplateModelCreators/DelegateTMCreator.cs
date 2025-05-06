@@ -1,6 +1,6 @@
 using RefDocGen.CodeElements.Abstract.Types.Delegate;
+using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
-using RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;

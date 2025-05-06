@@ -1,5 +1,5 @@
+using RefDocGen.TemplateGenerators.Shared.StaticPages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu;
-using RefDocGen.TemplateGenerators.Shared.Tools.StaticPages;
 using RefDocGen.Tools;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;

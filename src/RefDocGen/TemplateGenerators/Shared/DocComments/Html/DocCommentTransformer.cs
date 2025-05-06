@@ -1,16 +1,17 @@
 using RefDocGen.CodeElements.Abstract;
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.DocExtraction.Tools;
+using RefDocGen.TemplateGenerators.Shared.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 
-namespace RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
+namespace RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 
 /// <summary>
 /// Class responsible for transforming the XML doc comments into HTML.
 /// </summary>
-internal class DefaultDocCommentTransformer : IDocCommentTransformer
+internal class DocCommentTransformer : IDocCommentTransformer
 {
     /// <summary>
     /// <c>div</c> element name.
@@ -47,7 +48,7 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     ];
 
     /// <summary>
-    /// Initializes a new instance of <see cref="DefaultDocCommentTransformer"/> class.
+    /// Initializes a new instance of <see cref="DocCommentTransformer"/> class.
     /// </summary>
     /// <param name="typeRegistry">
     /// <inheritdoc cref="TypeRegistry"/>
@@ -55,15 +56,15 @@ internal class DefaultDocCommentTransformer : IDocCommentTransformer
     /// <param name="htmlConfiguration">
     /// <inheritdoc cref="htmlConfiguration"/>
     /// </param>
-    internal DefaultDocCommentTransformer(IDocCommentHtmlConfiguration htmlConfiguration, ITypeRegistry typeRegistry)
+    internal DocCommentTransformer(IDocCommentHtmlConfiguration htmlConfiguration, ITypeRegistry typeRegistry)
     {
         this.htmlConfiguration = htmlConfiguration;
         this.typeRegistry = typeRegistry;
         TypeUrlResolver = new(typeRegistry);
     }
 
-    /// <inheritdoc cref="DefaultDocCommentTransformer(IDocCommentHtmlConfiguration, ITypeRegistry)"/>
-    internal DefaultDocCommentTransformer(IDocCommentHtmlConfiguration htmlConfiguration)
+    /// <inheritdoc cref="DocCommentTransformer(IDocCommentHtmlConfiguration, ITypeRegistry)"/>
+    internal DocCommentTransformer(IDocCommentHtmlConfiguration htmlConfiguration)
     {
         this.htmlConfiguration = htmlConfiguration;
     }

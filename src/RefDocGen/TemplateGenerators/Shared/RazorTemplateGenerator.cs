@@ -4,13 +4,13 @@ using RefDocGen.CodeElements.Abstract;
 using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.CodeElements.Abstract.Types.Delegate;
 using RefDocGen.CodeElements.Abstract.Types.Enum;
+using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
+using RefDocGen.TemplateGenerators.Shared.DocVersioning;
+using RefDocGen.TemplateGenerators.Shared.StaticPages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
-using RefDocGen.TemplateGenerators.Shared.Tools.DocComments.Html;
-using RefDocGen.TemplateGenerators.Shared.Tools.DocVersioning;
-using RefDocGen.TemplateGenerators.Shared.Tools.StaticPages;
 using RefDocGen.Tools;
 
 namespace RefDocGen.TemplateGenerators.Shared;
