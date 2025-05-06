@@ -1,8 +1,7 @@
 using RefDocGen.TemplateGenerators.Shared.Tools;
-using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using System.Xml.Linq;
 
-namespace RefDocGen.TemplateGenerators.Default;
+namespace RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 
 /// <summary>
 /// Default configuration for transforming the XML documentation elements into their HTML representations.
@@ -72,11 +71,11 @@ internal class DocCommentHtmlConfiguration : IDocCommentHtmlConfiguration
     public virtual XElement ListTermElement => new XElement("span").WithClass("refdocgen-list-term");
 
     /// <inheritdoc />
-    public XElement ListDescriptionElement => new XElement("span").WithClass("refdocgen-list-description");
+    public virtual XElement ListDescriptionElement => new XElement("span").WithClass("refdocgen-list-description");
 
     /// <inheritdoc />
-    public XElement TableTermElement => new XElement("td").WithClass("refdocgen-table-term");
+    public virtual XElement TableTermElement => new XElement("td").WithClass("refdocgen-table-term");
 
     /// <inheritdoc />
-    public XElement TableDescriptionElement => new XElement("td").WithClass("refdocgen-table-element");
+    public virtual XElement TableDescriptionElement => new XElement("td").WithClass("refdocgen-table-element");
 }

@@ -29,7 +29,7 @@ internal class DefaultTemplateGenerator : RazorTemplateGenerator<
     internal DefaultTemplateGenerator(HtmlRenderer htmlRenderer, string outputDir, string? staticPagesDirectory = null, string? docVersion = null)
         : base(
             htmlRenderer,
-            new DefaultDocCommentTransformer(new DocCommentHtmlConfiguration()),
+            new DocCommentTransformer(new DocCommentHtmlConfiguration()),
             outputDir,
             staticPagesDirectory,
             docVersion)
