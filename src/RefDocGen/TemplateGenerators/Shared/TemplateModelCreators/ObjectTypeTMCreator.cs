@@ -63,6 +63,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             type.Id,
             GetTypeName(type),
             type.Namespace,
+            type.Assembly,
             type.Kind.GetName(),
             modifiers.GetStrings(),
             constructors,

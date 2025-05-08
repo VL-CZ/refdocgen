@@ -31,6 +31,7 @@ internal class EnumTMCreator : TypeTMCreator
             enumType.Id,
             GetTypeName(enumType),
             enumType.Namespace,
+            enumType.Assembly,
             modifiers.GetStrings(),
             enumMemberTMs,
             GetTemplateModels(enumType.Attributes),

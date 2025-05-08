@@ -7,7 +7,8 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 /// </summary>
 /// <param name="Id">Unique identifier of the delegate.</param>
 /// <param name="Name">Name of the delegate.</param>
-/// <param name="Namespace">Namespace containing the delegate.</param>
+/// <param name="Namespace">The namespace containing the delegate.</param>
+/// <param name="Assembly">The assembly containing the delegate.</param>
 /// <param name="Modifiers">Collection of modifiers for the delegate (e.g., public, abstract).</param>
 /// <param name="ReturnType">Return type of the delegate method.</param>
 /// <param name="ReturnsVoid">Checks whether the return type of the delegate method is <seealso cref="void"/>.</param>
@@ -31,6 +32,7 @@ public record DelegateTypeTM(
     string Id,
     string Name,
     string Namespace,
+    string Assembly,
     string[] Modifiers,
     TypeLinkTM ReturnType,
     bool ReturnsVoid,

@@ -83,4 +83,9 @@ public interface ITypeDeclaration : ITypeNameBaseData
     /// Indicates whether the type is an interface or not.
     /// </summary>
     bool IsInterface { get; }
+
+    /// <summary>
+    /// Name of the assembly containing the type.
+    /// </summary>
+    string Assembly { get; }
 }

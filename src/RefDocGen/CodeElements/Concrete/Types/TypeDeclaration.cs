@@ -116,6 +116,9 @@ internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
     public virtual bool IsInterface => false;
 
     /// <inheritdoc/>
+    public string Assembly => TypeObject.Assembly.GetName().Name ?? "";
+
+    /// <inheritdoc/>
     public override string? ToString()
     {
         return $"T:{Id}";
