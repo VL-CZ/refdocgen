@@ -141,4 +141,45 @@ internal class TypeRegistry : ITypeRegistry
         return result;
     }
 
+    public IEnumerable<AssemblyData> GetAssemblies()
+    {
+        var groupedTypes = ObjectTypes.Values.ToLookup(t => t.Assembly);
+        var groupedEnums = Enums.Values.ToLookup(e => e.Assembly);
+        var groupedDelegates = Delegates.Values.ToLookup(e => e.Assembly);
+
+        var allAssemblies = AllTypes.Values.Select(t => t.Assembly).Distinct();
+        List<AssemblyData> assemblies = [];
+
+        foreach (var assembly in allAssemblies)
+        {
+            var assemblyTypes = groupedTypes[assembly].ToLookup(t => t.Namespace);
+            var assemblyEnums = groupedEnums[assembly].ToLookup(e => e.Namespace);
+            var assemblyDelegates = groupedDelegates[assembly].ToLookup(d => d.Namespace);
+
+            var allNamespaces = assemblyTypes.Select(t => t.Key)
+                .Concat(assemblyEnums.Select(e => e.Key))
+                .Concat(assemblyDelegates.Select(d => d.Key))
+                .Distinct();
+
+            List<NamespaceData> namespaces = [];
+
+            foreach (var nsName in allNamespaces)
+            {
+                var nsObjectTypes = assemblyTypes[nsName];
+                var nsEnums = assemblyEnums[nsName];
+                var nsDelegates = assemblyDelegates[nsName];
+
+                namespaces.Add(new(nsName, nsObjectTypes, nsDelegates, nsEnums));
+            }
+
+            assemblies.Add(new(assembly, namespaces));
+        }
+
+        return assemblies;
+    }
+
+    public IEnumerable<NamespaceData> GetNamespaces()
+    {
+        return GetAssemblies().SelectMany(a => a.Namespaces);
+    }
 }

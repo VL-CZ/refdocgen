@@ -1,0 +1,19 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required string Assembly { get; set; }
+}
+
+@{
+    var assemblyUrl = $"{Assembly}-DLL.html";
+}
+
+<h6>
+    <samp data-id="type-namespace">
+        <a href="@assemblyUrl" class="refdocgen-link-secondary">
+            <span class="refdocgen-text-tertiary">assembly</span>
+            <span class="refdocgen-text-secondary">@Assembly</span>
+        </a>
+    </samp>
+</h6>

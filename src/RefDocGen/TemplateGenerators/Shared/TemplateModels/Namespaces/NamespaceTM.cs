@@ -34,3 +34,8 @@ public record NamespaceTM(
     public string Id => Name;
 }
 
+public record AssemblyTM(string Name, IEnumerable<NamespaceTM> Namespaces) : ITemplateModelWithId
+{
+    /// <inheritdoc/>
+    public string Id => $"{Name}-DLL";
+}

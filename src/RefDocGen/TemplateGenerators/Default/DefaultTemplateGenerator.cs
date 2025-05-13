@@ -12,11 +12,12 @@ namespace RefDocGen.TemplateGenerators.Default;
 /// Class used for generating default Razor templates.
 /// </summary>
 internal class DefaultTemplateGenerator : RazorTemplateGenerator<
+    ObjectTypeTemplate,
     DelegateTypeTemplate,
     EnumTypeTemplate,
-    NamespaceDetailTemplate,
-    NamespaceListTemplate,
-    ObjectTypeTemplate,
+    NamespaceTemplate,
+    AssemblyTemplate,
+    ApiTemplate,
     StaticPageTemplate>
 {
     /// <summary>

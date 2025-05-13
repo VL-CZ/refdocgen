@@ -13,67 +13,54 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 /// <summary>
 /// Class responsible for creating template models representing the namespaces of a program.
 /// </summary>
-internal class NamespaceListTMCreator
+internal class NamespaceTMCreator
 {
     /// <summary>
     /// Creates an enumerable of <see cref="NamespaceTM"/> instances based on the provided <see cref="IObjectTypeData"/>.
     /// </summary>
-    /// <param name="typeData">The <see cref="IObjectTypeData"/> instance representing the types.</param>
-    /// <returns>An enumerable of <see cref="NamespaceTM"/> instances based on the provided <paramref name="typeData"/>.</returns>
-    internal static IEnumerable<NamespaceTM> GetFrom(ITypeRegistry typeData)
+    /// <param name="namespaceData">The <see cref="IObjectTypeData"/> instance representing the types.</param>
+    /// <returns>An enumerable of <see cref="NamespaceTM"/> instances based on the provided <paramref name="namespaceData"/>.</returns>
+    internal static NamespaceTM GetFrom(NamespaceData namespaceData)
     {
-        var groupedTypes = typeData.ObjectTypes.ToLookup(t => t.Namespace);
-        var groupedEnums = typeData.Enums.ToLookup(e => e.Namespace);
-        var groupedDelegates = typeData.Delegates.ToLookup(e => e.Namespace);
-
-        var namespaceTemplateModels = new List<NamespaceTM>();
-
-        foreach (var typeGroup in groupedTypes)
+        Dictionary<TypeKind, IEnumerable<TypeNameTM>> namespaceTypes = new()
         {
-            string? namespaceName = typeGroup.Key;
+            [TypeKind.Class] = [],
+            [TypeKind.ValueType] = [],
+            [TypeKind.Interface] = [],
+        };
 
-            if (namespaceName is not null)
-            {
-                Dictionary<TypeKind, IEnumerable<TypeNameTM>> namespaceTypes = new()
-                {
-                    [TypeKind.Class] = [],
-                    [TypeKind.ValueType] = [],
-                    [TypeKind.Interface] = [],
-                };
-
-                // get namespace classes, value types and interfaces
-                foreach (var typeKind in namespaceTypes.Keys)
-                {
-                    namespaceTypes[typeKind] = typeGroup // select the types of the given kind, ordered by their name
-                        .Where(t => t.Kind == typeKind)
-                        .Select(GetFrom)
-                        .OrderBy(t => t.Name);
-                }
-
-                // get namespace enums
-                var namespaceEnums = groupedEnums[namespaceName]
-                    .Select(GetFrom)
-                    .OrderBy(e => e.Name);
-
-                // get namespace delegates
-                var namespaceDelegates = groupedDelegates[namespaceName]
-                    .Select(GetFrom)
-                    .OrderBy(d => d.Name);
-
-                namespaceTemplateModels.Add(
-                    new NamespaceTM(
-                        namespaceName,
-                        namespaceTypes[TypeKind.Class],
-                        namespaceTypes[TypeKind.ValueType],
-                        namespaceTypes[TypeKind.Interface],
-                        namespaceEnums,
-                        namespaceDelegates
-                        )
-                );
-            }
+        // get namespace classes, value types and interfaces
+        foreach (var typeKind in namespaceTypes.Keys)
+        {
+            namespaceTypes[typeKind] = namespaceData.ObjectTypes // select the types of the given kind, ordered by their name
+                .Where(t => t.Kind == typeKind)
+                .Select(GetFrom)
+                .OrderBy(t => t.Name);
         }
 
-        return namespaceTemplateModels.OrderBy(n => n.Name);
+        // get namespace enums
+        var namespaceEnums = namespaceData.Enums
+            .Select(GetFrom)
+            .OrderBy(e => e.Name);
+
+        // get namespace delegates
+        var namespaceDelegates = namespaceData.Delegates
+            .Select(GetFrom)
+            .OrderBy(d => d.Name);
+
+        return new NamespaceTM(
+            namespaceData.Name,
+            namespaceTypes[TypeKind.Class],
+            namespaceTypes[TypeKind.ValueType],
+            namespaceTypes[TypeKind.Interface],
+            namespaceEnums,
+            namespaceDelegates
+            );
+    }
+
+    internal static AssemblyTM GetFrom(AssemblyData assembly)
+    {
+        return new AssemblyTM(assembly.Name, assembly.Namespaces.Select(GetFrom));
     }
 
     /// <summary>

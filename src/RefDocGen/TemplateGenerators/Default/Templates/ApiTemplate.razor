@@ -1,0 +1,58 @@
+@using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required IEnumerable<AssemblyTM> Model { get; set; }
+
+    [Parameter]
+    public required TopMenuDataTM TopMenuData { get; set; }
+
+    [Parameter]
+    public required string[]? Versions { get; set; }
+}
+
+<CascadingValue Value="TopMenuData">
+    <CascadingValue Value="Versions">
+        <LayoutView Layout="typeof(AppLayout)">
+            @foreach (var assembly in Model)
+            {
+
+                <h1 class="display-4">
+                    <samp>
+                        <span class="refdocgen-text-tertiary">assembly</span>
+                        <span class="refdocgen-text-primary">@assembly.Name</span>
+                    </samp>
+                </h1>
+                <hr />
+
+                @foreach (var ns in assembly.Namespaces)
+                {
+                    var namespaceUrl = $"./{ns.Id}.html";
+
+                    <div data-id="namespace-section" id="@ns.Id">
+                        <h1 class="display-6" data-id="namespace-name">
+                            <samp>
+                                <a href="@namespaceUrl" class="refdocgen-link-primary">
+                                    <span class="refdocgen-text-tertiary">namespace</span>
+                                    <span>@ns.Name</span>
+                                </a>
+                            </samp>
+                        </h1>
+
+                        <hr />
+
+                        <table class="table">
+                            <tbody data-id="namespace-types">
+                                @foreach (var type in ns.AllTypes)
+                                {
+                                    <TypeNameRow Type="@type" />
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            }
+        </LayoutView>
+    </CascadingValue>
+</CascadingValue>

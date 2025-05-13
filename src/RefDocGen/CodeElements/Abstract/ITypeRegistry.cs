@@ -30,4 +30,8 @@ public interface ITypeRegistry
     /// <param name="typeId">ID of the type to return.</param>
     /// <returns>The type with the given ID, if found. <see langword="null"/> otherwise.</returns>
     ITypeDeclaration? GetDeclaredType(string typeId);
+
+    IEnumerable<AssemblyData> GetAssemblies();
+
+    IEnumerable<NamespaceData> GetNamespaces();
 }
