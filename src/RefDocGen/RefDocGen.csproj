@@ -37,9 +37,4 @@
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="TemplateGenerators\Shared\TemplateModels\Assemblies\" />
-    </ItemGroup>
-
 </Project>
