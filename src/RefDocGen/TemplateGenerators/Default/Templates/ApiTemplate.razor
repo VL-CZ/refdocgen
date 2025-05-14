@@ -24,6 +24,8 @@
                         <span class="refdocgen-text-primary">@assembly.Name</span>
                     </samp>
                 </h1>
+                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false">Toggle all</button>
+
                 <hr />
 
                 @foreach (var ns in assembly.Namespaces)
@@ -51,7 +53,7 @@
 
                         <hr />
 
-                        <div class="collapse show" id="@(ns.Name)-collapse">
+                        <div class="collapse show multi-collapse" id="@(ns.Name)-collapse">
                             <table class="table">
                                 <tbody data-id="namespace-types">
                                     @foreach (var type in ns.AllTypes)

@@ -11,14 +11,14 @@ namespace RefDocGen;
 public class DocGenerator
 {
     /// <summary>
-    /// Path to the DLL assembly.
+    /// Paths to the DLL assemblies.
     /// </summary>
-    private readonly string assemblyPath;
+    private readonly string[] assemblyPaths;
 
     /// <summary>
-    /// Path to the XML documentation file.
+    /// Paths to the XML documentation files.
     /// </summary>
-    private readonly string docXmlPath;
+    private readonly string[] docXmlPaths;
 
     /// <summary>
     /// An instance used for generating the templates.
@@ -38,15 +38,15 @@ public class DocGenerator
     /// <summary>
     /// Initialize a new instance of <see cref="DocGenerator"/> class.
     /// </summary>
-    /// <param name="assemblyPath">Path to the DLL assembly.</param>
-    /// <param name="docXmlPath">Path to the XML documentation file.</param>
+    /// <param name="assemblyPaths">Paths to the DLL assemblies.</param>
+    /// <param name="docXmlPaths">Path to the XML documentation files.</param>
     /// <param name="templateGenerator">An instance used for generating the templates</param>
     /// <param name="minVisibility">Minimal visibility of the types and members to include.</param>
     /// <param name="memberInheritanceMode">Specifies which inherited members should be included in types.</param>
-    public DocGenerator(string assemblyPath, string docXmlPath, ITemplateGenerator templateGenerator, AccessModifier minVisibility, MemberInheritanceMode memberInheritanceMode)
+    public DocGenerator(string[] assemblyPaths, string[] docXmlPaths, ITemplateGenerator templateGenerator, AccessModifier minVisibility, MemberInheritanceMode memberInheritanceMode)
     {
-        this.assemblyPath = assemblyPath;
-        this.docXmlPath = docXmlPath;
+        this.assemblyPaths = assemblyPaths;
+        this.docXmlPaths = docXmlPaths;
         this.templateGenerator = templateGenerator;
         this.minVisibility = minVisibility;
         this.memberInheritanceMode = memberInheritanceMode;
@@ -57,10 +57,10 @@ public class DocGenerator
     /// </summary>
     public void GenerateDoc()
     {
-        var assemblyAnalyzer = new AssemblyTypeExtractor(assemblyPath, minVisibility, memberInheritanceMode);
+        var assemblyAnalyzer = new AssemblyTypeExtractor(assemblyPaths, minVisibility, memberInheritanceMode);
         var typeRegistry = assemblyAnalyzer.GetDeclaredTypes();
 
-        var docCommentExtractor = new DocCommentExtractor(docXmlPath, typeRegistry);
+        var docCommentExtractor = new DocCommentExtractor(docXmlPaths, typeRegistry);
         docCommentExtractor.AddComments();
 
         templateGenerator.GenerateTemplates(typeRegistry);

@@ -98,20 +98,23 @@ internal class DocCommentExtractor
     private bool addingInheritedDocs;
 
     /// <summary>
+    /// Paths to the XML documentation files.
+    /// </summary>
+    private readonly string[] docXmlPaths;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
     /// </summary>
-    /// <param name="docXmlPath">Path to the XML documentation file.</param>
+    /// <param name="docXmlPaths">Paths to the XML documentation files.</param>
     /// <param name="typeRegistry">Registry of the declared types, to which the documentation comments will be added.</param>
-    internal DocCommentExtractor(string docXmlPath, TypeRegistry typeRegistry)
+    internal DocCommentExtractor(string[] docXmlPaths, TypeRegistry typeRegistry)
     {
         this.typeRegistry = typeRegistry;
+        this.docXmlPaths = docXmlPaths;
 
         memberInheritDocHandler = new(typeRegistry);
         typeInheritDocHandler = new(typeRegistry);
         crefInheritDocHandler = new(typeRegistry);
-
-        // load the document (preserve the whitespace, as the documentation is to be converted into HTML)
-        xmlDocument = XDocument.Load(docXmlPath, LoadOptions.PreserveWhitespace);
     }
 
     /// <summary>
@@ -119,12 +122,18 @@ internal class DocCommentExtractor
     /// </summary>
     internal void AddComments()
     {
-        var memberNodes = xmlDocument.Descendants(XmlDocIdentifiers.Member);
-
-        // add the doc comments
-        foreach (var memberNode in memberNodes)
+        foreach (var xmlPath in docXmlPaths)
         {
-            AddDocComment(memberNode);
+            // load the document (preserve the whitespace, as the documentation is to be converted into HTML)
+            var xmlDocument = XDocument.Load(xmlPath, LoadOptions.PreserveWhitespace);
+
+            var memberNodes = xmlDocument.Descendants(XmlDocIdentifiers.Member);
+
+            // add the doc comments
+            foreach (var memberNode in memberNodes)
+            {
+                AddDocComment(memberNode);
+            }
         }
 
         // from now on, we're adding the resolved inheritdocs
