@@ -23,6 +23,7 @@ namespace RefDocGen.TemplateGenerators.Shared;
 /// <typeparam name="TEnumTemplate">Type of the Razor component representing a enum type.</typeparam>
 /// <typeparam name="TNamespaceTemplate">Type of the Razor component representing a namespace.</typeparam>
 /// <typeparam name="TAssemblyTemplate">Type of the Razor component representing an assembly.</typeparam>
+/// <typeparam name="TApiTemplate">Type of the Razor component representing the main API page.</typeparam>
 /// <typeparam name="TObjectTypeTemplate">Type of the Razor component representing an object type.</typeparam>
 /// <typeparam name="TStaticPageTemplate">Type of the Razor component representing a static page.</typeparam>
 internal class RazorTemplateGenerator<
@@ -120,7 +121,7 @@ internal class RazorTemplateGenerator<
 
     /// <summary>
     /// Initialize a new instance of
-    /// <see cref="RazorTemplateGenerator{TDelegateTemplate, TEnumTemplate, TNamespaceDetailTemplate, TNamespaceListTemplate, TObjectTypeTemplate, TStaticPageTemplate}"/> class.
+    /// <see cref="RazorTemplateGenerator{TObjectTypeTemplate, TDelegateTemplate, TEnumTemplate, TNamespaceTemplate, TAssemblyTemplate, TApiTemplate, TStaticPageTemplate}"/> class.
     /// </summary>
     /// <param name="htmlRenderer">Renderer of the Razor components.</param>
     /// <param name="docCommentTransformer">Transformer of the XML doc comments into HTML.</param>
@@ -165,8 +166,15 @@ internal class RazorTemplateGenerator<
         GenerateObjectTypeTemplates(typeRegistry.ObjectTypes);
         GenerateEnumTemplates(typeRegistry.Enums);
         GenerateDelegateTemplates(typeRegistry.Delegates);
-        GenerateNamespaceTemplates(typeRegistry.GetNamespaces());
-        GenerateAssemblyTemplates(typeRegistry.GetAssemblies());
+        GenerateNamespaceTemplates(typeRegistry.Namespaces);
+        GenerateAssemblyTemplates(typeRegistry.Assemblies);
+        GenerateApiTemplate(typeRegistry.Assemblies);
+
+        if (!isUserDefinedIndexPage) // no user-specified 'index' page -> add the default one redirecting to API page.
+        {
+            string outputIndexPage = Path.Join(outputDirectory, indexPageId + ".html");
+            File.Copy(defaultIndexPage, outputIndexPage, true);
+        }
 
         CopyStaticTemplateFilesDirectory();
 
@@ -208,9 +216,9 @@ internal class RazorTemplateGenerator<
     }
 
     /// <summary>
-    /// Generate the templates representing the namespaces.
+    /// Generate the templates representing the individual namespaces.
     /// </summary>
-    /// <param name="types">The type data to be used in the templates.</param>
+    /// <param name="namespaces">The namespace data to be used in the templates.</param>
     private void GenerateNamespaceTemplates(IEnumerable<NamespaceData> namespaces)
     {
         var namespaceTMs = namespaces.Select(NamespaceTMCreator.GetFrom);
@@ -218,22 +226,23 @@ internal class RazorTemplateGenerator<
     }
 
     /// <summary>
-    /// Generate the templates representing the assemblies.
+    /// Generate the templates representing the individual assemblies.
     /// </summary>
-    /// <param name="types">The type data to be used in the templates.</param>
+    /// <param name="assemblies">The assembly data to be used in the templates.</param>
     private void GenerateAssemblyTemplates(IEnumerable<AssemblyData> assemblies)
     {
         var assemblyTMs = assemblies.Select(NamespaceTMCreator.GetFrom);
         GenerateTemplates<TAssemblyTemplate, AssemblyTM>(assemblyTMs);
+    }
 
-        // namespace list template
+    /// <summary>
+    /// Generate the API home page template.
+    /// </summary>
+    /// <param name="assemblies">The assembly data to be used in the template.</param>
+    private void GenerateApiTemplate(IEnumerable<AssemblyData> assemblies)
+    {
+        var assemblyTMs = assemblies.Select(NamespaceTMCreator.GetFrom);
         GenerateTemplate<TApiTemplate, IEnumerable<AssemblyTM>>(assemblyTMs, indexPageId);
-
-        if (!isUserDefinedIndexPage) // no user-specified 'index' page -> add the default one redirecting to API page.
-        {
-            string outputIndexPage = Path.Join(outputDirectory, indexPageId + ".html");
-            File.Copy(defaultIndexPage, outputIndexPage, true);
-        }
     }
 
     /// <summary>

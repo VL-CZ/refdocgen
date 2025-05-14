@@ -33,6 +33,9 @@ internal class TypeRegistry : ITypeRegistry
         AllTypes = ObjectTypes.ToParent<string, ObjectTypeData, TypeDeclaration>()
             .Merge(Enums.ToParent<string, EnumTypeData, TypeDeclaration>())
             .Merge(Delegates.ToParent<string, DelegateTypeData, TypeDeclaration>());
+
+        Assemblies = GetAssemblyData();
+        Namespaces = GetNamespaces();
     }
 
     /// <summary>
@@ -63,6 +66,12 @@ internal class TypeRegistry : ITypeRegistry
 
     /// <inheritdoc/>
     IEnumerable<IDelegateTypeData> ITypeRegistry.Delegates => Delegates.Values;
+
+    /// <inheritdoc/>
+    public IEnumerable<AssemblyData> Assemblies { get; }
+
+    /// <inheritdoc/>
+    public IEnumerable<NamespaceData> Namespaces { get; }
 
     /// <summary>
     /// Gets the member by its type ID and member ID.
@@ -141,7 +150,11 @@ internal class TypeRegistry : ITypeRegistry
         return result;
     }
 
-    public IEnumerable<AssemblyData> GetAssemblies()
+    /// <summary>
+    /// Get the data describing the assemblies.
+    /// </summary>
+    /// <returns>A list of objects describing the assemblies.</returns>
+    private List<AssemblyData> GetAssemblyData()
     {
         var groupedTypes = ObjectTypes.Values.ToLookup(t => t.Assembly);
         var groupedEnums = Enums.Values.ToLookup(e => e.Assembly);
@@ -156,14 +169,14 @@ internal class TypeRegistry : ITypeRegistry
             var assemblyEnums = groupedEnums[assembly].ToLookup(e => e.Namespace);
             var assemblyDelegates = groupedDelegates[assembly].ToLookup(d => d.Namespace);
 
-            var allNamespaces = assemblyTypes.Select(t => t.Key)
+            var assemblyNamespaces = assemblyTypes.Select(t => t.Key)
                 .Concat(assemblyEnums.Select(e => e.Key))
                 .Concat(assemblyDelegates.Select(d => d.Key))
                 .Distinct();
 
             List<NamespaceData> namespaces = [];
 
-            foreach (string nsName in allNamespaces)
+            foreach (string nsName in assemblyNamespaces)
             {
                 var nsObjectTypes = assemblyTypes[nsName];
                 var nsEnums = assemblyEnums[nsName];
@@ -178,8 +191,12 @@ internal class TypeRegistry : ITypeRegistry
         return assemblies;
     }
 
-    public IEnumerable<NamespaceData> GetNamespaces()
+    /// <summary>
+    /// Get the data describing the namespaces.
+    /// </summary>
+    /// <returns>A list of objects describing the namespaces.</returns>
+    private IEnumerable<NamespaceData> GetNamespaces()
     {
-        return GetAssemblies().SelectMany(a => a.Namespaces);
+        return GetAssemblyData().SelectMany(a => a.Namespaces);
     }
 }

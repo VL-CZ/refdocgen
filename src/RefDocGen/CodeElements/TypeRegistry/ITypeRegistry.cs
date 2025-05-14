@@ -10,17 +10,17 @@ namespace RefDocGen.CodeElements.TypeRegistry;
 public interface ITypeRegistry
 {
     /// <summary>
-    /// A collection of the declared value, reference and interface types.
+    /// A collection of all declared class, struct and interface types.
     /// </summary>
     IEnumerable<IObjectTypeData> ObjectTypes { get; }
 
     /// <summary>
-    /// A collection of the declared enum types.
+    /// A collection of all declared enum types.
     /// </summary>
     IEnumerable<IEnumTypeData> Enums { get; }
 
     /// <summary>
-    /// A collection of the declared delegate types.
+    /// A collection of all declared delegate types.
     /// </summary>
     IEnumerable<IDelegateTypeData> Delegates { get; }
 
@@ -31,7 +31,13 @@ public interface ITypeRegistry
     /// <returns>The type with the given ID, if found. <see langword="null"/> otherwise.</returns>
     ITypeDeclaration? GetDeclaredType(string typeId);
 
-    IEnumerable<AssemblyData> GetAssemblies();
+    /// <summary>
+    /// A collection of all assemblies contained in the processed DLLs.
+    /// </summary>
+    IEnumerable<AssemblyData> Assemblies { get; }
 
-    IEnumerable<NamespaceData> GetNamespaces();
+    /// <summary>
+    /// A collection of all namespaces contained in the processed DLLs.
+    /// </summary>
+    IEnumerable<NamespaceData> Namespaces { get; }
 }
