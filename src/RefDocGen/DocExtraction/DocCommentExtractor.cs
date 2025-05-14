@@ -4,10 +4,10 @@ using System.Xml.Linq;
 using RefDocGen.DocExtraction.Handlers.Members;
 using RefDocGen.DocExtraction.Handlers.Members.Enum;
 using RefDocGen.DocExtraction.Handlers.Types;
-using RefDocGen.CodeElements.Concrete.Members;
-using RefDocGen.CodeElements.Concrete;
-using RefDocGen.CodeElements.Concrete.Types;
 using RefDocGen.DocExtraction.Handlers.InheritDoc;
+using RefDocGen.CodeElements.Members.Concrete;
+using RefDocGen.CodeElements.Types.Concrete;
+using RefDocGen.CodeElements;
 
 namespace RefDocGen.DocExtraction;
 

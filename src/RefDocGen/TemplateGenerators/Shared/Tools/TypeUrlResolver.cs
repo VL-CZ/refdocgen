@@ -1,6 +1,6 @@
-using RefDocGen.CodeElements.Abstract;
-using RefDocGen.CodeElements.Abstract.Types.TypeName;
-using RefDocGen.CodeElements.Tools;
+using RefDocGen.CodeElements;
+using RefDocGen.CodeElements.Shared;
+using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.Tools;
 using System.Globalization;
 

@@ -1,5 +1,5 @@
-using RefDocGen.CodeElements.Concrete.Members.Enum;
-using RefDocGen.CodeElements.Concrete.Types.Enum;
+using RefDocGen.CodeElements.Members.Concrete.Enum;
+using RefDocGen.CodeElements.Types.Concrete.Enum;
 
 namespace RefDocGen.DocExtraction.Handlers.Members.Enum;
 

@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using RefDocGen.CodeElements;
-using RefDocGen.CodeElements.Abstract;
-using RefDocGen.CodeElements.Abstract.Types;
-using RefDocGen.CodeElements.Abstract.Types.Delegate;
-using RefDocGen.CodeElements.Abstract.Types.Enum;
+using RefDocGen.CodeElements.Types.Abstract;
+using RefDocGen.CodeElements.Types.Abstract.Delegate;
+using RefDocGen.CodeElements.Types.Abstract.Enum;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.DocVersioning;
 using RefDocGen.TemplateGenerators.Shared.StaticPages;

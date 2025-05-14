@@ -1,7 +1,8 @@
+using RefDocGen.AssemblyAnalysis.Extensions;
 using RefDocGen.CodeElements;
-using RefDocGen.CodeElements.Concrete.Members;
-using RefDocGen.CodeElements.Concrete.Types;
-using RefDocGen.CodeElements.Concrete.Types.Attribute;
+using RefDocGen.CodeElements.Members.Concrete;
+using RefDocGen.CodeElements.Types.Concrete;
+using RefDocGen.CodeElements.Types.Concrete.Attribute;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 

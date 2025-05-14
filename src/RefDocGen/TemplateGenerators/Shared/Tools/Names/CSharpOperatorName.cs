@@ -1,5 +1,5 @@
-using RefDocGen.CodeElements;
-using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Members;
+using RefDocGen.CodeElements.Members.Abstract;
 
 namespace RefDocGen.TemplateGenerators.Shared.Tools.Names;
 

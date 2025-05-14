@@ -1,13 +1,13 @@
-using RefDocGen.CodeElements;
-using RefDocGen.CodeElements.Abstract.Members;
-using RefDocGen.CodeElements.Abstract.Types;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Shared.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
-using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
+using RefDocGen.CodeElements.Members.Abstract;
+using RefDocGen.CodeElements.Types.Abstract;
+using RefDocGen.CodeElements.Types.Abstract.TypeName;
+using RefDocGen.CodeElements.Members;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 

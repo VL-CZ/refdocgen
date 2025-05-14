@@ -1,4 +1,4 @@
-using RefDocGen.CodeElements;
+using RefDocGen.CodeElements.Types;
 
 namespace RefDocGen.TemplateGenerators.Shared.Tools;
 
