@@ -7,6 +7,7 @@ using RefDocGen.CodeElements.Concrete.Members.Enum;
 using RefDocGen.AssemblyAnalysis.MemberCreators;
 using RefDocGen.CodeElements;
 using RefDocGen.Tools;
+using RefDocGen.CodeElements.Tools;
 
 namespace RefDocGen.AssemblyAnalysis;
 
@@ -83,7 +84,7 @@ internal class AssemblyTypeExtractor
     {
         List<Type> types = [];
 
-        foreach (var assemblyPath in assemblyPaths)
+        foreach (string assemblyPath in assemblyPaths)
         {
             var assembly = Assembly.LoadFrom(assemblyPath);
             types.AddRange(assembly.GetTypes());
@@ -106,21 +107,18 @@ internal class AssemblyTypeExtractor
 
         // construct types
         var enumsData = enums
-            .Select(ConstructEnum)
-            .ToIdDictionary();
+            .Select(ConstructEnum);
 
         var delegatesData = delegates
-            .Select(ConstructDelegate)
-            .ToIdDictionary();
+            .Select(ConstructDelegate);
 
         var objectTypesData = objectTypes
-            .Select(ConstructObjectType)
-            .ToIdDictionary();
+            .Select(ConstructObjectType);
 
         return new TypeRegistry( // add the types (including nested ones) to the registry
-            objectTypesData.Merge(allNestedObjectTypes.ToIdDictionary()),
-            enumsData.Merge(allNestedEnums.ToIdDictionary()),
-            delegatesData.Merge(allNestedDelegates.ToIdDictionary()));
+            objectTypesData.Concat(allNestedObjectTypes),
+            enumsData.Concat(allNestedEnums),
+            delegatesData.Concat(allNestedDelegates));
     }
 
     /// <summary>

@@ -22,11 +22,6 @@ internal class DocCommentExtractor
     private readonly TypeRegistry typeRegistry;
 
     /// <summary>
-    /// XML document containing the documentation comments.
-    /// </summary>
-    private readonly XDocument xmlDocument;
-
-    /// <summary>
     /// Dictionary of the selected member documentation handlers, identified by <see cref="CodeElementId"/> identifiers.
     /// </summary>
     private readonly Dictionary<string, IMemberDocHandler<ObjectTypeData>> memberDocHandlers = new()
@@ -122,7 +117,7 @@ internal class DocCommentExtractor
     /// </summary>
     internal void AddComments()
     {
-        foreach (var xmlPath in docXmlPaths)
+        foreach (string xmlPath in docXmlPaths)
         {
             // load the document (preserve the whitespace, as the documentation is to be converted into HTML)
             var xmlDocument = XDocument.Load(xmlPath, LoadOptions.PreserveWhitespace);

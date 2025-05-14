@@ -9,6 +9,7 @@ using RefDocGen.CodeElements.Concrete.Members;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.CodeElements.Abstract.Types.TypeName;
 using RefDocGen.Tools;
+using RefDocGen.CodeElements.Tools;
 
 namespace RefDocGen.CodeElements.Concrete;
 
@@ -18,17 +19,17 @@ internal class TypeRegistry : ITypeRegistry
     /// <summary>
     /// Initializes a new instance of the <see cref="TypeRegistry"/> class.
     /// </summary>
-    /// <param name="objectTypes"><inheritdoc cref="ObjectTypes"/></param>
-    /// <param name="enums"><inheritdoc cref="Enums"/></param>
-    /// <param name="delegates"><inheritdoc cref="Delegates"/></param>
+    /// <param name="objectTypes"><inheritdoc cref="ITypeRegistry.ObjectTypes"/></param>
+    /// <param name="enums"><inheritdoc cref="ITypeRegistry.Enums"/></param>
+    /// <param name="delegates"><inheritdoc cref="ITypeRegistry.Delegates"/></param>
     public TypeRegistry(
-        IReadOnlyDictionary<string, ObjectTypeData> objectTypes,
-        IReadOnlyDictionary<string, EnumTypeData> enums,
-        IReadOnlyDictionary<string, DelegateTypeData> delegates)
+        IEnumerable<ObjectTypeData> objectTypes,
+        IEnumerable<EnumTypeData> enums,
+        IEnumerable<DelegateTypeData> delegates)
     {
-        ObjectTypes = objectTypes;
-        Enums = enums;
-        Delegates = delegates;
+        ObjectTypes = objectTypes.ToIdDictionary();
+        Enums = enums.ToIdDictionary();
+        Delegates = delegates.ToIdDictionary();
 
         AllTypes = ObjectTypes.ToParent<string, ObjectTypeData, TypeDeclaration>()
             .Merge(Enums.ToParent<string, EnumTypeData, TypeDeclaration>())
@@ -150,7 +151,7 @@ internal class TypeRegistry : ITypeRegistry
         var allAssemblies = AllTypes.Values.Select(t => t.Assembly).Distinct();
         List<AssemblyData> assemblies = [];
 
-        foreach (var assembly in allAssemblies)
+        foreach (string assembly in allAssemblies)
         {
             var assemblyTypes = groupedTypes[assembly].ToLookup(t => t.Namespace);
             var assemblyEnums = groupedEnums[assembly].ToLookup(e => e.Namespace);
@@ -163,7 +164,7 @@ internal class TypeRegistry : ITypeRegistry
 
             List<NamespaceData> namespaces = [];
 
-            foreach (var nsName in allNamespaces)
+            foreach (string nsName in allNamespaces)
             {
                 var nsObjectTypes = assemblyTypes[nsName];
                 var nsEnums = assemblyEnums[nsName];
