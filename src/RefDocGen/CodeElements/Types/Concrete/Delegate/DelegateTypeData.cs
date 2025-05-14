@@ -1,12 +1,11 @@
-using RefDocGen.Tools.Xml;
-using System.Xml.Linq;
 using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.Members.Concrete;
-using RefDocGen.CodeElements.Types.Abstract.TypeName;
-using RefDocGen.CodeElements.Types.Abstract.Exception;
 using RefDocGen.CodeElements.Types.Abstract.Attribute;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
-using RefDocGen.CodeElements.Types.Concrete;
+using RefDocGen.CodeElements.Types.Abstract.Exception;
+using RefDocGen.CodeElements.Types.Abstract.TypeName;
+using RefDocGen.Tools.Xml;
+using System.Xml.Linq;
 
 namespace RefDocGen.CodeElements.Types.Concrete.Delegate;
 

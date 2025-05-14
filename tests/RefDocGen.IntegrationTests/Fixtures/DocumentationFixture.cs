@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using RefDocGen.TemplateGenerators.Default;
-using RefDocGen.CodeElements;
 using RefDocGen.AssemblyAnalysis;
+using RefDocGen.CodeElements;
+using RefDocGen.TemplateGenerators.Default;
 
 namespace RefDocGen.IntegrationTests.Fixtures;
 

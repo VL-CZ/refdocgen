@@ -1,8 +1,8 @@
-using RefDocGen.Tools.Xml;
-using System.Xml.Linq;
-using RefDocGen.DocExtraction.Handlers.Tools;
 using RefDocGen.CodeElements.Members.Concrete;
 using RefDocGen.CodeElements.Types.Concrete;
+using RefDocGen.DocExtraction.Handlers.Tools;
+using RefDocGen.Tools.Xml;
+using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction.Handlers.Members;
 

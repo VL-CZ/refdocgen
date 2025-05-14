@@ -2,7 +2,7 @@ using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
 
-namespace RefDocGen.CodeElements;
+namespace RefDocGen.CodeElements.TypeRegistry;
 
 /// <summary>
 /// Represents a registry of the declared types.

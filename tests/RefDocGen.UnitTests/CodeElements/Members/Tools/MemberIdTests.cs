@@ -1,9 +1,9 @@
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
-using RefDocGen.CodeElements.Types.Concrete.TypeName;
 using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.Members.Tools;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
+using RefDocGen.CodeElements.Types.Concrete.TypeName;
 using Shouldly;
 using System.Reflection;
 

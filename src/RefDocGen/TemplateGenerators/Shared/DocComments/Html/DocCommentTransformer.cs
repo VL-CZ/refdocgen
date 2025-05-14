@@ -1,4 +1,3 @@
-using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools;

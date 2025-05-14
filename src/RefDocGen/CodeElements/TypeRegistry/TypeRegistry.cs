@@ -1,16 +1,16 @@
-using RefDocGen.DocExtraction.Tools;
-using RefDocGen.Tools;
 using RefDocGen.CodeElements.Members.Concrete;
+using RefDocGen.CodeElements.Shared;
 using RefDocGen.CodeElements.Types.Abstract;
-using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
+using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.CodeElements.Types.Concrete;
-using RefDocGen.CodeElements.Types.Concrete.Enum;
 using RefDocGen.CodeElements.Types.Concrete.Delegate;
-using RefDocGen.CodeElements.Shared;
+using RefDocGen.CodeElements.Types.Concrete.Enum;
+using RefDocGen.DocExtraction.Tools;
+using RefDocGen.Tools;
 
-namespace RefDocGen.CodeElements;
+namespace RefDocGen.CodeElements.TypeRegistry;
 
 /// <inheritdoc/>
 internal class TypeRegistry : ITypeRegistry

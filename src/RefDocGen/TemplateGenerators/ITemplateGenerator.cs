@@ -1,5 +1,3 @@
-using RefDocGen.CodeElements;
-
 namespace RefDocGen.TemplateGenerators;
 
 /// <summary>

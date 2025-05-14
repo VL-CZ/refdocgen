@@ -1,4 +1,3 @@
-using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Shared;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.Tools;

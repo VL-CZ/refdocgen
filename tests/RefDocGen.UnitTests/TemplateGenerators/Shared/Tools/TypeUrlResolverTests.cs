@@ -1,6 +1,5 @@
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
-using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.TemplateGenerators.Shared.Tools;
 using Shouldly;

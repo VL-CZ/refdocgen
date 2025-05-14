@@ -1,10 +1,10 @@
 using NSubstitute;
 using RefDocGen.CodeElements;
-using RefDocGen.CodeElements.Types.Concrete.TypeName;
-using Shouldly;
-using RefDocGen.UnitTests.Shared;
 using RefDocGen.CodeElements.Types.Concrete;
+using RefDocGen.CodeElements.Types.Concrete.TypeName;
 using RefDocGen.CodeElements.Types.Tools;
+using RefDocGen.UnitTests.Shared;
+using Shouldly;
 
 namespace RefDocGen.UnitTests.CodeElements.Types.Tools;
 

@@ -1,4 +1,3 @@
-using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using System.Xml.Linq;
 

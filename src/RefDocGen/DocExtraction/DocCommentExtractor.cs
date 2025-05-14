@@ -1,13 +1,13 @@
-using RefDocGen.DocExtraction.Tools;
-using RefDocGen.Tools.Xml;
-using System.Xml.Linq;
+using RefDocGen.CodeElements.Members.Concrete;
+using RefDocGen.CodeElements.TypeRegistry;
+using RefDocGen.CodeElements.Types.Concrete;
+using RefDocGen.DocExtraction.Handlers.InheritDoc;
 using RefDocGen.DocExtraction.Handlers.Members;
 using RefDocGen.DocExtraction.Handlers.Members.Enum;
 using RefDocGen.DocExtraction.Handlers.Types;
-using RefDocGen.DocExtraction.Handlers.InheritDoc;
-using RefDocGen.CodeElements.Members.Concrete;
-using RefDocGen.CodeElements.Types.Concrete;
-using RefDocGen.CodeElements;
+using RefDocGen.DocExtraction.Tools;
+using RefDocGen.Tools.Xml;
+using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction;
 

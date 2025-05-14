@@ -1,4 +1,3 @@
-using RefDocGen.CodeElements.Members.Abstract;
 using System.Reflection;
 
 namespace RefDocGen.CodeElements.Members.Abstract.Enum;

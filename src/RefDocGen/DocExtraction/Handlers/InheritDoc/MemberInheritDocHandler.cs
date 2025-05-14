@@ -1,5 +1,5 @@
-using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Members.Concrete;
+using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.DocExtraction.Tools;
 using System.Xml.Linq;
 

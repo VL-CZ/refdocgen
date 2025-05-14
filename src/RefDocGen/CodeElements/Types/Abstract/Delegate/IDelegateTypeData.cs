@@ -1,5 +1,4 @@
 using RefDocGen.CodeElements.Members.Abstract;
-using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Exception;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using System.Xml.Linq;

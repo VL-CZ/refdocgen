@@ -1,4 +1,3 @@
-using RefDocGen.CodeElements;
 using System.Xml.Linq;
 
 namespace RefDocGen.TemplateGenerators.Shared.DocComments.Html;
