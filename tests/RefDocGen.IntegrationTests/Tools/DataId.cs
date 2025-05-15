@@ -24,6 +24,7 @@ internal enum DataId
     BaseType,
     ImplementedInterfaces,
     TypeNamespace,
+    TypeAssembly,
     DeclaringType,
     ExceptionData,
     ExceptionType,
@@ -104,6 +105,7 @@ internal static class DataIdExtensions
             DataId.MemberExplicitlyImplements => "member-explicitly-implements",
             DataId.MemberImplements => "member-implements",
             DataId.PageBody => "page-body",
+            DataId.TypeAssembly => "type-assembly",
             _ => throw new ArgumentException($"The provided DataId '{dataId}' has no string representation.")
         };
     }

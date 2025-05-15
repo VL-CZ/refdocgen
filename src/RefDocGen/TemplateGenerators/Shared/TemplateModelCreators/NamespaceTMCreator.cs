@@ -16,10 +16,10 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 internal class NamespaceTMCreator
 {
     /// <summary>
-    /// Creates an enumerable of <see cref="NamespaceTM"/> instances based on the provided <see cref="IObjectTypeData"/>.
+    /// Creates an enumerable of <see cref="NamespaceTM"/> instances based on the provided <see cref="NamespaceData"/>.
     /// </summary>
-    /// <param name="namespaceData">The <see cref="IObjectTypeData"/> instance representing the types.</param>
-    /// <returns>An enumerable of <see cref="NamespaceTM"/> instances based on the provided <paramref name="namespaceData"/>.</returns>
+    /// <param name="namespaceData">The <see cref="NamespaceData"/> instance representing the namespace.</param>
+    /// <returns>A <see cref="NamespaceTM"/> instance based on the provided <paramref name="namespaceData"/>.</returns>
     internal static NamespaceTM GetFrom(NamespaceData namespaceData)
     {
         Dictionary<TypeKind, IEnumerable<TypeNameTM>> namespaceTypes = new()
@@ -56,11 +56,6 @@ internal class NamespaceTMCreator
             namespaceEnums,
             namespaceDelegates
             );
-    }
-
-    internal static AssemblyTM GetFrom(AssemblyData assembly)
-    {
-        return new AssemblyTM(assembly.Name, assembly.Namespaces.Select(GetFrom));
     }
 
     /// <summary>

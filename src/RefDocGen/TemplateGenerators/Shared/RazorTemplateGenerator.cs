@@ -9,6 +9,7 @@ using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.DocVersioning;
 using RefDocGen.TemplateGenerators.Shared.StaticPages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Assemblies;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
@@ -231,7 +232,7 @@ internal class RazorTemplateGenerator<
     /// <param name="assemblies">The assembly data to be used in the templates.</param>
     private void GenerateAssemblyTemplates(IEnumerable<AssemblyData> assemblies)
     {
-        var assemblyTMs = assemblies.Select(NamespaceTMCreator.GetFrom);
+        var assemblyTMs = assemblies.Select(AssemblyTMCreator.GetFrom);
         GenerateTemplates<TAssemblyTemplate, AssemblyTM>(assemblyTMs);
     }
 
@@ -241,7 +242,7 @@ internal class RazorTemplateGenerator<
     /// <param name="assemblies">The assembly data to be used in the template.</param>
     private void GenerateApiTemplate(IEnumerable<AssemblyData> assemblies)
     {
-        var assemblyTMs = assemblies.Select(NamespaceTMCreator.GetFrom);
+        var assemblyTMs = assemblies.Select(AssemblyTMCreator.GetFrom);
         GenerateTemplate<TApiTemplate, IEnumerable<AssemblyTM>>(assemblyTMs, indexPageId);
     }
 
