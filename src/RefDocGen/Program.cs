@@ -26,8 +26,12 @@ public static class Program
         string staticPagesDir = "C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\demo-lib\\pages";
         string? version = null;
 
-        var minVisibility = AccessModifier.Private;
-        var memberInheritanceMode = MemberInheritanceMode.NonObject;
+        var assemblyDataConfig = new AssemblyDataConfiguration(
+            MinVisibility: AccessModifier.Private,
+            MemberInheritanceMode: MemberInheritanceMode.NonObject,
+            AssembliesToExclude: ["MyApp"],
+            NamespacesToExclude: ["MyLibrary.Exclude", "MyLibrary.Tools.Exclude"]
+            );
 
         IServiceCollection services = new ServiceCollection();
         _ = services.AddLogging();
@@ -39,7 +43,7 @@ public static class Program
 
         var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir, staticPagesDir, version);
 
-        var docGenerator = new DocGenerator(dllPaths, docPaths, templateGenerator, minVisibility, memberInheritanceMode);
+        var docGenerator = new DocGenerator(dllPaths, docPaths, templateGenerator, assemblyDataConfig);
         docGenerator.GenerateDoc();
 
         Console.WriteLine("Done...");

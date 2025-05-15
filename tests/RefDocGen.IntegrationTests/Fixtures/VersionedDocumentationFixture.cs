@@ -52,13 +52,15 @@ public class VersionedDocumentationFixture : IDisposable
 
         using var htmlRenderer = new HtmlRenderer(serviceProvider, loggerFactory);
 
+        var assemblyDataConfig = new AssemblyDataConfiguration(AccessModifier.Private, MemberInheritanceMode.NonObject, [], []);
+
         string[] versions = ["v1.0", "v1.1", "v2.0"];
 
         foreach (string version in versions)
         {
             var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir, staticPagesDirectory, version); // use the default template generator
 
-            var generator = new DocGenerator(["data/MyLibrary.dll"], ["data/MyLibrary.xml"], templateGenerator, AccessModifier.Private, MemberInheritanceMode.NonObject);
+            var generator = new DocGenerator(["data/MyLibrary.dll"], ["data/MyLibrary.xml"], templateGenerator, assemblyDataConfig);
             generator.GenerateDoc();
         }
     }

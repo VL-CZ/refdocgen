@@ -1,5 +1,4 @@
 using RefDocGen.AssemblyAnalysis;
-using RefDocGen.CodeElements;
 using RefDocGen.DocExtraction;
 using RefDocGen.TemplateGenerators;
 
@@ -13,12 +12,12 @@ public class DocGenerator
     /// <summary>
     /// Paths to the DLL assemblies.
     /// </summary>
-    private readonly string[] assemblyPaths;
+    private readonly IEnumerable<string> assemblyPaths;
 
     /// <summary>
     /// Paths to the XML documentation files.
     /// </summary>
-    private readonly string[] docXmlPaths;
+    private readonly IEnumerable<string> docXmlPaths;
 
     /// <summary>
     /// An instance used for generating the templates.
@@ -26,14 +25,9 @@ public class DocGenerator
     private readonly ITemplateGenerator templateGenerator;
 
     /// <summary>
-    /// Minimal visibility of the types and members to include.
+    /// Configuration describing what data should be extracted from the assemblies.
     /// </summary>
-    private readonly AccessModifier minVisibility;
-
-    /// <summary>
-    /// Specifies which inherited members should be included in types.
-    /// </summary>
-    private readonly MemberInheritanceMode memberInheritanceMode;
+    private readonly AssemblyDataConfiguration assemblyDataConfiguration;
 
     /// <summary>
     /// Initialize a new instance of <see cref="DocGenerator"/> class.
@@ -41,15 +35,13 @@ public class DocGenerator
     /// <param name="assemblyPaths">Paths to the DLL assemblies.</param>
     /// <param name="docXmlPaths">Path to the XML documentation files.</param>
     /// <param name="templateGenerator">An instance used for generating the templates</param>
-    /// <param name="minVisibility">Minimal visibility of the types and members to include.</param>
-    /// <param name="memberInheritanceMode">Specifies which inherited members should be included in types.</param>
-    public DocGenerator(string[] assemblyPaths, string[] docXmlPaths, ITemplateGenerator templateGenerator, AccessModifier minVisibility, MemberInheritanceMode memberInheritanceMode)
+    /// <param name="assemblyDataConfiguration">Configuration describing what data should be extracted from the assemblies.</param>
+    public DocGenerator(IEnumerable<string> assemblyPaths, IEnumerable<string> docXmlPaths, ITemplateGenerator templateGenerator, AssemblyDataConfiguration assemblyDataConfiguration)
     {
         this.assemblyPaths = assemblyPaths;
         this.docXmlPaths = docXmlPaths;
         this.templateGenerator = templateGenerator;
-        this.minVisibility = minVisibility;
-        this.memberInheritanceMode = memberInheritanceMode;
+        this.assemblyDataConfiguration = assemblyDataConfiguration;
     }
 
     /// <summary>
@@ -57,7 +49,7 @@ public class DocGenerator
     /// </summary>
     public void GenerateDoc()
     {
-        var assemblyAnalyzer = new AssemblyTypeExtractor(assemblyPaths, minVisibility, memberInheritanceMode);
+        var assemblyAnalyzer = new AssemblyTypeExtractor(assemblyPaths, assemblyDataConfiguration);
         var typeRegistry = assemblyAnalyzer.GetDeclaredTypes();
 
         var docCommentExtractor = new DocCommentExtractor(docXmlPaths, typeRegistry);
