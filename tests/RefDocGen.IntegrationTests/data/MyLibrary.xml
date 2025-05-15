@@ -107,7 +107,7 @@
             Class to be excluded from the documentation.
             </summary>
         </member>
-        <member name="T:MyLibrary.Exclude.Tools.AnotherClassToExclude">
+        <member name="T:MyLibrary.Exclude.Sub.AnotherClassToExclude">
             <summary>
             Class to be excluded from the documentation.
             </summary>

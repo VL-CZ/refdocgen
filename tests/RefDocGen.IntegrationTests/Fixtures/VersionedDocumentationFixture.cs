@@ -58,7 +58,7 @@ public class VersionedDocumentationFixture : IDisposable
         {
             var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir, staticPagesDirectory, version); // use the default template generator
 
-            var generator = new DocGenerator(["data/MyLibrary.dll"], ["data/MyLibrary.xml"], templateGenerator, AccessModifier.Private, MemberInheritanceMode.NonObject);
+            var generator = new DocGenerator(["data/MyLibrary.dll"], ["data/MyLibrary.xml"], templateGenerator, AccessModifier.Private, MemberInheritanceMode.NonObject, [], []);
             generator.GenerateDoc();
         }
     }
