@@ -26,29 +26,7 @@
 
             @foreach (var ns in Model.Namespaces)
             {
-                var namespaceUrl = $"./{ns.Id}.html";
-
-                <div data-id="namespace-section" id="@ns.Id">
-                    <h1 class="display-6" data-id="namespace-name">
-                        <samp>
-                            <a href="@namespaceUrl" class="refdocgen-link-primary">
-                                <span class="refdocgen-text-tertiary">namespace</span>
-                                <span>@ns.Name</span>
-                            </a>
-                        </samp>
-                    </h1>
-
-                    <hr />
-
-                    <table class="table">
-                        <tbody data-id="namespace-types">
-                            @foreach (var type in ns.AllTypes)
-                            {
-                                <TypeNameRow Type="@type" />
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                <NamespaceTypeList Namespace="@ns" />
             }
         </LayoutView>
     </CascadingValue>
