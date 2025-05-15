@@ -1,13 +1,15 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using RefDocGen.CodeElements.Abstract;
-using RefDocGen.CodeElements.Abstract.Types;
-using RefDocGen.CodeElements.Abstract.Types.Delegate;
-using RefDocGen.CodeElements.Abstract.Types.Enum;
+using RefDocGen.CodeElements;
+using RefDocGen.CodeElements.TypeRegistry;
+using RefDocGen.CodeElements.Types.Abstract;
+using RefDocGen.CodeElements.Types.Abstract.Delegate;
+using RefDocGen.CodeElements.Types.Abstract.Enum;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.DocVersioning;
 using RefDocGen.TemplateGenerators.Shared.StaticPages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Assemblies;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
@@ -18,27 +20,30 @@ namespace RefDocGen.TemplateGenerators.Shared;
 /// <summary>
 /// Class responsible for generating the Razor templates and populating them with the type data.
 /// </summary>
-/// <typeparam name="TDelegateTemplate">Type of the Razor component representing the delegate type.</typeparam>
-/// <typeparam name="TEnumTemplate">Type of the Razor component representing the enum type.</typeparam>
-/// <typeparam name="TNamespaceDetailTemplate">Type of the Razor component representing the namespace detail.</typeparam>
-/// <typeparam name="TNamespaceListTemplate">Type of the Razor component representing the namespace list.</typeparam>
-/// <typeparam name="TObjectTypeTemplate">Type of the Razor component representing the object type.</typeparam>
-/// <typeparam name="TStaticPageTemplate">Type of the Razor component representing the static page template.</typeparam>
+/// <typeparam name="TDelegateTemplate">Type of the Razor component representing a delegate type.</typeparam>
+/// <typeparam name="TEnumTemplate">Type of the Razor component representing a enum type.</typeparam>
+/// <typeparam name="TNamespaceTemplate">Type of the Razor component representing a namespace.</typeparam>
+/// <typeparam name="TAssemblyTemplate">Type of the Razor component representing an assembly.</typeparam>
+/// <typeparam name="TApiTemplate">Type of the Razor component representing the main API page.</typeparam>
+/// <typeparam name="TObjectTypeTemplate">Type of the Razor component representing an object type.</typeparam>
+/// <typeparam name="TStaticPageTemplate">Type of the Razor component representing a static page.</typeparam>
 internal class RazorTemplateGenerator<
+        TObjectTypeTemplate,
         TDelegateTemplate,
         TEnumTemplate,
-        TNamespaceDetailTemplate,
-        TNamespaceListTemplate,
-        TObjectTypeTemplate,
+        TNamespaceTemplate,
+        TAssemblyTemplate,
+        TApiTemplate,
         TStaticPageTemplate
     > : ITemplateGenerator
 
     where TDelegateTemplate : IComponent
     where TEnumTemplate : IComponent
-    where TNamespaceDetailTemplate : IComponent
-    where TNamespaceListTemplate : IComponent
+    where TNamespaceTemplate : IComponent
+    where TAssemblyTemplate : IComponent
     where TObjectTypeTemplate : IComponent
     where TStaticPageTemplate : IComponent
+    where TApiTemplate : IComponent
 {
     /// <summary>
     /// Namespace prefix of any template generator.
@@ -117,7 +122,7 @@ internal class RazorTemplateGenerator<
 
     /// <summary>
     /// Initialize a new instance of
-    /// <see cref="RazorTemplateGenerator{TDelegateTemplate, TEnumTemplate, TNamespaceDetailTemplate, TNamespaceListTemplate, TObjectTypeTemplate, TStaticPageTemplate}"/> class.
+    /// <see cref="RazorTemplateGenerator{TObjectTypeTemplate, TDelegateTemplate, TEnumTemplate, TNamespaceTemplate, TAssemblyTemplate, TApiTemplate, TStaticPageTemplate}"/> class.
     /// </summary>
     /// <param name="htmlRenderer">Renderer of the Razor components.</param>
     /// <param name="docCommentTransformer">Transformer of the XML doc comments into HTML.</param>
@@ -162,7 +167,15 @@ internal class RazorTemplateGenerator<
         GenerateObjectTypeTemplates(typeRegistry.ObjectTypes);
         GenerateEnumTemplates(typeRegistry.Enums);
         GenerateDelegateTemplates(typeRegistry.Delegates);
-        GenerateNamespaceTemplates(typeRegistry);
+        GenerateNamespaceTemplates(typeRegistry.Namespaces);
+        GenerateAssemblyTemplates(typeRegistry.Assemblies);
+        GenerateApiTemplate(typeRegistry.Assemblies);
+
+        if (!isUserDefinedIndexPage) // no user-specified 'index' page -> add the default one redirecting to API page.
+        {
+            string outputIndexPage = Path.Join(outputDirectory, indexPageId + ".html");
+            File.Copy(defaultIndexPage, outputIndexPage, true);
+        }
 
         CopyStaticTemplateFilesDirectory();
 
@@ -204,24 +217,33 @@ internal class RazorTemplateGenerator<
     }
 
     /// <summary>
-    /// Generate the templates for the namespaces (both namespace list and individual namespace details pages).
+    /// Generate the templates representing the individual namespaces.
     /// </summary>
-    /// <param name="types">The type data to be used in the templates.</param>
-    private void GenerateNamespaceTemplates(ITypeRegistry types)
+    /// <param name="namespaces">The namespace data to be used in the templates.</param>
+    private void GenerateNamespaceTemplates(IEnumerable<NamespaceData> namespaces)
     {
-        var namespaceTMs = NamespaceListTMCreator.GetFrom(types);
+        var namespaceTMs = namespaces.Select(NamespaceTMCreator.GetFrom);
+        GenerateTemplates<TNamespaceTemplate, NamespaceTM>(namespaceTMs);
+    }
 
-        // namespace list template
-        GenerateTemplate<TNamespaceListTemplate, IEnumerable<NamespaceTM>>(namespaceTMs, indexPageId);
+    /// <summary>
+    /// Generate the templates representing the individual assemblies.
+    /// </summary>
+    /// <param name="assemblies">The assembly data to be used in the templates.</param>
+    private void GenerateAssemblyTemplates(IEnumerable<AssemblyData> assemblies)
+    {
+        var assemblyTMs = assemblies.Select(AssemblyTMCreator.GetFrom);
+        GenerateTemplates<TAssemblyTemplate, AssemblyTM>(assemblyTMs);
+    }
 
-        if (!isUserDefinedIndexPage) // no user-specified 'index' page -> add the default one redirecting to API page.
-        {
-            string outputIndexPage = Path.Join(outputDirectory, indexPageId + ".html");
-            File.Copy(defaultIndexPage, outputIndexPage, true);
-        }
-
-        // namespace detail templates
-        GenerateTemplates<TNamespaceDetailTemplate, NamespaceTM>(namespaceTMs);
+    /// <summary>
+    /// Generate the API home page template.
+    /// </summary>
+    /// <param name="assemblies">The assembly data to be used in the template.</param>
+    private void GenerateApiTemplate(IEnumerable<AssemblyData> assemblies)
+    {
+        var assemblyTMs = assemblies.Select(AssemblyTMCreator.GetFrom);
+        GenerateTemplate<TApiTemplate, IEnumerable<AssemblyTM>>(assemblyTMs, indexPageId);
     }
 
     /// <summary>
@@ -313,8 +335,8 @@ internal class RazorTemplateGenerator<
         Type[] templateTypes = [
             typeof(TDelegateTemplate),
             typeof(TEnumTemplate),
-            typeof(TNamespaceDetailTemplate),
-            typeof(TNamespaceListTemplate),
+            typeof(TNamespaceTemplate),
+            typeof(TAssemblyTemplate),
             typeof(TObjectTypeTemplate)
         ];
 

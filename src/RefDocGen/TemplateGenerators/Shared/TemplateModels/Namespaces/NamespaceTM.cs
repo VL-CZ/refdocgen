@@ -33,4 +33,3 @@ public record NamespaceTM(
     /// <inheritdoc/>
     public string Id => Name;
 }
-

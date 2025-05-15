@@ -1,4 +1,4 @@
-using RefDocGen.CodeElements.Abstract.Types.Delegate;
+using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
@@ -27,6 +27,7 @@ internal class DelegateTMCreator : TypeTMCreator
             delegateType.Id,
             GetTypeName(delegateType),
             delegateType.Namespace,
+            delegateType.Assembly,
             modifiers.GetStrings(),
             GetTypeLink(delegateType.ReturnType),
             delegateType.ReturnType.IsVoid,

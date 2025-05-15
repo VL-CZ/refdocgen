@@ -1,8 +1,8 @@
-using RefDocGen.CodeElements.Abstract.Members;
-using RefDocGen.CodeElements.Abstract.Types;
-using RefDocGen.CodeElements.Abstract.Types.Attribute;
-using RefDocGen.CodeElements.Abstract.Types.Exception;
-using RefDocGen.CodeElements.Abstract.Types.TypeName;
+using RefDocGen.CodeElements.Members.Abstract;
+using RefDocGen.CodeElements.Types.Abstract;
+using RefDocGen.CodeElements.Types.Abstract.Attribute;
+using RefDocGen.CodeElements.Types.Abstract.Exception;
+using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;

@@ -1,4 +1,4 @@
-using RefDocGen.CodeElements.Abstract.Types.Attribute;
+using RefDocGen.CodeElements.Types.Abstract.Attribute;
 
 namespace RefDocGen.TemplateGenerators.Shared.Tools.Names;
 

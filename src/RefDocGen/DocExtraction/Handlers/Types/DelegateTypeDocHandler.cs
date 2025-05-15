@@ -1,4 +1,4 @@
-using RefDocGen.CodeElements.Concrete.Types.Delegate;
+using RefDocGen.CodeElements.Types.Concrete.Delegate;
 using RefDocGen.DocExtraction.Handlers.Tools;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.Tools.Xml;

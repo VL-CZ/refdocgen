@@ -617,7 +617,8 @@
             <description>15</description>
             </item>
             </list>
-            <see href="http://www.google.com">Google</see> <see langword="true"/>
+            <see href="http://www.google.com">Google</see>
+            <see langword="true"/>
             </summary>
             <seealso href="http://www.google.com"/>
             <seealso cref="F:MyLibrary.User.MaxAge">max age constant</seealso>

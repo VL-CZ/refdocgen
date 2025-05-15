@@ -18,13 +18,13 @@ public static class Program
     public static async Task Main()
     {
         string? rootPath = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).Parent?.Parent?.Parent?.Parent?.Parent?.FullName;
-        string dllPath = Path.Join(rootPath, "demo-lib", "MyLibrary.dll");
-        string docPath = Path.Join(rootPath, "demo-lib", "MyLibrary.xml");
+        string[] dllPaths = [Path.Join(rootPath, "demo-lib", "MyLibrary.dll"), Path.Join(rootPath, "demo-lib", "MyApp.dll")];
+        string[] docPaths = [Path.Join(rootPath, "demo-lib", "MyLibrary.xml"), Path.Join(rootPath, "demo-lib", "MyApp.xml")];
 
         string projectPath = Path.Join(rootPath, "src", "RefDocGen");
-        string outputDir = Path.Combine(projectPath, "out-versions");
+        string outputDir = Path.Combine(projectPath, "out");
         string staticPagesDir = "C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\demo-lib\\pages";
-        string? version = "v1.16";
+        string? version = null;
 
         var minVisibility = AccessModifier.Private;
         var memberInheritanceMode = MemberInheritanceMode.NonObject;
@@ -39,7 +39,7 @@ public static class Program
 
         var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir, staticPagesDir, version);
 
-        var docGenerator = new DocGenerator(dllPath, docPath, templateGenerator, minVisibility, memberInheritanceMode);
+        var docGenerator = new DocGenerator(dllPaths, docPaths, templateGenerator, minVisibility, memberInheritanceMode);
         docGenerator.GenerateDoc();
 
         Console.WriteLine("Done...");

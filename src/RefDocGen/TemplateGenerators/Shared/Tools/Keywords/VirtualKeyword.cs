@@ -1,4 +1,4 @@
-using RefDocGen.CodeElements.Abstract.Members;
+using RefDocGen.CodeElements.Members.Abstract;
 
 namespace RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
 

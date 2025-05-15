@@ -66,6 +66,18 @@ public class TypeDataTests
     }
 
     [Theory]
+    [InlineData("MyLibrary.User", "MyLibrary")]
+    [InlineData("MyLibrary.Tools.Collections.IMyCollection`1", "MyLibrary")]
+    public void Assembly_Matches(string pageName, string expectedAssembly)
+    {
+        using var document = DocumentationTools.GetApiPage($"{pageName}.html");
+
+        string ns = TypePageTools.GetAssemblyString(document.GetTypeDataSection());
+
+        ns.ShouldBe($"assembly {expectedAssembly}");
+    }
+
+    [Theory]
     [InlineData("MyLibrary.Tools.Collections.MyCollection`1.MyCollectionEnumerator", "MyCollection<T>")]
     [InlineData("MyLibrary.Tools.Collections.MyCollection`1.GenericEnumerator`1", "MyCollection<T>")]
     public void DeclaringType_Matches(string pageName, string expectedDeclaringType)

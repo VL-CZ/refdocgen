@@ -1,7 +1,7 @@
 using NSubstitute;
-using RefDocGen.CodeElements;
-using RefDocGen.CodeElements.Abstract.Members;
-using RefDocGen.CodeElements.Abstract.Types.TypeName;
+using RefDocGen.CodeElements.Members;
+using RefDocGen.CodeElements.Members.Abstract;
+using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 using Shouldly;
 

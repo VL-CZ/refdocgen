@@ -1,6 +1,6 @@
-using RefDocGen.CodeElements;
-using RefDocGen.CodeElements.Abstract.Members;
-using RefDocGen.CodeElements.Abstract.Types;
+using RefDocGen.CodeElements.Members.Abstract;
+using RefDocGen.CodeElements.Types;
+using RefDocGen.CodeElements.Types.Abstract;
 
 namespace RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
 

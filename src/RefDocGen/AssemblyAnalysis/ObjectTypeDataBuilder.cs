@@ -1,10 +1,11 @@
+using RefDocGen.AssemblyAnalysis.Extensions;
 using RefDocGen.AssemblyAnalysis.MemberCreators;
 using RefDocGen.CodeElements;
-using RefDocGen.CodeElements.Abstract.Members;
-using RefDocGen.CodeElements.Concrete.Members;
-using RefDocGen.CodeElements.Concrete.Types;
-using RefDocGen.CodeElements.Concrete.Types.Delegate;
-using RefDocGen.CodeElements.Concrete.Types.Enum;
+using RefDocGen.CodeElements.Members.Abstract;
+using RefDocGen.CodeElements.Members.Concrete;
+using RefDocGen.CodeElements.Types.Concrete;
+using RefDocGen.CodeElements.Types.Concrete.Delegate;
+using RefDocGen.CodeElements.Types.Concrete.Enum;
 using System.Reflection;
 
 namespace RefDocGen.AssemblyAnalysis;

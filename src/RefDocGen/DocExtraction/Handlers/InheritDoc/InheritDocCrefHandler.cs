@@ -1,4 +1,4 @@
-using RefDocGen.CodeElements.Concrete;
+using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;

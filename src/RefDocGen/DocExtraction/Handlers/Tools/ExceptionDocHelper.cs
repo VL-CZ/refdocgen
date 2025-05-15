@@ -1,5 +1,5 @@
-using RefDocGen.CodeElements.Abstract.Types.Exception;
-using RefDocGen.CodeElements.Concrete.Types.Exception;
+using RefDocGen.CodeElements.Types.Abstract.Exception;
+using RefDocGen.CodeElements.Types.Concrete.Exception;
 using RefDocGen.DocExtraction.Tools;
 using System.Xml.Linq;
 

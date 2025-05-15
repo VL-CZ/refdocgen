@@ -1,5 +1,5 @@
-using RefDocGen.CodeElements.Abstract.Members.Enum;
-using RefDocGen.CodeElements.Abstract.Types.Enum;
+using RefDocGen.CodeElements.Members.Abstract.Enum;
+using RefDocGen.CodeElements.Types.Abstract.Enum;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
@@ -31,6 +31,7 @@ internal class EnumTMCreator : TypeTMCreator
             enumType.Id,
             GetTypeName(enumType),
             enumType.Namespace,
+            enumType.Assembly,
             modifiers.GetStrings(),
             enumMemberTMs,
             GetTemplateModels(enumType.Attributes),

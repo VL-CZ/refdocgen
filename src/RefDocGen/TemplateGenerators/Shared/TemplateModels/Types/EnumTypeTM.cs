@@ -7,7 +7,8 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 /// </summary>
 /// <param name="Id">Unique identifier of the enum.</param>
 /// <param name="Name">Name of the enum.</param>
-/// <param name="Namespace">Namespace containing the enum.</param>
+/// <param name="Namespace">The namespace containing the enum.</param>
+/// <param name="Assembly">The assembly containing the enum.</param>
 /// <param name="Modifiers">Collection of modifiers for the type (e.g., public, abstract).</param>
 /// <param name="SummaryDocComment">'summary' documentation comment for the enum. <c>null</c> if the doc comment is not provided.</param>
 /// <param name="RemarksDocComment">'remarks' documentation comment for the enum. <c>null</c> if the doc comment is not provided.</param>
@@ -24,6 +25,7 @@ public record EnumTypeTM(
     string Id,
     string Name,
     string Namespace,
+    string Assembly,
     string[] Modifiers,
     EnumMemberTM[] Members,
     AttributeTM[] Attributes,

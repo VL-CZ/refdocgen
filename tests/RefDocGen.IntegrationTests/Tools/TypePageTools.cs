@@ -179,6 +179,16 @@ internal class TypePageTools
     }
 
     /// <summary>
+    /// Gets the assembly containing the type as a string.
+    /// </summary>
+    /// <param name="element">The HTML element representing the type.</param>
+    /// <returns>The assembly name as a string.</returns>
+    internal static string GetAssemblyString(IElement element)
+    {
+        return element.GetParsedContent(DataId.TypeAssembly);
+    }
+
+    /// <summary>
     /// Gets the name of the nested type.
     /// </summary>
     /// <param name="element">The HTML element representing the nested type.</param>
