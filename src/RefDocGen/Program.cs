@@ -21,6 +21,9 @@ public static class Program
         string[] dllPaths = [Path.Join(rootPath, "demo-lib", "MyLibrary.dll"), Path.Join(rootPath, "demo-lib", "MyApp.dll")];
         string[] docPaths = [Path.Join(rootPath, "demo-lib", "MyLibrary.xml"), Path.Join(rootPath, "demo-lib", "MyApp.xml")];
 
+        string[] assembliesToExclude = ["MyApp"];
+        string[] namespacesToExclude = ["MyLibrary.Exclude", "MyLibrary.Tools.Exclude"];
+
         string projectPath = Path.Join(rootPath, "src", "RefDocGen");
         string outputDir = Path.Combine(projectPath, "out");
         string staticPagesDir = "C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\demo-lib\\pages";
@@ -39,7 +42,7 @@ public static class Program
 
         var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir, staticPagesDir, version);
 
-        var docGenerator = new DocGenerator(dllPaths, docPaths, templateGenerator, minVisibility, memberInheritanceMode);
+        var docGenerator = new DocGenerator(dllPaths, docPaths, templateGenerator, minVisibility, memberInheritanceMode, assembliesToExclude, namespacesToExclude);
         docGenerator.GenerateDoc();
 
         Console.WriteLine("Done...");

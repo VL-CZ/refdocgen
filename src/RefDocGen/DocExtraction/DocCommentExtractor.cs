@@ -95,14 +95,14 @@ internal class DocCommentExtractor
     /// <summary>
     /// Paths to the XML documentation files.
     /// </summary>
-    private readonly string[] docXmlPaths;
+    private readonly IEnumerable<string> docXmlPaths;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
     /// </summary>
     /// <param name="docXmlPaths">Paths to the XML documentation files.</param>
     /// <param name="typeRegistry">Registry of the declared types, to which the documentation comments will be added.</param>
-    internal DocCommentExtractor(string[] docXmlPaths, TypeRegistry typeRegistry)
+    internal DocCommentExtractor(IEnumerable<string> docXmlPaths, TypeRegistry typeRegistry)
     {
         this.typeRegistry = typeRegistry;
         this.docXmlPaths = docXmlPaths;

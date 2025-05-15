@@ -102,6 +102,16 @@
             Asynchronous method for barking.
             </summary>
         </member>
+        <member name="T:MyLibrary.Exclude.ClassToExclude">
+            <summary>
+            Class to be excluded from the documentation.
+            </summary>
+        </member>
+        <member name="T:MyLibrary.Exclude.Tools.AnotherClassToExclude">
+            <summary>
+            Class to be excluded from the documentation.
+            </summary>
+        </member>
         <member name="T:MyLibrary.Hierarchy.IChild">
             <summary>
             IChild interface.
@@ -416,6 +426,11 @@
             </summary>
             <typeparam name="T">Type of the item.</typeparam>
             <param name="item">The item to add.</param>
+        </member>
+        <member name="T:MyLibrary.Tools.Exclude.ToolToExclude">
+            <summary>
+            Tool to be excluded from the documentation.
+            </summary>
         </member>
         <member name="T:MyLibrary.Tools.Point">
             <summary>
