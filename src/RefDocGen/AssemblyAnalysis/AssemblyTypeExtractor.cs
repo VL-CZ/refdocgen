@@ -70,25 +70,21 @@ internal class AssemblyTypeExtractor
     /// Initializes a new instance of the <see cref="AssemblyTypeExtractor"/> class with the specified assembly path.
     /// </summary>
     /// <param name="assemblyPaths">The path to the DLL assembly file</param>
-    /// <param name="minVisibility">Minimal visibility of the types and members to include.</param>
-    /// <param name="memberInheritanceMode">Specifies which inherited members should be included in types.</param>
-    /// <param name="assembliesToExclude">Names of assemblies to be excluded from the reference documentation.</param>
-    /// <param name="namespacesToExclude">Namespaces to be excluded from the reference documentation.</param>
-    internal AssemblyTypeExtractor(IEnumerable<string> assemblyPaths, AccessModifier minVisibility, MemberInheritanceMode memberInheritanceMode,
-        IEnumerable<string> assembliesToExclude, IEnumerable<string> namespacesToExclude)
+    /// <param name="configuration">Configuration describing what data should be extracted.</param>
+    internal AssemblyTypeExtractor(IEnumerable<string> assemblyPaths, AssemblyDataConfiguration configuration)
     {
         this.assemblyPaths = assemblyPaths;
-        this.minVisibility = minVisibility;
-        this.assembliesToExclude = assembliesToExclude;
-        this.namespacesToExclude = namespacesToExclude;
+        minVisibility = configuration.MinVisibility;
+        assembliesToExclude = configuration.AssembliesToExclude;
+        namespacesToExclude = configuration.NamespacesToExclude;
 
         var defaultBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
 
-        bindingFlags = memberInheritanceMode == MemberInheritanceMode.None
+        bindingFlags = configuration.MemberInheritanceMode == MemberInheritanceMode.None
             ? defaultBindingFlags | BindingFlags.DeclaredOnly
             : defaultBindingFlags;
 
-        excludeObjectMethods = memberInheritanceMode == MemberInheritanceMode.NonObject;
+        excludeObjectMethods = configuration.MemberInheritanceMode == MemberInheritanceMode.NonObject;
     }
 
     /// <summary>

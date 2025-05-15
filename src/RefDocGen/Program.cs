@@ -21,16 +21,17 @@ public static class Program
         string[] dllPaths = [Path.Join(rootPath, "demo-lib", "MyLibrary.dll"), Path.Join(rootPath, "demo-lib", "MyApp.dll")];
         string[] docPaths = [Path.Join(rootPath, "demo-lib", "MyLibrary.xml"), Path.Join(rootPath, "demo-lib", "MyApp.xml")];
 
-        string[] assembliesToExclude = ["MyApp"];
-        string[] namespacesToExclude = ["MyLibrary.Exclude", "MyLibrary.Tools.Exclude"];
-
         string projectPath = Path.Join(rootPath, "src", "RefDocGen");
         string outputDir = Path.Combine(projectPath, "out");
         string staticPagesDir = "C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\demo-lib\\pages";
         string? version = null;
 
-        var minVisibility = AccessModifier.Private;
-        var memberInheritanceMode = MemberInheritanceMode.NonObject;
+        var assemblyDataConfig = new AssemblyDataConfiguration(
+            MinVisibility: AccessModifier.Private,
+            MemberInheritanceMode: MemberInheritanceMode.NonObject,
+            AssembliesToExclude: ["MyApp"],
+            NamespacesToExclude: ["MyLibrary.Exclude", "MyLibrary.Tools.Exclude"]
+            );
 
         IServiceCollection services = new ServiceCollection();
         _ = services.AddLogging();
@@ -42,7 +43,7 @@ public static class Program
 
         var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir, staticPagesDir, version);
 
-        var docGenerator = new DocGenerator(dllPaths, docPaths, templateGenerator, minVisibility, memberInheritanceMode, assembliesToExclude, namespacesToExclude);
+        var docGenerator = new DocGenerator(dllPaths, docPaths, templateGenerator, assemblyDataConfig);
         docGenerator.GenerateDoc();
 
         Console.WriteLine("Done...");
