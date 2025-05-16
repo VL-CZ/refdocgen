@@ -17,7 +17,7 @@
     <CascadingValue Value="Versions">
         <LayoutView Layout="typeof(AppLayout)">
 
-            <h1 class="display-1">Search</h1>
+            <h1 class="display-4">Search</h1>
 
             <div class="input-group input-group-lg mb-3">
                 <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"
@@ -61,12 +61,20 @@
                         const item = document.createElement('div');
 
                         const link = document.createElement('a');
-                        link.setAttribute("class", "link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover fs-5");
 
+                        link.setAttribute("class", "link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover fs-5");
                         link.href = result.item.Url;
                         link.textContent = result.item.Name;
                         link.target = '_blank';
+
                         item.appendChild(link);
+
+                        const doc = document.createElement('div');
+                        doc.setAttribute("class", "text-body-secondary")
+                        doc.textContent = result.item.DocComment;
+
+                        item.appendChild(doc);
+
                         resultsList.appendChild(item);
                       });
 

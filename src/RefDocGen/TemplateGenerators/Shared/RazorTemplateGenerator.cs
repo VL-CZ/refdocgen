@@ -193,7 +193,7 @@ internal class RazorTemplateGenerator<
     /// <param name="typeRegistry">The type data to be used in the templates.</param>
     private void GenerateSearchPageTemplate(ITypeRegistry typeRegistry)
     {
-        var typeTemplateModels = typeRegistry.ObjectTypes.Select(t => new SearchPageTM(t.Id, t.Namespace + "." + CSharpTypeName.Of(t), t.SummaryDocComment.ToString()));
+        var typeTemplateModels = typeRegistry.ObjectTypes.Select(t => new SearchPageTM(t.Id, t.Namespace + "." + CSharpTypeName.Of(t), t.SummaryDocComment.Value));
         GenerateTemplate<SearchTemplate, IEnumerable<SearchPageTM>>(typeTemplateModels, "search");
     }
 
