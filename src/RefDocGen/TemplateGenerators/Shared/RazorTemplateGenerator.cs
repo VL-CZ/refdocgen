@@ -5,6 +5,7 @@ using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
+using RefDocGen.TemplateGenerators.Default.Templates;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.DocVersioning;
 using RefDocGen.TemplateGenerators.Shared.StaticPages;
@@ -13,6 +14,7 @@ using RefDocGen.TemplateGenerators.Shared.TemplateModels.Assemblies;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
+using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 using RefDocGen.Tools;
 
 namespace RefDocGen.TemplateGenerators.Shared;
@@ -171,6 +173,8 @@ internal class RazorTemplateGenerator<
         GenerateAssemblyTemplates(typeRegistry.Assemblies);
         GenerateApiTemplate(typeRegistry.Assemblies);
 
+        GenerateSearchPageTemplate(typeRegistry);
+
         if (!isUserDefinedIndexPage) // no user-specified 'index' page -> add the default one redirecting to API page.
         {
             string outputIndexPage = Path.Join(outputDirectory, indexPageId + ".html");
@@ -181,6 +185,16 @@ internal class RazorTemplateGenerator<
 
         versionManager?.UpdateOlderVersions(pagesGenerated);
         versionManager?.SaveCurrentVersionData(pagesGenerated);
+    }
+
+    /// <summary>
+    /// Generate the templates representing the individual object types.
+    /// </summary>
+    /// <param name="typeRegistry">The type data to be used in the templates.</param>
+    private void GenerateSearchPageTemplate(ITypeRegistry typeRegistry)
+    {
+        var typeTemplateModels = typeRegistry.ObjectTypes.Select(t => new SearchPageTM(t.Id, t.Namespace + "." + CSharpTypeName.Of(t), t.SummaryDocComment.ToString()));
+        GenerateTemplate<SearchTemplate, IEnumerable<SearchPageTM>>(typeTemplateModels, "search");
     }
 
     /// <summary>

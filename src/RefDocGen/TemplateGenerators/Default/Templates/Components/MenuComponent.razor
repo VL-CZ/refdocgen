@@ -57,6 +57,12 @@
 
             </ul>
             <ul class="navbar-nav ms-auto">
+                <li>
+                    <form class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                               id="menu-search-bar" />
+                    </form>
+                </li>
                 <li class="nav-item" id="theme-switcher">
                     <button class="nav-link">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-brightness-high" viewBox="0 0 16 16">
@@ -69,3 +75,13 @@
         </div>
     </div>
 </nav>
+
+<script>
+    document.getElementById('menu-search-bar').addEventListener('focus', () => {
+        // Use pushState to change URL
+        //   history.pushState({ page: 'other' }, 'Other Page', 'other.html');
+
+        // Then actually redirect to the other page
+        window.location.href = './search.html';
+    });
+</script>
