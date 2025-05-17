@@ -20,70 +20,30 @@
             <h1 class="display-4">Search</h1>
 
             <div class="input-group input-group-lg mb-3">
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"
+                <input type="text" class="form-control" aria-label="Search input" aria-describedby="inputGroup-sizing-lg"
                        id="search-box">
             </div>
 
-            <div id="results">
+            <div id="search-results">
             </div>
 
-            <div id="json-data" style="display: none;">
+            <div id="search-result-template">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title"><samp><a class="search-result-title-link refdocgen-link" href=""></a></samp></h5>
+                        <p class="card-text">
+                            <i class="text-body-secondary search-result-body"></i>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="search-json-data">
                 @JsonSerializer.Serialize(Model)
             </div>
 
             <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js"></script>
-            <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    document.getElementById('search-box').focus();
-
-                    const jsonText = document.getElementById('json-data').innerHTML.trim();
-
-                    // Parse the JSON string into a JS object
-                    const data = JSON.parse(jsonText);
-
-                      const fuse = new Fuse(data, {
-                      keys: ['Name'],
-                      threshold: 0.3 // Adjust for strict/fuzzy matching
-                    });
-
-                    const searchBox = document.getElementById('search-box');
-                    const resultsList = document.getElementById('results');
-
-                    searchBox.addEventListener('input', () => {
-                        console.log("Hello");
-
-                      const query = searchBox.value.trim();
-                      const results = fuse.search(query);
-
-                      resultsList.innerHTML = '';
-
-                      results.forEach(result => {
-                        const item = document.createElement('div');
-
-                        const link = document.createElement('a');
-
-                        link.setAttribute("class", "link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover fs-5");
-                        link.href = result.item.Url;
-                        link.textContent = result.item.Name;
-                        link.target = '_blank';
-
-                        item.appendChild(link);
-
-                        const doc = document.createElement('div');
-                        doc.setAttribute("class", "text-body-secondary")
-                        doc.textContent = result.item.DocComment;
-
-                        item.appendChild(doc);
-
-                        resultsList.appendChild(item);
-                      });
-
-                      if (results.length === 0 && query !== '') {
-                        resultsList.innerHTML = '<li>No results found.</li>';
-                      }
-                    });
-                });
-            </script>
+            <script src="../Static/search.js"></script>
 
         </LayoutView>
     </CascadingValue>

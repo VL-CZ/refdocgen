@@ -172,7 +172,6 @@ internal class RazorTemplateGenerator<
         GenerateNamespaceTemplates(typeRegistry.Namespaces);
         GenerateAssemblyTemplates(typeRegistry.Assemblies);
         GenerateApiTemplate(typeRegistry.Assemblies);
-
         GenerateSearchPageTemplate(typeRegistry);
 
         if (!isUserDefinedIndexPage) // no user-specified 'index' page -> add the default one redirecting to API page.
@@ -193,8 +192,11 @@ internal class RazorTemplateGenerator<
     /// <param name="typeRegistry">The type data to be used in the templates.</param>
     private void GenerateSearchPageTemplate(ITypeRegistry typeRegistry)
     {
-        var typeTemplateModels = typeRegistry.ObjectTypes.Select(t => new SearchPageTM(t.Id, t.Namespace + "." + CSharpTypeName.Of(t), t.SummaryDocComment.Value));
-        GenerateTemplate<SearchTemplate, IEnumerable<SearchPageTM>>(typeTemplateModels, "search");
+        var typeTemplateModels = typeRegistry.ObjectTypes.Select(t => new SearchPageTM(t.Id, t.Namespace + "." + CSharpTypeName.Of(t) + " class", t.SummaryDocComment.Value));
+        var nsTemplateModels = typeRegistry.Namespaces.Select(n => new SearchPageTM(n.Name, n.Name + " namespace", string.Empty));
+        var assemblyTemplateModels = typeRegistry.Assemblies.Select(a => new SearchPageTM(a.Name + "-DLL", a.Name + " assembly", string.Empty));
+
+        GenerateTemplate<SearchTemplate, IEnumerable<SearchPageTM>>([.. typeTemplateModels, .. nsTemplateModels], "search");
     }
 
     /// <summary>

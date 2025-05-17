@@ -148,6 +148,8 @@ h6:hover .anchor-link {
 
 // Version-related elements
 #version-list,
-#current-version {
+#current-version,
+#search-result-template,
+#search-json-data {
     display: none;
 }

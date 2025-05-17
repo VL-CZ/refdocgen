@@ -27,6 +27,9 @@
         <None Update="TemplateGenerators\Default\Templates\Static\bootstrap-5.3.5-dist.bundle.min.js">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="TemplateGenerators\Default\Templates\Static\search.js">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Update="TemplateGenerators\Default\Templates\Static\script.js">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
