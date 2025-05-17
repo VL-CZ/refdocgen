@@ -1,4 +1,4 @@
-namespace RefDocGen.TemplateGenerators.Default.Templates.Helpers;
+namespace RefDocGen.TemplateGenerators.Shared.TemplateTools;
 
 /// <summary>
 /// Helper class for URL manipulation, specifically for generating relative URIs.

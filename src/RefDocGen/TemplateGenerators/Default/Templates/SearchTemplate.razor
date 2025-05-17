@@ -11,40 +11,51 @@
 
     [Parameter]
     public required string[]? Versions { get; set; }
+
+    private const int NestingLevel = 0;
 }
 
 <CascadingValue Value="TopMenuData">
     <CascadingValue Value="Versions">
-        <LayoutView Layout="typeof(AppLayout)">
+        <CascadingValue Value="NestingLevel">
+            <LayoutView Layout="typeof(AppLayout)">
 
-            <h1 class="display-4">Search</h1>
+                <h1 class="display-4">Search</h1>
 
-            <div class="input-group input-group-lg mb-3">
-                <input type="text" class="form-control" aria-label="Search input" aria-describedby="inputGroup-sizing-lg"
-                       id="search-box">
-            </div>
+                <div class="input-group input-group-lg mb-3">
+                    <input type="text" class="form-control" aria-label="Search input" aria-describedby="inputGroup-sizing-lg"
+                           id="search-box">
+                </div>
 
-            <div id="search-results">
-            </div>
+                <div id="search-results">
+                </div>
 
-            <div id="search-result-template">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title"><samp><a class="search-result-title-link refdocgen-link" href=""></a></samp></h5>
-                        <p class="card-text">
-                            <i class="text-body-secondary search-result-body"></i>
-                        </p>
+                <div id="search-result-template">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title"><samp><a class="search-result-title-link refdocgen-link" href=""></a></samp></h5>
+                            <p class="card-text">
+                                <i class="text-body-secondary search-result-body"></i>
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="search-json-data">
-                @JsonSerializer.Serialize(Model)
-            </div>
+                <div id="search-json-data">
+                    @JsonSerializer.Serialize(Model)
+                </div>
 
-            <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js"></script>
-            <script src="../Static/search.js"></script>
+                @{
+                    var searchJsPath = UrlHelper.GetRelativeUrl("Static/search.js", NestingLevel);
+                }
 
-        </LayoutView>
+                <!-- Fuse.js -->
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js"></script>
+
+                <!-- Custom JS script -->
+                <script src="@searchJsPath"></script>
+
+            </LayoutView>
+        </CascadingValue>
     </CascadingValue>
 </CascadingValue>
