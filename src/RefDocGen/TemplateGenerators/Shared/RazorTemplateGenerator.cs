@@ -5,7 +5,6 @@ using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
-using RefDocGen.TemplateGenerators.Default.Templates;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.DocVersioning;
 using RefDocGen.TemplateGenerators.Shared.StaticPages;
@@ -21,30 +20,33 @@ namespace RefDocGen.TemplateGenerators.Shared;
 /// <summary>
 /// Class responsible for generating the Razor templates and populating them with the type data.
 /// </summary>
-/// <typeparam name="TDelegateTemplate">Type of the Razor component representing a delegate type.</typeparam>
-/// <typeparam name="TEnumTemplate">Type of the Razor component representing a enum type.</typeparam>
-/// <typeparam name="TNamespaceTemplate">Type of the Razor component representing a namespace.</typeparam>
-/// <typeparam name="TAssemblyTemplate">Type of the Razor component representing an assembly.</typeparam>
-/// <typeparam name="TApiTemplate">Type of the Razor component representing the main API page.</typeparam>
-/// <typeparam name="TObjectTypeTemplate">Type of the Razor component representing an object type.</typeparam>
-/// <typeparam name="TStaticPageTemplate">Type of the Razor component representing a static page.</typeparam>
+/// <typeparam name="TDelegatePageTemplate">Type of the Razor component representing a delegate page.</typeparam>
+/// <typeparam name="TEnumPageTemplate">Type of the Razor component representing a enum page.</typeparam>
+/// <typeparam name="TNamespacePageTemplate">Type of the Razor component representing a namespace page.</typeparam>
+/// <typeparam name="TAssemblyPageTemplate">Type of the Razor component representing an assembly page.</typeparam>
+/// <typeparam name="TApiPageTemplate">Type of the Razor component representing the main API page.</typeparam>
+/// <typeparam name="TObjectTypePageTemplate">Type of the Razor component representing an object type page.</typeparam>
+/// <typeparam name="TStaticPageTemplate">Type of the Razor component representing a static page template.</typeparam>
+/// <typeparam name="TSearchPageTemplate">Type of the Razor component representing a search page.</typeparam>
 internal class RazorTemplateGenerator<
-        TObjectTypeTemplate,
-        TDelegateTemplate,
-        TEnumTemplate,
-        TNamespaceTemplate,
-        TAssemblyTemplate,
-        TApiTemplate,
-        TStaticPageTemplate
+        TObjectTypePageTemplate,
+        TDelegatePageTemplate,
+        TEnumPageTemplate,
+        TNamespacePageTemplate,
+        TAssemblyPageTemplate,
+        TApiPageTemplate,
+        TStaticPageTemplate,
+        TSearchPageTemplate
     > : ITemplateGenerator
 
-    where TDelegateTemplate : IComponent
-    where TEnumTemplate : IComponent
-    where TNamespaceTemplate : IComponent
-    where TAssemblyTemplate : IComponent
-    where TObjectTypeTemplate : IComponent
+    where TDelegatePageTemplate : IComponent
+    where TEnumPageTemplate : IComponent
+    where TNamespacePageTemplate : IComponent
+    where TAssemblyPageTemplate : IComponent
+    where TObjectTypePageTemplate : IComponent
     where TStaticPageTemplate : IComponent
-    where TApiTemplate : IComponent
+    where TApiPageTemplate : IComponent
+    where TSearchPageTemplate : IComponent
 {
     /// <summary>
     /// Namespace prefix of any template generator.
@@ -123,7 +125,7 @@ internal class RazorTemplateGenerator<
 
     /// <summary>
     /// Initialize a new instance of
-    /// <see cref="RazorTemplateGenerator{TObjectTypeTemplate, TDelegateTemplate, TEnumTemplate, TNamespaceTemplate, TAssemblyTemplate, TApiTemplate, TStaticPageTemplate}"/> class.
+    /// <see cref="RazorTemplateGenerator{TObjectTypeTemplate, TDelegateTemplate, TEnumTemplate, TNamespaceTemplate, TAssemblyTemplate, TApiTemplate, TStaticPageTemplate, TSearchPageTemplate}"/> class.
     /// </summary>
     /// <param name="htmlRenderer">Renderer of the Razor components.</param>
     /// <param name="docCommentTransformer">Transformer of the XML doc comments into HTML.</param>
@@ -171,7 +173,7 @@ internal class RazorTemplateGenerator<
         GenerateNamespacePages(typeRegistry.Namespaces);
         GenerateAssemblyPages(typeRegistry.Assemblies);
         GenerateApiHomepage(typeRegistry.Assemblies);
-        GenerateSearchPageTemplate(typeRegistry);
+        GenerateSearchPage(typeRegistry);
 
         if (!isUserDefinedIndexPage) // no user-specified 'index' page -> add the default one redirecting to API page.
         {
@@ -189,7 +191,7 @@ internal class RazorTemplateGenerator<
     /// Generate the template representing the search page.
     /// </summary>
     /// <param name="typeRegistry">Type registry containing the declared types.</param>
-    private void GenerateSearchPageTemplate(ITypeRegistry typeRegistry)
+    private void GenerateSearchPage(ITypeRegistry typeRegistry)
     {
         var model = SearchResultTMCreator.GetFrom(typeRegistry);
 
@@ -198,7 +200,7 @@ internal class RazorTemplateGenerator<
             ["Model"] = model
         };
 
-        ProcessTemplate<SearchTemplate>(paramDictionary, outputDirectory, "search");
+        ProcessTemplate<TSearchPageTemplate>(paramDictionary, outputDirectory, "search");
     }
 
     /// <summary>
@@ -209,7 +211,7 @@ internal class RazorTemplateGenerator<
     {
         var creator = new ObjectTypeTMCreator(docCommentTransformer);
         var typeTemplateModels = types.Select(creator.GetFrom);
-        ProcessApiTemplates<TObjectTypeTemplate, ObjectTypeTM>(typeTemplateModels);
+        ProcessApiTemplates<TObjectTypePageTemplate, ObjectTypeTM>(typeTemplateModels);
     }
 
     /// <summary>
@@ -220,7 +222,7 @@ internal class RazorTemplateGenerator<
     {
         var creator = new EnumTMCreator(docCommentTransformer);
         var enumTMs = enums.Select(creator.GetFrom);
-        ProcessApiTemplates<TEnumTemplate, EnumTypeTM>(enumTMs);
+        ProcessApiTemplates<TEnumPageTemplate, EnumTypeTM>(enumTMs);
     }
 
     /// <summary>
@@ -231,7 +233,7 @@ internal class RazorTemplateGenerator<
     {
         var creator = new DelegateTMCreator(docCommentTransformer);
         var delegateTMs = delegates.Select(creator.GetFrom);
-        ProcessApiTemplates<TDelegateTemplate, DelegateTypeTM>(delegateTMs);
+        ProcessApiTemplates<TDelegatePageTemplate, DelegateTypeTM>(delegateTMs);
     }
 
     /// <summary>
@@ -241,7 +243,7 @@ internal class RazorTemplateGenerator<
     private void GenerateNamespacePages(IEnumerable<NamespaceData> namespaces)
     {
         var namespaceTMs = namespaces.Select(NamespaceTMCreator.GetFrom);
-        ProcessApiTemplates<TNamespaceTemplate, NamespaceTM>(namespaceTMs);
+        ProcessApiTemplates<TNamespacePageTemplate, NamespaceTM>(namespaceTMs);
     }
 
     /// <summary>
@@ -251,7 +253,7 @@ internal class RazorTemplateGenerator<
     private void GenerateAssemblyPages(IEnumerable<AssemblyData> assemblies)
     {
         var assemblyTMs = assemblies.Select(AssemblyTMCreator.GetFrom);
-        ProcessApiTemplates<TAssemblyTemplate, AssemblyTM>(assemblyTMs);
+        ProcessApiTemplates<TAssemblyPageTemplate, AssemblyTM>(assemblyTMs);
     }
 
     /// <summary>
@@ -261,7 +263,7 @@ internal class RazorTemplateGenerator<
     private void GenerateApiHomepage(IEnumerable<AssemblyData> assemblies)
     {
         var assemblyTMs = assemblies.Select(AssemblyTMCreator.GetFrom);
-        ProcessApiTemplate<TApiTemplate, IEnumerable<AssemblyTM>>(assemblyTMs, indexPageId);
+        ProcessApiTemplate<TApiPageTemplate, IEnumerable<AssemblyTM>>(assemblyTMs, indexPageId);
     }
 
     /// <summary>
@@ -332,14 +334,14 @@ internal class RazorTemplateGenerator<
         const string baseFolder = "TemplateGenerators";
 
         Type[] templateTypes = [
-            typeof(TDelegateTemplate),
-            typeof(TEnumTemplate),
-            typeof(TNamespaceTemplate),
-            typeof(TAssemblyTemplate),
-            typeof(TObjectTypeTemplate)
+            typeof(TDelegatePageTemplate),
+            typeof(TEnumPageTemplate),
+            typeof(TNamespacePageTemplate),
+            typeof(TAssemblyPageTemplate),
+            typeof(TObjectTypePageTemplate)
         ];
 
-        string? templatesNs = typeof(TObjectTypeTemplate).Namespace ?? "";
+        string? templatesNs = typeof(TObjectTypePageTemplate).Namespace ?? "";
 
         if (templateTypes.Any(t => t.Namespace != templatesNs))
         {
@@ -397,7 +399,7 @@ internal class RazorTemplateGenerator<
     }
 
     /// <summary>
-    /// Processes any template, populates it with given data and stores the resulting file in the corresponding directory.
+    /// Processes any template, populates it with given data and stores the resulting file in the selected directory.
     /// </summary>
     /// <typeparam name="TTemplate">Type of the template to process.</typeparam>
     /// <param name="customTemplateParameters">Custom paramters to be passed to the template. Note that the <c>TopMenuData</c> and <c>Versions</c> paramters are passed by default.</param>

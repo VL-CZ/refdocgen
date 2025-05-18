@@ -4,7 +4,7 @@
 
 @code {
     [Parameter]
-    public required IEnumerable<SearchPageTM> Model { get; set; }
+    public required IEnumerable<SearchResultTM> Model { get; set; }
 
     [Parameter]
     public required TopMenuDataTM TopMenuData { get; set; }
@@ -31,18 +31,11 @@
                 </div>
 
                 <div id="search-result-template">
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title"><samp><a class="search-result-title-link refdocgen-link" href=""></a></samp></h5>
-                            <p class="card-text">
-                                <i class="text-body-secondary search-result-body"></i>
-                            </p>
-                        </div>
-                    </div>
+                    <SearchResult />
                 </div>
 
                 <div id="search-json-data">
-                    @JsonSerializer.Serialize(Model)
+                    @JsonSerializer.Serialize(Model, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })
                 </div>
 
                 @{
