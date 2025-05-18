@@ -1,4 +1,6 @@
 @using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu
+@using RefDocGen.TemplateGenerators.Shared.TemplateTools
+@using RefDocGen.TemplateGenerators.Shared.Tools
 @inherits ComponentBase
 
 @code {
@@ -15,6 +17,7 @@
 
         @{
             string indexPagePath = UrlHelper.GetRelativeUrl("index.html", NestingLevel);
+            string searchPagePath = UrlHelper.GetRelativeUrl("search.html", NestingLevel);
         }
 
         <a class="navbar-brand" href="@indexPagePath">Project name</a>
@@ -57,6 +60,13 @@
 
             </ul>
             <ul class="navbar-nav ms-auto">
+                <li class="nav-item d-flex align-items-center">
+                    <form role="search" class="me-2">
+                        <input class="form-control" autocomplete="off"
+                               type="search" placeholder="Search" aria-label="Search" id="menu-search-bar" url-target="@searchPagePath" readonly>
+                    </form>
+                </li>
+
                 <li class="nav-item" id="theme-switcher">
                     <button class="nav-link">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-brightness-high" viewBox="0 0 16 16">

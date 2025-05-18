@@ -24,7 +24,7 @@ internal class EnumTMCreator : TypeTMCreator
     /// <returns>A <see cref="EnumTypeTM"/> instance based on the provided <paramref name="enumType"/>.</returns>
     internal EnumTypeTM GetFrom(IEnumTypeData enumType)
     {
-        var enumMemberTMs = enumType.Members.Select(GetFrom).ToArray();
+        var enumMemberTMs = enumType.Members.OrderBy(m => m.Value).Select(GetFrom).ToArray();
         List<Keyword> modifiers = [enumType.AccessModifier.ToKeyword()];
 
         return new EnumTypeTM(

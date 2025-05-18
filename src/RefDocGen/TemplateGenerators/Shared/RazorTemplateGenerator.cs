@@ -20,30 +20,33 @@ namespace RefDocGen.TemplateGenerators.Shared;
 /// <summary>
 /// Class responsible for generating the Razor templates and populating them with the type data.
 /// </summary>
-/// <typeparam name="TDelegateTemplate">Type of the Razor component representing a delegate type.</typeparam>
-/// <typeparam name="TEnumTemplate">Type of the Razor component representing a enum type.</typeparam>
-/// <typeparam name="TNamespaceTemplate">Type of the Razor component representing a namespace.</typeparam>
-/// <typeparam name="TAssemblyTemplate">Type of the Razor component representing an assembly.</typeparam>
-/// <typeparam name="TApiTemplate">Type of the Razor component representing the main API page.</typeparam>
-/// <typeparam name="TObjectTypeTemplate">Type of the Razor component representing an object type.</typeparam>
-/// <typeparam name="TStaticPageTemplate">Type of the Razor component representing a static page.</typeparam>
+/// <typeparam name="TDelegatePageTemplate">Type of the Razor component representing a delegate page.</typeparam>
+/// <typeparam name="TEnumPageTemplate">Type of the Razor component representing a enum page.</typeparam>
+/// <typeparam name="TNamespacePageTemplate">Type of the Razor component representing a namespace page.</typeparam>
+/// <typeparam name="TAssemblyPageTemplate">Type of the Razor component representing an assembly page.</typeparam>
+/// <typeparam name="TApiPageTemplate">Type of the Razor component representing the main API page.</typeparam>
+/// <typeparam name="TObjectTypePageTemplate">Type of the Razor component representing an object type page.</typeparam>
+/// <typeparam name="TStaticPageTemplate">Type of the Razor component representing a static page template.</typeparam>
+/// <typeparam name="TSearchPageTemplate">Type of the Razor component representing a search page.</typeparam>
 internal class RazorTemplateGenerator<
-        TObjectTypeTemplate,
-        TDelegateTemplate,
-        TEnumTemplate,
-        TNamespaceTemplate,
-        TAssemblyTemplate,
-        TApiTemplate,
-        TStaticPageTemplate
+        TObjectTypePageTemplate,
+        TDelegatePageTemplate,
+        TEnumPageTemplate,
+        TNamespacePageTemplate,
+        TAssemblyPageTemplate,
+        TApiPageTemplate,
+        TStaticPageTemplate,
+        TSearchPageTemplate
     > : ITemplateGenerator
 
-    where TDelegateTemplate : IComponent
-    where TEnumTemplate : IComponent
-    where TNamespaceTemplate : IComponent
-    where TAssemblyTemplate : IComponent
-    where TObjectTypeTemplate : IComponent
+    where TDelegatePageTemplate : IComponent
+    where TEnumPageTemplate : IComponent
+    where TNamespacePageTemplate : IComponent
+    where TAssemblyPageTemplate : IComponent
+    where TObjectTypePageTemplate : IComponent
     where TStaticPageTemplate : IComponent
-    where TApiTemplate : IComponent
+    where TApiPageTemplate : IComponent
+    where TSearchPageTemplate : IComponent
 {
     /// <summary>
     /// Namespace prefix of any template generator.
@@ -122,7 +125,7 @@ internal class RazorTemplateGenerator<
 
     /// <summary>
     /// Initialize a new instance of
-    /// <see cref="RazorTemplateGenerator{TObjectTypeTemplate, TDelegateTemplate, TEnumTemplate, TNamespaceTemplate, TAssemblyTemplate, TApiTemplate, TStaticPageTemplate}"/> class.
+    /// <see cref="RazorTemplateGenerator{TObjectTypeTemplate, TDelegateTemplate, TEnumTemplate, TNamespaceTemplate, TAssemblyTemplate, TApiTemplate, TStaticPageTemplate, TSearchPageTemplate}"/> class.
     /// </summary>
     /// <param name="htmlRenderer">Renderer of the Razor components.</param>
     /// <param name="docCommentTransformer">Transformer of the XML doc comments into HTML.</param>
@@ -164,12 +167,13 @@ internal class RazorTemplateGenerator<
 
         CopyStaticPages();
 
-        GenerateObjectTypeTemplates(typeRegistry.ObjectTypes);
-        GenerateEnumTemplates(typeRegistry.Enums);
-        GenerateDelegateTemplates(typeRegistry.Delegates);
-        GenerateNamespaceTemplates(typeRegistry.Namespaces);
-        GenerateAssemblyTemplates(typeRegistry.Assemblies);
-        GenerateApiTemplate(typeRegistry.Assemblies);
+        GenerateObjectTypePages(typeRegistry.ObjectTypes);
+        GenerateEnumPages(typeRegistry.Enums);
+        GenerateDelegatePages(typeRegistry.Delegates);
+        GenerateNamespacePages(typeRegistry.Namespaces);
+        GenerateAssemblyPages(typeRegistry.Assemblies);
+        GenerateApiHomepage(typeRegistry.Assemblies);
+        GenerateSearchPage(typeRegistry);
 
         if (!isUserDefinedIndexPage) // no user-specified 'index' page -> add the default one redirecting to API page.
         {
@@ -184,119 +188,116 @@ internal class RazorTemplateGenerator<
     }
 
     /// <summary>
-    /// Generate the templates representing the individual object types.
+    /// Generate the template representing the search page.
+    /// </summary>
+    /// <param name="typeRegistry">Type registry containing the declared types.</param>
+    private void GenerateSearchPage(ITypeRegistry typeRegistry)
+    {
+        var model = SearchResultTMCreator.GetFrom(typeRegistry);
+
+        var paramDictionary = new Dictionary<string, object?>()
+        {
+            ["Model"] = model
+        };
+
+        ProcessTemplate<TSearchPageTemplate>(paramDictionary, outputDirectory, "search");
+    }
+
+    /// <summary>
+    /// Generate the pages representing the individual object types.
     /// </summary>
     /// <param name="types">The type data to be used in the templates.</param>
-    private void GenerateObjectTypeTemplates(IEnumerable<IObjectTypeData> types)
+    private void GenerateObjectTypePages(IEnumerable<IObjectTypeData> types)
     {
         var creator = new ObjectTypeTMCreator(docCommentTransformer);
         var typeTemplateModels = types.Select(creator.GetFrom);
-        GenerateTemplates<TObjectTypeTemplate, ObjectTypeTM>(typeTemplateModels);
+        ProcessApiTemplates<TObjectTypePageTemplate, ObjectTypeTM>(typeTemplateModels);
     }
 
     /// <summary>
-    /// Generate the templates representing the individual enum types.
+    /// Generate the pages representing the individual enum types.
     /// </summary>
     /// <param name="enums">The enum data to be used in the templates.</param>
-    private void GenerateEnumTemplates(IEnumerable<IEnumTypeData> enums)
+    private void GenerateEnumPages(IEnumerable<IEnumTypeData> enums)
     {
         var creator = new EnumTMCreator(docCommentTransformer);
         var enumTMs = enums.Select(creator.GetFrom);
-        GenerateTemplates<TEnumTemplate, EnumTypeTM>(enumTMs);
+        ProcessApiTemplates<TEnumPageTemplate, EnumTypeTM>(enumTMs);
     }
 
     /// <summary>
-    /// Generate the templates representing the individual delegate types.
+    /// Generate the pages representing the individual delegate types.
     /// </summary>
     /// <param name="delegates">The delegate data to be used in the templates.</param>
-    private void GenerateDelegateTemplates(IEnumerable<IDelegateTypeData> delegates)
+    private void GenerateDelegatePages(IEnumerable<IDelegateTypeData> delegates)
     {
         var creator = new DelegateTMCreator(docCommentTransformer);
         var delegateTMs = delegates.Select(creator.GetFrom);
-        GenerateTemplates<TDelegateTemplate, DelegateTypeTM>(delegateTMs);
+        ProcessApiTemplates<TDelegatePageTemplate, DelegateTypeTM>(delegateTMs);
     }
 
     /// <summary>
-    /// Generate the templates representing the individual namespaces.
+    /// Generate the pages representing the individual namespaces.
     /// </summary>
     /// <param name="namespaces">The namespace data to be used in the templates.</param>
-    private void GenerateNamespaceTemplates(IEnumerable<NamespaceData> namespaces)
+    private void GenerateNamespacePages(IEnumerable<NamespaceData> namespaces)
     {
         var namespaceTMs = namespaces.Select(NamespaceTMCreator.GetFrom);
-        GenerateTemplates<TNamespaceTemplate, NamespaceTM>(namespaceTMs);
+        ProcessApiTemplates<TNamespacePageTemplate, NamespaceTM>(namespaceTMs);
     }
 
     /// <summary>
-    /// Generate the templates representing the individual assemblies.
+    /// Generate the pages representing the individual assemblies.
     /// </summary>
     /// <param name="assemblies">The assembly data to be used in the templates.</param>
-    private void GenerateAssemblyTemplates(IEnumerable<AssemblyData> assemblies)
+    private void GenerateAssemblyPages(IEnumerable<AssemblyData> assemblies)
     {
         var assemblyTMs = assemblies.Select(AssemblyTMCreator.GetFrom);
-        GenerateTemplates<TAssemblyTemplate, AssemblyTM>(assemblyTMs);
+        ProcessApiTemplates<TAssemblyPageTemplate, AssemblyTM>(assemblyTMs);
     }
 
     /// <summary>
-    /// Generate the API home page template.
+    /// Generate the API home page.
     /// </summary>
     /// <param name="assemblies">The assembly data to be used in the template.</param>
-    private void GenerateApiTemplate(IEnumerable<AssemblyData> assemblies)
+    private void GenerateApiHomepage(IEnumerable<AssemblyData> assemblies)
     {
         var assemblyTMs = assemblies.Select(AssemblyTMCreator.GetFrom);
-        GenerateTemplate<TApiTemplate, IEnumerable<AssemblyTM>>(assemblyTMs, indexPageId);
+        ProcessApiTemplate<TApiPageTemplate, IEnumerable<AssemblyTM>>(assemblyTMs, indexPageId);
     }
 
     /// <summary>
-    /// Generate the given templates using the provided template models.
+    /// Processes the given API templates using the provided template models and stores the resulting files in the output folder.
     /// </summary>
     /// <param name="templateModels">Template models used for the templates generation.</param>
     /// <typeparam name="TTemplateModel">Type of the template model to be used in the template.</typeparam>
     /// <typeparam name="TTemplate">Type of the Razor component representing the template to generate.</typeparam>
-    private void GenerateTemplates<TTemplate, TTemplateModel>(IEnumerable<TTemplateModel> templateModels)
+    private void ProcessApiTemplates<TTemplate, TTemplateModel>(IEnumerable<TTemplateModel> templateModels)
         where TTemplate : IComponent
         where TTemplateModel : ITemplateModelWithId
     {
         foreach (var tm in templateModels)
         {
-            GenerateTemplate<TTemplate, TTemplateModel>(tm, tm.Id);
+            ProcessApiTemplate<TTemplate, TTemplateModel>(tm, tm.Id);
         }
     }
 
     /// <summary>
-    /// Generate the given template using the provided template model.
+    /// Processes the given API template using the provided template model and stores the resulting file in the output folder.
     /// </summary>
-    /// <param name="templateModel">Template model used for the template generation.</param>
-    /// <param name="outputFile">Name of the output file containing the generated template populated with the <paramref name="templateModel"/> data.</param>
+    /// <param name="templateModel">Template model used for the template processing.</param>
+    /// <param name="outputFile">Name of the output file containing the processed template populated with the <paramref name="templateModel"/> data.</param>
     /// <typeparam name="TTemplateModel">Type of the template model to be used in the template.</typeparam>
-    /// <typeparam name="TTemplate">Type of the Razor component representing the template to generate.</typeparam>
-    private void GenerateTemplate<TTemplate, TTemplateModel>(TTemplateModel templateModel, string outputFile)
+    /// <typeparam name="TTemplate">Type of the Razor component representing the template to process.</typeparam>
+    private void ProcessApiTemplate<TTemplate, TTemplateModel>(TTemplateModel templateModel, string outputFile)
         where TTemplate : IComponent
     {
-        _ = Directory.CreateDirectory(OutputApiDirectory);
-
-        string outputFileName = Path.Join(OutputApiDirectory, $"{outputFile}.html");
-
-        string pagePath = Path.GetRelativePath(outputDirectory, outputFileName);
-        string[]? versions = versionManager?.GetVersions(pagePath);
-
-        string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
+        var paramDictionary = new Dictionary<string, object?>()
         {
-            var paramDictionary = new Dictionary<string, object?>()
-            {
-                ["Model"] = templateModel,
-                ["TopMenuData"] = topMenuData,
-                ["Versions"] = versions
-            };
+            ["Model"] = templateModel
+        };
 
-            var parameters = ParameterView.FromDictionary(paramDictionary);
-            var output = await htmlRenderer.RenderComponentAsync<TTemplate>(parameters);
-
-            return output.ToHtmlString();
-        }).Result;
-
-
-        File.WriteAllText(outputFileName, html);
-        _ = pagesGenerated.Add(pagePath);
+        ProcessTemplate<TTemplate>(paramDictionary, OutputApiDirectory, outputFile);
     }
 
     /// <summary>
@@ -333,14 +334,14 @@ internal class RazorTemplateGenerator<
         const string baseFolder = "TemplateGenerators";
 
         Type[] templateTypes = [
-            typeof(TDelegateTemplate),
-            typeof(TEnumTemplate),
-            typeof(TNamespaceTemplate),
-            typeof(TAssemblyTemplate),
-            typeof(TObjectTypeTemplate)
+            typeof(TDelegatePageTemplate),
+            typeof(TEnumPageTemplate),
+            typeof(TNamespacePageTemplate),
+            typeof(TAssemblyPageTemplate),
+            typeof(TObjectTypePageTemplate)
         ];
 
-        string? templatesNs = typeof(TObjectTypeTemplate).Namespace ?? "";
+        string? templatesNs = typeof(TObjectTypePageTemplate).Namespace ?? "";
 
         if (templateTypes.Any(t => t.Namespace != templatesNs))
         {
@@ -382,36 +383,56 @@ internal class RazorTemplateGenerator<
             isUserDefinedIndexPage = true; // mark user-defined 'index' page
         }
 
-        foreach (var page in pages) // wrap each page in the static page template and copy it into the output directory
+        foreach (var page in pages) // wrap each page in the static page template, process it, and copy it into the output directory
         {
             string outputPath = Path.Combine(outputDirectory, page.PageDirectory);
-            var dir = Directory.CreateDirectory(outputPath);
 
-            string outputFile = Path.Combine(outputPath, $"{page.PageName}.html");
-            string pagePath = Path.GetRelativePath(outputDirectory, outputFile);
-
-            string[]? versions = versionManager?.GetVersions(pagePath);
-
-            string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
+            var paramDictionary = new Dictionary<string, object?>()
             {
-                var paramDictionary = new Dictionary<string, object?>()
-                {
-                    ["Contents"] = page.HtmlBody,
-                    ["TopMenuData"] = topMenuData,
-                    ["CustomStyles"] = cssFile.Exists ? StaticPageProcessor.cssFilePath : null,
-                    ["NestingLevel"] = page.FolderDepth,
-                    ["Versions"] = versions
-                };
+                ["Contents"] = page.HtmlBody,
+                ["CustomStyles"] = cssFile.Exists ? StaticPageProcessor.cssFilePath : null,
+                ["NestingLevel"] = page.FolderDepth,
+            };
 
-                var parameters = ParameterView.FromDictionary(paramDictionary);
-                var output = await htmlRenderer.RenderComponentAsync<TStaticPageTemplate>(parameters);
-
-                return output.ToHtmlString();
-            }).Result;
-
-            File.WriteAllText(outputFile, html);
-
-            _ = pagesGenerated.Add(pagePath);
+            ProcessTemplate<TStaticPageTemplate>(paramDictionary, outputPath, page.PageName);
         }
+    }
+
+    /// <summary>
+    /// Processes any template, populates it with given data and stores the resulting file in the selected directory.
+    /// </summary>
+    /// <typeparam name="TTemplate">Type of the template to process.</typeparam>
+    /// <param name="customTemplateParameters">Custom paramters to be passed to the template. Note that the <c>TopMenuData</c> and <c>Versions</c> paramters are passed by default.</param>
+    /// <param name="templateOutputDirectory">Absolute path to the directory where the processed template should be stored.</param>
+    /// <param name="templateFileName">Name of the file (without extension) containing the templated processed with <paramref name="customTemplateParameters"/> data.</param>
+    private void ProcessTemplate<TTemplate>(Dictionary<string, object?> customTemplateParameters, string templateOutputDirectory, string templateFileName)
+        where TTemplate : IComponent
+    {
+        _ = Directory.CreateDirectory(templateOutputDirectory);
+
+        string outputFileName = Path.Join(templateOutputDirectory, $"{templateFileName}.html");
+
+        string pagePath = Path.GetRelativePath(outputDirectory, outputFileName);
+        string[]? versions = versionManager?.GetVersions(pagePath);
+
+        string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
+        {
+            var sharedTemplateParameters = new Dictionary<string, object?>()
+            {
+                ["TopMenuData"] = topMenuData,
+                ["Versions"] = versions
+            };
+
+            var templateParameters = sharedTemplateParameters.Merge(customTemplateParameters);
+
+            var parameters = ParameterView.FromDictionary(templateParameters);
+            var output = await htmlRenderer.RenderComponentAsync<TTemplate>(parameters);
+
+            return output.ToHtmlString();
+        }).Result;
+
+
+        File.WriteAllText(outputFileName, html);
+        _ = pagesGenerated.Add(pagePath);
     }
 }

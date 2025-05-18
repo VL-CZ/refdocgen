@@ -266,6 +266,11 @@ internal class AssemblyTypeExtractor
         return delegateType;
     }
 
+    /// <summary>
+    /// Checks if the given types is in an excluded namespace.
+    /// </summary>
+    /// <param name="type">The provided type.</param>
+    /// <returns><c>true</c> if the given types is in an excluded namespace, <c>false</c> otherwise.</returns>
     private bool IsInExcludedNamespace(Type type)
     {
         return namespacesToExclude.Any(ns => type.Namespace == ns ||
