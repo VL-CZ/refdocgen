@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const fuse = new Fuse(jsonSearchData, {
         keys: ['Name'],
-        threshold: 0.3 // Adjust for strict/fuzzy matching
+        threshold: 0.5 // Adjust for strict/fuzzy matching
     });
 
     const searchBox = document.getElementById('search-box');

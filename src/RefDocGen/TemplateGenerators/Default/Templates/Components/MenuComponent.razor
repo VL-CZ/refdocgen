@@ -63,7 +63,7 @@
                 <li class="nav-item d-flex align-items-center">
                     <form role="search" class="me-2">
                         <input class="form-control"
-                               type="search" placeholder="Search" aria-label="Search" id="menu-search-bar" url-target="@searchPagePath">
+                               type="search" placeholder="Search" aria-label="Search" id="menu-search-bar" url-target="@searchPagePath" readonly>
                     </form>
                 </li>
 
@@ -79,10 +79,3 @@
         </div>
     </div>
 </nav>
-
-<script>
-    document.getElementById('menu-search-bar').addEventListener('focus', () => {
-        const targetUrl = document.getElementById('menu-search-bar').getAttribute('url-target');
-        window.location.href = targetUrl;
-    });
-</script>

@@ -186,12 +186,12 @@ internal class RazorTemplateGenerator<
     }
 
     /// <summary>
-    /// Generate the templates representing the individual object types.
+    /// Generate the template representing the search page.
     /// </summary>
-    /// <param name="typeRegistry">The type data to be used in the templates.</param>
+    /// <param name="typeRegistry">Type registry containing the declared types.</param>
     private void GenerateSearchPageTemplate(ITypeRegistry typeRegistry)
     {
-        var model = SearchPageTMCreator.GetFrom(typeRegistry);
+        var model = SearchResultTMCreator.GetFrom(typeRegistry);
 
         var paramDictionary = new Dictionary<string, object?>()
         {

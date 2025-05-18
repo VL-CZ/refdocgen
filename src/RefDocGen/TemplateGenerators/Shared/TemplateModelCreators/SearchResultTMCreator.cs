@@ -9,9 +9,9 @@ using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 
 /// <summary>
-/// Class responsible for creating template models representing the namespaces of a program.
+/// Class responsible for creating template models representing the search result template models.
 /// </summary>
-internal class SearchPageTMCreator
+internal class SearchResultTMCreator
 {
     internal static IEnumerable<SearchPageTM> GetFrom(ITypeRegistry typeRegistry)
     {
