@@ -50,47 +50,91 @@ internal class SearchPageTMCreator
     {
         return new(ns.Name + " namespace", string.Empty, ns.Name);
     }
-
+    /// <summary>
+    /// Creates a <see cref="SearchPageTM"/> instance from the specified <see cref="AssemblyData"/>.
+    /// </summary>
+    /// <param name="assembly">The assembly data to create the search page model from.</param>
+    /// <returns>A <see cref="SearchPageTM"/> instance representing the search result for the given assembly.</returns>
     internal static SearchPageTM GetFrom(AssemblyData assembly)
     {
         return new(assembly.Name + " assembly", string.Empty, assembly.Name);
     }
 
+    /// <summary>
+    /// Creates a <see cref="SearchPageTM"/> instance from the specified <see cref="ITypeDeclaration"/>.
+    /// </summary>
+    /// <param name="type">The type declaration to create the search page model from.</param>
+    /// <returns>A <see cref="SearchPageTM"/> instance representing the search result for the given type.</returns>
     internal static SearchPageTM GetFrom(ITypeDeclaration type)
     {
         return new(CSharpTypeName.Of(type, useFullName: true) + " type", type.SummaryDocComment.Value, type.Id);
     }
 
+    /// <summary>
+    /// Creates a <see cref="SearchPageTM"/> instance from the specified <see cref="IMethodData"/>.
+    /// </summary>
+    /// <param name="method">The method data to create the search page model from.</param>
+    /// <returns>A <see cref="SearchPageTM"/> instance representing the search result for the given method.</returns>
     internal static SearchPageTM GetFrom(IMethodData method)
     {
         return GetFrom(method, "method");
     }
 
+    /// <summary>
+    /// Creates a <see cref="SearchPageTM"/> instance from the specified <see cref="IFieldData"/>.
+    /// </summary>
+    /// <param name="field">The field data to create the search page model from.</param>
+    /// <returns>A <see cref="SearchPageTM"/> instance representing the search result for the given field.</returns>
     internal static SearchPageTM GetFrom(IFieldData field)
     {
         return GetFrom(field, "field");
     }
 
+    /// <summary>
+    /// Creates a <see cref="SearchPageTM"/> instance from the specified <see cref="IPropertyData"/>.
+    /// </summary>
+    /// <param name="property">The property data to create the search page model from.</param>
+    /// <returns>A <see cref="SearchPageTM"/> instance representing the search result for the given property.</returns>
     internal static SearchPageTM GetFrom(IPropertyData property)
     {
         return GetFrom(property, "property");
     }
 
+    /// <summary>
+    /// Creates a <see cref="SearchPageTM"/> instance from the specified <see cref="IEventData"/>.
+    /// </summary>
+    /// <param name="e">The event data to create the search page model from.</param>
+    /// <returns>A <see cref="SearchPageTM"/> instance representing the search result for the given event.</returns>
     internal static SearchPageTM GetFrom(IEventData e)
     {
         return GetFrom(e, "event");
     }
 
+    /// <summary>
+    /// Creates a <see cref="SearchPageTM"/> instance from the specified <see cref="IConstructorData"/>.
+    /// </summary>
+    /// <param name="constructor">The constructor data to create the search page model from.</param>
+    /// <returns>A <see cref="SearchPageTM"/> instance representing the search result for the given constructor.</returns>
     internal static SearchPageTM GetFrom(IConstructorData constructor)
     {
         return GetFrom(constructor, "constructor", false);
     }
 
+    /// <summary>
+    /// Creates a <see cref="SearchPageTM"/> instance from the specified <see cref="IIndexerData"/>.
+    /// </summary>
+    /// <param name="indexer">The indexer data to create the search page model from.</param>
+    /// <returns>A <see cref="SearchPageTM"/> instance representing the search result for the given indexer.</returns>
     internal static SearchPageTM GetFrom(IIndexerData indexer)
     {
         return GetFrom(indexer, "indexer", false);
     }
 
+    /// <summary>
+    /// Creates a <see cref="SearchPageTM"/> instance from the specified <see cref="IOperatorData"/>.
+    /// </summary>
+    /// <param name="op">The operator data to create the search page model from.</param>
+    /// <returns>A <see cref="SearchPageTM"/> instance representing the search result for the given operator.</returns>
     internal static SearchPageTM GetFrom(IOperatorData op)
     {
         return GetFrom(op, "operator");
