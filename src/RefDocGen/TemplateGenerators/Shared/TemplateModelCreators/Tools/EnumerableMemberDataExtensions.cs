@@ -30,4 +30,16 @@ internal static class EnumerableMemberDataExtensions
     {
         return members.OrderBy(t => t.Name).ThenBy(t => t.Parameters.Count).ThenBy(t => t.Id);
     }
+
+    /// <summary>
+    /// Returns the members distinct by member name, in alphabetical order.
+    /// </summary>
+    /// <typeparam name="T">Type of the member in the collection.</typeparam>
+    /// <param name="members">An enumerable of members.</param>
+    /// <returns>Enumerable of members in alphabetic order.</returns>
+    internal static IEnumerable<T> DistinctByName<T>(this IEnumerable<T> members)
+        where T : IParameterizedMemberData
+    {
+        return members.OrderAlphabeticallyAndByParams().DistinctBy(m => m.Name);
+    }
 }

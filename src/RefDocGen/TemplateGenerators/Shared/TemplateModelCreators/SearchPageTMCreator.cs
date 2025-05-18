@@ -2,6 +2,7 @@ using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.CodeElements.Types.Abstract;
+using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators.Tools;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 
@@ -21,10 +22,11 @@ internal class SearchPageTMCreator
         var fieldTemplateModels = typeRegistry.ObjectTypes.SelectMany(t => t.Fields).Select(GetFrom);
         var propertyTemplateModels = typeRegistry.ObjectTypes.SelectMany(t => t.Properties).Select(GetFrom);
         var eventTemplateModels = typeRegistry.ObjectTypes.SelectMany(t => t.Events).Select(GetFrom);
-        var constructorTemplateModels = typeRegistry.ObjectTypes.SelectMany(t => t.Constructors).Select(GetFrom);
-        var methodTemplateModels = typeRegistry.ObjectTypes.SelectMany(t => t.Methods).Select(GetFrom);
-        var indexerTemplateModels = typeRegistry.ObjectTypes.SelectMany(t => t.Indexers).Select(GetFrom);
-        var operatorTemplateModels = typeRegistry.ObjectTypes.SelectMany(t => t.Operators).Select(GetFrom);
+
+        var constructorTemplateModels = typeRegistry.ObjectTypes.SelectMany(t => t.Constructors.DistinctByName()).Select(GetFrom);
+        var methodTemplateModels = typeRegistry.ObjectTypes.SelectMany(t => t.Methods.DistinctByName()).Select(GetFrom);
+        var indexerTemplateModels = typeRegistry.ObjectTypes.SelectMany(t => t.Indexers.DistinctByName()).Select(GetFrom);
+        var operatorTemplateModels = typeRegistry.ObjectTypes.SelectMany(t => t.Operators.DistinctByName()).Select(GetFrom);
 
         return [
             .. assemblyTemplateModels,
@@ -39,9 +41,14 @@ internal class SearchPageTMCreator
             .. operatorTemplateModels];
     }
 
-    internal static SearchPageTM GetFrom(NamespaceData namespaceData)
+    /// <summary>
+    /// Creates a <see cref="SearchPageTM"/> instance from the specified <see cref="NamespaceData"/>.
+    /// </summary>
+    /// <param name="ns">The namespace data to create the search page model from.</param>
+    /// <returns>A <see cref="SearchPageTM"/> instance representing the search result for the given namespace.</returns>
+    internal static SearchPageTM GetFrom(NamespaceData ns)
     {
-        return new(namespaceData.Name + " namespace", string.Empty, namespaceData.Name);
+        return new(ns.Name + " namespace", string.Empty, ns.Name);
     }
 
     internal static SearchPageTM GetFrom(AssemblyData assembly)
@@ -56,57 +63,60 @@ internal class SearchPageTMCreator
 
     internal static SearchPageTM GetFrom(IMethodData method)
     {
-        return new(CSharpTypeName.Of(method.ContainingType, useFullName: true) + "." + method.Name + " method",
-            method.SummaryDocComment.Value,
-            method.ContainingType.Id,
-            method.Id);
+        return GetFrom(method, "method");
     }
 
     internal static SearchPageTM GetFrom(IFieldData field)
     {
-        return new(CSharpTypeName.Of(field.ContainingType, useFullName: true) + "." + field.Name + " field",
-            field.SummaryDocComment.Value,
-            field.ContainingType.Id,
-            field.Id);
+        return GetFrom(field, "field");
     }
 
     internal static SearchPageTM GetFrom(IPropertyData property)
     {
-        return new(CSharpTypeName.Of(property.ContainingType, useFullName: true) + "." + property.Name + " property",
-            property.SummaryDocComment.Value,
-            property.ContainingType.Id,
-            property.Id);
+        return GetFrom(property, "property");
     }
 
     internal static SearchPageTM GetFrom(IEventData e)
     {
-        return new(CSharpTypeName.Of(e.ContainingType, useFullName: true) + "." + e.Name + " event",
-            e.SummaryDocComment.Value,
-            e.ContainingType.Id,
-            e.Id);
+        return GetFrom(e, "event");
     }
 
     internal static SearchPageTM GetFrom(IConstructorData constructor)
     {
-        return new(CSharpTypeName.Of(constructor.ContainingType, useFullName: true) + " constructor",
-            constructor.SummaryDocComment.Value,
-            constructor.ContainingType.Id,
-            constructor.Id);
+        return GetFrom(constructor, "constructor", false);
     }
 
     internal static SearchPageTM GetFrom(IIndexerData indexer)
     {
-        return new(CSharpTypeName.Of(indexer.ContainingType, useFullName: true) + " indexer",
-            indexer.SummaryDocComment.Value,
-            indexer.ContainingType.Id,
-            indexer.Id);
+        return GetFrom(indexer, "indexer", false);
     }
 
     internal static SearchPageTM GetFrom(IOperatorData op)
     {
-        return new(CSharpTypeName.Of(op.ContainingType, useFullName: true) + "." + op.Name + " operator",
-            op.SummaryDocComment.Value,
-            op.ContainingType.Id,
-            op.Id);
+        return GetFrom(op, "operator");
+    }
+
+    /// <summary>
+    /// Creates a <see cref="SearchPageTM"/> from the given <paramref name="member"/> instance.
+    /// </summary>
+    /// <param name="member">The <see cref="IMemberData"/> instance to convert.</param>
+    /// <param name="memberKindName">Name of the member kind to be displayed (e.g., 'field').</param>
+    /// <param name="showMemberName">Whether the member name should be included in the resulting <see cref="SearchPageTM"/>.</param>
+    /// <returns>A <see cref="SearchPageTM"/> instance based on the provided <paramref name="member"/> instance.</returns>
+    internal static SearchPageTM GetFrom(IMemberData member, string memberKindName, bool showMemberName = true)
+    {
+        string name = CSharpTypeName.Of(member.ContainingType, useFullName: true);
+
+        if (showMemberName)
+        {
+            name += $".{member.Name}";
+        }
+
+        name += $" {memberKindName}";
+
+        return new(name,
+            member.SummaryDocComment.Value,
+            member.ContainingType.Id,
+            member.Id);
     }
 }
