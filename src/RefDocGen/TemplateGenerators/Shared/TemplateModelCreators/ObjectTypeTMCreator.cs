@@ -3,6 +3,7 @@ using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
+using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators.Tools;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools;
@@ -27,13 +28,13 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="ObjectTypeTM"/> instance based on the provided <paramref name="type"/>.</returns>
     internal ObjectTypeTM GetFrom(IObjectTypeData type)
     {
-        var constructors = type.Constructors.Select(GetFrom).ToArray();
-        var fields = type.Fields.Select(GetFrom).ToArray();
-        var properties = type.Properties.Select(GetFrom).ToArray();
-        var methods = type.Methods.Select(GetFrom).ToArray();
-        var operators = type.Operators.Select(GetFrom).ToArray();
-        var indexers = type.Indexers.Select(GetFrom).ToArray();
-        var events = type.Events.Select(GetFrom).ToArray();
+        var constructors = type.Constructors.OrderAlphabeticallyAndByParams().Select(GetFrom).ToArray();
+        var fields = type.Fields.OrderAlphabetically().Select(GetFrom).ToArray();
+        var properties = type.Properties.OrderAlphabetically().Select(GetFrom).ToArray();
+        var methods = type.Methods.OrderAlphabeticallyAndByParams().Select(GetFrom).ToArray();
+        var operators = type.Operators.OrderAlphabeticallyAndByParams().Select(GetFrom).ToArray();
+        var indexers = type.Indexers.OrderAlphabeticallyAndByParams().Select(GetFrom).ToArray();
+        var events = type.Events.OrderAlphabetically().Select(GetFrom).ToArray();
 
         var interfaces = type.Interfaces.Select(GetTypeLink).ToArray();
 

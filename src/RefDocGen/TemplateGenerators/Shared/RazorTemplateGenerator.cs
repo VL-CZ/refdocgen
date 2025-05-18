@@ -14,7 +14,6 @@ using RefDocGen.TemplateGenerators.Shared.TemplateModels.Assemblies;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
-using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 using RefDocGen.Tools;
 
 namespace RefDocGen.TemplateGenerators.Shared;
@@ -192,11 +191,7 @@ internal class RazorTemplateGenerator<
     /// <param name="typeRegistry">The type data to be used in the templates.</param>
     private void GenerateSearchPageTemplate(ITypeRegistry typeRegistry)
     {
-        var typeTemplateModels = typeRegistry.ObjectTypes.Select(t => new SearchPageTM(t.Id, t.Namespace + "." + CSharpTypeName.Of(t) + " class", t.SummaryDocComment.Value));
-        var nsTemplateModels = typeRegistry.Namespaces.Select(n => new SearchPageTM(n.Name, n.Name + " namespace", string.Empty));
-        var assemblyTemplateModels = typeRegistry.Assemblies.Select(a => new SearchPageTM(a.Name + "-DLL", a.Name + " assembly", string.Empty));
-
-        IEnumerable<SearchPageTM> model = [.. typeTemplateModels, .. nsTemplateModels, .. assemblyTemplateModels];
+        var model = SearchPageTMCreator.GetFrom(typeRegistry);
 
         var paramDictionary = new Dictionary<string, object?>()
         {
