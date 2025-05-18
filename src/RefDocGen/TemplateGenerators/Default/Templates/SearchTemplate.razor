@@ -24,7 +24,7 @@
 
                 <div class="input-group input-group-lg mb-3">
                     <input type="text" class="form-control" aria-label="Search input" aria-describedby="inputGroup-sizing-lg"
-                           id="search-box">
+                           id="search-box" autocomplete="off">
                 </div>
 
                 <div id="search-results">
@@ -38,15 +38,11 @@
                     @JsonSerializer.Serialize(Model, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })
                 </div>
 
-                @{
-                    var searchJsPath = UrlHelper.GetRelativeUrl("Static/search.js", NestingLevel);
-                }
-
                 <!-- Fuse.js -->
-                <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js"></script>
+                <script src="Static/fuse-7.1.0.min.js"></script>
 
-                <!-- Custom JS script -->
-                <script src="@searchJsPath"></script>
+                <!-- Custom search JS script -->
+                <script src="Static/search.js"></script>
 
             </LayoutView>
         </CascadingValue>
