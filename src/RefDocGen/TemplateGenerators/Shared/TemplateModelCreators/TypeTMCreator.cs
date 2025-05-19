@@ -18,7 +18,18 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 /// </summary>
 internal abstract class TypeTMCreator
 {
-    protected ILanguageSpecificData languageSpecificData = new CSharpLanguageData();
+    protected Dictionary<Language, ILanguageSpecificData> languageSpecificData = new()
+    {
+        [Language.CSharp] = new CSharpLanguageData()
+    };
+
+    protected LocalizedData<T> GetLocalizedData<T>(Func<ILanguageSpecificData, T> function)
+    {
+        var localizedData = languageSpecificData.
+            ToDictionary(item => item.Key, item => function(item.Value));
+
+        return new LocalizedData<T>(localizedData);
+    }
 
     /// <summary>
     /// Transformer of the XML doc comments into HTML.
@@ -156,7 +167,7 @@ internal abstract class TypeTMCreator
     /// <returns>A <see cref="ParameterTM"/> instance based on the provided <paramref name="parameter"/>.</returns>
     protected ParameterTM GetFrom(IParameterData parameter)
     {
-        string[] modifiers = languageSpecificData.GetModifiers(parameter);
+        var modifiers = GetLocalizedData(lang => lang.GetModifiers(parameter));
 
         string? defaultValue = parameter.DefaultValue == DBNull.Value
             ? null
@@ -178,7 +189,7 @@ internal abstract class TypeTMCreator
     /// <returns>A <see cref="TypeParameterTM"/> instance based on the provided <paramref name="typeParameter"/>.</returns>
     protected TypeParameterTM GetFrom(ITypeParameterData typeParameter)
     {
-        string[] modifiers = languageSpecificData.GetModifiers(typeParameter);
+        var modifiers = GetLocalizedData(lang => lang.GetModifiers(typeParameter));
 
         // get constraints
         var typeConstraints = typeParameter.TypeConstraints.Select(GetTypeLink);

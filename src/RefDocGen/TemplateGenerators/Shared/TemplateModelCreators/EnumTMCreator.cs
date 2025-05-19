@@ -24,7 +24,7 @@ internal class EnumTMCreator : TypeTMCreator
     internal EnumTypeTM GetFrom(IEnumTypeData enumType)
     {
         var enumMemberTMs = enumType.Members.OrderBy(m => m.Value).Select(GetFrom).ToArray();
-        string[] modifiers = languageSpecificData.GetModifiers(enumType);
+        var modifiers = GetLocalizedData(langData => langData.GetModifiers(enumType));
 
         return new EnumTypeTM(
             Id: enumType.Id,

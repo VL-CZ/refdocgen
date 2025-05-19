@@ -18,7 +18,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 public record ConstructorTM(
     string Id,
     ParameterTM[] Parameters,
-    string[] Modifiers,
+    LocalizedData<string[]> Modifiers,
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,

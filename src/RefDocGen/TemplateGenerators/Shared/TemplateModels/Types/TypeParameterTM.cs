@@ -11,6 +11,6 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 public record TypeParameterTM(
     string Name,
     string? DocComment,
-    IEnumerable<string> Modifiers,
+    LocalizedData<string[]> Modifiers,
     IEnumerable<TypeLinkTM> TypeConstraints,
     IEnumerable<string> SpecialConstraints);

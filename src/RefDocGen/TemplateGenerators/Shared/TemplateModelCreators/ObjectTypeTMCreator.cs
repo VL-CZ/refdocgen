@@ -36,7 +36,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
 
         var interfaces = type.Interfaces.Select(GetTypeLink).ToArray();
 
-        string[] modifiers = languageSpecificData.GetModifiers(type);
+        var modifiers = GetLocalizedData(lang => lang.GetModifiers(type));
 
         return new ObjectTypeTM(
             Id: type.Id,
@@ -70,7 +70,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="ConstructorTM"/> instance based on the provided <paramref name="constructor"/>.</returns>
     private ConstructorTM GetFrom(IConstructorData constructor)
     {
-        string[] modifiers = languageSpecificData.GetModifiers(constructor);
+        var modifiers = GetLocalizedData(lang => lang.GetModifiers(constructor));
 
         return new ConstructorTM(
             Id: constructor.Id,
@@ -90,7 +90,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="FieldTM"/> instance based on the provided <paramref name="field"/>.</returns>
     private FieldTM GetFrom(IFieldData field)
     {
-        string[] modifiers = languageSpecificData.GetModifiers(field);
+        var modifiers = GetLocalizedData(lang => lang.GetModifiers(field));
 
         string? constantValue = field.ConstantValue == DBNull.Value
             ? null
@@ -116,7 +116,9 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="PropertyTM"/> instance based on the provided <paramref name="property"/>.</returns>
     private PropertyTM GetFrom(IPropertyData property)
     {
-        var modifiers = languageSpecificData.GetModifiers(property);
+        var modifiers = GetLocalizedData(lang => lang.GetModifiers(property).Modifiers);
+        var getterModifiers = GetLocalizedData(lang => lang.GetModifiers(property).GetterModifiers);
+        var setterModifiers = GetLocalizedData(lang => lang.GetModifiers(property).SetterModifiers);
 
         string? constantValue = property.ConstantValue == DBNull.Value
             ? null
@@ -129,9 +131,9 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             HasGetter: property.Getter is not null,
             HasSetter: property.Setter is not null,
             IsSetterInitOnly: property.IsSetterInitOnly,
-            Modifiers: modifiers.Modifiers,
-            GetterModifiers: modifiers.GetterModifiers,
-            SetterModifiers: modifiers.SetterModifiers,
+            Modifiers: modifiers,
+            GetterModifiers: getterModifiers,
+            SetterModifiers: setterModifiers,
             ConstantValue: constantValue,
             Attributes: GetTemplateModels(property.Attributes),
             SummaryDocComment: ToHtmlString(property.SummaryDocComment),
@@ -152,7 +154,9 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>An <see cref="IndexerTM"/> instance based on the provided <paramref name="indexer"/>.</returns>
     private IndexerTM GetFrom(IIndexerData indexer)
     {
-        var modifiers = languageSpecificData.GetModifiers(indexer);
+        var modifiers = GetLocalizedData(lang => lang.GetModifiers(indexer).Modifiers);
+        var getterModifiers = GetLocalizedData(lang => lang.GetModifiers(indexer).GetterModifiers);
+        var setterModifiers = GetLocalizedData(lang => lang.GetModifiers(indexer).SetterModifiers);
 
         return new IndexerTM(
             Id: indexer.Id,
@@ -161,9 +165,9 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             HasGetter: indexer.Getter is not null,
             HasSetter: indexer.Setter is not null,
             IsSetterInitOnly: indexer.IsSetterInitOnly,
-            Modifiers: modifiers.Modifiers,
-            GetterModifiers: modifiers.GetterModifiers,
-            SetterModifiers: modifiers.SetterModifiers,
+            Modifiers: modifiers,
+            GetterModifiers: getterModifiers,
+            SetterModifiers: setterModifiers,
             Attributes: GetTemplateModels(indexer.Attributes),
             SummaryDocComment: ToHtmlString(indexer.SummaryDocComment),
             RemarksDocComment: ToHtmlString(indexer.RemarksDocComment),
@@ -183,7 +187,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="MethodTM"/> instance based on the provided <paramref name="method"/>.</returns>
     private MethodTM GetFrom(IMethodData method)
     {
-        string[] modifiers = languageSpecificData.GetModifiers(method);
+        var modifiers = GetLocalizedData(lang => lang.GetModifiers(method));
 
         return new MethodTM(
             Id: method.Id,
@@ -212,7 +216,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="MethodTM"/> instance based on the provided <paramref name="operatorData"/>.</returns>
     private MethodTM GetFrom(IOperatorData operatorData)
     {
-        string[] modifiers = languageSpecificData.GetModifiers(operatorData);
+        var modifiers = GetLocalizedData(lang => lang.GetModifiers(operatorData));
 
         string name = CSharpOperatorName.Of(operatorData);
 
@@ -252,7 +256,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="EventTM"/> instance based on the provided <paramref name="eventData"/>.</returns>
     private EventTM GetFrom(IEventData eventData)
     {
-        string[] modifiers = languageSpecificData.GetModifiers(eventData);
+        var modifiers = GetLocalizedData(lang => lang.GetModifiers(eventData));
 
         return new EventTM(
             Id: eventData.Id,

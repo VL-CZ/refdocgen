@@ -35,7 +35,7 @@ public record EventTM(
     string Id,
     string Name,
     TypeLinkTM Type,
-    string[] Modifiers,
+    LocalizedData<string[]> Modifiers,
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,

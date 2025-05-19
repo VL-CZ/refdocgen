@@ -20,7 +20,7 @@ internal class DelegateTMCreator : TypeTMCreator
     /// <returns>A <see cref="DelegateTypeTM"/> instance based on the provided <paramref name="delegateType"/>.</returns>
     internal DelegateTypeTM GetFrom(IDelegateTypeData delegateType)
     {
-        string[] modifiers = languageSpecificData.GetModifiers(delegateType);
+        var modifiers = GetLocalizedData(langData => langData.GetModifiers(delegateType));
 
         return new DelegateTypeTM(
             Id: delegateType.Id,

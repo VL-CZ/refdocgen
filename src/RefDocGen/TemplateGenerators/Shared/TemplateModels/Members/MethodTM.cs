@@ -42,7 +42,7 @@ public record MethodTM(
     TypeParameterTM[] TypeParameters,
     TypeLinkTM ReturnType,
     bool ReturnsVoid,
-    string[] Modifiers,
+    LocalizedData<string[]> Modifiers,
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,

@@ -4,10 +4,11 @@ using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
 using RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
+using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 
 namespace RefDocGen.TemplateGenerators.Shared;
 
-internal enum Language { CSharp }
+public enum Language { CSharp }
 
 internal readonly record struct PropertyModifiers(string[] Modifiers, string[] GetterModifiers, string[] SetterModifiers);
 
@@ -25,6 +26,7 @@ internal interface ILanguageSpecificData
     string[] GetModifiers(IDelegateTypeData delegateType);
     string[] GetModifiers(IEnumTypeData enumType);
     string[] GetModifiers(ITypeParameterData typeParameter);
+    string GetTypeName(ITypeDeclaration type);
 
 }
 
@@ -216,6 +218,11 @@ internal class CSharpLanguageData : ILanguageSpecificData
         return modifiers.GetStrings();
     }
 
+    public string GetTypeName(ITypeDeclaration type)
+    {
+        return CSharpTypeName.Of(type); // TODO
+    }
+
     /// <summary>
     /// Gets the list of modifiers for the provided <paramref name="member"/> object.
     /// </summary>
@@ -262,4 +269,16 @@ internal class CSharpLanguageData : ILanguageSpecificData
 
         return modifiers;
     }
+}
+
+public class LocalizedData<T>
+{
+    private Dictionary<Language, T> data = new();
+
+    public LocalizedData(Dictionary<Language, T> data)
+    {
+        this.data = data;
+    }
+
+    public T this[Language language] => data[language];
 }

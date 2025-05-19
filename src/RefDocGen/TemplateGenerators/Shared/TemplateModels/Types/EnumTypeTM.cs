@@ -26,7 +26,7 @@ public record EnumTypeTM(
     string Name,
     string Namespace,
     string Assembly,
-    string[] Modifiers,
+    LocalizedData<string[]> Modifiers,
     EnumMemberTM[] Members,
     AttributeTM[] Attributes,
     TypeLinkTM? DeclaringType,
