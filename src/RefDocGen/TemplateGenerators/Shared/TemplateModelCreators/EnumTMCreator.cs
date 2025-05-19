@@ -25,14 +25,14 @@ internal class EnumTMCreator : TypeTMCreator
     internal EnumTypeTM GetFrom(IEnumTypeData enumType)
     {
         var enumMemberTMs = enumType.Members.OrderBy(m => m.Value).Select(GetFrom).ToArray();
-        List<Keyword> modifiers = [enumType.AccessModifier.ToKeyword()];
+        var modifiers = languageSpecificData.GetModifiers(enumType);
 
         return new EnumTypeTM(
             enumType.Id,
             GetTypeName(enumType),
             enumType.Namespace,
             enumType.Assembly,
-            modifiers.GetStrings(),
+            modifiers,
             enumMemberTMs,
             GetTemplateModels(enumType.Attributes),
             GetTypeLinkOrNull(enumType.DeclaringType),

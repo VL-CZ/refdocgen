@@ -21,14 +21,14 @@ internal class DelegateTMCreator : TypeTMCreator
     /// <returns>A <see cref="DelegateTypeTM"/> instance based on the provided <paramref name="delegateType"/>.</returns>
     internal DelegateTypeTM GetFrom(IDelegateTypeData delegateType)
     {
-        List<Keyword> modifiers = [delegateType.AccessModifier.ToKeyword()];
+        var modifiers = languageSpecificData.GetModifiers(delegateType);
 
         return new DelegateTypeTM(
             delegateType.Id,
             GetTypeName(delegateType),
             delegateType.Namespace,
             delegateType.Assembly,
-            modifiers.GetStrings(),
+            modifiers,
             GetTypeLink(delegateType.ReturnType),
             delegateType.ReturnType.IsVoid,
             GetTemplateModels(delegateType.Parameters),

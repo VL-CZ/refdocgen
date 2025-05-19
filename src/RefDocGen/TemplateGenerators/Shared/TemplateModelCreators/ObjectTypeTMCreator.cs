@@ -38,27 +38,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
 
         var interfaces = type.Interfaces.Select(GetTypeLink).ToArray();
 
-        List<Keyword> modifiers = [type.AccessModifier.ToKeyword()];
-
-        if (SealedKeyword.IsPresentIn(type))
-        {
-            modifiers.Add(Keyword.Sealed);
-        }
-
-        if (AbstractKeyword.IsPresentIn(type))
-        {
-            modifiers.Add(Keyword.Abstract);
-        }
-
-        if (StaticKeyword.IsPresentIn(type))
-        {
-            modifiers.Add(Keyword.Static);
-        }
-
-        if (type.IsByRefLike)
-        {
-            modifiers.Add(Keyword.Ref);
-        }
+        var modifiers = languageSpecificData.GetModifiers(type);
 
         return new ObjectTypeTM(
             type.Id,
@@ -66,7 +46,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             type.Namespace,
             type.Assembly,
             type.Kind.GetName(),
-            modifiers.GetStrings(),
+            modifiers,
             constructors,
             fields,
             properties,
@@ -93,17 +73,12 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="ConstructorTM"/> instance based on the provided <paramref name="constructor"/>.</returns>
     private ConstructorTM GetFrom(IConstructorData constructor)
     {
-        List<Keyword> modifiers = [constructor.AccessModifier.ToKeyword()];
-
-        if (constructor.IsStatic)
-        {
-            modifiers.Add(Keyword.Static);
-        }
+        var modifiers = languageSpecificData.GetModifiers(constructor);
 
         return new ConstructorTM(
             constructor.Id,
             GetTemplateModels(constructor.Parameters),
-            modifiers.GetStrings(),
+            modifiers,
             GetTemplateModels(constructor.Attributes),
             ToHtmlString(constructor.SummaryDocComment),
             ToHtmlString(constructor.RemarksDocComment),
@@ -118,24 +93,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="FieldTM"/> instance based on the provided <paramref name="field"/>.</returns>
     private FieldTM GetFrom(IFieldData field)
     {
-        List<Keyword> modifiers = [field.AccessModifier.ToKeyword()];
-
-        if (field.IsStatic && !field.IsConstant)
-        {
-            modifiers.Add(Keyword.Static);
-        }
-        if (field.IsConstant)
-        {
-            modifiers.Add(Keyword.Const);
-        }
-        if (field.IsReadonly)
-        {
-            modifiers.Add(Keyword.Readonly);
-        }
-        if (field.IsRequired)
-        {
-            modifiers.Add(Keyword.Required);
-        }
+        var modifiers = languageSpecificData.GetModifiers(field);
 
         string? constantValue = field.ConstantValue == DBNull.Value
             ? null
@@ -145,7 +103,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             field.Id,
             field.Name,
             GetTypeLink(field.Type),
-            modifiers.GetStrings(),
+            modifiers,
             constantValue,
             GetTemplateModels(field.Attributes),
             ToHtmlString(field.SummaryDocComment),
@@ -161,25 +119,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="PropertyTM"/> instance based on the provided <paramref name="property"/>.</returns>
     private PropertyTM GetFrom(IPropertyData property)
     {
-        var modifiers = GetCallableMemberModifiers(property);
-
-        if (property.IsRequired)
-        {
-            modifiers.Add(Keyword.Required);
-        }
-
-        List<Keyword> getterModifiers = [];
-        List<Keyword> setterModifiers = [];
-
-        if (property.Getter is not null && property.Getter.AccessModifier != property.AccessModifier)
-        {
-            getterModifiers.Add(property.Getter.AccessModifier.ToKeyword());
-        }
-
-        if (property.Setter is not null && property.Setter.AccessModifier != property.AccessModifier)
-        {
-            setterModifiers.Add(property.Setter.AccessModifier.ToKeyword());
-        }
+        var modifiers = languageSpecificData.GetModifiers(property);
 
         string? constantValue = property.ConstantValue == DBNull.Value
             ? null
@@ -192,9 +132,9 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             property.Getter is not null,
             property.Setter is not null,
             property.IsSetterInitOnly,
-            modifiers.GetStrings(),
-            getterModifiers.GetStrings(),
-            setterModifiers.GetStrings(),
+            modifiers.Modifiers,
+            modifiers.GetterModifiers,
+            modifiers.SetterModifiers,
             constantValue,
             GetTemplateModels(property.Attributes),
             ToHtmlString(property.SummaryDocComment),
@@ -215,20 +155,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>An <see cref="IndexerTM"/> instance based on the provided <paramref name="indexer"/>.</returns>
     private IndexerTM GetFrom(IIndexerData indexer)
     {
-        var modifiers = GetCallableMemberModifiers(indexer);
-
-        List<Keyword> getterModifiers = [];
-        List<Keyword> setterModifiers = [];
-
-        if (indexer.Getter is not null && indexer.Getter.AccessModifier != indexer.AccessModifier)
-        {
-            getterModifiers.Add(indexer.Getter.AccessModifier.ToKeyword());
-        }
-
-        if (indexer.Setter is not null && indexer.Setter.AccessModifier != indexer.AccessModifier)
-        {
-            setterModifiers.Add(indexer.Setter.AccessModifier.ToKeyword());
-        }
+        var modifiers = languageSpecificData.GetModifiers(indexer);
 
         return new IndexerTM(
             indexer.Id,
@@ -237,9 +164,9 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             indexer.Getter is not null,
             indexer.Setter is not null,
             indexer.IsSetterInitOnly,
-            modifiers.GetStrings(),
-            getterModifiers.GetStrings(),
-            setterModifiers.GetStrings(),
+            modifiers.Modifiers,
+            modifiers.GetterModifiers,
+            modifiers.SetterModifiers,
             GetTemplateModels(indexer.Attributes),
             ToHtmlString(indexer.SummaryDocComment),
             ToHtmlString(indexer.RemarksDocComment),
@@ -259,7 +186,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="MethodTM"/> instance based on the provided <paramref name="method"/>.</returns>
     private MethodTM GetFrom(IMethodData method)
     {
-        var modifiers = GetCallableMemberModifiers(method);
+        var modifiers = languageSpecificData.GetModifiers(method);
 
         return new MethodTM(
             method.Id,
@@ -268,7 +195,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             GetTemplateModels(method.TypeParameters),
             GetTypeLink(method.ReturnType),
             method.ReturnType.IsVoid,
-            modifiers.GetStrings(),
+            modifiers,
             GetTemplateModels(method.Attributes),
             ToHtmlString(method.SummaryDocComment),
             ToHtmlString(method.RemarksDocComment),
@@ -288,16 +215,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="MethodTM"/> instance based on the provided <paramref name="operatorData"/>.</returns>
     private MethodTM GetFrom(IOperatorData operatorData)
     {
-        var modifiers = GetCallableMemberModifiers(operatorData);
-
-        if (operatorData.Kind == OperatorKind.ExplicitConversion)
-        {
-            modifiers.Add(Keyword.Explicit);
-        }
-        else if (operatorData.Kind == OperatorKind.ImplicitConversion)
-        {
-            modifiers.Add(Keyword.Implicit);
-        }
+        var modifiers = languageSpecificData.GetModifiers(operatorData);
 
         string name = CSharpOperatorName.Of(operatorData);
 
@@ -317,7 +235,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             GetTemplateModels(operatorData.TypeParameters),
             returnType,
             operatorData.ReturnType.IsVoid,
-            modifiers.GetStrings(),
+            modifiers,
             GetTemplateModels(operatorData.Attributes),
             ToHtmlString(operatorData.SummaryDocComment),
             ToHtmlString(operatorData.RemarksDocComment),
@@ -337,14 +255,13 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="EventTM"/> instance based on the provided <paramref name="eventData"/>.</returns>
     private EventTM GetFrom(IEventData eventData)
     {
-        var modifiers = GetCallableMemberModifiers(eventData);
-        modifiers.Add(Keyword.Event);
+        var modifiers = languageSpecificData.GetModifiers(eventData);
 
         return new EventTM(
             eventData.Id,
             GetCallableMemberName(eventData),
             GetTypeLink(eventData.Type),
-            modifiers.GetStrings(),
+            modifiers,
             GetTemplateModels(eventData.Attributes),
             ToHtmlString(eventData.SummaryDocComment),
             ToHtmlString(eventData.RemarksDocComment),
@@ -354,53 +271,6 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             GetTypeMemberLinkOrNull(eventData.BaseDeclaringType, eventData),
             GetTypeMemberLinkOrNull(eventData.ExplicitInterfaceType, eventData),
             GetInterfacesImplemented(eventData));
-    }
-
-    /// <summary>
-    /// Gets the list of modifiers for the provided <paramref name="member"/> object.
-    /// </summary>
-    /// <param name="member">Member, whose modifiers we get.</param>
-    /// <returns>A list of modifiers for the provided member.</returns>
-    private List<Keyword> GetCallableMemberModifiers(ICallableMemberData member)
-    {
-        List<Keyword> modifiers = [];
-
-        if (!member.IsExplicitImplementation) // don't add access modifiers for explicitly implemeneted members
-        {
-            modifiers.Add(member.AccessModifier.ToKeyword());
-        }
-
-        if (member.IsStatic)
-        {
-            modifiers.Add(Keyword.Static);
-        }
-
-        if (AbstractKeyword.IsPresentIn(member))
-        {
-            modifiers.Add(Keyword.Abstract);
-        }
-
-        if (VirtualKeyword.IsPresentIn(member))
-        {
-            modifiers.Add(Keyword.Virtual);
-        }
-
-        if (member.OverridesAnotherMember)
-        {
-            modifiers.Add(Keyword.Override);
-        }
-
-        if (member.IsSealed)
-        {
-            modifiers.Add(Keyword.Sealed);
-        }
-
-        if (member.IsAsync)
-        {
-            modifiers.Add(Keyword.Async);
-        }
-
-        return modifiers;
     }
 
     /// <summary>

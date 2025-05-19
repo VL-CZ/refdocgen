@@ -19,6 +19,8 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 /// </summary>
 internal abstract class TypeTMCreator
 {
+    protected ILanguageSpecificData languageSpecificData = new CSharpLanguageData();
+
     /// <summary>
     /// Transformer of the XML doc comments into HTML.
     /// </summary>
@@ -155,32 +157,7 @@ internal abstract class TypeTMCreator
     /// <returns>A <see cref="ParameterTM"/> instance based on the provided <paramref name="parameter"/>.</returns>
     protected ParameterTM GetFrom(IParameterData parameter)
     {
-        List<Keyword> modifiers = [];
-
-        if (parameter.IsExtensionParameter)
-        {
-            modifiers.Add(Keyword.This);
-        }
-
-        if (parameter.IsInput)
-        {
-            modifiers.Add(Keyword.In);
-        }
-
-        if (parameter.IsOutput)
-        {
-            modifiers.Add(Keyword.Out);
-        }
-
-        if (RefKeyword.IsPresentIn(parameter))
-        {
-            modifiers.Add(Keyword.Ref);
-        }
-
-        if (parameter.IsParamsCollection)
-        {
-            modifiers.Add(Keyword.Params);
-        }
+        var modifiers = languageSpecificData.GetModifiers(parameter);
 
         string? defaultValue = parameter.DefaultValue == DBNull.Value
             ? null
@@ -189,7 +166,7 @@ internal abstract class TypeTMCreator
         return new ParameterTM(
             parameter.Name,
             GetTypeLink(parameter.Type),
-            modifiers.GetStrings(),
+            modifiers,
             GetTemplateModels(parameter.Attributes),
             defaultValue,
             ToHtmlString(parameter.DocComment));
@@ -202,16 +179,7 @@ internal abstract class TypeTMCreator
     /// <returns>A <see cref="TypeParameterTM"/> instance based on the provided <paramref name="typeParameter"/>.</returns>
     protected TypeParameterTM GetFrom(ITypeParameterData typeParameter)
     {
-        List<Keyword> modifiers = [];
-
-        if (typeParameter.IsCovariant)
-        {
-            modifiers.Add(Keyword.Out);
-        }
-        if (typeParameter.IsContravariant)
-        {
-            modifiers.Add(Keyword.In);
-        }
+        var modifiers = languageSpecificData.GetModifiers(typeParameter);
 
         // get constraints
         var typeConstraints = typeParameter.TypeConstraints.Select(GetTypeLink);
@@ -220,7 +188,7 @@ internal abstract class TypeTMCreator
         return new TypeParameterTM(
             typeParameter.Name,
             ToHtmlString(typeParameter.DocComment),
-            modifiers.GetStrings(),
+            modifiers,
             typeConstraints,
             specialConstraints);
     }
