@@ -181,6 +181,9 @@ internal class CSharpLanguageData : ILanguageSpecificData
             modifiers.Add(Keyword.Ref);
         }
 
+        // add 'class', 'struct' or 'interface' modifier
+        modifiers.Add(type.Kind.ToKeyword());
+
         return modifiers.GetStrings();
     }
 

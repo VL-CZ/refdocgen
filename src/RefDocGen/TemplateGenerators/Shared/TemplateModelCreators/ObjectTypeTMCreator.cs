@@ -39,28 +39,27 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         string[] modifiers = languageSpecificData.GetModifiers(type);
 
         return new ObjectTypeTM(
-            type.Id,
-            GetTypeName(type),
-            type.Namespace,
-            type.Assembly,
-            type.Kind.GetName(),
-            modifiers,
-            constructors,
-            fields,
-            properties,
-            methods,
-            operators,
-            indexers,
-            events,
-            GetNestedTypes(type),
-            GetTemplateModels(type.TypeParameters),
-            GetTypeLinkOrNull(type.BaseType),
-            interfaces,
-            GetTemplateModels(type.Attributes),
-            GetTypeLinkOrNull(type.DeclaringType),
-            ToHtmlString(type.SummaryDocComment),
-            ToHtmlString(type.RemarksDocComment),
-            GetHtmlStrings(type.SeeAlsoDocComments)
+            Id: type.Id,
+            Name: GetTypeName(type),
+            Namespace: type.Namespace,
+            Assembly: type.Assembly,
+            Modifiers: modifiers,
+            Constructors: constructors,
+            Fields: fields,
+            Properties: properties,
+            Methods: methods,
+            Operators: operators,
+            Indexers: indexers,
+            Events: events,
+            NestedTypes: GetNestedTypes(type),
+            TypeParameters: GetTemplateModels(type.TypeParameters),
+            BaseType: GetTypeLinkOrNull(type.BaseType),
+            ImplementedInterfaces: interfaces,
+            Attributes: GetTemplateModels(type.Attributes),
+            DeclaringType: GetTypeLinkOrNull(type.DeclaringType),
+            SummaryDocComment: ToHtmlString(type.SummaryDocComment),
+            RemarksDocComment: ToHtmlString(type.RemarksDocComment),
+            SeeAlsoDocComments: GetHtmlStrings(type.SeeAlsoDocComments)
         );
     }
 
@@ -74,14 +73,14 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         string[] modifiers = languageSpecificData.GetModifiers(constructor);
 
         return new ConstructorTM(
-            constructor.Id,
-            GetTemplateModels(constructor.Parameters),
-            modifiers,
-            GetTemplateModels(constructor.Attributes),
-            ToHtmlString(constructor.SummaryDocComment),
-            ToHtmlString(constructor.RemarksDocComment),
-            GetHtmlStrings(constructor.SeeAlsoDocComments),
-            GetTemplateModels(constructor.DocumentedExceptions));
+            Id: constructor.Id,
+            Parameters: GetTemplateModels(constructor.Parameters),
+            Modifiers: modifiers,
+            Attributes: GetTemplateModels(constructor.Attributes),
+            SummaryDocComment: ToHtmlString(constructor.SummaryDocComment),
+            RemarksDocComment: ToHtmlString(constructor.RemarksDocComment),
+            SeeAlsoDocComments: GetHtmlStrings(constructor.SeeAlsoDocComments),
+            Exceptions: GetTemplateModels(constructor.DocumentedExceptions));
     }
 
     /// <summary>
@@ -98,16 +97,16 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             : LiteralValueFormatter.Format(field.ConstantValue);
 
         return new FieldTM(
-            field.Id,
-            field.Name,
-            GetTypeLink(field.Type),
-            modifiers,
-            constantValue,
-            GetTemplateModels(field.Attributes),
-            ToHtmlString(field.SummaryDocComment),
-            ToHtmlString(field.RemarksDocComment),
-            GetHtmlStrings(field.SeeAlsoDocComments),
-            GetTypeLinkOrNull(field.InheritedFrom));
+            Id: field.Id,
+            Name: field.Name,
+            Type: GetTypeLink(field.Type),
+            Modifiers: modifiers,
+            ConstantValue: constantValue,
+            Attributes: GetTemplateModels(field.Attributes),
+            SummaryDocComment: ToHtmlString(field.SummaryDocComment),
+            RemarksDocComment: ToHtmlString(field.RemarksDocComment),
+            SeeAlsoDocComments: GetHtmlStrings(field.SeeAlsoDocComments),
+            InheritedFrom: GetTypeLinkOrNull(field.InheritedFrom));
     }
 
     /// <summary>
@@ -124,26 +123,26 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             : LiteralValueFormatter.Format(property.ConstantValue);
 
         return new PropertyTM(
-            property.Id,
-            GetCallableMemberName(property),
-            GetTypeLink(property.Type),
-            property.Getter is not null,
-            property.Setter is not null,
-            property.IsSetterInitOnly,
-            modifiers.Modifiers,
-            modifiers.GetterModifiers,
-            modifiers.SetterModifiers,
-            constantValue,
-            GetTemplateModels(property.Attributes),
-            ToHtmlString(property.SummaryDocComment),
-            ToHtmlString(property.RemarksDocComment),
-            ToHtmlString(property.ValueDocComment),
-            GetHtmlStrings(property.SeeAlsoDocComments),
-            GetTemplateModels(property.DocumentedExceptions),
-            GetTypeLinkOrNull(property.InheritedFrom),
-            GetTypeMemberLinkOrNull(property.BaseDeclaringType, property),
-            GetTypeMemberLinkOrNull(property.ExplicitInterfaceType, property),
-            GetInterfacesImplemented(property));
+            Id: property.Id,
+            Name: GetCallableMemberName(property),
+            Type: GetTypeLink(property.Type),
+            HasGetter: property.Getter is not null,
+            HasSetter: property.Setter is not null,
+            IsSetterInitOnly: property.IsSetterInitOnly,
+            Modifiers: modifiers.Modifiers,
+            GetterModifiers: modifiers.GetterModifiers,
+            SetterModifiers: modifiers.SetterModifiers,
+            ConstantValue: constantValue,
+            Attributes: GetTemplateModels(property.Attributes),
+            SummaryDocComment: ToHtmlString(property.SummaryDocComment),
+            RemarksDocComment: ToHtmlString(property.RemarksDocComment),
+            ValueDocComment: ToHtmlString(property.ValueDocComment),
+            SeeAlsoDocComments: GetHtmlStrings(property.SeeAlsoDocComments),
+            Exceptions: GetTemplateModels(property.DocumentedExceptions),
+            InheritedFrom: GetTypeLinkOrNull(property.InheritedFrom),
+            BaseDeclaringType: GetTypeMemberLinkOrNull(property.BaseDeclaringType, property),
+            ExplicitInterfaceType: GetTypeMemberLinkOrNull(property.ExplicitInterfaceType, property),
+            ImplementedInterfaces: GetInterfacesImplemented(property));
     }
 
     /// <summary>
@@ -156,25 +155,25 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         var modifiers = languageSpecificData.GetModifiers(indexer);
 
         return new IndexerTM(
-            indexer.Id,
-            GetTypeLink(indexer.Type),
-            GetTemplateModels(indexer.Parameters),
-            indexer.Getter is not null,
-            indexer.Setter is not null,
-            indexer.IsSetterInitOnly,
-            modifiers.Modifiers,
-            modifiers.GetterModifiers,
-            modifiers.SetterModifiers,
-            GetTemplateModels(indexer.Attributes),
-            ToHtmlString(indexer.SummaryDocComment),
-            ToHtmlString(indexer.RemarksDocComment),
-            ToHtmlString(indexer.ValueDocComment),
-            GetHtmlStrings(indexer.SeeAlsoDocComments),
-            GetTemplateModels(indexer.DocumentedExceptions),
-            GetTypeLinkOrNull(indexer.InheritedFrom),
-            GetTypeMemberLinkOrNull(indexer.BaseDeclaringType, indexer),
-            GetTypeMemberLinkOrNull(indexer.ExplicitInterfaceType, indexer),
-            GetInterfacesImplemented(indexer));
+            Id: indexer.Id,
+            Type: GetTypeLink(indexer.Type),
+            Parameters: GetTemplateModels(indexer.Parameters),
+            HasGetter: indexer.Getter is not null,
+            HasSetter: indexer.Setter is not null,
+            IsSetterInitOnly: indexer.IsSetterInitOnly,
+            Modifiers: modifiers.Modifiers,
+            GetterModifiers: modifiers.GetterModifiers,
+            SetterModifiers: modifiers.SetterModifiers,
+            Attributes: GetTemplateModels(indexer.Attributes),
+            SummaryDocComment: ToHtmlString(indexer.SummaryDocComment),
+            RemarksDocComment: ToHtmlString(indexer.RemarksDocComment),
+            ValueDocComment: ToHtmlString(indexer.ValueDocComment),
+            SeeAlsoDocComments: GetHtmlStrings(indexer.SeeAlsoDocComments),
+            Exceptions: GetTemplateModels(indexer.DocumentedExceptions),
+            InheritedFrom: GetTypeLinkOrNull(indexer.InheritedFrom),
+            BaseDeclaringType: GetTypeMemberLinkOrNull(indexer.BaseDeclaringType, indexer),
+            ExplicitInterfaceType: GetTypeMemberLinkOrNull(indexer.ExplicitInterfaceType, indexer),
+            ImplementedInterfaces: GetInterfacesImplemented(indexer));
     }
 
     /// <summary>
@@ -187,23 +186,23 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         string[] modifiers = languageSpecificData.GetModifiers(method);
 
         return new MethodTM(
-            method.Id,
-            GetCallableMemberName(method),
-            GetTemplateModels(method.Parameters),
-            GetTemplateModels(method.TypeParameters),
-            GetTypeLink(method.ReturnType),
-            method.ReturnType.IsVoid,
-            modifiers,
-            GetTemplateModels(method.Attributes),
-            ToHtmlString(method.SummaryDocComment),
-            ToHtmlString(method.RemarksDocComment),
-            ToHtmlString(method.ReturnValueDocComment),
-            GetHtmlStrings(method.SeeAlsoDocComments),
-            GetTemplateModels(method.DocumentedExceptions),
-            GetTypeLinkOrNull(method.InheritedFrom),
-            GetTypeMemberLinkOrNull(method.BaseDeclaringType, method),
-            GetTypeMemberLinkOrNull(method.ExplicitInterfaceType, method),
-            GetInterfacesImplemented(method));
+            Id: method.Id,
+            Name: GetCallableMemberName(method),
+            Parameters: GetTemplateModels(method.Parameters),
+            TypeParameters: GetTemplateModels(method.TypeParameters),
+            ReturnType: GetTypeLink(method.ReturnType),
+            ReturnsVoid: method.ReturnType.IsVoid,
+            Modifiers: modifiers,
+            Attributes: GetTemplateModels(method.Attributes),
+            SummaryDocComment: ToHtmlString(method.SummaryDocComment),
+            RemarksDocComment: ToHtmlString(method.RemarksDocComment),
+            ReturnsDocComment: ToHtmlString(method.ReturnValueDocComment),
+            SeeAlsoDocComments: GetHtmlStrings(method.SeeAlsoDocComments),
+            Exceptions: GetTemplateModels(method.DocumentedExceptions),
+            InheritedFrom: GetTypeLinkOrNull(method.InheritedFrom),
+            BaseDeclaringType: GetTypeMemberLinkOrNull(method.BaseDeclaringType, method),
+            ExplicitInterfaceType: GetTypeMemberLinkOrNull(method.ExplicitInterfaceType, method),
+            ImplementedInterfaces: GetInterfacesImplemented(method));
     }
 
     /// <summary>
@@ -227,23 +226,23 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         );
 
         return new MethodTM(
-            operatorData.Id,
-            name,
-            GetTemplateModels(operatorData.Parameters),
-            GetTemplateModels(operatorData.TypeParameters),
-            returnType,
-            operatorData.ReturnType.IsVoid,
-            modifiers,
-            GetTemplateModels(operatorData.Attributes),
-            ToHtmlString(operatorData.SummaryDocComment),
-            ToHtmlString(operatorData.RemarksDocComment),
-            ToHtmlString(operatorData.ReturnValueDocComment),
-            GetHtmlStrings(operatorData.SeeAlsoDocComments),
-            GetTemplateModels(operatorData.DocumentedExceptions),
-            GetTypeLinkOrNull(operatorData.InheritedFrom),
-            GetTypeMemberLinkOrNull(operatorData.BaseDeclaringType, operatorData),
-            GetTypeMemberLinkOrNull(operatorData.ExplicitInterfaceType, operatorData),
-            GetInterfacesImplemented(operatorData));
+            Id: operatorData.Id,
+            Name: name,
+            Parameters: GetTemplateModels(operatorData.Parameters),
+            TypeParameters: GetTemplateModels(operatorData.TypeParameters),
+            ReturnType: returnType,
+            ReturnsVoid: operatorData.ReturnType.IsVoid,
+            Modifiers: modifiers,
+            Attributes: GetTemplateModels(operatorData.Attributes),
+            SummaryDocComment: ToHtmlString(operatorData.SummaryDocComment),
+            RemarksDocComment: ToHtmlString(operatorData.RemarksDocComment),
+            ReturnsDocComment: ToHtmlString(operatorData.ReturnValueDocComment),
+            SeeAlsoDocComments: GetHtmlStrings(operatorData.SeeAlsoDocComments),
+            Exceptions: GetTemplateModels(operatorData.DocumentedExceptions),
+            InheritedFrom: GetTypeLinkOrNull(operatorData.InheritedFrom),
+            BaseDeclaringType: GetTypeMemberLinkOrNull(operatorData.BaseDeclaringType, operatorData),
+            ExplicitInterfaceType: GetTypeMemberLinkOrNull(operatorData.ExplicitInterfaceType, operatorData),
+            ImplementedInterfaces: GetInterfacesImplemented(operatorData));
     }
 
     /// <summary>
@@ -256,19 +255,19 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         string[] modifiers = languageSpecificData.GetModifiers(eventData);
 
         return new EventTM(
-            eventData.Id,
-            GetCallableMemberName(eventData),
-            GetTypeLink(eventData.Type),
-            modifiers,
-            GetTemplateModels(eventData.Attributes),
-            ToHtmlString(eventData.SummaryDocComment),
-            ToHtmlString(eventData.RemarksDocComment),
-            GetHtmlStrings(eventData.SeeAlsoDocComments),
-            GetTemplateModels(eventData.DocumentedExceptions),
-            GetTypeLinkOrNull(eventData.InheritedFrom),
-            GetTypeMemberLinkOrNull(eventData.BaseDeclaringType, eventData),
-            GetTypeMemberLinkOrNull(eventData.ExplicitInterfaceType, eventData),
-            GetInterfacesImplemented(eventData));
+            Id: eventData.Id,
+            Name: GetCallableMemberName(eventData),
+            Type: GetTypeLink(eventData.Type),
+            Modifiers: modifiers,
+            Attributes: GetTemplateModels(eventData.Attributes),
+            SummaryDocComment: ToHtmlString(eventData.SummaryDocComment),
+            RemarksDocComment: ToHtmlString(eventData.RemarksDocComment),
+            SeeAlsoDocComments: GetHtmlStrings(eventData.SeeAlsoDocComments),
+            Exceptions: GetTemplateModels(eventData.DocumentedExceptions),
+            InheritedFrom: GetTypeLinkOrNull(eventData.InheritedFrom),
+            BaseDeclaringType: GetTypeMemberLinkOrNull(eventData.BaseDeclaringType, eventData),
+            ExplicitInterfaceType: GetTypeMemberLinkOrNull(eventData.ExplicitInterfaceType, eventData),
+            ImplementedInterfaces: GetInterfacesImplemented(eventData));
     }
 
     /// <summary>

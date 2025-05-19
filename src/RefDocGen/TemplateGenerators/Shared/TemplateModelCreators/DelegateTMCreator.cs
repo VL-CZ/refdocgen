@@ -23,21 +23,21 @@ internal class DelegateTMCreator : TypeTMCreator
         string[] modifiers = languageSpecificData.GetModifiers(delegateType);
 
         return new DelegateTypeTM(
-            delegateType.Id,
-            GetTypeName(delegateType),
-            delegateType.Namespace,
-            delegateType.Assembly,
-            modifiers,
-            GetTypeLink(delegateType.ReturnType),
-            delegateType.ReturnType.IsVoid,
-            GetTemplateModels(delegateType.Parameters),
-            GetTemplateModels(delegateType.TypeParameters),
-            GetTemplateModels(delegateType.Attributes),
-            GetTypeLinkOrNull(delegateType.DeclaringType),
-            ToHtmlString(delegateType.SummaryDocComment),
-            ToHtmlString(delegateType.RemarksDocComment),
-            ToHtmlString(delegateType.ReturnValueDocComment),
-            GetHtmlStrings(delegateType.SeeAlsoDocComments),
-            GetTemplateModels(delegateType.Exceptions));
+            Id: delegateType.Id,
+            Name: GetTypeName(delegateType),
+            Namespace: delegateType.Namespace,
+            Assembly: delegateType.Assembly,
+            Modifiers: modifiers,
+            ReturnType: GetTypeLink(delegateType.ReturnType),
+            ReturnsVoid: delegateType.ReturnType.IsVoid,
+            Parameters: GetTemplateModels(delegateType.Parameters),
+            TypeParameters: GetTemplateModels(delegateType.TypeParameters),
+            Attributes: GetTemplateModels(delegateType.Attributes),
+            DeclaringType: GetTypeLinkOrNull(delegateType.DeclaringType),
+            SummaryDocComment: ToHtmlString(delegateType.SummaryDocComment),
+            RemarksDocComment: ToHtmlString(delegateType.RemarksDocComment),
+            ReturnsDocComment: ToHtmlString(delegateType.ReturnValueDocComment),
+            SeeAlsoDocComments: GetHtmlStrings(delegateType.SeeAlsoDocComments),
+            Exceptions: GetTemplateModels(delegateType.Exceptions));
     }
 }

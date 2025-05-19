@@ -27,17 +27,17 @@ internal class EnumTMCreator : TypeTMCreator
         string[] modifiers = languageSpecificData.GetModifiers(enumType);
 
         return new EnumTypeTM(
-            enumType.Id,
-            GetTypeName(enumType),
-            enumType.Namespace,
-            enumType.Assembly,
-            modifiers,
-            enumMemberTMs,
-            GetTemplateModels(enumType.Attributes),
-            GetTypeLinkOrNull(enumType.DeclaringType),
-            ToHtmlString(enumType.SummaryDocComment),
-            ToHtmlString(enumType.RemarksDocComment),
-            GetHtmlStrings(enumType.SeeAlsoDocComments));
+            Id: enumType.Id,
+            Name: GetTypeName(enumType),
+            Namespace: enumType.Namespace,
+            Assembly: enumType.Assembly,
+            Modifiers: modifiers,
+            Members: enumMemberTMs,
+            Attributes: GetTemplateModels(enumType.Attributes),
+            DeclaringType: GetTypeLinkOrNull(enumType.DeclaringType),
+            SummaryDocComment: ToHtmlString(enumType.SummaryDocComment),
+            RemarksDocComment: ToHtmlString(enumType.RemarksDocComment),
+            SeeAlsoDocComments: GetHtmlStrings(enumType.SeeAlsoDocComments));
     }
 
     /// <summary>
@@ -48,12 +48,12 @@ internal class EnumTMCreator : TypeTMCreator
     internal EnumMemberTM GetFrom(IEnumMemberData enumMember)
     {
         return new EnumMemberTM(
-            enumMember.Id,
-            enumMember.Name,
-            LiteralValueFormatter.Format(enumMember.Value),
-            GetTemplateModels(enumMember.Attributes),
-            ToHtmlString(enumMember.SummaryDocComment),
-            ToHtmlString(enumMember.RemarksDocComment),
-            GetHtmlStrings(enumMember.SeeAlsoDocComments));
+            Id: enumMember.Id,
+            Name: enumMember.Name,
+            Value: LiteralValueFormatter.Format(enumMember.Value),
+            Attributes: GetTemplateModels(enumMember.Attributes),
+            SummaryDocComment: ToHtmlString(enumMember.SummaryDocComment),
+            RemarksDocComment: ToHtmlString(enumMember.RemarksDocComment),
+            SeeAlsoDocComments: GetHtmlStrings(enumMember.SeeAlsoDocComments));
     }
 }

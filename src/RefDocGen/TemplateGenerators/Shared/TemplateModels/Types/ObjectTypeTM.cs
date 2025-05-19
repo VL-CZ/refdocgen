@@ -9,7 +9,6 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 /// <param name="Name">The name of the type.</param>
 /// <param name="Namespace">The namespace containing the type.</param>
 /// <param name="Assembly">The assembly containing the type.</param>
-/// <param name="TypeKindName">Name of the type kind.</param>
 /// <param name="Modifiers">Collection of modifiers for the type (e.g., public, abstract).</param>
 /// <param name="SummaryDocComment">'summary' documentation comment for the type. <c>null</c> if the doc comment is not provided.</param>
 /// <param name="RemarksDocComment">'remarks' documentation comment for the type. <c>null</c> if the doc comment is not provided.</param>
@@ -37,7 +36,6 @@ public record ObjectTypeTM(
     string Name,
     string Namespace,
     string Assembly,
-    string TypeKindName,
     string[] Modifiers,
     ConstructorTM[] Constructors,
     FieldTM[] Fields,
