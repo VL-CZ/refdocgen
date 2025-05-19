@@ -7,7 +7,6 @@ using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools;
-using RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 using RefDocGen.Tools;
 using System.Xml.Linq;
@@ -157,7 +156,7 @@ internal abstract class TypeTMCreator
     /// <returns>A <see cref="ParameterTM"/> instance based on the provided <paramref name="parameter"/>.</returns>
     protected ParameterTM GetFrom(IParameterData parameter)
     {
-        var modifiers = languageSpecificData.GetModifiers(parameter);
+        string[] modifiers = languageSpecificData.GetModifiers(parameter);
 
         string? defaultValue = parameter.DefaultValue == DBNull.Value
             ? null
@@ -179,7 +178,7 @@ internal abstract class TypeTMCreator
     /// <returns>A <see cref="TypeParameterTM"/> instance based on the provided <paramref name="typeParameter"/>.</returns>
     protected TypeParameterTM GetFrom(ITypeParameterData typeParameter)
     {
-        var modifiers = languageSpecificData.GetModifiers(typeParameter);
+        string[] modifiers = languageSpecificData.GetModifiers(typeParameter);
 
         // get constraints
         var typeConstraints = typeParameter.TypeConstraints.Select(GetTypeLink);

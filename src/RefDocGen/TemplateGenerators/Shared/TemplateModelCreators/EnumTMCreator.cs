@@ -4,7 +4,6 @@ using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools;
-using RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 
@@ -25,7 +24,7 @@ internal class EnumTMCreator : TypeTMCreator
     internal EnumTypeTM GetFrom(IEnumTypeData enumType)
     {
         var enumMemberTMs = enumType.Members.OrderBy(m => m.Value).Select(GetFrom).ToArray();
-        var modifiers = languageSpecificData.GetModifiers(enumType);
+        string[] modifiers = languageSpecificData.GetModifiers(enumType);
 
         return new EnumTypeTM(
             enumType.Id,

@@ -1,4 +1,3 @@
-using RefDocGen.CodeElements.Members;
 using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
@@ -7,7 +6,6 @@ using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators.Tools;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools;
-using RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
@@ -38,7 +36,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
 
         var interfaces = type.Interfaces.Select(GetTypeLink).ToArray();
 
-        var modifiers = languageSpecificData.GetModifiers(type);
+        string[] modifiers = languageSpecificData.GetModifiers(type);
 
         return new ObjectTypeTM(
             type.Id,
@@ -73,7 +71,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="ConstructorTM"/> instance based on the provided <paramref name="constructor"/>.</returns>
     private ConstructorTM GetFrom(IConstructorData constructor)
     {
-        var modifiers = languageSpecificData.GetModifiers(constructor);
+        string[] modifiers = languageSpecificData.GetModifiers(constructor);
 
         return new ConstructorTM(
             constructor.Id,
@@ -93,7 +91,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="FieldTM"/> instance based on the provided <paramref name="field"/>.</returns>
     private FieldTM GetFrom(IFieldData field)
     {
-        var modifiers = languageSpecificData.GetModifiers(field);
+        string[] modifiers = languageSpecificData.GetModifiers(field);
 
         string? constantValue = field.ConstantValue == DBNull.Value
             ? null
@@ -186,7 +184,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="MethodTM"/> instance based on the provided <paramref name="method"/>.</returns>
     private MethodTM GetFrom(IMethodData method)
     {
-        var modifiers = languageSpecificData.GetModifiers(method);
+        string[] modifiers = languageSpecificData.GetModifiers(method);
 
         return new MethodTM(
             method.Id,
@@ -215,7 +213,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="MethodTM"/> instance based on the provided <paramref name="operatorData"/>.</returns>
     private MethodTM GetFrom(IOperatorData operatorData)
     {
-        var modifiers = languageSpecificData.GetModifiers(operatorData);
+        string[] modifiers = languageSpecificData.GetModifiers(operatorData);
 
         string name = CSharpOperatorName.Of(operatorData);
 
@@ -255,7 +253,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="EventTM"/> instance based on the provided <paramref name="eventData"/>.</returns>
     private EventTM GetFrom(IEventData eventData)
     {
-        var modifiers = languageSpecificData.GetModifiers(eventData);
+        string[] modifiers = languageSpecificData.GetModifiers(eventData);
 
         return new EventTM(
             eventData.Id,

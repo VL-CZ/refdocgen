@@ -7,11 +7,11 @@ using RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
 
 namespace RefDocGen.TemplateGenerators.Shared;
 
-enum Language { CSharp }
+internal enum Language { CSharp }
 
-readonly record struct PropertyModifiers(string[] Modifiers, string[] GetterModifiers, string[] SetterModifiers);
+internal readonly record struct PropertyModifiers(string[] Modifiers, string[] GetterModifiers, string[] SetterModifiers);
 
-interface ILanguageSpecificData
+internal interface ILanguageSpecificData
 {
     string[] GetModifiers(IFieldData field);
     PropertyModifiers GetModifiers(IPropertyData property);
@@ -28,7 +28,7 @@ interface ILanguageSpecificData
 
 }
 
-class CSharpLanguageData : ILanguageSpecificData
+internal class CSharpLanguageData : ILanguageSpecificData
 {
     public string[] GetModifiers(IFieldData field)
     {

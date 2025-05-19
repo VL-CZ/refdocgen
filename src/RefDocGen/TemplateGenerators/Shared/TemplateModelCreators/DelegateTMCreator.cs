@@ -1,7 +1,6 @@
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
-using RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 
@@ -21,7 +20,7 @@ internal class DelegateTMCreator : TypeTMCreator
     /// <returns>A <see cref="DelegateTypeTM"/> instance based on the provided <paramref name="delegateType"/>.</returns>
     internal DelegateTypeTM GetFrom(IDelegateTypeData delegateType)
     {
-        var modifiers = languageSpecificData.GetModifiers(delegateType);
+        string[] modifiers = languageSpecificData.GetModifiers(delegateType);
 
         return new DelegateTypeTM(
             delegateType.Id,
