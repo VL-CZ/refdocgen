@@ -16,12 +16,7 @@
             <div class="border p-2 mb-2" id="@constructor.Id" data-id="member-data">
                 <h6 class="mb-1" data-id="member-name">
                     <samp>
-                        <span class="refdocgen-text-tertiary">
-                            @string.Join(' ', constructor.Modifiers)
-                        </span>
-                        <span class="refdocgen-text-primary">
-                            @TypeName
-                        </span><ParametersString Parameters="@constructor.Parameters" />
+                        <ConstructorName Constructor="@constructor" TypeName="@TypeName" />
 
                         <AnchorLink Id="@constructor.Id" />
                     </samp>

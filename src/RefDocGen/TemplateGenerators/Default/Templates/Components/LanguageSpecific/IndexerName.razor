@@ -1,0 +1,32 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required IndexerTM Indexer { get; set; }
+}
+
+<div class="csharp-lang">
+    <span class="refdocgen-text-tertiary">
+        @string.Join(' ', Indexer.Modifiers[Language.CSharp])
+    </span>
+
+    <TypeLink Type="@Indexer.Type" />
+
+    @if (Indexer.Parameters.Any())
+    {
+        var lastParam = Indexer.Parameters.Last();
+
+        <span class="refdocgen-text-primary"> this</span>
+
+        <ParametersString Parameters=Indexer.Parameters Prefix="[" Suffix="]" />
+
+    }
+
+    <AccessorMethods HasGetter="Indexer.HasGetter"
+                     HasSetter="Indexer.HasSetter"
+                     IsSetterInitOnly="@Indexer.IsSetterInitOnly"
+                     GetterModifiers="Indexer.GetterModifiers[Language.CSharp]"
+                     SetterModifiers="Indexer.SetterModifiers[Language.CSharp]" />
+</div>
+<div class="other-lang">
+</div>

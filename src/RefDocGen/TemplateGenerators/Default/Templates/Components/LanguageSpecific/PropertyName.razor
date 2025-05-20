@@ -1,0 +1,28 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required PropertyTM Property { get; set; }
+}
+
+<div class="csharp-lang">
+    <span class="refdocgen-text-tertiary">
+        @string.Join(' ', Property.Modifiers[Language.CSharp])
+    </span>
+
+    <TypeLink Type="@Property.Type" />
+
+    <span class="refdocgen-text-primary">
+        @Property.Name
+    </span>
+
+    <AccessorMethods HasGetter="@Property.HasGetter"
+                     HasSetter="@Property.HasSetter"
+                     IsSetterInitOnly="@Property.IsSetterInitOnly"
+                     GetterModifiers="@Property.GetterModifiers[Language.CSharp]"
+                     SetterModifiers="@Property.SetterModifiers[Language.CSharp]" />
+
+    <LiteralValueSuffix Value="@Property.ConstantValue" />
+</div>
+<div class="other-lang">
+</div>

@@ -1,0 +1,20 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required ConstructorTM Constructor { get; set; }
+
+    [Parameter]
+    public required string TypeName { get; set; }
+}
+
+<div class="csharp-lang">
+    <span class="refdocgen-text-tertiary">
+        @string.Join(' ', Constructor.Modifiers[Language.CSharp])
+    </span>
+    <span class="refdocgen-text-primary">
+        @TypeName
+    </span><ParametersString Parameters="@Constructor.Parameters" />
+</div>
+<div class="other-lang">
+</div>

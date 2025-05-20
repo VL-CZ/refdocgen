@@ -1,0 +1,23 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required FieldTM Field { get; set; }
+}
+
+<div class="csharp-lang">
+
+    <span class="refdocgen-text-tertiary">
+        @string.Join(' ', Field.Modifiers[Shared.Language.CSharp])
+    </span>
+
+    <TypeLink Type="@Field.Type" />
+
+    <span class="refdocgen-text-primary">
+        @Field.Name
+    </span>
+
+    <LiteralValueSuffix Value="@Field.ConstantValue" />
+</div>
+<div class="other-lang">
+</div>

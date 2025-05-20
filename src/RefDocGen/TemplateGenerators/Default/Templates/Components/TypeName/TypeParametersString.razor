@@ -9,20 +9,11 @@
 {
     <span>&lt;</span>
 
-    @foreach (var p in TypeParameters)
+    @foreach (var tp in TypeParameters)
     {
-        @if (p.Modifiers.Any())
-        {
-            <span class="refdocgen-text-tertiary">
-                @string.Join(' ', p.Modifiers)
-            </span>
-            <span> </span>
-        }
-        <span class="refdocgen-text-secondary">
-            @p.Name
-        </span>
+        <TypeParameterName TypeParameter="@tp" />
 
-        @if (p != TypeParameters[^1])
+        @if (tp != TypeParameters[^1])
         {
             <span>, </span>
         }

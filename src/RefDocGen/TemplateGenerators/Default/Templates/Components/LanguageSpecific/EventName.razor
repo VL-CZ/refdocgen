@@ -1,0 +1,21 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required EventTM Event { get; set; }
+}
+
+<div class="csharp-lang">
+
+    <span class="refdocgen-text-tertiary">
+        @string.Join(' ', Event.Modifiers[Language.CSharp])
+    </span>
+
+    <TypeLink Type="@Event.Type" />
+
+    <span class="refdocgen-text-primary">
+        @Event.Name
+    </span>
+</div>
+<div class="other-lang">
+</div>

@@ -2,7 +2,7 @@
 
 @code {
     [Parameter]
-    public required string[] Modifiers { get; set; }
+    public required LocalizedData<string[]> Modifiers { get; set; }
 
     [Parameter]
     public required string TypeName { get; set; }
@@ -13,7 +13,6 @@
 
 <h1 class="display-4" data-id="type-name-title">
     <samp>
-        <span class="refdocgen-text-tertiary">@string.Join(' ', Modifiers)</span>
-        <span class="refdocgen-text-primary">@TypeName</span><TypeParametersString TypeParameters="TypeParameters" />
+        <TypeDeclName Modifiers="@Modifiers" TypeName="@TypeName" TypeParameters="@TypeParameters" />
     </samp>
 </h1>
