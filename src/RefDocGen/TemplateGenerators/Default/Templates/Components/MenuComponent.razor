@@ -60,6 +60,14 @@
 
             </ul>
             <ul class="navbar-nav ms-auto">
+
+                <li class="nav-item">
+                    <select class="form-select" id="language-selector" aria-label="language">
+                        <option class="lang-option" value="csharp-lang">C#</option>
+                        <option class="lang-option" value="other-lang">Other</option>
+                    </select>
+                </li>
+
                 <li class="nav-item d-flex align-items-center">
                     <form role="search" class="me-2">
                         <input class="form-control" autocomplete="off"
@@ -79,3 +87,35 @@
         </div>
     </div>
 </nav>
+
+<style>
+    .invisible{
+        display: none;
+    }
+</style>
+
+<script>
+
+    const allLangs = Array.from(document.getElementsByClassName('lang-option'))
+                          .map(option => option.value);
+
+    document.getElementById('language-selector').addEventListener('change', function () {
+        const selectedLang = this.value;
+
+        // Hide all language-specific elements by adding the .invisible class
+        allLangs.forEach(lang => {
+            const elements = document.getElementsByClassName(lang);
+            Array.from(elements).forEach(el => {
+                el.classList.add('invisible');
+            });
+        });
+
+        // Show selected language elements by removing the .invisible class
+        const selectedLangElements = document.getElementsByClassName(selectedLang);
+        Array.from(selectedLangElements).forEach(el => {
+            el.classList.remove('invisible');
+        });
+
+        localStorage.setItem('refdocgen-displayed-language', selectedLang);
+    });
+</script>
