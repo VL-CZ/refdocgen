@@ -5,10 +5,10 @@
     public required FieldTM Field { get; set; }
 }
 
-<div class="csharp-lang">
+<span class="csharp-lang">
 
     <span class="refdocgen-text-tertiary">
-        @string.Join(' ', Field.Modifiers[Shared.Language.CSharp])
+        @string.Join(' ', Field.Modifiers[Language.CSharp])
     </span>
 
     <TypeLink Type="@Field.Type" />
@@ -18,6 +18,6 @@
     </span>
 
     <LiteralValueSuffix Value="@Field.ConstantValue" />
-</div>
-<div class="other-lang">
-</div>
+</span>
+<span class="other-lang">
+</span>
