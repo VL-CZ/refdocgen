@@ -96,13 +96,13 @@
 
 <script>
 
+    const languageSelector = document.getElementById('language-selector');
     const allLangs = Array.from(document.getElementsByClassName('lang-option'))
                           .map(option => option.value);
 
-    document.getElementById('language-selector').addEventListener('change', function () {
-        const selectedLang = this.value;
-
-        // Hide all language-specific elements by adding the .invisible class
+    // Function to update visibility
+    function updateLanguageVisibility(selectedLang) {
+        // Hide all language-specific elements
         allLangs.forEach(lang => {
             const elements = document.getElementsByClassName(lang);
             Array.from(elements).forEach(el => {
@@ -110,12 +110,34 @@
             });
         });
 
-        // Show selected language elements by removing the .invisible class
+        // Show only selected language elements
         const selectedLangElements = document.getElementsByClassName(selectedLang);
         Array.from(selectedLangElements).forEach(el => {
             el.classList.remove('invisible');
         });
+    }
 
-        localStorage.setItem('refdocgen-displayed-language', selectedLang);
+    // Event listener for dropdown change
+    languageSelector.addEventListener('change', function () {
+        const selectedLang = this.value;
+
+        // Store selection in localStorage
+        localStorage.setItem('selectedLanguage', selectedLang);
+
+        // Update visibility
+        updateLanguageVisibility(selectedLang);
+    });
+
+    // On page load, restore selected language
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('selectedLanguage');
+
+        if (savedLang && allLangs.includes(savedLang)) {
+            // Set dropdown to saved value
+            languageSelector.value = savedLang;
+
+            // Update visibility
+            updateLanguageVisibility(savedLang);
+        }
     });
 </script>

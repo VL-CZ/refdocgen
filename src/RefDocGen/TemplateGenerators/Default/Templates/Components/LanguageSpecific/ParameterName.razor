@@ -1,0 +1,28 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required ParameterTM Parameter { get; set; }
+}
+
+<span class="csharp-lang">
+    @{
+        var modifiers = Parameter.Modifiers[Language.CSharp];
+    }
+
+    @if (modifiers.Any())
+    {
+        <span class="refdocgen-text-tertiary">
+            @string.Join(' ', modifiers)
+        </span>
+        <span> </span>
+    }
+
+    <TypeLink Type="@Parameter.Type" />
+
+    <span>
+        @Parameter.Name
+    </span>
+</span><span class="other-lang">
+    <TodoComponent />
+</span>

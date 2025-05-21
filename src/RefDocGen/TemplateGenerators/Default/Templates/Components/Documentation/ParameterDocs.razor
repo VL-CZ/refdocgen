@@ -18,9 +18,11 @@
                     <span> </span>
                 }
 
-                <samp data-id="parameter-name">
-                    <ParameterName Parameter="@parameter" />
-                </samp>
+                <div data-id="parameter-name">
+                    <samp>
+                        <ParameterName Parameter="@parameter" />
+                    </samp>
+                </div>
 
                 <div class="text-body-secondary mb-2" data-id="parameter-doc">
                     @if (parameter.DocComment is not null)
