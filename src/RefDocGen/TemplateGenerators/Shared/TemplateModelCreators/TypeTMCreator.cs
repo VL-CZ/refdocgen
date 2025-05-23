@@ -18,10 +18,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 /// </summary>
 internal abstract class TypeTMCreator
 {
-    protected Dictionary<Language, ILanguageSpecificData> languageSpecificData = new()
-    {
-        [Language.CSharp] = new CSharpLanguageData()
-    };
+    protected IReadOnlyDictionary<Language, ILanguageSpecificData> languageSpecificData;
 
     protected LocalizedData<T> GetLocalizedData<T>(Func<ILanguageSpecificData, T> function)
     {
@@ -47,10 +44,12 @@ internal abstract class TypeTMCreator
     /// <param name="docCommentTransformer">
     /// <inheritdoc cref="docCommentTransformer"/>.
     /// </param>
-    protected TypeTMCreator(IDocCommentTransformer docCommentTransformer)
+    protected TypeTMCreator(IDocCommentTransformer docCommentTransformer, IReadOnlyDictionary<Language, ILanguageSpecificData> languageSpecificData)
     {
         this.docCommentTransformer = docCommentTransformer;
         typeUrlResolver = new(docCommentTransformer.TypeRegistry);
+
+        this.languageSpecificData = languageSpecificData;
     }
 
     /// <inheritdoc cref="IDocCommentTransformer.ToHtmlString(XElement)"/>

@@ -8,7 +8,7 @@ using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 
 namespace RefDocGen.TemplateGenerators.Shared;
 
-public enum Language { CSharp }
+public enum Language { CSharp, Other }
 
 internal readonly record struct PropertyModifiers(string[] Modifiers, string[] GetterModifiers, string[] SetterModifiers);
 

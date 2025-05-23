@@ -118,7 +118,9 @@ internal class RazorTemplateGenerator<
     /// </summary>
     private DocVersionManager? versionManager;
 
-    private LanguageTM[] languageData;
+    private readonly IReadOnlyDictionary<Language, ILanguageSpecificData> languagesConfiguration;
+
+    private readonly LanguageTM[] languageData;
 
     /// <summary>
     /// The directory, where the generated output API pages will be stored.
@@ -138,6 +140,7 @@ internal class RazorTemplateGenerator<
         HtmlRenderer htmlRenderer,
         IDocCommentTransformer docCommentTransformer,
         string outputDirectory,
+        IReadOnlyDictionary<Language, ILanguageSpecificData> languagesConfiguration,
         string? staticPagesDirectory = null,
         string? docVersion = null)
     {
@@ -146,12 +149,13 @@ internal class RazorTemplateGenerator<
         this.outputDirectory = outputDirectory;
         this.staticPagesDirectory = staticPagesDirectory;
         this.docVersion = docVersion;
+        this.languagesConfiguration = languagesConfiguration;
 
         defaultIndexPage = Path.Join("TemplateGenerators", "Shared", "StaticData", "defaultIndexPage.html");
         templatesDirectory = GetTemplatesDirectory();
 
         // TODO
-        languageData = [new("C#", "csharp-lang"), new("Other", "other-lang")];
+        languageData = languagesConfiguration.Values.Select(l => new LanguageTM(l.LanguageName, l.LanguageId)).ToArray();
     }
 
     /// <inheritdoc/>
@@ -213,7 +217,7 @@ internal class RazorTemplateGenerator<
     /// <param name="types">The type data to be used in the templates.</param>
     private void GenerateObjectTypePages(IEnumerable<IObjectTypeData> types)
     {
-        var creator = new ObjectTypeTMCreator(docCommentTransformer);
+        var creator = new ObjectTypeTMCreator(docCommentTransformer, languagesConfiguration);
         var typeTemplateModels = types.Select(creator.GetFrom);
         ProcessApiTemplates<TObjectTypePageTemplate, ObjectTypeTM>(typeTemplateModels);
     }
@@ -224,7 +228,7 @@ internal class RazorTemplateGenerator<
     /// <param name="enums">The enum data to be used in the templates.</param>
     private void GenerateEnumPages(IEnumerable<IEnumTypeData> enums)
     {
-        var creator = new EnumTMCreator(docCommentTransformer);
+        var creator = new EnumTMCreator(docCommentTransformer, languagesConfiguration);
         var enumTMs = enums.Select(creator.GetFrom);
         ProcessApiTemplates<TEnumPageTemplate, EnumTypeTM>(enumTMs);
     }
@@ -235,7 +239,7 @@ internal class RazorTemplateGenerator<
     /// <param name="delegates">The delegate data to be used in the templates.</param>
     private void GenerateDelegatePages(IEnumerable<IDelegateTypeData> delegates)
     {
-        var creator = new DelegateTMCreator(docCommentTransformer);
+        var creator = new DelegateTMCreator(docCommentTransformer, languagesConfiguration);
         var delegateTMs = delegates.Select(creator.GetFrom);
         ProcessApiTemplates<TDelegatePageTemplate, DelegateTypeTM>(delegateTMs);
     }

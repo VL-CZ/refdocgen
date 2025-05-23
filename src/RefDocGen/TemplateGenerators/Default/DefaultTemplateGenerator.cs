@@ -4,9 +4,85 @@ using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 
 #pragma warning disable IDE0005 // add the namespace containing the Razor templates
 using RefDocGen.TemplateGenerators.Default.Templates;
+using RefDocGen.CodeElements.Members.Abstract;
+using RefDocGen.CodeElements.Types.Abstract;
+using RefDocGen.CodeElements.Types.Abstract.Delegate;
+using RefDocGen.CodeElements.Types.Abstract.Enum;
 #pragma warning restore IDE0005
 
 namespace RefDocGen.TemplateGenerators.Default;
+
+class OtherLanguageData : ILanguageSpecificData
+{
+    public string LanguageName => "Other";
+
+    public string LanguageId => "other-lang";
+
+    public string[] GetModifiers(IFieldData field)
+    {
+        return [];
+    }
+
+    public PropertyModifiers GetModifiers(IPropertyData property)
+    {
+        return new([], [], []);
+    }
+
+    public string[] GetModifiers(IMethodData method)
+    {
+        return [];
+    }
+
+    public string[] GetModifiers(IConstructorData constructor)
+    {
+        return [];
+    }
+
+    public string[] GetModifiers(IEventData eventData)
+    {
+        return [];
+    }
+
+    public string[] GetModifiers(IParameterData parameter)
+    {
+        return [];
+    }
+
+    public PropertyModifiers GetModifiers(IIndexerData indexer)
+    {
+        return new([], [], []);
+    }
+
+    public string[] GetModifiers(IOperatorData operatorData)
+    {
+        return [];
+    }
+
+    public string[] GetModifiers(IObjectTypeData type)
+    {
+        return [];
+    }
+
+    public string[] GetModifiers(IDelegateTypeData delegateType)
+    {
+        return [];
+    }
+
+    public string[] GetModifiers(IEnumTypeData enumType)
+    {
+        return [];
+    }
+
+    public string[] GetModifiers(ITypeParameterData typeParameter)
+    {
+        return [];
+    }
+
+    public string GetTypeName(ITypeDeclaration type)
+    {
+        return "";
+    }
+}
 
 /// <summary>
 /// Class used for generating default Razor templates.
@@ -21,6 +97,12 @@ internal class DefaultTemplateGenerator : RazorTemplateGenerator<
     StaticPageTemplate,
     SearchTemplate>
 {
+    private static Dictionary<Language, ILanguageSpecificData> languages = new()
+    {
+        [Language.CSharp] = new CSharpLanguageData(),
+        [Language.Other] = new OtherLanguageData()
+    };
+
     /// <summary>
     /// Initialize a new instance of <see cref="DefaultTemplateGenerator"/> class.
     /// </summary>
@@ -33,6 +115,7 @@ internal class DefaultTemplateGenerator : RazorTemplateGenerator<
             htmlRenderer,
             new DocCommentTransformer(new DocCommentHtmlConfiguration()),
             outputDir,
+            languages,
             staticPagesDirectory,
             docVersion)
     {
