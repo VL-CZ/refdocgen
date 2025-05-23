@@ -16,6 +16,9 @@
 
     [Parameter]
     public required string[]? Versions { get; set; }
+
+    [Parameter]
+    public required LanguageTM[] Languages { get; set; }
 }
 
 
@@ -23,9 +26,11 @@
     <CascadingValue Value="CustomStyles">
         <CascadingValue Value="NestingLevel">
             <CascadingValue Value="Versions">
-                <LayoutView Layout="typeof(AppLayout)">
-                    @((MarkupString)Contents)
-                </LayoutView>
+                <CascadingValue Value="Languages">
+                    <LayoutView Layout="typeof(AppLayout)">
+                        @((MarkupString)Contents)
+                    </LayoutView>
+                </CascadingValue>
             </CascadingValue>
         </CascadingValue>
     </CascadingValue>

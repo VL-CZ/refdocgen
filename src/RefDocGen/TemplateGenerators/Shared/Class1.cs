@@ -27,11 +27,17 @@ internal interface ILanguageSpecificData
     string[] GetModifiers(IEnumTypeData enumType);
     string[] GetModifiers(ITypeParameterData typeParameter);
     string GetTypeName(ITypeDeclaration type);
+    string LanguageName { get; }
+    string LanguageId { get; }
 
 }
 
 internal class CSharpLanguageData : ILanguageSpecificData
 {
+    public string LanguageName => "C#";
+
+    public string LanguageId => "csharp-lang";
+
     public string[] GetModifiers(IFieldData field)
     {
         List<Keyword> modifiers = [field.AccessModifier.ToKeyword()];
@@ -282,3 +288,5 @@ public class LocalizedData<T>
 
     public T this[Language language] => data[language];
 }
+
+public record LanguageTM(string Name, string Id);

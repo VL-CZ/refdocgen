@@ -118,6 +118,8 @@ internal class RazorTemplateGenerator<
     /// </summary>
     private DocVersionManager? versionManager;
 
+    private LanguageTM[] languageData;
+
     /// <summary>
     /// The directory, where the generated output API pages will be stored.
     /// </summary>
@@ -148,6 +150,8 @@ internal class RazorTemplateGenerator<
         defaultIndexPage = Path.Join("TemplateGenerators", "Shared", "StaticData", "defaultIndexPage.html");
         templatesDirectory = GetTemplatesDirectory();
 
+        // TODO
+        languageData = [new("C#", "csharp-lang"), new("Other", "other-lang")];
     }
 
     /// <inheritdoc/>
@@ -420,7 +424,8 @@ internal class RazorTemplateGenerator<
             var sharedTemplateParameters = new Dictionary<string, object?>()
             {
                 ["TopMenuData"] = topMenuData,
-                ["Versions"] = versions
+                ["Versions"] = versions,
+                ["Languages"] = languageData
             };
 
             var templateParameters = sharedTemplateParameters.Merge(customTemplateParameters);

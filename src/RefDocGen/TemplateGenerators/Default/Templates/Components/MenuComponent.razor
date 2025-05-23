@@ -7,6 +7,9 @@
     [CascadingParameter]
     public required TopMenuDataTM TopMenuData { get; set; }
 
+    [CascadingParameter]
+    public required LanguageTM[] Languages { get; set; }
+
     [Parameter]
     public required int NestingLevel { get; set; }
 }
@@ -64,8 +67,10 @@
                 <li class="nav-item d-flex align-items-center">
                     <form class="me-2 mb-2 mb-lg-0">
                         <select class="form-select" id="language-selector" aria-label="language">
-                            <option class="lang-option" value="csharp-lang">C#</option>
-                            <option class="lang-option" value="other-lang">Other</option>
+                            @foreach (var language in Languages)
+                            {
+                                <option class="lang-option" value="@language.Id">@language.Name</option>
+                            }
                         </select>
                     </form>
                 </li>
