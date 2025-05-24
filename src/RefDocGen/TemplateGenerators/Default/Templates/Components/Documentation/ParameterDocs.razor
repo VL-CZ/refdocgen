@@ -12,11 +12,7 @@
         @foreach (var parameter in Parameters)
         {
             <div data-id="parameter-data">
-                @foreach (var attr in parameter.Attributes)
-                {
-                    <AttributeString Attribute="@attr" />
-                    <span> </span>
-                }
+                <AttributeList Attributes="@parameter.Attributes" />
 
                 <div data-id="parameter-name">
                     <samp>

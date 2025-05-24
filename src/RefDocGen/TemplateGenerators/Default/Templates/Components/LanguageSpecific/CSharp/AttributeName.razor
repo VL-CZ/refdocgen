@@ -5,7 +5,7 @@
     public required AttributeTM Attribute { get; set; }
 }
 
-<samp>
+<span class="csharp-lang">
     [<TypeLink Type="@Attribute.Type" />
 
     @if (Attribute.ConstructorArguments.Any() || Attribute.NamedArguments.Any())
@@ -32,4 +32,7 @@
         }
         <span>)</span>
     }]
-</samp>
+</span>
+<span class="other-lang">
+    <TodoComponent />
+</span>

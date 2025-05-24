@@ -1,0 +1,15 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required IEnumerable<AttributeTM> Attributes { get; set; }
+}
+
+@if (Attributes.Any())
+{
+    <h3 class="lead mt-3">Attributes</h3>
+    <div class="mx-2" data-id="attributes-section">
+        <AttributeList Attributes="@Attributes" />
+    </div>
+}
+
