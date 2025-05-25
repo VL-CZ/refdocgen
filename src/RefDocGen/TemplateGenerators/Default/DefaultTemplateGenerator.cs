@@ -20,7 +20,7 @@ class OtherLanguageData : ILanguageSpecificData
 
     public string FormatLiteralValue(object? literalValue)
     {
-        throw new NotImplementedException();
+        return "";
     }
 
     public string[] GetModifiers(IFieldData field)

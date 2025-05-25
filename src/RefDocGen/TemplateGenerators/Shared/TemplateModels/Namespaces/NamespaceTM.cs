@@ -28,7 +28,7 @@ public record NamespaceTM(
         .Concat(Interfaces)
         .Concat(Enums)
         .Concat(Delegates)
-        .OrderBy(t => t.Name);
+        .OrderBy(t => t.Name[Language.CSharp]);
 
     /// <inheritdoc/>
     public string Id => Name;
