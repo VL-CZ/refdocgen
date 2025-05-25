@@ -2,42 +2,19 @@ using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Attribute;
 using RefDocGen.CodeElements.Types.Abstract.Exception;
-using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
-using RefDocGen.Tools;
-using System.Xml.Linq;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 
 /// <summary>
 /// Base class responsible for creating template models representing any types.
 /// </summary>
-internal abstract class TypeTMCreator
+internal abstract class TypeTMCreator : BaseTMCreator
 {
-    protected IReadOnlyDictionary<Language, ILanguageSpecificData> languageSpecificData;
-
-    protected LocalizedData<T> GetLocalizedData<T>(Func<ILanguageSpecificData, T> function)
-    {
-        var localizedData = languageSpecificData.
-            ToDictionary(item => item.Key, item => function(item.Value));
-
-        return new LocalizedData<T>(localizedData);
-    }
-
-    /// <summary>
-    /// Transformer of the XML doc comments into HTML.
-    /// </summary>
-    protected readonly IDocCommentTransformer docCommentTransformer;
-
-    /// <summary>
-    /// Resolver of the individual type's documentation pages.
-    /// </summary>
-    protected readonly TypeUrlResolver typeUrlResolver;
-
     /// <summary>
     /// Creates a new instance of <see cref="TypeTMCreator"/> class.
     /// </summary>
@@ -45,27 +22,8 @@ internal abstract class TypeTMCreator
     /// <inheritdoc cref="docCommentTransformer"/>.
     /// </param>
     protected TypeTMCreator(IDocCommentTransformer docCommentTransformer, IReadOnlyDictionary<Language, ILanguageSpecificData> languageSpecificData)
+        : base(docCommentTransformer, languageSpecificData)
     {
-        this.docCommentTransformer = docCommentTransformer;
-        typeUrlResolver = new(docCommentTransformer.TypeRegistry);
-
-        this.languageSpecificData = languageSpecificData;
-    }
-
-    /// <inheritdoc cref="IDocCommentTransformer.ToHtmlString(XElement)"/>
-    protected string? ToHtmlString(XElement docComment)
-    {
-        return docCommentTransformer.ToHtmlString(docComment);
-    }
-
-    /// <summary>
-    /// Converts each of the <see cref="XElement"/> to its HTML string representation.
-    /// </summary>
-    /// <param name="elements">The elements to be converted to their HTML strings.</param>
-    /// <returns>Collection of raw HTML string representation of the <paramref name="elements"/>.</returns>
-    protected string[] GetHtmlStrings(IEnumerable<XElement> elements)
-    {
-        return [.. elements.Select(ToHtmlString).WhereNotNull()];
     }
 
     /// <summary>
@@ -106,57 +64,6 @@ internal abstract class TypeTMCreator
     protected AttributeTM[] GetTemplateModels(IEnumerable<IAttributeData> attributes)
     {
         return [.. attributes.Select(GetFrom)];
-    }
-
-    /// <summary>
-    /// Gets the <see cref="TypeLinkTM"/> from the provided <paramref name="type"/>.
-    /// </summary>
-    /// <param name="type">The provided type.</param>
-    /// <returns><see cref="TypeLinkTM"/> corresponding to the provided <paramref name="type"/>.</returns>
-    protected TypeLinkTM GetTypeLink(ITypeNameData type)
-    {
-        string? url = typeUrlResolver.GetUrlOf(type);
-
-        return new TypeLinkTM(
-            CSharpTypeName.Of(type, url is null),
-            url
-            );
-    }
-
-    /// <inheritdoc cref="GetTypeLink(ITypeNameData)"/>
-    protected TypeLinkTM GetTypeLink(ITypeDeclaration type)
-    {
-        string? url = typeUrlResolver.GetUrlOf(type.Id);
-
-        return new TypeLinkTM(
-            CSharpTypeName.Of(type),
-            url);
-    }
-
-    /// <summary>
-    /// Gets the <see cref="TypeLinkTM"/> from the provided <paramref name="type"/> or <see langword="null"/> if the type is <see langword="null"/>.
-    /// </summary>
-    /// <param name="type">The provided type.</param>
-    /// <returns><see cref="TypeLinkTM"/> corresponding to the provided <paramref name="type"/>. <see langword="null"/> if the provided <paramref name="type"/> is <see langword="null"/>.</returns>
-    protected TypeLinkTM? GetTypeLinkOrNull(ITypeNameData? type)
-    {
-        if (type is null)
-        {
-            return null;
-        }
-
-        return GetTypeLink(type);
-    }
-
-    /// <inheritdoc cref="GetTypeLinkOrNull(ITypeNameData?)"/>
-    protected TypeLinkTM? GetTypeLinkOrNull(ITypeDeclaration? type)
-    {
-        if (type is null)
-        {
-            return null;
-        }
-
-        return GetTypeLink(type);
     }
 
     /// <summary>
@@ -251,15 +158,5 @@ internal abstract class TypeTMCreator
                 typeUrlResolver.GetUrlOf(attribute.Type.Id, argument.Name)
             ),
             LiteralValueFormatter.Format(argument.Value));
-    }
-
-    /// <summary>
-    /// Gets the C# name of the type, excluding its generic parameters.
-    /// </summary>
-    /// <param name="type">The provided type.</param>
-    /// <returns>C# name of the provided type.</returns>
-    protected string GetTypeName(ITypeDeclaration type)
-    {
-        return CSharpTypeName.Of(type, false);
     }
 }

@@ -301,22 +301,11 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     {
         var nestedTypes = new List<TypeNameTM>();
 
-        nestedTypes.AddRange(type.NestedObjectTypes.Select(t => GetFrom(t, t.Kind.GetName())));
-        nestedTypes.AddRange(type.NestedDelegates.Select(d => GetFrom(d, "delegate"))); // TODO: use constants
-        nestedTypes.AddRange(type.NestedEnums.Select(d => GetFrom(d, "enum")));
+        nestedTypes.AddRange(type.NestedObjectTypes.Select(GetTypeNameFrom));
+        nestedTypes.AddRange(type.NestedDelegates.Select(GetTypeNameFrom));
+        nestedTypes.AddRange(type.NestedEnums.Select(GetTypeNameFrom));
 
         return [.. nestedTypes];
-    }
-
-    /// <summary>
-    /// Creates a <see cref="TypeNameTM"/> instance representing a nested type based on the provided <see cref="ITypeDeclaration"/> object.
-    /// </summary>
-    /// <param name="type">The <see cref="ITypeDeclaration"/> instance representing the nested type.</param>
-    /// <param name="typeKindName">Name of the type kind.</param>
-    /// <returns>A <see cref="TypeNameTM"/> instance based on the provided <paramref name="type"/>.</returns>
-    private TypeNameTM GetFrom(ITypeDeclaration type, string typeKindName)
-    {
-        return new TypeNameTM(type.Id, typeKindName, CSharpTypeName.Of(type), ToHtmlString(type.SummaryDocComment));
     }
 
     /// <summary>

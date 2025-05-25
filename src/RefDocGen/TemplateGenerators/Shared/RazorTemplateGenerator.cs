@@ -250,7 +250,8 @@ internal class RazorTemplateGenerator<
     /// <param name="namespaces">The namespace data to be used in the templates.</param>
     private void GenerateNamespacePages(IEnumerable<NamespaceData> namespaces)
     {
-        var namespaceTMs = namespaces.Select(NamespaceTMCreator.GetFrom);
+        var creator = new NamespaceTMCreator(docCommentTransformer, languagesConfiguration);
+        var namespaceTMs = namespaces.Select(creator.GetFrom);
         ProcessApiTemplates<TNamespacePageTemplate, NamespaceTM>(namespaceTMs);
     }
 
@@ -260,7 +261,8 @@ internal class RazorTemplateGenerator<
     /// <param name="assemblies">The assembly data to be used in the templates.</param>
     private void GenerateAssemblyPages(IEnumerable<AssemblyData> assemblies)
     {
-        var assemblyTMs = assemblies.Select(AssemblyTMCreator.GetFrom);
+        var creator = new AssemblyTMCreator(docCommentTransformer, languagesConfiguration);
+        var assemblyTMs = assemblies.Select(creator.GetFrom);
         ProcessApiTemplates<TAssemblyPageTemplate, AssemblyTM>(assemblyTMs);
     }
 
@@ -270,7 +272,8 @@ internal class RazorTemplateGenerator<
     /// <param name="assemblies">The assembly data to be used in the template.</param>
     private void GenerateApiHomepage(IEnumerable<AssemblyData> assemblies)
     {
-        var assemblyTMs = assemblies.Select(AssemblyTMCreator.GetFrom);
+        var creator = new AssemblyTMCreator(docCommentTransformer, languagesConfiguration);
+        var assemblyTMs = assemblies.Select(creator.GetFrom);
         ProcessApiTemplate<TApiPageTemplate, IEnumerable<AssemblyTM>>(assemblyTMs, indexPageId);
     }
 
