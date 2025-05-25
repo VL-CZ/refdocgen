@@ -1,0 +1,13 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required TypeParameterTM[] TypeParameters { get; set; }
+}
+
+<div class="csharp-lang">
+    <TypeParametersConstraints TypeParameters="@TypeParameters" />
+</div>
+<div class="other-lang">
+    <TodoComponent />
+</div>
