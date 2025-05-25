@@ -18,6 +18,11 @@ class OtherLanguageData : ILanguageSpecificData
 
     public string LanguageId => "other-lang";
 
+    public string FormatLiteralValue(object? literalValue)
+    {
+        throw new NotImplementedException();
+    }
+
     public string[] GetModifiers(IFieldData field)
     {
         return [];

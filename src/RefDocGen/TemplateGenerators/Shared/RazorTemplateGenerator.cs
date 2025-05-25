@@ -201,7 +201,8 @@ internal class RazorTemplateGenerator<
     /// <param name="typeRegistry">Type registry containing the declared types.</param>
     private void GenerateSearchPage(ITypeRegistry typeRegistry)
     {
-        var model = SearchResultTMCreator.GetFrom(typeRegistry);
+        var creator = new SearchResultTMCreator(docCommentTransformer, languagesConfiguration);
+        var model = creator.GetFrom(typeRegistry);
 
         var paramDictionary = new Dictionary<string, object?>()
         {

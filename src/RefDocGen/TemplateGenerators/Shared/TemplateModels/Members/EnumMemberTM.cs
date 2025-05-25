@@ -15,7 +15,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 public record EnumMemberTM(
     string Id,
     string Name,
-    string? Value,
+    LocalizedData<string>? Value,
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,

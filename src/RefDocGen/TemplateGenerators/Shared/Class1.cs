@@ -3,6 +3,7 @@ using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
+using RefDocGen.TemplateGenerators.Shared.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 
@@ -27,6 +28,7 @@ internal interface ILanguageSpecificData
     string[] GetModifiers(IEnumTypeData enumType);
     string[] GetModifiers(ITypeParameterData typeParameter);
     string GetTypeName(ITypeDeclaration type);
+    string FormatLiteralValue(object? literalValue);
     string LanguageName { get; }
     string LanguageId { get; }
 
@@ -37,6 +39,11 @@ internal class CSharpLanguageData : ILanguageSpecificData
     public string LanguageName => "C#";
 
     public string LanguageId => "csharp-lang";
+
+    public string FormatLiteralValue(object? literalValue)
+    {
+        return CSharpLiteralValueFormatter.Format(literalValue);
+    }
 
     public string[] GetModifiers(IFieldData field)
     {

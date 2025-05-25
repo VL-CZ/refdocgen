@@ -28,7 +28,7 @@ public record FieldTM(
     string Name,
     TypeLinkTM Type,
     LocalizedData<string[]> Modifiers,
-    string? ConstantValue,
+    LocalizedData<string>? ConstantValue,
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,

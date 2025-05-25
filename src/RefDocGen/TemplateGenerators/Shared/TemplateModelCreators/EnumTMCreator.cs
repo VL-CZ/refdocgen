@@ -48,10 +48,11 @@ internal class EnumTMCreator : TypeTMCreator
     /// <returns>A <see cref="EnumMemberTM"/> instance based on the provided <paramref name="enumMember"/>.</returns>
     internal EnumMemberTM GetFrom(IEnumMemberData enumMember)
     {
+
         return new EnumMemberTM(
             Id: enumMember.Id,
             Name: enumMember.Name,
-            Value: LiteralValueFormatter.Format(enumMember.Value),
+            Value: GetLocalizedDefaultValue(enumMember.Value),
             Attributes: GetTemplateModels(enumMember.Attributes),
             SummaryDocComment: ToHtmlString(enumMember.SummaryDocComment),
             RemarksDocComment: ToHtmlString(enumMember.RemarksDocComment),

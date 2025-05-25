@@ -53,7 +53,7 @@ public record PropertyTM(
     LocalizedData<string[]> Modifiers,
     LocalizedData<string[]> GetterModifiers,
     LocalizedData<string[]> SetterModifiers,
-    string? ConstantValue,
+    LocalizedData<string>? ConstantValue,
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,

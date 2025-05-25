@@ -93,16 +93,12 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     {
         var modifiers = GetLocalizedData(lang => lang.GetModifiers(field));
 
-        string? constantValue = field.ConstantValue == DBNull.Value
-            ? null
-            : LiteralValueFormatter.Format(field.ConstantValue);
-
         return new FieldTM(
             Id: field.Id,
             Name: field.Name,
             Type: GetTypeLink(field.Type),
             Modifiers: modifiers,
-            ConstantValue: constantValue,
+            ConstantValue: GetLocalizedDefaultValue(field.ConstantValue),
             Attributes: GetTemplateModels(field.Attributes),
             SummaryDocComment: ToHtmlString(field.SummaryDocComment),
             RemarksDocComment: ToHtmlString(field.RemarksDocComment),
@@ -121,10 +117,6 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         var getterModifiers = GetLocalizedData(lang => lang.GetModifiers(property).GetterModifiers);
         var setterModifiers = GetLocalizedData(lang => lang.GetModifiers(property).SetterModifiers);
 
-        string? constantValue = property.ConstantValue == DBNull.Value
-            ? null
-            : LiteralValueFormatter.Format(property.ConstantValue);
-
         return new PropertyTM(
             Id: property.Id,
             Name: GetCallableMemberName(property),
@@ -135,7 +127,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             Modifiers: modifiers,
             GetterModifiers: getterModifiers,
             SetterModifiers: setterModifiers,
-            ConstantValue: constantValue,
+            ConstantValue: GetLocalizedDefaultValue(property.ConstantValue),
             Attributes: GetTemplateModels(property.Attributes),
             SummaryDocComment: ToHtmlString(property.SummaryDocComment),
             RemarksDocComment: ToHtmlString(property.RemarksDocComment),

@@ -21,5 +21,5 @@ public record ParameterTM(
     TypeLinkTM Type,
     LocalizedData<string[]> Modifiers,
     AttributeTM[] Attributes,
-    string? DefaultValue,
+    LocalizedData<string>? DefaultValue,
     string? DocComment);

@@ -75,16 +75,12 @@ internal abstract class TypeTMCreator : BaseTMCreator
     {
         var modifiers = GetLocalizedData(lang => lang.GetModifiers(parameter));
 
-        string? defaultValue = parameter.DefaultValue == DBNull.Value
-            ? null
-            : LiteralValueFormatter.Format(parameter.DefaultValue);
-
         return new ParameterTM(
             parameter.Name,
             GetTypeLink(parameter.Type),
             modifiers,
             GetTemplateModels(parameter.Attributes),
-            defaultValue,
+            GetLocalizedDefaultValue(parameter.DefaultValue),
             ToHtmlString(parameter.DocComment));
     }
 
@@ -131,7 +127,7 @@ internal abstract class TypeTMCreator : BaseTMCreator
     /// <returns>A <see cref="AttributeTM"/> instance based on the provided <paramref name="attribute"/>.</returns>
     protected AttributeTM GetFrom(IAttributeData attribute)
     {
-        string?[] constructorArgumentTMs = [.. attribute.ConstructorArgumentValues.Select(LiteralValueFormatter.Format)];
+        LocalizedData<string>?[] constructorArgumentTMs = [.. attribute.ConstructorArgumentValues.Select(GetLocalizedDefaultValue)];
         var namedArgumentTMs = attribute.NamedArguments.Select(na => GetFrom(na, attribute)).ToArray();
 
         var typeLink = new TypeLinkTM(
@@ -157,6 +153,16 @@ internal abstract class TypeTMCreator : BaseTMCreator
                 argument.Name,
                 typeUrlResolver.GetUrlOf(attribute.Type.Id, argument.Name)
             ),
-            LiteralValueFormatter.Format(argument.Value));
+            GetLocalizedDefaultValue(argument.Value));
+    }
+
+    protected LocalizedData<string>? GetLocalizedDefaultValue(object? constantValue) // TODO
+    {
+        if (constantValue == DBNull.Value)
+        {
+            return null;
+        }
+
+        return GetLocalizedData(lang => lang.FormatLiteralValue(constantValue));
     }
 }

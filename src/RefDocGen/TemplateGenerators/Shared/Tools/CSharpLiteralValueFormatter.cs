@@ -3,16 +3,16 @@ using System.Globalization;
 namespace RefDocGen.TemplateGenerators.Shared.Tools;
 
 /// <summary>
-/// Class responsible for formatting literal values.
+/// Class responsible for formatting literal values to its C# format.
 /// </summary>
-internal class LiteralValueFormatter
+internal class CSharpLiteralValueFormatter
 {
     /// <summary>
     /// Format the literal value into a string.
     /// </summary>
     /// <param name="literalValue">Literal value to format.</param>
     /// <returns>String representation of the literal value.</returns>
-    internal static string? Format(object? literalValue)
+    internal static string Format(object? literalValue)
     {
         if (literalValue is null)
         {
@@ -32,7 +32,7 @@ internal class LiteralValueFormatter
         }
         else
         {
-            return literalValue.ToString();
+            return literalValue.ToString() ?? "";
         }
     }
 }
