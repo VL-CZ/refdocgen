@@ -6,20 +6,7 @@
 }
 
 <span class="csharp-lang">
-    @{
-        var modifiers = TypeParameter.Modifiers[Language.CSharp];
-    }
-
-    @if (modifiers.Any())
-    {
-        <span class="refdocgen-text-tertiary">
-            @string.Join(' ', modifiers)
-        </span>
-        <span> </span>
-    }
-    <span class="refdocgen-text-secondary">
-        @TypeParameter.Name
-    </span>
+    <CSharpTypeParameterName TypeParameter="@TypeParameter" />
 </span><span class="other-lang">
     <TodoComponent />
 </span>

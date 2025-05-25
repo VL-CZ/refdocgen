@@ -6,18 +6,7 @@
 }
 
 <span class="csharp-lang">
-
-    <span class="refdocgen-text-tertiary">
-        @string.Join(' ', Field.Modifiers[Language.CSharp])
-    </span>
-
-    <TypeLink Type="@Field.Type" />
-
-    <span class="refdocgen-text-primary">
-        @Field.Name
-    </span>
-
-    <LiteralValueSuffix Value="@Field.ConstantValue" />
+    <CSharpFieldName Field="@Field" />
 </span>
 <span class="other-lang">
     <TodoComponent />

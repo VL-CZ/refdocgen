@@ -6,15 +6,7 @@
 }
 
 <span class="csharp-lang">
-    <span class="refdocgen-text-tertiary">
-        @string.Join(' ', Method.Modifiers[Language.CSharp])
-    </span>
-
-    <TypeLink Type="@Method.ReturnType" />
-
-    <span class="refdocgen-text-primary">
-        @Method.Name
-    </span><TypeParametersString TypeParameters="@Method.TypeParameters" /><ParametersString Parameters="@Method.Parameters" />
+    <CSharpMethodName Method="@Method" />
 </span>
 <span class="other-lang">
     <TodoComponent />

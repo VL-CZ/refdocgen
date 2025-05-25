@@ -1,0 +1,20 @@
+@inherits ComponentBase
+@using RefDocGen.TemplateGenerators.Default.Templates.Components.LanguageSpecific.CSharp.Utils
+
+@code {
+    [Parameter]
+    public required MethodTM Method { get; set; }
+}
+
+
+<span class="refdocgen-text-tertiary">
+    @string.Join(' ', Method.Modifiers[Language.CSharp])
+</span>
+
+<TypeLink Type="@Method.ReturnType" />
+
+<span class="refdocgen-text-primary">
+    @Method.Name
+</span>
+<TypeParametersString TypeParameters="@Method.TypeParameters" />
+<ParametersString Parameters="@Method.Parameters" />

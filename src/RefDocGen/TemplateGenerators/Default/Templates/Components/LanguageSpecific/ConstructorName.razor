@@ -9,12 +9,7 @@
 }
 
 <span class="csharp-lang">
-    <span class="refdocgen-text-tertiary">
-        @string.Join(' ', Constructor.Modifiers[Language.CSharp])
-    </span>
-    <span class="refdocgen-text-primary">
-        @TypeName
-    </span><ParametersString Parameters="@Constructor.Parameters" />
+    <CSharpConstructorName Constructor="@Constructor" TypeName="@TypeName" />
 </span>
 <span class="other-lang">
     <TodoComponent />

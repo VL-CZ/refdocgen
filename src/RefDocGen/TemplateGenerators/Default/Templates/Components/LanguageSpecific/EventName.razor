@@ -6,16 +6,7 @@
 }
 
 <span class="csharp-lang">
-
-    <span class="refdocgen-text-tertiary">
-        @string.Join(' ', Event.Modifiers[Language.CSharp])
-    </span>
-
-    <TypeLink Type="@Event.Type" />
-
-    <span class="refdocgen-text-primary">
-        @Event.Name
-    </span>
+    <CSharpEventName Event="@Event" />
 </span>
 <span class="other-lang">
     <TodoComponent />
