@@ -94,8 +94,12 @@ internal abstract class TypeTMCreator : BaseTMCreator
         var modifiers = GetLocalizedData(lang => lang.GetModifiers(typeParameter));
 
         // get constraints
-        var typeConstraints = typeParameter.TypeConstraints.Select(GetTypeLink);
-        var specialConstraints = typeParameter.SpecialConstraints.Select(c => c.GetName());
+        var typeConstraints = typeParameter.TypeConstraints.Select(GetTypeLink).ToArray();
+        var specialConstraints = GetLocalizedData(lang =>
+        {
+            var constraints = typeParameter.SpecialConstraints;
+            return constraints.Select(c => lang.GetSpecialTypeConstraintName(c)).ToArray();
+        });
 
         return new TypeParameterTM(
             typeParameter.Name,

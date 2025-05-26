@@ -7,7 +7,8 @@
 
 @foreach (var tp in TypeParameters)
 {
-    var allConstraints = tp.SpecialConstraints.Concat(
+    var specialConstraints = tp.SpecialConstraints[Language.CSharp];
+    var allConstraints = specialConstraints.Concat(
         tp.TypeConstraints.Select(c => c.Name)
     );
 
@@ -18,13 +19,13 @@
                 <span class="refdocgen-text-tertiary">where</span>
                 <span class="refdocgen-text-secondary">@tp.Name</span>
                 <span> : </span>
-                <span class="refdocgen-text-tertiary">@string.Join(", ", tp.SpecialConstraints)</span>
+                <span class="refdocgen-text-tertiary">@string.Join(", ", specialConstraints)</span>
 
                 @if (tp.TypeConstraints.Any())
                 {
                     var lastItem = tp.TypeConstraints.Last();
 
-                    @if (tp.SpecialConstraints.Any())
+                    @if (specialConstraints.Any())
                     {
                         <span class="refdocgen-text-tertiary">, </span>
                     }

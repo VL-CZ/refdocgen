@@ -9,7 +9,6 @@ using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators.Tools;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools;
-using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 

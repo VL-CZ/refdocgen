@@ -12,5 +12,5 @@ public record TypeParameterTM(
     string Name,
     string? DocComment,
     LocalizedData<string[]> Modifiers,
-    IEnumerable<TypeLinkTM> TypeConstraints,
-    IEnumerable<string> SpecialConstraints);
+    TypeLinkTM[] TypeConstraints,
+    LocalizedData<string[]> SpecialConstraints);

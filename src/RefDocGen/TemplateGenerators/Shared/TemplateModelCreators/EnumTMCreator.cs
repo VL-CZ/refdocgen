@@ -3,7 +3,6 @@ using RefDocGen.CodeElements.Types.Abstract.Enum;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
-using RefDocGen.TemplateGenerators.Shared.Tools;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 

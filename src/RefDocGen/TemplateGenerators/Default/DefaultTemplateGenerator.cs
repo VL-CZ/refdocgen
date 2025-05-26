@@ -8,11 +8,12 @@ using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
+using RefDocGen.CodeElements;
 #pragma warning restore IDE0005
 
 namespace RefDocGen.TemplateGenerators.Default;
 
-class OtherLanguageData : ILanguageSpecificData
+internal class OtherLanguageData : ILanguageSpecificData
 {
     public string LanguageName => "Other";
 
@@ -83,6 +84,11 @@ class OtherLanguageData : ILanguageSpecificData
         return [];
     }
 
+    public string GetSpecialTypeConstraintName(SpecialTypeConstraint constraint)
+    {
+        return "";
+    }
+
     public string GetTypeName(ITypeDeclaration type)
     {
         return "";
@@ -102,7 +108,7 @@ internal class DefaultTemplateGenerator : RazorTemplateGenerator<
     StaticPageTemplate,
     SearchTemplate>
 {
-    private static Dictionary<Language, ILanguageSpecificData> languages = new()
+    private static readonly Dictionary<Language, ILanguageSpecificData> languages = new()
     {
         [Language.CSharp] = new CSharpLanguageData(),
         [Language.Other] = new OtherLanguageData()

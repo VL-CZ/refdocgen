@@ -155,7 +155,7 @@ internal class RazorTemplateGenerator<
         templatesDirectory = GetTemplatesDirectory();
 
         // TODO
-        languageData = languagesConfiguration.Values.Select(l => new LanguageTM(l.LanguageName, l.LanguageId)).ToArray();
+        languageData = [.. languagesConfiguration.Values.Select(l => new LanguageTM(l.LanguageName, l.LanguageId))];
     }
 
     /// <inheritdoc/>

@@ -1,3 +1,4 @@
+using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Members;
 using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.Types.Abstract;
@@ -29,6 +30,7 @@ internal interface ILanguageSpecificData
     string[] GetModifiers(ITypeParameterData typeParameter);
     string GetTypeName(ITypeDeclaration type);
     string FormatLiteralValue(object? literalValue);
+    string GetSpecialTypeConstraintName(SpecialTypeConstraint constraint);
     string LanguageName { get; }
     string LanguageId { get; }
 
@@ -231,6 +233,11 @@ internal class CSharpLanguageData : ILanguageSpecificData
         return modifiers.GetStrings();
     }
 
+    public string GetSpecialTypeConstraintName(SpecialTypeConstraint constraint)
+    {
+        return constraint.GetCSharpName();
+    }
+
     public string GetTypeName(ITypeDeclaration type)
     {
         return CSharpTypeName.Of(type); // TODO
@@ -286,7 +293,7 @@ internal class CSharpLanguageData : ILanguageSpecificData
 
 public class LocalizedData<T>
 {
-    private Dictionary<Language, T> data = new();
+    private readonly Dictionary<Language, T> data = [];
 
     public LocalizedData(Dictionary<Language, T> data)
     {
