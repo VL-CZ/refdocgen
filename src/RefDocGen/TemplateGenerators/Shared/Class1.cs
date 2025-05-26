@@ -7,6 +7,7 @@ using RefDocGen.CodeElements.Types.Abstract.Enum;
 using RefDocGen.TemplateGenerators.Shared.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
+using System.Text.Json.Serialization;
 
 namespace RefDocGen.TemplateGenerators.Shared;
 
@@ -293,7 +294,8 @@ internal class CSharpLanguageData : ILanguageSpecificData
 
 public class LocalizedData<T>
 {
-    private readonly Dictionary<Language, T> data = [];
+    [JsonInclude]
+    internal readonly Dictionary<Language, T> data = [];
 
     public LocalizedData(Dictionary<Language, T> data)
     {

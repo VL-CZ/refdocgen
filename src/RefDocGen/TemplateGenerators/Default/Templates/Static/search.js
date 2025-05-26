@@ -10,7 +10,7 @@ function getSearchResultCard(item) {
     const cardTitleLink = template.querySelector('.search-result-title-link');
     const cardBody = template.querySelector('.search-result-body');
 
-    cardTitleLink.textContent = item.name;
+    cardTitleLink.textContent = item.name.data['CSharp'];
     cardTitleLink.href = item.url;
 
     cardBody.innerHTML = item.docComment;
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const jsonSearchData = JSON.parse(serializedSearchData);
 
     const fuse = new Fuse(jsonSearchData, {
-        keys: ['name'],
+        keys: ['name.data.CSharp'],
         threshold: 0.5, // Adjust for strict/fuzzy matching, see https://www.fusejs.io/api/options.html#threshold
         distance: 500
     });
