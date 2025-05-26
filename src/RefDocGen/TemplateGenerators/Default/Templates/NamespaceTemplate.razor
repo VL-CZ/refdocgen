@@ -12,7 +12,7 @@
     public required string[]? Versions { get; set; }
 
     [Parameter]
-    public required LanguageTM[] Languages { get; set; }
+    public required Dictionary<Language, LanguageTM> Languages { get; set; }
 }
 
 <CascadingValue Value="TopMenuData">

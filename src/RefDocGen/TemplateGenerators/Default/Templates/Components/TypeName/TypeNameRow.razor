@@ -3,6 +3,9 @@
 @code {
     [Parameter]
     public required TypeNameTM Type { get; set; }
+
+    [CascadingParameter]
+    public required Dictionary<Language, LanguageTM> Languages { get; set; }
 }
 
 @{
@@ -16,10 +19,14 @@
                 <span class="refdocgen-text-tertiary">
                     @Type.TypeKindName
                 </span>
-                <span>
+                <span> </span>
 
-                </span>
-                @Type.Name
+                @foreach (var language in Languages)
+                {
+                    <span class="@language.Value.Id">
+                        @Type.Name[language.Key]
+                    </span>
+                }
             </a>
         </samp>
     </td>
