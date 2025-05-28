@@ -5,9 +5,8 @@
     public required AttributeTM Attribute { get; set; }
 }
 
-<span class="csharp-lang">
-    <CSharpAttributeName Attribute="@Attribute" />
-</span>
-<span class="other-lang">
-    <TodoComponent />
-</span>
+@{
+    Dictionary<string, object> parameters = new() { ["Attribute"] = Attribute };
+}
+
+<God Parameters="parameters" />

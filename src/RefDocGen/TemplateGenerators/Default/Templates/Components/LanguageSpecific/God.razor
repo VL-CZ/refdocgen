@@ -1,0 +1,22 @@
+@inherits ComponentBase
+
+@code {
+
+    [Parameter]
+    public required Dictionary<string, object> Parameters { get; set; }
+
+    string[] languages = ["csharp-lang", "other-lang"];
+
+    Dictionary<string, Type> components = new()
+        {
+            ["csharp-lang"] = typeof(CSharpAttributeName),
+            ["other-lang"] = typeof(TodoComponent),
+        };
+}
+
+@foreach (var lang in languages)
+{
+    <span class="@lang">
+        <DynamicComponent Type="@components[lang]" Parameters="@Parameters" />
+    </span>
+}
