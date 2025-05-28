@@ -1,0 +1,82 @@
+@inherits ComponentBase
+
+@code {
+
+    [Parameter]
+    public required object Parameter { get; set; }
+
+    [Parameter]
+    public required LanguageComponentType Type { get; set; }
+
+    [CascadingParameter]
+    public required Dictionary<Language, LanguageTM> Languages { get; set; }
+
+    private Dictionary<LanguageComponentType, string> templateParameterNames = new()
+        {
+            [LanguageComponentType.AttributeName] = "Attribute",
+            [LanguageComponentType.ConstructorName] = "Constructor",
+            [LanguageComponentType.DelegateMethodName] = "Delegate",
+            [LanguageComponentType.EnumMemberName] = "EnumMember",
+            [LanguageComponentType.EventName] = "Event",
+            [LanguageComponentType.FieldName] = "Field",
+            [LanguageComponentType.IndexerName] = "Indexer",
+            [LanguageComponentType.MethodName] = "Method",
+            [LanguageComponentType.ParameterName] = "Parameter",
+            [LanguageComponentType.PropertyName] = "Property",
+            [LanguageComponentType.TypeDeclarationName] = "Type",
+            [LanguageComponentType.TypeParameterName] = "TypeParameter",
+            [LanguageComponentType.TypeParametersConstraintsSection] = "TypeParameters"
+        };
+}
+
+@{
+    Dictionary<LanguageComponentType, Type> csharpComponents = new()
+            {
+                [LanguageComponentType.AttributeName] = typeof(CSharpAttributeName),
+                [LanguageComponentType.ConstructorName] = typeof(CSharpConstructorName),
+                [LanguageComponentType.DelegateMethodName] = typeof(CSharpDelegateMethodName),
+                [LanguageComponentType.EnumMemberName] = typeof(CSharpEnumMemberName),
+                [LanguageComponentType.EventName] = typeof(CSharpEventName),
+                [LanguageComponentType.FieldName] = typeof(CSharpFieldName),
+                [LanguageComponentType.IndexerName] = typeof(CSharpIndexerName),
+                [LanguageComponentType.MethodName] = typeof(CSharpMethodName),
+                [LanguageComponentType.ParameterName] = typeof(CSharpParameterName),
+                [LanguageComponentType.PropertyName] = typeof(CSharpPropertyName),
+                [LanguageComponentType.TypeDeclarationName] = typeof(CSharpTypeDeclarationName),
+                [LanguageComponentType.TypeParameterName] = typeof(CSharpTypeParameterName),
+                [LanguageComponentType.TypeParametersConstraintsSection] = typeof(CSharpTypeParametersConstraintsSection)
+            };
+
+    Dictionary<LanguageComponentType, Type> todoComponents = new()
+            {
+                [LanguageComponentType.AttributeName] = typeof(TodoAttributeName),
+                [LanguageComponentType.ConstructorName] = typeof(TodoConstructorName),
+                [LanguageComponentType.DelegateMethodName] = typeof(TodoDelegateMethodName),
+                [LanguageComponentType.EnumMemberName] = typeof(TodoEnumMemberName),
+                [LanguageComponentType.EventName] = typeof(TodoEventName),
+                [LanguageComponentType.FieldName] = typeof(TodoFieldName),
+                [LanguageComponentType.IndexerName] = typeof(TodoIndexerName),
+                [LanguageComponentType.MethodName] = typeof(TodoMethodName),
+                [LanguageComponentType.ParameterName] = typeof(TodoParameterName),
+                [LanguageComponentType.PropertyName] = typeof(TodoPropertyName),
+                [LanguageComponentType.TypeDeclarationName] = typeof(TodoTypeDeclarationName),
+                [LanguageComponentType.TypeParameterName] = typeof(TodoTypeParameterName),
+                [LanguageComponentType.TypeParametersConstraintsSection] = typeof(TodoTypeParametersConstraintsSection)
+            };
+
+    Dictionary<string, Dictionary<LanguageComponentType, Type>> languageComponents = new()
+            {
+                ["csharp-lang"] = csharpComponents,
+                ["other-lang"] = todoComponents
+            };
+
+    var parameterName = templateParameterNames[Type];
+    var templateParameters = new Dictionary<string, object> { [parameterName] = Parameter };
+}
+
+@foreach (var lang in Languages)
+{
+    <span class="@lang.Value.Id">
+        <DynamicComponent Type="@languageComponents[lang.Value.Id][Type]" Parameters="@templateParameters" />
+    </span>
+}

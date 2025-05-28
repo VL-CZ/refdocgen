@@ -3,12 +3,7 @@
 @code {
     [Parameter]
     public required ConstructorTM Constructor { get; set; }
-
 }
 
-<span class="csharp-lang">
-    <CSharpConstructorName Constructor="@Constructor" />
-</span>
-<span class="other-lang">
-    <TodoComponent />
-</span>
+<LanguageData Type="LanguageComponentType.ConstructorName" Parameter="Constructor" />
+

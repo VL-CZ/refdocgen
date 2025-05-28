@@ -5,8 +5,4 @@
     public required AttributeTM Attribute { get; set; }
 }
 
-@{
-    Dictionary<string, object> parameters = new() { ["Attribute"] = Attribute };
-}
-
-<God Type="LanguageComponentType.AttributeName" Parameters="parameters" />
+<LanguageData Type="LanguageComponentType.AttributeName" Parameter="@Attribute" />

@@ -12,7 +12,7 @@ public enum LanguageComponentType
     MethodName,
     ParameterName,
     PropertyName,
-    TypeDeclName,
+    TypeDeclarationName,
     TypeParameterName,
-    TypeParametersConstraints
+    TypeParametersConstraintsSection
 }

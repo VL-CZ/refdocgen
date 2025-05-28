@@ -5,10 +5,4 @@
     public required TypeParameterTM[] TypeParameters { get; set; }
 }
 
-<div class="csharp-lang">
-    <CSharpTypeParametersConstraintsSection TypeParameters="@TypeParameters" />
-</div>
-<div class="other-lang">
-    <!-- Leave empty if the constraint are displayed next to type parameter name (such as in F#) -->
-    <TodoComponent />
-</div>
+<LanguageData Type="LanguageComponentType.TypeParametersConstraintsSection" Parameter="TypeParameters" />
