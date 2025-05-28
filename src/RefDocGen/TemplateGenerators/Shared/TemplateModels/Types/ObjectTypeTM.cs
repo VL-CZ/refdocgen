@@ -52,4 +52,4 @@ public record ObjectTypeTM(
     TypeLinkTM? DeclaringType,
     string? SummaryDocComment,
     string? RemarksDocComment,
-    string[] SeeAlsoDocComments) : ITemplateModelWithId;
+    string[] SeeAlsoDocComments) : ITemplateModelWithId, ITypeDeclarationNameTM;

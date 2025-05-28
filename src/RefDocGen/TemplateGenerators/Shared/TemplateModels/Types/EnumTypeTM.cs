@@ -32,4 +32,8 @@ public record EnumTypeTM(
     TypeLinkTM? DeclaringType,
     string? SummaryDocComment,
     string? RemarksDocComment,
-    string[] SeeAlsoDocComments) : ITemplateModelWithId;
+    string[] SeeAlsoDocComments) : ITemplateModelWithId, ITypeDeclarationNameTM
+{
+    /// <inheritdoc/>
+    TypeParameterTM[] ITypeDeclarationNameTM.TypeParameters => [];
+}

@@ -44,4 +44,4 @@ public record DelegateTypeTM(
     string? RemarksDocComment,
     string? ReturnsDocComment,
     string[] SeeAlsoDocComments,
-    ExceptionTM[] Exceptions) : ITemplateModelWithId;
+    ExceptionTM[] Exceptions) : ITemplateModelWithId, ITypeDeclarationNameTM;
