@@ -3,18 +3,18 @@ using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.DocExtraction.Tools;
 using System.Xml.Linq;
 
-namespace RefDocGen.DocExtraction.Handlers.InheritDoc;
+namespace RefDocGen.DocExtraction.InheritDoc;
 
 /// <summary>
 /// Class responsible for handling the 'inheritdoc' comments provided to type members and replacing them with the actual documentation.
 /// </summary>
 /// <remarks>
-/// This class isn't intended to handle inheritdoc comments with 'cref' attribute (for further info, see <see cref="InheritDocCrefHandler"/>).
+/// This class isn't intended to handle inheritdoc comments with 'cref' attribute (for further info, see <see cref="CrefInheritDocResolver"/>).
 /// </remarks>
-internal class MemberInheritDocHandler : InheritDocHandler<MemberData>
+internal class MemberInheritDocResolver : InheritDocResolver<MemberData>
 {
     /// <inheritdoc/>
-    public MemberInheritDocHandler(TypeRegistry typeRegistry) : base(typeRegistry)
+    public MemberInheritDocResolver(TypeRegistry typeRegistry) : base(typeRegistry)
     {
     }
 

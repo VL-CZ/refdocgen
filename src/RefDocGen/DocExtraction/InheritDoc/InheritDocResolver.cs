@@ -4,7 +4,7 @@ using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
-namespace RefDocGen.DocExtraction.Handlers.InheritDoc;
+namespace RefDocGen.DocExtraction.InheritDoc;
 
 /// <summary>
 /// Generic base class responsible for handling the 'inheritdoc' comments and replacing them with the actual documentation
@@ -13,7 +13,7 @@ namespace RefDocGen.DocExtraction.Handlers.InheritDoc;
 /// <remarks>
 /// See <see cref="DfsResolve(TNode)"/> for the detailed description of the process.
 /// </remarks>
-internal abstract class InheritDocHandler<TNode>
+internal abstract class InheritDocResolver<TNode>
     where TNode : notnull
 {
     /// <summary>
@@ -27,10 +27,10 @@ internal abstract class InheritDocHandler<TNode>
     private readonly HashSet<TNode> visited = [];
 
     /// <summary>
-    /// Initializes a new instance of <see cref="InheritDocHandler{TNode}"/> class.
+    /// Initializes a new instance of <see cref="InheritDocResolver{TNode}"/> class.
     /// </summary>
     /// <param name="typeRegistry">The registry of the declared types.</param>
-    public InheritDocHandler(TypeRegistry typeRegistry)
+    public InheritDocResolver(TypeRegistry typeRegistry)
     {
         this.typeRegistry = typeRegistry;
     }

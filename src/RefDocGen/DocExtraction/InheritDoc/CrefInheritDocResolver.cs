@@ -3,18 +3,15 @@ using RefDocGen.DocExtraction.Tools;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 
-namespace RefDocGen.DocExtraction.Handlers.InheritDoc;
+namespace RefDocGen.DocExtraction.InheritDoc;
 
 /// <summary>
 /// Class responsible for handling the 'inheritdoc' comments with 'cref' attribute and replacing them with the actual documentation.
 /// </summary>
-/// <remarks>
-/// This class isn't intended to handle inheritdoc comments with 'cref' attribute (for further info, see <see cref="InheritDocCrefHandler"/>).
-/// </remarks>
-internal class InheritDocCrefHandler : InheritDocHandler<XElement>
+internal class CrefInheritDocResolver : InheritDocResolver<XElement>
 {
     /// <inheritdoc/>
-    public InheritDocCrefHandler(TypeRegistry typeRegistry) : base(typeRegistry)
+    public CrefInheritDocResolver(TypeRegistry typeRegistry) : base(typeRegistry)
     {
     }
 

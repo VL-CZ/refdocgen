@@ -1,10 +1,10 @@
 using RefDocGen.CodeElements.Members.Concrete;
 using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.CodeElements.Types.Concrete;
-using RefDocGen.DocExtraction.Handlers.InheritDoc;
 using RefDocGen.DocExtraction.Handlers.Members;
 using RefDocGen.DocExtraction.Handlers.Members.Enum;
 using RefDocGen.DocExtraction.Handlers.Types;
+using RefDocGen.DocExtraction.InheritDoc;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
@@ -63,19 +63,19 @@ internal class DocCommentExtractor
     private readonly DelegateTypeDocHandler delegateTypeDocHandler = new();
 
     /// <summary>
-    /// Handler for the 'inheritdoc' member comments.
+    /// Resolver of the 'inheritdoc' member comments.
     /// </summary>
-    private readonly MemberInheritDocHandler memberInheritDocHandler;
+    private readonly MemberInheritDocResolver memberInheritDocResolver;
 
     /// <summary>
-    /// Handler for the 'inheritdoc' type comments.
+    /// Resolver of the 'inheritdoc' type comments.
     /// </summary>
-    private readonly TypeInheritDocHandler typeInheritDocHandler;
+    private readonly TypeInheritDocResolver typeInheritDocResolver;
 
     /// <summary>
-    /// Handler for the 'inheritdoc' cref comments.
+    /// Resolver of the 'inheritdoc' cref comments.
     /// </summary>
-    private readonly InheritDocCrefHandler crefInheritDocHandler;
+    private readonly CrefInheritDocResolver crefInheritDocResolver;
 
     /// <summary>
     /// List of members, that have 'inheritdoc' documentation without 'cref' attribute.
@@ -107,9 +107,9 @@ internal class DocCommentExtractor
         this.typeRegistry = typeRegistry;
         this.docXmlPaths = docXmlPaths;
 
-        memberInheritDocHandler = new(typeRegistry);
-        typeInheritDocHandler = new(typeRegistry);
-        crefInheritDocHandler = new(typeRegistry);
+        memberInheritDocResolver = new(typeRegistry);
+        typeInheritDocResolver = new(typeRegistry);
+        crefInheritDocResolver = new(typeRegistry);
     }
 
     /// <summary>
@@ -137,14 +137,14 @@ internal class DocCommentExtractor
         // resolve member inheritdoc comments (excluding 'cref')
         foreach (var member in inheritDocMembers)
         {
-            memberInheritDocHandler.Resolve(member);
+            memberInheritDocResolver.Resolve(member);
             AddInheritedDocComment(member.RawDocComment);
         }
 
         // resolve type inheritdoc comments (excluding 'cref')
         foreach (var type in inheritDocTypes)
         {
-            typeInheritDocHandler.Resolve(type);
+            typeInheritDocResolver.Resolve(type);
             AddInheritedDocComment(type.RawDocComment);
         }
 
@@ -156,7 +156,7 @@ internal class DocCommentExtractor
             if (member.IsInherited)
             {
                 member.RawDocComment = new XElement("member", new XElement("inheritdoc"));
-                memberInheritDocHandler.Resolve(member);
+                memberInheritDocResolver.Resolve(member);
 
                 if (member.RawDocComment?.Nodes().Any() ?? false)
                 {
@@ -296,7 +296,7 @@ internal class DocCommentExtractor
             // check the type doc comment
             if (type.RawDocComment?.GetInheritDocs(InheritDocKind.Cref).Any() ?? false)
             {
-                crefInheritDocHandler.Resolve(type.RawDocComment);
+                crefInheritDocResolver.Resolve(type.RawDocComment);
                 AddInheritedDocComment(type.RawDocComment);
             }
 
@@ -305,7 +305,7 @@ internal class DocCommentExtractor
             {
                 if (member.RawDocComment?.GetInheritDocs(InheritDocKind.Cref).Any() ?? false)
                 {
-                    crefInheritDocHandler.Resolve(member.RawDocComment);
+                    crefInheritDocResolver.Resolve(member.RawDocComment);
                     AddInheritedDocComment(member.RawDocComment);
                 }
             }
