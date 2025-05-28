@@ -3,6 +3,9 @@
 @code {
     [Parameter]
     public required IEnumerable<TypeNameTM> NestedTypes { get; set; }
+
+    [CascadingParameter]
+    public required Dictionary<Language, LanguageTM> Languages { get; set; }
 }
 
 @if (NestedTypes.Any())
@@ -19,7 +22,14 @@
                         <span class="refdocgen-text-tertiary">
                             @nestedType.TypeKindName
                         </span>
-                        @nestedType.Name
+                        <span> </span>
+
+                        @foreach (var language in Languages)
+                        {
+                            <span class="@language.Value.Id">
+                                @nestedType.Name[language.Key]
+                            </span>
+                        }
                     </a>
                 </samp>
                 <div class="text-body-secondary mb-2" data-id="summary-doc">

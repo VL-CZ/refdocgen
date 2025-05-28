@@ -269,6 +269,16 @@ internal class TypePageTools
     }
 
     /// <summary>
+    /// Gets the attributes section applied to the type/member.
+    /// </summary>
+    /// <param name="element">The HTML element representing the type/member.</param>
+    /// <returns>An element containing the attributes section.</returns>
+    internal static IElement GetAttributesSection(IElement element)
+    {
+        return element.GetByDataId(DataId.AttributesSection);
+    }
+
+    /// <summary>
     /// Gets the <c>seealso</c> doc comments associated with the type/member.
     /// </summary>
     /// <param name="element">The HTML element representing the type/member.</param>

@@ -15,7 +15,8 @@ public class MemberDataTests
     {
         using var document = DocumentationTools.GetApiPage("MyLibrary.User.html");
 
-        string[] attributes = TypePageTools.GetAttributes(document.GetMemberElement("PrintProfile(System.String)"));
+        var attributesSection = TypePageTools.GetAttributesSection(document.GetMemberElement("PrintProfile(System.String)"));
+        string[] attributes = TypePageTools.GetAttributes(attributesSection);
 
         string[] expectedAttributes = ["[Obsolete]"];
 
