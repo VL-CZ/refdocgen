@@ -5,7 +5,7 @@
     public required IEnumerable<TypeNameTM> NestedTypes { get; set; }
 
     [CascadingParameter]
-    public required Dictionary<Language, LanguageTM> Languages { get; set; }
+    public required LanguageTM[] Languages { get; set; }
 }
 
 @if (NestedTypes.Any())
@@ -26,8 +26,8 @@
 
                         @foreach (var language in Languages)
                         {
-                            <span class="@language.Value.Id">
-                                @nestedType.Name[language.Key]
+                            <span class="@language.Id">
+                                @nestedType.Name[language.Id]
                             </span>
                         }
                     </a>

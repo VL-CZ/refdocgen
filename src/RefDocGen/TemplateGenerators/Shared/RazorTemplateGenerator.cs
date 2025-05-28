@@ -120,7 +120,7 @@ internal class RazorTemplateGenerator<
 
     private readonly IReadOnlyDictionary<Language, ILanguageSpecificData> languagesConfiguration;
 
-    private readonly Dictionary<Language, LanguageTM> languageData;
+    private readonly LanguageTM[] languageData;
 
     /// <summary>
     /// The directory, where the generated output API pages will be stored.
@@ -155,7 +155,7 @@ internal class RazorTemplateGenerator<
         templatesDirectory = GetTemplatesDirectory();
 
         // TODO
-        languageData = languagesConfiguration.ToDictionary(kv => kv.Key, kv => new LanguageTM(kv.Value.LanguageName, kv.Value.LanguageId));
+        languageData = [.. languagesConfiguration.Select(lang => new LanguageTM(lang.Value.LanguageName, lang.Value.LanguageId))];
     }
 
     /// <inheritdoc/>

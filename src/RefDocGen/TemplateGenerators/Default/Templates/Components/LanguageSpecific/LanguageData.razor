@@ -9,7 +9,7 @@
     public required LanguageComponentType Type { get; set; }
 
     [CascadingParameter]
-    public required Dictionary<Language, LanguageTM> Languages { get; set; }
+    public required LanguageTM[] Languages { get; set; }
 
     private Dictionary<LanguageComponentType, string> templateParameterNames = new()
         {
@@ -76,7 +76,7 @@
 
 @foreach (var lang in Languages)
 {
-    <span class="@lang.Value.Id">
-        <DynamicComponent Type="@languageComponents[lang.Value.Id][Type]" Parameters="@templateParameters" />
+    <span class="@lang.Id">
+        <DynamicComponent Type="@languageComponents[lang.Id][Type]" Parameters="@templateParameters" />
     </span>
 }
