@@ -74,6 +74,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
 
         return new ConstructorTM(
             Id: constructor.Id,
+            TypeName: GetLocalizedData(lang => lang.GetTypeName(constructor.ContainingType)),
             Parameters: GetTemplateModels(constructor.Parameters),
             Modifiers: modifiers,
             Attributes: GetTemplateModels(constructor.Attributes),

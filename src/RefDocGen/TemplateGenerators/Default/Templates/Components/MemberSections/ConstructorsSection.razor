@@ -3,9 +3,6 @@
 @code {
     [Parameter]
     public required ConstructorTM[] Constructors { get; set; }
-
-    [Parameter]
-    public required string TypeName { get; set; }
 }
 
 <h2 class="display-5 mt-2">Constructors</h2>
@@ -16,7 +13,7 @@
             <div class="border p-2 mb-2" id="@constructor.Id" data-id="member-data">
                 <h6 class="mb-1" data-id="member-name">
                     <samp>
-                        <ConstructorName Constructor="@constructor" TypeName="@TypeName" />
+                        <ConstructorName Constructor="@constructor"/>
 
                         <AnchorLink Id="@constructor.Id" />
                     </samp>

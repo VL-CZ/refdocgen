@@ -4,12 +4,10 @@
     [Parameter]
     public required ConstructorTM Constructor { get; set; }
 
-    [Parameter]
-    public required string TypeName { get; set; }
 }
 
 <span class="csharp-lang">
-    <CSharpConstructorName Constructor="@Constructor" TypeName="@TypeName" />
+    <CSharpConstructorName Constructor="@Constructor" />
 </span>
 <span class="other-lang">
     <TodoComponent />
