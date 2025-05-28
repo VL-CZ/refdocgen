@@ -39,9 +39,11 @@ internal interface ILanguageSpecificData
 
 internal class CSharpLanguageData : ILanguageSpecificData
 {
+    public const string languageId = "csharp-lang";
+
     public string LanguageName => "C#";
 
-    public string LanguageId => "csharp-lang";
+    public string LanguageId => languageId;
 
     public string FormatLiteralValue(object? literalValue)
     {
@@ -295,14 +297,16 @@ internal class CSharpLanguageData : ILanguageSpecificData
 public class LocalizedData<T>
 {
     [JsonInclude]
-    internal readonly Dictionary<Language, T> data = [];
+    internal readonly Dictionary<string, T> data = [];
 
-    public LocalizedData(Dictionary<Language, T> data)
+    public LocalizedData(Dictionary<string, T> data)
     {
         this.data = data;
     }
 
-    public T this[Language language] => data[language];
+    public T this[string language] => data[language];
+
+    public T CSharpData => data[CSharpLanguageData.languageId];
 }
 
 public record LanguageTM(string Name, string Id);

@@ -21,7 +21,7 @@ internal abstract class BaseTMCreator
     protected LocalizedData<T> GetLocalizedData<T>(Func<ILanguageSpecificData, T> function)
     {
         var localizedData = languageSpecificData.
-            ToDictionary(item => item.Key, item => function(item.Value));
+            ToDictionary(item => item.Value.LanguageId, item => function(item.Value));
 
         return new LocalizedData<T>(localizedData);
     }

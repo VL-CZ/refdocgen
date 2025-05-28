@@ -7,7 +7,7 @@
 
 @foreach (var tp in TypeParameters)
 {
-    var specialConstraints = tp.SpecialConstraints[Language.CSharp];
+    var specialConstraints = tp.SpecialConstraints.CSharpData;
     var allConstraints = specialConstraints.Concat(
         tp.TypeConstraints.Select(c => c.Name)
     );

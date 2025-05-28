@@ -37,18 +37,18 @@ internal class NamespaceTMCreator : BaseTMCreator
             namespaceTypes[typeKind] = namespaceData.ObjectTypes // select the types of the given kind, ordered by their name
                 .Where(t => t.Kind == typeKind)
                 .Select(GetTypeNameFrom)
-                .OrderBy(t => t.Name[Language.CSharp]);
+                .OrderBy(t => t.Name.CSharpData);
         }
 
         // get namespace enums
         var namespaceEnums = namespaceData.Enums
             .Select(GetTypeNameFrom)
-            .OrderBy(e => e.Name[Language.CSharp]);
+            .OrderBy(e => e.Name.CSharpData);
 
         // get namespace delegates
         var namespaceDelegates = namespaceData.Delegates
             .Select(GetTypeNameFrom)
-            .OrderBy(d => d.Name[Language.CSharp]);
+            .OrderBy(d => d.Name.CSharpData);
 
         return new NamespaceTM(
             namespaceData.Name,

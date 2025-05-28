@@ -14,7 +14,7 @@
     <span>(</span>
     @foreach (var ctorArg in Attribute.ConstructorArguments)
     {
-        <span class="refdocgen-text-green">@ctorArg[Language.CSharp]</span>
+        <span class="refdocgen-text-green">@ctorArg.CSharpData</span>
         @if (ctorArg != Attribute.ConstructorArguments.Last())
         {
             <span>, </span>
