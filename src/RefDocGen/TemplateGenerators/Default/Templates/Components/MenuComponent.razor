@@ -95,12 +95,6 @@
     </div>
 </nav>
 
-<style>
-    .invisible {
-        display: none;
-    }
-</style>
-
 <script>
 
     const languageSelector = document.getElementById('language-selector');
@@ -113,14 +107,14 @@
         allLangs.forEach(lang => {
             const elements = document.getElementsByClassName(lang);
             Array.from(elements).forEach(el => {
-                el.classList.add('invisible');
+                el.classList.add('not-visible');
             });
         });
 
         // Show only selected language elements
         const selectedLangElements = document.getElementsByClassName(selectedLang);
         Array.from(selectedLangElements).forEach(el => {
-            el.classList.remove('invisible');
+            el.classList.remove('not-visible');
         });
     }
 
