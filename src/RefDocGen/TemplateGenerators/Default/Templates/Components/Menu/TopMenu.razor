@@ -65,6 +65,7 @@
             </ul>
             <ul class="navbar-nav ms-auto">
 
+                <!-- Language selector -->
                 <li class="nav-item d-flex align-items-center">
                     <form class="me-2 mb-2 mb-lg-0">
                         <select class="form-select" id="language-selector" aria-label="language">
@@ -76,6 +77,7 @@
                     </form>
                 </li>
 
+                <!-- Searchbar -->
                 <li class="nav-item d-flex align-items-center">
                     <form role="search" class="me-2">
                         <input class="form-control" autocomplete="off"
@@ -83,6 +85,7 @@
                     </form>
                 </li>
 
+                <!-- Theme switcher -->
                 <li class="nav-item" id="theme-switcher">
                     <button class="nav-link">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-brightness-high" viewBox="0 0 16 16">
@@ -95,51 +98,3 @@
         </div>
     </div>
 </nav>
-
-<script>
-
-    const languageSelector = document.getElementById('language-selector');
-    const allLangs = Array.from(document.getElementsByClassName('lang-option'))
-                          .map(option => option.value);
-
-    // Function to update visibility
-    function updateLanguageVisibility(selectedLang) {
-        // Hide all language-specific elements
-        allLangs.forEach(lang => {
-            const elements = document.getElementsByClassName(lang);
-            Array.from(elements).forEach(el => {
-                el.classList.add('not-visible');
-            });
-        });
-
-        // Show only selected language elements
-        const selectedLangElements = document.getElementsByClassName(selectedLang);
-        Array.from(selectedLangElements).forEach(el => {
-            el.classList.remove('not-visible');
-        });
-    }
-
-    // Event listener for dropdown change
-    languageSelector.addEventListener('change', function () {
-        const selectedLang = this.value;
-
-        // Store selection in localStorage
-        localStorage.setItem('selectedLanguage', selectedLang);
-
-        // Update visibility
-        updateLanguageVisibility(selectedLang);
-    });
-
-    // On page load, restore selected language
-    window.addEventListener('DOMContentLoaded', () => {
-        const savedLang = localStorage.getItem('selectedLanguage');
-
-        if (savedLang && allLangs.includes(savedLang)) {
-            // Set dropdown to saved value
-            languageSelector.value = savedLang;
-
-            // Update visibility
-            updateLanguageVisibility(savedLang);
-        }
-    });
-</script>

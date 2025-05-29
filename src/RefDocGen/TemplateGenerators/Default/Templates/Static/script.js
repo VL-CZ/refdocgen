@@ -51,6 +51,40 @@ function switchTheme() {
     localStorage.setItem('refdocgen-theme', newTheme);
 }
 
+/**
+ * Sets the language visibility
+ * @param {any} selectedLang the selected language identifier
+ * @param {any} allLangs identifiers of all languages
+ */
+function setLanguageVisibility(selectedLang) {
+
+    // get all language identifiers
+    const allLangs = Array.from(document.getElementsByClassName('lang-option'))
+        .map(option => option.value);
+
+    // invalid language value -> return
+    if (!allLangs.includes(selectedLang)) {
+        return;
+    }
+
+    // Store into localStorage
+    localStorage.setItem('selectedLanguage', selectedLang);
+
+    // Hide all language-specific elements
+    allLangs.forEach(lang => {
+        const elements = document.getElementsByClassName(lang);
+        Array.from(elements).forEach(el => {
+            el.classList.add('not-visible');
+        });
+    });
+
+    // Show only selected language elements
+    const selectedLangElements = document.getElementsByClassName(selectedLang);
+    Array.from(selectedLangElements).forEach(el => {
+        el.classList.remove('not-visible');
+    });
+}
+
 function main() {
     // fetch versions
     fetchVersions();
@@ -65,6 +99,31 @@ function main() {
         const targetUrl = menuSearchBar.getAttribute('url-target');
         window.location.href = targetUrl;
     });
+
+    // language switching
+    const languageSelector = document.getElementById('language-selector');
+
+    // Event listener for dropdown change
+    languageSelector.addEventListener('change', function () {
+        const selectedLang = this.value;
+
+        // set language visibility
+        setLanguageVisibility(selectedLang);
+    });
 }
 
 window.addEventListener('load', main);
+
+// On page load, restore selected language
+window.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('selectedLanguage');
+    const languageSelector = document.getElementById('language-selector');
+
+    if (savedLang) {
+        // Set dropdown to saved value
+        languageSelector.value = savedLang;
+
+        // Update visibility
+        setLanguageVisibility(savedLang);
+    }
+});
