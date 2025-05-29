@@ -16,7 +16,7 @@ internal static class AbstractKeyword
     /// <returns>Boolean representing if the 'abstract' keyword is present in the type definition.</returns>
     internal static bool IsPresentIn(IObjectTypeData type)
     {
-        return type.IsAbstract && type.Kind == TypeKind.Class && !type.IsSealed;
+        return type.IsAbstract && type.Kind == ObjectTypeKind.Class && !type.IsSealed;
     }
 
     /// <summary>
@@ -27,7 +27,7 @@ internal static class AbstractKeyword
     internal static bool IsPresentIn(ICallableMemberData memberData)
     {
         if (memberData.ContainingType is IObjectTypeData objectType
-            && objectType.Kind == TypeKind.Interface)
+            && objectType.Kind == ObjectTypeKind.Interface)
         {
             return false; // for all interface members, return false.
         }

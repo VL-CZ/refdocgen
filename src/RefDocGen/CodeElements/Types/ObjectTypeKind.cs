@@ -1,9 +1,9 @@
 namespace RefDocGen.CodeElements.Types;
 
 /// <summary>
-/// Represents kind of a type.
+/// Represents kind of an object type.
 /// </summary>
-public enum TypeKind
+public enum ObjectTypeKind
 {
     /// <summary>
     /// Represents value type.

@@ -25,11 +25,11 @@ internal class NamespaceTMCreator : BaseTMCreator
     /// <returns>A <see cref="NamespaceTM"/> instance based on the provided <paramref name="namespaceData"/>.</returns>
     internal NamespaceTM GetFrom(NamespaceData namespaceData)
     {
-        Dictionary<TypeKind, IEnumerable<TypeNameTM>> namespaceTypes = new()
+        Dictionary<ObjectTypeKind, IEnumerable<TypeNameTM>> namespaceTypes = new()
         {
-            [TypeKind.Class] = [],
-            [TypeKind.ValueType] = [],
-            [TypeKind.Interface] = [],
+            [ObjectTypeKind.Class] = [],
+            [ObjectTypeKind.ValueType] = [],
+            [ObjectTypeKind.Interface] = [],
         };
 
         // get namespace classes, value types and interfaces
@@ -53,9 +53,9 @@ internal class NamespaceTMCreator : BaseTMCreator
 
         return new NamespaceTM(
             namespaceData.Name,
-            namespaceTypes[TypeKind.Class],
-            namespaceTypes[TypeKind.ValueType],
-            namespaceTypes[TypeKind.Interface],
+            namespaceTypes[ObjectTypeKind.Class],
+            namespaceTypes[ObjectTypeKind.ValueType],
+            namespaceTypes[ObjectTypeKind.Interface],
             namespaceEnums,
             namespaceDelegates
             );

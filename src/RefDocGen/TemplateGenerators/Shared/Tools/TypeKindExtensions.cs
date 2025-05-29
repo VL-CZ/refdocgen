@@ -3,7 +3,7 @@ using RefDocGen.CodeElements.Types;
 namespace RefDocGen.TemplateGenerators.Shared.Tools;
 
 /// <summary>
-/// Provides extension methods for <see cref="TypeKind"/> enum.
+/// Provides extension methods for <see cref="ObjectTypeKind"/> enum.
 /// </summary>
 internal static class TypeKindExtensions
 {
@@ -12,12 +12,12 @@ internal static class TypeKindExtensions
     /// </summary>
     /// <param name="typeKind">The kind of type, whose name we obtain.</param>
     /// <returns>C# name of the type kind.</returns>
-    internal static string GetName(this TypeKind typeKind)
+    internal static string GetName(this ObjectTypeKind typeKind)
     {
         return typeKind switch
         {
-            TypeKind.ValueType => "struct",
-            TypeKind.Interface => "interface",
+            ObjectTypeKind.ValueType => "struct",
+            ObjectTypeKind.Interface => "interface",
             _ => "class"
         };
     }

@@ -15,6 +15,6 @@ internal static class SealedKeyword
     /// <returns>Boolean representing if the 'sealed' keyword is present in the type definition.</returns>
     internal static bool IsPresentIn(IObjectTypeData type)
     {
-        return type.IsSealed && type.Kind == TypeKind.Class && !type.IsAbstract;
+        return type.IsSealed && type.Kind == ObjectTypeKind.Class && !type.IsAbstract;
     }
 }
