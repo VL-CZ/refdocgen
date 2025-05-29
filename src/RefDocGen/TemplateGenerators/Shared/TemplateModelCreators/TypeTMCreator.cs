@@ -113,7 +113,7 @@ internal abstract class TypeTMCreator : BaseTMCreator
     {
         return new ExceptionTM(
             new TypeLinkTM(
-                exception.Id,
+                GetLanguageSpecificData(_ => exception.Id), // TODO
                 typeUrlResolver.GetUrlOf(exception.Id)
                 ),
             ToHtmlString(exception.DocComment));
@@ -130,7 +130,7 @@ internal abstract class TypeTMCreator : BaseTMCreator
         var namedArgumentTMs = attribute.NamedArguments.Select(na => GetFrom(na, attribute)).ToArray();
 
         var typeLink = new TypeLinkTM(
-                CSharpAttributeName.Of(attribute), // TODO: make localized
+                GetLanguageSpecificData(_ => CSharpAttributeName.Of(attribute)), // TODO: make localized
                 typeUrlResolver.GetUrlOf(attribute.Type));
 
         return new AttributeTM(
@@ -149,7 +149,7 @@ internal abstract class TypeTMCreator : BaseTMCreator
     {
         return new NamedAttributeArgumentTM(
             new TypeLinkTM(
-                argument.Name,
+                GetLanguageSpecificData(_ => argument.Name),
                 typeUrlResolver.GetUrlOf(attribute.Type.Id, argument.Name)
             ),
             GetLanguageSpecificDefaultValue(argument.Value));

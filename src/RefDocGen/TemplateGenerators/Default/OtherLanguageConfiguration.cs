@@ -4,6 +4,7 @@ using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
 using RefDocGen.CodeElements;
 using RefDocGen.TemplateGenerators.Shared.Languages;
+using RefDocGen.CodeElements.Types.Abstract.TypeName;
 
 namespace RefDocGen.TemplateGenerators.Default;
 
@@ -109,7 +110,7 @@ internal class OtherLanguageConfiguration : ILanguageConfiguration
     }
 
     /// <inheritdoc />
-    public string GetTypeName(ITypeDeclaration type)
+    public string GetTypeName(ITypeNameData type)
     {
         return "";
     }

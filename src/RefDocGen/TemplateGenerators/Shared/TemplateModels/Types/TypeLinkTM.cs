@@ -1,3 +1,5 @@
+using RefDocGen.TemplateGenerators.Shared.Languages;
+
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 
 /// <summary>
@@ -8,7 +10,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 /// URL of the type definition page.
 /// <c>null</c> if the type definition page isn't found.
 /// </param>
-public record TypeLinkTM(string Name, string? Url);
+public record TypeLinkTM(LanguageSpecificData<string> Name, string? Url);
 
 
 /// <summary>

@@ -300,8 +300,10 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns><see cref="TypeLinkTM"/> corresponding to the provided <paramref name="type"/> and <paramref name="member"/>.</returns>
     private TypeLinkTM GetTypeMemberLink(ITypeNameData type, IMemberData member)
     {
+        var name = GetLanguageSpecificData(lang => lang.GetTypeName(type) + $".{member.Name}");
+
         return new TypeLinkTM(
-            CSharpTypeName.Of(type) + "." + member.Name,
+            name,
             typeUrlResolver.GetUrlOf(type.TypeDeclarationId, member.Id));
     }
 

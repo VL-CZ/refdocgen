@@ -9,11 +9,11 @@
     @if (Type.Url is not null)
     {
         <a href="@Type.Url" class="refdocgen-link-secondary">
-            @Type.Name
+            <LanguageSpecificStrings Data="Type.Name" />
         </a>
     }
     else
     {
-        @Type.Name
+        <LanguageSpecificStrings Data="Type.Name" />
     }
 </span>

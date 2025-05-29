@@ -1,9 +1,11 @@
+using RefDocGen.CodeElements.Shared;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.Languages;
+using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators.Tools;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
@@ -72,9 +74,11 @@ internal abstract class BaseTMCreator
     protected TypeLinkTM GetTypeLink(ITypeNameData type)
     {
         string? url = typeUrlResolver.GetUrlOf(type);
+        var name = GetLanguageSpecificData(lang => lang.GetTypeName(type));
 
         return new TypeLinkTM(
-            CSharpTypeName.Of(type, useFullName: url is null),
+            //CSharpTypeName.Of(type, useFullName: url is null),
+            name,
             url
             );
     }
@@ -93,11 +97,7 @@ internal abstract class BaseTMCreator
     /// <inheritdoc cref="GetTypeLink(ITypeNameData)"/>
     protected TypeLinkTM GetTypeLink(ITypeDeclaration type)
     {
-        string? url = typeUrlResolver.GetUrlOf(type.Id);
-
-        return new TypeLinkTM(
-            CSharpTypeName.Of(type),
-            url);
+        return GetTypeLink(type.TypeObject.GetTypeNameData());
     }
 
     /// <summary>

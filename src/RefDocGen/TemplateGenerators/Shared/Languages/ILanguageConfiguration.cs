@@ -3,6 +3,7 @@ using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
+using RefDocGen.CodeElements.Types.Abstract.TypeName;
 
 namespace RefDocGen.TemplateGenerators.Shared.Languages;
 
@@ -100,7 +101,7 @@ internal interface ILanguageConfiguration
     /// </summary>
     /// <param name="type">The type, whose name is returned.</param>
     /// <returns>The name of the type, incuding its generic parameters.</returns>
-    string GetTypeName(ITypeDeclaration type);
+    string GetTypeName(ITypeNameData type);
 
     /// <summary>
     /// Formats the given <paramref name="literalValue"/> as a language-specific literal.
