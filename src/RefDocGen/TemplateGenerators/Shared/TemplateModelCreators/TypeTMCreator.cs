@@ -72,7 +72,7 @@ internal abstract class TypeTMCreator : BaseTMCreator
 
         return new ParameterTM(
             parameter.Name,
-            GetTypeLink(parameter.Type),
+            GetGenericTypeLink(parameter.Type),
             modifiers,
             GetTemplateModels(parameter.Attributes),
             GetLanguageSpecificDefaultValue(parameter.DefaultValue),
@@ -89,7 +89,7 @@ internal abstract class TypeTMCreator : BaseTMCreator
         var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(typeParameter));
 
         // get constraints
-        var typeConstraints = typeParameter.TypeConstraints.Select(GetTypeLink).ToArray();
+        var typeConstraints = typeParameter.TypeConstraints.Select(GetGenericTypeLink).ToArray();
         var specialConstraints = GetLanguageSpecificData(lang =>
         {
             var constraints = typeParameter.SpecialConstraints;
@@ -112,7 +112,7 @@ internal abstract class TypeTMCreator : BaseTMCreator
     protected ExceptionTM GetFrom(IExceptionDocumentation exception)
     {
         return new ExceptionTM(
-            new TypeLinkTM(
+            new TypeLinkTM( // TODO
                 exception.Id,
                 typeUrlResolver.GetUrlOf(exception.Id)
                 ),

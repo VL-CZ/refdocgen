@@ -35,7 +35,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         var indexers = type.Indexers.OrderAlphabeticallyAndByParams().Select(GetFrom).ToArray();
         var events = type.Events.OrderAlphabetically().Select(GetFrom).ToArray();
 
-        var interfaces = type.Interfaces.Select(GetTypeLink).ToArray();
+        var interfaces = type.Interfaces.Select(GetGenericTypeLink).ToArray();
 
         var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(type));
 
@@ -97,7 +97,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         return new FieldTM(
             Id: field.Id,
             Name: field.Name,
-            Type: GetTypeLink(field.Type),
+            Type: GetGenericTypeLink(field.Type),
             Modifiers: modifiers,
             ConstantValue: GetLanguageSpecificDefaultValue(field.ConstantValue),
             Attributes: GetTemplateModels(field.Attributes),
@@ -121,7 +121,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         return new PropertyTM(
             Id: property.Id,
             Name: GetCallableMemberName(property),
-            Type: GetTypeLink(property.Type),
+            Type: GetGenericTypeLink(property.Type),
             HasGetter: property.Getter is not null,
             HasSetter: property.Setter is not null,
             IsSetterInitOnly: property.IsSetterInitOnly,
@@ -154,7 +154,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
 
         return new IndexerTM(
             Id: indexer.Id,
-            Type: GetTypeLink(indexer.Type),
+            Type: GetGenericTypeLink(indexer.Type),
             Parameters: GetTemplateModels(indexer.Parameters),
             HasGetter: indexer.Getter is not null,
             HasSetter: indexer.Setter is not null,
@@ -188,7 +188,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             Name: GetCallableMemberName(method),
             Parameters: GetTemplateModels(method.Parameters),
             TypeParameters: GetTemplateModels(method.TypeParameters),
-            ReturnType: GetTypeLink(method.ReturnType),
+            ReturnType: GetGenericTypeLink(method.ReturnType),
             ReturnsVoid: method.ReturnType.IsVoid,
             Modifiers: modifiers,
             Attributes: GetTemplateModels(method.Attributes),
@@ -213,17 +213,12 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(operatorData));
         var name = GetLanguageSpecificData(lang => lang.GetOperatorName(operatorData));
 
-        var returnType = new TypeLinkTM(
-            CSharpTypeName.Of(operatorData.ReturnType),
-            typeUrlResolver.GetUrlOf(operatorData.ReturnType)
-        );
-
         return new OperatorTM(
             Id: operatorData.Id,
             Name: name,
             Parameters: GetTemplateModels(operatorData.Parameters),
             TypeParameters: GetTemplateModels(operatorData.TypeParameters),
-            ReturnType: returnType,
+            ReturnType: GetGenericTypeLink(operatorData.ReturnType),
             ReturnsVoid: operatorData.ReturnType.IsVoid,
             IsConversionOperator: operatorData.IsConversionOperator,
             Modifiers: modifiers,
@@ -251,7 +246,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         return new EventTM(
             Id: eventData.Id,
             Name: GetCallableMemberName(eventData),
-            Type: GetTypeLink(eventData.Type),
+            Type: GetGenericTypeLink(eventData.Type),
             Modifiers: modifiers,
             Attributes: GetTemplateModels(eventData.Attributes),
             SummaryDocComment: ToHtmlString(eventData.SummaryDocComment),

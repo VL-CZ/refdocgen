@@ -40,7 +40,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// </param>
 public record IndexerTM(
     string Id,
-    TypeLinkTM Type,
+    GenericTypeLinkTM Type,
     ParameterTM[] Parameters,
     bool HasGetter,
     bool HasSetter,

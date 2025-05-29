@@ -14,5 +14,5 @@ public record TypeParameterTM(
     string Name,
     string? DocComment,
     LanguageSpecificData<string[]> Modifiers,
-    TypeLinkTM[] TypeConstraints,
+    GenericTypeLinkTM[] TypeConstraints,
     LanguageSpecificData<string[]> SpecialConstraints);

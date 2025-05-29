@@ -41,7 +41,7 @@ public record MethodTM(
     string Name,
     ParameterTM[] Parameters,
     TypeParameterTM[] TypeParameters,
-    TypeLinkTM ReturnType,
+    GenericTypeLinkTM ReturnType,
     bool ReturnsVoid,
     LanguageSpecificData<string[]> Modifiers,
     AttributeTM[] Attributes,

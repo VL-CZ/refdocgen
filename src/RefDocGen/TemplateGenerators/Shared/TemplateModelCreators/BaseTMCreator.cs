@@ -79,6 +79,17 @@ internal abstract class BaseTMCreator
             );
     }
 
+    protected GenericTypeLinkTM GetGenericTypeLink(ITypeNameData type)
+    {
+        string? url = typeUrlResolver.GetUrlOf(type);
+
+        return new GenericTypeLinkTM(
+            type.ShortName,
+            url,
+            type.TypeParameters.Select(GetGenericTypeLink).ToArray()
+            );
+    }
+
     /// <inheritdoc cref="GetTypeLink(ITypeNameData)"/>
     protected TypeLinkTM GetTypeLink(ITypeDeclaration type)
     {

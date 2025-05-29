@@ -20,6 +20,7 @@ public enum LanguageSpecificComponent
     PropertyName,
     TypeDeclarationName,
     TypeParameterName,
-    TypeParametersConstraintsSection
+    TypeParametersConstraintsSection,
+    GenericTypeLink
 }
 #pragma warning restore CS1591

@@ -35,7 +35,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 public record EventTM(
     string Id,
     string Name,
-    TypeLinkTM Type,
+    GenericTypeLinkTM Type,
     LanguageSpecificData<string[]> Modifiers,
     AttributeTM[] Attributes,
     string? SummaryDocComment,

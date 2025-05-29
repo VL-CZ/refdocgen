@@ -27,7 +27,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 public record FieldTM(
     string Id,
     string Name,
-    TypeLinkTM Type,
+    GenericTypeLinkTM Type,
     LanguageSpecificData<string[]> Modifiers,
     LanguageSpecificData<string>? ConstantValue,
     AttributeTM[] Attributes,

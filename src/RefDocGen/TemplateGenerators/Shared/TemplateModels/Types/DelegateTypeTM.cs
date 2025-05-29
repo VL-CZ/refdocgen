@@ -35,7 +35,7 @@ public record DelegateTypeTM(
     string Namespace,
     string Assembly,
     LanguageSpecificData<string[]> Modifiers,
-    TypeLinkTM ReturnType,
+    GenericTypeLinkTM ReturnType,
     bool ReturnsVoid,
     ParameterTM[] Parameters,
     TypeParameterTM[] TypeParameters,

@@ -47,7 +47,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 public record PropertyTM(
     string Id,
     string Name,
-    TypeLinkTM Type,
+    GenericTypeLinkTM Type,
     bool HasGetter,
     bool HasSetter,
     bool IsSetterInitOnly,

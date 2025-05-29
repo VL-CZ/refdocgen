@@ -27,7 +27,8 @@
             [LanguageSpecificComponent.PropertyName] = "Property",
             [LanguageSpecificComponent.TypeDeclarationName] = "Type",
             [LanguageSpecificComponent.TypeParameterName] = "TypeParameter",
-            [LanguageSpecificComponent.TypeParametersConstraintsSection] = "TypeParameters"
+            [LanguageSpecificComponent.TypeParametersConstraintsSection] = "TypeParameters",
+            [LanguageSpecificComponent.GenericTypeLink] = "Type",
         };
 }
 
@@ -47,7 +48,8 @@
                 [LanguageSpecificComponent.PropertyName] = typeof(CSharpPropertyName),
                 [LanguageSpecificComponent.TypeDeclarationName] = typeof(CSharpTypeDeclarationName),
                 [LanguageSpecificComponent.TypeParameterName] = typeof(CSharpTypeParameterName),
-                [LanguageSpecificComponent.TypeParametersConstraintsSection] = typeof(CSharpTypeParametersConstraintsSection)
+                [LanguageSpecificComponent.TypeParametersConstraintsSection] = typeof(CSharpTypeParametersConstraintsSection),
+                [LanguageSpecificComponent.GenericTypeLink] = typeof(CSharpGenericTypeLink)
             };
 
     Dictionary<LanguageSpecificComponent, Type> todoComponents = new()
@@ -65,7 +67,8 @@
                 [LanguageSpecificComponent.PropertyName] = typeof(TodoPropertyName),
                 [LanguageSpecificComponent.TypeDeclarationName] = typeof(TodoTypeDeclarationName),
                 [LanguageSpecificComponent.TypeParameterName] = typeof(TodoTypeParameterName),
-                [LanguageSpecificComponent.TypeParametersConstraintsSection] = typeof(TodoTypeParametersConstraintsSection)
+                [LanguageSpecificComponent.TypeParametersConstraintsSection] = typeof(TodoTypeParametersConstraintsSection),
+                [LanguageSpecificComponent.GenericTypeLink] = typeof(TodoGenericTypeLink)
             };
 
     Dictionary<string, Dictionary<LanguageSpecificComponent, Type>> languageComponents = new()

@@ -30,7 +30,7 @@ internal class DelegateTMCreator : TypeTMCreator
             Namespace: delegateType.Namespace,
             Assembly: delegateType.Assembly,
             Modifiers: modifiers,
-            ReturnType: GetTypeLink(delegateType.ReturnType),
+            ReturnType: GetGenericTypeLink(delegateType.ReturnType),
             ReturnsVoid: delegateType.ReturnType.IsVoid,
             Parameters: GetTemplateModels(delegateType.Parameters),
             TypeParameters: GetTemplateModels(delegateType.TypeParameters),

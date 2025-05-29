@@ -42,7 +42,7 @@ public record OperatorTM(
     LanguageSpecificData<string> Name,
     ParameterTM[] Parameters,
     TypeParameterTM[] TypeParameters,
-    TypeLinkTM ReturnType,
+    GenericTypeLinkTM ReturnType,
     bool ReturnsVoid,
     bool IsConversionOperator,
     LanguageSpecificData<string[]> Modifiers,
