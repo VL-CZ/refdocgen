@@ -63,7 +63,7 @@ internal static class CSharpTypeName
     /// <param name="type">The type, whose name is retrieved.</param>
     /// <param name="useFullName">Indicates whether type type's fully qualified name including its namespace should be used.</param>
     /// <returns>Name of the type formatted according to C# conventions.</returns>
-    internal static string Of(ITypeNameData type, bool useFullName = false)
+    internal static string Of(ITypeNameData type, bool includeGenericParams = true, bool useFullName = false)
     {
         string defaultTypeName = useFullName
             ? type.FullName
@@ -71,7 +71,7 @@ internal static class CSharpTypeName
 
         string typeName = GetBuiltInName(type) ?? defaultTypeName;
 
-        if (type.HasTypeParameters)
+        if (includeGenericParams && type.HasTypeParameters)
         {
             string genericParamsString = string.Join(", ", type.TypeParameters.Select(tp => Of(tp)));
             typeName += '<' + genericParamsString + '>'; // add generic params to the type name

@@ -19,14 +19,18 @@
 </span>
 @if (Type.TypeParameters.Any())
 {
+    bool isFirst = true;
+
     <span class="text-body-secondary">&lt;</span>
     @foreach (var tp in Type.TypeParameters)
     {
-        if (tp != Type.TypeParameters.First())
+        if (!isFirst)
         {
             <span class="text-body-secondary">, </span>
         }
         <CSharpGenericTypeLink Type="tp" />
+
+        isFirst = false;
     }
     <span class="text-body-secondary">&gt;</span>
 }

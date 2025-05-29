@@ -74,7 +74,7 @@ internal abstract class BaseTMCreator
         string? url = typeUrlResolver.GetUrlOf(type);
 
         return new TypeLinkTM(
-            CSharpTypeName.Of(type, url is null),
+            CSharpTypeName.Of(type, useFullName: url is null),
             url
             );
     }
@@ -84,7 +84,7 @@ internal abstract class BaseTMCreator
         string? url = typeUrlResolver.GetUrlOf(type);
 
         return new GenericTypeLinkTM(
-            type.ShortName,
+            CSharpTypeName.Of(type, false, url is null), // TODO
             url,
             type.TypeParameters.Select(GetGenericTypeLink).ToArray()
             );
