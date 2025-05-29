@@ -1,6 +1,6 @@
 using RefDocGen.CodeElements.Types;
 
-namespace RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
+namespace RefDocGen.TemplateGenerators.Shared.Tools.Keywords.CSharp;
 
 /// <summary>
 /// Class containing extension methods for <see cref="ObjectTypeKind"/> enum.

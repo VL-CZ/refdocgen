@@ -1,6 +1,6 @@
 using RefDocGen.CodeElements.Members.Abstract;
 
-namespace RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
+namespace RefDocGen.TemplateGenerators.Shared.Tools.Keywords.CSharp;
 
 /// <summary>
 /// Static class containing additional methods related to the 'ref' keyword.

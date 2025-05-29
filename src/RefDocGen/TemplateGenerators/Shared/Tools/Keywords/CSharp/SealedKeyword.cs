@@ -1,7 +1,7 @@
 using RefDocGen.CodeElements.Types;
 using RefDocGen.CodeElements.Types.Abstract;
 
-namespace RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
+namespace RefDocGen.TemplateGenerators.Shared.Tools.Keywords.CSharp;
 
 /// <summary>
 /// Static class containing additional methods related to the 'sealed' keyword.

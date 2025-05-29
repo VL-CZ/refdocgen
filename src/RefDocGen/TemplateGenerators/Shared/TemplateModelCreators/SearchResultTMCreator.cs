@@ -95,7 +95,7 @@ internal class SearchResultTMCreator : BaseTMCreator
     /// <returns>A <see cref="SearchResultTM"/> instance representing the search result for the given type.</returns>
     internal SearchResultTM GetFrom(IObjectTypeData type)
     {
-        return GetFrom(type, type.Kind.GetName());
+        return GetFrom(type, TypeKindName.Of(type));
     }
 
     /// <summary>
@@ -105,17 +105,17 @@ internal class SearchResultTMCreator : BaseTMCreator
     /// <returns>A <see cref="SearchResultTM"/> instance representing the search result for the given enum.</returns>
     internal SearchResultTM GetFrom(IEnumTypeData e)
     {
-        return GetFrom(e, "enum");
+        return GetFrom(e, TypeKindName.Enum);
     }
 
     /// <summary>
     /// Creates a <see cref="SearchResultTM"/> instance from the specified <see cref="IDelegateTypeData"/>.
     /// </summary>
-    /// <param name="type">The type declaration to create the search page model from.</param>
+    /// <param name="d">The type declaration to create the search page model from.</param>
     /// <returns>A <see cref="SearchResultTM"/> instance representing the search result for the given delegate.</returns>
-    internal SearchResultTM GetFrom(IDelegateTypeData type)
+    internal SearchResultTM GetFrom(IDelegateTypeData d)
     {
-        return GetFrom(type, "delegate");
+        return GetFrom(d, TypeKindName.Delegate);
     }
 
     /// <summary>

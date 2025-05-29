@@ -132,7 +132,7 @@ internal abstract class BaseTMCreator
     /// <returns>A <see cref="TypeNameTM"/> instance based on the provided <paramref name="type"/>.</returns>
     protected TypeNameTM GetTypeNameFrom(IObjectTypeData type)
     {
-        return GetTypeNameFrom(type, type.Kind.GetName());
+        return GetTypeNameFrom(type, TypeKindName.Of(type));
     }
 
     /// <summary>
@@ -142,7 +142,7 @@ internal abstract class BaseTMCreator
     /// <returns>A <see cref="TypeNameTM"/> instance based on the provided <paramref name="enumData"/>.</returns>
     protected TypeNameTM GetTypeNameFrom(IEnumTypeData enumData)
     {
-        return GetTypeNameFrom(enumData, "enum"); // TODO
+        return GetTypeNameFrom(enumData, TypeKindName.Enum);
     }
 
     /// <summary>
@@ -152,7 +152,7 @@ internal abstract class BaseTMCreator
     /// <returns>A <see cref="TypeNameTM"/> instance based on the provided <paramref name="delegateData"/>.</returns>
     protected TypeNameTM GetTypeNameFrom(IDelegateTypeData delegateData)
     {
-        return GetTypeNameFrom(delegateData, "delegate");
+        return GetTypeNameFrom(delegateData, TypeKindName.Delegate);
     }
 
     /// <summary>

@@ -5,7 +5,7 @@ using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
 using RefDocGen.TemplateGenerators.Shared.Tools;
-using RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
+using RefDocGen.TemplateGenerators.Shared.Tools.Keywords.CSharp;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 
 namespace RefDocGen.TemplateGenerators.Shared.Languages;
