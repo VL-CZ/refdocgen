@@ -47,7 +47,7 @@ public record ObjectTypeTM(
     EventTM[] Events,
     TypeNameTM[] NestedTypes,
     TypeParameterTM[] TypeParameters,
-    GenericTypeLinkTM? BaseType,
+    TypeLinkTM? BaseType,
     GenericTypeLinkTM[] ImplementedInterfaces,
     AttributeTM[] Attributes,
     TypeLinkTM? DeclaringType,

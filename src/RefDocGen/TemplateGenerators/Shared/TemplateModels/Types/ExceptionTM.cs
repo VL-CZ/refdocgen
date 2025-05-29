@@ -5,4 +5,4 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 /// </summary>
 /// <param name="Type">Type of the exception.</param>
 /// <param name="DocComment">Documentation comment provided to the exception. <c>null</c> if the doc comment is not provided.</param>
-public record ExceptionTM(GenericTypeLinkTM Type, string? DocComment);
+public record ExceptionTM(TypeLinkTM Type, string? DocComment);

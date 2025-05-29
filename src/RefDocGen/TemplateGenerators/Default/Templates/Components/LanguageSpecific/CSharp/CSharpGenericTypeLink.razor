@@ -17,7 +17,16 @@
         @Type.Name
     }
 </span>
-@foreach(var tp in Type.TypeParameters)
+@if (Type.TypeParameters.Any())
 {
-    <CSharpGenericTypeLink Type="tp"/>
+    <span class="text-body-secondary">&lt;</span>
+    @foreach (var tp in Type.TypeParameters)
+    {
+        if (tp != Type.TypeParameters.First())
+        {
+            <span class="text-body-secondary">, </span>
+        }
+        <CSharpGenericTypeLink Type="tp" />
+    }
+    <span class="text-body-secondary">&gt;</span>
 }

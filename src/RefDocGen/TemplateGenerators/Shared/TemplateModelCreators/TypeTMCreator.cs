@@ -112,7 +112,7 @@ internal abstract class TypeTMCreator : BaseTMCreator
     protected ExceptionTM GetFrom(IExceptionDocumentation exception)
     {
         return new ExceptionTM(
-            new TypeLinkTM( // TODO
+            new TypeLinkTM(
                 exception.Id,
                 typeUrlResolver.GetUrlOf(exception.Id)
                 ),

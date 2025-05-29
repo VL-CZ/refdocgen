@@ -3,7 +3,7 @@
 @code {
 
     [Parameter]
-    public required TypeLinkTM Type { get; set; }
+    public required GenericTypeLinkTM Type { get; set; }
 
     [Parameter]
     public required string? DocComment { get; set; }
@@ -12,7 +12,7 @@
 <h3 class="lead my-2">Returns</h3>
 <div class="mx-2" data-id="returns-section">
     <samp data-id="return-type-name">
-        <TypeLink Type="@Type" />
+        <GenericTypeLink Type="@Type" />
     </samp>
     <div class="text-body-secondary" data-id="returns-doc">
         @if (DocComment is not null)

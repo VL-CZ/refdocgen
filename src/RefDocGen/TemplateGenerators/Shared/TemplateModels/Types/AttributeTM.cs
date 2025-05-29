@@ -9,7 +9,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 /// <param name="ConstructorArguments">Array of attribute's constructor arguments.</param>
 /// <param name="NamedArguments">Array of attribute's named arguments.</param>
 public record AttributeTM(
-    GenericTypeLinkTM Type,
+    TypeLinkTM Type,
     LanguageSpecificData<string>?[] ConstructorArguments,
     NamedAttributeArgumentTM[] NamedArguments);
 
