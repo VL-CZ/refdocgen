@@ -27,7 +27,7 @@ internal class DefaultTemplateGenerator : RazorTemplateGenerator<
     /// </summary>
     private static readonly ILanguageConfiguration[] languages = [
         new CSharpLanguageConfiguration(),
-        new OtherLanguageData()
+        new OtherLanguageConfiguration()
     ];
 
     /// <summary>
