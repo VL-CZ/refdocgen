@@ -229,6 +229,12 @@ internal class CSharpLanguageConfiguration : ILanguageConfiguration
     }
 
     /// <inheritdoc/>
+    public string GetOperatorName(IOperatorData operatorData)
+    {
+        return CSharpOperatorName.Of(operatorData);
+    }
+
+    /// <inheritdoc/>
     public string GetSpecialTypeConstraintName(SpecialTypeConstraint constraint)
     {
         return constraint.GetCSharpName();

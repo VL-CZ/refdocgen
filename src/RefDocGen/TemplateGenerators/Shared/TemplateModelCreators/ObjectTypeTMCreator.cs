@@ -204,32 +204,28 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     }
 
     /// <summary>
-    /// Creates a <see cref="MethodTM"/> instance based on the provided <see cref="IOperatorData"/> object.
+    /// Creates a <see cref="OperatorTM"/> instance based on the provided <see cref="IOperatorData"/> object.
     /// </summary>
     /// <param name="operatorData">The <see cref="IOperatorData"/> instance representing the method.</param>
-    /// <returns>A <see cref="MethodTM"/> instance based on the provided <paramref name="operatorData"/>.</returns>
-    private MethodTM GetFrom(IOperatorData operatorData)
+    /// <returns>A <see cref="OperatorTM"/> instance based on the provided <paramref name="operatorData"/>.</returns>
+    private OperatorTM GetFrom(IOperatorData operatorData)
     {
         var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(operatorData));
-
-        string name = CSharpOperatorName.Of(operatorData);
-
-        string returnTypeName = operatorData.IsConversionOperator
-            ? "" // for conversion operators, the return type is shown in its name
-            : CSharpTypeName.Of(operatorData.ReturnType);
+        var name = GetLanguageSpecificData(lang => lang.GetOperatorName(operatorData));
 
         var returnType = new TypeLinkTM(
-            returnTypeName,
+            CSharpTypeName.Of(operatorData.ReturnType),
             typeUrlResolver.GetUrlOf(operatorData.ReturnType)
         );
 
-        return new MethodTM(
+        return new OperatorTM(
             Id: operatorData.Id,
             Name: name,
             Parameters: GetTemplateModels(operatorData.Parameters),
             TypeParameters: GetTemplateModels(operatorData.TypeParameters),
             ReturnType: returnType,
             ReturnsVoid: operatorData.ReturnType.IsVoid,
+            IsConversionOperator: operatorData.IsConversionOperator,
             Modifiers: modifiers,
             Attributes: GetTemplateModels(operatorData.Attributes),
             SummaryDocComment: ToHtmlString(operatorData.SummaryDocComment),

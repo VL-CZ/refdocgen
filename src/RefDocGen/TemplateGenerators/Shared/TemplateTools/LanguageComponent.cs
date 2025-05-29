@@ -15,6 +15,7 @@ public enum LanguageSpecificComponent
     FieldName,
     IndexerName,
     MethodName,
+    OperatorName,
     ParameterName,
     PropertyName,
     TypeDeclarationName,

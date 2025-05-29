@@ -42,7 +42,7 @@ public record ObjectTypeTM(
     FieldTM[] Fields,
     PropertyTM[] Properties,
     MethodTM[] Methods,
-    MethodTM[] Operators,
+    OperatorTM[] Operators,
     IndexerTM[] Indexers,
     EventTM[] Events,
     TypeNameTM[] NestedTypes,

@@ -130,7 +130,7 @@ internal abstract class TypeTMCreator : BaseTMCreator
         var namedArgumentTMs = attribute.NamedArguments.Select(na => GetFrom(na, attribute)).ToArray();
 
         var typeLink = new TypeLinkTM(
-                CSharpAttributeName.Of(attribute),
+                CSharpAttributeName.Of(attribute), // TODO: make localized
                 typeUrlResolver.GetUrlOf(attribute.Type));
 
         return new AttributeTM(

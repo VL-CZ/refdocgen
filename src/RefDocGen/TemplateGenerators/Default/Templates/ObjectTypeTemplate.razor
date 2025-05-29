@@ -30,7 +30,7 @@
         <CascadingValue Value="Languages">
             <LayoutView Layout="typeof(AppLayout)">
                 <div data-id="declared-type-data">
-                    <TypeNameTitle Type="@Model"/>
+                    <TypeNameTitle Type="@Model" />
 
                     <TypeParametersConstraintsSection TypeParameters="@Model.TypeParameters" />
 
@@ -74,7 +74,7 @@
 
                 @if (Model.Constructors.Any())
                 {
-                    <ConstructorsSection Constructors="@Model.Constructors"/>
+                    <ConstructorsSection Constructors="@Model.Constructors" />
                 }
 
                 @if (Model.Fields.Any())
@@ -99,12 +99,12 @@
 
                 @if (Model.Methods.Any())
                 {
-                    <MethodsSection Methods="@Model.Methods" SectionName="Methods" />
+                    <MethodsSection Methods="@Model.Methods" />
                 }
 
                 @if (Model.Operators.Any())
                 {
-                    <MethodsSection Methods="@Model.Operators" SectionName="Operators" />
+                    <OperatorsSection Operators="@Model.Operators" />
                 }
             </LayoutView>
         </CascadingValue>

@@ -117,6 +117,13 @@ internal interface ILanguageConfiguration
     string GetSpecialTypeConstraintName(SpecialTypeConstraint constraint);
 
     /// <summary>
+    /// Gets name of the operator.
+    /// </summary>
+    /// <param name="operatorData">The operator, whose name is returned.</param>
+    /// <returns>Name of the operator.</returns>
+    string GetOperatorName(IOperatorData operatorData);
+
+    /// <summary>
     /// The language name to be displayed in the documentation.
     /// </summary>
     string LanguageName { get; }

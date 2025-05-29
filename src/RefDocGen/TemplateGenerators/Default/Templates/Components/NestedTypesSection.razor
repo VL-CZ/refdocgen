@@ -1,4 +1,3 @@
-@using RefDocGen.TemplateGenerators.Shared.TemplateModels.Language
 @inherits ComponentBase
 
 @code {
@@ -25,12 +24,7 @@
                         </span>
                         <span> </span>
 
-                        @foreach (var language in Languages)
-                        {
-                            <span class="@language.Id">
-                                @nestedType.Name[language.Id]
-                            </span>
-                        }
+                        <LanguageSpecificStrings Data="@nestedType.Name" />
                     </a>
                 </samp>
                 <div class="text-body-secondary mb-2" data-id="summary-doc">

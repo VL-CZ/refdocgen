@@ -1,12 +1,9 @@
-
-#pragma warning disable IDE0005 // add the namespace containing the Razor templates
 using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
 using RefDocGen.CodeElements;
 using RefDocGen.TemplateGenerators.Shared.Languages;
-#pragma warning restore IDE0005
 
 namespace RefDocGen.TemplateGenerators.Default;
 
@@ -97,6 +94,12 @@ internal class OtherLanguageConfiguration : ILanguageConfiguration
     public string[] GetModifiers(ITypeParameterData typeParameter)
     {
         return [];
+    }
+
+    /// <inheritdoc />
+    public string GetOperatorName(IOperatorData operatorData)
+    {
+        return "";
     }
 
     /// <inheritdoc />
