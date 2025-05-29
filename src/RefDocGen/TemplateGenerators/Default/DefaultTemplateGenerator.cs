@@ -13,7 +13,7 @@ using RefDocGen.CodeElements;
 
 namespace RefDocGen.TemplateGenerators.Default;
 
-internal class OtherLanguageData : ILanguageSpecificData
+internal class OtherLanguageData : ILanguageConfiguration
 {
     public string LanguageName => "Other";
 
@@ -108,8 +108,8 @@ internal class DefaultTemplateGenerator : RazorTemplateGenerator<
     StaticPageTemplate,
     SearchTemplate>
 {
-    private static readonly ILanguageSpecificData[] languages = [
-        new CSharpLanguageData(),
+    private static readonly ILanguageConfiguration[] languages = [
+        new CSharpLanguageConfiguration(),
         new OtherLanguageData()
     ];
 

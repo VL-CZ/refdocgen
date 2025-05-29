@@ -10,8 +10,14 @@ using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 
 namespace RefDocGen.TemplateGenerators.Shared;
 
-internal interface ILanguageSpecificData
+
+internal interface ILanguageConfiguration
 {
+    /// <summary>
+    /// Get the modifiers for the specified <paramref name="field"/>.
+    /// </summary>
+    /// <param name="field">The field whose modifiers are to be retrieved.</param>
+    /// <returns>An array of strings representing the modifiers applied to the field.</returns>
     string[] GetModifiers(IFieldData field);
     PropertyModifiers GetModifiers(IPropertyData property);
     string[] GetModifiers(IMethodData method);
@@ -32,7 +38,7 @@ internal interface ILanguageSpecificData
 
 }
 
-internal class CSharpLanguageData : ILanguageSpecificData
+internal class CSharpLanguageConfiguration : ILanguageConfiguration
 {
     public const string languageId = "csharp-lang";
 

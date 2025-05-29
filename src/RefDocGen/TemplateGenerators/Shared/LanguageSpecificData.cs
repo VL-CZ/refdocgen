@@ -27,7 +27,7 @@ public class LanguageSpecificData<T>
     /// <summary>
     /// Gets the data associated with the given language.
     /// </summary>
-    /// <param name="language">The language identifier (equal to the <see cref="ILanguageSpecificData.LanguageId"/> value).</param>
+    /// <param name="language">The language identifier (equal to the <see cref="ILanguageConfiguration.LanguageId"/> value).</param>
     /// <returns>The data associated with the given <paramref name="language"/>.</returns>
     public T this[string language] => data[language];
 
@@ -35,5 +35,5 @@ public class LanguageSpecificData<T>
     /// Gets the data associated with C# language.
     /// </summary>
     [JsonIgnore]
-    public T CSharpData => data[CSharpLanguageData.languageId];
+    public T CSharpData => data[CSharpLanguageConfiguration.languageId];
 }

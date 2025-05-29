@@ -14,7 +14,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 /// </summary>
 internal class ObjectTypeTMCreator : TypeTMCreator
 {
-    public ObjectTypeTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageSpecificData> languages)
+    public ObjectTypeTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageConfiguration> languages)
         : base(docCommentTransformer, languages)
     {
     }
@@ -36,7 +36,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
 
         var interfaces = type.Interfaces.Select(GetTypeLink).ToArray();
 
-        var modifiers = GetLocalizedData(lang => lang.GetModifiers(type));
+        var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(type));
 
         return new ObjectTypeTM(
             Id: type.Id,
@@ -70,11 +70,11 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="ConstructorTM"/> instance based on the provided <paramref name="constructor"/>.</returns>
     private ConstructorTM GetFrom(IConstructorData constructor)
     {
-        var modifiers = GetLocalizedData(lang => lang.GetModifiers(constructor));
+        var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(constructor));
 
         return new ConstructorTM(
             Id: constructor.Id,
-            TypeName: GetLocalizedData(lang => lang.GetTypeName(constructor.ContainingType)),
+            TypeName: GetLanguageSpecificData(lang => lang.GetTypeName(constructor.ContainingType)),
             Parameters: GetTemplateModels(constructor.Parameters),
             Modifiers: modifiers,
             Attributes: GetTemplateModels(constructor.Attributes),
@@ -91,14 +91,14 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="FieldTM"/> instance based on the provided <paramref name="field"/>.</returns>
     private FieldTM GetFrom(IFieldData field)
     {
-        var modifiers = GetLocalizedData(lang => lang.GetModifiers(field));
+        var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(field));
 
         return new FieldTM(
             Id: field.Id,
             Name: field.Name,
             Type: GetTypeLink(field.Type),
             Modifiers: modifiers,
-            ConstantValue: GetLocalizedDefaultValue(field.ConstantValue),
+            ConstantValue: GetLanguageSpecificDefaultValue(field.ConstantValue),
             Attributes: GetTemplateModels(field.Attributes),
             SummaryDocComment: ToHtmlString(field.SummaryDocComment),
             RemarksDocComment: ToHtmlString(field.RemarksDocComment),
@@ -113,9 +113,9 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="PropertyTM"/> instance based on the provided <paramref name="property"/>.</returns>
     private PropertyTM GetFrom(IPropertyData property)
     {
-        var modifiers = GetLocalizedData(lang => lang.GetModifiers(property).Modifiers);
-        var getterModifiers = GetLocalizedData(lang => lang.GetModifiers(property).GetterModifiers);
-        var setterModifiers = GetLocalizedData(lang => lang.GetModifiers(property).SetterModifiers);
+        var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(property).Modifiers);
+        var getterModifiers = GetLanguageSpecificData(lang => lang.GetModifiers(property).GetterModifiers);
+        var setterModifiers = GetLanguageSpecificData(lang => lang.GetModifiers(property).SetterModifiers);
 
         return new PropertyTM(
             Id: property.Id,
@@ -127,7 +127,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             Modifiers: modifiers,
             GetterModifiers: getterModifiers,
             SetterModifiers: setterModifiers,
-            ConstantValue: GetLocalizedDefaultValue(property.ConstantValue),
+            ConstantValue: GetLanguageSpecificDefaultValue(property.ConstantValue),
             Attributes: GetTemplateModels(property.Attributes),
             SummaryDocComment: ToHtmlString(property.SummaryDocComment),
             RemarksDocComment: ToHtmlString(property.RemarksDocComment),
@@ -147,9 +147,9 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>An <see cref="IndexerTM"/> instance based on the provided <paramref name="indexer"/>.</returns>
     private IndexerTM GetFrom(IIndexerData indexer)
     {
-        var modifiers = GetLocalizedData(lang => lang.GetModifiers(indexer).Modifiers);
-        var getterModifiers = GetLocalizedData(lang => lang.GetModifiers(indexer).GetterModifiers);
-        var setterModifiers = GetLocalizedData(lang => lang.GetModifiers(indexer).SetterModifiers);
+        var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(indexer).Modifiers);
+        var getterModifiers = GetLanguageSpecificData(lang => lang.GetModifiers(indexer).GetterModifiers);
+        var setterModifiers = GetLanguageSpecificData(lang => lang.GetModifiers(indexer).SetterModifiers);
 
         return new IndexerTM(
             Id: indexer.Id,
@@ -180,7 +180,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="MethodTM"/> instance based on the provided <paramref name="method"/>.</returns>
     private MethodTM GetFrom(IMethodData method)
     {
-        var modifiers = GetLocalizedData(lang => lang.GetModifiers(method));
+        var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(method));
 
         return new MethodTM(
             Id: method.Id,
@@ -209,7 +209,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="MethodTM"/> instance based on the provided <paramref name="operatorData"/>.</returns>
     private MethodTM GetFrom(IOperatorData operatorData)
     {
-        var modifiers = GetLocalizedData(lang => lang.GetModifiers(operatorData));
+        var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(operatorData));
 
         string name = CSharpOperatorName.Of(operatorData);
 
@@ -249,7 +249,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>A <see cref="EventTM"/> instance based on the provided <paramref name="eventData"/>.</returns>
     private EventTM GetFrom(IEventData eventData)
     {
-        var modifiers = GetLocalizedData(lang => lang.GetModifiers(eventData));
+        var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(eventData));
 
         return new EventTM(
             Id: eventData.Id,

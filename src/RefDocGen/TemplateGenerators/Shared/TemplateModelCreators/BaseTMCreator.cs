@@ -12,11 +12,11 @@ using System.Xml.Linq;
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 
 /// <summary>
-/// Base class responsible for creating template models representing any types.
+/// Base class containing functionality shared between all TM Creators.
 /// </summary>
 internal abstract class BaseTMCreator
 {
-    protected IEnumerable<ILanguageSpecificData> languages;
+    protected IEnumerable<ILanguageConfiguration> languages;
 
     /// <summary>
     /// Transformer of the XML doc comments into HTML.
@@ -34,7 +34,10 @@ internal abstract class BaseTMCreator
     /// <param name="docCommentTransformer">
     /// <inheritdoc cref="docCommentTransformer"/>.
     /// </param>
-    protected BaseTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageSpecificData> languages)
+    /// <param name="languages">
+    /// <inheritdoc cref="languages"/>
+    /// </param>
+    protected BaseTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageConfiguration> languages)
     {
         this.docCommentTransformer = docCommentTransformer;
         this.languages = languages;
@@ -148,12 +151,23 @@ internal abstract class BaseTMCreator
         return GetTypeNameFrom(delegateData, "delegate");
     }
 
-    protected LanguageSpecificData<T> GetLocalizedData<T>(Func<ILanguageSpecificData, T> function)
+    /// <summary>
+    /// Gets language specific data obtained by executing the <paramref name="languageFunction"/> on each available language.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var typeName = GetLanguageSpecificData(lang => lang.GetTypeName(type)); // gets name of the type in all available languages
+    /// </code>
+    /// </example>
+    /// <typeparam name="T">Type of the data returned by the <paramref name="languageFunction"/>.</typeparam>
+    /// <param name="languageFunction">The function that obtains the data based on the language.</param>
+    /// <returns>Language specific data obtained by executing the <paramref name="languageFunction"/> on each available language.</returns>
+    protected LanguageSpecificData<T> GetLanguageSpecificData<T>(Func<ILanguageConfiguration, T> languageFunction)
     {
-        var localizedData = languages.
-            ToDictionary(item => item.LanguageId, item => function(item));
+        var languageData = languages.
+            ToDictionary(lang => lang.LanguageId, lang => languageFunction(lang));
 
-        return new LanguageSpecificData<T>(localizedData);
+        return new LanguageSpecificData<T>(languageData);
     }
 
     /// <summary>
@@ -164,7 +178,7 @@ internal abstract class BaseTMCreator
     /// <returns>A <see cref="TypeNameTM"/> instance based on the provided <paramref name="type"/>.</returns>
     private TypeNameTM GetTypeNameFrom(ITypeDeclaration type, string typeKindName)
     {
-        var typeName = GetLocalizedData(lang => lang.GetTypeName(type));
+        var typeName = GetLanguageSpecificData(lang => lang.GetTypeName(type));
         return new TypeNameTM(type.Id, typeKindName, typeName, ToHtmlString(type.SummaryDocComment));
     }
 }

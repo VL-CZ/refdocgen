@@ -119,8 +119,14 @@ internal class RazorTemplateGenerator<
     /// </summary>
     private DocVersionManager? versionManager;
 
-    private readonly IEnumerable<ILanguageSpecificData> languages;
+    /// <summary>
+    /// 
+    /// </summary>
+    private readonly IEnumerable<ILanguageConfiguration> languages;
 
+    /// <summary>
+    /// Template models of available languages.
+    /// </summary>
     private readonly LanguageTM[] languageTMs;
 
     /// <summary>
@@ -141,7 +147,7 @@ internal class RazorTemplateGenerator<
         HtmlRenderer htmlRenderer,
         IDocCommentTransformer docCommentTransformer,
         string outputDirectory,
-        IEnumerable<ILanguageSpecificData> languages,
+        IEnumerable<ILanguageConfiguration> languages,
         string? staticPagesDirectory = null,
         string? docVersion = null)
     {
@@ -155,7 +161,6 @@ internal class RazorTemplateGenerator<
         defaultIndexPage = Path.Join("TemplateGenerators", "Shared", "StaticData", "defaultIndexPage.html");
         templatesDirectory = GetTemplatesDirectory();
 
-        // TODO
         languageTMs = [.. this.languages.Select(lang => new LanguageTM(lang.LanguageName, lang.LanguageId))];
     }
 

@@ -11,7 +11,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 /// </summary>
 internal class EnumTMCreator : TypeTMCreator
 {
-    public EnumTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageSpecificData> languages)
+    public EnumTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageConfiguration> languages)
         : base(docCommentTransformer, languages)
     {
     }
@@ -24,7 +24,7 @@ internal class EnumTMCreator : TypeTMCreator
     internal EnumTypeTM GetFrom(IEnumTypeData enumType)
     {
         var enumMemberTMs = enumType.Members.OrderBy(m => m.Value).Select(GetFrom).ToArray();
-        var modifiers = GetLocalizedData(langData => langData.GetModifiers(enumType));
+        var modifiers = GetLanguageSpecificData(langData => langData.GetModifiers(enumType));
 
         return new EnumTypeTM(
             Id: enumType.Id,
@@ -51,7 +51,7 @@ internal class EnumTMCreator : TypeTMCreator
         return new EnumMemberTM(
             Id: enumMember.Id,
             Name: enumMember.Name,
-            Value: GetLocalizedDefaultValue(enumMember.Value),
+            Value: GetLanguageSpecificDefaultValue(enumMember.Value),
             Attributes: GetTemplateModels(enumMember.Attributes),
             SummaryDocComment: ToHtmlString(enumMember.SummaryDocComment),
             RemarksDocComment: ToHtmlString(enumMember.RemarksDocComment),

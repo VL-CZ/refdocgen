@@ -9,7 +9,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 /// </summary>
 internal class DelegateTMCreator : TypeTMCreator
 {
-    public DelegateTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageSpecificData> languages)
+    public DelegateTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageConfiguration> languages)
         : base(docCommentTransformer, languages)
     {
     }
@@ -21,7 +21,7 @@ internal class DelegateTMCreator : TypeTMCreator
     /// <returns>A <see cref="DelegateTypeTM"/> instance based on the provided <paramref name="delegateType"/>.</returns>
     internal DelegateTypeTM GetFrom(IDelegateTypeData delegateType)
     {
-        var modifiers = GetLocalizedData(langData => langData.GetModifiers(delegateType));
+        var modifiers = GetLanguageSpecificData(langData => langData.GetModifiers(delegateType));
 
         return new DelegateTypeTM(
             Id: delegateType.Id,

@@ -17,7 +17,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 /// </summary>
 internal class SearchResultTMCreator : BaseTMCreator
 {
-    public SearchResultTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageSpecificData> languages)
+    public SearchResultTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageConfiguration> languages)
         : base(docCommentTransformer, languages)
     {
     }
@@ -72,7 +72,7 @@ internal class SearchResultTMCreator : BaseTMCreator
     /// <returns>A <see cref="SearchResultTM"/> instance representing the search result for the given namespace.</returns>
     internal SearchResultTM GetFrom(NamespaceData ns)
     {
-        var name = GetLocalizedData(_ => $"{ns.Name} namespace");
+        var name = GetLanguageSpecificData(_ => $"{ns.Name} namespace");
         return new(name, string.Empty, ns.Name);
     }
 
@@ -83,7 +83,7 @@ internal class SearchResultTMCreator : BaseTMCreator
     /// <returns>A <see cref="SearchResultTM"/> instance representing the search result for the given assembly.</returns>
     internal SearchResultTM GetFrom(AssemblyData assembly)
     {
-        var name = GetLocalizedData(_ => $"{assembly.Name} assembly");
+        var name = GetLanguageSpecificData(_ => $"{assembly.Name} assembly");
         return new(name, string.Empty, assembly.Name + "-DLL");
     }
 
@@ -205,7 +205,7 @@ internal class SearchResultTMCreator : BaseTMCreator
     /// <returns>A <see cref="SearchResultTM"/> instance based on the provided <paramref name="type"/> instance.</returns>
     internal SearchResultTM GetFrom(ITypeDeclaration type, string typeKindName)
     {
-        var localizedNames = GetLocalizedData(lang =>
+        var localizedNames = GetLanguageSpecificData(lang =>
         {
             string name = lang.GetTypeName(type);
             return $"{type.Namespace}.{name} {typeKindName}";
@@ -223,7 +223,7 @@ internal class SearchResultTMCreator : BaseTMCreator
     /// <returns>A <see cref="SearchResultTM"/> instance based on the provided <paramref name="member"/> instance.</returns>
     internal SearchResultTM GetFrom(IMemberData member, string memberKindName, bool showMemberName = true)
     {
-        var localizedNames = GetLocalizedData(lang =>
+        var localizedNames = GetLanguageSpecificData(lang =>
         {
             string typeName = lang.GetTypeName(member.ContainingType);
             string result = $"{member.ContainingType.Namespace}.{typeName}";

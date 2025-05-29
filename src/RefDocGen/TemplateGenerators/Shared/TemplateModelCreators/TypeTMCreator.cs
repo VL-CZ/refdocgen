@@ -5,7 +5,6 @@ using RefDocGen.CodeElements.Types.Abstract.Exception;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
-using RefDocGen.TemplateGenerators.Shared.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
@@ -15,13 +14,8 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 /// </summary>
 internal abstract class TypeTMCreator : BaseTMCreator
 {
-    /// <summary>
-    /// Creates a new instance of <see cref="TypeTMCreator"/> class.
-    /// </summary>
-    /// <param name="docCommentTransformer">
-    /// <inheritdoc cref="docCommentTransformer"/>.
-    /// </param>
-    protected TypeTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageSpecificData> languages)
+
+    protected TypeTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageConfiguration> languages)
         : base(docCommentTransformer, languages)
     {
     }
@@ -73,14 +67,14 @@ internal abstract class TypeTMCreator : BaseTMCreator
     /// <returns>A <see cref="ParameterTM"/> instance based on the provided <paramref name="parameter"/>.</returns>
     protected ParameterTM GetFrom(IParameterData parameter)
     {
-        var modifiers = GetLocalizedData(lang => lang.GetModifiers(parameter));
+        var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(parameter));
 
         return new ParameterTM(
             parameter.Name,
             GetTypeLink(parameter.Type),
             modifiers,
             GetTemplateModels(parameter.Attributes),
-            GetLocalizedDefaultValue(parameter.DefaultValue),
+            GetLanguageSpecificDefaultValue(parameter.DefaultValue),
             ToHtmlString(parameter.DocComment));
     }
 
@@ -91,11 +85,11 @@ internal abstract class TypeTMCreator : BaseTMCreator
     /// <returns>A <see cref="TypeParameterTM"/> instance based on the provided <paramref name="typeParameter"/>.</returns>
     protected TypeParameterTM GetFrom(ITypeParameterData typeParameter)
     {
-        var modifiers = GetLocalizedData(lang => lang.GetModifiers(typeParameter));
+        var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(typeParameter));
 
         // get constraints
         var typeConstraints = typeParameter.TypeConstraints.Select(GetTypeLink).ToArray();
-        var specialConstraints = GetLocalizedData(lang =>
+        var specialConstraints = GetLanguageSpecificData(lang =>
         {
             var constraints = typeParameter.SpecialConstraints;
             return constraints.Select(c => lang.GetSpecialTypeConstraintName(c)).ToArray();
@@ -131,7 +125,7 @@ internal abstract class TypeTMCreator : BaseTMCreator
     /// <returns>A <see cref="AttributeTM"/> instance based on the provided <paramref name="attribute"/>.</returns>
     protected AttributeTM GetFrom(IAttributeData attribute)
     {
-        LanguageSpecificData<string>?[] constructorArgumentTMs = [.. attribute.ConstructorArgumentValues.Select(GetLocalizedDefaultValue)];
+        LanguageSpecificData<string>?[] constructorArgumentTMs = [.. attribute.ConstructorArgumentValues.Select(GetLanguageSpecificDefaultValue)];
         var namedArgumentTMs = attribute.NamedArguments.Select(na => GetFrom(na, attribute)).ToArray();
 
         var typeLink = new TypeLinkTM(
@@ -157,16 +151,21 @@ internal abstract class TypeTMCreator : BaseTMCreator
                 argument.Name,
                 typeUrlResolver.GetUrlOf(attribute.Type.Id, argument.Name)
             ),
-            GetLocalizedDefaultValue(argument.Value));
+            GetLanguageSpecificDefaultValue(argument.Value));
     }
 
-    protected LanguageSpecificData<string>? GetLocalizedDefaultValue(object? constantValue) // TODO
+    /// <summary>
+    /// Gets a language specific string of the provided <paramref name="constantValue"/> in all available languages.
+    /// </summary>
+    /// <param name="constantValue">The constant value to be serialized.</param>
+    /// <returns><see cref="LanguageSpecificData{T}"/> containing strings of the provided <paramref name="constantValue"/>.</returns>
+    protected LanguageSpecificData<string>? GetLanguageSpecificDefaultValue(object? constantValue)
     {
         if (constantValue == DBNull.Value)
         {
             return null;
         }
 
-        return GetLocalizedData(lang => lang.FormatLiteralValue(constantValue));
+        return GetLanguageSpecificData(lang => lang.FormatLiteralValue(constantValue));
     }
 }
