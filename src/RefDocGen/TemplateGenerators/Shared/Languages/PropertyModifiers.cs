@@ -1,4 +1,4 @@
-namespace RefDocGen.TemplateGenerators.Shared;
+namespace RefDocGen.TemplateGenerators.Shared.Languages;
 
 /// <summary>
 /// Represents a set of property modifiers.

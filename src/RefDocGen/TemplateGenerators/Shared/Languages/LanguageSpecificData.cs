@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace RefDocGen.TemplateGenerators.Shared;
+namespace RefDocGen.TemplateGenerators.Shared.Languages;
 
 /// <summary>
 /// Represents data stored in multiple programming languages (e.g., C#, VB.NET, F#).

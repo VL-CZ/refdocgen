@@ -7,6 +7,7 @@ using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.DocVersioning;
+using RefDocGen.TemplateGenerators.Shared.Languages;
 using RefDocGen.TemplateGenerators.Shared.StaticPages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Assemblies;
@@ -120,12 +121,12 @@ internal class RazorTemplateGenerator<
     private DocVersionManager? versionManager;
 
     /// <summary>
-    /// 
+    /// Configuration of languages available in the documentation.
     /// </summary>
     private readonly IEnumerable<ILanguageConfiguration> languages;
 
     /// <summary>
-    /// Template models of available languages.
+    /// Template models of languages available in the documentation.
     /// </summary>
     private readonly LanguageTM[] languageTMs;
 
@@ -143,6 +144,7 @@ internal class RazorTemplateGenerator<
     /// <param name="outputDirectory">The directory, where the generated output will be stored.</param>
     /// <param name="staticPagesDirectory">Path to the directory containing the static pages created by user. <c>null</c> indicates that the directory is not specified.</param>
     /// <param name="docVersion">Version of the documentation (e.g. 'v1.0'). Pass <c>null</c> if no specific version should be generated.</param>
+    /// <param name="languages"><inheritdoc cref="languages"/></param>
     internal RazorTemplateGenerator(
         HtmlRenderer htmlRenderer,
         IDocCommentTransformer docCommentTransformer,

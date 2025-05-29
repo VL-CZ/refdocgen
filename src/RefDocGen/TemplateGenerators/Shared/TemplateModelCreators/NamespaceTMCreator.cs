@@ -1,6 +1,7 @@
 using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Types;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
+using RefDocGen.TemplateGenerators.Shared.Languages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 

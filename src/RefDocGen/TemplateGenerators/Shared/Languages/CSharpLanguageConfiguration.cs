@@ -8,49 +8,29 @@ using RefDocGen.TemplateGenerators.Shared.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 
-namespace RefDocGen.TemplateGenerators.Shared;
+namespace RefDocGen.TemplateGenerators.Shared.Languages;
 
-
-internal interface ILanguageConfiguration
-{
-    /// <summary>
-    /// Get the modifiers for the specified <paramref name="field"/>.
-    /// </summary>
-    /// <param name="field">The field whose modifiers are to be retrieved.</param>
-    /// <returns>An array of strings representing the modifiers applied to the field.</returns>
-    string[] GetModifiers(IFieldData field);
-    PropertyModifiers GetModifiers(IPropertyData property);
-    string[] GetModifiers(IMethodData method);
-    string[] GetModifiers(IConstructorData constructor);
-    string[] GetModifiers(IEventData eventData);
-    string[] GetModifiers(IParameterData parameter);
-    PropertyModifiers GetModifiers(IIndexerData indexer);
-    string[] GetModifiers(IOperatorData operatorData);
-    string[] GetModifiers(IObjectTypeData type);
-    string[] GetModifiers(IDelegateTypeData delegateType);
-    string[] GetModifiers(IEnumTypeData enumType);
-    string[] GetModifiers(ITypeParameterData typeParameter);
-    string GetTypeName(ITypeDeclaration type);
-    string FormatLiteralValue(object? literalValue);
-    string GetSpecialTypeConstraintName(SpecialTypeConstraint constraint);
-    string LanguageName { get; }
-    string LanguageId { get; }
-
-}
-
+/// <summary>
+/// Provides syntax-related data the C# language.
+/// </summary>
 internal class CSharpLanguageConfiguration : ILanguageConfiguration
 {
+    /// <inheritdoc cref="LanguageId"/>
     public const string languageId = "csharp-lang";
 
+    /// <inheritdoc/>
     public string LanguageName => "C#";
 
+    /// <inheritdoc/>
     public string LanguageId => languageId;
 
+    /// <inheritdoc/>
     public string FormatLiteralValue(object? literalValue)
     {
         return CSharpLiteralValueFormatter.Format(literalValue);
     }
 
+    /// <inheritdoc/>
     public string[] GetModifiers(IFieldData field)
     {
         List<Keyword> modifiers = [field.AccessModifier.ToKeyword()];
@@ -75,6 +55,7 @@ internal class CSharpLanguageConfiguration : ILanguageConfiguration
         return modifiers.GetStrings();
     }
 
+    /// <inheritdoc/>
     public PropertyModifiers GetModifiers(IPropertyData property)
     {
         var modifiers = GetCallableMemberModifiers(property);
@@ -100,11 +81,13 @@ internal class CSharpLanguageConfiguration : ILanguageConfiguration
         return new(modifiers.GetStrings(), getterModifiers.GetStrings(), setterModifiers.GetStrings());
     }
 
+    /// <inheritdoc/>
     public string[] GetModifiers(IMethodData method)
     {
         return GetCallableMemberModifiers(method).GetStrings();
     }
 
+    /// <inheritdoc/>
     public string[] GetModifiers(IConstructorData constructor)
     {
         List<Keyword> modifiers = [constructor.AccessModifier.ToKeyword()];
@@ -117,6 +100,7 @@ internal class CSharpLanguageConfiguration : ILanguageConfiguration
         return modifiers.GetStrings();
     }
 
+    /// <inheritdoc/>
     public string[] GetModifiers(IEventData eventData)
     {
         var modifiers = GetCallableMemberModifiers(eventData);
@@ -125,6 +109,7 @@ internal class CSharpLanguageConfiguration : ILanguageConfiguration
         return modifiers.GetStrings();
     }
 
+    /// <inheritdoc/>
     public string[] GetModifiers(IParameterData parameter)
     {
         List<Keyword> modifiers = [];
@@ -157,11 +142,13 @@ internal class CSharpLanguageConfiguration : ILanguageConfiguration
         return modifiers.GetStrings();
     }
 
+    /// <inheritdoc/>
     public PropertyModifiers GetModifiers(IIndexerData indexer)
     {
         return GetModifiers((IPropertyData)indexer);
     }
 
+    /// <inheritdoc/>
     public string[] GetModifiers(IOperatorData operatorData)
     {
         var modifiers = GetCallableMemberModifiers(operatorData);
@@ -178,6 +165,7 @@ internal class CSharpLanguageConfiguration : ILanguageConfiguration
         return modifiers.GetStrings();
     }
 
+    /// <inheritdoc/>
     public string[] GetModifiers(IObjectTypeData type)
     {
         List<Keyword> modifiers = [type.AccessModifier.ToKeyword()];
@@ -208,12 +196,14 @@ internal class CSharpLanguageConfiguration : ILanguageConfiguration
         return modifiers.GetStrings();
     }
 
+    /// <inheritdoc/>
     public string[] GetModifiers(IDelegateTypeData delegateType)
     {
         List<Keyword> modifiers = [delegateType.AccessModifier.ToKeyword(), Keyword.Delegate];
         return modifiers.GetStrings();
     }
 
+    /// <inheritdoc/>
     public string[] GetModifiers(IEnumTypeData enumType)
     {
         List<Keyword> modifiers = [enumType.AccessModifier.ToKeyword(), Keyword.Enum];
@@ -221,6 +211,7 @@ internal class CSharpLanguageConfiguration : ILanguageConfiguration
 
     }
 
+    /// <inheritdoc/>
     public string[] GetModifiers(ITypeParameterData typeParameter)
     {
         List<Keyword> modifiers = [];
@@ -237,14 +228,16 @@ internal class CSharpLanguageConfiguration : ILanguageConfiguration
         return modifiers.GetStrings();
     }
 
+    /// <inheritdoc/>
     public string GetSpecialTypeConstraintName(SpecialTypeConstraint constraint)
     {
         return constraint.GetCSharpName();
     }
 
+    /// <inheritdoc/>
     public string GetTypeName(ITypeDeclaration type)
     {
-        return CSharpTypeName.Of(type); // TODO
+        return CSharpTypeName.Of(type);
     }
 
     /// <summary>

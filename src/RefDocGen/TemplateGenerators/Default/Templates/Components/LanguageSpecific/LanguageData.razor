@@ -7,65 +7,65 @@
     public required object Parameter { get; set; }
 
     [Parameter]
-    public required LanguageComponentType Type { get; set; }
+    public required LanguageSpecificComponent Type { get; set; }
 
     [CascadingParameter]
     public required LanguageTM[] Languages { get; set; }
 
-    private Dictionary<LanguageComponentType, string> templateParameterNames = new()
+    private Dictionary<LanguageSpecificComponent, string> templateParameterNames = new()
         {
-            [LanguageComponentType.AttributeName] = "Attribute",
-            [LanguageComponentType.ConstructorName] = "Constructor",
-            [LanguageComponentType.DelegateMethodName] = "Delegate",
-            [LanguageComponentType.EnumMemberName] = "EnumMember",
-            [LanguageComponentType.EventName] = "Event",
-            [LanguageComponentType.FieldName] = "Field",
-            [LanguageComponentType.IndexerName] = "Indexer",
-            [LanguageComponentType.MethodName] = "Method",
-            [LanguageComponentType.ParameterName] = "Parameter",
-            [LanguageComponentType.PropertyName] = "Property",
-            [LanguageComponentType.TypeDeclarationName] = "Type",
-            [LanguageComponentType.TypeParameterName] = "TypeParameter",
-            [LanguageComponentType.TypeParametersConstraintsSection] = "TypeParameters"
+            [LanguageSpecificComponent.AttributeName] = "Attribute",
+            [LanguageSpecificComponent.ConstructorName] = "Constructor",
+            [LanguageSpecificComponent.DelegateMethodName] = "Delegate",
+            [LanguageSpecificComponent.EnumMemberName] = "EnumMember",
+            [LanguageSpecificComponent.EventName] = "Event",
+            [LanguageSpecificComponent.FieldName] = "Field",
+            [LanguageSpecificComponent.IndexerName] = "Indexer",
+            [LanguageSpecificComponent.MethodName] = "Method",
+            [LanguageSpecificComponent.ParameterName] = "Parameter",
+            [LanguageSpecificComponent.PropertyName] = "Property",
+            [LanguageSpecificComponent.TypeDeclarationName] = "Type",
+            [LanguageSpecificComponent.TypeParameterName] = "TypeParameter",
+            [LanguageSpecificComponent.TypeParametersConstraintsSection] = "TypeParameters"
         };
 }
 
 @{
-    Dictionary<LanguageComponentType, Type> csharpComponents = new()
+    Dictionary<LanguageSpecificComponent, Type> csharpComponents = new()
             {
-                [LanguageComponentType.AttributeName] = typeof(CSharpAttributeName),
-                [LanguageComponentType.ConstructorName] = typeof(CSharpConstructorName),
-                [LanguageComponentType.DelegateMethodName] = typeof(CSharpDelegateMethodName),
-                [LanguageComponentType.EnumMemberName] = typeof(CSharpEnumMemberName),
-                [LanguageComponentType.EventName] = typeof(CSharpEventName),
-                [LanguageComponentType.FieldName] = typeof(CSharpFieldName),
-                [LanguageComponentType.IndexerName] = typeof(CSharpIndexerName),
-                [LanguageComponentType.MethodName] = typeof(CSharpMethodName),
-                [LanguageComponentType.ParameterName] = typeof(CSharpParameterName),
-                [LanguageComponentType.PropertyName] = typeof(CSharpPropertyName),
-                [LanguageComponentType.TypeDeclarationName] = typeof(CSharpTypeDeclarationName),
-                [LanguageComponentType.TypeParameterName] = typeof(CSharpTypeParameterName),
-                [LanguageComponentType.TypeParametersConstraintsSection] = typeof(CSharpTypeParametersConstraintsSection)
+                [LanguageSpecificComponent.AttributeName] = typeof(CSharpAttributeName),
+                [LanguageSpecificComponent.ConstructorName] = typeof(CSharpConstructorName),
+                [LanguageSpecificComponent.DelegateMethodName] = typeof(CSharpDelegateMethodName),
+                [LanguageSpecificComponent.EnumMemberName] = typeof(CSharpEnumMemberName),
+                [LanguageSpecificComponent.EventName] = typeof(CSharpEventName),
+                [LanguageSpecificComponent.FieldName] = typeof(CSharpFieldName),
+                [LanguageSpecificComponent.IndexerName] = typeof(CSharpIndexerName),
+                [LanguageSpecificComponent.MethodName] = typeof(CSharpMethodName),
+                [LanguageSpecificComponent.ParameterName] = typeof(CSharpParameterName),
+                [LanguageSpecificComponent.PropertyName] = typeof(CSharpPropertyName),
+                [LanguageSpecificComponent.TypeDeclarationName] = typeof(CSharpTypeDeclarationName),
+                [LanguageSpecificComponent.TypeParameterName] = typeof(CSharpTypeParameterName),
+                [LanguageSpecificComponent.TypeParametersConstraintsSection] = typeof(CSharpTypeParametersConstraintsSection)
             };
 
-    Dictionary<LanguageComponentType, Type> todoComponents = new()
+    Dictionary<LanguageSpecificComponent, Type> todoComponents = new()
             {
-                [LanguageComponentType.AttributeName] = typeof(TodoAttributeName),
-                [LanguageComponentType.ConstructorName] = typeof(TodoConstructorName),
-                [LanguageComponentType.DelegateMethodName] = typeof(TodoDelegateMethodName),
-                [LanguageComponentType.EnumMemberName] = typeof(TodoEnumMemberName),
-                [LanguageComponentType.EventName] = typeof(TodoEventName),
-                [LanguageComponentType.FieldName] = typeof(TodoFieldName),
-                [LanguageComponentType.IndexerName] = typeof(TodoIndexerName),
-                [LanguageComponentType.MethodName] = typeof(TodoMethodName),
-                [LanguageComponentType.ParameterName] = typeof(TodoParameterName),
-                [LanguageComponentType.PropertyName] = typeof(TodoPropertyName),
-                [LanguageComponentType.TypeDeclarationName] = typeof(TodoTypeDeclarationName),
-                [LanguageComponentType.TypeParameterName] = typeof(TodoTypeParameterName),
-                [LanguageComponentType.TypeParametersConstraintsSection] = typeof(TodoTypeParametersConstraintsSection)
+                [LanguageSpecificComponent.AttributeName] = typeof(TodoAttributeName),
+                [LanguageSpecificComponent.ConstructorName] = typeof(TodoConstructorName),
+                [LanguageSpecificComponent.DelegateMethodName] = typeof(TodoDelegateMethodName),
+                [LanguageSpecificComponent.EnumMemberName] = typeof(TodoEnumMemberName),
+                [LanguageSpecificComponent.EventName] = typeof(TodoEventName),
+                [LanguageSpecificComponent.FieldName] = typeof(TodoFieldName),
+                [LanguageSpecificComponent.IndexerName] = typeof(TodoIndexerName),
+                [LanguageSpecificComponent.MethodName] = typeof(TodoMethodName),
+                [LanguageSpecificComponent.ParameterName] = typeof(TodoParameterName),
+                [LanguageSpecificComponent.PropertyName] = typeof(TodoPropertyName),
+                [LanguageSpecificComponent.TypeDeclarationName] = typeof(TodoTypeDeclarationName),
+                [LanguageSpecificComponent.TypeParameterName] = typeof(TodoTypeParameterName),
+                [LanguageSpecificComponent.TypeParametersConstraintsSection] = typeof(TodoTypeParametersConstraintsSection)
             };
 
-    Dictionary<string, Dictionary<LanguageComponentType, Type>> languageComponents = new()
+    Dictionary<string, Dictionary<LanguageSpecificComponent, Type>> languageComponents = new()
             {
                 ["csharp-lang"] = csharpComponents,
                 ["other-lang"] = todoComponents

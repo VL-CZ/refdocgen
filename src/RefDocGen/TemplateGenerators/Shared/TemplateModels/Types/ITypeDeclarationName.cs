@@ -1,3 +1,5 @@
+using RefDocGen.TemplateGenerators.Shared.Languages;
+
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 
 /// <summary>
