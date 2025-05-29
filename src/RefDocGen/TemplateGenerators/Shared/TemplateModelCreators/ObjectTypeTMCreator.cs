@@ -14,7 +14,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 /// </summary>
 internal class ObjectTypeTMCreator : TypeTMCreator
 {
-    public ObjectTypeTMCreator(IDocCommentTransformer docCommentTransformer, IReadOnlyDictionary<Language, ILanguageSpecificData> languages)
+    public ObjectTypeTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageSpecificData> languages)
         : base(docCommentTransformer, languages)
     {
     }

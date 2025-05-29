@@ -16,15 +16,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 /// </summary>
 internal abstract class BaseTMCreator
 {
-    protected IReadOnlyDictionary<Language, ILanguageSpecificData> languageSpecificData;
-
-    protected LanguageSpecificData<T> GetLocalizedData<T>(Func<ILanguageSpecificData, T> function)
-    {
-        var localizedData = languageSpecificData.
-            ToDictionary(item => item.Value.LanguageId, item => function(item.Value));
-
-        return new LanguageSpecificData<T>(localizedData);
-    }
+    protected IEnumerable<ILanguageSpecificData> languages;
 
     /// <summary>
     /// Transformer of the XML doc comments into HTML.
@@ -42,12 +34,11 @@ internal abstract class BaseTMCreator
     /// <param name="docCommentTransformer">
     /// <inheritdoc cref="docCommentTransformer"/>.
     /// </param>
-    protected BaseTMCreator(IDocCommentTransformer docCommentTransformer, IReadOnlyDictionary<Language, ILanguageSpecificData> languageSpecificData)
+    protected BaseTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageSpecificData> languages)
     {
         this.docCommentTransformer = docCommentTransformer;
+        this.languages = languages;
         typeUrlResolver = new(docCommentTransformer.TypeRegistry);
-
-        this.languageSpecificData = languageSpecificData;
     }
 
     /// <inheritdoc cref="IDocCommentTransformer.ToHtmlString(XElement)"/>
@@ -155,6 +146,14 @@ internal abstract class BaseTMCreator
     protected TypeNameTM GetTypeNameFrom(IDelegateTypeData delegateData)
     {
         return GetTypeNameFrom(delegateData, "delegate");
+    }
+
+    protected LanguageSpecificData<T> GetLocalizedData<T>(Func<ILanguageSpecificData, T> function)
+    {
+        var localizedData = languages.
+            ToDictionary(item => item.LanguageId, item => function(item));
+
+        return new LanguageSpecificData<T>(localizedData);
     }
 
     /// <summary>

@@ -12,8 +12,8 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 internal class NamespaceTMCreator : BaseTMCreator
 {
 
-    public NamespaceTMCreator(IDocCommentTransformer docCommentTransformer, IReadOnlyDictionary<Language, ILanguageSpecificData> languageSpecificData)
-        : base(docCommentTransformer, languageSpecificData)
+    public NamespaceTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageSpecificData> languages)
+        : base(docCommentTransformer, languages)
     {
     }
 

@@ -9,12 +9,15 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 /// </summary>
 internal class AssemblyTMCreator : BaseTMCreator
 {
+    /// <summary>
+    /// TM creator responsible for creating <see cref="TemplateModels.Namespaces.NamespaceTM"/> instances.
+    /// </summary>
     private readonly NamespaceTMCreator nsTMCreator;
 
-    public AssemblyTMCreator(IDocCommentTransformer docCommentTransformer, IReadOnlyDictionary<Language, ILanguageSpecificData> languageSpecificData)
-        : base(docCommentTransformer, languageSpecificData)
+    public AssemblyTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageSpecificData> languages)
+        : base(docCommentTransformer, languages)
     {
-        nsTMCreator = new(docCommentTransformer, languageSpecificData);
+        nsTMCreator = new(docCommentTransformer, languages);
     }
 
     /// <summary>

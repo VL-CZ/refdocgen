@@ -21,8 +21,8 @@ internal abstract class TypeTMCreator : BaseTMCreator
     /// <param name="docCommentTransformer">
     /// <inheritdoc cref="docCommentTransformer"/>.
     /// </param>
-    protected TypeTMCreator(IDocCommentTransformer docCommentTransformer, IReadOnlyDictionary<Language, ILanguageSpecificData> languageSpecificData)
-        : base(docCommentTransformer, languageSpecificData)
+    protected TypeTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageSpecificData> languages)
+        : base(docCommentTransformer, languages)
     {
     }
 

@@ -17,8 +17,8 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 /// </summary>
 internal class SearchResultTMCreator : BaseTMCreator
 {
-    public SearchResultTMCreator(IDocCommentTransformer docCommentTransformer, IReadOnlyDictionary<Language, ILanguageSpecificData> languageSpecificData)
-        : base(docCommentTransformer, languageSpecificData)
+    public SearchResultTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageSpecificData> languages)
+        : base(docCommentTransformer, languages)
     {
     }
 

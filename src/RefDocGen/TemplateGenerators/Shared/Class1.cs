@@ -10,8 +10,6 @@ using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 
 namespace RefDocGen.TemplateGenerators.Shared;
 
-public enum Language { CSharp, Other }
-
 internal interface ILanguageSpecificData
 {
     string[] GetModifiers(IFieldData field);

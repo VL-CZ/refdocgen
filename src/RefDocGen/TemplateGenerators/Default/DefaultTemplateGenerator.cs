@@ -108,11 +108,10 @@ internal class DefaultTemplateGenerator : RazorTemplateGenerator<
     StaticPageTemplate,
     SearchTemplate>
 {
-    private static readonly Dictionary<Language, ILanguageSpecificData> languages = new()
-    {
-        [Language.CSharp] = new CSharpLanguageData(),
-        [Language.Other] = new OtherLanguageData()
-    };
+    private static readonly ILanguageSpecificData[] languages = [
+        new CSharpLanguageData(),
+        new OtherLanguageData()
+    ];
 
     /// <summary>
     /// Initialize a new instance of <see cref="DefaultTemplateGenerator"/> class.
