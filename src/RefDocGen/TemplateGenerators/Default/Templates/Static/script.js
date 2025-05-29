@@ -112,8 +112,6 @@ function main() {
     });
 }
 
-window.addEventListener('load', main);
-
 // On page load, restore selected language
 window.addEventListener('DOMContentLoaded', () => {
     const savedLang = localStorage.getItem('selectedLanguage');
@@ -127,3 +125,5 @@ window.addEventListener('DOMContentLoaded', () => {
         setLanguageVisibility(savedLang);
     }
 });
+
+window.addEventListener('load', main);
