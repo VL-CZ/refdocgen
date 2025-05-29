@@ -3,6 +3,9 @@
 @code {
     [Parameter]
     public required TypeNameTM Type { get; set; }
+
+    [CascadingParameter]
+    public required LanguageTM[] Languages { get; set; }
 }
 
 @{
@@ -16,7 +19,9 @@
                 <span class="refdocgen-text-tertiary">
                     @Type.TypeKindName
                 </span>
-                @Type.Name
+                <span> </span>
+
+                <LanguageSpecificStrings Data="@Type.Name" />
             </a>
         </samp>
     </td>

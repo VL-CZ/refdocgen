@@ -13,12 +13,7 @@
         {
             <div data-id="type-parameter-data">
                 <samp data-id="type-parameter-name">
-                    <span class="refdocgen-text-tertiary">
-                        @string.Join(' ', typeParam.Modifiers)
-                    </span>
-                    <span class="refdocgen-text-secondary">
-                        @typeParam.Name
-                    </span>
+                    <TypeParameterName TypeParameter="@typeParam" />
                 </samp>
                 <div class="text-body-secondary mb-2" data-id="type-parameter-doc">
                     @if (typeParam.DocComment is not null)

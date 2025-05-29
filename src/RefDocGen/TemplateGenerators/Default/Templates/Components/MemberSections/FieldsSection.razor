@@ -13,17 +13,7 @@
             <div class="border p-2 mb-2" id="@field.Id" data-id="member-data">
                 <h6 class="mb-1" data-id="member-name">
                     <samp>
-                        <span class="refdocgen-text-tertiary">
-                            @string.Join(' ', field.Modifiers)
-                        </span>
-
-                        <TypeLink Type="@field.Type" />
-
-                        <span class="refdocgen-text-primary">
-                            @field.Name
-                        </span>
-
-                        <LiteralValueSuffix Value="@field.ConstantValue" />
+                        <FieldName Field="@field" />
 
                         <AnchorLink Id="@field.Id" />
                     </samp>
@@ -34,7 +24,7 @@
 
                 <SummaryDoc DocComment="@field.SummaryDocComment" />
 
-                <AttributeList Attributes="@field.Attributes" />
+                <AttributesSection Attributes="@field.Attributes" />
 
                 <RemarksDoc DocComment="@field.RemarksDocComment" />
 

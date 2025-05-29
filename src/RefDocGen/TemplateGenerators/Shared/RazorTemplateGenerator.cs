@@ -7,9 +7,11 @@ using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.DocVersioning;
+using RefDocGen.TemplateGenerators.Shared.Languages;
 using RefDocGen.TemplateGenerators.Shared.StaticPages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Assemblies;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Language;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
@@ -119,6 +121,16 @@ internal class RazorTemplateGenerator<
     private DocVersionManager? versionManager;
 
     /// <summary>
+    /// Configuration of languages available in the documentation.
+    /// </summary>
+    private readonly IEnumerable<ILanguageConfiguration> availableLanguages;
+
+    /// <summary>
+    /// Template models of languages available in the documentation.
+    /// </summary>
+    private readonly LanguageTM[] languageTMs;
+
+    /// <summary>
     /// The directory, where the generated output API pages will be stored.
     /// </summary>
     private string OutputApiDirectory => Path.Join(outputDirectory, "api");
@@ -132,10 +144,12 @@ internal class RazorTemplateGenerator<
     /// <param name="outputDirectory">The directory, where the generated output will be stored.</param>
     /// <param name="staticPagesDirectory">Path to the directory containing the static pages created by user. <c>null</c> indicates that the directory is not specified.</param>
     /// <param name="docVersion">Version of the documentation (e.g. 'v1.0'). Pass <c>null</c> if no specific version should be generated.</param>
+    /// <param name="availableLanguages"><inheritdoc cref="availableLanguages"/></param>
     internal RazorTemplateGenerator(
         HtmlRenderer htmlRenderer,
         IDocCommentTransformer docCommentTransformer,
         string outputDirectory,
+        IEnumerable<ILanguageConfiguration> availableLanguages,
         string? staticPagesDirectory = null,
         string? docVersion = null)
     {
@@ -144,10 +158,12 @@ internal class RazorTemplateGenerator<
         this.outputDirectory = outputDirectory;
         this.staticPagesDirectory = staticPagesDirectory;
         this.docVersion = docVersion;
+        this.availableLanguages = availableLanguages;
 
         defaultIndexPage = Path.Join("TemplateGenerators", "Shared", "StaticData", "defaultIndexPage.html");
         templatesDirectory = GetTemplatesDirectory();
 
+        languageTMs = [.. this.availableLanguages.Select(lang => new LanguageTM(lang.LanguageName, lang.LanguageId))];
     }
 
     /// <inheritdoc/>
@@ -193,7 +209,8 @@ internal class RazorTemplateGenerator<
     /// <param name="typeRegistry">Type registry containing the declared types.</param>
     private void GenerateSearchPage(ITypeRegistry typeRegistry)
     {
-        var model = SearchResultTMCreator.GetFrom(typeRegistry);
+        var creator = new SearchResultTMCreator(docCommentTransformer, availableLanguages);
+        var model = creator.GetFrom(typeRegistry);
 
         var paramDictionary = new Dictionary<string, object?>()
         {
@@ -209,7 +226,7 @@ internal class RazorTemplateGenerator<
     /// <param name="types">The type data to be used in the templates.</param>
     private void GenerateObjectTypePages(IEnumerable<IObjectTypeData> types)
     {
-        var creator = new ObjectTypeTMCreator(docCommentTransformer);
+        var creator = new ObjectTypeTMCreator(docCommentTransformer, availableLanguages);
         var typeTemplateModels = types.Select(creator.GetFrom);
         ProcessApiTemplates<TObjectTypePageTemplate, ObjectTypeTM>(typeTemplateModels);
     }
@@ -220,7 +237,7 @@ internal class RazorTemplateGenerator<
     /// <param name="enums">The enum data to be used in the templates.</param>
     private void GenerateEnumPages(IEnumerable<IEnumTypeData> enums)
     {
-        var creator = new EnumTMCreator(docCommentTransformer);
+        var creator = new EnumTMCreator(docCommentTransformer, availableLanguages);
         var enumTMs = enums.Select(creator.GetFrom);
         ProcessApiTemplates<TEnumPageTemplate, EnumTypeTM>(enumTMs);
     }
@@ -231,7 +248,7 @@ internal class RazorTemplateGenerator<
     /// <param name="delegates">The delegate data to be used in the templates.</param>
     private void GenerateDelegatePages(IEnumerable<IDelegateTypeData> delegates)
     {
-        var creator = new DelegateTMCreator(docCommentTransformer);
+        var creator = new DelegateTMCreator(docCommentTransformer, availableLanguages);
         var delegateTMs = delegates.Select(creator.GetFrom);
         ProcessApiTemplates<TDelegatePageTemplate, DelegateTypeTM>(delegateTMs);
     }
@@ -242,7 +259,8 @@ internal class RazorTemplateGenerator<
     /// <param name="namespaces">The namespace data to be used in the templates.</param>
     private void GenerateNamespacePages(IEnumerable<NamespaceData> namespaces)
     {
-        var namespaceTMs = namespaces.Select(NamespaceTMCreator.GetFrom);
+        var creator = new NamespaceTMCreator(docCommentTransformer, availableLanguages);
+        var namespaceTMs = namespaces.Select(creator.GetFrom);
         ProcessApiTemplates<TNamespacePageTemplate, NamespaceTM>(namespaceTMs);
     }
 
@@ -252,7 +270,8 @@ internal class RazorTemplateGenerator<
     /// <param name="assemblies">The assembly data to be used in the templates.</param>
     private void GenerateAssemblyPages(IEnumerable<AssemblyData> assemblies)
     {
-        var assemblyTMs = assemblies.Select(AssemblyTMCreator.GetFrom);
+        var creator = new AssemblyTMCreator(docCommentTransformer, availableLanguages);
+        var assemblyTMs = assemblies.Select(creator.GetFrom);
         ProcessApiTemplates<TAssemblyPageTemplate, AssemblyTM>(assemblyTMs);
     }
 
@@ -262,7 +281,8 @@ internal class RazorTemplateGenerator<
     /// <param name="assemblies">The assembly data to be used in the template.</param>
     private void GenerateApiHomepage(IEnumerable<AssemblyData> assemblies)
     {
-        var assemblyTMs = assemblies.Select(AssemblyTMCreator.GetFrom);
+        var creator = new AssemblyTMCreator(docCommentTransformer, availableLanguages);
+        var assemblyTMs = assemblies.Select(creator.GetFrom);
         ProcessApiTemplate<TApiPageTemplate, IEnumerable<AssemblyTM>>(assemblyTMs, indexPageId);
     }
 
@@ -420,7 +440,8 @@ internal class RazorTemplateGenerator<
             var sharedTemplateParameters = new Dictionary<string, object?>()
             {
                 ["TopMenuData"] = topMenuData,
-                ["Versions"] = versions
+                ["Versions"] = versions,
+                ["Languages"] = languageTMs
             };
 
             var templateParameters = sharedTemplateParameters.Merge(customTemplateParameters);

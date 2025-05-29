@@ -1,3 +1,4 @@
+@using RefDocGen.TemplateGenerators.Shared.TemplateModels.Language
 @using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu
 @inherits ComponentBase
 
@@ -11,6 +12,9 @@
     [Parameter]
     public required string[]? Versions { get; set; }
 
+    [Parameter]
+    public required LanguageTM[] Languages { get; set; }
+
     /// <summary>
     /// Checks if the model has any (summary, remarks,...) doc comments.
     /// </summary>
@@ -23,63 +27,61 @@
 
 <CascadingValue Value="TopMenuData">
     <CascadingValue Value="Versions">
-        <LayoutView Layout="typeof(AppLayout)">
-            <div data-id="declared-type-data">
-                <DeclaredTypeName TypeName="@Model.Name" TypeKindName="enum" Modifiers="@Model.Modifiers" />
+        <CascadingValue Value="Languages">
+            <LayoutView Layout="typeof(AppLayout)">
+                <div data-id="declared-type-data">
+                    <TypeNameTitle Type="@Model"/>
 
-                <AssemblyLink Assembly="@Model.Assembly" />
+                    <AssemblyLink Assembly="@Model.Assembly" />
 
-                <NamespaceLink Namespace="@Model.Namespace" />
+                    <NamespaceLink Namespace="@Model.Namespace" />
 
-                <DeclaringTypeSection DeclaringType="@Model.DeclaringType" />
+                    <DeclaringTypeSection DeclaringType="@Model.DeclaringType" />
 
-                <hr />
-
-                <SummaryDoc DocComment="@Model.SummaryDocComment" />
-
-                <AttributeList Attributes="@Model.Attributes" />
-
-                <!-- Remarks doc comment -->
-                <RemarksDoc DocComment="@Model.RemarksDocComment" />
-
-                <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
-
-
-                @if (IsModelDocumented())
-                {
                     <hr />
-                }
-            </div>
 
-            <h2 class="display-5 mt-2">Members</h2>
-            <div class="row">
-                <div class="col-md-12">
-                    @foreach (var enumMember in Model.Members)
+                    <SummaryDoc DocComment="@Model.SummaryDocComment" />
+
+                    <AttributesSection Attributes="@Model.Attributes" />
+
+                    <!-- Remarks doc comment -->
+                    <RemarksDoc DocComment="@Model.RemarksDocComment" />
+
+                    <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
+
+
+                    @if (IsModelDocumented())
                     {
-                        <div class="border p-2 mb-2" id="@enumMember.Id" data-id="enum-member">
-                            <h6 class="mb-1" data-id="member-name">
-                                <samp>
-                                    <span>
-                                        @enumMember.Name
-                                    </span>
-
-                                    <LiteralValueSuffix Value="@enumMember.Value" />
-
-                                    <AnchorLink Id="@enumMember.Id" />
-                                </samp>
-                            </h6>
-
-                            <SummaryDoc DocComment="@enumMember.SummaryDocComment" />
-
-                            <AttributeList Attributes="@enumMember.Attributes" />
-
-                            <RemarksDoc DocComment="@enumMember.RemarksDocComment" />
-
-                            <SeeAlsoDocs DocComments="@enumMember.SeeAlsoDocComments" />
-                        </div>
+                        <hr />
                     }
                 </div>
-            </div>
-        </LayoutView>
+
+                <h2 class="display-5 mt-2">Members</h2>
+                <div class="row">
+                    <div class="col-md-12">
+                        @foreach (var enumMember in Model.Members)
+                        {
+                            <div class="border p-2 mb-2" id="@enumMember.Id" data-id="enum-member">
+                                <h6 class="mb-1" data-id="member-name">
+                                    <samp>
+                                        <EnumMemberName EnumMember="@enumMember" />
+
+                                        <AnchorLink Id="@enumMember.Id" />
+                                    </samp>
+                                </h6>
+
+                                <SummaryDoc DocComment="@enumMember.SummaryDocComment" />
+
+                                <AttributesSection Attributes="@enumMember.Attributes" />
+
+                                <RemarksDoc DocComment="@enumMember.RemarksDocComment" />
+
+                                <SeeAlsoDocs DocComments="@enumMember.SeeAlsoDocComments" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            </LayoutView>
+        </CascadingValue>
     </CascadingValue>
 </CascadingValue>

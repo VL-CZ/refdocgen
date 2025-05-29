@@ -1,0 +1,25 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required ParameterTM Parameter { get; set; }
+}
+
+
+@{
+    var modifiers = Parameter.Modifiers.CSharpData;
+}
+
+@if (modifiers.Any())
+{
+    <span class="refdocgen-text-tertiary">
+        @string.Join(' ', modifiers)
+    </span>
+    <span> </span>
+}
+
+<TypeLink Type="@Parameter.Type" />
+
+<span>
+    @Parameter.Name
+</span>

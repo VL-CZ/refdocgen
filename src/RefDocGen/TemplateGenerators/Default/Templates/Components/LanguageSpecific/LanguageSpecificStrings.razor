@@ -1,0 +1,17 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required LanguageSpecificData<string> Data { get; set; }
+
+    [CascadingParameter]
+    public required LanguageTM[] Languages { get; set; }
+}
+
+@foreach (var language in Languages)
+{
+    <span class="@language.Id">
+        @Data[language.Id]
+    </span>
+}
+

@@ -5,25 +5,32 @@ using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
+using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
+using RefDocGen.TemplateGenerators.Shared.Languages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators.Tools;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools;
-using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 
 /// <summary>
 /// Class responsible for creating template models representing the search result template models.
 /// </summary>
-internal class SearchResultTMCreator
+internal class SearchResultTMCreator : BaseTMCreator
 {
+    public SearchResultTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageConfiguration> availableLanguages)
+        : base(docCommentTransformer, availableLanguages)
+    {
+    }
+
+
     /// <summary>
     /// Creates an enumerable of <see cref="SearchResultTM"/> instances based on the data stored in the <paramref name="typeRegistry"/>.
     /// </summary>
     /// <param name="typeRegistry">A registry containing the types to be included in the documentation.
     /// </param>
     /// <returns>An enumerable of <see cref="SearchResultTM"/> instances based on the data stored in the <paramref name="typeRegistry"/>.</returns>
-    internal static IEnumerable<SearchResultTM> GetFrom(ITypeRegistry typeRegistry)
+    internal IEnumerable<SearchResultTM> GetFrom(ITypeRegistry typeRegistry)
     {
         var nsModels = typeRegistry.Namespaces.Select(GetFrom);
         var assemblyModels = typeRegistry.Assemblies.Select(GetFrom);
@@ -64,9 +71,10 @@ internal class SearchResultTMCreator
     /// </summary>
     /// <param name="ns">The namespace data to create the search page model from.</param>
     /// <returns>A <see cref="SearchResultTM"/> instance representing the search result for the given namespace.</returns>
-    internal static SearchResultTM GetFrom(NamespaceData ns)
+    internal SearchResultTM GetFrom(NamespaceData ns)
     {
-        return new(ns.Name + " namespace", string.Empty, ns.Name);
+        var name = GetLanguageSpecificData(_ => $"{ns.Name} namespace");
+        return new(name, string.Empty, ns.Name);
     }
 
     /// <summary>
@@ -74,9 +82,10 @@ internal class SearchResultTMCreator
     /// </summary>
     /// <param name="assembly">The assembly data to create the search page model from.</param>
     /// <returns>A <see cref="SearchResultTM"/> instance representing the search result for the given assembly.</returns>
-    internal static SearchResultTM GetFrom(AssemblyData assembly)
+    internal SearchResultTM GetFrom(AssemblyData assembly)
     {
-        return new(assembly.Name + " assembly", string.Empty, assembly.Name + "-DLL");
+        var name = GetLanguageSpecificData(_ => $"{assembly.Name} assembly");
+        return new(name, string.Empty, assembly.Name + "-DLL");
     }
 
     /// <summary>
@@ -84,9 +93,9 @@ internal class SearchResultTMCreator
     /// </summary>
     /// <param name="type">The type declaration to create the search page model from.</param>
     /// <returns>A <see cref="SearchResultTM"/> instance representing the search result for the given type.</returns>
-    internal static SearchResultTM GetFrom(IObjectTypeData type)
+    internal SearchResultTM GetFrom(IObjectTypeData type)
     {
-        return GetFrom(type, type.Kind.GetName());
+        return GetFrom(type, TypeKindName.Of(type));
     }
 
     /// <summary>
@@ -94,19 +103,19 @@ internal class SearchResultTMCreator
     /// </summary>
     /// <param name="e">The type declaration to create the search page model from.</param>
     /// <returns>A <see cref="SearchResultTM"/> instance representing the search result for the given enum.</returns>
-    internal static SearchResultTM GetFrom(IEnumTypeData e)
+    internal SearchResultTM GetFrom(IEnumTypeData e)
     {
-        return GetFrom(e, "enum");
+        return GetFrom(e, TypeKindName.Enum);
     }
 
     /// <summary>
     /// Creates a <see cref="SearchResultTM"/> instance from the specified <see cref="IDelegateTypeData"/>.
     /// </summary>
-    /// <param name="type">The type declaration to create the search page model from.</param>
+    /// <param name="d">The type declaration to create the search page model from.</param>
     /// <returns>A <see cref="SearchResultTM"/> instance representing the search result for the given delegate.</returns>
-    internal static SearchResultTM GetFrom(IDelegateTypeData type)
+    internal SearchResultTM GetFrom(IDelegateTypeData d)
     {
-        return GetFrom(type, "delegate");
+        return GetFrom(d, TypeKindName.Delegate);
     }
 
     /// <summary>
@@ -114,7 +123,7 @@ internal class SearchResultTMCreator
     /// </summary>
     /// <param name="method">The method data to create the search page model from.</param>
     /// <returns>A <see cref="SearchResultTM"/> instance representing the search result for the given method.</returns>
-    internal static SearchResultTM GetFrom(IMethodData method)
+    internal SearchResultTM GetFrom(IMethodData method)
     {
         return GetFrom(method, "method");
     }
@@ -124,7 +133,7 @@ internal class SearchResultTMCreator
     /// </summary>
     /// <param name="field">The field data to create the search page model from.</param>
     /// <returns>A <see cref="SearchResultTM"/> instance representing the search result for the given field.</returns>
-    internal static SearchResultTM GetFrom(IFieldData field)
+    internal SearchResultTM GetFrom(IFieldData field)
     {
         return GetFrom(field, "field");
     }
@@ -134,7 +143,7 @@ internal class SearchResultTMCreator
     /// </summary>
     /// <param name="property">The property data to create the search page model from.</param>
     /// <returns>A <see cref="SearchResultTM"/> instance representing the search result for the given property.</returns>
-    internal static SearchResultTM GetFrom(IPropertyData property)
+    internal SearchResultTM GetFrom(IPropertyData property)
     {
         return GetFrom(property, "property");
     }
@@ -144,7 +153,7 @@ internal class SearchResultTMCreator
     /// </summary>
     /// <param name="e">The event data to create the search page model from.</param>
     /// <returns>A <see cref="SearchResultTM"/> instance representing the search result for the given event.</returns>
-    internal static SearchResultTM GetFrom(IEventData e)
+    internal SearchResultTM GetFrom(IEventData e)
     {
         return GetFrom(e, "event");
     }
@@ -154,7 +163,7 @@ internal class SearchResultTMCreator
     /// </summary>
     /// <param name="constructor">The constructor data to create the search page model from.</param>
     /// <returns>A <see cref="SearchResultTM"/> instance representing the search result for the given constructor.</returns>
-    internal static SearchResultTM GetFrom(IConstructorData constructor)
+    internal SearchResultTM GetFrom(IConstructorData constructor)
     {
         return GetFrom(constructor, "constructor", false);
     }
@@ -164,7 +173,7 @@ internal class SearchResultTMCreator
     /// </summary>
     /// <param name="indexer">The indexer data to create the search page model from.</param>
     /// <returns>A <see cref="SearchResultTM"/> instance representing the search result for the given indexer.</returns>
-    internal static SearchResultTM GetFrom(IIndexerData indexer)
+    internal SearchResultTM GetFrom(IIndexerData indexer)
     {
         return GetFrom(indexer, "indexer", false);
     }
@@ -174,7 +183,7 @@ internal class SearchResultTMCreator
     /// </summary>
     /// <param name="op">The operator data to create the search page model from.</param>
     /// <returns>A <see cref="SearchResultTM"/> instance representing the search result for the given operator.</returns>
-    internal static SearchResultTM GetFrom(IOperatorData op)
+    internal SearchResultTM GetFrom(IOperatorData op)
     {
         return GetFrom(op, "operator");
     }
@@ -184,7 +193,7 @@ internal class SearchResultTMCreator
     /// </summary>
     /// <param name="member">The enum member to create the search page model from.</param>
     /// <returns>A <see cref="SearchResultTM"/> instance representing the search result for the given enum member.</returns>
-    internal static SearchResultTM GetFrom(IEnumMemberData member)
+    internal SearchResultTM GetFrom(IEnumMemberData member)
     {
         return GetFrom(member, "enum member");
     }
@@ -195,9 +204,15 @@ internal class SearchResultTMCreator
     /// <param name="type">The <see cref="ITypeDeclaration"/> instance to convert.</param>
     /// <param name="typeKindName">Name of the type kind to be displayed (e.g., 'class').</param>
     /// <returns>A <see cref="SearchResultTM"/> instance based on the provided <paramref name="type"/> instance.</returns>
-    internal static SearchResultTM GetFrom(ITypeDeclaration type, string typeKindName)
+    internal SearchResultTM GetFrom(ITypeDeclaration type, string typeKindName)
     {
-        return new(CSharpTypeName.Of(type, useFullName: true) + " " + typeKindName, type.SummaryDocComment.Value, type.Id);
+        var localizedNames = GetLanguageSpecificData(lang =>
+        {
+            string name = lang.GetTypeName(type);
+            return $"{type.Namespace}.{name} {typeKindName}";
+        });
+
+        return new(localizedNames, type.SummaryDocComment.Value, type.Id);
     }
 
     /// <summary>
@@ -207,18 +222,23 @@ internal class SearchResultTMCreator
     /// <param name="memberKindName">Name of the member kind to be displayed (e.g., 'field').</param>
     /// <param name="showMemberName">Whether the member name should be included in the resulting <see cref="SearchResultTM"/>.</param>
     /// <returns>A <see cref="SearchResultTM"/> instance based on the provided <paramref name="member"/> instance.</returns>
-    internal static SearchResultTM GetFrom(IMemberData member, string memberKindName, bool showMemberName = true)
+    internal SearchResultTM GetFrom(IMemberData member, string memberKindName, bool showMemberName = true)
     {
-        string name = CSharpTypeName.Of(member.ContainingType, useFullName: true);
-
-        if (showMemberName)
+        var localizedNames = GetLanguageSpecificData(lang =>
         {
-            name += $".{member.Name}";
-        }
+            string typeName = lang.GetTypeName(member.ContainingType);
+            string result = $"{member.ContainingType.Namespace}.{typeName}";
 
-        name += $" {memberKindName}";
+            if (showMemberName)
+            {
+                result += $".{member.Name}";
+            }
 
-        return new(name,
+            result += $" {memberKindName}";
+            return result;
+        });
+
+        return new(localizedNames,
             member.SummaryDocComment.Value,
             member.ContainingType.Id,
             member.Id);

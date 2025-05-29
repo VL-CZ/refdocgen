@@ -12,7 +12,7 @@ internal static class SpecialConstraintExtensions
     /// </summary>
     /// <param name="specialConstraint">The selected special constraint.</param>
     /// <returns>C# name of the constraint.</returns>
-    internal static string GetName(this SpecialTypeConstraint specialConstraint)
+    internal static string GetCSharpName(this SpecialTypeConstraint specialConstraint)
     {
         return specialConstraint switch
         {

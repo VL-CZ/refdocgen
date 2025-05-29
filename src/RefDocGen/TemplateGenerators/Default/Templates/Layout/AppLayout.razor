@@ -29,6 +29,8 @@
     <script>
         const savedTheme = localStorage.getItem('refdocgen-theme') || "light"; // get the saved theme
         document.documentElement.setAttribute('data-bs-theme', savedTheme); // set the 'data-bs-theme' attribute
+
+
     </script>
 
     <!-- Global CSS (Bootstrap + custom styles) -->
@@ -44,7 +46,7 @@
 </head>
 
 <body>
-    <MenuComponent NestingLevel="@NestingLevel" />
+    <TopMenu NestingLevel="@NestingLevel" />
 
     <div class="container my-4" data-id="page-body">
         @Body

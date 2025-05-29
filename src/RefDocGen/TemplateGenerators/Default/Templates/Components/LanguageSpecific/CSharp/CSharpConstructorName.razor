@@ -1,0 +1,14 @@
+@inherits ComponentBase
+@using RefDocGen.TemplateGenerators.Default.Templates.Components.LanguageSpecific.CSharp.Utils
+
+@code {
+    [Parameter]
+    public required ConstructorTM Constructor { get; set; }
+}
+
+<span class="refdocgen-text-tertiary">
+    @string.Join(' ', Constructor.Modifiers.CSharpData)
+</span>
+<span class="refdocgen-text-primary">
+    @Constructor.TypeName.CSharpData
+</span><ParametersString Parameters="@Constructor.Parameters" />

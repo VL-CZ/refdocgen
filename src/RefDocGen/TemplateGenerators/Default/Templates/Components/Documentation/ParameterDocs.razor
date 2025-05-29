@@ -12,15 +12,13 @@
         @foreach (var parameter in Parameters)
         {
             <div data-id="parameter-data">
-                @foreach (var attr in parameter.Attributes)
-                {
-                    <AttributeString Attribute="@attr" />
-                    <span> </span>
-                }
+                <AttributeList Attributes="@parameter.Attributes" />
 
-                <samp data-id="parameter-name">
-                    <ParameterName Parameter="@parameter" />
-                </samp>
+                <div data-id="parameter-name">
+                    <samp>
+                        <ParameterName Parameter="@parameter" />
+                    </samp>
+                </div>
 
                 <div class="text-body-secondary mb-2" data-id="parameter-doc">
                     @if (parameter.DocComment is not null)

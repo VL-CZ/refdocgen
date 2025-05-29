@@ -1,3 +1,4 @@
+using RefDocGen.TemplateGenerators.Shared.Languages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
@@ -15,7 +16,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 public record EnumMemberTM(
     string Id,
     string Name,
-    string? Value,
+    LanguageSpecificData<string>? Value,
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,

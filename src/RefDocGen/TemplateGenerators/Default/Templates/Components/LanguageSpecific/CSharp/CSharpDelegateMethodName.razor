@@ -1,0 +1,16 @@
+@inherits ComponentBase
+@using RefDocGen.TemplateGenerators.Default.Templates.Components.LanguageSpecific.CSharp.Utils
+
+@code {
+    [Parameter]
+    public required DelegateTypeTM Delegate { get; set; }
+}
+
+
+<span class="refdocgen-text-tertiary">@string.Join(' ', Delegate.Modifiers.CSharpData)</span>
+
+<TypeLink Type="@Delegate.ReturnType" />
+
+<span>
+    @Delegate.Name
+</span><TypeParametersString TypeParameters="@Delegate.TypeParameters" /><ParametersString Parameters="@Delegate.Parameters" />

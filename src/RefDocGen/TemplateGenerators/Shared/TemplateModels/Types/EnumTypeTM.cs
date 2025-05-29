@@ -1,3 +1,4 @@
+using RefDocGen.TemplateGenerators.Shared.Languages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
@@ -26,10 +27,14 @@ public record EnumTypeTM(
     string Name,
     string Namespace,
     string Assembly,
-    string[] Modifiers,
+    LanguageSpecificData<string[]> Modifiers,
     EnumMemberTM[] Members,
     AttributeTM[] Attributes,
     TypeLinkTM? DeclaringType,
     string? SummaryDocComment,
     string? RemarksDocComment,
-    string[] SeeAlsoDocComments) : ITemplateModelWithId;
+    string[] SeeAlsoDocComments) : ITemplateModelWithId, ITypeDeclarationNameTM
+{
+    /// <inheritdoc/>
+    TypeParameterTM[] ITypeDeclarationNameTM.TypeParameters => [];
+}

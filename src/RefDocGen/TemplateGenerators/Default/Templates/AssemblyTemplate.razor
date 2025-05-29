@@ -1,4 +1,5 @@
 @using RefDocGen.TemplateGenerators.Shared.TemplateModels.Assemblies
+@using RefDocGen.TemplateGenerators.Shared.TemplateModels.Language
 @using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu
 @inherits ComponentBase
 
@@ -11,24 +12,29 @@
 
     [Parameter]
     public required string[]? Versions { get; set; }
+
+    [Parameter]
+    public required LanguageTM[] Languages { get; set; }
 }
 
 <CascadingValue Value="TopMenuData">
     <CascadingValue Value="Versions">
-        <LayoutView Layout="typeof(AppLayout)">
+        <CascadingValue Value="Languages">
+            <LayoutView Layout="typeof(AppLayout)">
 
-            <h1 class="display-4">
-                <samp>
-                    <span class="refdocgen-text-tertiary">assembly</span>
-                    <span class="refdocgen-text-primary">@Model.Name</span>
-                </samp>
-            </h1>
-            <hr />
+                <h1 class="display-4">
+                    <samp>
+                        <span class="refdocgen-text-tertiary">assembly</span>
+                        <span class="refdocgen-text-primary">@Model.Name</span>
+                    </samp>
+                </h1>
+                <hr />
 
-            @foreach (var ns in Model.Namespaces)
-            {
-                <NamespaceTypeList Namespace="@ns" />
-            }
-        </LayoutView>
+                @foreach (var ns in Model.Namespaces)
+                {
+                    <NamespaceTypeList Namespace="@ns" />
+                }
+            </LayoutView>
+        </CascadingValue>
     </CascadingValue>
 </CascadingValue>

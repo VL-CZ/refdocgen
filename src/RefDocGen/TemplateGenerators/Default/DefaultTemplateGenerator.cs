@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using RefDocGen.TemplateGenerators.Shared;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
+using RefDocGen.TemplateGenerators.Shared.Languages;
 
 #pragma warning disable IDE0005 // add the namespace containing the Razor templates
 using RefDocGen.TemplateGenerators.Default.Templates;
@@ -22,6 +23,14 @@ internal class DefaultTemplateGenerator : RazorTemplateGenerator<
     SearchTemplate>
 {
     /// <summary>
+    /// Languages available in the documentation.
+    /// </summary>
+    private static readonly ILanguageConfiguration[] availableLanguages = [
+        new CSharpLanguageConfiguration(),
+        new OtherLanguageConfiguration()
+    ];
+
+    /// <summary>
     /// Initialize a new instance of <see cref="DefaultTemplateGenerator"/> class.
     /// </summary>
     /// <param name="htmlRenderer">Renderer of the Razor components.</param>
@@ -33,6 +42,7 @@ internal class DefaultTemplateGenerator : RazorTemplateGenerator<
             htmlRenderer,
             new DocCommentTransformer(new DocCommentHtmlConfiguration()),
             outputDir,
+            availableLanguages,
             staticPagesDirectory,
             docVersion)
     {

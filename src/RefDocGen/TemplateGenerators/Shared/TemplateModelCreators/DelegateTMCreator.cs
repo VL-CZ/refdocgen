@@ -1,7 +1,7 @@
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
+using RefDocGen.TemplateGenerators.Shared.Languages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
-using RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 
@@ -10,7 +10,8 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 /// </summary>
 internal class DelegateTMCreator : TypeTMCreator
 {
-    public DelegateTMCreator(IDocCommentTransformer docCommentTransformer) : base(docCommentTransformer)
+    public DelegateTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageConfiguration> availableLanguages)
+        : base(docCommentTransformer, availableLanguages)
     {
     }
 
@@ -21,24 +22,24 @@ internal class DelegateTMCreator : TypeTMCreator
     /// <returns>A <see cref="DelegateTypeTM"/> instance based on the provided <paramref name="delegateType"/>.</returns>
     internal DelegateTypeTM GetFrom(IDelegateTypeData delegateType)
     {
-        List<Keyword> modifiers = [delegateType.AccessModifier.ToKeyword()];
+        var modifiers = GetLanguageSpecificData(langData => langData.GetModifiers(delegateType));
 
         return new DelegateTypeTM(
-            delegateType.Id,
-            GetTypeName(delegateType),
-            delegateType.Namespace,
-            delegateType.Assembly,
-            modifiers.GetStrings(),
-            GetTypeLink(delegateType.ReturnType),
-            delegateType.ReturnType.IsVoid,
-            GetTemplateModels(delegateType.Parameters),
-            GetTemplateModels(delegateType.TypeParameters),
-            GetTemplateModels(delegateType.Attributes),
-            GetTypeLinkOrNull(delegateType.DeclaringType),
-            ToHtmlString(delegateType.SummaryDocComment),
-            ToHtmlString(delegateType.RemarksDocComment),
-            ToHtmlString(delegateType.ReturnValueDocComment),
-            GetHtmlStrings(delegateType.SeeAlsoDocComments),
-            GetTemplateModels(delegateType.Exceptions));
+            Id: delegateType.Id,
+            Name: GetTypeName(delegateType),
+            Namespace: delegateType.Namespace,
+            Assembly: delegateType.Assembly,
+            Modifiers: modifiers,
+            ReturnType: GetTypeLink(delegateType.ReturnType),
+            ReturnsVoid: delegateType.ReturnType.IsVoid,
+            Parameters: GetTemplateModels(delegateType.Parameters),
+            TypeParameters: GetTemplateModels(delegateType.TypeParameters),
+            Attributes: GetTemplateModels(delegateType.Attributes),
+            DeclaringType: GetTypeLinkOrNull(delegateType.DeclaringType),
+            SummaryDocComment: ToHtmlString(delegateType.SummaryDocComment),
+            RemarksDocComment: ToHtmlString(delegateType.RemarksDocComment),
+            ReturnsDocComment: ToHtmlString(delegateType.ReturnValueDocComment),
+            SeeAlsoDocComments: GetHtmlStrings(delegateType.SeeAlsoDocComments),
+            Exceptions: GetTemplateModels(delegateType.Exceptions));
     }
 }

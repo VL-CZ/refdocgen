@@ -21,7 +21,7 @@ public interface IObjectTypeData : ITypeDeclaration
     /// <summary>
     /// Kind of the type.
     /// </summary>
-    TypeKind Kind { get; }
+    ObjectTypeKind Kind { get; }
 
     /// <summary>
     /// Checks if the type is sealed (i.e. cannot be inherited)

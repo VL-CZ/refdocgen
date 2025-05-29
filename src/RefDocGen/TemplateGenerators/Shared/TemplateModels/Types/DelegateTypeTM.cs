@@ -1,3 +1,4 @@
+using RefDocGen.TemplateGenerators.Shared.Languages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
@@ -33,7 +34,7 @@ public record DelegateTypeTM(
     string Name,
     string Namespace,
     string Assembly,
-    string[] Modifiers,
+    LanguageSpecificData<string[]> Modifiers,
     TypeLinkTM ReturnType,
     bool ReturnsVoid,
     ParameterTM[] Parameters,
@@ -44,4 +45,4 @@ public record DelegateTypeTM(
     string? RemarksDocComment,
     string? ReturnsDocComment,
     string[] SeeAlsoDocComments,
-    ExceptionTM[] Exceptions) : ITemplateModelWithId;
+    ExceptionTM[] Exceptions) : ITemplateModelWithId, ITypeDeclarationNameTM;

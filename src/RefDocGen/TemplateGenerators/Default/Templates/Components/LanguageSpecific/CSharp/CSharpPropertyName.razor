@@ -1,0 +1,26 @@
+@inherits ComponentBase
+@using RefDocGen.TemplateGenerators.Default.Templates.Components.LanguageSpecific.CSharp.Utils
+
+@code {
+    [Parameter]
+    public required PropertyTM Property { get; set; }
+}
+
+
+<span class="refdocgen-text-tertiary">
+    @string.Join(' ', Property.Modifiers.CSharpData)
+</span>
+
+<TypeLink Type="@Property.Type" />
+
+<span class="refdocgen-text-primary">
+    @Property.Name
+</span>
+
+<AccessorMethods HasGetter="@Property.HasGetter"
+                 HasSetter="@Property.HasSetter"
+                 IsSetterInitOnly="@Property.IsSetterInitOnly"
+                 GetterModifiers="@Property.GetterModifiers.CSharpData"
+                 SetterModifiers="@Property.SetterModifiers.CSharpData" />
+
+<LiteralValueSuffix Value="@Property.ConstantValue" />

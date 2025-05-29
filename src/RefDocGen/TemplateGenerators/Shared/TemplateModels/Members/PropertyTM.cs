@@ -1,3 +1,4 @@
+using RefDocGen.TemplateGenerators.Shared.Languages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
@@ -50,10 +51,10 @@ public record PropertyTM(
     bool HasGetter,
     bool HasSetter,
     bool IsSetterInitOnly,
-    string[] Modifiers,
-    string[] GetterModifiers,
-    string[] SetterModifiers,
-    string? ConstantValue,
+    LanguageSpecificData<string[]> Modifiers,
+    LanguageSpecificData<string[]> GetterModifiers,
+    LanguageSpecificData<string[]> SetterModifiers,
+    LanguageSpecificData<string>? ConstantValue,
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,

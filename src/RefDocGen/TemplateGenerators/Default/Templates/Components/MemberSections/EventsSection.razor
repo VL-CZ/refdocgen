@@ -13,15 +13,7 @@
             <div class="border p-2 mb-2" id="@e.Id" data-id="member-data">
                 <h6 class="mb-1" data-id="member-name">
                     <samp>
-                        <span class="refdocgen-text-tertiary">
-                            @string.Join(' ', e.Modifiers)
-                        </span>
-
-                        <TypeLink Type="@e.Type" />
-
-                        <span class="refdocgen-text-primary">
-                            @e.Name
-                        </span>
+                        <EventName Event="@e"/>
 
                         <AnchorLink Id="@e.Id" />
                     </samp>
@@ -37,7 +29,7 @@
 
                 <SummaryDoc DocComment="@e.SummaryDocComment" />
 
-                <AttributeList Attributes="@e.Attributes" />
+                <AttributesSection Attributes="@e.Attributes" />
 
                 <RemarksDoc DocComment="@e.RemarksDocComment" />
 

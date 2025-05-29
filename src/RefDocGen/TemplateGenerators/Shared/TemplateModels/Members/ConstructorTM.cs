@@ -1,3 +1,4 @@
+using RefDocGen.TemplateGenerators.Shared.Languages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
@@ -6,6 +7,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// Represents the template model of a constructor.
 /// </summary>
 /// <param name="Id">Identifier of the constructor.</param>
+/// <param name="TypeName">Name of the containing type.</param>
 /// <param name="Parameters">Collection of the constructor parameters.</param>
 /// <param name="SummaryDocComment"><c>summary</c> documentation comment for the constructor. <c>null</c> if the doc comment is not provided.</param>
 /// <param name="RemarksDocComment"><c>remarks</c> documentation comment for the constructor. <c>null</c> if the doc comment is not provided.</param>
@@ -17,8 +19,9 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// <param name="Attributes">Array of attributes applied to the constructor.</param>
 public record ConstructorTM(
     string Id,
+    LanguageSpecificData<string> TypeName,
     ParameterTM[] Parameters,
-    string[] Modifiers,
+    LanguageSpecificData<string[]> Modifiers,
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,

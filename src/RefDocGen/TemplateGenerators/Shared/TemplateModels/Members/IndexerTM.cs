@@ -1,3 +1,4 @@
+using RefDocGen.TemplateGenerators.Shared.Languages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
@@ -44,9 +45,9 @@ public record IndexerTM(
     bool HasGetter,
     bool HasSetter,
     bool IsSetterInitOnly,
-    string[] Modifiers,
-    string[] GetterModifiers,
-    string[] SetterModifiers,
+    LanguageSpecificData<string[]> Modifiers,
+    LanguageSpecificData<string[]> GetterModifiers,
+    LanguageSpecificData<string[]> SetterModifiers,
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,

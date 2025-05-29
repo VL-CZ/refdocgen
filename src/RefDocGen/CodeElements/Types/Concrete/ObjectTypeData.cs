@@ -76,11 +76,11 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
     public bool IsSealed => TypeObject.IsSealed;
 
     /// <inheritdoc/>
-    public TypeKind Kind => TypeObject.IsInterface
-        ? TypeKind.Interface
+    public ObjectTypeKind Kind => TypeObject.IsInterface
+        ? ObjectTypeKind.Interface
         : TypeObject.IsValueType
-            ? TypeKind.ValueType
-            : TypeKind.Class;
+            ? ObjectTypeKind.ValueType
+            : ObjectTypeKind.Class;
 
     /// <inheritdoc/>
     public bool IsByRefLike => TypeObject.IsByRefLike;
@@ -119,7 +119,7 @@ internal class ObjectTypeData : TypeDeclaration, IObjectTypeData
     public IEnumerable<IEnumTypeData> NestedEnums { get; private set; } = [];
 
     /// <inheritdoc/>
-    public override bool IsInterface => Kind == TypeKind.Interface;
+    public override bool IsInterface => Kind == ObjectTypeKind.Interface;
 
     /// <summary>
     /// Adds the members to the type.

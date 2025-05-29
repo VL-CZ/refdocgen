@@ -1,32 +1,35 @@
 using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Types;
-using RefDocGen.CodeElements.Types.Abstract;
-using RefDocGen.CodeElements.Types.Abstract.Delegate;
-using RefDocGen.CodeElements.Types.Abstract.Enum;
+using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
+using RefDocGen.TemplateGenerators.Shared.Languages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
-using RefDocGen.TemplateGenerators.Shared.Tools;
-using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 
 /// <summary>
 /// Class responsible for creating template models representing the namespaces of a program.
 /// </summary>
-internal class NamespaceTMCreator
+internal class NamespaceTMCreator : BaseTMCreator
 {
+
+    public NamespaceTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageConfiguration> availableLanguages)
+        : base(docCommentTransformer, availableLanguages)
+    {
+    }
+
     /// <summary>
     /// Creates an enumerable of <see cref="NamespaceTM"/> instances based on the provided <see cref="NamespaceData"/>.
     /// </summary>
     /// <param name="namespaceData">The <see cref="NamespaceData"/> instance representing the namespace.</param>
     /// <returns>A <see cref="NamespaceTM"/> instance based on the provided <paramref name="namespaceData"/>.</returns>
-    internal static NamespaceTM GetFrom(NamespaceData namespaceData)
+    internal NamespaceTM GetFrom(NamespaceData namespaceData)
     {
-        Dictionary<TypeKind, IEnumerable<TypeNameTM>> namespaceTypes = new()
+        Dictionary<ObjectTypeKind, IEnumerable<TypeNameTM>> namespaceTypes = new()
         {
-            [TypeKind.Class] = [],
-            [TypeKind.ValueType] = [],
-            [TypeKind.Interface] = [],
+            [ObjectTypeKind.Class] = [],
+            [ObjectTypeKind.ValueType] = [],
+            [ObjectTypeKind.Interface] = [],
         };
 
         // get namespace classes, value types and interfaces
@@ -34,57 +37,27 @@ internal class NamespaceTMCreator
         {
             namespaceTypes[typeKind] = namespaceData.ObjectTypes // select the types of the given kind, ordered by their name
                 .Where(t => t.Kind == typeKind)
-                .Select(GetFrom)
-                .OrderBy(t => t.Name);
+                .Select(GetTypeNameFrom)
+                .OrderBy(t => t.Name.CSharpData);
         }
 
         // get namespace enums
         var namespaceEnums = namespaceData.Enums
-            .Select(GetFrom)
-            .OrderBy(e => e.Name);
+            .Select(GetTypeNameFrom)
+            .OrderBy(e => e.Name.CSharpData);
 
         // get namespace delegates
         var namespaceDelegates = namespaceData.Delegates
-            .Select(GetFrom)
-            .OrderBy(d => d.Name);
+            .Select(GetTypeNameFrom)
+            .OrderBy(d => d.Name.CSharpData);
 
         return new NamespaceTM(
             namespaceData.Name,
-            namespaceTypes[TypeKind.Class],
-            namespaceTypes[TypeKind.ValueType],
-            namespaceTypes[TypeKind.Interface],
+            namespaceTypes[ObjectTypeKind.Class],
+            namespaceTypes[ObjectTypeKind.ValueType],
+            namespaceTypes[ObjectTypeKind.Interface],
             namespaceEnums,
             namespaceDelegates
             );
-    }
-
-    /// <summary>
-    /// Creates a <see cref="TypeNameTM"/> instance based on the provided <see cref="IObjectTypeData"/> object.
-    /// </summary>
-    /// <param name="type">The <see cref="IObjectTypeData"/> instance representing the type.</param>
-    /// <returns>A <see cref="TypeNameTM"/> instance based on the provided <paramref name="type"/>.</returns>
-    private static TypeNameTM GetFrom(IObjectTypeData type)
-    {
-        return new TypeNameTM(type.Id, type.Kind.GetName(), CSharpTypeName.Of(type), type.SummaryDocComment.Value);
-    }
-
-    /// <summary>
-    /// Creates a <see cref="TypeNameTM"/> instance based on the provided <see cref="IEnumTypeData"/> object.
-    /// </summary>
-    /// <param name="enumData">The <see cref="IEnumTypeData"/> instance representing the enum.</param>
-    /// <returns>A <see cref="TypeNameTM"/> instance based on the provided <paramref name="enumData"/>.</returns>
-    private static TypeNameTM GetFrom(IEnumTypeData enumData)
-    {
-        return new TypeNameTM(enumData.Id, "enum", CSharpTypeName.Of(enumData), enumData.SummaryDocComment.Value);
-    }
-
-    /// <summary>
-    /// Creates a <see cref="TypeNameTM"/> instance based on the provided <see cref="IDelegateTypeData"/> object.
-    /// </summary>
-    /// <param name="delegateData">The <see cref="IDelegateTypeData"/> instance representing the delegate.</param>
-    /// <returns>A <see cref="TypeNameTM"/> instance based on the provided <paramref name="delegateData"/>.</returns>
-    private static TypeNameTM GetFrom(IDelegateTypeData delegateData)
-    {
-        return new TypeNameTM(delegateData.Id, "delegate", CSharpTypeName.Of(delegateData), delegateData.SummaryDocComment.Value);
     }
 }

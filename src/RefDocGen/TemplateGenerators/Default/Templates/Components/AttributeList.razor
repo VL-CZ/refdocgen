@@ -5,16 +5,12 @@
     public required IEnumerable<AttributeTM> Attributes { get; set; }
 }
 
-@if (Attributes.Any())
+@foreach (var attr in Attributes)
 {
-    <h3 class="lead mt-3">Attributes</h3>
-    <div class="mx-2" data-id="attributes-section">
-        @foreach (var attr in Attributes)
-        {
-            <div data-id="attribute-data">
-                <AttributeString Attribute="@attr" />
-            </div>
-        }
+    <div data-id="attribute-data">
+        <samp>
+            <AttributeName Attribute="@attr" />
+        </samp>
     </div>
 }
 

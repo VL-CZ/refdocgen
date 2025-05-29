@@ -1,10 +1,9 @@
 using RefDocGen.CodeElements.Members.Abstract.Enum;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
+using RefDocGen.TemplateGenerators.Shared.Languages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
-using RefDocGen.TemplateGenerators.Shared.Tools;
-using RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 
@@ -13,7 +12,8 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 /// </summary>
 internal class EnumTMCreator : TypeTMCreator
 {
-    public EnumTMCreator(IDocCommentTransformer docCommentTransformer) : base(docCommentTransformer)
+    public EnumTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageConfiguration> availableLanguages)
+        : base(docCommentTransformer, availableLanguages)
     {
     }
 
@@ -25,20 +25,20 @@ internal class EnumTMCreator : TypeTMCreator
     internal EnumTypeTM GetFrom(IEnumTypeData enumType)
     {
         var enumMemberTMs = enumType.Members.OrderBy(m => m.Value).Select(GetFrom).ToArray();
-        List<Keyword> modifiers = [enumType.AccessModifier.ToKeyword()];
+        var modifiers = GetLanguageSpecificData(langData => langData.GetModifiers(enumType));
 
         return new EnumTypeTM(
-            enumType.Id,
-            GetTypeName(enumType),
-            enumType.Namespace,
-            enumType.Assembly,
-            modifiers.GetStrings(),
-            enumMemberTMs,
-            GetTemplateModels(enumType.Attributes),
-            GetTypeLinkOrNull(enumType.DeclaringType),
-            ToHtmlString(enumType.SummaryDocComment),
-            ToHtmlString(enumType.RemarksDocComment),
-            GetHtmlStrings(enumType.SeeAlsoDocComments));
+            Id: enumType.Id,
+            Name: GetTypeName(enumType),
+            Namespace: enumType.Namespace,
+            Assembly: enumType.Assembly,
+            Modifiers: modifiers,
+            Members: enumMemberTMs,
+            Attributes: GetTemplateModels(enumType.Attributes),
+            DeclaringType: GetTypeLinkOrNull(enumType.DeclaringType),
+            SummaryDocComment: ToHtmlString(enumType.SummaryDocComment),
+            RemarksDocComment: ToHtmlString(enumType.RemarksDocComment),
+            SeeAlsoDocComments: GetHtmlStrings(enumType.SeeAlsoDocComments));
     }
 
     /// <summary>
@@ -48,13 +48,14 @@ internal class EnumTMCreator : TypeTMCreator
     /// <returns>A <see cref="EnumMemberTM"/> instance based on the provided <paramref name="enumMember"/>.</returns>
     internal EnumMemberTM GetFrom(IEnumMemberData enumMember)
     {
+
         return new EnumMemberTM(
-            enumMember.Id,
-            enumMember.Name,
-            LiteralValueFormatter.Format(enumMember.Value),
-            GetTemplateModels(enumMember.Attributes),
-            ToHtmlString(enumMember.SummaryDocComment),
-            ToHtmlString(enumMember.RemarksDocComment),
-            GetHtmlStrings(enumMember.SeeAlsoDocComments));
+            Id: enumMember.Id,
+            Name: enumMember.Name,
+            Value: GetLanguageSpecificDefaultValue(enumMember.Value),
+            Attributes: GetTemplateModels(enumMember.Attributes),
+            SummaryDocComment: ToHtmlString(enumMember.SummaryDocComment),
+            RemarksDocComment: ToHtmlString(enumMember.RemarksDocComment),
+            SeeAlsoDocComments: GetHtmlStrings(enumMember.SeeAlsoDocComments));
     }
 }

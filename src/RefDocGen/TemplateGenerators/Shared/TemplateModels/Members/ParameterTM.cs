@@ -1,3 +1,4 @@
+using RefDocGen.TemplateGenerators.Shared.Languages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
@@ -19,7 +20,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 public record ParameterTM(
     string Name,
     TypeLinkTM Type,
-    string[] Modifiers,
+    LanguageSpecificData<string[]> Modifiers,
     AttributeTM[] Attributes,
-    string? DefaultValue,
+    LanguageSpecificData<string>? DefaultValue,
     string? DocComment);

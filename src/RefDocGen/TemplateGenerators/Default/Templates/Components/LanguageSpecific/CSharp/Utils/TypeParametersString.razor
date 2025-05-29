@@ -1,0 +1,23 @@
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required TypeParameterTM[] TypeParameters { get; set; }
+}
+
+@if (TypeParameters.Any())
+{
+    <span>&lt;</span>
+
+    @foreach (var tp in TypeParameters)
+    {
+        <TypeParameterName TypeParameter="@tp" />
+
+        @if (tp != TypeParameters[^1])
+        {
+            <span>, </span>
+        }
+    }
+
+    <span>&gt;</span>
+}

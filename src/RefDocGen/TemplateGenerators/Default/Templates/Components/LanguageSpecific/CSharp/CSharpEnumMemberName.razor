@@ -1,0 +1,14 @@
+@inherits ComponentBase
+@using RefDocGen.TemplateGenerators.Default.Templates.Components.LanguageSpecific.CSharp.Utils
+
+@code {
+    [Parameter]
+    public required EnumMemberTM EnumMember { get; set; }
+}
+
+<span>
+    @EnumMember.Name
+</span>
+
+<LiteralValueSuffix Value="@EnumMember.Value" />
+

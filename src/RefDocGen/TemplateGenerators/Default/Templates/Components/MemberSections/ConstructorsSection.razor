@@ -3,9 +3,6 @@
 @code {
     [Parameter]
     public required ConstructorTM[] Constructors { get; set; }
-
-    [Parameter]
-    public required string TypeName { get; set; }
 }
 
 <h2 class="display-5 mt-2">Constructors</h2>
@@ -16,12 +13,7 @@
             <div class="border p-2 mb-2" id="@constructor.Id" data-id="member-data">
                 <h6 class="mb-1" data-id="member-name">
                     <samp>
-                        <span class="refdocgen-text-tertiary">
-                            @string.Join(' ', constructor.Modifiers)
-                        </span>
-                        <span class="refdocgen-text-primary">
-                            @TypeName
-                        </span><ParametersString Parameters="@constructor.Parameters" />
+                        <ConstructorName Constructor="@constructor"/>
 
                         <AnchorLink Id="@constructor.Id" />
                     </samp>
@@ -32,7 +24,7 @@
 
                 <ParameterDocs Parameters="@constructor.Parameters" />
 
-                <AttributeList Attributes="@constructor.Attributes" />
+                <AttributesSection Attributes="@constructor.Attributes" />
 
                 <!-- Remarks doc comment -->
                 <RemarksDoc DocComment="@constructor.RemarksDocComment" />
