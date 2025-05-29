@@ -25,7 +25,7 @@ internal class DefaultTemplateGenerator : RazorTemplateGenerator<
     /// <summary>
     /// Languages available in the documentation.
     /// </summary>
-    private static readonly ILanguageConfiguration[] languages = [
+    private static readonly ILanguageConfiguration[] availableLanguages = [
         new CSharpLanguageConfiguration(),
         new OtherLanguageConfiguration()
     ];
@@ -42,7 +42,7 @@ internal class DefaultTemplateGenerator : RazorTemplateGenerator<
             htmlRenderer,
             new DocCommentTransformer(new DocCommentHtmlConfiguration()),
             outputDir,
-            languages,
+            availableLanguages,
             staticPagesDirectory,
             docVersion)
     {

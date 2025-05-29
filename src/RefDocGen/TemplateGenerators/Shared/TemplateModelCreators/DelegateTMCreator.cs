@@ -10,8 +10,8 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 /// </summary>
 internal class DelegateTMCreator : TypeTMCreator
 {
-    public DelegateTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageConfiguration> languages)
-        : base(docCommentTransformer, languages)
+    public DelegateTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageConfiguration> availableLanguages)
+        : base(docCommentTransformer, availableLanguages)
     {
     }
 

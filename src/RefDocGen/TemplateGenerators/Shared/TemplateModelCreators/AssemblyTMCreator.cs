@@ -15,10 +15,10 @@ internal class AssemblyTMCreator : BaseTMCreator
     /// </summary>
     private readonly NamespaceTMCreator nsTMCreator;
 
-    public AssemblyTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageConfiguration> languages)
-        : base(docCommentTransformer, languages)
+    public AssemblyTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageConfiguration> availableLanguages)
+        : base(docCommentTransformer, availableLanguages)
     {
-        nsTMCreator = new(docCommentTransformer, languages);
+        nsTMCreator = new(docCommentTransformer, availableLanguages);
     }
 
     /// <summary>

@@ -12,8 +12,8 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 /// </summary>
 internal class EnumTMCreator : TypeTMCreator
 {
-    public EnumTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageConfiguration> languages)
-        : base(docCommentTransformer, languages)
+    public EnumTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageConfiguration> availableLanguages)
+        : base(docCommentTransformer, availableLanguages)
     {
     }
 

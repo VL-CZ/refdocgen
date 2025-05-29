@@ -20,7 +20,7 @@ internal abstract class BaseTMCreator
     /// <summary>
     /// Configuration of languages available in the documentation.
     /// </summary>
-    protected IEnumerable<ILanguageConfiguration> languages;
+    protected IEnumerable<ILanguageConfiguration> availableLanguages;
 
     /// <summary>
     /// Transformer of the XML doc comments into HTML.
@@ -38,13 +38,13 @@ internal abstract class BaseTMCreator
     /// <param name="docCommentTransformer">
     /// <inheritdoc cref="docCommentTransformer"/>.
     /// </param>
-    /// <param name="languages">
-    /// <inheritdoc cref="languages"/>
+    /// <param name="availableLanguages">
+    /// <inheritdoc cref="availableLanguages"/>
     /// </param>
-    protected BaseTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageConfiguration> languages)
+    protected BaseTMCreator(IDocCommentTransformer docCommentTransformer, IEnumerable<ILanguageConfiguration> availableLanguages)
     {
         this.docCommentTransformer = docCommentTransformer;
-        this.languages = languages;
+        this.availableLanguages = availableLanguages;
         typeUrlResolver = new(docCommentTransformer.TypeRegistry);
     }
 
@@ -168,7 +168,7 @@ internal abstract class BaseTMCreator
     /// <returns>Language specific data obtained by executing the <paramref name="languageFunction"/> on each available language.</returns>
     protected LanguageSpecificData<T> GetLanguageSpecificData<T>(Func<ILanguageConfiguration, T> languageFunction)
     {
-        var languageData = languages.
+        var languageData = availableLanguages.
             ToDictionary(lang => lang.LanguageId, lang => languageFunction(lang));
 
         return new LanguageSpecificData<T>(languageData);
