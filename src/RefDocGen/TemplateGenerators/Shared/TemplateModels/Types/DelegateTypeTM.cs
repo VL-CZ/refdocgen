@@ -33,7 +33,7 @@ public record DelegateTypeTM(
     string Name,
     string Namespace,
     string Assembly,
-    LocalizedData<string[]> Modifiers,
+    LanguageSpecificData<string[]> Modifiers,
     TypeLinkTM ReturnType,
     bool ReturnsVoid,
     ParameterTM[] Parameters,

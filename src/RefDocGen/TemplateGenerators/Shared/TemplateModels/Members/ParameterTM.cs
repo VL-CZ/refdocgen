@@ -19,7 +19,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 public record ParameterTM(
     string Name,
     TypeLinkTM Type,
-    LocalizedData<string[]> Modifiers,
+    LanguageSpecificData<string[]> Modifiers,
     AttributeTM[] Attributes,
-    LocalizedData<string>? DefaultValue,
+    LanguageSpecificData<string>? DefaultValue,
     string? DocComment);

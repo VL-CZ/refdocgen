@@ -7,13 +7,10 @@ using RefDocGen.CodeElements.Types.Abstract.Enum;
 using RefDocGen.TemplateGenerators.Shared.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools.Keywords;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
-using System.Text.Json.Serialization;
 
 namespace RefDocGen.TemplateGenerators.Shared;
 
 public enum Language { CSharp, Other }
-
-internal readonly record struct PropertyModifiers(string[] Modifiers, string[] GetterModifiers, string[] SetterModifiers);
 
 internal interface ILanguageSpecificData
 {
@@ -293,20 +290,3 @@ internal class CSharpLanguageData : ILanguageSpecificData
         return modifiers;
     }
 }
-
-public class LocalizedData<T>
-{
-    [JsonInclude]
-    internal readonly Dictionary<string, T> data = [];
-
-    public LocalizedData(Dictionary<string, T> data)
-    {
-        this.data = data;
-    }
-
-    public T this[string language] => data[language];
-
-    public T CSharpData => data[CSharpLanguageData.languageId];
-}
-
-public record LanguageTM(string Name, string Id);

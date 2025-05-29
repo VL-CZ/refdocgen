@@ -13,7 +13,7 @@ public interface ITypeDeclarationNameTM
     /// <summary>
     /// Collection of modifiers for the type (e.g., public, abstract).
     /// </summary>
-    LocalizedData<string[]> Modifiers { get; }
+    LanguageSpecificData<string[]> Modifiers { get; }
 
     /// <summary>
     /// Template models of the generic type parameters contained in the type.

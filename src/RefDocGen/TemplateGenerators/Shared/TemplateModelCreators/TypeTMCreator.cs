@@ -131,7 +131,7 @@ internal abstract class TypeTMCreator : BaseTMCreator
     /// <returns>A <see cref="AttributeTM"/> instance based on the provided <paramref name="attribute"/>.</returns>
     protected AttributeTM GetFrom(IAttributeData attribute)
     {
-        LocalizedData<string>?[] constructorArgumentTMs = [.. attribute.ConstructorArgumentValues.Select(GetLocalizedDefaultValue)];
+        LanguageSpecificData<string>?[] constructorArgumentTMs = [.. attribute.ConstructorArgumentValues.Select(GetLocalizedDefaultValue)];
         var namedArgumentTMs = attribute.NamedArguments.Select(na => GetFrom(na, attribute)).ToArray();
 
         var typeLink = new TypeLinkTM(
@@ -160,7 +160,7 @@ internal abstract class TypeTMCreator : BaseTMCreator
             GetLocalizedDefaultValue(argument.Value));
     }
 
-    protected LocalizedData<string>? GetLocalizedDefaultValue(object? constantValue) // TODO
+    protected LanguageSpecificData<string>? GetLocalizedDefaultValue(object? constantValue) // TODO
     {
         if (constantValue == DBNull.Value)
         {

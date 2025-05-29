@@ -10,6 +10,7 @@ using RefDocGen.TemplateGenerators.Shared.DocVersioning;
 using RefDocGen.TemplateGenerators.Shared.StaticPages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Assemblies;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Language;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;

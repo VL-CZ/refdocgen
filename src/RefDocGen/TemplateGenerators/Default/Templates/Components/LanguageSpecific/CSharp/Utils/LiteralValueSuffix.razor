@@ -1,8 +1,9 @@
+@using RefDocGen.TemplateGenerators.Shared.TemplateModels
 @inherits ComponentBase
 
 @code {
     [Parameter]
-    public required LocalizedData<string>? Value { get; set; }
+    public required LanguageSpecificData<string>? Value { get; set; }
 }
 
 @if (Value is not null)

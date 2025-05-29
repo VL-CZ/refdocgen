@@ -7,4 +7,4 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 /// <param name="TypeKindName">Name of the type kind.</param>
 /// <param name="Name">Name of the type.</param>
 /// <param name="DocComment">Documentation comment for the type.</param>
-public record TypeNameTM(string Id, string TypeKindName, LocalizedData<string> Name, string? DocComment);
+public record TypeNameTM(string Id, string TypeKindName, LanguageSpecificData<string> Name, string? DocComment);

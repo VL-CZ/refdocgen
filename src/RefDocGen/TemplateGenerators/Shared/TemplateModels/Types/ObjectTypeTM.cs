@@ -36,7 +36,7 @@ public record ObjectTypeTM(
     string Name,
     string Namespace,
     string Assembly,
-    LocalizedData<string[]> Modifiers,
+    LanguageSpecificData<string[]> Modifiers,
     ConstructorTM[] Constructors,
     FieldTM[] Fields,
     PropertyTM[] Properties,

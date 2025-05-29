@@ -18,9 +18,9 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// <param name="Attributes">Array of attributes applied to the constructor.</param>
 public record ConstructorTM(
     string Id,
-    LocalizedData<string> TypeName,
+    LanguageSpecificData<string> TypeName,
     ParameterTM[] Parameters,
-    LocalizedData<string[]> Modifiers,
+    LanguageSpecificData<string[]> Modifiers,
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,

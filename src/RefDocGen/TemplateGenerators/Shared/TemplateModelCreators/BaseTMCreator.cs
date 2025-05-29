@@ -18,12 +18,12 @@ internal abstract class BaseTMCreator
 {
     protected IReadOnlyDictionary<Language, ILanguageSpecificData> languageSpecificData;
 
-    protected LocalizedData<T> GetLocalizedData<T>(Func<ILanguageSpecificData, T> function)
+    protected LanguageSpecificData<T> GetLocalizedData<T>(Func<ILanguageSpecificData, T> function)
     {
         var localizedData = languageSpecificData.
             ToDictionary(item => item.Value.LanguageId, item => function(item.Value));
 
-        return new LocalizedData<T>(localizedData);
+        return new LanguageSpecificData<T>(localizedData);
     }
 
     /// <summary>

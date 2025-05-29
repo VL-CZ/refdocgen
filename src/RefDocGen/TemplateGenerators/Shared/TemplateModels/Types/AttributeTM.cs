@@ -8,7 +8,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 /// <param name="NamedArguments">Array of attribute's named arguments.</param>
 public record AttributeTM(
     TypeLinkTM Type,
-    LocalizedData<string>?[] ConstructorArguments,
+    LanguageSpecificData<string>?[] ConstructorArguments,
     NamedAttributeArgumentTM[] NamedArguments);
 
 /// <summary>
@@ -16,4 +16,4 @@ public record AttributeTM(
 /// </summary>
 /// <param name="Name">Name of the argument.</param>
 /// <param name="Value">Value of the argument.</param>
-public record NamedAttributeArgumentTM(TypeLinkTM Name, LocalizedData<string>? Value);
+public record NamedAttributeArgumentTM(TypeLinkTM Name, LanguageSpecificData<string>? Value);
