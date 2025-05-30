@@ -3,11 +3,13 @@ using RefDocGen.CodeElements.Shared;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Attribute;
 using RefDocGen.CodeElements.Types.Abstract.Exception;
+using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.Languages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
+using System.Reflection;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 
@@ -112,13 +114,11 @@ internal abstract class TypeTMCreator : BaseTMCreator
     /// <returns>A <see cref="ExceptionTM"/> instance based on the provided <paramref name="exception"/>.</returns>
     protected ExceptionTM GetFrom(IExceptionDocumentation exception)
     {
-        var type = Type.GetType(exception.Id, false); // TODO
-
         var name = GetLanguageSpecificData(_ => exception.Id);
 
-        if (type is not null)
+        if (TypeTools.GetType(exception.Id) is ITypeNameData type) // type found by its ID string -> get its name
         {
-            name = GetLanguageSpecificData(lang => lang.GetTypeName(type.GetTypeNameData()));
+            name = GetLanguageSpecificData(lang => lang.GetTypeName(type));
         }
 
         return new ExceptionTM(
@@ -178,5 +178,20 @@ internal abstract class TypeTMCreator : BaseTMCreator
         }
 
         return GetLanguageSpecificData(lang => lang.FormatLiteralValue(constantValue));
+    }
+}
+
+internal class TypeTools
+{
+    internal static ITypeNameData? GetType(string typeId)
+    {
+        try
+        {
+            return Type.GetType(typeId, false)?.GetTypeNameData();
+        }
+        catch (Exception ex) when (ex is ArgumentNullException or TargetInvocationException or TypeLoadException or ArgumentException)
+        {
+            return null;
+        }
     }
 }

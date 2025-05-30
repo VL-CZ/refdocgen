@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RefDocGen.AssemblyAnalysis;
 using RefDocGen.CodeElements;
-using RefDocGen.CodeElements.Types.Concrete.TypeName;
 using RefDocGen.TemplateGenerators.Default;
 using RefDocGen.TemplateGenerators.Shared.Languages;
 
