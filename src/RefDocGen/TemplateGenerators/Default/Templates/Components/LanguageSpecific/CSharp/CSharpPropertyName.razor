@@ -6,6 +6,11 @@
     public required PropertyTM Property { get; set; }
 }
 
+@{
+    string propertyName = Property.ExplicitInterfaceType is not null
+            ? Property.ExplicitInterfaceType.Name.CSharpData + "." + Property.Name
+            : Property.Name;
+}
 
 <span class="refdocgen-text-tertiary">
     @string.Join(' ', Property.Modifiers.CSharpData)
@@ -14,7 +19,7 @@
 <GenericTypeLink Type="@Property.Type" />
 
 <span class="refdocgen-text-primary">
-    @Property.Name
+    @propertyName
 </span>
 
 <AccessorMethods HasGetter="@Property.HasGetter"

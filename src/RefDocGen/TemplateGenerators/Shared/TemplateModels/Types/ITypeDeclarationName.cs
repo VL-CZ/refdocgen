@@ -21,5 +21,13 @@ public interface ITypeDeclarationNameTM
     /// Template models of the generic type parameters contained in the type.
     /// </summary>
     TypeParameterTM[] TypeParameters { get; }
+
+    /// <summary>
+    /// The type that contains the declaration of this type.
+    /// <para>
+    /// <c>null</c> if the type is not nested.
+    /// </para>
+    /// </summary>
+    TypeLinkTM? DeclaringType { get; }
 }
 

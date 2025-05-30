@@ -100,8 +100,9 @@ internal interface ILanguageConfiguration
     /// Gets the type name (including its generic parameters) of the given <paramref name="type"/>.
     /// </summary>
     /// <param name="type">The type, whose name is returned.</param>
-    /// <returns>The name of the type, incuding its generic parameters.</returns>
-    string GetTypeName(ITypeNameData type);
+    /// <param name="includeTypeParameters">Specifies whether the type paramters should be included in the result.</param>
+    /// <returns>The name of the type.</returns>
+    string GetTypeName(ITypeNameData type, bool includeTypeParameters = true);
 
     /// <summary>
     /// Formats the given <paramref name="literalValue"/> as a language-specific literal.

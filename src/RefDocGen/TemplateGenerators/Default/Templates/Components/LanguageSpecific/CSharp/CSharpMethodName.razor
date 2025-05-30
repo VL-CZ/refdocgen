@@ -6,6 +6,11 @@
     public required MethodTM Method { get; set; }
 }
 
+@{
+    string methodName = Method.ExplicitInterfaceType is not null
+            ? Method.ExplicitInterfaceType.Name.CSharpData + "." + Method.Name
+            : Method.Name;
+}
 
 <span class="refdocgen-text-tertiary">
     @string.Join(' ', Method.Modifiers.CSharpData)
@@ -14,5 +19,5 @@
 <GenericTypeLink Type="@Method.ReturnType" />
 
 <span class="refdocgen-text-primary">
-    @Method.Name
+    @methodName
 </span><TypeParametersString TypeParameters="@Method.TypeParameters" /><ParametersString Parameters="@Method.Parameters" />

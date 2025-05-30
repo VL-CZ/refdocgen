@@ -9,7 +9,7 @@
 {
     var specialConstraints = tp.SpecialConstraints.CSharpData;
     var allConstraints = specialConstraints.Concat(
-        tp.TypeConstraints.Select(c => c.Name)
+        tp.TypeConstraints.Select(c => c.TypeLink.Name.CSharpData)
     );
 
     if (allConstraints.Any())

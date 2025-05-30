@@ -242,9 +242,9 @@ internal class CSharpLanguageConfiguration : ILanguageConfiguration
     }
 
     /// <inheritdoc/>
-    public string GetTypeName(ITypeNameData type)
+    public string GetTypeName(ITypeNameData type, bool includeTypeParameters = true)
     {
-        return CSharpTypeName.Of(type);
+        return CSharpTypeName.Of(type, includeTypeParameters);
     }
 
     /// <summary>

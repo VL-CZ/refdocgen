@@ -44,7 +44,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
 
         return new ObjectTypeTM(
             Id: type.Id,
-            Name: GetTypeName(type),
+            Name: type.ShortName,
             Namespace: type.Namespace,
             Assembly: type.Assembly,
             Modifiers: modifiers,
@@ -123,7 +123,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
 
         return new PropertyTM(
             Id: property.Id,
-            Name: GetCallableMemberName(property),
+            Name: property.Name,
             Type: GetGenericTypeLink(property.Type),
             HasGetter: property.Getter is not null,
             HasSetter: property.Setter is not null,
@@ -188,7 +188,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
 
         return new MethodTM(
             Id: method.Id,
-            Name: GetCallableMemberName(method),
+            Name: method.Name,
             Parameters: GetTemplateModels(method.Parameters),
             TypeParameters: GetTemplateModels(method.TypeParameters),
             ReturnType: GetGenericTypeLink(method.ReturnType),
@@ -248,7 +248,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
 
         return new EventTM(
             Id: eventData.Id,
-            Name: GetCallableMemberName(eventData),
+            Name: eventData.Name,
             Type: GetGenericTypeLink(eventData.Type),
             Modifiers: modifiers,
             Attributes: GetTemplateModels(eventData.Attributes),
@@ -260,23 +260,6 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             BaseDeclaringType: GetTypeMemberLinkOrNull(eventData.BaseDeclaringType, eventData),
             ExplicitInterfaceType: GetTypeMemberLinkOrNull(eventData.ExplicitInterfaceType, eventData),
             ImplementedInterfaces: GetInterfacesImplemented(eventData));
-    }
-
-    /// <summary>
-    /// Gets the C# name of <see cref="ICallableMemberData"/>.
-    /// </summary>
-    /// <param name="member">The provided member.</param>
-    /// <returns>C# name of the provided member.</returns>
-    private string GetCallableMemberName(ICallableMemberData member)
-    {
-        if (member.ExplicitInterfaceType is not null)
-        {
-            return CSharpTypeName.Of(member.ExplicitInterfaceType) + "." + member.Name;
-        }
-        else
-        {
-            return member.Name;
-        }
     }
 
     /// <summary>
@@ -303,11 +286,12 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns><see cref="TypeLinkTM"/> corresponding to the provided <paramref name="type"/> and <paramref name="member"/>.</returns>
     private TypeLinkTM GetTypeMemberLink(ITypeNameData type, IMemberData member)
     {
-        var name = GetLanguageSpecificData(lang => lang.GetTypeName(type) + $".{member.Name}");
+        var name = GetLanguageSpecificData(lang => lang.GetTypeName(type));
 
         return new TypeLinkTM(
             name,
-            typeUrlResolver.GetUrlOf(type.TypeDeclarationId, member.Id));
+            typeUrlResolver.GetUrlOf(type.TypeDeclarationId, member.Id),
+            member.Name);
     }
 
     /// <summary>

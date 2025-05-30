@@ -110,7 +110,7 @@ internal class OtherLanguageConfiguration : ILanguageConfiguration
     }
 
     /// <inheritdoc />
-    public string GetTypeName(ITypeNameData type)
+    public string GetTypeName(ITypeNameData type, bool includeTypeParameters = true)
     {
         return "";
     }

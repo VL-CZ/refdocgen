@@ -86,10 +86,12 @@ internal abstract class BaseTMCreator
     protected GenericTypeLinkTM GetGenericTypeLink(ITypeNameData type)
     {
         string? url = typeUrlResolver.GetUrlOf(type);
+        var name = GetLanguageSpecificData(lang => lang.GetTypeName(type, false));
+
+        var typeLink = new TypeLinkTM(name, url);
 
         return new GenericTypeLinkTM(
-            CSharpTypeName.Of(type, false, url is null), // TODO
-            url,
+            typeLink,
             type.TypeParameters.Select(GetGenericTypeLink).ToArray()
             );
     }
@@ -124,16 +126,6 @@ internal abstract class BaseTMCreator
         }
 
         return GetTypeLink(type);
-    }
-
-    /// <summary>
-    /// Gets the name of the type, excluding its generic parameters.
-    /// </summary>
-    /// <param name="type">The provided type.</param>
-    /// <returns>The name of the provided type.</returns>
-    protected string GetTypeName(ITypeDeclaration type)
-    {
-        return CSharpTypeName.Of(type, false);
     }
 
     /// <summary>

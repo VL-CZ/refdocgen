@@ -5,15 +5,21 @@
     public required TypeLinkTM Type { get; set; }
 }
 
+@{
+    string? memberSuffix = Type.MemberName is not null
+            ? "." + Type.MemberName
+            : null;
+}
+
 <span class="refdocgen-text-secondary">
     @if (Type.Url is not null)
     {
         <a href="@Type.Url" class="refdocgen-link-secondary">
-            <LanguageSpecificStrings Data="Type.Name" />
+            <LanguageSpecificStrings Data="Type.Name" DataSuffix="@memberSuffix" />
         </a>
     }
     else
     {
-        <LanguageSpecificStrings Data="Type.Name" />
+        <LanguageSpecificStrings Data="Type.Name" DataSuffix="@memberSuffix" />
     }
 </span>

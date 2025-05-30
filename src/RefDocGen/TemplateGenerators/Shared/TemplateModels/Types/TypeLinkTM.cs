@@ -10,8 +10,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 /// URL of the type definition page.
 /// <c>null</c> if the type definition page isn't found.
 /// </param>
-public record TypeLinkTM(LanguageSpecificData<string> Name, string? Url);
-
+public record TypeLinkTM(LanguageSpecificData<string> Name, string? Url, string? MemberName = null);
 
 /// <summary>
 /// Represents the template model for a type, including a URL to its definition.
@@ -21,4 +20,4 @@ public record TypeLinkTM(LanguageSpecificData<string> Name, string? Url);
 /// URL of the type definition page.
 /// <c>null</c> if the type definition page isn't found.
 /// </param>
-public record GenericTypeLinkTM(string Name, string? Url, GenericTypeLinkTM[] TypeParameters);
+public record GenericTypeLinkTM(TypeLinkTM TypeLink, GenericTypeLinkTM[] TypeParameters);
