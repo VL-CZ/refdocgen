@@ -82,7 +82,7 @@ internal class MemberId
     /// <returns>The ID of the given <paramref name="constructor"/></returns>
     internal static string Of(IConstructorData constructor)
     {
-        return ConstructorData.DefaultName + GetParameterListId(constructor.Parameters);
+        return constructor.Name + GetParameterListId(constructor.Parameters);
     }
 
     /// <summary>

@@ -17,6 +17,11 @@ internal class ConstructorData : MethodLikeMemberData, IConstructorData
     internal const string DefaultName = "#ctor";
 
     /// <summary>
+    /// The default name for a static constructor method in the XML documentation files.
+    /// </summary>
+    internal const string DefaultStaticName = "#cctor";
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="ConstructorData"/> class.
     /// </summary>
     /// <param name="constructorInfo"><see cref="System.Reflection.ConstructorInfo"/> object representing the constructor.</param>
@@ -39,5 +44,7 @@ internal class ConstructorData : MethodLikeMemberData, IConstructorData
     public ConstructorInfo ConstructorInfo { get; }
 
     /// <inheritdoc/>
-    public override string Name => DefaultName;
+    public override string Name => IsStatic
+        ? DefaultStaticName
+        : DefaultName;
 }
