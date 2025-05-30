@@ -17,6 +17,13 @@ internal static class ITypeDeclarationExtensions
     /// <returns>A corresponding <see cref="ITypeDeclaration"/> instance.</returns>
     internal static string GetTypeName(this ILanguageConfiguration lang, ITypeDeclaration type)
     {
-        return lang.GetTypeName(type.TypeObject.GetTypeNameData());
+        var typeName = lang.GetTypeName(type.TypeObject.GetTypeNameData());
+
+        if (type.DeclaringType is not null)
+        {
+            typeName = GetTypeName(lang, type.DeclaringType) + "." + typeName;
+        }
+
+        return typeName;
     }
 }

@@ -1,3 +1,4 @@
+using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.Shared;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
@@ -67,39 +68,38 @@ internal abstract class BaseTMCreator
     }
 
     /// <summary>
-    /// Gets the <see cref="TypeLinkTM"/> from the provided <paramref name="type"/>.
+    /// Gets the <see cref="TypeLinkTM"/> of the provided type member.
     /// </summary>
-    /// <param name="type">The provided type.</param>
-    /// <returns><see cref="TypeLinkTM"/> corresponding to the provided <paramref name="type"/>.</returns>
-    protected TypeLinkTM GetTypeLink(ITypeNameData type)
+    /// <param name="type">The provided type containing the member.</param>
+    /// <param name="member">The member for which the URL is returned.</param>
+    /// <returns><see cref="TypeLinkTM"/> corresponding to the provided <paramref name="type"/> and <paramref name="member"/>.</returns>
+    protected TypeLinkTM GetTypeMemberLink(ITypeNameData type, IMemberData? member = null)
     {
-        string? url = typeUrlResolver.GetUrlOf(type);
+        string? url = typeUrlResolver.GetUrlOf(type.TypeDeclarationId, member?.Id);
         var name = GetLanguageSpecificData(lang => lang.GetTypeName(type));
 
-        return new TypeLinkTM(
-            //CSharpTypeName.Of(type, useFullName: url is null),
-            name,
-            url
-            );
+        if (url is null && type.Namespace != string.Empty) // URL not found -> add namespace before the type name (for all langauges)
+        {
+            name = GetLanguageSpecificData(lang => $"{type.Namespace}." + lang.GetTypeName(type));
+        }
+
+        return new TypeLinkTM(name, url, member?.Name);
     }
 
-    protected GenericTypeLinkTM GetGenericTypeLink(ITypeNameData type)
+    /// <summary>
+    /// Gets the <see cref="TypeLinkTM"/> of the provided type member.
+    /// </summary>
+    /// <param name="type">The provided type containing the member.</param>
+    /// <param name="member">The member for which the URL is returned.</param>
+    /// <returns><see cref="TypeLinkTM"/> corresponding to the provided <paramref name="type"/> and <paramref name="member"/>. <see langword="null"/> if the provided <paramref name="type"/> is <see langword="null"/>.</returns>
+    protected TypeLinkTM? GetTypeMemberLinkOrNull(ITypeNameData? type, IMemberData member)
     {
-        string? url = typeUrlResolver.GetUrlOf(type);
-        var name = GetLanguageSpecificData(lang => lang.GetTypeName(type, false));
+        if (type is null)
+        {
+            return null;
+        }
 
-        var typeLink = new TypeLinkTM(name, url);
-
-        return new GenericTypeLinkTM(
-            typeLink,
-            type.TypeParameters.Select(GetGenericTypeLink).ToArray()
-            );
-    }
-
-    /// <inheritdoc cref="GetTypeLink(ITypeNameData)"/>
-    protected TypeLinkTM GetTypeLink(ITypeDeclaration type)
-    {
-        return GetTypeLink(type.TypeObject.GetTypeNameData());
+        return GetTypeMemberLink(type, member);
     }
 
     /// <summary>
@@ -114,7 +114,7 @@ internal abstract class BaseTMCreator
             return null;
         }
 
-        return GetTypeLink(type);
+        return GetTypeMemberLink(type);
     }
 
     /// <inheritdoc cref="GetTypeLinkOrNull(ITypeNameData?)"/>
@@ -125,7 +125,25 @@ internal abstract class BaseTMCreator
             return null;
         }
 
-        return GetTypeLink(type);
+        return GetTypeMemberLink(type.TypeObject.GetTypeNameData());
+    }
+
+    protected GenericTypeLinkTM GetGenericTypeLink(ITypeNameData type)
+    {
+        if (type.ShortName.StartsWith("MyCollectionEnumerator"))
+        {
+            int x = 0;
+        }
+
+        string? url = typeUrlResolver.GetUrlOf(type);
+        var name = GetLanguageSpecificData(lang => lang.GetTypeName(type, false));
+
+        var typeLink = new TypeLinkTM(name, url);
+
+        return new GenericTypeLinkTM(
+            typeLink,
+            type.TypeParameters.Select(GetGenericTypeLink).ToArray()
+            );
     }
 
     /// <summary>

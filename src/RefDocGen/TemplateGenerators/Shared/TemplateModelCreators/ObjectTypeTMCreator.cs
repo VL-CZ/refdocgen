@@ -279,38 +279,6 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     }
 
     /// <summary>
-    /// Gets the <see cref="TypeLinkTM"/> of the provided type member.
-    /// </summary>
-    /// <param name="type">The provided type containing the member.</param>
-    /// <param name="member">The member for which the URL is returned.</param>
-    /// <returns><see cref="TypeLinkTM"/> corresponding to the provided <paramref name="type"/> and <paramref name="member"/>.</returns>
-    private TypeLinkTM GetTypeMemberLink(ITypeNameData type, IMemberData member)
-    {
-        var name = GetLanguageSpecificData(lang => lang.GetTypeName(type));
-
-        return new TypeLinkTM(
-            name,
-            typeUrlResolver.GetUrlOf(type.TypeDeclarationId, member.Id),
-            member.Name);
-    }
-
-    /// <summary>
-    /// Gets the <see cref="TypeLinkTM"/> of the provided type member.
-    /// </summary>
-    /// <param name="type">The provided type containing the member.</param>
-    /// <param name="member">The member for which the URL is returned.</param>
-    /// <returns><see cref="TypeLinkTM"/> corresponding to the provided <paramref name="type"/> and <paramref name="member"/>. <see langword="null"/> if the provided <paramref name="type"/> is <see langword="null"/>.</returns>
-    private TypeLinkTM? GetTypeMemberLinkOrNull(ITypeNameData? type, IMemberData member)
-    {
-        if (type is null)
-        {
-            return null;
-        }
-
-        return GetTypeMemberLink(type, member);
-    }
-
-    /// <summary>
     /// Returns the types of the interfaces, whose part of contract the member implements.
     /// </summary>
     /// <param name="member">The provided member.</param>
