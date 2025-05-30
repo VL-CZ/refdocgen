@@ -74,7 +74,7 @@ internal abstract class BaseTMCreator
     /// <returns><see cref="CodeLinkTM"/> corresponding to the provided <paramref name="type"/> and <paramref name="member"/>.</returns>
     protected CodeLinkTM GetTypeMemberLink(ITypeNameData type, IMemberData? member = null, bool includeTypeParameters = true)
     {
-        string? url = typeUrlResolver.GetUrlOf(type.TypeDeclarationId, member?.Id);
+        string? url = typeUrlResolver.GetUrlOf(type, member?.Id);
         var name = GetLanguageSpecificData(lang => lang.GetTypeName(type, includeTypeParameters));
 
         if (url is null && type.Namespace != string.Empty) // URL not found -> add namespace before the type name (for all langauges)
