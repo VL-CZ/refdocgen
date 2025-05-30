@@ -27,9 +27,19 @@ internal class TypeNameData : TypeNameBaseData, ITypeNameData
     /// <param name="availableTypeParameters">Collection of type parameters declared in the containing type; the keys represent type parameter names.</param>
     internal TypeNameData(Type type, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters) : base(type)
     {
+        DeclaringType = type.DeclaringType?.GetTypeNameData(availableTypeParameters);
+
         TypeParameters = [.. TypeObject
             .GetGenericArguments()
             .Select(t => t.GetTypeNameData(availableTypeParameters))];
+
+        if (DeclaringType is not null)
+        {
+            TypeParameters = [..
+                TypeParameters.ExceptBy(
+                    DeclaringType.TypeParameters.Select(t => t.TypeDeclarationId), t => t.TypeDeclarationId // remove the type paramters defined in the declaring type
+                )];
+        }
     }
 
     /// <summary>
@@ -43,7 +53,7 @@ internal class TypeNameData : TypeNameBaseData, ITypeNameData
     public override string Id => TypeId.Of(this);
 
     /// <inheritdoc/>
-    public override bool HasTypeParameters => TypeObject.IsGenericType;
+    public override bool HasTypeParameters => TypeParameters.Count > 0;
 
     /// <inheritdoc/>
     public IReadOnlyList<ITypeNameData> TypeParameters { get; }
@@ -62,4 +72,7 @@ internal class TypeNameData : TypeNameBaseData, ITypeNameData
 
     /// <inheritdoc/>
     public string TypeDeclarationId => TypeId.Of(this, true);
+
+    /// <inheritdoc/>
+    public ITypeNameData? DeclaringType { get; }
 }

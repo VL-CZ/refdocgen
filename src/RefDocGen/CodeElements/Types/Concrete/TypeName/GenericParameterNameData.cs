@@ -1,3 +1,4 @@
+using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.CodeElements.Types.Tools;
 
@@ -58,5 +59,8 @@ internal class GenericTypeParameterNameData : ITypeNameData
     public bool IsGenericParameter => true;
 
     /// <inheritdoc/>
-    string ITypeNameData.TypeDeclarationId => FullName;
+    ITypeNameData? ITypeNameData.DeclaringType => null;
+
+    /// <inheritdoc/>
+    public string TypeDeclarationId => FullName;
 }
