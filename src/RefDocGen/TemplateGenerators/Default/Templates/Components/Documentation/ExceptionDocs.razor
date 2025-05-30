@@ -16,10 +16,10 @@
                     <TypeLink Type="@exception.Type" />
                 </samp>
 
-                <div class="text-body-secondary mb-2" data-id="exception-doc">
+                <div class="text-body-secondary fst-italic mb-2" data-id="exception-doc">
                     @if (exception.DocComment is not null)
                     {
-                        <i>@((MarkupString)exception.DocComment)</i>
+                        @((MarkupString)exception.DocComment)
                     }
                 </div>
             </div>
