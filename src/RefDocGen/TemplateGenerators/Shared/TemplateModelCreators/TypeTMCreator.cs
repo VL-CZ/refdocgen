@@ -1,4 +1,5 @@
 using RefDocGen.CodeElements.Members.Abstract;
+using RefDocGen.CodeElements.Shared;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Attribute;
 using RefDocGen.CodeElements.Types.Abstract.Exception;
@@ -111,9 +112,18 @@ internal abstract class TypeTMCreator : BaseTMCreator
     /// <returns>A <see cref="ExceptionTM"/> instance based on the provided <paramref name="exception"/>.</returns>
     protected ExceptionTM GetFrom(IExceptionDocumentation exception)
     {
+        var type = Type.GetType(exception.Id, false); // TODO
+
+        var name = GetLanguageSpecificData(_ => exception.Id);
+
+        if (type is not null)
+        {
+            name = GetLanguageSpecificData(lang => lang.GetTypeName(type.GetTypeNameData()));
+        }
+
         return new ExceptionTM(
             new TypeLinkTM(
-                GetLanguageSpecificData(_ => exception.Id), // TODO
+                name,
                 typeUrlResolver.GetUrlOf(exception.Id)
                 ),
             ToHtmlString(exception.DocComment));
@@ -130,7 +140,7 @@ internal abstract class TypeTMCreator : BaseTMCreator
         var namedArgumentTMs = attribute.NamedArguments.Select(na => GetFrom(na, attribute)).ToArray();
 
         var typeLink = new TypeLinkTM(
-                GetLanguageSpecificData(_ => CSharpAttributeName.Of(attribute)), // TODO: make localized
+                GetLanguageSpecificData(lang => AttributeName.Of(lang, attribute)),
                 typeUrlResolver.GetUrlOf(attribute.Type));
 
         return new AttributeTM(

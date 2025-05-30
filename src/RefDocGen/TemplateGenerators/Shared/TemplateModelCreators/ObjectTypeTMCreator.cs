@@ -36,6 +36,9 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         var events = type.Events.OrderAlphabetically().Select(GetFrom).ToArray();
 
         var interfaces = type.Interfaces.Select(GetGenericTypeLink).ToArray();
+        var baseType = type.BaseType is not null
+            ? GetGenericTypeLink(type.BaseType)
+            : null;
 
         var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(type));
 
@@ -54,7 +57,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             Events: events,
             NestedTypes: GetNestedTypes(type),
             TypeParameters: GetTemplateModels(type.TypeParameters),
-            BaseType: GetTypeLinkOrNull(type.BaseType),
+            BaseType: baseType,
             ImplementedInterfaces: interfaces,
             Attributes: GetTemplateModels(type.Attributes),
             DeclaringType: GetTypeLinkOrNull(type.DeclaringType),

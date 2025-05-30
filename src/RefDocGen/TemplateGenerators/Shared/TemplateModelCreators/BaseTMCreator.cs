@@ -127,10 +127,10 @@ internal abstract class BaseTMCreator
     }
 
     /// <summary>
-    /// Gets the C# name of the type, excluding its generic parameters.
+    /// Gets the name of the type, excluding its generic parameters.
     /// </summary>
     /// <param name="type">The provided type.</param>
-    /// <returns>C# name of the provided type.</returns>
+    /// <returns>The name of the provided type.</returns>
     protected string GetTypeName(ITypeDeclaration type)
     {
         return CSharpTypeName.Of(type, false);

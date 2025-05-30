@@ -6,7 +6,7 @@ using RefDocGen.CodeElements;
 using RefDocGen.TemplateGenerators.Shared.Languages;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
 
-namespace RefDocGen.TemplateGenerators.Default;
+namespace RefDocGen;
 
 /// <summary>
 /// This class shows an example empty configuration of an 'other' language.

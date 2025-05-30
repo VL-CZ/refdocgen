@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using RefDocGen.AssemblyAnalysis;
 using RefDocGen.CodeElements;
 using RefDocGen.TemplateGenerators.Default;
+using RefDocGen.TemplateGenerators.Shared.Languages;
 
 namespace RefDocGen;
 
@@ -41,7 +42,12 @@ public static class Program
 
         await using var htmlRenderer = new HtmlRenderer(serviceProvider, loggerFactory);
 
-        var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir, staticPagesDir, version);
+        ILanguageConfiguration[] availableLanguages = [
+            new CSharpLanguageConfiguration(),
+            new OtherLanguageConfiguration()
+        ];
+
+        var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir, availableLanguages, staticPagesDir, version);
 
         var docGenerator = new DocGenerator(dllPaths, docPaths, templateGenerator, assemblyDataConfig);
         docGenerator.GenerateDoc();

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using RefDocGen.AssemblyAnalysis;
 using RefDocGen.CodeElements;
 using RefDocGen.TemplateGenerators.Default;
+using RefDocGen.TemplateGenerators.Shared.Languages;
 
 namespace RefDocGen.IntegrationTests.Fixtures;
 
@@ -52,7 +53,7 @@ public class DocumentationFixture : IDisposable
 
         using var htmlRenderer = new HtmlRenderer(serviceProvider, loggerFactory);
 
-        var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir, staticPagesDirectory); // use the default template generator
+        var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir, [new CSharpLanguageConfiguration()], staticPagesDirectory); // use the default template generator
 
         var assemblyDataConfig = new AssemblyDataConfiguration(
             AccessModifier.Private,

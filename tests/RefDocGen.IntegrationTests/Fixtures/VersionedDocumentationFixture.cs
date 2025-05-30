@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using RefDocGen.AssemblyAnalysis;
 using RefDocGen.CodeElements;
 using RefDocGen.TemplateGenerators.Default;
+using RefDocGen.TemplateGenerators.Shared.Languages;
 
 namespace RefDocGen.IntegrationTests.Fixtures;
 
@@ -58,7 +59,7 @@ public class VersionedDocumentationFixture : IDisposable
 
         foreach (string version in versions)
         {
-            var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir, staticPagesDirectory, version); // use the default template generator
+            var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir, [new CSharpLanguageConfiguration()], staticPagesDirectory, version); // use the default template generator
 
             var generator = new DocGenerator(["data/MyLibrary.dll"], ["data/MyLibrary.xml"], templateGenerator, assemblyDataConfig);
             generator.GenerateDoc();
