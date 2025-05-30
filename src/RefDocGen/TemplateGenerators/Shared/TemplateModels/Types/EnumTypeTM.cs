@@ -30,7 +30,7 @@ public record EnumTypeTM(
     LanguageSpecificData<string[]> Modifiers,
     EnumMemberTM[] Members,
     AttributeTM[] Attributes,
-    TypeLinkTM? DeclaringType,
+    CodeLinkTM? DeclaringType,
     string? SummaryDocComment,
     string? RemarksDocComment,
     string[] SeeAlsoDocComments) : ITemplateModelWithId, ITypeDeclarationNameTM

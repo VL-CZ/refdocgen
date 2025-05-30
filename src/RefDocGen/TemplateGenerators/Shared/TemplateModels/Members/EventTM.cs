@@ -35,14 +35,14 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 public record EventTM(
     string Id,
     string Name,
-    GenericTypeLinkTM Type,
+    GenericCodeLinkTM Type,
     LanguageSpecificData<string[]> Modifiers,
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions,
-    TypeLinkTM? InheritedFrom,
-    TypeLinkTM? BaseDeclaringType,
-    TypeLinkTM? ExplicitInterfaceType,
-    TypeLinkTM[] ImplementedInterfaces);
+    CodeLinkTM? InheritedFrom,
+    CodeLinkTM? BaseDeclaringType,
+    CodeLinkTM? ExplicitInterfaceType,
+    CodeLinkTM[] ImplementedInterfaces);

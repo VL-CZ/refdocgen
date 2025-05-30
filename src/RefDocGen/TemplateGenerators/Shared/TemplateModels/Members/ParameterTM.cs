@@ -19,7 +19,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// <param name="Attributes">Array of attributes applied to the parameter.</param>
 public record ParameterTM(
     string Name,
-    GenericTypeLinkTM Type,
+    GenericCodeLinkTM Type,
     LanguageSpecificData<string[]> Modifiers,
     AttributeTM[] Attributes,
     LanguageSpecificData<string>? DefaultValue,

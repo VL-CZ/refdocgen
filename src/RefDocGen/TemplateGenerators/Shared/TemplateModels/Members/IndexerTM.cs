@@ -40,7 +40,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// </param>
 public record IndexerTM(
     string Id,
-    GenericTypeLinkTM Type,
+    GenericCodeLinkTM Type,
     ParameterTM[] Parameters,
     bool HasGetter,
     bool HasSetter,
@@ -54,7 +54,7 @@ public record IndexerTM(
     string? ValueDocComment,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions,
-    TypeLinkTM? InheritedFrom,
-    TypeLinkTM? BaseDeclaringType,
-    TypeLinkTM? ExplicitInterfaceType,
-    TypeLinkTM[] ImplementedInterfaces);
+    CodeLinkTM? InheritedFrom,
+    CodeLinkTM? BaseDeclaringType,
+    CodeLinkTM? ExplicitInterfaceType,
+    CodeLinkTM[] ImplementedInterfaces);

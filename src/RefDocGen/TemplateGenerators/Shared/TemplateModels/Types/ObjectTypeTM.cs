@@ -47,10 +47,10 @@ public record ObjectTypeTM(
     EventTM[] Events,
     TypeNameTM[] NestedTypes,
     TypeParameterTM[] TypeParameters,
-    GenericTypeLinkTM? BaseType,
-    GenericTypeLinkTM[] ImplementedInterfaces,
+    GenericCodeLinkTM? BaseType,
+    GenericCodeLinkTM[] ImplementedInterfaces,
     AttributeTM[] Attributes,
-    TypeLinkTM? DeclaringType,
+    CodeLinkTM? DeclaringType,
     string? SummaryDocComment,
     string? RemarksDocComment,
     string[] SeeAlsoDocComments) : ITemplateModelWithId, ITypeDeclarationNameTM;

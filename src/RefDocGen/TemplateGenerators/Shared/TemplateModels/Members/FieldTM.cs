@@ -27,11 +27,11 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 public record FieldTM(
     string Id,
     string Name,
-    GenericTypeLinkTM Type,
+    GenericCodeLinkTM Type,
     LanguageSpecificData<string[]> Modifiers,
     LanguageSpecificData<string>? ConstantValue,
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,
     string[] SeeAlsoDocComments,
-    TypeLinkTM? InheritedFrom);
+    CodeLinkTM? InheritedFrom);

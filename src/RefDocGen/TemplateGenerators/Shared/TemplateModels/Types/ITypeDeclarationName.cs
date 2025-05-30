@@ -28,6 +28,6 @@ public interface ITypeDeclarationNameTM
     /// <c>null</c> if the type is not nested.
     /// </para>
     /// </summary>
-    TypeLinkTM? DeclaringType { get; }
+    CodeLinkTM? DeclaringType { get; }
 }
 

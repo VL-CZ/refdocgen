@@ -121,7 +121,7 @@ internal abstract class TypeTMCreator : BaseTMCreator
         }
 
         return new ExceptionTM(
-            new TypeLinkTM(
+            new CodeLinkTM(
                 name,
                 typeUrlResolver.GetUrlOf(exception.Id)
                 ),
@@ -138,7 +138,7 @@ internal abstract class TypeTMCreator : BaseTMCreator
         LanguageSpecificData<string>?[] constructorArgumentTMs = [.. attribute.ConstructorArgumentValues.Select(GetLanguageSpecificDefaultValue)];
         var namedArgumentTMs = attribute.NamedArguments.Select(na => GetFrom(na, attribute)).ToArray();
 
-        var typeLink = new TypeLinkTM(
+        var typeLink = new CodeLinkTM(
                 GetLanguageSpecificData(lang => AttributeName.Of(lang, attribute)),
                 typeUrlResolver.GetUrlOf(attribute.Type));
 
@@ -157,7 +157,7 @@ internal abstract class TypeTMCreator : BaseTMCreator
     protected NamedAttributeArgumentTM GetFrom(NamedAttributeArgument argument, IAttributeData attribute)
     {
         return new NamedAttributeArgumentTM(
-            new TypeLinkTM(
+            new CodeLinkTM(
                 GetLanguageSpecificData(_ => argument.Name),
                 typeUrlResolver.GetUrlOf(attribute.Type.Id, argument.Name)
             ),

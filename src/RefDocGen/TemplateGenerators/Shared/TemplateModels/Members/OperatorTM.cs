@@ -42,7 +42,7 @@ public record OperatorTM(
     LanguageSpecificData<string> Name,
     ParameterTM[] Parameters,
     TypeParameterTM[] TypeParameters,
-    GenericTypeLinkTM ReturnType,
+    GenericCodeLinkTM ReturnType,
     bool ReturnsVoid,
     bool IsConversionOperator,
     LanguageSpecificData<string[]> Modifiers,
@@ -52,7 +52,7 @@ public record OperatorTM(
     string? ReturnsDocComment,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions,
-    TypeLinkTM? InheritedFrom,
-    TypeLinkTM? BaseDeclaringType,
-    TypeLinkTM? ExplicitInterfaceType,
-    TypeLinkTM[] ImplementedInterfaces);
+    CodeLinkTM? InheritedFrom,
+    CodeLinkTM? BaseDeclaringType,
+    CodeLinkTM? ExplicitInterfaceType,
+    CodeLinkTM[] ImplementedInterfaces);

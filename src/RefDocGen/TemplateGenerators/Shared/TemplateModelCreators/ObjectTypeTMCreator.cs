@@ -281,7 +281,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// </summary>
     /// <param name="member">The provided member.</param>
     /// <returns>The types of the interfaces, whose part of contract the member implements.</returns>
-    private TypeLinkTM[] GetInterfacesImplemented(ICallableMemberData member)
+    private CodeLinkTM[] GetInterfacesImplemented(ICallableMemberData member)
     {
         return [.. member.ImplementedInterfaces.Select(i => GetTypeMemberLink(i, member))];
     }
