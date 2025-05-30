@@ -2,7 +2,6 @@ using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.DocExtraction.Tools;
-using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 using RefDocGen.TemplateGenerators.Shared.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 using RefDocGen.Tools.Xml;

@@ -1,5 +1,4 @@
 using RefDocGen.CodeElements.Members.Abstract;
-using RefDocGen.CodeElements.Shared;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Attribute;
 using RefDocGen.CodeElements.Types.Abstract.Exception;
@@ -8,8 +7,8 @@ using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.Languages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
+using RefDocGen.TemplateGenerators.Shared.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
-using System.Reflection;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
 
@@ -178,20 +177,5 @@ internal abstract class TypeTMCreator : BaseTMCreator
         }
 
         return GetLanguageSpecificData(lang => lang.FormatLiteralValue(constantValue));
-    }
-}
-
-internal class TypeTools
-{
-    internal static ITypeNameData? GetType(string typeId)
-    {
-        try
-        {
-            return Type.GetType(typeId, false)?.GetTypeNameData();
-        }
-        catch (Exception ex) when (ex is ArgumentNullException or TargetInvocationException or TypeLoadException or ArgumentException)
-        {
-            return null;
-        }
     }
 }
