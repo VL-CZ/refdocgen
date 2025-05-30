@@ -73,14 +73,14 @@ internal abstract class BaseTMCreator
     /// <param name="type">The provided type containing the member.</param>
     /// <param name="member">The member for which the URL is returned.</param>
     /// <returns><see cref="TypeLinkTM"/> corresponding to the provided <paramref name="type"/> and <paramref name="member"/>.</returns>
-    protected TypeLinkTM GetTypeMemberLink(ITypeNameData type, IMemberData? member = null)
+    protected TypeLinkTM GetTypeMemberLink(ITypeNameData type, IMemberData? member = null, bool includeTypeParameters = true)
     {
         string? url = typeUrlResolver.GetUrlOf(type.TypeDeclarationId, member?.Id);
-        var name = GetLanguageSpecificData(lang => lang.GetTypeName(type));
+        var name = GetLanguageSpecificData(lang => lang.GetTypeName(type, includeTypeParameters));
 
         if (url is null && type.Namespace != string.Empty) // URL not found -> add namespace before the type name (for all langauges)
         {
-            name = GetLanguageSpecificData(lang => $"{type.Namespace}." + lang.GetTypeName(type));
+            name = GetLanguageSpecificData(lang => $"{type.Namespace}." + lang.GetTypeName(type, includeTypeParameters));
         }
 
         return new TypeLinkTM(name, url, member?.Name);
@@ -130,19 +130,11 @@ internal abstract class BaseTMCreator
 
     protected GenericTypeLinkTM GetGenericTypeLink(ITypeNameData type)
     {
-        if (type.ShortName.StartsWith("MyCollectionEnumerator"))
-        {
-            int x = 0;
-        }
-
-        string? url = typeUrlResolver.GetUrlOf(type);
-        var name = GetLanguageSpecificData(lang => lang.GetTypeName(type, false));
-
-        var typeLink = new TypeLinkTM(name, url);
+        var typeLink = GetTypeMemberLink(type, includeTypeParameters: false);
 
         return new GenericTypeLinkTM(
             typeLink,
-            type.TypeParameters.Select(GetGenericTypeLink).ToArray()
+            [.. type.TypeParameters.Select(GetGenericTypeLink)]
             );
     }
 
@@ -178,12 +170,12 @@ internal abstract class BaseTMCreator
 
     /// <summary>
     /// Gets language specific data obtained by executing the <paramref name="languageFunction"/> on each available language.
-    /// </summary>
     /// <example>
     /// <code>
     /// var typeName = GetLanguageSpecificData(lang => lang.GetTypeName(type)); // gets name of the type in all available languages
     /// </code>
     /// </example>
+    /// </summary>
     /// <typeparam name="T">Type of the data returned by the <paramref name="languageFunction"/>.</typeparam>
     /// <param name="languageFunction">The function that obtains the data based on the language.</param>
     /// <returns>Language specific data obtained by executing the <paramref name="languageFunction"/> on each available language.</returns>

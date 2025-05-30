@@ -42,7 +42,7 @@ internal class TypeId
 
         if (type.DeclaringType is not null)
         {
-            id = $"{Of(type.DeclaringType, isDeclarationId)}.{id}";
+            id = $"{Of(type.DeclaringType, isDeclarationId)}.{type.ShortName}";
         }
 
         if (type.HasTypeParameters)

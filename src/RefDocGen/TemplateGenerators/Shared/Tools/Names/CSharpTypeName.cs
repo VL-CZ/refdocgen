@@ -66,8 +66,12 @@ internal static class CSharpTypeName
     internal static string Of(ITypeNameData type, bool includeGenericParams = true)
     {
         string defaultTypeName = type.ShortName;
-
         string typeName = GetBuiltInName(type) ?? defaultTypeName;
+
+        if (type.DeclaringType is not null)
+        {
+            typeName = $"{Of(type.DeclaringType)}.{typeName}";
+        }
 
         if (includeGenericParams && type.HasTypeParameters)
         {
