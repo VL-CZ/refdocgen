@@ -1,3 +1,5 @@
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links;
+
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 
 /// <summary>
@@ -5,4 +7,4 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 /// </summary>
 /// <param name="Type">Type of the exception.</param>
 /// <param name="DocComment">Documentation comment provided to the exception. <c>null</c> if the doc comment is not provided.</param>
-public record ExceptionTM(TypeLinkTM Type, string? DocComment);
+public record ExceptionTM(CodeLinkTM Type, string? DocComment);

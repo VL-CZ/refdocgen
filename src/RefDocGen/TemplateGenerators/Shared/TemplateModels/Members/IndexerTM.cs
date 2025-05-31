@@ -1,4 +1,5 @@
 using RefDocGen.TemplateGenerators.Shared.Languages;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
@@ -40,7 +41,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// </param>
 public record IndexerTM(
     string Id,
-    TypeLinkTM Type,
+    GenericTypeLinkTM Type,
     ParameterTM[] Parameters,
     bool HasGetter,
     bool HasSetter,
@@ -54,7 +55,7 @@ public record IndexerTM(
     string? ValueDocComment,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions,
-    TypeLinkTM? InheritedFrom,
-    TypeLinkTM? BaseDeclaringType,
-    TypeLinkTM? ExplicitInterfaceType,
-    TypeLinkTM[] ImplementedInterfaces);
+    CodeLinkTM? InheritedFrom,
+    CodeLinkTM? BaseDeclaringType,
+    CodeLinkTM? ExplicitInterfaceType,
+    CodeLinkTM[] ImplementedInterfaces);

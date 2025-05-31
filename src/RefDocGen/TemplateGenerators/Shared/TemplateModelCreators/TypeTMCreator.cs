@@ -2,10 +2,13 @@ using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Attribute;
 using RefDocGen.CodeElements.Types.Abstract.Exception;
+using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.Languages;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
+using RefDocGen.TemplateGenerators.Shared.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
@@ -72,7 +75,7 @@ internal abstract class TypeTMCreator : BaseTMCreator
 
         return new ParameterTM(
             parameter.Name,
-            GetTypeLink(parameter.Type),
+            GetGenericTypeLink(parameter.Type),
             modifiers,
             GetTemplateModels(parameter.Attributes),
             GetLanguageSpecificDefaultValue(parameter.DefaultValue),
@@ -89,7 +92,7 @@ internal abstract class TypeTMCreator : BaseTMCreator
         var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(typeParameter));
 
         // get constraints
-        var typeConstraints = typeParameter.TypeConstraints.Select(GetTypeLink).ToArray();
+        var typeConstraints = typeParameter.TypeConstraints.Select(GetGenericTypeLink).ToArray();
         var specialConstraints = GetLanguageSpecificData(lang =>
         {
             var constraints = typeParameter.SpecialConstraints;
@@ -111,11 +114,16 @@ internal abstract class TypeTMCreator : BaseTMCreator
     /// <returns>A <see cref="ExceptionTM"/> instance based on the provided <paramref name="exception"/>.</returns>
     protected ExceptionTM GetFrom(IExceptionDocumentation exception)
     {
+        var name = GetLanguageSpecificData(_ => exception.Id);
+        string? url = typeUrlResolver.GetUrlOf(exception.Id);
+
+        if (TypeTools.GetType(exception.Id) is ITypeNameData type) // type found by its ID string -> get its name
+        {
+            name = GetLanguageSpecificData(lang => lang.GetTypeName(type, true, url is null));
+        }
+
         return new ExceptionTM(
-            new TypeLinkTM(
-                exception.Id,
-                typeUrlResolver.GetUrlOf(exception.Id)
-                ),
+            new CodeLinkTM(name, url),
             ToHtmlString(exception.DocComment));
     }
 
@@ -129,8 +137,8 @@ internal abstract class TypeTMCreator : BaseTMCreator
         LanguageSpecificData<string>?[] constructorArgumentTMs = [.. attribute.ConstructorArgumentValues.Select(GetLanguageSpecificDefaultValue)];
         var namedArgumentTMs = attribute.NamedArguments.Select(na => GetFrom(na, attribute)).ToArray();
 
-        var typeLink = new TypeLinkTM(
-                CSharpAttributeName.Of(attribute), // TODO: make localized
+        var typeLink = new CodeLinkTM(
+                GetLanguageSpecificData(lang => AttributeName.Of(lang, attribute)),
                 typeUrlResolver.GetUrlOf(attribute.Type));
 
         return new AttributeTM(
@@ -148,9 +156,9 @@ internal abstract class TypeTMCreator : BaseTMCreator
     protected NamedAttributeArgumentTM GetFrom(NamedAttributeArgument argument, IAttributeData attribute)
     {
         return new NamedAttributeArgumentTM(
-            new TypeLinkTM(
-                argument.Name,
-                typeUrlResolver.GetUrlOf(attribute.Type.Id, argument.Name)
+            new CodeLinkTM(
+                GetLanguageSpecificData(_ => argument.Name),
+                typeUrlResolver.GetUrlOf(attribute.Type, argument.Name)
             ),
             GetLanguageSpecificDefaultValue(argument.Value));
     }

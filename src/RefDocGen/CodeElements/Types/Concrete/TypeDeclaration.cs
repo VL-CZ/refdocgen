@@ -15,7 +15,7 @@ namespace RefDocGen.CodeElements.Types.Concrete;
 internal abstract class TypeDeclaration : TypeNameBaseData, ITypeDeclaration
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="TypeNameBaseData"/> class.
+    /// Initializes a new instance of the <see cref="TypeDeclaration"/> class.
     /// </summary>
     /// <param name="type"><see cref="Type"/> object representing the type.</param>
     /// <param name="typeParameters">Collection of the type parameters declared in the type; the keys represent type parameter names.</param>

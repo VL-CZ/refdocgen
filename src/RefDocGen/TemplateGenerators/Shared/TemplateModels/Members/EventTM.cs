@@ -1,4 +1,5 @@
 using RefDocGen.TemplateGenerators.Shared.Languages;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
@@ -35,14 +36,14 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 public record EventTM(
     string Id,
     string Name,
-    TypeLinkTM Type,
+    GenericTypeLinkTM Type,
     LanguageSpecificData<string[]> Modifiers,
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions,
-    TypeLinkTM? InheritedFrom,
-    TypeLinkTM? BaseDeclaringType,
-    TypeLinkTM? ExplicitInterfaceType,
-    TypeLinkTM[] ImplementedInterfaces);
+    CodeLinkTM? InheritedFrom,
+    CodeLinkTM? BaseDeclaringType,
+    CodeLinkTM? ExplicitInterfaceType,
+    CodeLinkTM[] ImplementedInterfaces);

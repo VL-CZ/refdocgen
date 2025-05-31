@@ -5,13 +5,19 @@
     public required EventTM Event { get; set; }
 }
 
+@{
+    string eventName = Event.ExplicitInterfaceType is not null
+            ? Event.ExplicitInterfaceType.Name.CSharpData + "." + Event.Name
+            : Event.Name;
+}
+
 <span class="refdocgen-text-tertiary">
     @string.Join(' ', Event.Modifiers.CSharpData)
 </span>
 
-<TypeLink Type="@Event.Type" />
+<GenericTypeLink Type="@Event.Type" />
 
 <span class="refdocgen-text-primary">
-    @Event.Name
+    @eventName
 </span>
 

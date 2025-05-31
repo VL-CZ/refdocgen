@@ -1,4 +1,5 @@
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 using Shouldly;
@@ -111,6 +112,7 @@ public class CSharpTypeNameTests
         typeData.TypeParameters.Returns(genericParams);
         typeData.IsArray.Returns(isArray);
         typeData.IsPointer.Returns(false);
+        typeData.DeclaringType.ReturnsNull();
 
         return typeData;
     }

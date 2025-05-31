@@ -1,5 +1,4 @@
 using RefDocGen.CodeElements.Members.Abstract;
-using RefDocGen.CodeElements.Members.Concrete;
 
 namespace RefDocGen.CodeElements.Members.Tools;
 
@@ -82,7 +81,7 @@ internal class MemberId
     /// <returns>The ID of the given <paramref name="constructor"/></returns>
     internal static string Of(IConstructorData constructor)
     {
-        return ConstructorData.DefaultName + GetParameterListId(constructor.Parameters);
+        return constructor.Name + GetParameterListId(constructor.Parameters);
     }
 
     /// <summary>

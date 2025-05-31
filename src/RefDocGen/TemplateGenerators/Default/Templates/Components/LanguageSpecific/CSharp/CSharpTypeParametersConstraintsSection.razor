@@ -9,7 +9,7 @@
 {
     var specialConstraints = tp.SpecialConstraints.CSharpData;
     var allConstraints = specialConstraints.Concat(
-        tp.TypeConstraints.Select(c => c.Name)
+        tp.TypeConstraints.Select(c => c.TypeLink.Name.CSharpData)
     );
 
     if (allConstraints.Any())
@@ -32,7 +32,7 @@
 
                     foreach (var constraint in tp.TypeConstraints)
                     {
-                        <TypeLink Type="@constraint" />
+                        <GenericTypeLink Type="@constraint" />
 
                         if (constraint != lastItem)
                         {

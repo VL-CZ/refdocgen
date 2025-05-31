@@ -1,19 +1,18 @@
+@using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links
 @inherits ComponentBase
 
 @code {
     [Parameter]
-    public required TypeLinkTM[] Interfaces { get; set; }
+    public required CodeLinkTM[] Interfaces { get; set; }
 }
 
 @if (Interfaces.Any())
 {
     @foreach (var iface in Interfaces)
     {
-        <div class="refdocgen-text-tertiary ms-4" data-id="member-implements">
-            <i>
+        <div class="refdocgen-text-tertiary fst-italic ms-4" data-id="member-implements">
                 Implements
-                <TypeLink Type="@iface" />
-            </i>
+                <CodeLink Type="@iface" />
         </div>
     }
     <div class="mb-2" />

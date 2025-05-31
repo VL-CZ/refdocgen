@@ -39,6 +39,14 @@ public interface ITypeNameData : ITypeNameBaseData
     bool IsPointer { get; }
 
     /// <summary>
+    /// The type that contains the declaration of this type.
+    /// <para>
+    /// <c>null</c> if the type is not nested.
+    /// </para>
+    /// </summary>
+    ITypeNameData? DeclaringType { get; }
+
+    /// <summary>
     /// Id of the type in the type declaration format (i.e. the same format as <see cref="TypeDeclaration.Id"/>).
     /// </summary>
     string TypeDeclarationId { get; }

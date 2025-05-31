@@ -1,4 +1,5 @@
 using RefDocGen.TemplateGenerators.Shared.Languages;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
@@ -30,7 +31,7 @@ public record EnumTypeTM(
     LanguageSpecificData<string[]> Modifiers,
     EnumMemberTM[] Members,
     AttributeTM[] Attributes,
-    TypeLinkTM? DeclaringType,
+    CodeLinkTM? DeclaringType,
     string? SummaryDocComment,
     string? RemarksDocComment,
     string[] SeeAlsoDocComments) : ITemplateModelWithId, ITypeDeclarationNameTM

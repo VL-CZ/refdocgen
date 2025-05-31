@@ -1,8 +1,9 @@
+@using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links
 @inherits ComponentBase
 
 @code {
     [Parameter]
-    public required TypeLinkTM BaseType { get; set; }
+    public required GenericTypeLinkTM BaseType { get; set; }
 }
 
 <!-- Base type name -->
@@ -11,7 +12,7 @@
     <div data-id="base-type">
         <i>Base type:&nbsp;</i>
         <samp class="refdocgen-text-secondary">
-            <TypeLink Type="@BaseType" />
+            <GenericTypeLink Type="@BaseType" />
         </samp>
     </div>
 }

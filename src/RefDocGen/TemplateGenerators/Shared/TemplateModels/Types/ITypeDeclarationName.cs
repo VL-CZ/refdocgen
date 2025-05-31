@@ -1,4 +1,5 @@
 using RefDocGen.TemplateGenerators.Shared.Languages;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 
@@ -21,5 +22,13 @@ public interface ITypeDeclarationNameTM
     /// Template models of the generic type parameters contained in the type.
     /// </summary>
     TypeParameterTM[] TypeParameters { get; }
+
+    /// <summary>
+    /// The type that contains the declaration of this type.
+    /// <para>
+    /// <c>null</c> if the type is not nested.
+    /// </para>
+    /// </summary>
+    CodeLinkTM? DeclaringType { get; }
 }
 

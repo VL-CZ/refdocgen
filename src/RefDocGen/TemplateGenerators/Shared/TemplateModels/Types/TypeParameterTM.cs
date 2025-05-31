@@ -1,4 +1,5 @@
 using RefDocGen.TemplateGenerators.Shared.Languages;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 
@@ -14,5 +15,5 @@ public record TypeParameterTM(
     string Name,
     string? DocComment,
     LanguageSpecificData<string[]> Modifiers,
-    TypeLinkTM[] TypeConstraints,
+    GenericTypeLinkTM[] TypeConstraints,
     LanguageSpecificData<string[]> SpecialConstraints);

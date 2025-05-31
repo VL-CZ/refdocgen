@@ -12,10 +12,8 @@
 
         @foreach (var comment in DocComments)
         {
-            <div class="text-body-secondary" data-id="seealso-item">
-                <i>
+            <div class="text-body-secondary fst-italic" data-id="seealso-item">
                     @((MarkupString)comment)
-                </i>
             </div>
         }
     </div>

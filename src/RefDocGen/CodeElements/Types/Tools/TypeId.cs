@@ -38,21 +38,26 @@ internal class TypeId
     /// <returns>The ID of the given <paramref name="type"/></returns>
     internal static string Of(ITypeNameData type, bool isDeclarationId = false)
     {
-        string name = type.FullName;
+        string id = type.FullName;
+
+        if (type.DeclaringType is not null)
+        {
+            id = $"{Of(type.DeclaringType, isDeclarationId)}.{type.ShortName}";
+        }
 
         if (type.HasTypeParameters)
         {
             if (isDeclarationId)
             {
-                name += $"`{type.TypeParameters.Count}"; // add count of type parameters
+                id += $"`{type.TypeParameters.Count}"; // add count of type parameters
             }
             else
             {
-                name = name + '{' + string.Join(",", type.TypeParameters.Select(p => p.Id)) + '}'; // select all type parameter IDs
+                id = id + '{' + string.Join(",", type.TypeParameters.Select(p => p.Id)) + '}'; // select all type parameter IDs
             }
         }
 
-        return name;
+        return id;
     }
 
     /// <summary>

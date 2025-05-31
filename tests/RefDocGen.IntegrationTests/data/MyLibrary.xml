@@ -351,6 +351,11 @@
             </summary>
             <returns>An enumerator for the collection.</returns>
         </member>
+        <member name="M:MyLibrary.Tools.Collections.MyCollection`1.GetCustomEnumerator">
+            <summary>
+            Gets a custom enumerator.
+            </summary>
+        </member>
         <member name="M:MyLibrary.Tools.Collections.MyCollection`1.MyLibrary#Tools#Collections#IMyCollection{T}#CanAdd">
             <inheritdoc/>
         </member>

@@ -1,4 +1,5 @@
 using RefDocGen.TemplateGenerators.Shared.Languages;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
@@ -27,11 +28,11 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 public record FieldTM(
     string Id,
     string Name,
-    TypeLinkTM Type,
+    GenericTypeLinkTM Type,
     LanguageSpecificData<string[]> Modifiers,
     LanguageSpecificData<string>? ConstantValue,
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,
     string[] SeeAlsoDocComments,
-    TypeLinkTM? InheritedFrom);
+    CodeLinkTM? InheritedFrom);

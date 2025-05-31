@@ -115,10 +115,10 @@ public class MemberDataTests
         string e2type = TypePageTools.GetExceptionType(exceptions[1]);
         string e2doc = TypePageTools.GetExceptionDoc(exceptions[1]);
 
-        e1type.ShouldBe("System.NotImplementedException");
+        e1type.ShouldBe("NotImplementedException");
         e1doc.ShouldBeEmpty();
 
-        e2type.ShouldBe("System.ArgumentNullException");
+        e2type.ShouldBe("ArgumentNullException");
         e2doc.ShouldBe("If the argument is null.");
     }
 }

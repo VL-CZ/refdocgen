@@ -58,5 +58,8 @@ internal class GenericTypeParameterNameData : ITypeNameData
     public bool IsGenericParameter => true;
 
     /// <inheritdoc/>
-    string ITypeNameData.TypeDeclarationId => FullName;
+    ITypeNameData? ITypeNameData.DeclaringType => null;
+
+    /// <inheritdoc/>
+    public string TypeDeclarationId => FullName;
 }

@@ -1,4 +1,5 @@
 using RefDocGen.TemplateGenerators.Shared.Languages;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
@@ -47,7 +48,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 public record PropertyTM(
     string Id,
     string Name,
-    TypeLinkTM Type,
+    GenericTypeLinkTM Type,
     bool HasGetter,
     bool HasSetter,
     bool IsSetterInitOnly,
@@ -61,7 +62,7 @@ public record PropertyTM(
     string? ValueDocComment,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions,
-    TypeLinkTM? InheritedFrom,
-    TypeLinkTM? BaseDeclaringType,
-    TypeLinkTM? ExplicitInterfaceType,
-    TypeLinkTM[] ImplementedInterfaces);
+    CodeLinkTM? InheritedFrom,
+    CodeLinkTM? BaseDeclaringType,
+    CodeLinkTM? ExplicitInterfaceType,
+    CodeLinkTM[] ImplementedInterfaces);

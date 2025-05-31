@@ -36,13 +36,17 @@ internal class TypeUrlResolver
     }
 
     /// <summary>
-    /// Gets the URL of the documentation page of the provided <paramref name="type"/>.
+    /// Gets the URL of the documentation page of the provided <paramref name="type"/> and possibly member.
     /// </summary>
     /// <param name="type">The type for which the documentation page URL is returned.</param>
+    /// <param name="memberId">
+    /// ID of the member for which the documentation page URL is returned.
+    /// Pass <c>null</c> if the type documentation should be returned.
+    /// </param>
     /// <returns>
-    /// URL of the documentation page of the provided <paramref name="type"/>. <c>null</c> if the documentation page is not found.
+    /// URL of the documentation page of the provided <paramref name="type"/>, or its member. <c>null</c> if the documentation page is not found.
     /// </returns>
-    internal string? GetUrlOf(ITypeNameData type)
+    internal string? GetUrlOf(ITypeNameData type, string? memberId = null)
     {
         if (type.IsArray || type.IsPointer) // array or pointer -> select base element type (i.e. `int` instead of `int[]`)
         {
@@ -51,11 +55,10 @@ internal class TypeUrlResolver
 
         string typeId = type.TypeDeclarationId;
 
-        return GetUrlOf(typeId);
+        return GetUrlOf(typeId, memberId);
     }
 
-    /// <inheritdoc cref="GetUrlOf(ITypeNameData)" path="/summary"/>
-    /// <inheritdoc cref="GetUrlOf(ITypeNameData)" path="/returns"/>
+    /// <inheritdoc cref="GetUrlOf(ITypeNameData, string)" />
     /// <param name="typeId">ID of the type for which the documentation page URL is returned.</param>
     /// <param name="memberId">
     /// ID of the member for which the documentation page URL is returned.

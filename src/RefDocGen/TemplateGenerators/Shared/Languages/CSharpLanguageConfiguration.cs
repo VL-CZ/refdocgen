@@ -4,6 +4,7 @@ using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
+using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.TemplateGenerators.Shared.Tools;
 using RefDocGen.TemplateGenerators.Shared.Tools.Keywords.CSharp;
 using RefDocGen.TemplateGenerators.Shared.Tools.Names;
@@ -241,9 +242,9 @@ internal class CSharpLanguageConfiguration : ILanguageConfiguration
     }
 
     /// <inheritdoc/>
-    public string GetTypeName(ITypeDeclaration type)
+    public string GetTypeName(ITypeNameData type, bool includeTypeParameters = true)
     {
-        return CSharpTypeName.Of(type);
+        return CSharpTypeName.Of(type, includeTypeParameters);
     }
 
     /// <summary>

@@ -7,7 +7,7 @@
 }
 
 
-[<TypeLink Type="@Attribute.Type" />
+[<CodeLink Type="@Attribute.Type" />
 
 @if (Attribute.ConstructorArguments.Any() || Attribute.NamedArguments.Any())
 {
@@ -31,7 +31,7 @@
 
     @foreach (var namedArg in Attribute.NamedArguments)
     {
-        <TypeLink Type="@namedArg.Name" />
+        <CodeLink Type="@namedArg.Name" />
         <LiteralValueSuffix Value="@namedArg.Value" />
     }
     <span>)</span>

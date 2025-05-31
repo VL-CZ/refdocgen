@@ -27,10 +27,10 @@
                         <LanguageSpecificStrings Data="@nestedType.Name" />
                     </a>
                 </samp>
-                <div class="text-body-secondary mb-2" data-id="summary-doc">
+                <div class="text-body-secondary fst-italic mb-2" data-id="summary-doc">
                     @if (nestedType.DocComment is not null)
                     {
-                        <i>@((MarkupString)nestedType.DocComment)</i>
+                        @((MarkupString)nestedType.DocComment)
                     }
                 </div>
             </div>

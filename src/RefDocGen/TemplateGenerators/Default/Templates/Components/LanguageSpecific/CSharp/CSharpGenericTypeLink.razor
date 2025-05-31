@@ -1,0 +1,27 @@
+@using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required GenericTypeLinkTM Type { get; set; }
+}
+
+<CodeLink Type="Type.TypeLink" />
+
+@if (Type.TypeParameters.Any())
+{
+    bool isFirst = true;
+
+    <span class="text-body-secondary">&lt;</span>
+    @foreach (var tp in Type.TypeParameters)
+    {
+        if (!isFirst)
+        {
+            <span class="text-body-secondary">, </span>
+        }
+        <CSharpGenericTypeLink Type="tp" />
+
+        isFirst = false;
+    }
+    <span class="text-body-secondary">&gt;</span>
+}

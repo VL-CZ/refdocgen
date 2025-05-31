@@ -29,13 +29,13 @@ internal class EnumTMCreator : TypeTMCreator
 
         return new EnumTypeTM(
             Id: enumType.Id,
-            Name: GetTypeName(enumType),
+            Name: enumType.ShortName,
             Namespace: enumType.Namespace,
             Assembly: enumType.Assembly,
             Modifiers: modifiers,
             Members: enumMemberTMs,
             Attributes: GetTemplateModels(enumType.Attributes),
-            DeclaringType: GetTypeLinkOrNull(enumType.DeclaringType),
+            DeclaringType: GetCodeLinkOrNull(enumType.DeclaringType),
             SummaryDocComment: ToHtmlString(enumType.SummaryDocComment),
             RemarksDocComment: ToHtmlString(enumType.RemarksDocComment),
             SeeAlsoDocComments: GetHtmlStrings(enumType.SeeAlsoDocComments));

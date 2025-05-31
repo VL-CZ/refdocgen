@@ -43,7 +43,7 @@ public class TypeDocCommentTests
 
         string[] seeAlsoDocs = TypePageTools.GetSeeAlsoDocs(document.GetTypeDataSection());
 
-        string[] expectedDocs = ["My collection class", "System.Collections.Generic.ICollection`1"]; // TODO: update to ICollection<T>
+        string[] expectedDocs = ["My collection class", "ICollection<T>"];
 
         seeAlsoDocs.ShouldBe(expectedDocs);
     }

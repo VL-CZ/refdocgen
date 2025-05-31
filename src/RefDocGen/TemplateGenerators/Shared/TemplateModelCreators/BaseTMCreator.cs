@@ -1,12 +1,14 @@
+using RefDocGen.CodeElements.Members.Abstract;
+using RefDocGen.CodeElements.Shared;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.Languages;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools;
-using RefDocGen.TemplateGenerators.Shared.Tools.Names;
 using RefDocGen.Tools;
 using System.Xml.Linq;
 
@@ -65,64 +67,76 @@ internal abstract class BaseTMCreator
     }
 
     /// <summary>
-    /// Gets the <see cref="TypeLinkTM"/> from the provided <paramref name="type"/>.
+    /// Gets the <see cref="CodeLinkTM"/> representing the provided type or type member.
+    /// </summary>
+    /// <param name="type">The provided type containing the member.</param>
+    /// <param name="member">The member for which the URL is returned. <c>null</c> if the link should point to a type.</param>
+    /// <param name="includeTypeParameters">Specifies whether the type paramters should be included in the resulting <see cref="CodeLinkTM"/> instance.</param>
+    /// <returns><see cref="CodeLinkTM"/> corresponding to the provided <paramref name="type"/> and <paramref name="member"/>.</returns>
+    protected CodeLinkTM GetCodeLink(ITypeNameData type, IMemberData? member = null, bool includeTypeParameters = true)
+    {
+        string? url = typeUrlResolver.GetUrlOf(type, member?.Id);
+
+        var name = GetLanguageSpecificData(lang => lang.GetTypeName(type, includeTypeParameters, url is null));
+
+        return new CodeLinkTM(name, url, member?.Name);
+    }
+
+    /// <summary>
+    /// Gets the <see cref="CodeLinkTM"/> representing the provided type member.
+    /// </summary>
+    /// <param name="type">The provided type containing the member.</param>
+    /// <param name="member">The member for which the URL is returned.</param>
+    /// <returns><see cref="CodeLinkTM"/> corresponding to the provided <paramref name="type"/> and <paramref name="member"/>. <see langword="null"/> if the provided <paramref name="type"/> is <see langword="null"/>.</returns>
+    protected CodeLinkTM? GetCodeLinkOrNull(ITypeNameData? type, IMemberData member)
+    {
+        if (type is null)
+        {
+            return null;
+        }
+
+        return GetCodeLink(type, member);
+    }
+
+    /// <summary>
+    /// Gets the <see cref="CodeLinkTM"/> representing the provided <paramref name="type"/>.
     /// </summary>
     /// <param name="type">The provided type.</param>
-    /// <returns><see cref="TypeLinkTM"/> corresponding to the provided <paramref name="type"/>.</returns>
-    protected TypeLinkTM GetTypeLink(ITypeNameData type)
+    /// <returns><see cref="CodeLinkTM"/> corresponding to the provided <paramref name="type"/>. <see langword="null"/> if the provided <paramref name="type"/> is <see langword="null"/>.</returns>
+    protected CodeLinkTM? GetCodeLinkOrNull(ITypeNameData? type)
     {
-        string? url = typeUrlResolver.GetUrlOf(type);
+        if (type is null)
+        {
+            return null;
+        }
 
-        return new TypeLinkTM(
-            CSharpTypeName.Of(type, url is null),
-            url
+        return GetCodeLink(type);
+    }
+
+    /// <inheritdoc cref="GetCodeLinkOrNull(ITypeNameData?)"/>
+    protected CodeLinkTM? GetCodeLinkOrNull(ITypeDeclaration? type)
+    {
+        if (type is null)
+        {
+            return null;
+        }
+
+        return GetCodeLink(type.TypeObject.GetTypeNameData());
+    }
+
+    /// <summary>
+    /// Gets the <see cref="GenericTypeLinkTM"/> representing the provided <paramref name="type"/>.
+    /// </summary>
+    /// <param name="type">The provided type.</param>
+    /// <returns><see cref="GenericTypeLinkTM"/> corresponding to the provided <paramref name="type"/>.</returns>
+    protected GenericTypeLinkTM GetGenericTypeLink(ITypeNameData type)
+    {
+        var typeLink = GetCodeLink(type, includeTypeParameters: false);
+
+        return new GenericTypeLinkTM(
+            typeLink,
+            [.. type.TypeParameters.Select(GetGenericTypeLink)]
             );
-    }
-
-    /// <inheritdoc cref="GetTypeLink(ITypeNameData)"/>
-    protected TypeLinkTM GetTypeLink(ITypeDeclaration type)
-    {
-        string? url = typeUrlResolver.GetUrlOf(type.Id);
-
-        return new TypeLinkTM(
-            CSharpTypeName.Of(type),
-            url);
-    }
-
-    /// <summary>
-    /// Gets the <see cref="TypeLinkTM"/> from the provided <paramref name="type"/> or <see langword="null"/> if the type is <see langword="null"/>.
-    /// </summary>
-    /// <param name="type">The provided type.</param>
-    /// <returns><see cref="TypeLinkTM"/> corresponding to the provided <paramref name="type"/>. <see langword="null"/> if the provided <paramref name="type"/> is <see langword="null"/>.</returns>
-    protected TypeLinkTM? GetTypeLinkOrNull(ITypeNameData? type)
-    {
-        if (type is null)
-        {
-            return null;
-        }
-
-        return GetTypeLink(type);
-    }
-
-    /// <inheritdoc cref="GetTypeLinkOrNull(ITypeNameData?)"/>
-    protected TypeLinkTM? GetTypeLinkOrNull(ITypeDeclaration? type)
-    {
-        if (type is null)
-        {
-            return null;
-        }
-
-        return GetTypeLink(type);
-    }
-
-    /// <summary>
-    /// Gets the C# name of the type, excluding its generic parameters.
-    /// </summary>
-    /// <param name="type">The provided type.</param>
-    /// <returns>C# name of the provided type.</returns>
-    protected string GetTypeName(ITypeDeclaration type)
-    {
-        return CSharpTypeName.Of(type, false);
     }
 
     /// <summary>
@@ -157,12 +171,12 @@ internal abstract class BaseTMCreator
 
     /// <summary>
     /// Gets language specific data obtained by executing the <paramref name="languageFunction"/> on each available language.
-    /// </summary>
     /// <example>
     /// <code>
     /// var typeName = GetLanguageSpecificData(lang => lang.GetTypeName(type)); // gets name of the type in all available languages
     /// </code>
     /// </example>
+    /// </summary>
     /// <typeparam name="T">Type of the data returned by the <paramref name="languageFunction"/>.</typeparam>
     /// <param name="languageFunction">The function that obtains the data based on the language.</param>
     /// <returns>Language specific data obtained by executing the <paramref name="languageFunction"/> on each available language.</returns>
