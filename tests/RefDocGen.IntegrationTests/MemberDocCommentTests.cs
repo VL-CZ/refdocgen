@@ -78,7 +78,7 @@ public class MemberDocCommentTests
         string[] expectedDocs = [
             "http://www.google.com",
             "max age constant",
-            "System.Reflection.FieldInfo.IsLiteral",
+            "FieldInfo.IsLiteral",
             "Point",
             "!:notFound"
             ];
