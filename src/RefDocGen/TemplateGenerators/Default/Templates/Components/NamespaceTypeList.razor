@@ -32,13 +32,11 @@
     <hr />
 
     <div class="collapse show multi-collapse" id="@(Namespace.Name)-collapse">
-        <table class="table">
-            <tbody data-id="namespace-types">
+            <div data-id="namespace-types">
                 @foreach (var type in Namespace.AllTypes)
                 {
                     <TypeNameRow Type="@type" />
                 }
-            </tbody>
-        </table>
+            </div>
     </div>
 </div>
