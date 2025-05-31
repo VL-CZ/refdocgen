@@ -13,7 +13,7 @@
 }
 
 <tr data-id="type-row-element">
-    <td class="w-50" data-id="type-row-name">
+    <td class="col-md-6" data-id="type-row-name">
         <samp>
             <a href="@typeUrl" class="refdocgen-link-secondary">
                 <span class="refdocgen-text-tertiary">
@@ -25,7 +25,10 @@
             </a>
         </samp>
     </td>
-    <td class="text-body-secondary fst-italic" data-id="type-row-doc">
-        @Type.DocComment
+    <td class="col-md-6 text-body-secondary fst-italic text-truncate" data-id="type-row-doc">
+        @if (Type.DocComment is not null)
+        {
+            @((MarkupString)Type.DocComment)
+        }
     </td>
 </tr>
