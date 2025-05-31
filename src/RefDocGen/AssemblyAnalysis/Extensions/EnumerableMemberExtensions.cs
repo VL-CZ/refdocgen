@@ -17,6 +17,5 @@ internal static class EnumerableMemberDataExtensions
         where TMember : IMemberData
     {
         return members.ToDictionary(m => m.Id);
-        // return members.DistinctBy(x => x.Id).ToDictionary(m => m.Id);
     }
 }
