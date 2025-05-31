@@ -1,3 +1,5 @@
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links;
+
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 
 /// <summary>

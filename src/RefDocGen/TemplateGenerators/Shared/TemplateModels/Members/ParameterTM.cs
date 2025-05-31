@@ -1,4 +1,5 @@
 using RefDocGen.TemplateGenerators.Shared.Languages;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
@@ -19,7 +20,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// <param name="Attributes">Array of attributes applied to the parameter.</param>
 public record ParameterTM(
     string Name,
-    GenericCodeLinkTM Type,
+    GenericTypeLinkTM Type,
     LanguageSpecificData<string[]> Modifiers,
     AttributeTM[] Attributes,
     LanguageSpecificData<string>? DefaultValue,

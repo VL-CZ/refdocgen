@@ -1,9 +1,10 @@
+@using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links
 @inherits ComponentBase
 
 @code {
 
     [Parameter]
-    public required GenericCodeLinkTM Type { get; set; }
+    public required GenericTypeLinkTM Type { get; set; }
 
     [Parameter]
     public required string? DocComment { get; set; }

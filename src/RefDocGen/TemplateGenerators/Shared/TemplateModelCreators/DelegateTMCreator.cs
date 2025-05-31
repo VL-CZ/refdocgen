@@ -35,7 +35,7 @@ internal class DelegateTMCreator : TypeTMCreator
             Parameters: GetTemplateModels(delegateType.Parameters),
             TypeParameters: GetTemplateModels(delegateType.TypeParameters),
             Attributes: GetTemplateModels(delegateType.Attributes),
-            DeclaringType: GetTypeLinkOrNull(delegateType.DeclaringType),
+            DeclaringType: GetCodeLinkOrNull(delegateType.DeclaringType),
             SummaryDocComment: ToHtmlString(delegateType.SummaryDocComment),
             RemarksDocComment: ToHtmlString(delegateType.RemarksDocComment),
             ReturnsDocComment: ToHtmlString(delegateType.ReturnValueDocComment),

@@ -1,4 +1,5 @@
 using RefDocGen.TemplateGenerators.Shared.Languages;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
@@ -47,8 +48,8 @@ public record ObjectTypeTM(
     EventTM[] Events,
     TypeNameTM[] NestedTypes,
     TypeParameterTM[] TypeParameters,
-    GenericCodeLinkTM? BaseType,
-    GenericCodeLinkTM[] ImplementedInterfaces,
+    GenericTypeLinkTM? BaseType,
+    GenericTypeLinkTM[] ImplementedInterfaces,
     AttributeTM[] Attributes,
     CodeLinkTM? DeclaringType,
     string? SummaryDocComment,

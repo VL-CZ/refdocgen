@@ -1,4 +1,5 @@
 using RefDocGen.TemplateGenerators.Shared.Languages;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
@@ -40,7 +41,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 /// </param>
 public record IndexerTM(
     string Id,
-    GenericCodeLinkTM Type,
+    GenericTypeLinkTM Type,
     ParameterTM[] Parameters,
     bool HasGetter,
     bool HasSetter,

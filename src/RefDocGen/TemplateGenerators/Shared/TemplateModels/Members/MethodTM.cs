@@ -1,4 +1,5 @@
 using RefDocGen.TemplateGenerators.Shared.Languages;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
@@ -41,7 +42,7 @@ public record MethodTM(
     string Name,
     ParameterTM[] Parameters,
     TypeParameterTM[] TypeParameters,
-    GenericCodeLinkTM ReturnType,
+    GenericTypeLinkTM ReturnType,
     bool ReturnsVoid,
     LanguageSpecificData<string[]> Modifiers,
     AttributeTM[] Attributes,

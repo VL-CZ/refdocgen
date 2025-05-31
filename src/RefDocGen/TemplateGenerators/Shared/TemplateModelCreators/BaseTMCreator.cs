@@ -6,7 +6,7 @@ using RefDocGen.CodeElements.Types.Abstract.Enum;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.Languages;
-using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators.Tools;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools;
 using RefDocGen.Tools;
@@ -67,71 +67,73 @@ internal abstract class BaseTMCreator
     }
 
     /// <summary>
-    /// Gets the <see cref="CodeLinkTM"/> of the provided type member.
+    /// Gets the <see cref="CodeLinkTM"/> representing the provided type or type member.
     /// </summary>
     /// <param name="type">The provided type containing the member.</param>
-    /// <param name="member">The member for which the URL is returned.</param>
+    /// <param name="member">The member for which the URL is returned. <c>null</c> if the link should point to a type.</param>
+    /// <param name="includeTypeParameters">Specifies whether the type paramters should be included in the resulting <see cref="CodeLinkTM"/> instance.</param>
     /// <returns><see cref="CodeLinkTM"/> corresponding to the provided <paramref name="type"/> and <paramref name="member"/>.</returns>
-    protected CodeLinkTM GetTypeMemberLink(ITypeNameData type, IMemberData? member = null, bool includeTypeParameters = true)
+    protected CodeLinkTM GetCodeLink(ITypeNameData type, IMemberData? member = null, bool includeTypeParameters = true)
     {
         string? url = typeUrlResolver.GetUrlOf(type, member?.Id);
-        var name = GetLanguageSpecificData(lang => lang.GetTypeName(type, includeTypeParameters));
 
-        if (url is null && type.Namespace != string.Empty) // URL not found -> add namespace before the type name (for all langauges)
-        {
-            name = GetLanguageSpecificData(lang => $"{type.Namespace}." + lang.GetTypeName(type, includeTypeParameters));
-        }
+        var name = GetLanguageSpecificData(lang => lang.GetTypeName(type, includeTypeParameters, url is null));
 
         return new CodeLinkTM(name, url, member?.Name);
     }
 
     /// <summary>
-    /// Gets the <see cref="CodeLinkTM"/> of the provided type member.
+    /// Gets the <see cref="CodeLinkTM"/> representing the provided type member.
     /// </summary>
     /// <param name="type">The provided type containing the member.</param>
     /// <param name="member">The member for which the URL is returned.</param>
     /// <returns><see cref="CodeLinkTM"/> corresponding to the provided <paramref name="type"/> and <paramref name="member"/>. <see langword="null"/> if the provided <paramref name="type"/> is <see langword="null"/>.</returns>
-    protected CodeLinkTM? GetTypeMemberLinkOrNull(ITypeNameData? type, IMemberData member)
+    protected CodeLinkTM? GetCodeLink(ITypeNameData? type, IMemberData member)
     {
         if (type is null)
         {
             return null;
         }
 
-        return GetTypeMemberLink(type, member);
+        return GetCodeLink(type, member);
     }
 
     /// <summary>
-    /// Gets the <see cref="CodeLinkTM"/> from the provided <paramref name="type"/> or <see langword="null"/> if the type is <see langword="null"/>.
+    /// Gets the <see cref="CodeLinkTM"/> representing the provided <paramref name="type"/>.
     /// </summary>
     /// <param name="type">The provided type.</param>
     /// <returns><see cref="CodeLinkTM"/> corresponding to the provided <paramref name="type"/>. <see langword="null"/> if the provided <paramref name="type"/> is <see langword="null"/>.</returns>
-    protected CodeLinkTM? GetTypeLinkOrNull(ITypeNameData? type)
+    protected CodeLinkTM? GetCodeLinkOrNull(ITypeNameData? type)
     {
         if (type is null)
         {
             return null;
         }
 
-        return GetTypeMemberLink(type);
+        return GetCodeLink(type);
     }
 
-    /// <inheritdoc cref="GetTypeLinkOrNull(ITypeNameData?)"/>
-    protected CodeLinkTM? GetTypeLinkOrNull(ITypeDeclaration? type)
+    /// <inheritdoc cref="GetCodeLinkOrNull(ITypeNameData?)"/>
+    protected CodeLinkTM? GetCodeLinkOrNull(ITypeDeclaration? type)
     {
         if (type is null)
         {
             return null;
         }
 
-        return GetTypeMemberLink(type.TypeObject.GetTypeNameData());
+        return GetCodeLink(type.TypeObject.GetTypeNameData());
     }
 
-    protected GenericCodeLinkTM GetGenericTypeLink(ITypeNameData type)
+    /// <summary>
+    /// Gets the <see cref="GenericTypeLinkTM"/> representing the provided <paramref name="type"/>.
+    /// </summary>
+    /// <param name="type">The provided type.</param>
+    /// <returns><see cref="GenericTypeLinkTM"/> corresponding to the provided <paramref name="type"/>.</returns>
+    protected GenericTypeLinkTM GetGenericTypeLink(ITypeNameData type)
     {
-        var typeLink = GetTypeMemberLink(type, includeTypeParameters: false);
+        var typeLink = GetCodeLink(type, includeTypeParameters: false);
 
-        return new GenericCodeLinkTM(
+        return new GenericTypeLinkTM(
             typeLink,
             [.. type.TypeParameters.Select(GetGenericTypeLink)]
             );

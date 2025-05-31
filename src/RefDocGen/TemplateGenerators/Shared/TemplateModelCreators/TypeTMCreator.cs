@@ -5,6 +5,7 @@ using RefDocGen.CodeElements.Types.Abstract.Exception;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.Languages;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 using RefDocGen.TemplateGenerators.Shared.Tools;
@@ -114,17 +115,15 @@ internal abstract class TypeTMCreator : BaseTMCreator
     protected ExceptionTM GetFrom(IExceptionDocumentation exception)
     {
         var name = GetLanguageSpecificData(_ => exception.Id);
+        string? url = typeUrlResolver.GetUrlOf(exception.Id);
 
         if (TypeTools.GetType(exception.Id) is ITypeNameData type) // type found by its ID string -> get its name
         {
-            name = GetLanguageSpecificData(lang => lang.GetTypeName(type));
+            name = GetLanguageSpecificData(lang => lang.GetTypeName(type, true, url is null));
         }
 
         return new ExceptionTM(
-            new CodeLinkTM(
-                name,
-                typeUrlResolver.GetUrlOf(exception.Id)
-                ),
+            new CodeLinkTM(name, url),
             ToHtmlString(exception.DocComment));
     }
 
@@ -159,7 +158,7 @@ internal abstract class TypeTMCreator : BaseTMCreator
         return new NamedAttributeArgumentTM(
             new CodeLinkTM(
                 GetLanguageSpecificData(_ => argument.Name),
-                typeUrlResolver.GetUrlOf(attribute.Type.Id, argument.Name)
+                typeUrlResolver.GetUrlOf(attribute.Type, argument.Name)
             ),
             GetLanguageSpecificDefaultValue(argument.Value));
     }

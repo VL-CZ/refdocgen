@@ -1,5 +1,4 @@
 using RefDocGen.CodeElements.Members.Abstract;
-using RefDocGen.CodeElements.Members.Concrete;
 
 namespace RefDocGen.CodeElements.Members.Tools;
 

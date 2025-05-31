@@ -35,7 +35,7 @@ internal class EnumTMCreator : TypeTMCreator
             Modifiers: modifiers,
             Members: enumMemberTMs,
             Attributes: GetTemplateModels(enumType.Attributes),
-            DeclaringType: GetTypeLinkOrNull(enumType.DeclaringType),
+            DeclaringType: GetCodeLinkOrNull(enumType.DeclaringType),
             SummaryDocComment: ToHtmlString(enumType.SummaryDocComment),
             RemarksDocComment: ToHtmlString(enumType.RemarksDocComment),
             SeeAlsoDocComments: GetHtmlStrings(enumType.SeeAlsoDocComments));

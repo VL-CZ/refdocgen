@@ -1,4 +1,5 @@
 using RefDocGen.TemplateGenerators.Shared.Languages;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 
 namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
@@ -35,7 +36,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 public record EventTM(
     string Id,
     string Name,
-    GenericCodeLinkTM Type,
+    GenericTypeLinkTM Type,
     LanguageSpecificData<string[]> Modifiers,
     AttributeTM[] Attributes,
     string? SummaryDocComment,

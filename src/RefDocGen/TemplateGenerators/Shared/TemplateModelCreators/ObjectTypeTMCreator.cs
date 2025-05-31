@@ -3,6 +3,7 @@ using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using RefDocGen.TemplateGenerators.Shared.Languages;
 using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators.Tools;
+using RefDocGen.TemplateGenerators.Shared.TemplateModels.Links;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Members;
 using RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 
@@ -58,7 +59,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             BaseType: baseType,
             ImplementedInterfaces: interfaces,
             Attributes: GetTemplateModels(type.Attributes),
-            DeclaringType: GetTypeLinkOrNull(type.DeclaringType),
+            DeclaringType: GetCodeLinkOrNull(type.DeclaringType),
             SummaryDocComment: ToHtmlString(type.SummaryDocComment),
             RemarksDocComment: ToHtmlString(type.RemarksDocComment),
             SeeAlsoDocComments: GetHtmlStrings(type.SeeAlsoDocComments)
@@ -105,7 +106,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             SummaryDocComment: ToHtmlString(field.SummaryDocComment),
             RemarksDocComment: ToHtmlString(field.RemarksDocComment),
             SeeAlsoDocComments: GetHtmlStrings(field.SeeAlsoDocComments),
-            InheritedFrom: GetTypeLinkOrNull(field.InheritedFrom));
+            InheritedFrom: GetCodeLinkOrNull(field.InheritedFrom));
     }
 
     /// <summary>
@@ -136,9 +137,9 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             ValueDocComment: ToHtmlString(property.ValueDocComment),
             SeeAlsoDocComments: GetHtmlStrings(property.SeeAlsoDocComments),
             Exceptions: GetTemplateModels(property.DocumentedExceptions),
-            InheritedFrom: GetTypeLinkOrNull(property.InheritedFrom),
-            BaseDeclaringType: GetTypeMemberLinkOrNull(property.BaseDeclaringType, property),
-            ExplicitInterfaceType: GetTypeMemberLinkOrNull(property.ExplicitInterfaceType, property),
+            InheritedFrom: GetCodeLinkOrNull(property.InheritedFrom),
+            BaseDeclaringType: GetCodeLink(property.BaseDeclaringType, property),
+            ExplicitInterfaceType: GetCodeLink(property.ExplicitInterfaceType, property),
             ImplementedInterfaces: GetInterfacesImplemented(property));
     }
 
@@ -169,9 +170,9 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             ValueDocComment: ToHtmlString(indexer.ValueDocComment),
             SeeAlsoDocComments: GetHtmlStrings(indexer.SeeAlsoDocComments),
             Exceptions: GetTemplateModels(indexer.DocumentedExceptions),
-            InheritedFrom: GetTypeLinkOrNull(indexer.InheritedFrom),
-            BaseDeclaringType: GetTypeMemberLinkOrNull(indexer.BaseDeclaringType, indexer),
-            ExplicitInterfaceType: GetTypeMemberLinkOrNull(indexer.ExplicitInterfaceType, indexer),
+            InheritedFrom: GetCodeLinkOrNull(indexer.InheritedFrom),
+            BaseDeclaringType: GetCodeLink(indexer.BaseDeclaringType, indexer),
+            ExplicitInterfaceType: GetCodeLink(indexer.ExplicitInterfaceType, indexer),
             ImplementedInterfaces: GetInterfacesImplemented(indexer));
     }
 
@@ -198,9 +199,9 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             ReturnsDocComment: ToHtmlString(method.ReturnValueDocComment),
             SeeAlsoDocComments: GetHtmlStrings(method.SeeAlsoDocComments),
             Exceptions: GetTemplateModels(method.DocumentedExceptions),
-            InheritedFrom: GetTypeLinkOrNull(method.InheritedFrom),
-            BaseDeclaringType: GetTypeMemberLinkOrNull(method.BaseDeclaringType, method),
-            ExplicitInterfaceType: GetTypeMemberLinkOrNull(method.ExplicitInterfaceType, method),
+            InheritedFrom: GetCodeLinkOrNull(method.InheritedFrom),
+            BaseDeclaringType: GetCodeLink(method.BaseDeclaringType, method),
+            ExplicitInterfaceType: GetCodeLink(method.ExplicitInterfaceType, method),
             ImplementedInterfaces: GetInterfacesImplemented(method));
     }
 
@@ -229,9 +230,9 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             ReturnsDocComment: ToHtmlString(operatorData.ReturnValueDocComment),
             SeeAlsoDocComments: GetHtmlStrings(operatorData.SeeAlsoDocComments),
             Exceptions: GetTemplateModels(operatorData.DocumentedExceptions),
-            InheritedFrom: GetTypeLinkOrNull(operatorData.InheritedFrom),
-            BaseDeclaringType: GetTypeMemberLinkOrNull(operatorData.BaseDeclaringType, operatorData),
-            ExplicitInterfaceType: GetTypeMemberLinkOrNull(operatorData.ExplicitInterfaceType, operatorData),
+            InheritedFrom: GetCodeLinkOrNull(operatorData.InheritedFrom),
+            BaseDeclaringType: GetCodeLink(operatorData.BaseDeclaringType, operatorData),
+            ExplicitInterfaceType: GetCodeLink(operatorData.ExplicitInterfaceType, operatorData),
             ImplementedInterfaces: GetInterfacesImplemented(operatorData));
     }
 
@@ -254,9 +255,9 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             RemarksDocComment: ToHtmlString(eventData.RemarksDocComment),
             SeeAlsoDocComments: GetHtmlStrings(eventData.SeeAlsoDocComments),
             Exceptions: GetTemplateModels(eventData.DocumentedExceptions),
-            InheritedFrom: GetTypeLinkOrNull(eventData.InheritedFrom),
-            BaseDeclaringType: GetTypeMemberLinkOrNull(eventData.BaseDeclaringType, eventData),
-            ExplicitInterfaceType: GetTypeMemberLinkOrNull(eventData.ExplicitInterfaceType, eventData),
+            InheritedFrom: GetCodeLinkOrNull(eventData.InheritedFrom),
+            BaseDeclaringType: GetCodeLink(eventData.BaseDeclaringType, eventData),
+            ExplicitInterfaceType: GetCodeLink(eventData.ExplicitInterfaceType, eventData),
             ImplementedInterfaces: GetInterfacesImplemented(eventData));
     }
 
@@ -283,6 +284,6 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>The types of the interfaces, whose part of contract the member implements.</returns>
     private CodeLinkTM[] GetInterfacesImplemented(ICallableMemberData member)
     {
-        return [.. member.ImplementedInterfaces.Select(i => GetTypeMemberLink(i, member))];
+        return [.. member.ImplementedInterfaces.Select(i => GetCodeLink(i, member))];
     }
 }
