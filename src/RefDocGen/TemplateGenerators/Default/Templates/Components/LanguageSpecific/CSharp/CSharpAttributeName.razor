@@ -33,6 +33,11 @@
     {
         <CodeLink Type="@namedArg.Name" />
         <LiteralValueSuffix Value="@namedArg.Value" />
+
+        @if (namedArg != Attribute.NamedArguments.Last())
+        {
+            <span>, </span>
+        }
     }
     <span>)</span>
 }
