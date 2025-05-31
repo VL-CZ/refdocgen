@@ -138,8 +138,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             SeeAlsoDocComments: GetHtmlStrings(property.SeeAlsoDocComments),
             Exceptions: GetTemplateModels(property.DocumentedExceptions),
             InheritedFrom: GetCodeLinkOrNull(property.InheritedFrom),
-            BaseDeclaringType: GetCodeLink(property.BaseDeclaringType, property),
-            ExplicitInterfaceType: GetCodeLink(property.ExplicitInterfaceType, property),
+            BaseDeclaringType: GetCodeLinkOrNull(property.BaseDeclaringType, property),
+            ExplicitInterfaceType: GetCodeLinkOrNull(property.ExplicitInterfaceType, property),
             ImplementedInterfaces: GetInterfacesImplemented(property));
     }
 
@@ -171,8 +171,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             SeeAlsoDocComments: GetHtmlStrings(indexer.SeeAlsoDocComments),
             Exceptions: GetTemplateModels(indexer.DocumentedExceptions),
             InheritedFrom: GetCodeLinkOrNull(indexer.InheritedFrom),
-            BaseDeclaringType: GetCodeLink(indexer.BaseDeclaringType, indexer),
-            ExplicitInterfaceType: GetCodeLink(indexer.ExplicitInterfaceType, indexer),
+            BaseDeclaringType: GetCodeLinkOrNull(indexer.BaseDeclaringType, indexer),
+            ExplicitInterfaceType: GetCodeLinkOrNull(indexer.ExplicitInterfaceType, indexer),
             ImplementedInterfaces: GetInterfacesImplemented(indexer));
     }
 
@@ -200,8 +200,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             SeeAlsoDocComments: GetHtmlStrings(method.SeeAlsoDocComments),
             Exceptions: GetTemplateModels(method.DocumentedExceptions),
             InheritedFrom: GetCodeLinkOrNull(method.InheritedFrom),
-            BaseDeclaringType: GetCodeLink(method.BaseDeclaringType, method),
-            ExplicitInterfaceType: GetCodeLink(method.ExplicitInterfaceType, method),
+            BaseDeclaringType: GetCodeLinkOrNull(method.BaseDeclaringType, method),
+            ExplicitInterfaceType: GetCodeLinkOrNull(method.ExplicitInterfaceType, method),
             ImplementedInterfaces: GetInterfacesImplemented(method));
     }
 
@@ -231,8 +231,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             SeeAlsoDocComments: GetHtmlStrings(operatorData.SeeAlsoDocComments),
             Exceptions: GetTemplateModels(operatorData.DocumentedExceptions),
             InheritedFrom: GetCodeLinkOrNull(operatorData.InheritedFrom),
-            BaseDeclaringType: GetCodeLink(operatorData.BaseDeclaringType, operatorData),
-            ExplicitInterfaceType: GetCodeLink(operatorData.ExplicitInterfaceType, operatorData),
+            BaseDeclaringType: GetCodeLinkOrNull(operatorData.BaseDeclaringType, operatorData),
+            ExplicitInterfaceType: GetCodeLinkOrNull(operatorData.ExplicitInterfaceType, operatorData),
             ImplementedInterfaces: GetInterfacesImplemented(operatorData));
     }
 
@@ -256,8 +256,8 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             SeeAlsoDocComments: GetHtmlStrings(eventData.SeeAlsoDocComments),
             Exceptions: GetTemplateModels(eventData.DocumentedExceptions),
             InheritedFrom: GetCodeLinkOrNull(eventData.InheritedFrom),
-            BaseDeclaringType: GetCodeLink(eventData.BaseDeclaringType, eventData),
-            ExplicitInterfaceType: GetCodeLink(eventData.ExplicitInterfaceType, eventData),
+            BaseDeclaringType: GetCodeLinkOrNull(eventData.BaseDeclaringType, eventData),
+            ExplicitInterfaceType: GetCodeLinkOrNull(eventData.ExplicitInterfaceType, eventData),
             ImplementedInterfaces: GetInterfacesImplemented(eventData));
     }
 
@@ -284,6 +284,6 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>The types of the interfaces, whose part of contract the member implements.</returns>
     private CodeLinkTM[] GetInterfacesImplemented(ICallableMemberData member)
     {
-        return [.. member.ImplementedInterfaces.Select(i => GetCodeLink(i, member))];
+        return [.. member.ImplementedInterfaces.Select(i => GetCodeLinkOrNull(i, member))];
     }
 }

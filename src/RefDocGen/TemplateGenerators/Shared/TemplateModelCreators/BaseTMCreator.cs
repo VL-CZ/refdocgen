@@ -88,7 +88,7 @@ internal abstract class BaseTMCreator
     /// <param name="type">The provided type containing the member.</param>
     /// <param name="member">The member for which the URL is returned.</param>
     /// <returns><see cref="CodeLinkTM"/> corresponding to the provided <paramref name="type"/> and <paramref name="member"/>. <see langword="null"/> if the provided <paramref name="type"/> is <see langword="null"/>.</returns>
-    protected CodeLinkTM? GetCodeLink(ITypeNameData? type, IMemberData member)
+    protected CodeLinkTM? GetCodeLinkOrNull(ITypeNameData? type, IMemberData member)
     {
         if (type is null)
         {
