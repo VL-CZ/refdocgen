@@ -1,4 +1,5 @@
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using RefDocGen.CodeElements.Members;
 using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
@@ -33,6 +34,7 @@ public class CSharpOperatorNameTests
         returnType.TypeObject.Returns(typeof(DateTime));
         returnType.ShortName.Returns("DateTime");
         returnType.HasTypeParameters.Returns(false);
+        returnType.DeclaringType.ReturnsNull();
 
         var operatorData = Substitute.For<IOperatorData>();
 
