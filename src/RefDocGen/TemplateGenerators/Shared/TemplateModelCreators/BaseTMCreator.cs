@@ -56,6 +56,12 @@ internal abstract class BaseTMCreator
         return docCommentTransformer.ToHtmlString(docComment);
     }
 
+    /// <inheritdoc cref="IDocCommentTransformer.ToHtmlOneLineString(XElement)"/>
+    protected string? ToHtmlOneLineString(XElement docComment)
+    {
+        return docCommentTransformer.ToHtmlOneLineString(docComment);
+    }
+
     /// <summary>
     /// Converts each of the <see cref="XElement"/> to its HTML string representation.
     /// </summary>
@@ -197,6 +203,6 @@ internal abstract class BaseTMCreator
     private TypeNameTM GetTypeNameFrom(ITypeDeclaration type, string typeKindName)
     {
         var typeName = GetLanguageSpecificData(lang => lang.GetTypeName(type));
-        return new TypeNameTM(type.Id, typeKindName, typeName, ToHtmlString(type.SummaryDocComment));
+        return new TypeNameTM(type.Id, typeKindName, typeName, ToHtmlOneLineString(type.SummaryDocComment));
     }
 }

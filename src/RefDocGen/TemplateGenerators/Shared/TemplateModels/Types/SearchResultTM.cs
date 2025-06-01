@@ -9,7 +9,7 @@ namespace RefDocGen.TemplateGenerators.Shared.TemplateModels.Types;
 /// <param name="DocComment">Documentation provided to the search result.</param>
 /// <param name="Id">ID of the search result. In case of a member, the ID containing type is returned.</param>
 /// <param name="IdFragment">In case of a member, this variable represents the ID of the member.</param>
-public record SearchResultTM(LanguageSpecificData<string> Name, string DocComment, string Id, string? IdFragment = null) : ITemplateModelWithId
+public record SearchResultTM(LanguageSpecificData<string> Name, string? DocComment, string Id, string? IdFragment = null) : ITemplateModelWithId
 {
     /// <summary>
     /// URL of the search result, relative to the <c>search</c> page.

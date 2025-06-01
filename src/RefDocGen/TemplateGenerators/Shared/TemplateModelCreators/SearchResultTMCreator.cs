@@ -212,7 +212,7 @@ internal class SearchResultTMCreator : BaseTMCreator
             return $"{type.Namespace}.{name} {typeKindName}";
         });
 
-        return new(localizedNames, type.SummaryDocComment.Value, type.Id);
+        return new(localizedNames, ToHtmlOneLineString(type.SummaryDocComment), type.Id);
     }
 
     /// <summary>
@@ -239,7 +239,7 @@ internal class SearchResultTMCreator : BaseTMCreator
         });
 
         return new(localizedNames,
-            member.SummaryDocComment.Value,
+            ToHtmlOneLineString(member.SummaryDocComment),
             member.ContainingType.Id,
             member.Id);
     }

@@ -12,7 +12,7 @@
 
 <div data-id="namespace-section" id="@Namespace.Id">
 
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex justify-content-between align-items-center pt-2 pb-1">
         <h1 class="display-6" data-id="namespace-name">
             <samp>
                 <a href="@namespaceUrl" class="refdocgen-link-primary">
@@ -29,16 +29,14 @@
         </button>
     </div>
 
-    <hr />
+    <hr class="my-2"/>
 
     <div class="collapse show multi-collapse" id="@(Namespace.Name)-collapse">
-        <table class="table">
-            <tbody data-id="namespace-types">
+            <div data-id="namespace-types">
                 @foreach (var type in Namespace.AllTypes)
                 {
                     <TypeNameRow Type="@type" />
                 }
-            </tbody>
-        </table>
+            </div>
     </div>
 </div>

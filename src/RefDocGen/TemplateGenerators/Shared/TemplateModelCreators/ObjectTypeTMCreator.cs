@@ -284,6 +284,6 @@ internal class ObjectTypeTMCreator : TypeTMCreator
     /// <returns>The types of the interfaces, whose part of contract the member implements.</returns>
     private CodeLinkTM[] GetInterfacesImplemented(ICallableMemberData member)
     {
-        return [.. member.ImplementedInterfaces.Select(i => GetCodeLinkOrNull(i, member))];
+        return [.. member.ImplementedInterfaces.Select(i => GetCodeLink(i, member))];
     }
 }

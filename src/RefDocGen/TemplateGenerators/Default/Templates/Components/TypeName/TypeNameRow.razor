@@ -12,8 +12,8 @@
     var typeUrl = $"./{Type.Id}.html";
 }
 
-<tr data-id="type-row-element">
-    <td class="w-50" data-id="type-row-name">
+<div class="row align-items-center mx-2" data-id="type-row-element">
+    <div class="col-md-6" data-id="type-row-name">
         <samp>
             <a href="@typeUrl" class="refdocgen-link-secondary">
                 <span class="refdocgen-text-tertiary">
@@ -24,8 +24,12 @@
                 <LanguageSpecificStrings Data="@Type.Name" />
             </a>
         </samp>
-    </td>
-    <td class="text-body-secondary fst-italic" data-id="type-row-doc">
-        @Type.DocComment
-    </td>
-</tr>
+    </div>
+    <div class="col-md-6 text-body-secondary fst-italic text-truncate" data-id="type-row-doc">
+        @if (Type.DocComment is not null)
+        {
+            @((MarkupString)Type.DocComment)
+        }
+    </div>
+</div>
+<hr class="my-2" />
