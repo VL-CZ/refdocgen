@@ -1,3 +1,4 @@
+using AngleSharp.Dom;
 using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
@@ -599,5 +600,39 @@ internal class DocCommentTransformer : IDocCommentTransformer
         {
             return AddTextNodeTo(fullObjectName, htmlTemplateIfNotFound);
         }
+    }
+
+    /// <inheritdoc/>
+    public string? ToHtmlOneLineString(XElement docComment)
+    {
+        var docCommentCopy = new XElement(docComment);
+
+        TransformToHtml(docCommentCopy);
+
+        if (!docCommentCopy.Nodes().Any()) // no content -> return null
+        {
+            return null;
+        }
+
+        string[] newLineElements = ["div", "p", "br", "table", "thead", "tr", "th", "ul", "ol", "li", "pre"];
+
+        foreach (var element in newLineElements)
+        {
+            var divs = docCommentCopy.Descendants(element).ToList();
+
+            foreach (var div in divs)
+            {
+                // Replace with its child nodes (i.e., unwrap it)
+                div.ReplaceWith(div.Nodes());
+            }
+        }
+
+        if (docCommentCopy is XElement rootElement)
+        {
+            var nodeStrings = rootElement.Nodes().Select(n => n.ToString());
+            return string.Join("", nodeStrings);
+        }
+
+        return docCommentCopy.ToString();
     }
 }

@@ -16,6 +16,16 @@ internal interface IDocCommentTransformer
     string? ToHtmlString(XElement docComment);
 
     /// <summary>
+    /// Converts the <paramref name="docComment"/> <see cref="XElement"/> to its HTML one-line string representation.
+    /// </summary>
+    /// <param name="docComment">The element to be converted to its HTML string.</param>
+    /// <returns>Raw HTML one-line string representation of the <paramref name="docComment"/>. <c>null</c> if the <paramref name="docComment"/> is empty.</returns>
+    /// <remarks>
+    /// All elements that cause a line break (such as <c>div</c> and <c>br</c>) are removed from the documentation.
+    /// </remarks>
+    string? ToHtmlOneLineString(XElement docComment);
+
+    /// <summary>
     /// A registry of the declared types.
     /// </summary>
     /// <remarks>

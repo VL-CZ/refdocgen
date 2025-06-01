@@ -1,3 +1,4 @@
+using AngleSharp.Dom;
 using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.Shared;
 using RefDocGen.CodeElements.Types.Abstract;
@@ -54,6 +55,12 @@ internal abstract class BaseTMCreator
     protected string? ToHtmlString(XElement docComment)
     {
         return docCommentTransformer.ToHtmlString(docComment);
+    }
+
+    /// <inheritdoc cref="IDocCommentTransformer.ToHtmlOneLineString(XElement)"/>
+    protected string? ToHtmlOneLineString(XElement docComment)
+    {
+        return docCommentTransformer.ToHtmlOneLineString(docComment);
     }
 
     /// <summary>
@@ -197,6 +204,6 @@ internal abstract class BaseTMCreator
     private TypeNameTM GetTypeNameFrom(ITypeDeclaration type, string typeKindName)
     {
         var typeName = GetLanguageSpecificData(lang => lang.GetTypeName(type));
-        return new TypeNameTM(type.Id, typeKindName, typeName, ToHtmlString(type.SummaryDocComment));
+        return new TypeNameTM(type.Id, typeKindName, typeName, ToHtmlOneLineString(type.SummaryDocComment));
     }
 }
