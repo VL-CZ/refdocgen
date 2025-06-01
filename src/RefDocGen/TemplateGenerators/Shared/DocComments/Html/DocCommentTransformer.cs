@@ -1,4 +1,3 @@
-using AngleSharp.Dom;
 using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
@@ -616,7 +615,7 @@ internal class DocCommentTransformer : IDocCommentTransformer
 
         string[] newLineElements = ["div", "p", "br", "table", "thead", "tr", "th", "ul", "ol", "li", "pre"];
 
-        foreach (var element in newLineElements)
+        foreach (string element in newLineElements)
         {
             var divs = docCommentCopy.Descendants(element).ToList();
 

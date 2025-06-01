@@ -1,4 +1,3 @@
-using AngleSharp.Dom;
 using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.Shared;
 using RefDocGen.CodeElements.Types.Abstract;
