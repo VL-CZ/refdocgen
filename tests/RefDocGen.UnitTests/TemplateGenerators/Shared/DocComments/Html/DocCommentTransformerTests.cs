@@ -6,7 +6,7 @@ using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using Shouldly;
 using System.Xml.Linq;
 
-namespace RefDocGen.UnitTests.Shared.DocComments.Html;
+namespace RefDocGen.UnitTests.TemplateGenerators.Shared.DocComments.Html;
 
 /// <summary>
 /// Class responsible for transforming the XML doc comments into HTML.
@@ -16,10 +16,10 @@ public class DocCommentTransformerTests
     /// <summary>
     /// Transformer of the doc comments into HTML.
     /// </summary>
-    private DocCommentTransformer docCommentTransformer;
+    private readonly DocCommentTransformer docCommentTransformer;
 
     /// <inheritdoc cref="IDocCommentHtmlConfiguration"/>
-    private IDocCommentHtmlConfiguration configuration;
+    private readonly IDocCommentHtmlConfiguration configuration;
 
     public DocCommentTransformerTests()
     {
@@ -32,7 +32,7 @@ public class DocCommentTransformerTests
     [Fact]
     public void ToHtmlString_ReturnsCorrectData_ForBasicElements()
     {
-        XElement docComment = XElement.Parse(
+        var docComment = XElement.Parse(
             """
             <summary>
                 documentation, parameter <paramref name="input"/> and type parameter <typeparamref name="T"/>
@@ -79,7 +79,7 @@ public class DocCommentTransformerTests
     [Fact]
     public void ToHtmlString_ReturnsHtmlTable_ForTableListElement()
     {
-        XElement docComment = XElement.Parse(
+        var docComment = XElement.Parse(
             """
             <summary>
                 <list type="table">
@@ -128,7 +128,7 @@ public class DocCommentTransformerTests
     [InlineData("F:type1.field1", "./type1.html#field1", "type1.field1")]
     public void ToHtmlString_ReturnsLink_ForCrefElement_WhenLinkFound(string crefValue, string expectedHref, string expectedText)
     {
-        XElement docComment = XElement.Parse(
+        var docComment = XElement.Parse(
             $"""
             <summary>
                 <see cref="{crefValue}"/>
@@ -149,7 +149,7 @@ public class DocCommentTransformerTests
     [Fact]
     public void ToHtmlString_ReturnsHighlightedText_ForCrefElement_WhenLinkNotFound()
     {
-        XElement docComment = XElement.Parse(
+        var docComment = XElement.Parse(
             $"""
             <summary>
                 <see cref="T:notFoundType"/>
