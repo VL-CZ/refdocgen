@@ -1,0 +1,24 @@
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Types
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required TypeParameterTM TypeParameter { get; set; }
+}
+
+
+@{
+    var modifiers = TypeParameter.Modifiers.CSharpData;
+}
+
+@if (modifiers.Any())
+{
+    <span class="refdocgen-text-tertiary">
+        @string.Join(' ', modifiers)
+    </span>
+    <span> </span>
+}
+<span class="refdocgen-text-secondary">
+    @TypeParameter.Name
+</span>
+

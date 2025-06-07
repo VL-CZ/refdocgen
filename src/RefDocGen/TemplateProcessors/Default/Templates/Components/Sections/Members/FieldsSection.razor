@@ -1,0 +1,36 @@
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Members
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required FieldTM[] Fields { get; set; }
+}
+
+<h2 class="display-5 mt-2">Fields</h2>
+<div class="row" data-id="fields-section">
+    <div class="col-md-12">
+        @foreach (var field in Fields)
+        {
+            <div class="border p-2 mb-2" id="@field.Id" data-id="member-data">
+                <h6 class="mb-1" data-id="member-name">
+                    <samp>
+                        <FieldName Field="@field" />
+
+                        <AnchorLink Id="@field.Id" />
+                    </samp>
+
+                </h6>
+
+                <MemberInheritedFrom OriginalType="@field.InheritedFrom" />
+
+                <SummaryDoc DocComment="@field.SummaryDocComment" />
+
+                <AttributesSection Attributes="@field.Attributes" />
+
+                <RemarksDoc DocComment="@field.RemarksDocComment" />
+
+                <SeeAlsoDocs DocComments="@field.SeeAlsoDocComments" />
+            </div>
+        }
+    </div>
+</div>

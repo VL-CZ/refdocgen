@@ -1,0 +1,48 @@
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Members
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required IndexerTM[] Indexers { get; set; }
+}
+
+<h2 class="display-5 mt-2">Indexers</h2>
+<div class="row" data-id="indexers-section">
+    <div class="col-md-12">
+        @foreach (var indexer in Indexers)
+        {
+            <div class="border p-2 mb-2" id="@indexer.Id" data-id="member-data">
+                <h6 class="mb-1" data-id="member-name">
+                    <samp>
+                        <IndexerName Indexer="@indexer" />
+
+                        <AnchorLink Id="@indexer.Id" />
+                    </samp>
+                </h6>
+
+                <MemberInheritedFrom OriginalType="@indexer.InheritedFrom" />
+
+                <MemberOverrides BaseType="@indexer.BaseDeclaringType" />
+
+                <MemberExplicitlyImplements Interface="@indexer.ExplicitInterfaceType" />
+
+                <MemberImplements Interfaces="@indexer.ImplementedInterfaces" />
+
+                <SummaryDoc DocComment="@indexer.SummaryDocComment" />
+
+                <ParameterDocs Parameters="@indexer.Parameters" />
+
+                <ValueDoc DocComment="@indexer.ValueDocComment" />
+
+                <AttributesSection Attributes="@indexer.Attributes" />
+
+                <!-- Remarks doc comment -->
+                <RemarksDoc DocComment="@indexer.RemarksDocComment" />
+
+                <ExceptionDocs Exceptions="@indexer.Exceptions" />
+
+                <SeeAlsoDocs DocComments="@indexer.SeeAlsoDocComments" />
+            </div>
+        }
+    </div>
+</div>

@@ -3,8 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RefDocGen.AssemblyAnalysis;
 using RefDocGen.CodeElements;
-using RefDocGen.TemplateGenerators.Default;
-using RefDocGen.TemplateGenerators.Shared.Languages;
+using RefDocGen.TemplateProcessors.Default;
+using RefDocGen.TemplateProcessors.Shared.Languages;
 
 namespace RefDocGen;
 
@@ -47,9 +47,9 @@ public static class Program
             new OtherLanguageConfiguration()
         ];
 
-        var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir, availableLanguages, staticPagesDir, version);
+        var templateProcessor = new DefaultTemplateProcessor(htmlRenderer, availableLanguages, staticPagesDir, version);
 
-        var docGenerator = new DocGenerator(dllPaths, docPaths, templateGenerator, assemblyDataConfig);
+        var docGenerator = new DocGenerator(dllPaths, docPaths, templateProcessor, assemblyDataConfig, outputDir);
         docGenerator.GenerateDoc();
 
         Console.WriteLine("Done...");

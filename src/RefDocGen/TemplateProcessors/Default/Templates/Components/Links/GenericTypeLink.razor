@@ -1,0 +1,10 @@
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Links
+@using RefDocGen.TemplateProcessors.Shared.TemplateTools
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required GenericTypeLinkTM Type { get; set; }
+}
+
+<LanguageData Type="LanguageSpecificComponent.GenericTypeLink" Parameter="Type" />

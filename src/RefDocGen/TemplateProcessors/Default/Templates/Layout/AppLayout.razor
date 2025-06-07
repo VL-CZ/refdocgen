@@ -1,0 +1,68 @@
+@using RefDocGen.TemplateProcessors.Shared.TemplateTools
+@inherits LayoutComponentBase
+
+@code {
+    [CascadingParameter]
+    public string? CustomStyles { get; set; } = null;
+
+    [CascadingParameter]
+    public string[]? Versions { get; set; } = [];
+
+    [CascadingParameter]
+    public int NestingLevel { get; set; } = 1;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+@{
+    string stylesUrl = UrlHelper.GetRelativeUrl("Static/styles.css", NestingLevel);
+    string customJsUrl = UrlHelper.GetRelativeUrl("Static/script.js", NestingLevel);
+    string boostrapJsUrl = UrlHelper.GetRelativeUrl("Static/bootstrap-5.3.5-dist.bundle.min.js", NestingLevel);
+}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Reference documentation</title>
+
+    <script>
+        const savedTheme = localStorage.getItem('refdocgen-theme') || "light"; // get the saved theme
+        document.documentElement.setAttribute('data-bs-theme', savedTheme); // set the 'data-bs-theme' attribute
+
+
+    </script>
+
+    <!-- Global CSS (Bootstrap + custom styles) -->
+    <link href="@stylesUrl" rel="stylesheet" />
+
+    @if (CustomStyles is not null)
+    {
+        string customStylesUrl = UrlHelper.GetRelativeUrl(CustomStyles, NestingLevel);
+
+        <!-- Custom CSS for static pages -->
+        <link href="@customStylesUrl" rel="stylesheet" />
+    }
+</head>
+
+<body>
+    <TopMenu NestingLevel="@NestingLevel" />
+
+    <div class="container my-4" data-id="page-body">
+        @Body
+    </div>
+
+    @if (Versions is not null)
+    {
+        <BottomMenu Versions="@Versions" />
+    }
+
+    <!-- Bootstrap JS -->
+    <script src="@boostrapJsUrl"></script>
+
+    <!-- Custom JS -->
+    <script src="@customJsUrl"></script>
+
+</body>
+</html>

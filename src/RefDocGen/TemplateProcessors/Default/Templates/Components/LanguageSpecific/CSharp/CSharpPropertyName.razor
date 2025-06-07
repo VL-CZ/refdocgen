@@ -1,0 +1,32 @@
+@inherits ComponentBase
+@using RefDocGen.TemplateProcessors.Default.Templates.Components.LanguageSpecific.CSharp.Utils
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Members
+
+@code {
+    [Parameter]
+    public required PropertyTM Property { get; set; }
+}
+
+@{
+    string propertyName = Property.ExplicitInterfaceType is not null
+            ? Property.ExplicitInterfaceType.Name.CSharpData + "." + Property.Name
+            : Property.Name;
+}
+
+<span class="refdocgen-text-tertiary">
+    @string.Join(' ', Property.Modifiers.CSharpData)
+</span>
+
+<GenericTypeLink Type="@Property.Type" />
+
+<span class="refdocgen-text-primary">
+    @propertyName
+</span>
+
+<AccessorMethods HasGetter="@Property.HasGetter"
+                 HasSetter="@Property.HasSetter"
+                 IsSetterInitOnly="@Property.IsSetterInitOnly"
+                 GetterModifiers="@Property.GetterModifiers.CSharpData"
+                 SetterModifiers="@Property.SetterModifiers.CSharpData" />
+
+<LiteralValueSuffix Value="@Property.ConstantValue" />

@@ -1,0 +1,46 @@
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Members
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required PropertyTM[] Properties { get; set; }
+}
+
+<h2 class="display-5 mt-2">Properties</h2>
+<div class="row" data-id="properties-section">
+    <div class="col-md-12">
+        @foreach (var property in Properties)
+        {
+            <div class="border p-2 mb-2" id="@property.Id" data-id="member-data">
+                <h6 class="mb-1" data-id="member-name">
+                    <samp>
+                        <PropertyName Property="@property" />
+
+                        <AnchorLink Id="@property.Id" />
+                    </samp>
+                </h6>
+
+                <MemberInheritedFrom OriginalType="@property.InheritedFrom" />
+
+                <MemberOverrides BaseType="@property.BaseDeclaringType" />
+
+                <MemberExplicitlyImplements Interface="@property.ExplicitInterfaceType" />
+
+                <MemberImplements Interfaces="@property.ImplementedInterfaces" />
+
+                <SummaryDoc DocComment="@property.SummaryDocComment" />
+
+                <ValueDoc DocComment="@property.ValueDocComment" />
+
+                <AttributesSection Attributes="@property.Attributes" />
+
+                <!-- Remarks doc comment -->
+                <RemarksDoc DocComment="@property.RemarksDocComment" />
+
+                <ExceptionDocs Exceptions="@property.Exceptions" />
+
+                <SeeAlsoDocs DocComments="@property.SeeAlsoDocComments" />
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,18 @@
+@inherits ComponentBase
+@using RefDocGen.TemplateProcessors.Default.Templates.Components.LanguageSpecific.CSharp.Utils
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Types
+
+@code {
+    [Parameter]
+    public required ITypeDeclarationNameTM Type { get; set; }
+}
+
+@{
+    string typeFullName = Type.DeclaringType is not null
+            ? Type.DeclaringType.Name.CSharpData + "." + Type.Name
+            : Type.Name;
+}
+
+<span class="refdocgen-text-tertiary">@string.Join(' ', Type.Modifiers.CSharpData)</span>
+<span class="refdocgen-text-primary">@typeFullName</span><TypeParametersString TypeParameters="@Type.TypeParameters" />
+

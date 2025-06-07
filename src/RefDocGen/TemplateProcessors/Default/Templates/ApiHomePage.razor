@@ -1,0 +1,49 @@
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Assemblies
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Language
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Menu
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required AssemblyTM[] Model { get; set; }
+
+    [Parameter]
+    public required TopMenuDataTM TopMenuData { get; set; }
+
+    [Parameter]
+    public required string[]? Versions { get; set; }
+
+    [Parameter]
+    public required LanguageTM[] Languages { get; set; }
+}
+
+<CascadingValue Value="TopMenuData">
+    <CascadingValue Value="Versions">
+        <CascadingValue Value="Languages">
+            <LayoutView Layout="typeof(AppLayout)">
+                @foreach (var assembly in Model)
+                {
+
+                    <h1 class="display-4">
+                        <samp>
+                            <a href="@(assembly.Name)-DLL.html" class="refdocgen-link-primary">
+                                <span class="refdocgen-text-tertiary">assembly</span>
+                                <span class="refdocgen-text-primary">@assembly.Name</span>
+                            </a>
+                        </samp>
+                    </h1>
+
+                    @* <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false">Toggle all</button> *@
+
+                    <hr />
+
+                    @foreach (var ns in assembly.Namespaces)
+                    {
+                        <NamespaceTypeList Namespace="@ns" />
+                    }
+                }
+
+            </LayoutView>
+        </CascadingValue>
+    </CascadingValue>
+</CascadingValue>

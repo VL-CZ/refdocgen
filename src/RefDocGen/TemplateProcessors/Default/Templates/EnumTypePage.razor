@@ -1,0 +1,88 @@
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Language
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Menu
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Types
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required EnumTypeTM Model { get; set; }
+
+    [Parameter]
+    public required TopMenuDataTM TopMenuData { get; set; }
+
+    [Parameter]
+    public required string[]? Versions { get; set; }
+
+    [Parameter]
+    public required LanguageTM[] Languages { get; set; }
+
+    /// <summary>
+    /// Checks if the model has any (summary, remarks,...) doc comments.
+    /// </summary>
+    /// <returns>Boolean indicating whether the model is documented.</returns>
+    private bool IsModelDocumented()
+    {
+        return Model.SummaryDocComment is not null || Model.RemarksDocComment is not null || Model.SeeAlsoDocComments.Any();
+    }
+}
+
+<CascadingValue Value="TopMenuData">
+    <CascadingValue Value="Versions">
+        <CascadingValue Value="Languages">
+            <LayoutView Layout="typeof(AppLayout)">
+                <div data-id="declared-type-data">
+                    <TypeNameTitle Type="@Model"/>
+
+                    <AssemblyLink Assembly="@Model.Assembly" />
+
+                    <NamespaceLink Namespace="@Model.Namespace" />
+
+                    <DeclaringTypeSection DeclaringType="@Model.DeclaringType" />
+
+                    <hr />
+
+                    <SummaryDoc DocComment="@Model.SummaryDocComment" />
+
+                    <AttributesSection Attributes="@Model.Attributes" />
+
+                    <!-- Remarks doc comment -->
+                    <RemarksDoc DocComment="@Model.RemarksDocComment" />
+
+                    <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
+
+
+                    @if (IsModelDocumented())
+                    {
+                        <hr />
+                    }
+                </div>
+
+                <h2 class="display-5 mt-2">Members</h2>
+                <div class="row">
+                    <div class="col-md-12">
+                        @foreach (var enumMember in Model.Members)
+                        {
+                            <div class="border p-2 mb-2" id="@enumMember.Id" data-id="enum-member">
+                                <h6 class="mb-1" data-id="member-name">
+                                    <samp>
+                                        <EnumMemberName EnumMember="@enumMember" />
+
+                                        <AnchorLink Id="@enumMember.Id" />
+                                    </samp>
+                                </h6>
+
+                                <SummaryDoc DocComment="@enumMember.SummaryDocComment" />
+
+                                <AttributesSection Attributes="@enumMember.Attributes" />
+
+                                <RemarksDoc DocComment="@enumMember.RemarksDocComment" />
+
+                                <SeeAlsoDocs DocComments="@enumMember.SeeAlsoDocComments" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            </LayoutView>
+        </CascadingValue>
+    </CascadingValue>
+</CascadingValue>

@@ -24,22 +24,22 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="TemplateGenerators\Default\Templates\Static\bootstrap-5.3.5-dist.bundle.min.js">
+        <None Update="TemplateProcessors\Default\Templates\Static\bootstrap-5.3.5-dist.bundle.min.js">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="TemplateGenerators\Default\Templates\Static\fuse-7.1.0.min.js">
+        <None Update="TemplateProcessors\Default\Templates\Static\fuse-7.1.0.min.js">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="TemplateGenerators\Default\Templates\Static\search.js">
+        <None Update="TemplateProcessors\Default\Templates\Static\search.js">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="TemplateGenerators\Default\Templates\Static\script.js">
+        <None Update="TemplateProcessors\Default\Templates\Static\script.js">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="TemplateGenerators\Default\Templates\Static\styles.css">
+        <None Update="TemplateProcessors\Default\Templates\Static\styles.css">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="TemplateGenerators\Shared\StaticData\defaultIndexPage.html">
+        <None Update="TemplateProcessors\Shared\StaticData\defaultIndexPage.html">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
