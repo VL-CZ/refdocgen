@@ -173,8 +173,8 @@ internal class RazorTemplateProcessor<
         {
             string rootOutputDirectory = outputDirectory;
 
-            outputDirectory = Path.Join(outputDirectory, docVersion); // set output directory
-            _ = Directory.CreateDirectory(outputDirectory);
+            this.outputDirectory = Path.Join(outputDirectory, docVersion); // set output directory
+            _ = Directory.CreateDirectory(this.outputDirectory);
 
             versionManager = new(rootOutputDirectory, docVersion);
         }
@@ -191,7 +191,7 @@ internal class RazorTemplateProcessor<
 
         if (!isUserDefinedIndexPage) // no user-specified 'index' page -> add the default one redirecting to API page.
         {
-            string outputIndexPage = Path.Join(outputDirectory, indexPageId + ".html");
+            string outputIndexPage = Path.Join(this.outputDirectory, indexPageId + ".html");
             File.Copy(defaultIndexPage, outputIndexPage, true);
         }
 
