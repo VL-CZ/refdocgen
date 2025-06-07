@@ -26,8 +26,8 @@ public class MemberDataTests
     [Fact]
     public void TypeConstraints_Match()
     {
-        using var document = DocumentationTools.GetApiPage("MyLibrary.Tools.Collections.MyCollection`1.html");
-        var method = document.GetMemberElement("AddGeneric``1(``0)");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.Tools.Collections.MyCollection-1.html");
+        var method = document.GetMemberElement("AddGeneric--1(--0)");
 
         string[] constraints = TypePageTools.GetTypeParamConstraints(method);
 
@@ -36,7 +36,7 @@ public class MemberDataTests
 
     [Theory]
     [InlineData("MyLibrary.Dog", "Owner", "Animal")]
-    [InlineData("MyLibrary.Tools.Collections.MySortedList`1", "Contains(`0)", "MyCollection<T>")]
+    [InlineData("MyLibrary.Tools.Collections.MySortedList-1", "Contains(-0)", "MyCollection<T>")]
     public void InheritedFromString_Matches(string pageName, string memberId, string expectedInheritedFromTypeName)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
@@ -50,7 +50,7 @@ public class MemberDataTests
     [Theory]
     [InlineData("MyLibrary.Dog", "GetSound", "Animal.GetSound")]
     [InlineData("MyLibrary.Hierarchy.ChildChild", "Handle(System.Object)", "Parent.Handle")]
-    [InlineData("MyLibrary.Tools.Collections.MySortedList`1", "AddRange(System.Collections.Generic.IEnumerable{`0})", "MyCollection<T>.AddRange")]
+    [InlineData("MyLibrary.Tools.Collections.MySortedList-1", "AddRange(System.Collections.Generic.IEnumerable{-0})", "MyCollection<T>.AddRange")]
     public void OverridesString_Matches(string pageName, string memberId, string expectedOverridenMemberName)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
@@ -62,9 +62,9 @@ public class MemberDataTests
     }
 
     [Theory]
-    [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "System#Collections#IEnumerable#GetEnumerator", "IEnumerable.GetEnumerator")]
-    [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "MyLibrary#Tools#Collections#IMyCollection{T}#CanAdd", "IMyCollection<T>.CanAdd")]
-    [InlineData("MyLibrary.Tools.Collections.NonGenericCollection", "System#Collections#ICollection#IsSynchronized", "ICollection.IsSynchronized")]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection-1", "System.Collections.IEnumerable.GetEnumerator", "IEnumerable.GetEnumerator")]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection-1", "MyLibrary.Tools.Collections.IMyCollection{T}.CanAdd", "IMyCollection<T>.CanAdd")]
+    [InlineData("MyLibrary.Tools.Collections.NonGenericCollection", "System.Collections.ICollection.IsSynchronized", "ICollection.IsSynchronized")]
     public void ExplicitlyImplementedInterface_Matches(string pageName, string memberId, string expectedExplicitInterface)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
@@ -76,8 +76,8 @@ public class MemberDataTests
     }
 
     [Theory]
-    [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "Count", "ICollection<T>.Count")]
-    [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "Add(`0)", "ICollection<T>.Add")]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection-1", "Count", "ICollection<T>.Count")]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection-1", "Add(-0)", "ICollection<T>.Add")]
     [InlineData("MyLibrary.Tools.Collections.MyStringCollection", "Add(System.String)", "ICollection<string>.Add")]
     public void SingleImplementedInterface_Matches(string pageName, string memberId, string expectedInterface)
     {
@@ -105,7 +105,7 @@ public class MemberDataTests
     {
         using var document = DocumentationTools.GetApiPage("MyLibrary.Tools.Collections.MyCollection-1.html");
 
-        var exceptions = TypePageTools.GetExceptions(document.GetMemberElement("Add(`0)"));
+        var exceptions = TypePageTools.GetExceptions(document.GetMemberElement("Add(-0)"));
 
         exceptions.Length.ShouldBe(2);
 

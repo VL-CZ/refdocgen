@@ -13,8 +13,8 @@ public class ParameterSectionTests
     [Theory]
     [InlineData("MyLibrary.Animal", "GetAverageLifespan(System.String)", "string species", "The species of the animal.")]
     [InlineData("MyLibrary.Tools.Point", "op_UnaryNegation(MyLibrary.Tools.Point)", "Point point", "The provided point.")]
-    [InlineData("MyLibrary.Tools.WeatherStation", "#ctor(MyLibrary.Tools.Point)", "Point location", "Location of the weather station.")]
-    [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "Item(System.Index)", "Index index", "An Index struct.")]
+    [InlineData("MyLibrary.Tools.WeatherStation", ".ctor(MyLibrary.Tools.Point)", "Point location", "Location of the weather station.")]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection-1", "Item(System.Index)", "Index index", "An Index struct.")]
     [InlineData(
         "MyLibrary.User",
         "AddAnimalsByType(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{MyLibrary.Animal}})",

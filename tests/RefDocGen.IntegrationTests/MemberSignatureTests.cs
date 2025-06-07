@@ -19,17 +19,17 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Dog", "BarkAsync", "private async Task BarkAsync()")]
     [InlineData("MyLibrary.User", "GetAnimalsByType", "public Dictionary<string, List<Animal>> GetAnimalsByType()")]
     [InlineData("MyLibrary.User", "AddAnimals(MyLibrary.Animal[])", "public void AddAnimals(params Animal[] animals)")]
-    [InlineData("MyLibrary.Tools.Collections.IMyCollection`1",
-        "AddRange(System.Collections.Generic.IEnumerable{`0})",
+    [InlineData("MyLibrary.Tools.Collections.IMyCollection-1",
+        "AddRange(System.Collections.Generic.IEnumerable{-0})",
         "public void AddRange(IEnumerable<T> range)")]
     [InlineData("MyLibrary.Tools.StringExtensions",
         "ZipWith(System.String,System.String)",
         "public static string ZipWith(this string s1, string s2)")]
-    [InlineData("MyLibrary.Tools.Collections.MyCollection`1",
-        "System#Collections#IEnumerable#GetEnumerator",
+    [InlineData("MyLibrary.Tools.Collections.MyCollection-1",
+        "System.Collections.IEnumerable.GetEnumerator",
         "IEnumerator IEnumerable.GetEnumerator()")]
-    [InlineData("MyLibrary.Tools.Collections.MyCollection`1",
-        "AddGeneric``1(``0)",
+    [InlineData("MyLibrary.Tools.Collections.MyCollection-1",
+        "AddGeneric--1(--0)",
         "public void AddGeneric<T2>(T2 item)")]
     public void MethodSignature_Matches(string pageName, string methodId, string expectedSignature)
     {
@@ -62,7 +62,7 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.User", "LastName", "public string LastName { get; init; }")]
     [InlineData(
         "MyLibrary.Tools.Collections.NonGenericCollection",
-        "System#Collections#ICollection#IsSynchronized",
+        "System.Collections.ICollection.IsSynchronized",
         "bool ICollection.IsSynchronized { get; }")]
     public void PropertySignature_Matches(string pageName, string propertyId, string expectedSignature)
     {
@@ -75,8 +75,8 @@ public class MemberSignatureTests
     }
 
     [Theory]
-    [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "Item(System.Int32)", "public T this[int index] { get; private set; }")]
-    [InlineData("MyLibrary.Tools.Collections.MyCollection`1", "Item(System.Index)", "public T this[Index index] { get; private set; }")]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection-1", "Item(System.Int32)", "public T this[int index] { get; private set; }")]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection-1", "Item(System.Index)", "public T this[Index index] { get; private set; }")]
     public void IndexerSignature_Matches(string pageName, string indexerId, string expectedSignature)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
@@ -88,9 +88,9 @@ public class MemberSignatureTests
     }
 
     [Theory]
-    [InlineData("MyLibrary.User", "#ctor", "public User()")]
-    [InlineData("MyLibrary.User", "#ctor(System.String,System.Int32)", "public User(string username, int age)")]
-    [InlineData("MyLibrary.Tools.Point", "#ctor(System.Double,System.Double)", "internal Point(double x, double y)")]
+    [InlineData("MyLibrary.User", ".ctor", "public User()")]
+    [InlineData("MyLibrary.User", ".ctor(System.String,System.Int32)", "public User(string username, int age)")]
+    [InlineData("MyLibrary.Tools.Point", ".ctor(System.Double,System.Double)", "internal Point(double x, double y)")]
     public void ConstructorSignature_Matches(string pageName, string constructorId, string expectedSignature)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
@@ -144,7 +144,7 @@ public class MemberSignatureTests
     [Fact]
     public void DelegateMethodSignature_Matches()
     {
-        using var document = DocumentationTools.GetApiPage("MyLibrary.Tools.MyPredicate`1.html");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.Tools.MyPredicate-1.html");
 
         var delegateMethod = document.DocumentElement.GetByDataId(DataId.DelegateMethod);
 
