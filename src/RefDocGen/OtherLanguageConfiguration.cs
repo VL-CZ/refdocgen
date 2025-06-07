@@ -3,8 +3,8 @@ using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
 using RefDocGen.CodeElements;
-using RefDocGen.TemplateGenerators.Shared.Languages;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
+using RefDocGen.TemplateProcessors.Shared.Languages;
 
 namespace RefDocGen;
 

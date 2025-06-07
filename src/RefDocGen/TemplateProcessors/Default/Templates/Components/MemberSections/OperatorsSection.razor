@@ -1,0 +1,55 @@
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Members
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required OperatorTM[] Operators { get; set; }
+}
+
+<h2 class="display-5 mt-2">Operators</h2>
+<div class="row" data-id="operators-section">
+    <div class="col-md-12">
+        @foreach (var op in Operators)
+        {
+            <div class="border p-2 mb-2" id="@op.Id" data-id="member-data">
+                <h6 class="mb-1" data-id="member-name">
+                    <samp>
+                        <OperatorName Operator="@op" />
+
+                        <AnchorLink Id="@op.Id" />
+                    </samp>
+                </h6>
+
+                <TypeParametersConstraintsSection TypeParameters="@op.TypeParameters" />
+
+                <MemberInheritedFrom OriginalType="@op.InheritedFrom" />
+
+                <MemberOverrides BaseType="@op.BaseDeclaringType" />
+
+                <MemberExplicitlyImplements Interface="@op.ExplicitInterfaceType" />
+
+                <MemberImplements Interfaces="@op.ImplementedInterfaces" />
+
+                <SummaryDoc DocComment="@op.SummaryDocComment" />
+
+                <TypeParameterDocs TypeParameters="@op.TypeParameters" />
+
+                <ParameterDocs Parameters="@op.Parameters" />
+
+                @if (!op.ReturnsVoid)
+                {
+                    <ReturnValueDoc DocComment="@op.ReturnsDocComment" Type="@op.ReturnType" />
+                }
+
+                <AttributesSection Attributes="@op.Attributes" />
+
+                <!-- Remarks doc comment -->
+                <RemarksDoc DocComment="@op.RemarksDocComment" />
+
+                <ExceptionDocs Exceptions="@op.Exceptions" />
+
+                <SeeAlsoDocs DocComments="@op.SeeAlsoDocComments" />
+            </div>
+        }
+    </div>
+</div>

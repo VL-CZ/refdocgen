@@ -1,6 +1,6 @@
-using RefDocGen.TemplateGenerators.Shared.StaticPages;
-using RefDocGen.TemplateGenerators.Shared.TemplateModelCreators;
-using RefDocGen.TemplateGenerators.Shared.TemplateModels.Menu;
+using RefDocGen.TemplateProcessors.Shared.StaticPages;
+using RefDocGen.TemplateProcessors.Shared.TemplateModelCreators;
+using RefDocGen.TemplateProcessors.Shared.TemplateModels.Menu;
 using Shouldly;
 
 namespace RefDocGen.UnitTests.TemplateGenerators.Shared.TemplateModelCreators;

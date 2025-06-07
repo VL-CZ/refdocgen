@@ -1,0 +1,56 @@
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Language
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Menu
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Types
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required IEnumerable<SearchResultTM> Model { get; set; }
+
+    [Parameter]
+    public required TopMenuDataTM TopMenuData { get; set; }
+
+    [Parameter]
+    public required string[]? Versions { get; set; }
+
+    [Parameter]
+    public required LanguageTM[] Languages { get; set; }
+
+    private const int NestingLevel = 0;
+}
+
+<CascadingValue Value="TopMenuData">
+    <CascadingValue Value="Versions">
+        <CascadingValue Value="Languages">
+            <CascadingValue Value="NestingLevel">
+                <LayoutView Layout="typeof(AppLayout)">
+
+                    <h1 class="display-4">Search</h1>
+
+                    <div class="input-group input-group-lg mb-3">
+                        <input type="text" class="form-control" aria-label="Search input" aria-describedby="inputGroup-sizing-lg"
+                               id="search-box" autocomplete="off">
+                    </div>
+
+                    <div id="search-results">
+                    </div>
+
+                    <div id="search-result-template">
+                        <SearchResult />
+                    </div>
+
+                    <div id="search-json-data">
+                        @JsonSerializer.Serialize(Model, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })
+                    </div>
+
+                    <!-- Fuse.js -->
+                    <script src="Static/fuse-7.1.0.min.js"></script>
+
+                    <!-- Custom search JS script -->
+                    <script src="Static/search.js"></script>
+
+                </LayoutView>
+            </CascadingValue>
+        </CascadingValue>
+    </CascadingValue>
+</CascadingValue>

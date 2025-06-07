@@ -1,0 +1,24 @@
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Links
+@inherits ComponentBase
+
+@code {
+
+    [Parameter]
+    public required GenericTypeLinkTM Type { get; set; }
+
+    [Parameter]
+    public required string? DocComment { get; set; }
+}
+
+<h3 class="lead my-2">Returns</h3>
+<div class="mx-2" data-id="returns-section">
+    <samp data-id="return-type-name">
+        <GenericTypeLink Type="@Type" />
+    </samp>
+    <div class="text-body-secondary fst-italic" data-id="returns-doc">
+        @if (DocComment is not null)
+        {
+            @((MarkupString)DocComment)
+        }
+    </div>
+</div>

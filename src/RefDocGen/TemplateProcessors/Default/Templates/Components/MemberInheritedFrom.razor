@@ -1,0 +1,15 @@
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Links
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required CodeLinkTM? OriginalType { get; set; }
+}
+
+@if (OriginalType is not null)
+{
+    <div class="refdocgen-text-tertiary fst-italic ms-4 mb-2" data-id="member-inherited-from">
+            Inherited from
+            <CodeLink Type="@OriginalType" />
+    </div>
+}

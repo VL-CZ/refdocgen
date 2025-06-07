@@ -3,7 +3,7 @@ using NSubstitute.ReturnsExtensions;
 using RefDocGen.CodeElements.Members;
 using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
-using RefDocGen.TemplateGenerators.Shared.Tools.Names;
+using RefDocGen.TemplateProcessors.Shared.Tools.Names;
 using Shouldly;
 
 namespace RefDocGen.UnitTests.TemplateGenerators.Shared.Tools.Names;

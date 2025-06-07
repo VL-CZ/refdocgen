@@ -1,0 +1,10 @@
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Members
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required ConstructorTM Constructor { get; set; }
+
+    [Parameter]
+    public required string TypeName { get; set; }
+}

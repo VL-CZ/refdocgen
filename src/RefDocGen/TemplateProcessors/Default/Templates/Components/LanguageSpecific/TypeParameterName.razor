@@ -1,0 +1,10 @@
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Types
+@using RefDocGen.TemplateProcessors.Shared.TemplateTools
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required TypeParameterTM TypeParameter { get; set; }
+}
+
+<LanguageData Type="LanguageSpecificComponent.TypeParameterName" Parameter="TypeParameter" />

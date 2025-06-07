@@ -1,0 +1,43 @@
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Members
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required EventTM[] Events { get; set; }
+}
+
+<h2 class="display-5 mt-2">Events</h2>
+<div class="row" data-id="events-section">
+    <div class="col-md-12">
+        @foreach (var e in Events)
+        {
+            <div class="border p-2 mb-2" id="@e.Id" data-id="member-data">
+                <h6 class="mb-1" data-id="member-name">
+                    <samp>
+                        <EventName Event="@e"/>
+
+                        <AnchorLink Id="@e.Id" />
+                    </samp>
+                </h6>
+
+                <MemberInheritedFrom OriginalType="@e.InheritedFrom" />
+
+                <MemberOverrides BaseType="@e.BaseDeclaringType" />
+
+                <MemberExplicitlyImplements Interface="@e.ExplicitInterfaceType" />
+
+                <MemberImplements Interfaces="@e.ImplementedInterfaces" />
+
+                <SummaryDoc DocComment="@e.SummaryDocComment" />
+
+                <AttributesSection Attributes="@e.Attributes" />
+
+                <RemarksDoc DocComment="@e.RemarksDocComment" />
+
+                <ExceptionDocs Exceptions="@e.Exceptions" />
+
+                <SeeAlsoDocs DocComments="@e.SeeAlsoDocComments" />
+            </div>
+        }
+    </div>
+</div>

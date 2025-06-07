@@ -2,9 +2,9 @@ using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.CodeElements.Types.Abstract;
-using RefDocGen.TemplateGenerators.Shared.DocComments.Html;
 using Shouldly;
 using System.Xml.Linq;
+using RefDocGen.TemplateProcessors.Shared.DocComments.Html;
 
 namespace RefDocGen.UnitTests.TemplateGenerators.Shared.DocComments.Html;
 

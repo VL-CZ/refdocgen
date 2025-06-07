@@ -1,6 +1,6 @@
 using RefDocGen.AssemblyAnalysis;
 using RefDocGen.DocExtraction;
-using RefDocGen.TemplateGenerators;
+using RefDocGen.TemplateProcessors;
 
 namespace RefDocGen;
 

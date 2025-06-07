@@ -1,0 +1,11 @@
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Members
+@using RefDocGen.TemplateProcessors.Shared.TemplateTools
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required ConstructorTM Constructor { get; set; }
+}
+
+<LanguageData Type="LanguageSpecificComponent.ConstructorName" Parameter="Constructor" />
+

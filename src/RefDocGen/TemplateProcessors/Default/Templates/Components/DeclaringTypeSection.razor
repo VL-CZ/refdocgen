@@ -1,0 +1,17 @@
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Links
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required CodeLinkTM DeclaringType { get; set; }
+}
+
+@if (DeclaringType is not null)
+{
+    <div data-id="declaring-type">
+        <i>Declaring type:&nbsp;</i>
+        <samp class="refdocgen-text-secondary">
+            <CodeLink Type="@DeclaringType" />
+        </samp>
+    </div>
+}

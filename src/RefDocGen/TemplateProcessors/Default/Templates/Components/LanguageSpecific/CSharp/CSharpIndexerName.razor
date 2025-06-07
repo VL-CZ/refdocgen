@@ -1,0 +1,31 @@
+@inherits ComponentBase
+@using RefDocGen.TemplateGenerators.Default.Templates.Components.LanguageSpecific.CSharp.Utils
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Members
+
+@code {
+    [Parameter]
+    public required IndexerTM Indexer { get; set; }
+}
+
+
+<span class="refdocgen-text-tertiary">
+    @string.Join(' ', Indexer.Modifiers.CSharpData)
+</span>
+
+<GenericTypeLink Type="@Indexer.Type" />
+
+    @if (Indexer.Parameters.Any())
+{
+    var lastParam = Indexer.Parameters.Last();
+
+    <span class="refdocgen-text-primary"> this</span>
+
+    <ParametersString Parameters=Indexer.Parameters Prefix="[" Suffix="]" />
+
+}
+
+<AccessorMethods HasGetter="Indexer.HasGetter"
+                 HasSetter="Indexer.HasSetter"
+                 IsSetterInitOnly="@Indexer.IsSetterInitOnly"
+                 GetterModifiers="Indexer.GetterModifiers.CSharpData"
+                 SetterModifiers="Indexer.SetterModifiers.CSharpData" />

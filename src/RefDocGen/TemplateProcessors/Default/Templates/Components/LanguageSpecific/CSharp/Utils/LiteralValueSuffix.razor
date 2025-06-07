@@ -1,0 +1,14 @@
+@using RefDocGen.TemplateGenerators.Shared.TemplateModels
+@using RefDocGen.TemplateProcessors.Shared.Languages
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required LanguageSpecificData<string>? Value { get; set; }
+}
+
+@if (Value is not null)
+{
+    <span> = </span>
+    <span class="refdocgen-text-green">@Value.CSharpData</span>
+}

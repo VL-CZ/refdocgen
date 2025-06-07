@@ -1,0 +1,25 @@
+@using RefDocGen.TemplateProcessors.Shared.Languages
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Language
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required LanguageSpecificData<string> Data { get; set; }
+
+    /// <summary>
+    /// Language independent suffix of the data.
+    /// </summary>
+    [Parameter]
+    public string? DataSuffix { get; set; } = null;
+
+    [CascadingParameter]
+    public required LanguageTM[] Languages { get; set; }
+}
+
+@foreach (var language in Languages)
+{
+    <span class="@language.Id">
+        @(Data[language.Id] + DataSuffix)
+    </span>
+}
+

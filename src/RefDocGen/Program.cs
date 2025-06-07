@@ -3,8 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RefDocGen.AssemblyAnalysis;
 using RefDocGen.CodeElements;
-using RefDocGen.TemplateGenerators.Default;
-using RefDocGen.TemplateGenerators.Shared.Languages;
+using RefDocGen.TemplateProcessors.Default;
+using RefDocGen.TemplateProcessors.Shared.Languages;
 
 namespace RefDocGen;
 
