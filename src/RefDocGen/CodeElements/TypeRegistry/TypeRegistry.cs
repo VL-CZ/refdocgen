@@ -182,7 +182,7 @@ internal class TypeRegistry : ITypeRegistry
                 var nsEnums = assemblyEnums[nsName];
                 var nsDelegates = assemblyDelegates[nsName];
 
-                namespaces.Add(new(nsName, nsObjectTypes, nsDelegates, nsEnums));
+                namespaces.Add(new(nsName, nsObjectTypes, nsDelegates, nsEnums, assembly));
             }
 
             assemblies.Add(new(assembly, namespaces));

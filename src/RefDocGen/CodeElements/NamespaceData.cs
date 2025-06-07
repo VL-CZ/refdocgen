@@ -11,4 +11,5 @@ namespace RefDocGen.CodeElements;
 /// <param name="ObjectTypes">Enumerable of classes, structures and interfaces contained in the namespace.</param>
 /// <param name="Delegates">Delegates contained in the namespace.</param>
 /// <param name="Enums">Enums contained in the namespace.</param>
-public record NamespaceData(string Name, IEnumerable<IObjectTypeData> ObjectTypes, IEnumerable<IDelegateTypeData> Delegates, IEnumerable<IEnumTypeData> Enums);
+/// <param name="AssemblyName">Name of the assembly that contains the namespace.</param>
+public record NamespaceData(string Name, IEnumerable<IObjectTypeData> ObjectTypes, IEnumerable<IDelegateTypeData> Delegates, IEnumerable<IEnumTypeData> Enums, string AssemblyName);

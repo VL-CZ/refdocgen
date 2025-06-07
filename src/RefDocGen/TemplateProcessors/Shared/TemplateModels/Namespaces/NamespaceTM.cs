@@ -11,13 +11,15 @@ namespace RefDocGen.TemplateProcessors.Shared.TemplateModels.Namespaces;
 /// <param name="Interfaces">Interfaces contained in the namespace, ordered alphabetically by their name.</param>
 /// <param name="Enums">Enums contained in the namespace, ordered alphabetically by their name.</param>
 /// <param name="Delegates">Delegates contained in the namespace, ordered alphabetically by their name.</param>
+/// <param name="AssemblyName">Name of the assembly that contains the namespace.</param>
 public record NamespaceTM(
     string Name,
     TypeNameTM[] Classes,
     TypeNameTM[] ValueTypes,
     TypeNameTM[] Interfaces,
     TypeNameTM[] Enums,
-    TypeNameTM[] Delegates
+    TypeNameTM[] Delegates,
+    string AssemblyName
     ) : ITemplateModelWithId
 {
 

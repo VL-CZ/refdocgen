@@ -57,7 +57,8 @@ internal class NamespaceTMCreator : BaseTMCreator
             [.. namespaceTypes[ObjectTypeKind.ValueType]],
             [.. namespaceTypes[ObjectTypeKind.Interface]],
             [.. namespaceEnums],
-            [.. namespaceDelegates]
+            [.. namespaceDelegates],
+            namespaceData.AssemblyName
             );
     }
 }
