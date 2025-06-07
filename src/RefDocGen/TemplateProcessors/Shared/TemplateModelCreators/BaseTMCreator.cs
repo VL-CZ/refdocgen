@@ -203,6 +203,8 @@ internal abstract class BaseTMCreator
     private TypeNameTM GetTypeNameFrom(ITypeDeclaration type, string typeKindName)
     {
         var typeName = GetLanguageSpecificData(lang => lang.GetTypeName(type));
-        return new TypeNameTM(type.Id, typeKindName, typeName, ToHtmlOneLineString(type.SummaryDocComment));
+        string typeId = TemplateId.Of(type);
+
+        return new TypeNameTM(typeId, typeKindName, typeName, ToHtmlOneLineString(type.SummaryDocComment));
     }
 }

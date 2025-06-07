@@ -44,7 +44,7 @@ public class TypeUrlResolverTests
 
     [Theory]
     [InlineData("MyApp.Person", "./MyApp.Person.html")]
-    [InlineData("MyApp.Dictionary`2", "./MyApp.Dictionary%602.html")]
+    [InlineData("MyApp.Dictionary`2", "./MyApp.Dictionary-2.html")]
     public void GetUrlOf_ReturnsCorrectData_ForDeclaredType(string typeId, string expectedUrl)
     {
         string? result = typeUrlResolver.GetUrlOf(typeId);
@@ -54,7 +54,7 @@ public class TypeUrlResolverTests
 
     [Theory]
     [InlineData("MyApp.Person", "Name", "./MyApp.Person.html#Name")]
-    [InlineData("MyApp.Dictionary`2", "Add(System.String,`0)", "./MyApp.Dictionary%602.html#Add%28System.String%2C%600%29")]
+    [InlineData("MyApp.Dictionary`2", "Add(System.String,`0)", "./MyApp.Dictionary-2.html#Add(System.String,-0)")]
     public void GetUrlOf_ReturnsCorrectData_ForDeclaredTypeAndMember(string typeId, string memberId, string expectedUrl)
     {
         string? result = typeUrlResolver.GetUrlOf(typeId, memberId);

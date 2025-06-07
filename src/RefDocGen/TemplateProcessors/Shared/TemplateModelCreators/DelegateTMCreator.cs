@@ -2,6 +2,7 @@ using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.TemplateProcessors.Shared.DocComments.Html;
 using RefDocGen.TemplateProcessors.Shared.Languages;
 using RefDocGen.TemplateProcessors.Shared.TemplateModels.Types;
+using RefDocGen.TemplateProcessors.Shared.Tools;
 
 namespace RefDocGen.TemplateProcessors.Shared.TemplateModelCreators;
 
@@ -25,7 +26,7 @@ internal class DelegateTMCreator : TypeTMCreator
         var modifiers = GetLanguageSpecificData(langData => langData.GetModifiers(delegateType));
 
         return new DelegateTypeTM(
-            Id: delegateType.Id,
+            Id: TemplateId.Of(delegateType),
             Name: delegateType.ShortName,
             Namespace: delegateType.Namespace,
             Assembly: delegateType.Assembly,

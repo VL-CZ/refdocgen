@@ -212,7 +212,9 @@ internal class SearchResultTMCreator : BaseTMCreator
             return $"{type.Namespace}.{name} {typeKindName}";
         });
 
-        return new(localizedNames, ToHtmlOneLineString(type.SummaryDocComment), type.Id);
+        string typeId = TemplateId.Of(type);
+
+        return new(localizedNames, ToHtmlOneLineString(type.SummaryDocComment), typeId);
     }
 
     /// <summary>
@@ -240,7 +242,7 @@ internal class SearchResultTMCreator : BaseTMCreator
 
         return new(localizedNames,
             ToHtmlOneLineString(member.SummaryDocComment),
-            member.ContainingType.Id,
-            member.Id);
+            TemplateId.Of(member.ContainingType),
+            TemplateId.Of(member));
     }
 }

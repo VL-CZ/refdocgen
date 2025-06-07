@@ -363,7 +363,7 @@ internal class RazorTemplateProcessor<
 
         if (templateTypes.Any(t => t.Namespace != templatesNs))
         {
-            throw new ArgumentException("Invalid configuration, all 5 templates must be in the same directory.");
+            throw new ArgumentException("Invalid configuration, all templates must be in the same directory.");
         }
 
         if (!templatesNs.StartsWith(templateProcessorsNsPrefix, StringComparison.Ordinal))
