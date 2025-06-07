@@ -15,9 +15,9 @@ internal class TypeTools
     /// Gets a <see cref="ITypeNameData"/> instance based on the provided <paramref name="typeId"/>, or <c>null</c> if not found.
     /// </summary>
     /// <param name="typeId">The ID of the type to be found.</param>
-    /// <param name="typeRegistry">A registry of declared types</param>
+    /// <param name="typeRegistry">A registry of declared types. <c>null</c> if the registry is not provided.</param>
     /// <returns>A <see cref="ITypeNameData"/> instance based on the provided <paramref name="typeId"/> or <see langword="null"/> if the type was not found.</returns>
-    internal static ITypeNameData? GetType(string typeId, ITypeRegistry? typeRegistry)
+    internal static ITypeNameData? GetType(string typeId, ITypeRegistry? typeRegistry = null)
     {
         // try to find it in the type registry
         if (typeRegistry?.GetDeclaredType(typeId) is ITypeDeclaration type)

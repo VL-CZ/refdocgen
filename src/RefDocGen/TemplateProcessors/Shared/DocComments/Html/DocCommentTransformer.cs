@@ -1,5 +1,6 @@
 using System.Xml.Linq;
 using RefDocGen.CodeElements.TypeRegistry;
+using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.TemplateProcessors.Shared.Tools;
@@ -563,9 +564,13 @@ internal class DocCommentTransformer : IDocCommentTransformer
 
             string targetName = typeId;
 
-            if (TypeTools.GetType(typeId, TypeRegistry) is ITypeNameData type) // the type is found by its ID -> get its name
+            if (TypeRegistry.GetDeclaredType(typeId) is ITypeDeclaration type) // type found in the registry -> get its name
             {
                 targetName = CSharpTypeName.Of(type);
+            }
+            if (TypeTools.GetType(typeId) is ITypeNameData typeName) // the type is found by its ID -> get its name
+            {
+                targetName = CSharpTypeName.Of(typeName);
             }
 
             // add member ID (if the reference target is a type member)
