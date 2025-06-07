@@ -17,7 +17,7 @@ public class ParameterSectionTests
     [InlineData("MyLibrary.Tools.Collections.MyCollection-1", "Item(System.Index)", "Index index", "An Index struct.")]
     [InlineData(
         "MyLibrary.User",
-        "AddAnimalsByType(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{MyLibrary.Animal}})",
+        "AddAnimalsByType(System.Collections.Generic.Dictionary(System.String,System.Collections.Generic.List(MyLibrary.Animal)))",
         "Dictionary<string, List<Animal>> animals",
         "Animals to add. Key: animal type, Value: list of animals of the given type.")]
     public void Section_WithSingleParameter_Matches(string pageName, string memberId, string parameterSignature, string expectedDoc)
@@ -39,7 +39,7 @@ public class ParameterSectionTests
     public void Section_WithMultipleParameter_Matches()
     {
         using var document = DocumentationTools.GetApiPage("MyLibrary.User.html");
-        var memberElement = document.GetMemberElement("ProcessValues(System.Int32@,System.Int32@,System.String,System.Int32@,System.Double)");
+        var memberElement = document.GetMemberElement("ProcessValues(System.Int32-,System.Int32-,System.String,System.Int32-,System.Double)");
 
         var parameters = TypePageTools.GetMemberParameters(memberElement);
 

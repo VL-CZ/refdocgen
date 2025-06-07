@@ -18,9 +18,9 @@ public class MemberSignatureTests
     [InlineData("MyLibrary.Dog", "GetSound", "internal override string GetSound()")]
     [InlineData("MyLibrary.Dog", "BarkAsync", "private async Task BarkAsync()")]
     [InlineData("MyLibrary.User", "GetAnimalsByType", "public Dictionary<string, List<Animal>> GetAnimalsByType()")]
-    [InlineData("MyLibrary.User", "AddAnimals(MyLibrary.Animal[])", "public void AddAnimals(params Animal[] animals)")]
+    [InlineData("MyLibrary.User", "AddAnimals(MyLibrary.Animal())", "public void AddAnimals(params Animal[] animals)")]
     [InlineData("MyLibrary.Tools.Collections.IMyCollection-1",
-        "AddRange(System.Collections.Generic.IEnumerable{-0})",
+        "AddRange(System.Collections.Generic.IEnumerable(-0))",
         "public void AddRange(IEnumerable<T> range)")]
     [InlineData("MyLibrary.Tools.StringExtensions",
         "ZipWith(System.String,System.String)",

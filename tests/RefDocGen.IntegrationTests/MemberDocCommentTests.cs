@@ -16,7 +16,7 @@ public class MemberDocCommentTests
     [InlineData("MyLibrary.User", ".ctor(System.String,System.Int32)", "Initializes a new user using the provided username and age.")]
     [InlineData("MyLibrary.Animal", "GetAverageLifespan(System.String)", "Static method returning the average lifespan of an animal.")]
     [InlineData("MyLibrary.Dog", "Owner", "Dog's owner; NULL if the dog doesn't have any owner.")]
-    [InlineData("MyLibrary.Tools.Collections.IMyCollection-1", "AddRange(System.Collections.Generic.IEnumerable{-0})", "Add range of items into the collection.")]
+    [InlineData("MyLibrary.Tools.Collections.IMyCollection-1", "AddRange(System.Collections.Generic.IEnumerable(-0))", "Add range of items into the collection.")]
     [InlineData("MyLibrary.Tools.Season", "Summer", "Represents summer.")]
     [InlineData("MyLibrary.Tools.WeatherStation", "OnTemperatureChange", "Temperature change event.")]
     [InlineData("MyLibrary.Tools.Collections.MyCollection-1",

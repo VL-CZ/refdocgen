@@ -50,7 +50,7 @@ public class MemberDataTests
     [Theory]
     [InlineData("MyLibrary.Dog", "GetSound", "Animal.GetSound")]
     [InlineData("MyLibrary.Hierarchy.ChildChild", "Handle(System.Object)", "Parent.Handle")]
-    [InlineData("MyLibrary.Tools.Collections.MySortedList-1", "AddRange(System.Collections.Generic.IEnumerable{-0})", "MyCollection<T>.AddRange")]
+    [InlineData("MyLibrary.Tools.Collections.MySortedList-1", "AddRange(System.Collections.Generic.IEnumerable(-0))", "MyCollection<T>.AddRange")]
     public void OverridesString_Matches(string pageName, string memberId, string expectedOverridenMemberName)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
@@ -63,7 +63,7 @@ public class MemberDataTests
 
     [Theory]
     [InlineData("MyLibrary.Tools.Collections.MyCollection-1", "System.Collections.IEnumerable.GetEnumerator", "IEnumerable.GetEnumerator")]
-    [InlineData("MyLibrary.Tools.Collections.MyCollection-1", "MyLibrary.Tools.Collections.IMyCollection{T}.CanAdd", "IMyCollection<T>.CanAdd")]
+    [InlineData("MyLibrary.Tools.Collections.MyCollection-1", "MyLibrary.Tools.Collections.IMyCollection(T).CanAdd", "IMyCollection<T>.CanAdd")]
     [InlineData("MyLibrary.Tools.Collections.NonGenericCollection", "System.Collections.ICollection.IsSynchronized", "ICollection.IsSynchronized")]
     public void ExplicitlyImplementedInterface_Matches(string pageName, string memberId, string expectedExplicitInterface)
     {
