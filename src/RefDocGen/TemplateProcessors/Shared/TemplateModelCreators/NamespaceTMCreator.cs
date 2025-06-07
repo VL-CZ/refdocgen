@@ -53,11 +53,11 @@ internal class NamespaceTMCreator : BaseTMCreator
 
         return new NamespaceTM(
             namespaceData.Name,
-            namespaceTypes[ObjectTypeKind.Class],
-            namespaceTypes[ObjectTypeKind.ValueType],
-            namespaceTypes[ObjectTypeKind.Interface],
-            namespaceEnums,
-            namespaceDelegates
+            [.. namespaceTypes[ObjectTypeKind.Class]],
+            [.. namespaceTypes[ObjectTypeKind.ValueType]],
+            [.. namespaceTypes[ObjectTypeKind.Interface]],
+            [.. namespaceEnums],
+            [.. namespaceDelegates]
             );
     }
 }

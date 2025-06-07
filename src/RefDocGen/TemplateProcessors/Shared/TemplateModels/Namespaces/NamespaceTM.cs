@@ -13,22 +13,27 @@ namespace RefDocGen.TemplateProcessors.Shared.TemplateModels.Namespaces;
 /// <param name="Delegates">Delegates contained in the namespace, ordered alphabetically by their name.</param>
 public record NamespaceTM(
     string Name,
-    IEnumerable<TypeNameTM> Classes,
-    IEnumerable<TypeNameTM> ValueTypes,
-    IEnumerable<TypeNameTM> Interfaces,
-    IEnumerable<TypeNameTM> Enums,
-    IEnumerable<TypeNameTM> Delegates
+    TypeNameTM[] Classes,
+    TypeNameTM[] ValueTypes,
+    TypeNameTM[] Interfaces,
+    TypeNameTM[] Enums,
+    TypeNameTM[] Delegates
     ) : ITemplateModelWithId
 {
+
+#pragma warning disable IDE0305 // Simplify collection initialization
+
     /// <summary>
     /// An enumerable of all types contained in the namespace, ordered alphabetically by their name.
     /// </summary>
-    public IEnumerable<TypeNameTM> AllTypes => Classes
+    public TypeNameTM[] AllTypes => Classes
         .Concat(ValueTypes)
         .Concat(Interfaces)
         .Concat(Enums)
         .Concat(Delegates)
-        .OrderBy(t => t.Name.CSharpData);
+        .OrderBy(t => t.Name.CSharpData)
+        .ToArray();
+#pragma warning restore IDE0305
 
     /// <inheritdoc/>
     public string Id => Name;

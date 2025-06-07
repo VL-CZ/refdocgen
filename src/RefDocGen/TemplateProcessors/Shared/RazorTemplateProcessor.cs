@@ -280,8 +280,8 @@ internal class RazorTemplateProcessor<
     private void GenerateApiHomepage(IEnumerable<AssemblyData> assemblies)
     {
         var creator = new AssemblyTMCreator(docCommentTransformer, availableLanguages);
-        var assemblyTMs = assemblies.Select(creator.GetFrom);
-        ProcessApiTemplate<TApiHomePageTemplate, IEnumerable<AssemblyTM>>(assemblyTMs, indexPageId);
+        var assemblyTMs = assemblies.Select(creator.GetFrom).ToArray();
+        ProcessApiTemplate<TApiHomePageTemplate, AssemblyTM[]>(assemblyTMs, indexPageId);
     }
 
     /// <summary>

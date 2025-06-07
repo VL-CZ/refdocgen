@@ -7,7 +7,7 @@ namespace RefDocGen.TemplateProcessors.Shared.TemplateModels.Assemblies;
 /// </summary>
 /// <param name="Name">Name of the assembly.</param>
 /// <param name="Namespaces">Namespaces contained within the assembly.</param>
-public record AssemblyTM(string Name, IEnumerable<NamespaceTM> Namespaces) : ITemplateModelWithId
+public record AssemblyTM(string Name, NamespaceTM[] Namespaces) : ITemplateModelWithId
 {
     /// <inheritdoc/>
     public string Id => $"{Name}-DLL";

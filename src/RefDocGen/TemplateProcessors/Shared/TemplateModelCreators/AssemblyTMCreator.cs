@@ -28,6 +28,6 @@ internal class AssemblyTMCreator : BaseTMCreator
     /// <returns>An <see cref="AssemblyTM"/> instance based on the provided <paramref name="assemblyData"/>.</returns>
     internal AssemblyTM GetFrom(AssemblyData assemblyData)
     {
-        return new AssemblyTM(assemblyData.Name, assemblyData.Namespaces.OrderBy(n => n.Name).Select(nsTMCreator.GetFrom));
+        return new AssemblyTM(assemblyData.Name, [.. assemblyData.Namespaces.OrderBy(n => n.Name).Select(nsTMCreator.GetFrom)]);
     }
 }
