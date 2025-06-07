@@ -20,7 +20,7 @@ using RefDocGen.Tools;
 namespace RefDocGen.TemplateGenerators.Shared;
 
 /// <summary>
-/// Class responsible for generating the Razor templates and populating them with the type data.
+/// Class responsible for processing the Razor templates and populating them with the type data.
 /// </summary>
 /// <typeparam name="TDelegatePageTemplate">Type of the Razor component representing a delegate page.</typeparam>
 /// <typeparam name="TEnumPageTemplate">Type of the Razor component representing a enum page.</typeparam>
@@ -30,7 +30,7 @@ namespace RefDocGen.TemplateGenerators.Shared;
 /// <typeparam name="TObjectTypePageTemplate">Type of the Razor component representing an object type page.</typeparam>
 /// <typeparam name="TStaticPageTemplate">Type of the Razor component representing a static page template.</typeparam>
 /// <typeparam name="TSearchPageTemplate">Type of the Razor component representing a search page.</typeparam>
-internal class RazorTemplateGenerator<
+internal class RazorTemplateProcessor<
         TObjectTypePageTemplate,
         TDelegatePageTemplate,
         TEnumPageTemplate,
@@ -39,7 +39,7 @@ internal class RazorTemplateGenerator<
         TApiPageTemplate,
         TStaticPageTemplate,
         TSearchPageTemplate
-    > : ITemplateGenerator
+    > : ITemplateProcessor
 
     where TDelegatePageTemplate : IComponent
     where TEnumPageTemplate : IComponent
@@ -73,7 +73,7 @@ internal class RazorTemplateGenerator<
     /// <summary>
     /// The directory, where the generated output will be stored.
     /// </summary>
-    private string outputDirectory;
+    private string outputDirectory = "reference-docs";
 
     /// <summary>
     /// Rendered of the Razor components.
@@ -137,25 +137,22 @@ internal class RazorTemplateGenerator<
 
     /// <summary>
     /// Initialize a new instance of
-    /// <see cref="RazorTemplateGenerator{TObjectTypeTemplate, TDelegateTemplate, TEnumTemplate, TNamespaceTemplate, TAssemblyTemplate, TApiTemplate, TStaticPageTemplate, TSearchPageTemplate}"/> class.
+    /// <see cref="RazorTemplateProcessor{TObjectTypeTemplate, TDelegateTemplate, TEnumTemplate, TNamespaceTemplate, TAssemblyTemplate, TApiTemplate, TStaticPageTemplate, TSearchPageTemplate}"/> class.
     /// </summary>
     /// <param name="htmlRenderer">Renderer of the Razor components.</param>
     /// <param name="docCommentTransformer">Transformer of the XML doc comments into HTML.</param>
-    /// <param name="outputDirectory">The directory, where the generated output will be stored.</param>
     /// <param name="staticPagesDirectory">Path to the directory containing the static pages created by user. <c>null</c> indicates that the directory is not specified.</param>
     /// <param name="docVersion">Version of the documentation (e.g. 'v1.0'). Pass <c>null</c> if no specific version should be generated.</param>
     /// <param name="availableLanguages"><inheritdoc cref="availableLanguages"/></param>
-    internal RazorTemplateGenerator(
+    internal RazorTemplateProcessor(
         HtmlRenderer htmlRenderer,
         IDocCommentTransformer docCommentTransformer,
-        string outputDirectory,
         IEnumerable<ILanguageConfiguration> availableLanguages,
         string? staticPagesDirectory = null,
         string? docVersion = null)
     {
         this.htmlRenderer = htmlRenderer;
         this.docCommentTransformer = docCommentTransformer;
-        this.outputDirectory = outputDirectory;
         this.staticPagesDirectory = staticPagesDirectory;
         this.docVersion = docVersion;
         this.availableLanguages = availableLanguages;
@@ -167,8 +164,9 @@ internal class RazorTemplateGenerator<
     }
 
     /// <inheritdoc/>
-    public void GenerateTemplates(ITypeRegistry typeRegistry)
+    public void ProcessTemplates(ITypeRegistry typeRegistry, string outputDirectory)
     {
+        this.outputDirectory = outputDirectory;
         docCommentTransformer.TypeRegistry = typeRegistry;
 
         if (docVersion is not null) // a specific version of documentation is being generated

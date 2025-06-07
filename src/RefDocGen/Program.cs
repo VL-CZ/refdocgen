@@ -47,9 +47,9 @@ public static class Program
             new OtherLanguageConfiguration()
         ];
 
-        var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir, availableLanguages, staticPagesDir, version);
+        var templateGenerator = new DefaultTemplateProcessor(htmlRenderer, availableLanguages, staticPagesDir, version);
 
-        var docGenerator = new DocGenerator(dllPaths, docPaths, templateGenerator, assemblyDataConfig);
+        var docGenerator = new DocGenerator(dllPaths, docPaths, templateGenerator, assemblyDataConfig, outputDir);
         docGenerator.GenerateDoc();
 
         Console.WriteLine("Done...");

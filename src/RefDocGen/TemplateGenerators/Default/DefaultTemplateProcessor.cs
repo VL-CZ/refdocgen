@@ -10,9 +10,9 @@ using RefDocGen.TemplateGenerators.Default.Templates;
 namespace RefDocGen.TemplateGenerators.Default;
 
 /// <summary>
-/// Class used for generating default Razor templates.
+/// Class used for processing the default Razor templates.
 /// </summary>
-internal class DefaultTemplateGenerator : RazorTemplateGenerator<
+internal class DefaultTemplateProcessor : RazorTemplateProcessor<
     ObjectTypeTemplate,
     DelegateTypeTemplate,
     EnumTypeTemplate,
@@ -23,19 +23,17 @@ internal class DefaultTemplateGenerator : RazorTemplateGenerator<
     SearchTemplate>
 {
     /// <summary>
-    /// Initialize a new instance of <see cref="DefaultTemplateGenerator"/> class.
+    /// Initialize a new instance of <see cref="DefaultTemplateProcessor"/> class.
     /// </summary>
     /// <param name="htmlRenderer">Renderer of the Razor components.</param>
-    /// <param name="outputDir">The directory, where the generated output will be stored.</param>
     /// <param name="staticPagesDirectory">Path to the directory containing the static pages created by user. <c>null</c> indicates that the directory is not specified.</param>
     /// <param name="docVersion">Version of the documentation (e.g. 'v1.0'). Pass <c>null</c> if no specific version should be generated.</param>
     /// <param name="availableLanguages">Configuration of languages available in the documentation.</param>
-    internal DefaultTemplateGenerator(HtmlRenderer htmlRenderer, string outputDir, ILanguageConfiguration[] availableLanguages,
+    internal DefaultTemplateProcessor(HtmlRenderer htmlRenderer, ILanguageConfiguration[] availableLanguages,
         string? staticPagesDirectory = null, string? docVersion = null)
         : base(
             htmlRenderer,
             new DocCommentTransformer(new DocCommentHtmlConfiguration()),
-            outputDir,
             availableLanguages,
             staticPagesDirectory,
             docVersion)
