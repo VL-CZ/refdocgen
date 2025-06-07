@@ -42,7 +42,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(type));
 
         return new ObjectTypeTM(
-            Id: type.Id,
+            Id: TemplateId.Of(type),
             Name: type.ShortName,
             Namespace: type.Namespace,
             Assembly: type.Assembly,
@@ -76,7 +76,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(constructor));
 
         return new ConstructorTM(
-            Id: constructor.Id,
+            Id: TemplateId.Of(constructor),
             TypeName: GetLanguageSpecificData(lang => lang.GetTypeName(constructor.ContainingType)),
             Parameters: GetTemplateModels(constructor.Parameters),
             Modifiers: modifiers,
@@ -97,7 +97,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(field));
 
         return new FieldTM(
-            Id: field.Id,
+            Id: TemplateId.Of(field),
             Name: field.Name,
             Type: GetGenericTypeLink(field.Type),
             Modifiers: modifiers,
@@ -121,7 +121,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         var setterModifiers = GetLanguageSpecificData(lang => lang.GetModifiers(property).SetterModifiers);
 
         return new PropertyTM(
-            Id: property.Id,
+            Id: TemplateId.Of(property),
             Name: property.Name,
             Type: GetGenericTypeLink(property.Type),
             HasGetter: property.Getter is not null,
@@ -155,7 +155,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         var setterModifiers = GetLanguageSpecificData(lang => lang.GetModifiers(indexer).SetterModifiers);
 
         return new IndexerTM(
-            Id: indexer.Id,
+            Id: TemplateId.Of(indexer),
             Type: GetGenericTypeLink(indexer.Type),
             Parameters: GetTemplateModels(indexer.Parameters),
             HasGetter: indexer.Getter is not null,
@@ -186,7 +186,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(method));
 
         return new MethodTM(
-            Id: method.Id,
+            Id: TemplateId.Of(method),
             Name: method.Name,
             Parameters: GetTemplateModels(method.Parameters),
             TypeParameters: GetTemplateModels(method.TypeParameters),
@@ -216,7 +216,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         var name = GetLanguageSpecificData(lang => lang.GetOperatorName(operatorData));
 
         return new OperatorTM(
-            Id: operatorData.Id,
+            Id: TemplateId.Of(operatorData),
             Name: name,
             Parameters: GetTemplateModels(operatorData.Parameters),
             TypeParameters: GetTemplateModels(operatorData.TypeParameters),
@@ -246,7 +246,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
         var modifiers = GetLanguageSpecificData(lang => lang.GetModifiers(eventData));
 
         return new EventTM(
-            Id: eventData.Id,
+            Id: TemplateId.Of(eventData),
             Name: eventData.Name,
             Type: GetGenericTypeLink(eventData.Type),
             Modifiers: modifiers,

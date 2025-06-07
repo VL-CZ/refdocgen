@@ -25,7 +25,7 @@ internal class DelegateTMCreator : TypeTMCreator
         var modifiers = GetLanguageSpecificData(langData => langData.GetModifiers(delegateType));
 
         return new DelegateTypeTM(
-            Id: delegateType.Id,
+            Id: TemplateId.Of(delegateType),
             Name: delegateType.ShortName,
             Namespace: delegateType.Namespace,
             Assembly: delegateType.Assembly,

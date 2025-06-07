@@ -1,6 +1,7 @@
 using System.Globalization;
 using RefDocGen.CodeElements.Shared;
 using RefDocGen.CodeElements.TypeRegistry;
+using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.Tools;
 
@@ -66,22 +67,13 @@ internal class TypeUrlResolver
     /// </param>
     internal string? GetUrlOf(string typeId, string? memberId = null)
     {
-        if (memberId is not null)
+        if (typeRegistry.GetDeclaredType(typeId) is ITypeDeclaration type) // the type is found in the type registry
         {
-            int lastHashIndex = memberId.LastIndexOf('#');
-            if (lastHashIndex > 0 && lastHashIndex < memberId.Length - 1) // remove explicit interface type (if present) from the ID string
-            {
-                memberId = memberId[(lastHashIndex + 1)..];
-            }
-        }
-
-        if (typeRegistry.GetDeclaredType(typeId) is not null) // the type is found in the type registry
-        {
-            string uriEncodedType = Uri.EscapeDataString(typeId);
+            string uriEncodedType = TemplateId.Escape(typeId);
 
             if (memberId is not null)
             {
-                string uriEncodedMember = Uri.EscapeDataString(memberId);
+                string uriEncodedMember = TemplateId.Escape(memberId);
                 return $"./{uriEncodedType}.html#{uriEncodedMember}"; // append member string
             }
             else
@@ -93,6 +85,12 @@ internal class TypeUrlResolver
         {
             if (memberId is not null) // append member string
             {
+                int lastHashIndex = memberId.LastIndexOf('#');
+                if (lastHashIndex > 0 && lastHashIndex < memberId.Length - 1) // remove explicit interface type (if present) from the ID string
+                {
+                    memberId = memberId[(lastHashIndex + 1)..];
+                }
+
                 if (memberId.TryGetIndex('(', out int parenthesisIndex)) // remove parameters string (if present)
                 {
                     memberId = memberId[..parenthesisIndex];
@@ -125,7 +123,7 @@ internal class TypeUrlResolver
 
         if (rootTypeNamespace == systemNs)
         {
-            string typeUrl = typeId.ToLower(CultureInfo.InvariantCulture).Replace('`', '-'); // The .NET API docs use the following convention (TODO: fix)
+            string typeUrl = typeId.ToLower(CultureInfo.InvariantCulture).Replace('`', '-'); // The .NET API docs use the following convention, see https://learn.microsoft.com/en-us/contribute/content/dotnet/dotnet-style-guide
             return new Uri(dotnetApiDocs, typeUrl).ToString();
         }
 

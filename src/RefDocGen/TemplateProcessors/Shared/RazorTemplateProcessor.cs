@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using RefDocGen.CodeElements;
+using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
+using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.TemplateProcessors.Shared.DocComments.Html;
 using RefDocGen.TemplateProcessors.Shared.DocVersioning;
 using RefDocGen.TemplateProcessors.Shared.Languages;
@@ -16,6 +18,7 @@ using RefDocGen.TemplateProcessors.Shared.TemplateModels.Menu;
 using RefDocGen.TemplateProcessors.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateProcessors.Shared.TemplateModels.Types;
 using RefDocGen.Tools;
+using System.Web;
 
 namespace RefDocGen.TemplateProcessors.Shared;
 
@@ -363,7 +366,7 @@ internal class RazorTemplateProcessor<
 
         if (templateTypes.Any(t => t.Namespace != templatesNs))
         {
-            throw new ArgumentException("Invalid configuration, all 5 templates must be in the same directory.");
+            throw new ArgumentException("Invalid configuration, all templates must be in the same directory.");
         }
 
         if (!templatesNs.StartsWith(templateProcessorsNsPrefix, StringComparison.Ordinal))
@@ -453,5 +456,30 @@ internal class RazorTemplateProcessor<
 
         File.WriteAllText(outputFileName, html);
         _ = pagesGenerated.Add(pagePath);
+    }
+}
+
+class TemplateId
+{
+    internal static string Of(ITypeDeclaration type)
+    {
+        return Escape(type.Id);
+    }
+
+    internal static string Of(IMemberData member)
+    {
+        return Escape(member.Id);
+    }
+
+    internal static string Escape(string id)
+    {
+        return id
+            .Replace("`", "-")
+            .Replace("{", "(")
+            .Replace("}", ")")
+            .Replace("#", ".")
+            .Replace("@", "-")
+            .Replace("[", "(")
+            .Replace("]", ")");
     }
 }

@@ -28,7 +28,7 @@ internal class EnumTMCreator : TypeTMCreator
         var modifiers = GetLanguageSpecificData(langData => langData.GetModifiers(enumType));
 
         return new EnumTypeTM(
-            Id: enumType.Id,
+            Id: TemplateId.Of(enumType),
             Name: enumType.ShortName,
             Namespace: enumType.Namespace,
             Assembly: enumType.Assembly,
@@ -50,7 +50,7 @@ internal class EnumTMCreator : TypeTMCreator
     {
 
         return new EnumMemberTM(
-            Id: enumMember.Id,
+            Id: TemplateId.Of(enumMember),
             Name: enumMember.Name,
             Value: GetLanguageSpecificDefaultValue(enumMember.Value),
             Attributes: GetTemplateModels(enumMember.Attributes),

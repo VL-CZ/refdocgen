@@ -103,7 +103,7 @@ public class MemberDataTests
     [Fact]
     public void Exceptions_Match()
     {
-        using var document = DocumentationTools.GetApiPage("MyLibrary.Tools.Collections.MyCollection`1.html");
+        using var document = DocumentationTools.GetApiPage("MyLibrary.Tools.Collections.MyCollection-1.html");
 
         var exceptions = TypePageTools.GetExceptions(document.GetMemberElement("Add(`0)"));
 
