@@ -5,7 +5,7 @@ using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.TemplateProcessors.Shared.Tools;
 using Shouldly;
 
-namespace RefDocGen.UnitTests.TemplateGenerators.Shared.Tools;
+namespace RefDocGen.UnitTests.TemplateProcessors.Shared.Tools;
 
 /// <summary>
 /// Class containing tests for <see cref="TypeUrlResolver"/> class.

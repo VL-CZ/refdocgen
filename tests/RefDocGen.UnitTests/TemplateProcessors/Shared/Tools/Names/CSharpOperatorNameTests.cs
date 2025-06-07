@@ -6,7 +6,7 @@ using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.TemplateProcessors.Shared.Tools.Names;
 using Shouldly;
 
-namespace RefDocGen.UnitTests.TemplateGenerators.Shared.Tools.Names;
+namespace RefDocGen.UnitTests.TemplateProcessors.Shared.Tools.Names;
 
 /// <summary>
 /// Class containing tests for <see cref="CSharpOperatorName"/> class.

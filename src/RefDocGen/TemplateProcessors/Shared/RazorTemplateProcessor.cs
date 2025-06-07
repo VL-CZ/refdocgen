@@ -53,7 +53,7 @@ internal class RazorTemplateProcessor<
     /// <summary>
     /// Namespace prefix of any template generator.
     /// </summary>
-    private const string templateGeneratorsNsPrefix = "RefDocGen.TemplateGenerators.";
+    private const string templateProcessorsNsPrefix = "RefDocGen.TemplateProcessors.";
 
     /// <summary>
     /// Identifier of the <c>index</c> page.
@@ -81,7 +81,7 @@ internal class RazorTemplateProcessor<
     private readonly HtmlRenderer htmlRenderer;
 
     /// <summary>
-    /// Path to the directory containing the Razor templates, relative to <c>TemplateGenerators</c> folder.
+    /// Path to the directory containing the Razor templates, relative to <c>TemplateProcessors</c> folder.
     /// </summary>
     private readonly string templatesDirectory;
 
@@ -157,7 +157,7 @@ internal class RazorTemplateProcessor<
         this.docVersion = docVersion;
         this.availableLanguages = availableLanguages;
 
-        defaultIndexPage = Path.Join("TemplateGenerators", "Shared", "StaticData", "defaultIndexPage.html");
+        defaultIndexPage = Path.Join("TemplateProcessors", "Shared", "StaticData", "defaultIndexPage.html");
         templatesDirectory = GetTemplatesDirectory();
 
         languageTMs = [.. this.availableLanguages.Select(lang => new LanguageTM(lang.LanguageName, lang.LanguageId))];
@@ -343,13 +343,13 @@ internal class RazorTemplateProcessor<
     /// <exception cref="ArgumentException">
     /// Thrown in 2 cases
     /// <list type="bullet">
-    /// <item>The templates aren't stored under <c>RefDocGen/TemplateGenerators</c> directory.</item>
+    /// <item>The templates aren't stored under <c>RefDocGen/TemplateProcessors</c> directory.</item>
     /// <item>The templates (i.e. the generic type parameters) aren't stored in the same directory.</item>
     /// </list>
     /// </exception>
     private string GetTemplatesDirectory()
     {
-        const string baseFolder = "TemplateGenerators";
+        const string baseFolder = "TemplateProcessors";
 
         Type[] templateTypes = [
             typeof(TDelegatePageTemplate),
@@ -366,12 +366,12 @@ internal class RazorTemplateProcessor<
             throw new ArgumentException("Invalid configuration, all 5 templates must be in the same directory.");
         }
 
-        if (!templatesNs.StartsWith(templateGeneratorsNsPrefix, StringComparison.Ordinal))
+        if (!templatesNs.StartsWith(templateProcessorsNsPrefix, StringComparison.Ordinal))
         {
-            throw new ArgumentException("Invalid configuration, the templates must be stored in a folder contained in 'RefDocGen/TemplateGenerators' directory.");
+            throw new ArgumentException("Invalid configuration, the templates must be stored in a folder contained in 'RefDocGen/TemplateProcessors' directory.");
         }
 
-        string relativeTemplateNs = templatesNs[templateGeneratorsNsPrefix.Length..];
+        string relativeTemplateNs = templatesNs[templateProcessorsNsPrefix.Length..];
 
         string[] templatePathFragments = [baseFolder, .. relativeTemplateNs.Split('.')];
         return Path.Combine(templatePathFragments);

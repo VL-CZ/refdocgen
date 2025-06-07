@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RefDocGen.AssemblyAnalysis;
 using RefDocGen.CodeElements;
+using RefDocGen.TemplateProcessors.Default;
 using RefDocGen.TemplateProcessors.Shared.Languages;
 
 namespace RefDocGen.IntegrationTests.Fixtures;
@@ -58,9 +59,9 @@ public class VersionedDocumentationFixture : IDisposable
 
         foreach (string version in versions)
         {
-            var templateGenerator = new DefaultTemplateGenerator(htmlRenderer, outputDir, [new CSharpLanguageConfiguration()], staticPagesDirectory, version); // use the default template generator
+            var templateGenerator = new DefaultTemplateProcessor(htmlRenderer, [new CSharpLanguageConfiguration()], staticPagesDirectory, version); // use the default template generator
 
-            var generator = new DocGenerator(["data/MyLibrary.dll"], ["data/MyLibrary.xml"], templateGenerator, assemblyDataConfig);
+            var generator = new DocGenerator(["data/MyLibrary.dll"], ["data/MyLibrary.xml"], templateGenerator, assemblyDataConfig, outputDir);
             generator.GenerateDoc();
         }
     }

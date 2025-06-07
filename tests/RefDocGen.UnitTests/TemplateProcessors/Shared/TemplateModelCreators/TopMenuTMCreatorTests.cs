@@ -3,7 +3,7 @@ using RefDocGen.TemplateProcessors.Shared.TemplateModelCreators;
 using RefDocGen.TemplateProcessors.Shared.TemplateModels.Menu;
 using Shouldly;
 
-namespace RefDocGen.UnitTests.TemplateGenerators.Shared.TemplateModelCreators;
+namespace RefDocGen.UnitTests.TemplateProcessors.Shared.TemplateModelCreators;
 
 /// <summary>
 /// Class containing tests for <see cref="TopMenuTMCreator"/> class.

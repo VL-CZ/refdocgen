@@ -6,7 +6,7 @@ using Shouldly;
 using System.Xml.Linq;
 using RefDocGen.TemplateProcessors.Shared.DocComments.Html;
 
-namespace RefDocGen.UnitTests.TemplateGenerators.Shared.DocComments.Html;
+namespace RefDocGen.UnitTests.TemplateProcessors.Shared.DocComments.Html;
 
 /// <summary>
 /// Class responsible for transforming the XML doc comments into HTML.
