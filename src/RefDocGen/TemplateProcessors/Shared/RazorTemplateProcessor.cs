@@ -5,7 +5,6 @@ using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
-using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.TemplateProcessors.Shared.DocComments.Html;
 using RefDocGen.TemplateProcessors.Shared.DocVersioning;
 using RefDocGen.TemplateProcessors.Shared.Languages;
@@ -17,7 +16,6 @@ using RefDocGen.TemplateProcessors.Shared.TemplateModels.Menu;
 using RefDocGen.TemplateProcessors.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateProcessors.Shared.TemplateModels.Types;
 using RefDocGen.Tools;
-using System.Web;
 
 namespace RefDocGen.TemplateProcessors.Shared;
 

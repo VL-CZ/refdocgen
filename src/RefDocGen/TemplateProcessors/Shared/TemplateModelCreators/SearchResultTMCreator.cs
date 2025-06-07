@@ -212,7 +212,7 @@ internal class SearchResultTMCreator : BaseTMCreator
             return $"{type.Namespace}.{name} {typeKindName}";
         });
 
-        var typeId = TemplateId.Of(type);
+        string typeId = TemplateId.Of(type);
 
         return new(localizedNames, ToHtmlOneLineString(type.SummaryDocComment), typeId);
     }

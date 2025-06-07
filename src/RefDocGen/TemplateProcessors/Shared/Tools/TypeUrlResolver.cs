@@ -67,7 +67,7 @@ internal class TypeUrlResolver
     /// </param>
     internal string? GetUrlOf(string typeId, string? memberId = null)
     {
-        if (typeRegistry.GetDeclaredType(typeId) is ITypeDeclaration type) // the type is found in the type registry
+        if (typeRegistry.GetDeclaredType(typeId) is not null) // the type is found in the type registry
         {
             string uriEncodedType = TemplateId.Escape(typeId);
 

@@ -18,7 +18,7 @@ internal class TemplateId
     /// <param name="type">The provided type.</param>
     /// <returns>The ID of the given type used in templates.</returns>
     /// <remarks>
-    /// The ID is intended to be used in the URL.
+    /// The ID is intended to be used in a URL.
     /// </remarks>
     internal static string Of(ITypeDeclaration type)
     {
@@ -31,7 +31,7 @@ internal class TemplateId
     /// <param name="member">The provided member.</param>
     /// <returns>The ID of the given member used in templates.</returns>
     /// <remarks>
-    /// The ID is intended to be used in the URL.
+    /// The ID is intended to be used in a URL.
     /// </remarks>
     internal static string Of(IMemberData member)
     {
@@ -41,8 +41,8 @@ internal class TemplateId
     /// <summary>
     /// Escapes the ID of a type or member.
     /// </summary>
-    /// <param name="id">An ID of a type or a member to escape.</param>
-    /// <returns>The escaped ID, which can be used as a part of URL.</returns>
+    /// <param name="id">An ID of a type or a member to escape (i.e. <see cref="ITypeNameBaseData.Id"/> or <see cref="IMemberData.Id"/>)</param>
+    /// <returns>The escaped ID, which can be used as a part of a URL.</returns>
     internal static string Escape(string id)
     {
         return id

@@ -527,7 +527,7 @@ internal class DocCommentTransformer : IDocCommentTransformer
     /// <param name="element">The element to transform.</param>
     /// <param name="htmlTemplateIfFound">The HTML template used for transformation if the cref target is found.</param>
     /// <param name="crefValue">Value of the <c>cref</c> attribute.</param>
-    /// <param name="htmlTemplateIfNotFound">The HTML template used for transformation if the cref target is found.</param>
+    /// <param name="htmlTemplateIfNotFound">The HTML template used for transformation if the cref target is NOT found.</param>
     /// <returns>
     /// The HTML representation of the provided element.
     /// <para>
@@ -541,6 +541,7 @@ internal class DocCommentTransformer : IDocCommentTransformer
 
         string typeId;
         string? memberId = null;
+        string? memberName = null;
 
         if (objectIdentifier == CodeElementId.Type) // type
         {
@@ -548,7 +549,7 @@ internal class DocCommentTransformer : IDocCommentTransformer
         }
         else if (CodeElementId.IsMember(objectIdentifier)) // member
         {
-            (typeId, string memberName, string paramsString) = MemberSignatureParser.Parse(fullObjectName);
+            (typeId, memberName, string paramsString) = MemberSignatureParser.Parse(fullObjectName);
             memberId = memberName + paramsString;
         }
         else // reference not found
@@ -573,10 +574,10 @@ internal class DocCommentTransformer : IDocCommentTransformer
                 targetName = CSharpTypeName.Of(typeName);
             }
 
-            // add member ID (if the reference target is a type member)
+            // add member name (if the reference target is a type member)
             if (memberId is not null)
             {
-                targetName += $".{memberId}";
+                targetName += $".{memberName}";
             }
 
             emptyDescendant.Add(
