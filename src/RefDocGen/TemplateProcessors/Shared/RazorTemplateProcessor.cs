@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using RefDocGen.CodeElements;
-using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;
@@ -456,30 +455,5 @@ internal class RazorTemplateProcessor<
 
         File.WriteAllText(outputFileName, html);
         _ = pagesGenerated.Add(pagePath);
-    }
-}
-
-class TemplateId
-{
-    internal static string Of(ITypeDeclaration type)
-    {
-        return Escape(type.Id);
-    }
-
-    internal static string Of(IMemberData member)
-    {
-        return Escape(member.Id);
-    }
-
-    internal static string Escape(string id)
-    {
-        return id
-            .Replace("`", "-")
-            .Replace("{", "(")
-            .Replace("}", ")")
-            .Replace("#", ".")
-            .Replace("@", "-")
-            .Replace("[", "(")
-            .Replace("]", ")");
     }
 }
