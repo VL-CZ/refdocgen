@@ -117,13 +117,15 @@ internal abstract class TypeTMCreator : BaseTMCreator
         var name = GetLanguageSpecificData(_ => exception.Id);
         string? url = typeUrlResolver.GetUrlOf(exception.Id);
 
-        if (TypeTools.GetType(exception.Id) is ITypeNameData type) // type found by its ID string -> get its name
+        var codeLink = new CodeLinkTM(name, url);
+
+        if (TypeTools.GetType(exception.Id, docCommentTransformer.TypeRegistry) is ITypeNameData type) // type found by its ID string -> get its name
         {
-            name = GetLanguageSpecificData(lang => lang.GetTypeName(type, true, url is null));
+            codeLink = GetCodeLink(type);
         }
 
         return new ExceptionTM(
-            new CodeLinkTM(name, url),
+            codeLink,
             ToHtmlString(exception.DocComment));
     }
 
