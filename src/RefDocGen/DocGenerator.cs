@@ -20,9 +20,9 @@ public class DocGenerator
     private readonly IEnumerable<string> docXmlPaths;
 
     /// <summary>
-    /// An instance used for generating the templates.
+    /// An instance used for processing the templates.
     /// </summary>
-    private readonly ITemplateProcessor templateGenerator;
+    private readonly ITemplateProcessor templateProcessor;
 
     /// <summary>
     /// The directory, where the generated output will be stored.
@@ -39,15 +39,15 @@ public class DocGenerator
     /// </summary>
     /// <param name="assemblyPaths">Paths to the DLL assemblies.</param>
     /// <param name="docXmlPaths">Path to the XML documentation files.</param>
-    /// <param name="templateGenerator">An instance used for generating the templates</param>
+    /// <param name="templateProcessor">An instance used for processing the templates.</param>
     /// <param name="assemblyDataConfiguration">Configuration describing what data should be extracted from the assemblies.</param>
     /// <param name="outputDirectory">The directory, where the generated output will be stored.</param>
-    public DocGenerator(IEnumerable<string> assemblyPaths, IEnumerable<string> docXmlPaths, ITemplateProcessor templateGenerator,
+    public DocGenerator(IEnumerable<string> assemblyPaths, IEnumerable<string> docXmlPaths, ITemplateProcessor templateProcessor,
         AssemblyDataConfiguration assemblyDataConfiguration, string outputDirectory)
     {
         this.assemblyPaths = assemblyPaths;
         this.docXmlPaths = docXmlPaths;
-        this.templateGenerator = templateGenerator;
+        this.templateProcessor = templateProcessor;
         this.assemblyDataConfiguration = assemblyDataConfiguration;
         this.outputDirectory = outputDirectory;
     }
@@ -63,6 +63,6 @@ public class DocGenerator
         var docCommentExtractor = new DocCommentExtractor(docXmlPaths, typeRegistry);
         docCommentExtractor.AddComments();
 
-        templateGenerator.ProcessTemplates(typeRegistry, outputDirectory);
+        templateProcessor.ProcessTemplates(typeRegistry, outputDirectory);
     }
 }

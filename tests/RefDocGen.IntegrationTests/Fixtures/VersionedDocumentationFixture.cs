@@ -59,9 +59,9 @@ public class VersionedDocumentationFixture : IDisposable
 
         foreach (string version in versions)
         {
-            var templateGenerator = new DefaultTemplateProcessor(htmlRenderer, [new CSharpLanguageConfiguration()], staticPagesDirectory, version); // use the default template generator
+            var templateProcessor = new DefaultTemplateProcessor(htmlRenderer, [new CSharpLanguageConfiguration()], staticPagesDirectory, version); // use the default template generator
 
-            var generator = new DocGenerator(["data/MyLibrary.dll"], ["data/MyLibrary.xml"], templateGenerator, assemblyDataConfig, outputDir);
+            var generator = new DocGenerator(["data/MyLibrary.dll"], ["data/MyLibrary.xml"], templateProcessor, assemblyDataConfig, outputDir);
             generator.GenerateDoc();
         }
     }

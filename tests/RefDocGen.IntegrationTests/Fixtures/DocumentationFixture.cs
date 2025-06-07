@@ -53,7 +53,7 @@ public class DocumentationFixture : IDisposable
 
         using var htmlRenderer = new HtmlRenderer(serviceProvider, loggerFactory);
 
-        var templateGenerator = new DefaultTemplateProcessor(htmlRenderer, [new CSharpLanguageConfiguration()], staticPagesDirectory); // use the default template generator
+        var templateProcessor = new DefaultTemplateProcessor(htmlRenderer, [new CSharpLanguageConfiguration()], staticPagesDirectory); // use the default template generator
 
         var assemblyDataConfig = new AssemblyDataConfiguration(
             AccessModifier.Private,
@@ -61,7 +61,7 @@ public class DocumentationFixture : IDisposable
             NamespacesToExclude: ["MyLibrary.Exclude", "MyLibrary.Tools.Exclude"],
             AssembliesToExclude: []);
 
-        var generator = new DocGenerator(["data/MyLibrary.dll"], ["data/MyLibrary.xml"], templateGenerator, assemblyDataConfig, outputDir);
+        var generator = new DocGenerator(["data/MyLibrary.dll"], ["data/MyLibrary.xml"], templateProcessor, assemblyDataConfig, outputDir);
 
         generator.GenerateDoc();
     }
