@@ -22,21 +22,21 @@ namespace RefDocGen.TemplateProcessors.Shared;
 /// <summary>
 /// Class responsible for processing the Razor templates and populating them with the type data.
 /// </summary>
-/// <typeparam name="TDelegatePageTemplate">Type of the Razor component representing a delegate page.</typeparam>
-/// <typeparam name="TEnumPageTemplate">Type of the Razor component representing a enum page.</typeparam>
-/// <typeparam name="TNamespacePageTemplate">Type of the Razor component representing a namespace page.</typeparam>
-/// <typeparam name="TAssemblyPageTemplate">Type of the Razor component representing an assembly page.</typeparam>
-/// <typeparam name="TApiPageTemplate">Type of the Razor component representing the main API page.</typeparam>
-/// <typeparam name="TObjectTypePageTemplate">Type of the Razor component representing an object type page.</typeparam>
-/// <typeparam name="TStaticPageTemplate">Type of the Razor component representing a static page template.</typeparam>
-/// <typeparam name="TSearchPageTemplate">Type of the Razor component representing a search page.</typeparam>
+/// <typeparam name="TDelegatePageTemplate">Type of the Razor component representing the delegate page.</typeparam>
+/// <typeparam name="TEnumPageTemplate">Type of the Razor component representing the enum page.</typeparam>
+/// <typeparam name="TNamespacePageTemplate">Type of the Razor component representing the namespace page.</typeparam>
+/// <typeparam name="TAssemblyPageTemplate">Type of the Razor component representing the assembly page.</typeparam>
+/// <typeparam name="TApiHomePageTemplate">Type of the Razor component representing the API home page.</typeparam>
+/// <typeparam name="TObjectTypePageTemplate">Type of the Razor component representing the object type page.</typeparam>
+/// <typeparam name="TStaticPageTemplate">Type of the Razor component representing the static page.</typeparam>
+/// <typeparam name="TSearchPageTemplate">Type of the Razor component representing the search page.</typeparam>
 internal class RazorTemplateProcessor<
         TObjectTypePageTemplate,
         TDelegatePageTemplate,
         TEnumPageTemplate,
         TNamespacePageTemplate,
         TAssemblyPageTemplate,
-        TApiPageTemplate,
+        TApiHomePageTemplate,
         TStaticPageTemplate,
         TSearchPageTemplate
     > : ITemplateProcessor
@@ -47,7 +47,7 @@ internal class RazorTemplateProcessor<
     where TAssemblyPageTemplate : IComponent
     where TObjectTypePageTemplate : IComponent
     where TStaticPageTemplate : IComponent
-    where TApiPageTemplate : IComponent
+    where TApiHomePageTemplate : IComponent
     where TSearchPageTemplate : IComponent
 {
     /// <summary>
@@ -281,7 +281,7 @@ internal class RazorTemplateProcessor<
     {
         var creator = new AssemblyTMCreator(docCommentTransformer, availableLanguages);
         var assemblyTMs = assemblies.Select(creator.GetFrom);
-        ProcessApiTemplate<TApiPageTemplate, IEnumerable<AssemblyTM>>(assemblyTMs, indexPageId);
+        ProcessApiTemplate<TApiHomePageTemplate, IEnumerable<AssemblyTM>>(assemblyTMs, indexPageId);
     }
 
     /// <summary>

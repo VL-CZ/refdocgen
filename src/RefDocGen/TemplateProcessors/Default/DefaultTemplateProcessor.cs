@@ -13,14 +13,14 @@ namespace RefDocGen.TemplateProcessors.Default;
 /// Class used for processing the default Razor templates.
 /// </summary>
 internal class DefaultTemplateProcessor : RazorTemplateProcessor<
-    ObjectTypeTemplate,
-    DelegateTypeTemplate,
-    EnumTypeTemplate,
-    NamespaceTemplate,
-    AssemblyTemplate,
-    ApiTemplate,
-    StaticPageTemplate,
-    SearchTemplate>
+    ObjectTypePage,
+    DelegateTypePage,
+    EnumTypePage,
+    NamespacePage,
+    AssemblyPage,
+    ApiHomePage,
+    StaticPage,
+    SearchPage>
 {
     /// <summary>
     /// Initialize a new instance of <see cref="DefaultTemplateProcessor"/> class.
