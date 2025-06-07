@@ -1,7 +1,6 @@
 using System.Globalization;
 using RefDocGen.CodeElements.Shared;
 using RefDocGen.CodeElements.TypeRegistry;
-using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.Tools;
 
