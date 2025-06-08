@@ -1,6 +1,4 @@
 
-const isLocalFile = location.protocol === 'file:';
-
 function fetchVersions() {
     // Get the original <ul> and its <li> items
 
@@ -79,20 +77,6 @@ function setLanguageVisibility(selectedLang) {
         return;
     }
 
-    // Hide all language-specific elements
-    allLangs.forEach(lang => {
-        const elements = document.getElementsByClassName(lang);
-        Array.from(elements).forEach(el => {
-            el.classList.add('not-visible');
-        });
-    });
-
-    // Show only selected language elements
-    const selectedLangElements = document.getElementsByClassName(selectedLang);
-    Array.from(selectedLangElements).forEach(el => {
-        el.classList.remove('not-visible');
-    });
-
     if (isLocalFile) {
         const url = new URL(window.location.href);
 
@@ -105,6 +89,24 @@ function setLanguageVisibility(selectedLang) {
         // Store into localStorage
         localStorage.setItem('refdocgen-language', selectedLang);
     }
+
+    // Hide all language-specific elements
+    allLangs.forEach(lang => {
+        if (lang == selectedLang) {
+            // Show only selected language elements
+            const selectedLangElements = document.getElementsByClassName(selectedLang);
+            Array.from(selectedLangElements).forEach(el => {
+                el.classList.remove('not-visible');
+            });
+        }
+        else {
+
+            const elements = document.getElementsByClassName(lang);
+            Array.from(elements).forEach(el => {
+                el.classList.add('not-visible');
+            });
+        }
+    });
 }
 
 function updateRelativeLinks() {
@@ -138,6 +140,24 @@ function updateRelativeLinks() {
 }
 
 function main() {
+    const languageSelector = document.getElementById('language-selector');
+    let savedLang = null;
+
+    if (isLocalFile) {
+        const searchParams = new URLSearchParams(window.location.search);
+        savedLang = searchParams.get('lang');
+    }
+    else {
+        savedLang = localStorage.getItem('refdocgen-language');
+    }
+
+    if (savedLang) {
+        // Set dropdown to saved value
+        languageSelector.value = savedLang;
+
+        // Update visibility
+        setLanguageVisibility(savedLang);
+    }
 
     // fetch versions
     fetchVersions();
@@ -162,9 +182,6 @@ function main() {
         window.location.href = newUrl.toString();
     });
 
-    // language switching
-    const languageSelector = document.getElementById('language-selector');
-
     // Event listener for dropdown change
     languageSelector.addEventListener('change', function () {
         const selectedLang = this.value;
@@ -174,21 +191,8 @@ function main() {
     });
 }
 
-// On page load, restore selected language
-window.addEventListener('DOMContentLoaded', () => {
-    //const savedLang = localStorage.getItem('refdocgen-language');
-    const languageSelector = document.getElementById('language-selector');
-
-    const url = new URL(window.location.href);
-    const savedLang = url.searchParams.get('lang');
-
-    if (savedLang) {
-        // Set dropdown to saved value
-        languageSelector.value = savedLang;
-
-        // Update visibility
-        setLanguageVisibility(savedLang);
-    }
-});
-
-window.addEventListener('load', main);
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", main);
+} else {
+    main();
+}
