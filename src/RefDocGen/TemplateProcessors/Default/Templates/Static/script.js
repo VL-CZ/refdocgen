@@ -1,4 +1,6 @@
 
+const isLocalFile = location.protocol === "file:";
+
 /**
  * Loads the version list from the 'version-list' element, and populates the 'version-selector' dropdown with their data.
  */
@@ -100,6 +102,14 @@ function setLanguageVisibility(selectedLang) {
 }
 
 /**
+ * Tests if the URL is absolute.
+ */
+function isAbsoluteUrl(url) {
+    return /^(https?:)?\/\//.test(url); // check for 'http' or 'https' or '//', which is enough in our case
+                                        // https://stackoverflow.com/questions/10687099/how-to-test-if-a-url-string-is-absolute-or-relative
+}
+
+/**
  * Updates all relative links at the page to include the same URL parameters as this page has.
  */
 function updateRelativeLinks() {
@@ -118,8 +128,9 @@ function updateRelativeLinks() {
         const href = link.getAttribute("href");
 
         // Skip if it's an absolute URL (e.g., starts with http or //)
-        if (/^(https?:)?\/\//.test(href))
+        if (isAbsoluteUrl(href)) {
             continue;
+        }
 
         // Create a URL object relative to the current location
         const url = new URL(href, window.location.href);

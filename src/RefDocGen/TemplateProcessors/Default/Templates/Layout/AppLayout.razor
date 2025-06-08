@@ -33,50 +33,55 @@
 
     <script>
 
-        const isLocalFile = location.protocol === "file:";
-        const defaultTheme = "dark";
-        const defaultLang = "csharp-lang";
+        // use IIFE in order to avoid polluting global context with functions & variables
+        // https://developer.mozilla.org/en-US/docs/Glossary/IIFE
+        (function() {
+            const isLocalFile = location.protocol === "file:";
+            const defaultTheme = "dark";
+            const defaultLang = "csharp-lang";
 
-        if(isLocalFile){
-            const urlParams = new URLSearchParams(window.location.search);
+            if(isLocalFile){
+                const urlParams = new URLSearchParams(window.location.search);
 
-            // Preserve existing params and update or add 'version'
+                let redirect = false;
 
-            let redirect = false;
+                // set 'theme' URL param if not found
+                if(!urlParams.has("theme")){
+                    urlParams.set("theme", defaultTheme);
+                    redirect = true;
+                }
 
-            if(!urlParams.has("theme")){
-                urlParams.set("theme", defaultTheme);
-                redirect = true;
+                // set 'lang' URL param if not found
+                if(!urlParams.has("lang")){
+                    urlParams.set("lang", defaultLang);
+                    redirect = true;
+                }
+
+                // redirect, if some of the URL parameters are missing
+                if(redirect){
+                    const newUrl = new URL(window.location.href);
+                    newUrl.search = urlParams.toString();
+
+                    window.location.href = newUrl;
+                }
+                else {
+                    document.documentElement.setAttribute("data-bs-theme", urlParams.get("theme")); // set the 'data-bs-theme' attribute
+                    document.documentElement.setAttribute("data-language", urlParams.get("lang")); // set the 'data-language' attribute
+                }
             }
-            if(!urlParams.has("lang")){
-                urlParams.set("lang", defaultLang);
-                redirect = true;
-            }
+            else { // no local file -> use localStorage
+                if (!localStorage.getItem("refdocgen-theme")) { 
+                    localStorage.setItem("refdocgen-theme", defaultTheme);
+                }
 
-            if(redirect){
-                const newUrl = new URL(window.location.href);
-                newUrl.search = urlParams.toString();
+                if (!localStorage.getItem("refdocgen-language")) {
+                    localStorage.setItem("refdocgen-language", defaultLang);
+                }
 
-                window.location.href = newUrl;
+                document.documentElement.setAttribute("data-bs-theme", localStorage.getItem("refdocgen-theme")); // set the 'data-bs-theme' attribute
+                document.documentElement.setAttribute("data-language", localStorage.getItem("refdocgen-language")); // set the 'data-language' attribute
             }
-            else {
-                document.documentElement.setAttribute("data-bs-theme", urlParams.get("theme")); // set the 'data-bs-theme' attribute
-                document.documentElement.setAttribute("data-language", urlParams.get("lang")); // set the 'data-bs-theme' attribute
-            }
-        }
-        else {
-            if (!localStorage.getItem("refdocgen-theme")) { 
-                localStorage.setItem("refdocgen-theme", defaultTheme);
-            }
-
-            if (!localStorage.getItem("refdocgen-language")) {
-                localStorage.setItem("refdocgen-language", defaultLang);
-            }
-
-            document.documentElement.setAttribute("data-bs-theme", localStorage.getItem("refdocgen-theme")); // set the 'data-bs-theme' attribute
-            document.documentElement.setAttribute("data-language", localStorage.getItem("refdocgen-language")); // set the 'data-bs-theme' attribute
-        }
-
+        })();
     </script>
 
     <!-- Global CSS (Bootstrap + custom styles) -->
