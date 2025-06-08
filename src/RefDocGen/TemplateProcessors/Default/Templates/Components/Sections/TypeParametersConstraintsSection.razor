@@ -7,4 +7,7 @@
     public required TypeParameterTM[] TypeParameters { get; set; }
 }
 
-<LanguageData Type="LanguageSpecificComponent.TypeParametersConstraintsSection" Parameter="TypeParameters" />
+@foreach (var tp in TypeParameters)
+{
+    <LanguageData Type="LanguageSpecificComponent.TypeParameterConstraints" Parameter="tp" />
+}
