@@ -28,14 +28,46 @@
     <title>Reference documentation</title>
 
     <script>
-        // const savedTheme = localStorage.getItem('refdocgen-theme') || "light"; // get the saved theme
 
-        const url = new URL(window.location.href);
+        const isLocalFile = location.protocol === 'file:';
 
-        // Preserve existing params and update or add 'version'
-        const savedTheme = url.searchParams.get('theme') || "light";
+        if(isLocalFile){
+            const urlParams = new URLSearchParams(window.location.search);
 
-        document.documentElement.setAttribute('data-bs-theme', savedTheme); // set the 'data-bs-theme' attribute
+            // Preserve existing params and update or add 'version'
+
+            let redirect = false;
+
+            if(!urlParams.has('theme')){
+                urlParams.set('theme', 'light');
+                redirect = true;
+            }
+            if(!urlParams.has('lang')){
+                urlParams.set('lang', 'csharp-lang');
+                redirect = true;
+            }
+
+            if(redirect){
+                const newUrl = new URL(window.location.href);
+                newUrl.search = urlParams.toString();
+
+                window.location.href = newUrl;
+            }
+            else {
+                document.documentElement.setAttribute('data-bs-theme', urlParams.get('theme')); // set the 'data-bs-theme' attribute
+            }
+        }
+        else {
+            if (!localStorage.getItem('refdocgen-theme')) {
+                localStorage.setItem('refdocgen-theme', 'light');
+            }
+
+            if (!localStorage.getItem('refdocgen-language')) {
+                localStorage.setItem('refdocgen-language', 'csharp-lang');
+            }
+
+            document.documentElement.setAttribute('data-bs-theme', localStorage.getItem('refdocgen-theme')); // set the 'data-bs-theme' attribute
+        }
 
     </script>
 

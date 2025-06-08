@@ -1,4 +1,6 @@
 
+const isLocalFile = location.protocol === 'file:';
+
 function fetchVersions() {
     // Get the original <ul> and its <li> items
 
@@ -42,18 +44,23 @@ function fetchVersions() {
 }
 
 function switchTheme() {
-    //const htmlElement = document.documentElement;
-    //const currentTheme = htmlElement.getAttribute('data-bs-theme');
+    if (isLocalFile) {
+        const url = new URL(window.location.href);
+        const currentTheme = url.searchParams.get('theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
 
-    const url = new URL(window.location.href);
-    const currentTheme = url.searchParams.get('theme') || 'light';
-    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        url.searchParams.set('theme', newTheme);
+        window.location.href = url.toString();
+    }
+    else {
+        const htmlElement = document.documentElement;
 
-    url.searchParams.set('theme', newTheme);
-    window.location.href = url.toString();
+        const currentTheme = htmlElement.getAttribute('data-bs-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        htmlElement.setAttribute('data-bs-theme', newTheme);
 
-    // htmlElement.setAttribute('data-bs-theme', newTheme);
-    // localStorage.setItem('refdocgen-theme', newTheme);
+        localStorage.setItem('refdocgen-theme', newTheme);
+    }
 }
 
 /**
@@ -72,9 +79,6 @@ function setLanguageVisibility(selectedLang) {
         return;
     }
 
-    // Store into localStorage
-    //localStorage.setItem('refdocgen-language', selectedLang);
-
     // Hide all language-specific elements
     allLangs.forEach(lang => {
         const elements = document.getElementsByClassName(lang);
@@ -89,11 +93,17 @@ function setLanguageVisibility(selectedLang) {
         el.classList.remove('not-visible');
     });
 
-    const url = new URL(window.location.href);
+    if (isLocalFile) {
+        const url = new URL(window.location.href);
 
-    if (url.searchParams.get('lang') !== selectedLang) {
-        url.searchParams.set('lang', selectedLang);
-        window.location.href = url.toString();
+        if (url.searchParams.get('lang') !== selectedLang) {
+            url.searchParams.set('lang', selectedLang);
+            window.location.href = url.toString();
+        }
+    }
+    else {
+        // Store into localStorage
+        localStorage.setItem('refdocgen-language', selectedLang);
     }
 }
 
@@ -128,6 +138,7 @@ function updateRelativeLinks() {
 }
 
 function main() {
+
     // fetch versions
     fetchVersions();
 
@@ -135,7 +146,9 @@ function main() {
     const themeSwitcher = document.getElementById('theme-switcher');
     themeSwitcher.addEventListener('click', switchTheme);
 
-    updateRelativeLinks();
+    if (isLocalFile) {
+        updateRelativeLinks();
+    }
 
     // go to search page on search bar click
     const menuSearchBar = document.getElementById('menu-search-bar');
@@ -167,7 +180,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const languageSelector = document.getElementById('language-selector');
 
     const url = new URL(window.location.href);
-    const savedLang = url.searchParams.get('lang') || "csharp-lang";
+    const savedLang = url.searchParams.get('lang');
 
     if (savedLang) {
         // Set dropdown to saved value
