@@ -85,6 +85,32 @@ function setLanguageVisibility(selectedLang) {
     });
 }
 
+function updateRelativeLinks() {
+    let theme = new URLSearchParams(window.location.search).get('theme');
+    if (!theme) {
+        theme = "light";
+    }
+
+    const links = document.querySelectorAll('a[href]');
+
+    for (const link of links) {
+        const href = link.getAttribute('href');
+
+        // Skip if it's an absolute URL (e.g., starts with http or //)
+        if (/^(https?:)?\/\//.test(href))
+            continue;
+
+        // Create a URL object relative to the current location
+        const url = new URL(href, window.location.href);
+
+        // Preserve existing params and update or add 'version'
+        url.searchParams.set('theme', theme);
+
+        // Set it back as a relative URL (without origin)
+        link.setAttribute('href', url.toString());
+    }
+}
+
 function main() {
     // fetch versions
     fetchVersions();
@@ -92,6 +118,8 @@ function main() {
     // switch theme on click
     const themeSwitcher = document.getElementById('theme-switcher');
     themeSwitcher.addEventListener('click', switchTheme);
+
+    updateRelativeLinks();
 
     // go to search page on search bar click
     const menuSearchBar = document.getElementById('menu-search-bar');

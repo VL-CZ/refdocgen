@@ -28,9 +28,14 @@
     <title>Reference documentation</title>
 
     <script>
-        const savedTheme = localStorage.getItem('refdocgen-theme') || "light"; // get the saved theme
-        document.documentElement.setAttribute('data-bs-theme', savedTheme); // set the 'data-bs-theme' attribute
+        // const savedTheme = localStorage.getItem('refdocgen-theme') || "light"; // get the saved theme
 
+        const url = new URL(window.location.href);
+
+        // Preserve existing params and update or add 'version'
+        const savedTheme = url.searchParams.get('theme') || "light";
+
+        document.documentElement.setAttribute('data-bs-theme', savedTheme); // set the 'data-bs-theme' attribute
 
     </script>
 
