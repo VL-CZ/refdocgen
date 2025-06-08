@@ -1,0 +1,46 @@
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Types
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public required TypeParameterTM TypeParameter { get; set; }
+}
+
+@{
+    var specialConstraints = TypeParameter.SpecialConstraints.CSharpData;
+    var allConstraints = specialConstraints.Concat(
+        TypeParameter.TypeConstraints.Select(c => c.TypeLink.Name.CSharpData)
+    );
+}
+
+@if (allConstraints.Any())
+{
+    <h6 class="mx-3" data-id="type-param-constraints">
+        <samp>
+            <span class="refdocgen-text-tertiary">where</span>
+            <span class="refdocgen-text-secondary">@TypeParameter.Name</span>
+            <span> : </span>
+            <span class="refdocgen-text-tertiary">@string.Join(", ", specialConstraints)</span>
+
+            @if (TypeParameter.TypeConstraints.Any())
+            {
+                var lastItem = TypeParameter.TypeConstraints.Last();
+
+                @if (specialConstraints.Any())
+                {
+                    <span class="refdocgen-text-tertiary">, </span>
+                }
+
+                foreach (var constraint in TypeParameter.TypeConstraints)
+                {
+                    <GenericTypeLink Type="@constraint" />
+
+                    if (constraint != lastItem)
+                    {
+                        <text>, </text>
+                    }
+                }
+            }
+        </samp>
+    </h6>
+}
