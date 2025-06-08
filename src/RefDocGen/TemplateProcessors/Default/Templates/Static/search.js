@@ -14,7 +14,7 @@ function getSearchResultCard(item, language) {
     cardTitleLink.textContent = item.name.data[language];
 
     const url = new URL(item.url, window.location.href);
-    url.search = window.location.search;
+    url.search = window.location.search; // keep the original URL params
 
     cardTitleLink.href = url.toString();
     cardBody.innerHTML = item.docComment;

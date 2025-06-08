@@ -8,7 +8,7 @@
 
     <script>
         const newUrl = new URL("./api/index.html", window.location.href);
-        newUrl.search = window.location.search;
+        newUrl.search = window.location.search; // keep the original URL params
 
         window.location.replace(newUrl); // redirect to api/index.html before rendering
     </script>

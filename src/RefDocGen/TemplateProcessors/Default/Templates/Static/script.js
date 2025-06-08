@@ -73,7 +73,7 @@ function setLanguageVisibility(selectedLang) {
     }
 
     // Store into localStorage
-    localStorage.setItem('selectedLanguage', selectedLang);
+    //localStorage.setItem('refdocgen-language', selectedLang);
 
     // Hide all language-specific elements
     allLangs.forEach(lang => {
@@ -88,12 +88,23 @@ function setLanguageVisibility(selectedLang) {
     Array.from(selectedLangElements).forEach(el => {
         el.classList.remove('not-visible');
     });
+
+    const url = new URL(window.location.href);
+
+    if (url.searchParams.get('lang') !== selectedLang) {
+        url.searchParams.set('lang', selectedLang);
+        window.location.href = url.toString();
+    }
 }
 
 function updateRelativeLinks() {
-    let theme = new URLSearchParams(window.location.search).get('theme');
-    if (!theme) {
-        theme = "light";
+    const urlParams = new URLSearchParams(window.location.search);
+    if (!urlParams.get('theme')) {
+        urlParams.set('theme', 'light');
+    }
+
+    if (!urlParams.get('lang')) {
+        urlParams.set('lang', 'csharp-lang');
     }
 
     let links = document.querySelectorAll('a[href]');
@@ -108,8 +119,8 @@ function updateRelativeLinks() {
         // Create a URL object relative to the current location
         const url = new URL(href, window.location.href);
 
-        // Preserve existing params and update or add 'version'
-        url.searchParams.set('theme', theme);
+        // Preserve the existing URL params
+        url.search = urlParams.toString();
 
         // Set it back as a relative URL (without origin)
         link.setAttribute('href', url.toString());
@@ -152,8 +163,11 @@ function main() {
 
 // On page load, restore selected language
 window.addEventListener('DOMContentLoaded', () => {
-    const savedLang = localStorage.getItem('selectedLanguage');
+    //const savedLang = localStorage.getItem('refdocgen-language');
     const languageSelector = document.getElementById('language-selector');
+
+    const url = new URL(window.location.href);
+    const savedLang = url.searchParams.get('lang') || "csharp-lang";
 
     if (savedLang) {
         // Set dropdown to saved value
