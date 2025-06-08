@@ -43,7 +43,7 @@
             let redirect = false;
 
             if(!urlParams.has('theme')){
-                urlParams.set('theme', 'light');
+                urlParams.set('theme', 'dark');
                 redirect = true;
             }
             if(!urlParams.has('lang')){
@@ -59,12 +59,12 @@
             }
             else {
                 document.documentElement.setAttribute('data-bs-theme', urlParams.get('theme')); // set the 'data-bs-theme' attribute
-                document.documentElement.setAttribute('refdocgen-language', urlParams.get('lang')); // set the 'data-bs-theme' attribute
+                document.documentElement.setAttribute('data-language', urlParams.get('lang')); // set the 'data-bs-theme' attribute
             }
         }
         else {
-            if (!localStorage.getItem('refdocgen-theme')) {
-                localStorage.setItem('refdocgen-theme', 'light');
+            if (!localStorage.getItem('refdocgen-theme')) { 
+                localStorage.setItem('refdocgen-theme', 'dark');
             }
 
             if (!localStorage.getItem('refdocgen-language')) {
@@ -72,7 +72,7 @@
             }
 
             document.documentElement.setAttribute('data-bs-theme', localStorage.getItem('refdocgen-theme')); // set the 'data-bs-theme' attribute
-            document.documentElement.setAttribute('refdocgen-language', localStorage.getItem('refdocgen-language')); // set the 'data-bs-theme' attribute
+            document.documentElement.setAttribute('data-language', localStorage.getItem('refdocgen-language')); // set the 'data-bs-theme' attribute
         }
 
     </script>
@@ -94,7 +94,7 @@
         var sb = new System.Text.StringBuilder();
         foreach (var lang in Languages)
         {
-            sb.AppendLine($"html[refdocgen-language=\"{lang.Id}\"] .{lang.Id} {{ display: inline; }}");
+            sb.AppendLine($"html[data-language=\"{lang.Id}\"] .{lang.Id} {{ display: inline; }}");
         }
         return sb.ToString();
         }
