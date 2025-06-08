@@ -5,11 +5,11 @@
  * @param {any} language the language in which the results are displayed
  */
 function getSearchResultCard(item, language) {
-    const searchResultTemplate = document.getElementById('search-result-template').firstElementChild;
+    const searchResultTemplate = document.getElementById("search-result-template").firstElementChild;
     const template = searchResultTemplate.cloneNode(true);
 
-    const cardTitleLink = template.querySelector('.search-result-title-link');
-    const cardBody = template.querySelector('.search-result-body');
+    const cardTitleLink = template.querySelector(".search-result-title-link");
+    const cardBody = template.querySelector(".search-result-body");
 
     cardTitleLink.textContent = item.name.data[language];
 
@@ -29,33 +29,33 @@ function getSearchResultCard(item, language) {
  * @param {any} language the language in which the results are displayed
  */
 function getSearchResults(fuse, text, language) {
-    const resultsList = document.getElementById('search-results');
+    const resultsList = document.getElementById("search-results");
 
     const query = text.trim();
     const results = fuse.search(query);
 
-    resultsList.innerHTML = '';
+    resultsList.innerHTML = "";
 
     results.forEach(result => {
         const item = getSearchResultCard(result.item, language);
         resultsList.appendChild(item);
     });
 
-    if (results.length === 0 && query !== '') {
-        resultsList.innerHTML = 'No results found';
+    if (results.length === 0 && query !== "") {
+        resultsList.innerHTML = "No results found";
     }
 }
 
-window.addEventListener('load', () => {
-    const searchBox = document.getElementById('search-box');
+window.addEventListener("load", () => {
+    const searchBox = document.getElementById("search-box");
     searchBox.focus();
 
-    const serializedSearchData = document.getElementById('search-json-data').innerHTML.trim();
+    const serializedSearchData = document.getElementById("search-json-data").innerHTML.trim();
 
     // Parse the JSON string into a JS object
     const jsonSearchData = JSON.parse(serializedSearchData);
 
-    const language = document.getElementById('language-selector').value;
+    const language = document.getElementById("language-selector").value;
 
     const fuse = new Fuse(jsonSearchData, {
         keys: [`name.data.${language}`],
@@ -64,5 +64,5 @@ window.addEventListener('load', () => {
     });
 
     // search when the user types a character
-    searchBox.addEventListener('input', () => getSearchResults(fuse, searchBox.value, language));
+    searchBox.addEventListener("input", () => getSearchResults(fuse, searchBox.value, language));
 });

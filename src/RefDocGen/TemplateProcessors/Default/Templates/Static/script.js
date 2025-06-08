@@ -3,26 +3,26 @@
  * Loads the version list from the 'version-list' element, and populates the 'version-selector' dropdown with their data.
  */
 function loadVersions() {
-    const versionListElement = document.getElementById('version-list');
+    const versionListElement = document.getElementById("version-list");
 
     if (versionListElement) {
 
         const versionsJson = versionListElement.innerText;
         const versionItems = JSON.parse(versionsJson).reverse();
 
-        const currentVersion = document.getElementById('current-version').innerText.trim();
+        const currentVersion = document.getElementById("current-version").innerText.trim();
 
         // Get the 'version-selector'
-        const versionSelector = document.getElementById('version-selector');
+        const versionSelector = document.getElementById("version-selector");
 
         // Loop through each version and create a new <li> with a <a> inside
         versionItems.forEach(item => {
             const versionText = item.trim(); // Get the version text
-            const newLi = document.createElement('li');
-            const newA = document.createElement('a');
+            const newLi = document.createElement("li");
+            const newA = document.createElement("a");
 
             // Set the href and class for the <a> tag
-            newA.classList.add('dropdown-item');
+            newA.classList.add("dropdown-item");
 
             const currentUrl = window.location.href;
             const newUrl = currentUrl.replace(currentVersion, versionText);
@@ -45,7 +45,7 @@ function loadVersions() {
  * Gets the other theme that passed in the parameter.
  */
 function getOtherTheme(theme) {
-    return theme === 'light' ? 'dark' : 'light';
+    return theme === "light" ? "dark" : "light";
 }
 
 /**
@@ -54,19 +54,19 @@ function getOtherTheme(theme) {
 function switchTheme() {
     if (isLocalFile) { // set the 'theme' URL param, and redirect
         const url = new URL(window.location.href);
-        const currentTheme = url.searchParams.get('theme');
+        const currentTheme = url.searchParams.get("theme");
         const newTheme = getOtherTheme(currentTheme);
 
-        url.searchParams.set('theme', newTheme);
+        url.searchParams.set("theme", newTheme);
         window.location.href = url.toString();
     }
     else { // set the 'data-bs-theme' attribute + store into local storage
         const htmlElement = document.documentElement;
-        const currentTheme = htmlElement.getAttribute('data-bs-theme');
+        const currentTheme = htmlElement.getAttribute("data-bs-theme");
         const newTheme = getOtherTheme(currentTheme);
 
-        htmlElement.setAttribute('data-bs-theme', newTheme);
-        localStorage.setItem('refdocgen-theme', newTheme);
+        htmlElement.setAttribute("data-bs-theme", newTheme);
+        localStorage.setItem("refdocgen-theme", newTheme);
     }
 }
 
@@ -77,7 +77,7 @@ function switchTheme() {
 function setLanguageVisibility(selectedLang) {
 
     // get all language identifiers
-    const allLangs = Array.from(document.getElementsByClassName('lang-option'))
+    const allLangs = Array.from(document.getElementsByClassName("lang-option"))
         .map(option => option.value);
 
     // invalid language value -> do nothing
@@ -88,14 +88,14 @@ function setLanguageVisibility(selectedLang) {
     if (isLocalFile) {
         const url = new URL(window.location.href);
 
-        if (url.searchParams.get('lang') !== selectedLang) { // add the 'lang' URL param, and redirect
-            url.searchParams.set('lang', selectedLang);
+        if (url.searchParams.get("lang") !== selectedLang) { // add the 'lang' URL param, and redirect
+            url.searchParams.set("lang", selectedLang);
             window.location.href = url.toString();
         }
     }
     else { // set 'data-language' attribute + store into local storage
-        document.documentElement.setAttribute('data-language', selectedLang);
-        localStorage.setItem('refdocgen-language', selectedLang);
+        document.documentElement.setAttribute("data-language", selectedLang);
+        localStorage.setItem("refdocgen-language", selectedLang);
     }
 }
 
@@ -104,18 +104,18 @@ function setLanguageVisibility(selectedLang) {
  */
 function updateRelativeLinks() {
     const urlParams = new URLSearchParams(window.location.search);
-    if (!urlParams.get('theme')) {
-        urlParams.set('theme', 'dark');
+    if (!urlParams.get("theme")) {
+        urlParams.set("theme", "dark");
     }
 
-    if (!urlParams.get('lang')) {
-        urlParams.set('lang', 'csharp-lang');
+    if (!urlParams.get("lang")) {
+        urlParams.set("lang", "csharp-lang");
     }
 
-    let links = document.querySelectorAll('a[href]');
+    let links = document.querySelectorAll("a[href]");
 
     for (const link of links) {
-        const href = link.getAttribute('href');
+        const href = link.getAttribute("href");
 
         // Skip if it's an absolute URL (e.g., starts with http or //)
         if (/^(https?:)?\/\//.test(href))
@@ -128,13 +128,13 @@ function updateRelativeLinks() {
         url.search = urlParams.toString();
 
         // Set it back as a relative URL (without origin)
-        link.setAttribute('href', url.toString());
+        link.setAttribute("href", url.toString());
     }
 }
 
 function main() {
-    const languageSelector = document.getElementById('language-selector');
-    const savedLang = document.documentElement.getAttribute('data-language');
+    const languageSelector = document.getElementById("language-selector");
+    const savedLang = document.documentElement.getAttribute("data-language");
 
     // set the saved language
     if (savedLang) {
@@ -145,13 +145,13 @@ function main() {
     loadVersions();
 
     // switch theme on click
-    const themeSwitcher = document.getElementById('theme-switcher');
-    themeSwitcher.addEventListener('click', switchTheme);
+    const themeSwitcher = document.getElementById("theme-switcher");
+    themeSwitcher.addEventListener("click", switchTheme);
 
     // go to search page on search bar click
-    const menuSearchBar = document.getElementById('menu-search-bar');
-    menuSearchBar.addEventListener('focus', () => {
-        const targetRelativeUrl = menuSearchBar.getAttribute('url-target');
+    const menuSearchBar = document.getElementById("menu-search-bar");
+    menuSearchBar.addEventListener("focus", () => {
+        const targetRelativeUrl = menuSearchBar.getAttribute("url-target");
 
         const currentUrl = new URL(window.location.href);
         const newUrl = new URL(targetRelativeUrl, window.location.href);
@@ -161,7 +161,7 @@ function main() {
     });
 
     // Event listener for dropdown change
-    languageSelector.addEventListener('change', function () {
+    languageSelector.addEventListener("change", function () {
         const selectedLang = this.value;
 
         // set language visibility

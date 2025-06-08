@@ -33,7 +33,9 @@
 
     <script>
 
-        const isLocalFile = location.protocol === 'file:';
+        const isLocalFile = location.protocol === "file:";
+        const defaultTheme = "dark";
+        const defaultLang = "csharp-lang";
 
         if(isLocalFile){
             const urlParams = new URLSearchParams(window.location.search);
@@ -42,12 +44,12 @@
 
             let redirect = false;
 
-            if(!urlParams.has('theme')){
-                urlParams.set('theme', 'dark');
+            if(!urlParams.has("theme")){
+                urlParams.set("theme", defaultTheme);
                 redirect = true;
             }
-            if(!urlParams.has('lang')){
-                urlParams.set('lang', 'csharp-lang');
+            if(!urlParams.has("lang")){
+                urlParams.set("lang", defaultLang);
                 redirect = true;
             }
 
@@ -58,21 +60,21 @@
                 window.location.href = newUrl;
             }
             else {
-                document.documentElement.setAttribute('data-bs-theme', urlParams.get('theme')); // set the 'data-bs-theme' attribute
-                document.documentElement.setAttribute('data-language', urlParams.get('lang')); // set the 'data-bs-theme' attribute
+                document.documentElement.setAttribute("data-bs-theme", urlParams.get("theme")); // set the 'data-bs-theme' attribute
+                document.documentElement.setAttribute("data-language", urlParams.get("lang")); // set the 'data-bs-theme' attribute
             }
         }
         else {
-            if (!localStorage.getItem('refdocgen-theme')) { 
-                localStorage.setItem('refdocgen-theme', 'dark');
+            if (!localStorage.getItem("refdocgen-theme")) { 
+                localStorage.setItem("refdocgen-theme", defaultTheme);
             }
 
-            if (!localStorage.getItem('refdocgen-language')) {
-                localStorage.setItem('refdocgen-language', 'csharp-lang');
+            if (!localStorage.getItem("refdocgen-language")) {
+                localStorage.setItem("refdocgen-language", defaultLang);
             }
 
-            document.documentElement.setAttribute('data-bs-theme', localStorage.getItem('refdocgen-theme')); // set the 'data-bs-theme' attribute
-            document.documentElement.setAttribute('data-language', localStorage.getItem('refdocgen-language')); // set the 'data-bs-theme' attribute
+            document.documentElement.setAttribute("data-bs-theme", localStorage.getItem("refdocgen-theme")); // set the 'data-bs-theme' attribute
+            document.documentElement.setAttribute("data-language", localStorage.getItem("refdocgen-language")); // set the 'data-bs-theme' attribute
         }
 
     </script>
