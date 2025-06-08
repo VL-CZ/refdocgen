@@ -42,13 +42,18 @@ function fetchVersions() {
 }
 
 function switchTheme() {
-    const htmlElement = document.documentElement;
+    //const htmlElement = document.documentElement;
+    //const currentTheme = htmlElement.getAttribute('data-bs-theme');
 
-    const currentTheme = htmlElement.getAttribute('data-bs-theme');
+    const url = new URL(window.location.href);
+    const currentTheme = url.searchParams.get('theme') || 'light';
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-    htmlElement.setAttribute('data-bs-theme', newTheme);
 
-    localStorage.setItem('refdocgen-theme', newTheme);
+    url.searchParams.set('theme', newTheme);
+    window.location.href = url.toString();
+
+    // htmlElement.setAttribute('data-bs-theme', newTheme);
+    // localStorage.setItem('refdocgen-theme', newTheme);
 }
 
 /**
@@ -91,7 +96,7 @@ function updateRelativeLinks() {
         theme = "light";
     }
 
-    const links = document.querySelectorAll('a[href]');
+    let links = document.querySelectorAll('a[href]');
 
     for (const link of links) {
         const href = link.getAttribute('href');
@@ -124,8 +129,13 @@ function main() {
     // go to search page on search bar click
     const menuSearchBar = document.getElementById('menu-search-bar');
     menuSearchBar.addEventListener('focus', () => {
-        const targetUrl = menuSearchBar.getAttribute('url-target');
-        window.location.href = targetUrl;
+        const targetRelativeUrl = menuSearchBar.getAttribute('url-target');
+
+        const currentUrl = new URL(window.location.href);
+        const newUrl = new URL(targetRelativeUrl, window.location.href);
+        newUrl.search = currentUrl.search;
+
+        window.location.href = newUrl.toString();
     });
 
     // language switching

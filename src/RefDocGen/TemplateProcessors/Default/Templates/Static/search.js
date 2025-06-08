@@ -12,8 +12,11 @@ function getSearchResultCard(item, language) {
     const cardBody = template.querySelector('.search-result-body');
 
     cardTitleLink.textContent = item.name.data[language];
-    cardTitleLink.href = item.url;
 
+    const url = new URL(item.url, window.location.href);
+    url.search = window.location.search;
+
+    cardTitleLink.href = url.toString();
     cardBody.innerHTML = item.docComment;
 
     return template;

@@ -7,7 +7,10 @@
     <title>Home</title>
 
     <script>
-        window.location.replace("./api/index.html"); // redirect to api/index.html before rendering
+        const newUrl = new URL("./api/index.html", window.location.href);
+        newUrl.search = window.location.search;
+
+        window.location.replace(newUrl); // redirect to api/index.html before rendering
     </script>
 
 </head>
