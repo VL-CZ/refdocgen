@@ -1,3 +1,4 @@
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Language
 @using RefDocGen.TemplateProcessors.Shared.TemplateTools
 @inherits LayoutComponentBase
 
@@ -7,6 +8,9 @@
 
     [CascadingParameter]
     public string[]? Versions { get; set; } = [];
+
+    [CascadingParameter]
+    public required LanguageTM[] Languages { get; set; }
 
     [CascadingParameter]
     public int NestingLevel { get; set; } = 1;
@@ -55,6 +59,7 @@
             }
             else {
                 document.documentElement.setAttribute('data-bs-theme', urlParams.get('theme')); // set the 'data-bs-theme' attribute
+                document.documentElement.setAttribute('refdocgen-language', urlParams.get('lang')); // set the 'data-bs-theme' attribute
             }
         }
         else {
@@ -67,6 +72,7 @@
             }
 
             document.documentElement.setAttribute('data-bs-theme', localStorage.getItem('refdocgen-theme')); // set the 'data-bs-theme' attribute
+            document.documentElement.setAttribute('refdocgen-language', localStorage.getItem('refdocgen-language')); // set the 'data-bs-theme' attribute
         }
 
     </script>
@@ -81,6 +87,23 @@
         <!-- Custom CSS for static pages -->
         <link href="@customStylesUrl" rel="stylesheet" />
     }
+
+    @{
+    string BuildCssRules()
+        {
+        var sb = new System.Text.StringBuilder();
+        foreach (var lang in Languages)
+        {
+            sb.AppendLine($"html[refdocgen-language=\"{lang.Id}\"] .{lang.Id} {{ display: inline; }}");
+        }
+        return sb.ToString();
+        }
+    }
+
+    <style>
+        @((MarkupString)BuildCssRules())
+    </style>
+
 </head>
 
 <body>

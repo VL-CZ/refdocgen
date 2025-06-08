@@ -90,23 +90,25 @@ function setLanguageVisibility(selectedLang) {
         localStorage.setItem('refdocgen-language', selectedLang);
     }
 
-    // Hide all language-specific elements
-    allLangs.forEach(lang => {
-        if (lang == selectedLang) {
-            // Show only selected language elements
-            const selectedLangElements = document.getElementsByClassName(selectedLang);
-            Array.from(selectedLangElements).forEach(el => {
-                el.classList.remove('not-visible');
-            });
-        }
-        else {
+    document.documentElement.setAttribute('refdocgen-language', selectedLang);
 
-            const elements = document.getElementsByClassName(lang);
-            Array.from(elements).forEach(el => {
-                el.classList.add('not-visible');
-            });
-        }
-    });
+    //// Hide all language-specific elements
+    //allLangs.forEach(lang => {
+    //    if (lang == selectedLang) {
+    //        // Show only selected language elements
+    //        const selectedLangElements = document.getElementsByClassName(selectedLang);
+    //        Array.from(selectedLangElements).forEach(el => {
+    //            el.classList.remove('not-visible');
+    //        });
+    //    }
+    //    else {
+
+    //        const elements = document.getElementsByClassName(lang);
+    //        Array.from(elements).forEach(el => {
+    //            el.classList.add('not-visible');
+    //        });
+    //    }
+    //});
 }
 
 function updateRelativeLinks() {
