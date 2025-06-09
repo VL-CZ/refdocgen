@@ -87,7 +87,7 @@
 
 @foreach (var lang in Languages)
 {
-    <span class="@lang.Id not-visible">
+    <span class="not-visible" data-language="@lang.Id">
         <DynamicComponent Type="@languageComponents[lang.Id][Type]" Parameters="@templateParameters" />
     </span>
 }
