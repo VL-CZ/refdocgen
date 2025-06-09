@@ -1,5 +1,6 @@
 using AngleSharp;
 using Markdig;
+using RefDocGen.Tools;
 
 namespace RefDocGen.TemplateProcessors.Shared.StaticPages;
 
@@ -40,6 +41,11 @@ internal class StaticPageProcessor
     public StaticPageProcessor(string staticPagesDirectory)
     {
         this.staticPagesDirectory = staticPagesDirectory;
+
+        if (!Directory.Exists(staticPagesDirectory))
+        {
+            throw new StaticFilesFolderNotFound(staticPagesDirectory);
+        }
     }
 
     /// <summary>

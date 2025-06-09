@@ -16,6 +16,7 @@ using RefDocGen.TemplateProcessors.Shared.TemplateModels.Menu;
 using RefDocGen.TemplateProcessors.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateProcessors.Shared.TemplateModels.Types;
 using RefDocGen.Tools;
+using RefDocGen.Tools.Exceptions;
 
 namespace RefDocGen.TemplateProcessors.Shared;
 
@@ -161,6 +162,8 @@ internal class RazorTemplateProcessor<
         templatesDirectory = GetTemplatesDirectory();
 
         languageTMs = [.. this.availableLanguages.Select(lang => new LanguageTM(lang.LanguageName, lang.LanguageId))];
+
+        ValidateLanguageData(availableLanguages);
     }
 
     /// <inheritdoc/>
@@ -202,7 +205,7 @@ internal class RazorTemplateProcessor<
     }
 
     /// <summary>
-    /// Generate the template representing the search page.
+    /// Generate the search page.
     /// </summary>
     /// <param name="typeRegistry">Type registry containing the declared types.</param>
     private void GenerateSearchPage(ITypeRegistry typeRegistry)
@@ -340,7 +343,7 @@ internal class RazorTemplateProcessor<
     /// Returns base directory containing the Razor templates and static files.
     /// </summary>
     /// <returns>Path to the directory containing the Razor templates and static files.</returns>
-    /// <exception cref="ArgumentException">
+    /// <exception cref="InvalidTemplateConfiguration">
     /// Thrown in 2 cases
     /// <list type="bullet">
     /// <item>The templates aren't stored under <c>RefDocGen/TemplateProcessors</c> directory.</item>
@@ -354,21 +357,19 @@ internal class RazorTemplateProcessor<
         Type[] templateTypes = [
             typeof(TDelegatePageTemplate),
             typeof(TEnumPageTemplate),
+            typeof(TObjectTypePageTemplate),
             typeof(TNamespacePageTemplate),
             typeof(TAssemblyPageTemplate),
-            typeof(TObjectTypePageTemplate)
+            typeof(TApiHomePageTemplate),
+            typeof(TStaticPageTemplate),
+            typeof(TStaticPageTemplate)
         ];
 
         string? templatesNs = typeof(TObjectTypePageTemplate).Namespace ?? "";
 
-        if (templateTypes.Any(t => t.Namespace != templatesNs))
+        if (templateTypes.Any(t => t.Namespace != templatesNs) || !templatesNs.StartsWith(templateProcessorsNsPrefix, StringComparison.Ordinal))
         {
-            throw new ArgumentException("Invalid configuration, all templates must be in the same directory.");
-        }
-
-        if (!templatesNs.StartsWith(templateProcessorsNsPrefix, StringComparison.Ordinal))
-        {
-            throw new ArgumentException("Invalid configuration, the templates must be stored in a folder contained in 'RefDocGen/TemplateProcessors' directory.");
+            throw new InvalidTemplateConfiguration("Invalid configuration, all templates must be in the same directory contained in 'RefDocGen/TemplateProcessors' directory.");
         }
 
         string relativeTemplateNs = templatesNs[templateProcessorsNsPrefix.Length..];
@@ -453,5 +454,33 @@ internal class RazorTemplateProcessor<
 
         File.WriteAllText(outputFileName, html);
         _ = pagesGenerated.Add(pagePath);
+    }
+
+    /// <summary>
+    /// Checks whether the <paramref name="languageData"/> are valid.
+    /// </summary>
+    /// <param name="languageData">The language data to validate.</param>
+    /// <exception cref="InvalidLanguageName">
+    /// Thrown if an ID of any language is invalid.
+    /// </exception>
+    /// <exception cref="DuplicateLanguageName">
+    /// Thrown if two or more languages have the same ID.
+    /// </exception>
+    private void ValidateLanguageData(IEnumerable<ILanguageConfiguration> languageData)
+    {
+        var invalidLanguageIds = languageData.Select(l => l.LanguageId).Where(l => !UrlValidator.IsValid(l));
+
+        if (invalidLanguageIds.Any())
+        {
+            throw new InvalidLanguageName(invalidLanguageIds.First()); // invalid language ID -> throw
+        }
+
+        var groupped = languageData.GroupBy(l => l.LanguageId).Where(group => group.Count() >= 2);
+
+        if (groupped.Any())
+        {
+            throw new DuplicateLanguageName(groupped.First().Key); // duplicate language ID -> throw
+        }
+
     }
 }

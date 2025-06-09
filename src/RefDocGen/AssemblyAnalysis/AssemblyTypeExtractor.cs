@@ -7,6 +7,7 @@ using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.CodeElements.Types.Concrete;
 using RefDocGen.CodeElements.Types.Concrete.Delegate;
 using RefDocGen.CodeElements.Types.Concrete.Enum;
+using RefDocGen.Tools;
 using System.Reflection;
 
 namespace RefDocGen.AssemblyAnalysis;
@@ -69,7 +70,7 @@ internal class AssemblyTypeExtractor
     /// <summary>
     /// Initializes a new instance of the <see cref="AssemblyTypeExtractor"/> class with the specified assembly path.
     /// </summary>
-    /// <param name="assemblyPaths">The path to the DLL assembly file</param>
+    /// <param name="assemblyPaths">The path to the DLL assembly files.</param>
     /// <param name="configuration">Configuration describing what data should be extracted.</param>
     internal AssemblyTypeExtractor(IEnumerable<string> assemblyPaths, AssemblyDataConfiguration configuration)
     {
@@ -97,8 +98,17 @@ internal class AssemblyTypeExtractor
 
         foreach (string assemblyPath in assemblyPaths)
         {
-            var assembly = Assembly.LoadFrom(assemblyPath);
+            Assembly? assembly = null;
+            try
+            {
+                assembly = Assembly.LoadFrom(assemblyPath);
+            }
+            catch (Exception e) when (e is FileNotFoundException or ArgumentNullException or ArgumentException)
+            {
+                throw new AssemblyNotLoadedException(assemblyPath); // Assembly not found
+            }
 
+            // load types
             if (!assembliesToExclude.Contains(assembly.GetName().Name))
             {
                 types.AddRange(assembly.GetTypes());

@@ -6,6 +6,7 @@ using RefDocGen.DocExtraction.Handlers.Members.Enum;
 using RefDocGen.DocExtraction.Handlers.Types;
 using RefDocGen.DocExtraction.InheritDoc;
 using RefDocGen.DocExtraction.Tools;
+using RefDocGen.Tools;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 
@@ -119,8 +120,17 @@ internal class DocCommentExtractor
     {
         foreach (string xmlPath in docXmlPaths)
         {
-            // load the document (preserve the whitespace, as the documentation is to be converted into HTML)
-            var xmlDocument = XDocument.Load(xmlPath, LoadOptions.PreserveWhitespace);
+            XDocument? xmlDocument = null;
+
+            try
+            {
+                // load the document (preserve the whitespace, as the documentation is to be converted into HTML)
+                xmlDocument = XDocument.Load(xmlPath, LoadOptions.PreserveWhitespace);
+            }
+            catch (FileNotFoundException)
+            {
+                throw new XmlDocNotLoaded(xmlPath); // XML docs not found
+            }
 
             var memberNodes = xmlDocument.Descendants(XmlDocIdentifiers.Member);
 

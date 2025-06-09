@@ -5,6 +5,7 @@ using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.TemplateProcessors.Shared.Tools;
 using RefDocGen.TemplateProcessors.Shared.Tools.Names;
+using RefDocGen.Tools.Exceptions;
 using RefDocGen.Tools.Xml;
 
 namespace RefDocGen.TemplateProcessors.Shared.DocComments.Html;
@@ -191,7 +192,7 @@ internal class DocCommentTransformer : IDocCommentTransformer
     private XElement CopyChildNodes(XElement source, XElement target)
     {
         var result = new XElement(target);
-        var emptyDescendant = result.GetSingleEmptyDescendantOrSelf();
+        var emptyDescendant = GetSingleEmptyDescendantOrSelf(result);
 
         emptyDescendant.Add(source.Nodes());
 
@@ -222,7 +223,7 @@ internal class DocCommentTransformer : IDocCommentTransformer
     {
         var result = new XElement(target);
 
-        var emptyDescendant = result.GetSingleEmptyDescendantOrSelf();
+        var emptyDescendant = GetSingleEmptyDescendantOrSelf(result);
         emptyDescendant.Add(source.Nodes());
 
         if (source.Attribute(attributeName) is XAttribute attr)
@@ -254,7 +255,7 @@ internal class DocCommentTransformer : IDocCommentTransformer
     {
         var result = new XElement(target);
 
-        var emptyDescendant = result.GetSingleEmptyDescendantOrSelf();
+        var emptyDescendant = GetSingleEmptyDescendantOrSelf(result);
         emptyDescendant.Add(text);
 
         return result;
@@ -561,7 +562,7 @@ internal class DocCommentTransformer : IDocCommentTransformer
         if (TypeUrlResolver.GetUrlOf(typeId, memberId) is string targetUrl)
         {
             var result = new XElement(htmlTemplateIfFound);
-            var emptyDescendant = result.GetSingleEmptyDescendantOrSelf();
+            var emptyDescendant = GetSingleEmptyDescendantOrSelf(result);
 
             string targetName = typeId;
 
@@ -600,6 +601,20 @@ internal class DocCommentTransformer : IDocCommentTransformer
         {
             return AddTextNodeTo(fullObjectName, htmlTemplateIfNotFound);
         }
+    }
+
+    /// <summary>
+    /// Gets descendant-or-self node that is empty (i.e. has no children).
+    /// </summary>
+    /// <param name="element">Element, where to search for the nodes.</param>
+    /// <returns>Descendant-or-self node that is empty.</returns>
+    /// <exception cref="InvalidInnerXmlTagConfiguration">
+    /// Thrown if there's no such node or more that 2 of them.
+    /// </exception>
+    internal static XElement GetSingleEmptyDescendantOrSelf(XElement element)
+    {
+        return element.DescendantsAndSelf().SingleOrDefault(n => !n.Nodes().Any())
+            ?? throw new InvalidInnerXmlTagConfiguration(element); // The configuration is invalid -> throw exception
     }
 
     /// <inheritdoc/>

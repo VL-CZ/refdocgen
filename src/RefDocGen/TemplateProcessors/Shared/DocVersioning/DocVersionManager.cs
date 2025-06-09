@@ -1,6 +1,7 @@
 using System.Text.Json;
 using AngleSharp;
 using RefDocGen.Tools;
+using RefDocGen.Tools.Exceptions;
 
 namespace RefDocGen.TemplateProcessors.Shared.DocVersioning;
 
@@ -43,12 +44,23 @@ internal class DocVersionManager
     {
         this.baseOutputDirectory = baseOutputDirectory;
         this.currentVersion = currentVersion;
+
+        if (!UrlValidator.IsValid(currentVersion))
+        {
+            throw new DocVersionNameException(currentVersion); // invalid version name -> throw exception
+        }
+
         versionsFile = new FileInfo(Path.Join(baseOutputDirectory, "versions.json"));
 
         if (versionsFile.Exists)
         {
             string json = File.ReadAllText(versionsFile.FullName);
             versions = JsonSerializer.Deserialize<List<DocVersion>>(json) ?? [];
+
+            if (versions.Any(v => v.Version == currentVersion))
+            {
+                throw new DuplicateDocVersion(currentVersion); // there's already a version with the same name -> throw exception
+            }
         }
         else
         {
