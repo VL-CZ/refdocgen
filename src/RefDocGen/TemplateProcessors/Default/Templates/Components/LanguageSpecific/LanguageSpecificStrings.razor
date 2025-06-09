@@ -18,7 +18,7 @@
 
 @foreach (var language in Languages)
 {
-    <span class="@language.Id not-visible">
+    <span class="not-visible" data-language="@language.Id">
         @(Data[language.Id] + DataSuffix)
     </span>
 }

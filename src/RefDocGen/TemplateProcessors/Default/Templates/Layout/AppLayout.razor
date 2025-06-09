@@ -70,7 +70,7 @@
                 }
             }
             else { // no local file -> use localStorage
-                if (!localStorage.getItem("refdocgen-theme")) { 
+                if (!localStorage.getItem("refdocgen-theme")) {
                     localStorage.setItem("refdocgen-theme", defaultTheme);
                 }
 
@@ -96,19 +96,17 @@
     }
 
     @{
-    string BuildCssRules()
+        string GetCssRule(LanguageTM lang) // build the CSS rule "html[data-language=XX] [data-language=XX] { display: inline !important }"
         {
-        var sb = new System.Text.StringBuilder();
-        foreach (var lang in Languages)
-        {
-            sb.AppendLine($"html[data-language=\"{lang.Id}\"] .{lang.Id} {{ display: inline; }}");
-        }
-        return sb.ToString();
+            return $"html[data-language=\"{lang.Id}\"] [data-language=\"{lang.Id}\"] {{ display: inline !important; }}\n" ;
         }
     }
 
     <style>
-        @((MarkupString)BuildCssRules())
+        @foreach (var lang in Languages)
+        {
+            @((MarkupString)GetCssRule(lang))
+        }
     </style>
 
 </head>
