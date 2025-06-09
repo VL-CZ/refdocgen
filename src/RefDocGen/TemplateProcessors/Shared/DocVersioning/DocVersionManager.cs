@@ -47,7 +47,7 @@ internal class DocVersionManager
 
         if (!UrlValidator.IsValid(currentVersion))
         {
-            throw new DocVersionNameException(currentVersion); // invalid version name -> throw exception
+            throw new InvalidDocVersionNameException(currentVersion); // invalid version name -> throw exception
         }
 
         versionsFile = new FileInfo(Path.Join(baseOutputDirectory, "versions.json"));
@@ -59,7 +59,7 @@ internal class DocVersionManager
 
             if (versions.Any(v => v.Version == currentVersion))
             {
-                throw new DuplicateDocVersion(currentVersion); // there's already a version with the same name -> throw exception
+                throw new DuplicateDocVersionNameException(currentVersion); // there's already a version with the same name -> throw exception
             }
         }
         else

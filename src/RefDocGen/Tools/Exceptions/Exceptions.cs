@@ -1,9 +1,13 @@
 using System.Xml.Linq;
 
-namespace RefDocGen.Tools;
+namespace RefDocGen.Tools.Exceptions;
 
 internal class RefDocGenFatalException : Exception
 {
+    public RefDocGenFatalException() : base()
+    {
+    }
+
     public RefDocGenFatalException(string message) : base(message)
     {
     }
@@ -13,80 +17,82 @@ internal class RefDocGenFatalException : Exception
     }
 }
 
-internal class AssemblyNotLoadedException : RefDocGenFatalException
+internal class AssemblyNotFoundException : RefDocGenFatalException
 {
-    public AssemblyNotLoadedException(string assemblyPath) : base(assemblyPath)
+    private const string template = "The assembly at path {0} was not found.";
+
+    public AssemblyNotFoundException(string assemblyPath) : base(string.Format(template, assemblyPath))
     {
     }
 }
 
-internal class XmlDocNotLoaded : RefDocGenFatalException
+internal class XmlDocNotFoundException : RefDocGenFatalException
 {
-    public XmlDocNotLoaded(string xmlDocPath) : base(xmlDocPath)
-    {
-
-    }
-}
-
-internal class DocVersionNameException : RefDocGenFatalException
-{
-    public DocVersionNameException(string version) : base(version)
+    public XmlDocNotFoundException(string xmlDocPath) : base(xmlDocPath)
     {
 
     }
 }
 
-internal class DuplicateDocVersion : RefDocGenFatalException
+internal class InvalidDocVersionNameException : RefDocGenFatalException
 {
-    public DuplicateDocVersion(string version) : base(version)
+    public InvalidDocVersionNameException(string version) : base(version)
     {
 
     }
 }
 
-internal class InvalidTemplateConfiguration : RefDocGenFatalException
+internal class DuplicateDocVersionNameException : RefDocGenFatalException
 {
-    public InvalidTemplateConfiguration(string version) : base(version)
+    public DuplicateDocVersionNameException(string version) : base(version)
     {
 
     }
 }
 
-internal class InvalidInnerXmlTagConfiguration : RefDocGenFatalException
+internal class InvalidTemplateConfigurationException : RefDocGenFatalException
 {
-    public InvalidInnerXmlTagConfiguration(XElement version) : base(version.ToString())
+    public InvalidTemplateConfigurationException(string version) : base(version)
     {
 
     }
 }
 
-internal class StaticFilesFolderNotFound : RefDocGenFatalException
+internal class InvalidInnerXmlTagConfigurationException : RefDocGenFatalException
 {
-    public StaticFilesFolderNotFound(string version) : base(version)
+    public InvalidInnerXmlTagConfigurationException(XElement version) : base(version.ToString())
     {
 
     }
 }
 
-internal class InvalidLanguageName : RefDocGenFatalException
+internal class StaticFilesFolderNotFoundException : RefDocGenFatalException
 {
-    public InvalidLanguageName(string version) : base(version)
+    public StaticFilesFolderNotFoundException(string version) : base(version)
     {
 
     }
 }
 
-internal class DuplicateLanguageName : RefDocGenFatalException
+internal class InvalidLanguageIdException : RefDocGenFatalException
 {
-    public DuplicateLanguageName(string version) : base(version)
+    public InvalidLanguageIdException(string version) : base(version)
     {
 
     }
 }
 
-internal class InvalidTemplate : RefDocGenFatalException
+internal class DuplicateLanguageIdException : RefDocGenFatalException
 {
-    public InvalidTemplate(string version) : base(version)
+    public DuplicateLanguageIdException(string version) : base(version)
+    {
+
+    }
+}
+
+internal class InvalidTemplateException : RefDocGenFatalException
+{
+    public InvalidTemplateException(string version) : base(version)
     {
 
     }

@@ -7,6 +7,7 @@ using RefDocGen.DocExtraction.Handlers.Types;
 using RefDocGen.DocExtraction.InheritDoc;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.Tools;
+using RefDocGen.Tools.Exceptions;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 
@@ -129,7 +130,7 @@ internal class DocCommentExtractor
             }
             catch (FileNotFoundException)
             {
-                throw new XmlDocNotLoaded(xmlPath); // XML docs not found
+                throw new XmlDocNotFoundException(xmlPath); // XML docs not found
             }
 
             var memberNodes = xmlDocument.Descendants(XmlDocIdentifiers.Member);

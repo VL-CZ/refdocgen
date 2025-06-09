@@ -343,7 +343,7 @@ internal class RazorTemplateProcessor<
     /// Returns base directory containing the Razor templates and static files.
     /// </summary>
     /// <returns>Path to the directory containing the Razor templates and static files.</returns>
-    /// <exception cref="InvalidTemplateConfiguration">
+    /// <exception cref="InvalidTemplateConfigurationException">
     /// Thrown in 2 cases
     /// <list type="bullet">
     /// <item>The templates aren't stored under <c>RefDocGen/TemplateProcessors</c> directory.</item>
@@ -369,7 +369,7 @@ internal class RazorTemplateProcessor<
 
         if (templateTypes.Any(t => t.Namespace != templatesNs) || !templatesNs.StartsWith(templateProcessorsNsPrefix, StringComparison.Ordinal))
         {
-            throw new InvalidTemplateConfiguration("Invalid configuration, all templates must be in the same directory contained in 'RefDocGen/TemplateProcessors' directory.");
+            throw new InvalidTemplateConfigurationException("Invalid configuration, all templates must be in the same directory contained in 'RefDocGen/TemplateProcessors' directory.");
         }
 
         string relativeTemplateNs = templatesNs[templateProcessorsNsPrefix.Length..];
@@ -460,10 +460,10 @@ internal class RazorTemplateProcessor<
     /// Checks whether the <paramref name="languageData"/> are valid.
     /// </summary>
     /// <param name="languageData">The language data to validate.</param>
-    /// <exception cref="InvalidLanguageName">
+    /// <exception cref="InvalidLanguageIdException">
     /// Thrown if an ID of any language is invalid.
     /// </exception>
-    /// <exception cref="DuplicateLanguageName">
+    /// <exception cref="DuplicateLanguageIdException">
     /// Thrown if two or more languages have the same ID.
     /// </exception>
     private void ValidateLanguageData(IEnumerable<ILanguageConfiguration> languageData)
@@ -472,14 +472,14 @@ internal class RazorTemplateProcessor<
 
         if (invalidLanguageIds.Any())
         {
-            throw new InvalidLanguageName(invalidLanguageIds.First()); // invalid language ID -> throw
+            throw new InvalidLanguageIdException(invalidLanguageIds.First()); // invalid language ID -> throw
         }
 
         var groupped = languageData.GroupBy(l => l.LanguageId).Where(group => group.Count() >= 2);
 
         if (groupped.Any())
         {
-            throw new DuplicateLanguageName(groupped.First().Key); // duplicate language ID -> throw
+            throw new DuplicateLanguageIdException(groupped.First().Key); // duplicate language ID -> throw
         }
 
     }

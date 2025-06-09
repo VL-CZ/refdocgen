@@ -8,6 +8,7 @@ using RefDocGen.CodeElements.Types.Concrete;
 using RefDocGen.CodeElements.Types.Concrete.Delegate;
 using RefDocGen.CodeElements.Types.Concrete.Enum;
 using RefDocGen.Tools;
+using RefDocGen.Tools.Exceptions;
 using System.Reflection;
 
 namespace RefDocGen.AssemblyAnalysis;
@@ -105,7 +106,7 @@ internal class AssemblyTypeExtractor
             }
             catch (Exception e) when (e is FileNotFoundException or ArgumentNullException or ArgumentException)
             {
-                throw new AssemblyNotLoadedException(assemblyPath); // Assembly not found
+                throw new AssemblyNotFoundException(assemblyPath); // Assembly not found
             }
 
             // load types
