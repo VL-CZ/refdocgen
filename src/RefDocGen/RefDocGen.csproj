@@ -21,6 +21,9 @@
         <PackageReference Include="Markdig" Version="0.40.0" />
         <InternalsVisibleTo Include="RefDocGen.UnitTests" />
         <InternalsVisibleTo Include="RefDocGen.IntegrationTests" />
+        <PackageReference Include="Serilog" Version="4.3.0" />
+        <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.2" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
     </ItemGroup>
 
     <ItemGroup>

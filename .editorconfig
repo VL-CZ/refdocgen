@@ -83,3 +83,4 @@ dotnet_diagnostic.IDE0072.severity = none # https://learn.microsoft.com/en-us/do
 dotnet_diagnostic.CA1822.severity = none # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1822
 dotnet_diagnostic.CA1852.severity = none # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1852
 dotnet_diagnostic.IDE0046.severity = none # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0046
+dotnet_diagnostic.CA1848.severity = none # https://learn.microsoft.com/cs-cz/dotnet/fundamentals/code-analysis/quality-rules/ca1848

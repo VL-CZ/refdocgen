@@ -154,7 +154,7 @@ internal class InvalidLanguageIdException : RefDocGenFatalException
 /// </summary>
 internal class DuplicateLanguageIdException : RefDocGenFatalException
 {
-    private const string messageTemplate = "A language with identifier '{0}' already exists.";
+    private const string messageTemplate = "The language identifier '{0}' is duplicate.";
 
     public DuplicateLanguageIdException(string languageId)
         : base(messageTemplate, languageId)

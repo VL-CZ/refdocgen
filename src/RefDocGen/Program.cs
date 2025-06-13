@@ -5,6 +5,9 @@ using RefDocGen.AssemblyAnalysis;
 using RefDocGen.CodeElements;
 using RefDocGen.TemplateProcessors.Default;
 using RefDocGen.TemplateProcessors.Shared.Languages;
+using Serilog;
+using Serilog.Events;
+using System.Globalization;
 
 namespace RefDocGen;
 
@@ -34,8 +37,21 @@ public static class Program
             NamespacesToExclude: ["MyLibrary.Exclude", "MyLibrary.Tools.Exclude"]
             );
 
+
+        bool verbose = false;
+        string outputTemplate = verbose
+            ? "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"
+            : "[{Level:u}] {Message:lj}{NewLine}";
+
+        var level = verbose ? LogEventLevel.Debug : LogEventLevel.Error;
+
+        var serilogger = new LoggerConfiguration()
+            .MinimumLevel.Is(level)
+            .WriteTo.Console(outputTemplate: outputTemplate, formatProvider: CultureInfo.InvariantCulture)
+            .CreateLogger();
+
         IServiceCollection services = new ServiceCollection();
-        _ = services.AddLogging();
+        _ = services.AddLogging(builder => builder.AddSerilog(serilogger, dispose: true));
 
         IServiceProvider serviceProvider = services.BuildServiceProvider();
         var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
@@ -44,14 +60,23 @@ public static class Program
 
         ILanguageConfiguration[] availableLanguages = [
             new CSharpLanguageConfiguration(),
+            new CSharpLanguageConfiguration(),
             new OtherLanguageConfiguration()
         ];
 
-        var templateProcessor = new DefaultTemplateProcessor(htmlRenderer, availableLanguages, staticPagesDir, version);
+        var logger = loggerFactory.CreateLogger("Program");
 
-        var docGenerator = new DocGenerator(dllPaths, docPaths, templateProcessor, assemblyDataConfig, outputDir);
-        docGenerator.GenerateDoc();
+        try
+        {
+            var templateProcessor = new DefaultTemplateProcessor(htmlRenderer, availableLanguages, staticPagesDir, version);
 
-        Console.WriteLine("Done...");
+            var docGenerator = new DocGenerator(dllPaths, docPaths, templateProcessor, assemblyDataConfig, outputDir);
+            docGenerator.GenerateDoc();
+            Console.WriteLine("Done...");
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "{ErrorMessage}", ex.Message);
+        }
     }
 }
