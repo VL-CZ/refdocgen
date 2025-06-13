@@ -45,7 +45,7 @@ internal class StaticPageProcessor
 
         if (!Directory.Exists(staticPagesDirectory))
         {
-            throw new StaticFilesFolderNotFoundException(staticPagesDirectory);
+            throw new StaticPagesDirectoryNotFoundException(staticPagesDirectory); // Static pages directory not found
         }
     }
 

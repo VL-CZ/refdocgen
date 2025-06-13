@@ -343,7 +343,7 @@ internal class RazorTemplateProcessor<
     /// Returns base directory containing the Razor templates and static files.
     /// </summary>
     /// <returns>Path to the directory containing the Razor templates and static files.</returns>
-    /// <exception cref="InvalidTemplateConfigurationException">
+    /// <exception cref="InvalidTemplateLocationException">
     /// Thrown in 2 cases
     /// <list type="bullet">
     /// <item>The templates aren't stored under <c>RefDocGen/TemplateProcessors</c> directory.</item>
@@ -369,7 +369,7 @@ internal class RazorTemplateProcessor<
 
         if (templateTypes.Any(t => t.Namespace != templatesNs) || !templatesNs.StartsWith(templateProcessorsNsPrefix, StringComparison.Ordinal))
         {
-            throw new InvalidTemplateConfigurationException("Invalid configuration, all templates must be in the same directory contained in 'RefDocGen/TemplateProcessors' directory.");
+            throw new InvalidTemplateLocationException(templateTypes); // invalid template location -> throw
         }
 
         string relativeTemplateNs = templatesNs[templateProcessorsNsPrefix.Length..];

@@ -59,7 +59,7 @@ internal class DocVersionManager
 
             if (versions.Any(v => v.Version == currentVersion))
             {
-                throw new DuplicateDocVersionNameException(currentVersion); // there's already a version with the same name -> throw exception
+                throw new DuplicateDocVersionNameException(currentVersion); // there's already a version with the same name -> throw an exception
             }
         }
         else

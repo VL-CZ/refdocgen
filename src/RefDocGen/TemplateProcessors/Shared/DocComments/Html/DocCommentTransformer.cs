@@ -608,13 +608,16 @@ internal class DocCommentTransformer : IDocCommentTransformer
     /// </summary>
     /// <param name="element">Element, where to search for the nodes.</param>
     /// <returns>Descendant-or-self node that is empty.</returns>
-    /// <exception cref="InvalidInnerXmlTagConfigurationException">
+    /// <exception cref="InvalidDocCommentHtmlConfigurationException">
     /// Thrown if there's no such node or more that 2 of them.
     /// </exception>
     internal static XElement GetSingleEmptyDescendantOrSelf(XElement element)
     {
-        return element.DescendantsAndSelf().SingleOrDefault(n => !n.Nodes().Any())
-            ?? throw new InvalidInnerXmlTagConfigurationException(element); // The configuration is invalid -> throw exception
+        var emptyDescendants = element.DescendantsAndSelf().Where(n => !n.Nodes().Any());
+
+        return emptyDescendants.Count() == 1
+            ? emptyDescendants.First() // exactly one empty descendant -> return it
+            : throw new InvalidDocCommentHtmlConfigurationException(element); // The configuration is invalid -> throw exception
     }
 
     /// <inheritdoc/>

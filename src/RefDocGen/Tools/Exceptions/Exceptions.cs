@@ -1,102 +1,162 @@
+using RefDocGen.TemplateProcessors.Shared.DocComments.Html;
+using System.Globalization;
 using System.Xml.Linq;
 
 namespace RefDocGen.Tools.Exceptions;
 
 internal class RefDocGenFatalException : Exception
 {
-    public RefDocGenFatalException() : base()
+    protected RefDocGenFatalException(string messageTemplate, params string[] messageVariables)
+        : base(string.Format(CultureInfo.InvariantCulture, messageTemplate, messageVariables))
     {
     }
 
-    public RefDocGenFatalException(string message) : base(message)
-    {
-    }
-
-    public RefDocGenFatalException(string message, Exception innerException) : base(message, innerException)
+    protected RefDocGenFatalException(string message, Exception innerException) : base(message, innerException)
     {
     }
 }
 
+/// <summary>
+/// Thrown when the provided assembly is not found.
+/// </summary>
 internal class AssemblyNotFoundException : RefDocGenFatalException
 {
-    private const string template = "The assembly at path {0} was not found.";
+    private const string messageTemplate = "The assembly at path '{0}' was not found.";
 
-    public AssemblyNotFoundException(string assemblyPath) : base(string.Format(template, assemblyPath))
+    public AssemblyNotFoundException(string assemblyPath) : base(messageTemplate, assemblyPath)
     {
     }
 }
 
-internal class XmlDocNotFoundException : RefDocGenFatalException
+/// <summary>
+/// Thrown when the XML documentation file is not found.
+/// </summary>
+internal class XmlDocFileNotFoundException : RefDocGenFatalException
 {
-    public XmlDocNotFoundException(string xmlDocPath) : base(xmlDocPath)
-    {
+    private const string messageTemplate = "The XML documentation file at path '{0}' was not found.";
 
+    public XmlDocFileNotFoundException(string xmlDocPath)
+        : base(messageTemplate, xmlDocPath)
+    {
     }
 }
 
+/// <summary>
+/// Thrown when the documentation version name is invalid.
+/// </summary>
 internal class InvalidDocVersionNameException : RefDocGenFatalException
 {
-    public InvalidDocVersionNameException(string version) : base(version)
-    {
+    private const string messageTemplate = "The documentation version name '{0}' is invalid. " +
+        "A valid documentation version name may contain only ASCII letters, digits, and the characters '-','.' '_', and '~'";
 
+    public InvalidDocVersionNameException(string version)
+        : base(messageTemplate, version)
+    {
     }
 }
 
+/// <summary>
+/// Thrown when a duplicate documentation version is encountered.
+/// </summary>
 internal class DuplicateDocVersionNameException : RefDocGenFatalException
 {
-    public DuplicateDocVersionNameException(string version) : base(version)
-    {
+    private const string messageTemplate = "A documentation version with the name '{0}' already exists.";
 
+    public DuplicateDocVersionNameException(string version)
+        : base(messageTemplate, version)
+    {
     }
 }
 
-internal class InvalidTemplateConfigurationException : RefDocGenFatalException
+/// <summary>
+/// Thrown when the template location is invalid.
+/// </summary>
+internal class InvalidTemplateLocationException : RefDocGenFatalException
 {
-    public InvalidTemplateConfigurationException(string version) : base(version)
-    {
+    private const string messageTemplate = "The location of the templates: \n {0} \n is invalid. " +
+        "All templates must be in stored the same directory contained within 'RefDocGen/TemplateProcessors' folder.";
 
+    public InvalidTemplateLocationException(Type[] templateTypes)
+        : base(messageTemplate, GetTemplateTypeNamesString(templateTypes))
+    {
+    }
+
+    /// <summary>
+    /// Gets string containing the names of the template types.
+    /// </summary>
+    private static string GetTemplateTypeNamesString(Type[] templateTypes)
+    {
+        var templateNames = templateTypes.Select(t => t.FullName);
+        return string.Join(", ", templateNames);
     }
 }
 
-internal class InvalidInnerXmlTagConfigurationException : RefDocGenFatalException
+/// <summary>
+/// Thrown when the provided <see cref="IDocCommentHtmlConfiguration"/> is invalid.
+/// </summary>
+internal class InvalidDocCommentHtmlConfigurationException : RefDocGenFatalException
 {
-    public InvalidInnerXmlTagConfigurationException(XElement version) : base(version.ToString())
-    {
+    private const string messageTemplate = "The HTML provided for an inner XML documentation tag is invalid. \n {0} \n " +
+        "There must be exactly one empty descendant (or self) element.";
 
+    public InvalidDocCommentHtmlConfigurationException(XElement element)
+        : base(messageTemplate, element.ToString())
+    {
     }
 }
 
-internal class StaticFilesFolderNotFoundException : RefDocGenFatalException
+/// <summary>
+/// Thrown when the static pages directory is not found.
+/// </summary>
+internal class StaticPagesDirectoryNotFoundException : RefDocGenFatalException
 {
-    public StaticFilesFolderNotFoundException(string version) : base(version)
-    {
+    private const string messageTemplate = "The static pages directory at path '{0}' was not found.";
 
+    public StaticPagesDirectoryNotFoundException(string staticPagesDirectory)
+        : base(messageTemplate, staticPagesDirectory)
+    {
     }
 }
 
+/// <summary>
+/// Thrown when the language ID is invalid.
+/// </summary>
 internal class InvalidLanguageIdException : RefDocGenFatalException
 {
-    public InvalidLanguageIdException(string version) : base(version)
-    {
+    private const string messageTemplate = "The language identifier '{0}' is invalid. A valid language identifier may contain only ASCII letters, digits, and the characters '-','.' '_', and '~'";
 
+    public InvalidLanguageIdException(string languageId)
+        : base(messageTemplate, languageId)
+    {
     }
 }
 
+/// <summary>
+/// Thrown when a duplicate language ID is encountered.
+/// </summary>
 internal class DuplicateLanguageIdException : RefDocGenFatalException
 {
-    public DuplicateLanguageIdException(string version) : base(version)
-    {
+    private const string messageTemplate = "A language with identifier '{0}' already exists.";
 
+    public DuplicateLanguageIdException(string languageId)
+        : base(messageTemplate, languageId)
+    {
     }
 }
 
+/// <summary>
+/// Thrown when the template is invalid.
+/// </summary>
 internal class InvalidTemplateException : RefDocGenFatalException
 {
-    public InvalidTemplateException(string version) : base(version)
-    {
+    private const string messageTemplate = "The template for language ID '{0}' is invalid.";
 
+    public InvalidTemplateException(string languageId)
+        : base(messageTemplate, languageId)
+    {
     }
 }
+
 
 internal class UrlValidator
 {
