@@ -117,7 +117,7 @@ internal class RazorTemplateProcessor<
     private readonly HashSet<string> pagesGenerated = [];
 
     /// <summary>
-    /// Manager of the documentation version.
+    /// Manager of the documentation version. <c>null</c> if the generated documentation isn't versioned.
     /// </summary>
     private DocVersionManager? versionManager;
 
@@ -177,10 +177,10 @@ internal class RazorTemplateProcessor<
             string rootOutputDirectory = outputDirectory;
 
             this.outputDirectory = Path.Join(outputDirectory, docVersion); // set output directory
-            _ = Directory.CreateDirectory(this.outputDirectory);
-
             versionManager = new(rootOutputDirectory, docVersion);
         }
+
+        _ = Directory.CreateDirectory(this.outputDirectory);
 
         CopyStaticPages();
 
@@ -362,7 +362,7 @@ internal class RazorTemplateProcessor<
             typeof(TAssemblyPageTemplate),
             typeof(TApiHomePageTemplate),
             typeof(TStaticPageTemplate),
-            typeof(TStaticPageTemplate)
+            typeof(TSearchPageTemplate)
         ];
 
         string? templatesNs = typeof(TObjectTypePageTemplate).Namespace ?? "";
@@ -434,26 +434,35 @@ internal class RazorTemplateProcessor<
         string pagePath = Path.GetRelativePath(outputDirectory, outputFileName);
         string[]? versions = versionManager?.GetVersions(pagePath);
 
-        string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
+        try
         {
-            var sharedTemplateParameters = new Dictionary<string, object?>()
+            // populate the template with the data, and return the HTML data as a string
+            string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
             {
-                ["TopMenuData"] = topMenuData,
-                ["Versions"] = versions,
-                ["Languages"] = languageTMs
-            };
+                var sharedTemplateParameters = new Dictionary<string, object?>()
+                {
+                    ["TopMenuData"] = topMenuData,
+                    ["Versions"] = versions,
+                    ["Languages"] = languageTMs
+                };
 
-            var templateParameters = sharedTemplateParameters.Merge(customTemplateParameters);
+                var templateParameters = sharedTemplateParameters.Merge(customTemplateParameters);
 
-            var parameters = ParameterView.FromDictionary(templateParameters);
-            var output = await htmlRenderer.RenderComponentAsync<TTemplate>(parameters);
+                var parameters = ParameterView.FromDictionary(templateParameters);
+                var output = await htmlRenderer.RenderComponentAsync<TTemplate>(parameters);
 
-            return output.ToHtmlString();
-        }).Result;
+                return output.ToHtmlString();
+            }).Result;
 
-
-        File.WriteAllText(outputFileName, html);
-        _ = pagesGenerated.Add(pagePath);
+            // save the HTML
+            File.WriteAllText(outputFileName, html);
+            _ = pagesGenerated.Add(pagePath);
+        }
+        catch (AggregateException ex) // Template compilation failed -> delete the directory & throw an exception
+        {
+            Directory.Delete(outputDirectory, true);
+            throw new TemplateRenderingException(typeof(TTemplate), ex);
+        }
     }
 
     /// <summary>

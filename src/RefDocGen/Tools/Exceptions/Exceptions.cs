@@ -6,12 +6,13 @@ namespace RefDocGen.Tools.Exceptions;
 
 internal class RefDocGenFatalException : Exception
 {
-    protected RefDocGenFatalException(string messageTemplate, params string[] messageVariables)
-        : base(string.Format(CultureInfo.InvariantCulture, messageTemplate, messageVariables))
+    protected RefDocGenFatalException(string messageTemplate, Exception? innerException, params string[] messageVariables)
+        : base(string.Format(CultureInfo.InvariantCulture, messageTemplate, messageVariables), innerException)
     {
     }
 
-    protected RefDocGenFatalException(string message, Exception innerException) : base(message, innerException)
+    protected RefDocGenFatalException(string message, params string[] messageVariables)
+        : this(message, null, messageVariables)
     {
     }
 }
@@ -73,7 +74,7 @@ internal class DuplicateDocVersionNameException : RefDocGenFatalException
 /// </summary>
 internal class InvalidTemplateLocationException : RefDocGenFatalException
 {
-    private const string messageTemplate = "The location of the templates: \n {0} \n is invalid. " +
+    private const string messageTemplate = "The location of the templates: \n{0} \n is invalid. " +
         "All templates must be in stored the same directory contained within 'RefDocGen/TemplateProcessors' folder.";
 
     public InvalidTemplateLocationException(Type[] templateTypes)
@@ -145,14 +146,14 @@ internal class DuplicateLanguageIdException : RefDocGenFatalException
 }
 
 /// <summary>
-/// Thrown when the template is invalid.
+/// Thrown when rendering of a template fails (typically due to errors in the template or its data).
 /// </summary>
-internal class InvalidTemplateException : RefDocGenFatalException
+internal class TemplateRenderingException : RefDocGenFatalException
 {
-    private const string messageTemplate = "The template for language ID '{0}' is invalid.";
+    private const string messageTemplate = "An error occurred while rendering the '{0}' template; see the inner exception for further details.";
 
-    public InvalidTemplateException(string languageId)
-        : base(messageTemplate, languageId)
+    public TemplateRenderingException(Type templateType, Exception innerException)
+        : base(messageTemplate, innerException, templateType.FullName ?? templateType.Name)
     {
     }
 }
