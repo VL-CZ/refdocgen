@@ -1,5 +1,6 @@
 using System.Text.Json;
 using AngleSharp;
+using RefDocGen.TemplateProcessors.Shared.Tools;
 using RefDocGen.Tools;
 using RefDocGen.Tools.Exceptions;
 
@@ -45,7 +46,7 @@ internal class DocVersionManager
         this.baseOutputDirectory = baseOutputDirectory;
         this.currentVersion = currentVersion;
 
-        if (!UrlValidator.IsValid(currentVersion))
+        if (!UrlValidator.IsValidUrlItem(currentVersion))
         {
             throw new InvalidDocVersionNameException(currentVersion); // invalid version name -> throw exception
         }

@@ -15,6 +15,7 @@ using RefDocGen.TemplateProcessors.Shared.TemplateModels.Language;
 using RefDocGen.TemplateProcessors.Shared.TemplateModels.Menu;
 using RefDocGen.TemplateProcessors.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateProcessors.Shared.TemplateModels.Types;
+using RefDocGen.TemplateProcessors.Shared.Tools;
 using RefDocGen.Tools;
 using RefDocGen.Tools.Exceptions;
 
@@ -477,7 +478,7 @@ internal class RazorTemplateProcessor<
     /// </exception>
     private void ValidateLanguageData(IEnumerable<ILanguageConfiguration> languageData)
     {
-        var invalidLanguageIds = languageData.Select(l => l.LanguageId).Where(l => !UrlValidator.IsValid(l));
+        var invalidLanguageIds = languageData.Select(l => l.LanguageId).Where(l => !UrlValidator.IsValidUrlItem(l));
 
         if (invalidLanguageIds.Any())
         {

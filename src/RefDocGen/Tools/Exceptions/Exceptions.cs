@@ -4,15 +4,32 @@ using System.Xml.Linq;
 
 namespace RefDocGen.Tools.Exceptions;
 
+/// <summary>
+/// Common base class for all of the fatal exceptions, caused by an invalid program configuration.
+/// </summary>
 internal class RefDocGenFatalException : Exception
 {
-    protected RefDocGenFatalException(string messageTemplate, Exception? innerException, params string[] messageVariables)
-        : base(string.Format(CultureInfo.InvariantCulture, messageTemplate, messageVariables), innerException)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RefDocGenFatalException"/> class
+    /// with a formatted message and an optional inner exception.
+    /// </summary>
+    /// <param name="messageTemplate">
+    /// A composite format string that defines the exception message.
+    /// </param>
+    /// <param name="innerException">
+    /// The optional inner exception.
+    /// </param>
+    /// <param name="messageTemplateArguments">
+    /// An array of arguments to be passed into the <paramref name="messageTemplate"/>.
+    /// </param>
+    protected RefDocGenFatalException(string messageTemplate, Exception? innerException, params string[] messageTemplateArguments)
+        : base(string.Format(CultureInfo.InvariantCulture, messageTemplate, messageTemplateArguments), innerException)
     {
     }
 
-    protected RefDocGenFatalException(string message, params string[] messageVariables)
-        : this(message, null, messageVariables)
+    /// <inheritdoc cref="RefDocGenFatalException(string, Exception?, string[])"/>
+    protected RefDocGenFatalException(string messageTemplate, params string[] messageTemplateArguments)
+        : this(messageTemplate, null, messageTemplateArguments)
     {
     }
 }
@@ -97,7 +114,7 @@ internal class InvalidTemplateLocationException : RefDocGenFatalException
 /// </summary>
 internal class InvalidDocCommentHtmlConfigurationException : RefDocGenFatalException
 {
-    private const string messageTemplate = "The HTML provided for an inner XML documentation tag is invalid. \n {0} \n " +
+    private const string messageTemplate = "The following HTML provided for an inner XML documentation tag is invalid. \n{0} \n " +
         "There must be exactly one empty descendant (or self) element.";
 
     public InvalidDocCommentHtmlConfigurationException(XElement element)
@@ -155,16 +172,5 @@ internal class TemplateRenderingException : RefDocGenFatalException
     public TemplateRenderingException(Type templateType, Exception innerException)
         : base(messageTemplate, innerException, templateType.FullName ?? templateType.Name)
     {
-    }
-}
-
-
-internal class UrlValidator
-{
-    private static readonly char[] allowedCharacters = ['-', '_', '~', '.'];
-
-    internal static bool IsValid(string url)
-    {
-        return url.All(c => char.IsAsciiLetter(c) || char.IsAsciiDigit(c) || allowedCharacters.Contains(c));
     }
 }
