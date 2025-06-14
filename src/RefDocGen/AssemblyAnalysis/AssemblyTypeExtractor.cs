@@ -8,7 +8,6 @@ using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.CodeElements.Types.Concrete;
 using RefDocGen.CodeElements.Types.Concrete.Delegate;
 using RefDocGen.CodeElements.Types.Concrete.Enum;
-using RefDocGen.Tools;
 using RefDocGen.Tools.Exceptions;
 using System.Reflection;
 

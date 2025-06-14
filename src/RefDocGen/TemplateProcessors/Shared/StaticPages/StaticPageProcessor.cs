@@ -1,7 +1,6 @@
 using AngleSharp;
 using Markdig;
 using Microsoft.Extensions.Logging;
-using RefDocGen.Tools;
 using RefDocGen.Tools.Exceptions;
 
 namespace RefDocGen.TemplateProcessors.Shared.StaticPages;

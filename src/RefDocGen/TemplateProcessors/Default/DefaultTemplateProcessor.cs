@@ -5,7 +5,6 @@ using RefDocGen.TemplateProcessors.Shared.Languages;
 
 #pragma warning disable IDE0005 // add the namespace containing the Razor templates
 using RefDocGen.TemplateProcessors.Default.Templates;
-using Microsoft.Extensions.Logging;
 #pragma warning restore IDE0005
 
 namespace RefDocGen.TemplateProcessors.Default;
@@ -30,7 +29,7 @@ internal class DefaultTemplateProcessor : RazorTemplateProcessor<
     /// <param name="staticPagesDirectory">Path to the directory containing the static pages created by user. <c>null</c> indicates that the directory is not specified.</param>
     /// <param name="docVersion">Version of the documentation (e.g. 'v1.0'). Pass <c>null</c> if no specific version should be generated.</param>
     /// <param name="availableLanguages">Configuration of languages available in the documentation.</param>
-    internal DefaultTemplateProcessor(HtmlRenderer htmlRenderer, ILanguageConfiguration[] availableLanguages, 
+    internal DefaultTemplateProcessor(HtmlRenderer htmlRenderer, ILanguageConfiguration[] availableLanguages,
         string? staticPagesDirectory = null, string? docVersion = null)
         : base(
             htmlRenderer,
