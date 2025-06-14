@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using RefDocGen.AssemblyAnalysis.Extensions;
 using RefDocGen.AssemblyAnalysis.MemberCreators;
 using RefDocGen.CodeElements;
@@ -69,13 +70,21 @@ internal class AssemblyTypeExtractor
     private readonly List<EnumTypeData> allNestedEnums = [];
 
     /// <summary>
+    /// A logger instance.
+    /// </summary>
+    private readonly ILogger logger;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="AssemblyTypeExtractor"/> class with the specified assembly path.
     /// </summary>
     /// <param name="assemblyPaths">The path to the DLL assembly files.</param>
     /// <param name="configuration">Configuration describing what data should be extracted.</param>
-    internal AssemblyTypeExtractor(IEnumerable<string> assemblyPaths, AssemblyDataConfiguration configuration)
+    /// <param name="logger">A logger instance.</param>
+    internal AssemblyTypeExtractor(IEnumerable<string> assemblyPaths, AssemblyDataConfiguration configuration, ILogger logger)
     {
         this.assemblyPaths = assemblyPaths;
+        this.logger = logger;
+
         minVisibility = configuration.MinVisibility;
         assembliesToExclude = configuration.AssembliesToExclude;
         namespacesToExclude = configuration.NamespacesToExclude;
@@ -112,7 +121,12 @@ internal class AssemblyTypeExtractor
             // load types
             if (!assembliesToExclude.Contains(assembly.GetName().Name))
             {
+                logger.LogInformation("Assembly {Name} loaded", assemblyPath);
                 types.AddRange(assembly.GetTypes());
+            }
+            else
+            {
+                logger.LogInformation("Assembly {Name} excluded", assemblyPath);
             }
         }
 
@@ -269,7 +283,7 @@ internal class AssemblyTypeExtractor
 
         var delegateType = new DelegateTypeData(type, typeParameters, attributeData);
 
-        var invokeMethodInfo = type.GetMethod(delegateMethodName) ?? throw new ArgumentException("TODO");
+        var invokeMethodInfo = type.GetMethod(delegateMethodName) ?? throw new ArgumentException("The 'Invoke' method of a delegate wasn't found.");
         var invokeMethod = MethodDataCreator.CreateFrom(invokeMethodInfo, delegateType, typeParameters);
 
         delegateType.AddInvokeMethod(invokeMethod);

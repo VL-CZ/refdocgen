@@ -5,6 +5,7 @@ using RefDocGen.AssemblyAnalysis;
 using RefDocGen.CodeElements;
 using RefDocGen.TemplateProcessors.Default;
 using RefDocGen.TemplateProcessors.Shared.Languages;
+using RefDocGen.Tools.Exceptions;
 using Serilog;
 using Serilog.Events;
 using System.Globalization;
@@ -31,7 +32,7 @@ public static class Program
         string? version = null;
 
         var assemblyDataConfig = new AssemblyDataConfiguration(
-            MinVisibility: AccessModifier.Private,
+            MinVisibility: AccessModifier.Public,
             MemberInheritanceMode: MemberInheritanceMode.NonObject,
             AssembliesToExclude: ["MyApp"],
             NamespacesToExclude: ["MyLibrary.Exclude", "MyLibrary.Tools.Exclude"]
@@ -43,15 +44,15 @@ public static class Program
             ? "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"
             : "[{Level:u}] {Message:lj}{NewLine}";
 
-        var level = verbose ? LogEventLevel.Debug : LogEventLevel.Error;
+        var level = verbose ? LogEventLevel.Information : LogEventLevel.Warning;
 
-        var serilogger = new LoggerConfiguration()
+        var serilogLogger = new LoggerConfiguration()
             .MinimumLevel.Is(level)
             .WriteTo.Console(outputTemplate: outputTemplate, formatProvider: CultureInfo.InvariantCulture)
             .CreateLogger();
 
         IServiceCollection services = new ServiceCollection();
-        _ = services.AddLogging(builder => builder.AddSerilog(serilogger, dispose: true));
+        _ = services.AddLogging(builder => builder.AddSerilog(serilogLogger, dispose: true));
 
         IServiceProvider serviceProvider = services.BuildServiceProvider();
         var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
@@ -60,23 +61,30 @@ public static class Program
 
         ILanguageConfiguration[] availableLanguages = [
             new CSharpLanguageConfiguration(),
-            new CSharpLanguageConfiguration(),
             new OtherLanguageConfiguration()
         ];
 
-        var logger = loggerFactory.CreateLogger("Program");
+        var logger = loggerFactory.CreateLogger("RefDocGen");
 
         try
         {
             var templateProcessor = new DefaultTemplateProcessor(htmlRenderer, availableLanguages, staticPagesDir, version);
 
-            var docGenerator = new DocGenerator(dllPaths, docPaths, templateProcessor, assemblyDataConfig, outputDir);
+            var docGenerator = new DocGenerator(dllPaths, docPaths, templateProcessor, assemblyDataConfig, outputDir, logger);
             docGenerator.GenerateDoc();
             Console.WriteLine("Done...");
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "{ErrorMessage}", ex.Message);
+            if (ex is RefDocGenFatalException refDocGenEx)
+            {
+                logger.LogError(refDocGenEx, "{ErrorMessage}", ex.Message);
+            }
+            else
+            {
+                logger.LogError(ex, "An exception occurred");
+            }
+
         }
     }
 }

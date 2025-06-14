@@ -74,7 +74,7 @@ internal class DocCommentTransformer : IDocCommentTransformer
     /// <inheritdoc/>
     public ITypeRegistry TypeRegistry
     {
-        get => typeRegistry ?? throw new InvalidOperationException("ERROR: Type registry not set."); // TODO: update
+        get => typeRegistry ?? throw new InvalidOperationException("Type registry not provided");
         set
         {
             typeRegistry = value;
@@ -87,7 +87,7 @@ internal class DocCommentTransformer : IDocCommentTransformer
     /// </summary>
     private TypeUrlResolver TypeUrlResolver
     {
-        get => typeUrlResolver ?? throw new InvalidOperationException("ERROR: Type registry not set."); // TODO: update
+        get => typeUrlResolver ?? throw new InvalidOperationException("Type registry not provided");
         set => typeUrlResolver = value;
     }
 

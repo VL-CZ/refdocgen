@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.Extensions.Logging;
 using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.CodeElements.Types.Abstract;
@@ -138,6 +139,11 @@ internal class RazorTemplateProcessor<
     private string OutputApiDirectory => Path.Join(outputDirectory, "api");
 
     /// <summary>
+    /// A logger instance.
+    /// </summary>
+    private ILogger? logger;
+
+    /// <summary>
     /// Initialize a new instance of
     /// <see cref="RazorTemplateProcessor{TObjectTypeTemplate, TDelegateTemplate, TEnumTemplate, TNamespaceTemplate, TAssemblyTemplate, TApiTemplate, TStaticPageTemplate, TSearchPageTemplate}"/> class.
     /// </summary>
@@ -168,9 +174,10 @@ internal class RazorTemplateProcessor<
     }
 
     /// <inheritdoc/>
-    public void ProcessTemplates(ITypeRegistry typeRegistry, string outputDirectory)
+    public void ProcessTemplates(ITypeRegistry typeRegistry, string outputDirectory, ILogger? logger = null)
     {
         this.outputDirectory = outputDirectory;
+        this.logger = logger;
         docCommentTransformer.TypeRegistry = typeRegistry;
 
         if (docVersion is not null) // a specific version of documentation is being generated
@@ -182,6 +189,8 @@ internal class RazorTemplateProcessor<
         }
 
         _ = Directory.CreateDirectory(this.outputDirectory);
+
+        this.logger?.LogInformation("Generating documentation in {Folder} folder", this.outputDirectory);
 
         CopyStaticPages();
 
@@ -333,10 +342,11 @@ internal class RazorTemplateProcessor<
         if (staticFilesDir.Exists)
         {
             staticFilesDir.CopyTo(outputDirPath, true);
+            logger?.LogInformation("A directory containing static template data copied to {Directory}", outputDirPath);
         }
         else
         {
-            // TODO: log static files dir not found
+            logger?.LogInformation("No directory containing static template data found at path {Directory}", staticFilesDir);
         }
     }
 
@@ -389,7 +399,7 @@ internal class RazorTemplateProcessor<
             return;
         }
 
-        var pageProcessor = new StaticPageProcessor(staticPagesDirectory);
+        var pageProcessor = new StaticPageProcessor(staticPagesDirectory, logger);
 
         var pages = pageProcessor.GetStaticPages();
         var cssFile = pageProcessor.GetCssFile();
@@ -405,6 +415,7 @@ internal class RazorTemplateProcessor<
 
         foreach (var page in pages) // wrap each page in the static page template, process it, and copy it into the output directory
         {
+            logger?.LogInformation("Static page {Path} found", Path.Combine(staticPagesDirectory, page.FullName));
             string outputPath = Path.Combine(outputDirectory, page.PageDirectory);
 
             var paramDictionary = new Dictionary<string, object?>()
@@ -458,6 +469,8 @@ internal class RazorTemplateProcessor<
             // save the HTML
             File.WriteAllText(outputFileName, html);
             _ = pagesGenerated.Add(pagePath);
+
+            logger?.LogInformation("Page {Name} created", outputFileName);
         }
         catch (AggregateException ex) // Template compilation failed -> delete the directory & throw an exception
         {

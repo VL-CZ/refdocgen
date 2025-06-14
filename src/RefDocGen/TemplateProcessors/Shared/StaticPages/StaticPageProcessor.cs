@@ -1,5 +1,6 @@
 using AngleSharp;
 using Markdig;
+using Microsoft.Extensions.Logging;
 using RefDocGen.Tools;
 using RefDocGen.Tools.Exceptions;
 
@@ -36,12 +37,19 @@ internal class StaticPageProcessor
     internal static readonly string cssFilePath = Path.Join("css", "styles.css");
 
     /// <summary>
+    /// A logger instance.
+    /// </summary>
+    private readonly ILogger? logger;
+
+    /// <summary>
     /// Initializes a new instance of <see cref="StaticPageProcessor"/> class.
     /// </summary>
     /// <param name="staticPagesDirectory">Path to the folder containing the static pages.</param>
-    public StaticPageProcessor(string staticPagesDirectory)
+    /// <param name="logger">A logger instance.</param>
+    public StaticPageProcessor(string staticPagesDirectory, ILogger? logger)
     {
         this.staticPagesDirectory = staticPagesDirectory;
+        this.logger = logger;
 
         if (!Directory.Exists(staticPagesDirectory))
         {
@@ -111,6 +119,7 @@ internal class StaticPageProcessor
                 }
 
                 File.Copy(file.FullName, outputPath, true);
+                logger?.LogInformation("Static file {FilePath} copied to {OutputPath}", filePath, outputPath);
             }
         }
     }
