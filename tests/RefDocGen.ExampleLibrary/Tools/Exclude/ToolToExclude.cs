@@ -1,4 +1,4 @@
-namespace RefDocGen.TestingLibrary.Tools.Exclude;
+namespace RefDocGen.ExampleLibrary.Tools.Exclude;
 
 /// <summary>
 /// Tool to be excluded from the documentation.

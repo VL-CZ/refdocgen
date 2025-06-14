@@ -1,4 +1,4 @@
-namespace RefDocGen.TestingLibrary.Tools.Collections;
+namespace RefDocGen.ExampleLibrary.Tools.Collections;
 
 /// <summary>
 /// Custom string collection.

@@ -1,4 +1,4 @@
-namespace RefDocGen.TestingLibrary.Tools;
+namespace RefDocGen.ExampleLibrary.Tools;
 
 [Flags]
 internal enum HarvestingSeason

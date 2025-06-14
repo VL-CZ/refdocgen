@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace RefDocGen.TestingLibrary.Tools.Collections
+namespace RefDocGen.ExampleLibrary.Tools.Collections
 {
     /// <summary>
     /// Non generic collection interface.

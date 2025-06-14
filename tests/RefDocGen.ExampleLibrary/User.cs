@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
-namespace RefDocGen.TestingLibrary;
+namespace RefDocGen.ExampleLibrary;
 
 /// <summary>
 /// Class representing an user of our app.

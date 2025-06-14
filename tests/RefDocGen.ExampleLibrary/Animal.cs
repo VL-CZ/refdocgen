@@ -1,6 +1,6 @@
-using RefDocGen.TestingLibrary.Tools.Collections;
+using RefDocGen.ExampleLibrary.Tools.Collections;
 
-namespace RefDocGen.TestingLibrary;
+namespace RefDocGen.ExampleLibrary;
 
 /// <summary>
 /// Abstract class representing an animal.

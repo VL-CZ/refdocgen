@@ -1,4 +1,4 @@
-namespace RefDocGen.TestingLibrary.Tools;
+namespace RefDocGen.ExampleLibrary.Tools;
 
 /// <summary>
 /// Predicate about an object.

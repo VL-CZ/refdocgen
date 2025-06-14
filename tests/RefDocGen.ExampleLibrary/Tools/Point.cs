@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace RefDocGen.TestingLibrary.Tools;
+namespace RefDocGen.ExampleLibrary.Tools;
 
 /// <summary>
 /// Struct representing a point.

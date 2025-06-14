@@ -1,4 +1,4 @@
-namespace RefDocGen.TestingLibrary;
+namespace RefDocGen.ExampleLibrary;
 
 /// <summary>
 /// Represents a dog; i.e. a specific type of animal.
