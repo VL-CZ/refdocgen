@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -9,10 +9,6 @@
         <IsTestProject>true</IsTestProject>
         <NoWarn>IDE0058,CA1707,CA1816,IDE0305</NoWarn>
     </PropertyGroup>
-
-    <ItemGroup>
-        <None Include="StaticPagesTests.cs" />
-    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="AngleSharp" Version="1.3.0" />
@@ -47,11 +43,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="data\MyLibrary.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <None Update="data\Debug\net8.0\RefDocGen.TestingLibrary.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="data\MyLibrary.xml">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <None Update="data\Debug\net8.0\RefDocGen.TestingLibrary.xml">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="data\static-pages\css\styles.css">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

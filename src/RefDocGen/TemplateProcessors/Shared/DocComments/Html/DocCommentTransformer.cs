@@ -645,7 +645,17 @@ internal class DocCommentTransformer : IDocCommentTransformer
             }
         }
 
-        if (docCommentCopy is XElement rootElement)
+        // replace all links by a highlighted text
+        var links = docCommentCopy.Descendants("a").ToList();
+
+        foreach (var link in links)
+        {
+            var highlightedText = CopyChildNodes(link, htmlConfiguration.SeeCrefNotFoundElement);
+            link.ReplaceWith(highlightedText);
+        }
+
+        // remove the root element if it's a new-line element
+        if (docCommentCopy is XElement rootElement && newLineElements.Contains(rootElement.Name.LocalName))
         {
             var nodeStrings = rootElement.Nodes().Select(n => n.ToString());
             return string.Join("", nodeStrings);

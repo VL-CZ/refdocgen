@@ -32,11 +32,11 @@ public class NamespaceListPageTests : IDisposable
         string[] classes = NamespacePageTools.GetNamespaceNames(document);
 
         string[] expected = [
-            "namespace MyLibrary",
-            "namespace MyLibrary.CyclicDoc",
-            "namespace MyLibrary.Hierarchy",
-            "namespace MyLibrary.Tools",
-            "namespace MyLibrary.Tools.Collections"
+            "namespace RefDocGen.TestingLibrary",
+            "namespace RefDocGen.TestingLibrary.CyclicDoc",
+            "namespace RefDocGen.TestingLibrary.Hierarchy",
+            "namespace RefDocGen.TestingLibrary.Tools",
+            "namespace RefDocGen.TestingLibrary.Tools.Collections"
         ];
 
         classes.ShouldBe(expected);
@@ -45,7 +45,7 @@ public class NamespaceListPageTests : IDisposable
     [Fact]
     public void NamespaceTypeNames_Match()
     {
-        var ns = document.GetNamespaceElement("MyLibrary.Tools");
+        var ns = document.GetNamespaceElement("RefDocGen.TestingLibrary.Tools");
 
         string[] nsTypes = NamespacePageTools.GetNamespaceTypeNames(ns);
 

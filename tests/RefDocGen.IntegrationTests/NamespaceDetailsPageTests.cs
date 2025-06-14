@@ -12,13 +12,13 @@ namespace RefDocGen.IntegrationTests;
 public class NamespaceDetailsPageTests : IDisposable
 {
     /// <summary>
-    /// The HTML page representing the <c>MyLibrary.Tools</c> namespace.
+    /// The HTML page representing the <c>RefDocGen.TestingLibrary.Tools</c> namespace.
     /// </summary>
     private readonly IDocument document;
 
     public NamespaceDetailsPageTests()
     {
-        document = DocumentationTools.GetApiPage("MyLibrary.Tools.html");
+        document = DocumentationTools.GetApiPage("RefDocGen.TestingLibrary.Tools.html");
     }
 
     public void Dispose()

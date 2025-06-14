@@ -59,12 +59,18 @@ public class DocumentationFixture : IDisposable
         var assemblyDataConfig = new AssemblyDataConfiguration(
             AccessModifier.Private,
             MemberInheritanceMode.NonObject,
-            NamespacesToExclude: ["MyLibrary.Exclude", "MyLibrary.Tools.Exclude"],
+            NamespacesToExclude: ["RefDocGen.TestingLibrary.Exclude", "RefDocGen.TestingLibrary.Tools.Exclude"],
             AssembliesToExclude: []);
 
         var logger = Substitute.For<ILogger>();
 
-        var generator = new DocGenerator(["data/MyLibrary.dll"], ["data/MyLibrary.xml"], templateProcessor, assemblyDataConfig, outputDir, logger);
+        var generator = new DocGenerator(
+            ["data/Debug/net8.0/RefDocGen.TestingLibrary.dll"],
+            ["data/Debug/net8.0/RefDocGen.TestingLibrary.xml"],
+            templateProcessor,
+            assemblyDataConfig,
+            outputDir,
+            logger);
 
         generator.GenerateDoc();
     }

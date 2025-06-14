@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<doc>
+  <members>
+    <member name="M:MyNamespace.MyClass.MyMethod">
+      <summary>
+        Determines whether the collection contains a specific item.
+      </summary>
+      <param name="item">The item to locate in the collection.</param>
+      <returns>
+        <c>true</c> if the item is found; otherwise, <c>false</c>.
+      </returns>
+    </member>
+  </members>
+</doc>

@@ -28,4 +28,4 @@ jobs:
       - name: Integration tests
         run: dotnet test ./tests/RefDocGen.IntegrationTests --no-build --verbosity normal
       - name: Check formatting
-        run: dotnet format style --verify-no-changes
+        run: dotnet format style --verify-no-changes --exclude tests/RefDocGen.TestingLibrary # exclude the TestingLibrary
