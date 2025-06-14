@@ -7,19 +7,19 @@ namespace RefDocGen.TemplateProcessors.Shared.TemplateTools;
 /// </summary>
 public enum LanguageSpecificComponent
 {
-    AttributeName,
-    ConstructorName,
-    DelegateMethodName,
-    EnumMemberName,
-    EventName,
-    FieldName,
-    IndexerName,
-    MethodName,
-    OperatorName,
-    ParameterName,
-    PropertyName,
-    TypeDeclarationName,
-    TypeParameterName,
+    AttributeDeclaration,
+    ConstructorDeclaration,
+    DelegateMethodDeclaration,
+    EnumMemberDeclaration,
+    EventDeclaration,
+    FieldDeclaration,
+    IndexerDeclaration,
+    MethodDeclaration,
+    OperatorDeclaration,
+    ParameterDeclaration,
+    PropertyDeclaration,
+    TypeDeclaration,
+    TypeParameterDeclaration,
     TypeParameterConstraints,
     GenericTypeLink
 }
