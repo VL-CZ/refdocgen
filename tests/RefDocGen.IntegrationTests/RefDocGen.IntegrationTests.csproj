@@ -47,6 +47,12 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Update="data\Debug\net8.0\RefDocGen.TestingLibrary.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="data\Debug\net8.0\RefDocGen.TestingLibrary.xml">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Update="data\MyLibrary.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
