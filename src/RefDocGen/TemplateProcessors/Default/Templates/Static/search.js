@@ -32,7 +32,7 @@ function getSearchResults(fuse, text, language) {
     const resultsList = document.getElementById("search-results");
 
     const query = text.trim();
-    const results = fuse.search(query);
+    const results = fuse.search(query).slice(0, 100); // search -> get at most 100 results
 
     resultsList.innerHTML = "";
 
