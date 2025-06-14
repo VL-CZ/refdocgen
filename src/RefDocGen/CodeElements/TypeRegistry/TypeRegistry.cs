@@ -137,7 +137,6 @@ internal class TypeRegistry : ITypeRegistry
 
         foreach (var parentType in parentTypes)
         {
-            // convert the ID: TODO refactor
             string parentId = parentType.TypeDeclarationId;
 
             // the parent type is contained in the type registry

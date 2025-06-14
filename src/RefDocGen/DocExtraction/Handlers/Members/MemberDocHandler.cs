@@ -29,7 +29,7 @@ internal abstract class MemberDocHandler<TType, TMember> : IMemberDocHandler<TTy
 
         if (member is null)
         {
-            return; // TODO: log member not found
+            return; // member not found
         }
 
         // add 'summary' doc comment

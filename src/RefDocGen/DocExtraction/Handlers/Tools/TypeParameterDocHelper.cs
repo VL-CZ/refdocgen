@@ -24,12 +24,10 @@ internal class TypeParameterDocHelper
 
                 if (typeParameter is null)
                 {
-                    // TODO: log parameter not found
-                    return;
+                    return; // type parameter not found
                 }
 
                 typeParameter.DocComment = paramDocComment;
-
             }
         }
     }

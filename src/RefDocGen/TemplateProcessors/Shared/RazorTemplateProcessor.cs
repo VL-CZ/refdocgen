@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.Extensions.Logging;
 using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.CodeElements.Types.Abstract;
@@ -15,7 +16,9 @@ using RefDocGen.TemplateProcessors.Shared.TemplateModels.Language;
 using RefDocGen.TemplateProcessors.Shared.TemplateModels.Menu;
 using RefDocGen.TemplateProcessors.Shared.TemplateModels.Namespaces;
 using RefDocGen.TemplateProcessors.Shared.TemplateModels.Types;
+using RefDocGen.TemplateProcessors.Shared.Tools;
 using RefDocGen.Tools;
+using RefDocGen.Tools.Exceptions;
 
 namespace RefDocGen.TemplateProcessors.Shared;
 
@@ -116,7 +119,7 @@ internal class RazorTemplateProcessor<
     private readonly HashSet<string> pagesGenerated = [];
 
     /// <summary>
-    /// Manager of the documentation version.
+    /// Manager of the documentation version. <c>null</c> if the generated documentation isn't versioned.
     /// </summary>
     private DocVersionManager? versionManager;
 
@@ -134,6 +137,11 @@ internal class RazorTemplateProcessor<
     /// The directory, where the generated output API pages will be stored.
     /// </summary>
     private string OutputApiDirectory => Path.Join(outputDirectory, "api");
+
+    /// <summary>
+    /// A logger instance.
+    /// </summary>
+    private ILogger? logger;
 
     /// <summary>
     /// Initialize a new instance of
@@ -161,12 +169,15 @@ internal class RazorTemplateProcessor<
         templatesDirectory = GetTemplatesDirectory();
 
         languageTMs = [.. this.availableLanguages.Select(lang => new LanguageTM(lang.LanguageName, lang.LanguageId))];
+
+        ValidateLanguageData(availableLanguages);
     }
 
     /// <inheritdoc/>
-    public void ProcessTemplates(ITypeRegistry typeRegistry, string outputDirectory)
+    public void ProcessTemplates(ITypeRegistry typeRegistry, string outputDirectory, ILogger? logger = null)
     {
         this.outputDirectory = outputDirectory;
+        this.logger = logger;
         docCommentTransformer.TypeRegistry = typeRegistry;
 
         if (docVersion is not null) // a specific version of documentation is being generated
@@ -174,10 +185,12 @@ internal class RazorTemplateProcessor<
             string rootOutputDirectory = outputDirectory;
 
             this.outputDirectory = Path.Join(outputDirectory, docVersion); // set output directory
-            _ = Directory.CreateDirectory(this.outputDirectory);
-
             versionManager = new(rootOutputDirectory, docVersion);
         }
+
+        _ = Directory.CreateDirectory(this.outputDirectory);
+
+        this.logger?.LogInformation("Generating documentation in {Folder} folder", this.outputDirectory);
 
         CopyStaticPages();
 
@@ -202,7 +215,7 @@ internal class RazorTemplateProcessor<
     }
 
     /// <summary>
-    /// Generate the template representing the search page.
+    /// Generate the search page.
     /// </summary>
     /// <param name="typeRegistry">Type registry containing the declared types.</param>
     private void GenerateSearchPage(ITypeRegistry typeRegistry)
@@ -329,10 +342,11 @@ internal class RazorTemplateProcessor<
         if (staticFilesDir.Exists)
         {
             staticFilesDir.CopyTo(outputDirPath, true);
+            logger?.LogInformation("A directory containing static template data copied to {Directory}", outputDirPath);
         }
         else
         {
-            // TODO: log static files dir not found
+            logger?.LogInformation("No directory containing static template data found at path {Directory}", staticFilesDir);
         }
     }
 
@@ -340,7 +354,7 @@ internal class RazorTemplateProcessor<
     /// Returns base directory containing the Razor templates and static files.
     /// </summary>
     /// <returns>Path to the directory containing the Razor templates and static files.</returns>
-    /// <exception cref="ArgumentException">
+    /// <exception cref="InvalidTemplateLocationException">
     /// Thrown in 2 cases
     /// <list type="bullet">
     /// <item>The templates aren't stored under <c>RefDocGen/TemplateProcessors</c> directory.</item>
@@ -354,21 +368,19 @@ internal class RazorTemplateProcessor<
         Type[] templateTypes = [
             typeof(TDelegatePageTemplate),
             typeof(TEnumPageTemplate),
+            typeof(TObjectTypePageTemplate),
             typeof(TNamespacePageTemplate),
             typeof(TAssemblyPageTemplate),
-            typeof(TObjectTypePageTemplate)
+            typeof(TApiHomePageTemplate),
+            typeof(TStaticPageTemplate),
+            typeof(TSearchPageTemplate)
         ];
 
         string? templatesNs = typeof(TObjectTypePageTemplate).Namespace ?? "";
 
-        if (templateTypes.Any(t => t.Namespace != templatesNs))
+        if (templateTypes.Any(t => t.Namespace != templatesNs) || !templatesNs.StartsWith(templateProcessorsNsPrefix, StringComparison.Ordinal))
         {
-            throw new ArgumentException("Invalid configuration, all templates must be in the same directory.");
-        }
-
-        if (!templatesNs.StartsWith(templateProcessorsNsPrefix, StringComparison.Ordinal))
-        {
-            throw new ArgumentException("Invalid configuration, the templates must be stored in a folder contained in 'RefDocGen/TemplateProcessors' directory.");
+            throw new InvalidTemplateLocationException(templateTypes); // invalid template location -> throw
         }
 
         string relativeTemplateNs = templatesNs[templateProcessorsNsPrefix.Length..];
@@ -387,7 +399,7 @@ internal class RazorTemplateProcessor<
             return;
         }
 
-        var pageProcessor = new StaticPageProcessor(staticPagesDirectory);
+        var pageProcessor = new StaticPageProcessor(staticPagesDirectory, logger);
 
         var pages = pageProcessor.GetStaticPages();
         var cssFile = pageProcessor.GetCssFile();
@@ -403,6 +415,7 @@ internal class RazorTemplateProcessor<
 
         foreach (var page in pages) // wrap each page in the static page template, process it, and copy it into the output directory
         {
+            logger?.LogInformation("Static page {Path} found", Path.Combine(staticPagesDirectory, page.FullName));
             string outputPath = Path.Combine(outputDirectory, page.PageDirectory);
 
             var paramDictionary = new Dictionary<string, object?>()
@@ -433,25 +446,64 @@ internal class RazorTemplateProcessor<
         string pagePath = Path.GetRelativePath(outputDirectory, outputFileName);
         string[]? versions = versionManager?.GetVersions(pagePath);
 
-        string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
+        try
         {
-            var sharedTemplateParameters = new Dictionary<string, object?>()
+            // populate the template with the data, and return the HTML data as a string
+            string html = htmlRenderer.Dispatcher.InvokeAsync(async () =>
             {
-                ["TopMenuData"] = topMenuData,
-                ["Versions"] = versions,
-                ["Languages"] = languageTMs
-            };
+                var sharedTemplateParameters = new Dictionary<string, object?>()
+                {
+                    ["TopMenuData"] = topMenuData,
+                    ["Versions"] = versions,
+                    ["Languages"] = languageTMs
+                };
 
-            var templateParameters = sharedTemplateParameters.Merge(customTemplateParameters);
+                var templateParameters = sharedTemplateParameters.Merge(customTemplateParameters);
 
-            var parameters = ParameterView.FromDictionary(templateParameters);
-            var output = await htmlRenderer.RenderComponentAsync<TTemplate>(parameters);
+                var parameters = ParameterView.FromDictionary(templateParameters);
+                var output = await htmlRenderer.RenderComponentAsync<TTemplate>(parameters);
 
-            return output.ToHtmlString();
-        }).Result;
+                return output.ToHtmlString();
+            }).Result;
 
+            // save the HTML
+            File.WriteAllText(outputFileName, html);
+            _ = pagesGenerated.Add(pagePath);
 
-        File.WriteAllText(outputFileName, html);
-        _ = pagesGenerated.Add(pagePath);
+            logger?.LogInformation("Page {Name} created", outputFileName);
+        }
+        catch (AggregateException ex) // Template compilation failed -> delete the directory & throw an exception
+        {
+            Directory.Delete(outputDirectory, true);
+            throw new TemplateRenderingException(typeof(TTemplate), ex);
+        }
+    }
+
+    /// <summary>
+    /// Checks whether the <paramref name="languageData"/> are valid.
+    /// </summary>
+    /// <param name="languageData">The language data to validate.</param>
+    /// <exception cref="InvalidLanguageIdException">
+    /// Thrown if an ID of any language is invalid.
+    /// </exception>
+    /// <exception cref="DuplicateLanguageIdException">
+    /// Thrown if two or more languages have the same ID.
+    /// </exception>
+    private void ValidateLanguageData(IEnumerable<ILanguageConfiguration> languageData)
+    {
+        var invalidLanguageIds = languageData.Select(l => l.LanguageId).Where(l => !UrlValidator.IsValidUrlItem(l));
+
+        if (invalidLanguageIds.Any())
+        {
+            throw new InvalidLanguageIdException(invalidLanguageIds.First()); // invalid language ID -> throw
+        }
+
+        var groupped = languageData.GroupBy(l => l.LanguageId).Where(group => group.Count() >= 2);
+
+        if (groupped.Any())
+        {
+            throw new DuplicateLanguageIdException(groupped.First().Key); // duplicate language ID -> throw
+        }
+
     }
 }

@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using RefDocGen.CodeElements.Members.Concrete;
 using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.CodeElements.Types.Concrete;
@@ -6,6 +7,7 @@ using RefDocGen.DocExtraction.Handlers.Members.Enum;
 using RefDocGen.DocExtraction.Handlers.Types;
 using RefDocGen.DocExtraction.InheritDoc;
 using RefDocGen.DocExtraction.Tools;
+using RefDocGen.Tools.Exceptions;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 
@@ -24,7 +26,7 @@ internal class DocCommentExtractor
     /// <summary>
     /// Dictionary of the selected member documentation handlers, identified by <see cref="CodeElementId"/> identifiers.
     /// </summary>
-    private readonly Dictionary<string, IMemberDocHandler<ObjectTypeData>> memberDocHandlers = new()
+    private readonly Dictionary<string, IMemberDocHandler<ObjectTypeData>> baseMemberDocHandlers = new()
     {
         [CodeElementId.Field] = new FieldDocHandler(),
         [CodeElementId.Property] = new PropertyDocHandler(),
@@ -98,14 +100,21 @@ internal class DocCommentExtractor
     private readonly IEnumerable<string> docXmlPaths;
 
     /// <summary>
+    /// A logger instance.
+    /// </summary>
+    private readonly ILogger logger;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="DocCommentExtractor"/> class.
     /// </summary>
     /// <param name="docXmlPaths">Paths to the XML documentation files.</param>
     /// <param name="typeRegistry">Registry of the declared types, to which the documentation comments will be added.</param>
-    internal DocCommentExtractor(IEnumerable<string> docXmlPaths, TypeRegistry typeRegistry)
+    /// <param name="logger">A logger instance.</param>
+    internal DocCommentExtractor(IEnumerable<string> docXmlPaths, TypeRegistry typeRegistry, ILogger logger)
     {
         this.typeRegistry = typeRegistry;
         this.docXmlPaths = docXmlPaths;
+        this.logger = logger;
 
         memberInheritDocResolver = new(typeRegistry);
         typeInheritDocResolver = new(typeRegistry);
@@ -119,8 +128,18 @@ internal class DocCommentExtractor
     {
         foreach (string xmlPath in docXmlPaths)
         {
-            // load the document (preserve the whitespace, as the documentation is to be converted into HTML)
-            var xmlDocument = XDocument.Load(xmlPath, LoadOptions.PreserveWhitespace);
+            XDocument? xmlDocument = null;
+
+            try
+            {
+                // load the document (preserve the whitespace, as the documentation is to be converted into HTML)
+                xmlDocument = XDocument.Load(xmlPath, LoadOptions.PreserveWhitespace);
+                logger.LogInformation("XML documentation file {Name} loaded", xmlPath);
+            }
+            catch (FileNotFoundException)
+            {
+                throw new XmlDocFileNotFoundException(xmlPath); // XML documentation file not found
+            }
 
             var memberNodes = xmlDocument.Descendants(XmlDocIdentifiers.Member);
 
@@ -176,6 +195,13 @@ internal class DocCommentExtractor
         if (docComment.TryGetNameAttribute(out var memberNameAttr))
         {
             string[] splitMemberName = memberNameAttr.Value.Split(':');
+
+            if (splitMemberName.Length != 2)
+            {
+                logger.LogWarning("An invalid ID was encountered in the documentation: {Id}", memberNameAttr.Value);
+                return;
+            }
+
             (string objectIdentifier, string fullObjectName) = (splitMemberName[0], splitMemberName[1]);
 
             if (objectIdentifier == CodeElementId.Type) // type
@@ -193,7 +219,7 @@ internal class DocCommentExtractor
         }
         else
         {
-            // TODO: log unknown member / type
+            logger.LogWarning("A member element with no 'name' attribute encountered");
         }
     }
 
@@ -258,13 +284,13 @@ internal class DocCommentExtractor
             {
                 indexerDocHandler.AddDocumentation(type, memberId, docCommentNode);
             }
-            else if (memberDocHandlers.TryGetValue(memberKindId, out var handler))
+            else if (baseMemberDocHandlers.TryGetValue(memberKindId, out var handler))
             {
                 handler.AddDocumentation(type, memberId, docCommentNode);
             }
             else
             {
-                // TODO: log unknown member
+                logger.LogWarning("The documentation contains invalid member ID: '{MemberId}'", $"{memberKindId}:{fullMemberName}");
             }
         }
         else if (typeRegistry.Enums.TryGetValue(typeName, out var e)) // member of an enum

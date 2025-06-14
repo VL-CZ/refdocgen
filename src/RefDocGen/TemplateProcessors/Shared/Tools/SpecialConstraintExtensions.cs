@@ -19,7 +19,7 @@ internal static class SpecialConstraintExtensions
             SpecialTypeConstraint.DefaultConstructor => "new()",
             SpecialTypeConstraint.NotNullableValueType => "struct",
             SpecialTypeConstraint.ReferenceType => "class",
-            _ => throw new ArgumentException("") // TODO: add message
+            _ => throw new ArgumentException($"Unknown constraint type: {specialConstraint}")
         };
     }
 }

@@ -25,8 +25,7 @@ internal class ParameterDocHelper
 
                 if (parameter is null)
                 {
-                    // TODO: log parameter not found
-                    return;
+                    return; // parameter not found
                 }
 
                 parameter.DocComment = paramDocComment;

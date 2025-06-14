@@ -3,7 +3,7 @@ using System.Xml.Linq;
 namespace RefDocGen.TemplateProcessors.Shared.DocComments.Html;
 
 /// <summary>
-/// Defines the HTML representations for the XML doc comment elements.
+/// Defines the HTML representations of the inner XML documentation elements.
 /// </summary>
 internal interface IDocCommentHtmlConfiguration
 {

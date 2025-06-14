@@ -5,6 +5,7 @@ using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.TemplateProcessors.Shared.Tools;
 using RefDocGen.TemplateProcessors.Shared.Tools.Names;
+using RefDocGen.Tools.Exceptions;
 using RefDocGen.Tools.Xml;
 
 namespace RefDocGen.TemplateProcessors.Shared.DocComments.Html;
@@ -73,7 +74,7 @@ internal class DocCommentTransformer : IDocCommentTransformer
     /// <inheritdoc/>
     public ITypeRegistry TypeRegistry
     {
-        get => typeRegistry ?? throw new InvalidOperationException("ERROR: Type registry not set."); // TODO: update
+        get => typeRegistry ?? throw new InvalidOperationException("Type registry not provided");
         set
         {
             typeRegistry = value;
@@ -86,7 +87,7 @@ internal class DocCommentTransformer : IDocCommentTransformer
     /// </summary>
     private TypeUrlResolver TypeUrlResolver
     {
-        get => typeUrlResolver ?? throw new InvalidOperationException("ERROR: Type registry not set."); // TODO: update
+        get => typeUrlResolver ?? throw new InvalidOperationException("Type registry not provided");
         set => typeUrlResolver = value;
     }
 
@@ -191,7 +192,7 @@ internal class DocCommentTransformer : IDocCommentTransformer
     private XElement CopyChildNodes(XElement source, XElement target)
     {
         var result = new XElement(target);
-        var emptyDescendant = result.GetSingleEmptyDescendantOrSelf();
+        var emptyDescendant = GetSingleEmptyDescendantOrSelf(result);
 
         emptyDescendant.Add(source.Nodes());
 
@@ -222,7 +223,7 @@ internal class DocCommentTransformer : IDocCommentTransformer
     {
         var result = new XElement(target);
 
-        var emptyDescendant = result.GetSingleEmptyDescendantOrSelf();
+        var emptyDescendant = GetSingleEmptyDescendantOrSelf(result);
         emptyDescendant.Add(source.Nodes());
 
         if (source.Attribute(attributeName) is XAttribute attr)
@@ -254,7 +255,7 @@ internal class DocCommentTransformer : IDocCommentTransformer
     {
         var result = new XElement(target);
 
-        var emptyDescendant = result.GetSingleEmptyDescendantOrSelf();
+        var emptyDescendant = GetSingleEmptyDescendantOrSelf(result);
         emptyDescendant.Add(text);
 
         return result;
@@ -561,7 +562,7 @@ internal class DocCommentTransformer : IDocCommentTransformer
         if (TypeUrlResolver.GetUrlOf(typeId, memberId) is string targetUrl)
         {
             var result = new XElement(htmlTemplateIfFound);
-            var emptyDescendant = result.GetSingleEmptyDescendantOrSelf();
+            var emptyDescendant = GetSingleEmptyDescendantOrSelf(result);
 
             string targetName = typeId;
 
@@ -600,6 +601,23 @@ internal class DocCommentTransformer : IDocCommentTransformer
         {
             return AddTextNodeTo(fullObjectName, htmlTemplateIfNotFound);
         }
+    }
+
+    /// <summary>
+    /// Gets descendant-or-self node that is empty (i.e. has no children).
+    /// </summary>
+    /// <param name="element">Element, where to search for the nodes.</param>
+    /// <returns>Descendant-or-self node that is empty.</returns>
+    /// <exception cref="InvalidDocCommentHtmlConfigurationException">
+    /// Thrown if there's no such node or more that 2 of them.
+    /// </exception>
+    internal static XElement GetSingleEmptyDescendantOrSelf(XElement element)
+    {
+        var emptyDescendants = element.DescendantsAndSelf().Where(n => !n.Nodes().Any());
+
+        return emptyDescendants.Count() == 1
+            ? emptyDescendants.First() // exactly one empty descendant -> return it
+            : throw new InvalidDocCommentHtmlConfigurationException(element); // The configuration is invalid -> throw exception
     }
 
     /// <inheritdoc/>

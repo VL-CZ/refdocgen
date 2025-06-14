@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using RefDocGen.CodeElements.TypeRegistry;
 
 namespace RefDocGen.TemplateProcessors;
@@ -12,5 +13,6 @@ public interface ITemplateProcessor
     /// </summary>
     /// <param name="typeRegistry">A registry of declared type data to be used in the templates.</param>
     /// <param name="outputDirectory">The directory, where the ouput will be stored.</param>
-    void ProcessTemplates(ITypeRegistry typeRegistry, string outputDirectory);
+    /// <param name="logger">A logger instance.</param>
+    void ProcessTemplates(ITypeRegistry typeRegistry, string outputDirectory, ILogger? logger = null);
 }

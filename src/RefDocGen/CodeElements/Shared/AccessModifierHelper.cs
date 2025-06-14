@@ -36,8 +36,7 @@ internal static class AccessModifierHelper
             (false, false, true, false, false, false) => AccessModifier.Assembly, // C# internal
             (false, false, false, true, false, false) => AccessModifier.FamilyAndAssembly, // C# private protected
             (false, false, false, false, true, false) => AccessModifier.FamilyOrAssembly, // C# protected internal
-            (false, false, false, false, false, true) => AccessModifier.Public,
-            _ => throw new ArgumentException("Invalid combination of the arguments. There must be exactly one of them set to true.") // TODO: don't fail
+            _ => AccessModifier.Public
         };
     }
 
