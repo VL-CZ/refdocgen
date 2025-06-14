@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NSubstitute;
 using RefDocGen.AssemblyAnalysis;
 using RefDocGen.CodeElements;
 using RefDocGen.TemplateProcessors.Default;
@@ -61,7 +62,9 @@ public class DocumentationFixture : IDisposable
             NamespacesToExclude: ["MyLibrary.Exclude", "MyLibrary.Tools.Exclude"],
             AssembliesToExclude: []);
 
-        var generator = new DocGenerator(["data/MyLibrary.dll"], ["data/MyLibrary.xml"], templateProcessor, assemblyDataConfig, outputDir);
+        var logger = Substitute.For<ILogger>();
+
+        var generator = new DocGenerator(["data/MyLibrary.dll"], ["data/MyLibrary.xml"], templateProcessor, assemblyDataConfig, outputDir, logger);
 
         generator.GenerateDoc();
     }

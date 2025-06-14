@@ -32,7 +32,7 @@ public static class Program
         string? version = null;
 
         var assemblyDataConfig = new AssemblyDataConfiguration(
-            MinVisibility: AccessModifier.Public,
+            MinVisibility: AccessModifier.Private,
             MemberInheritanceMode: MemberInheritanceMode.NonObject,
             AssembliesToExclude: ["MyApp"],
             NamespacesToExclude: ["MyLibrary.Exclude", "MyLibrary.Tools.Exclude"]
