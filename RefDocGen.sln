@@ -8,6 +8,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RefDocGen.UnitTests", "tests\RefDocGen.UnitTests\RefDocGen.UnitTests.csproj", "{1E52D21B-B095-4E2D-A4FC-92D38AD87EEF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefDocGen.IntegrationTests", "tests\RefDocGen.IntegrationTests\RefDocGen.IntegrationTests.csproj", "{B76D3660-EAC8-4FA8-BC62-951CB1B936D4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8EFA7142-1CA6-4C82-B5B7-7E0D7F1EDAA3} = {8EFA7142-1CA6-4C82-B5B7-7E0D7F1EDAA3}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefDocGen.TestingLibrary", "tests\RefDocGen.TestingLibrary\RefDocGen.TestingLibrary.csproj", "{8EFA7142-1CA6-4C82-B5B7-7E0D7F1EDAA3}"
 EndProject
