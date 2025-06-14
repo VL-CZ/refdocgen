@@ -1,4 +1,4 @@
-﻿namespace RefDocGen.TestingLibrary.Hierarchy
+namespace RefDocGen.TestingLibrary.Hierarchy
 {
     /// <summary>
     /// IChild interface.

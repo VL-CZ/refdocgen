@@ -1,4 +1,4 @@
-﻿namespace RefDocGen.TestingLibrary.Tools.Collections;
+namespace RefDocGen.TestingLibrary.Tools.Collections;
 
 /// <summary>
 /// A simple custom dictionary.

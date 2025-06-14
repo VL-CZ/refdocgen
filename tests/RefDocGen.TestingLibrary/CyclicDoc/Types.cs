@@ -1,4 +1,4 @@
-﻿namespace RefDocGen.TestingLibrary.CyclicDoc;
+namespace RefDocGen.TestingLibrary.CyclicDoc;
 
 /// <inheritdoc cref="Cycle2"/>
 class Cycle1 { }

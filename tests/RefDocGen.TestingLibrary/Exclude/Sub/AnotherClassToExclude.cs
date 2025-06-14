@@ -1,4 +1,4 @@
-﻿namespace RefDocGen.TestingLibrary.Exclude.Sub
+namespace RefDocGen.TestingLibrary.Exclude.Sub
 {
     /// <summary>
     /// Class to be excluded from the documentation.
