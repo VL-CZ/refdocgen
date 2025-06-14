@@ -32,7 +32,7 @@ function getSearchResults(fuse, text, language) {
     const resultsList = document.getElementById("search-results");
 
     const query = text.trim();
-    const results = fuse.search(query);
+    const results = fuse.search(query).slice(0, 50); // search -> get at most 50 results
 
     resultsList.innerHTML = "";
 
@@ -59,7 +59,7 @@ window.addEventListener("load", () => {
 
     const fuse = new Fuse(jsonSearchData, {
         keys: [`name.data.${language}`],
-        threshold: 0.5, // Adjust for strict/fuzzy matching, see https://www.fusejs.io/api/options.html#threshold
+        threshold: 0.4, // Adjust for strict/fuzzy matching, see https://www.fusejs.io/api/options.html#threshold
         distance: 500
     });
 
