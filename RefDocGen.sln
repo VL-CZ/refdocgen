@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefDocGen.IntegrationTests"
 		{8EFA7142-1CA6-4C82-B5B7-7E0D7F1EDAA3} = {8EFA7142-1CA6-4C82-B5B7-7E0D7F1EDAA3}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefDocGen.TestingLibrary", "tests\RefDocGen.TestingLibrary\RefDocGen.TestingLibrary.csproj", "{8EFA7142-1CA6-4C82-B5B7-7E0D7F1EDAA3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefDocGen.ExampleLibrary", "tests\RefDocGen.ExampleLibrary\RefDocGen.ExampleLibrary.csproj", "{8EFA7142-1CA6-4C82-B5B7-7E0D7F1EDAA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

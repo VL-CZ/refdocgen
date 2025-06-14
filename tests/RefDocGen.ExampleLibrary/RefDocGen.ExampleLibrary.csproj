@@ -6,6 +6,7 @@
         <Nullable>enable</Nullable>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <BaseOutputPath>../RefDocGen.IntegrationTests/data</BaseOutputPath>
+        <RootNamespace>RefDocGen.TestingLibrary</RootNamespace>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
