@@ -5,7 +5,7 @@ using Shouldly;
 namespace RefDocGen.IntegrationTests;
 
 /// <summary>
-/// This class contains tests for the 'Type parameters' section - i.e. the individual parameter signatures and doc comments.
+/// This class contains tests for the 'Type parameters' section - i.e. the individual parameter declarations and doc comments.
 /// </summary>
 [Collection(DocumentationTestCollection.Name)]
 public class TypeParameterSectionTests
@@ -13,7 +13,7 @@ public class TypeParameterSectionTests
     [Theory]
     [InlineData("RefDocGen.TestingLibrary.Tools.Collections.MyCollection-1", "T", "The type of the items in the collection.")]
     [InlineData("RefDocGen.TestingLibrary.Tools.MyPredicate-1", "T", "The type of the object.")]
-    public void TypeSection_WithSingleTypeParameter_Matches(string pageName, string parameterSignature, string expectedDoc)
+    public void TypeSection_WithSingleTypeParameter_Matches(string pageName, string parameterDeclaration, string expectedDoc)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
@@ -21,8 +21,8 @@ public class TypeParameterSectionTests
 
         parameters.Length.ShouldBe(1);
 
-        string paramSignature = TypePageTools.GetTypeParameterName(parameters[0]);
-        paramSignature.ShouldBe(parameterSignature);
+        string paramDeclaration = TypePageTools.GetTypeParameterName(parameters[0]);
+        paramDeclaration.ShouldBe(parameterDeclaration);
 
         string paramDoc = TypePageTools.GetTypeParameterDoc(parameters[0]);
         paramDoc.ShouldBe(expectedDoc);
@@ -37,8 +37,8 @@ public class TypeParameterSectionTests
 
         parameters.Length.ShouldBe(1);
 
-        string paramSignature = TypePageTools.GetTypeParameterName(parameters[0]);
-        paramSignature.ShouldBe("T2");
+        string paramDeclaration = TypePageTools.GetTypeParameterName(parameters[0]);
+        paramDeclaration.ShouldBe("T2");
 
         string paramDoc = TypePageTools.GetTypeParameterDoc(parameters[0]);
         paramDoc.ShouldBe("Type of the item to add.");
@@ -53,14 +53,14 @@ public class TypeParameterSectionTests
 
         parameters.Length.ShouldBe(2);
 
-        string paramSignature1 = TypePageTools.GetTypeParameterName(parameters[0]);
-        paramSignature1.ShouldBe("TKey");
+        string paramDeclaration1 = TypePageTools.GetTypeParameterName(parameters[0]);
+        paramDeclaration1.ShouldBe("TKey");
 
         string paramDoc1 = TypePageTools.GetTypeParameterDoc(parameters[0]);
         paramDoc1.ShouldBe("Type of the key.");
 
-        string paramSignature2 = TypePageTools.GetTypeParameterName(parameters[1]);
-        paramSignature2.ShouldBe("TValue");
+        string paramDeclaration2 = TypePageTools.GetTypeParameterName(parameters[1]);
+        paramDeclaration2.ShouldBe("TValue");
 
         string paramDoc2 = TypePageTools.GetTypeParameterDoc(parameters[1]);
         paramDoc2.ShouldBe("Type of the value.");

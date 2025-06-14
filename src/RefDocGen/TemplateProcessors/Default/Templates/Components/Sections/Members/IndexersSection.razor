@@ -12,9 +12,9 @@
         @foreach (var indexer in Indexers)
         {
             <div class="border p-2 mb-2" id="@indexer.Id" data-id="member-data">
-                <h6 class="mb-1" data-id="member-name">
+                <h6 class="mb-1" data-id="member-declaration">
                     <samp>
-                        <IndexerName Indexer="@indexer" />
+                        <IndexerDeclaration Indexer="@indexer" />
 
                         <AnchorLink Id="@indexer.Id" />
                     </samp>

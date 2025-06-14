@@ -5,10 +5,10 @@ using Shouldly;
 namespace RefDocGen.IntegrationTests;
 
 /// <summary>
-/// This class contains tests of type signatures (including classes, generic classes, interfaces, enums, etc.).
+/// This class contains tests of type declarations (including classes, generic classes, interfaces, enums, etc.).
 /// </summary>
 [Collection(DocumentationTestCollection.Name)]
-public class TypeSignatureTests
+public class TypeDeclarationTests
 {
     [Theory]
     [InlineData("RefDocGen.TestingLibrary.Dog", "public class Dog")]
@@ -22,12 +22,12 @@ public class TypeSignatureTests
     [InlineData("RefDocGen.TestingLibrary.Tools.Season", "internal enum Season")]
     [InlineData("RefDocGen.TestingLibrary.Tools.ObjectPredicate", "internal delegate ObjectPredicate")]
     [InlineData("RefDocGen.TestingLibrary.Tools.MyPredicate-1", "internal delegate MyPredicate<T>")]
-    public void TypeSignature_Matches(string pageName, string expectedSignature)
+    public void TypeDeclaration_Matches(string pageName, string expectedDeclarationString)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
-        string signature = TypePageTools.GetTypeSignature(document);
+        string typeDeclString = TypePageTools.GetTypeDeclaration(document);
 
-        signature.ShouldBe(expectedSignature);
+        typeDeclString.ShouldBe(expectedDeclarationString);
     }
 }

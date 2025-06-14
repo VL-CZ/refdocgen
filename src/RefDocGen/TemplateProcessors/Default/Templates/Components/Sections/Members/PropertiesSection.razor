@@ -12,9 +12,9 @@
         @foreach (var property in Properties)
         {
             <div class="border p-2 mb-2" id="@property.Id" data-id="member-data">
-                <h6 class="mb-1" data-id="member-name">
+                <h6 class="mb-1" data-id="member-declaration">
                     <samp>
-                        <PropertyName Property="@property" />
+                        <PropertyDeclaration Property="@property" />
 
                         <AnchorLink Id="@property.Id" />
                     </samp>

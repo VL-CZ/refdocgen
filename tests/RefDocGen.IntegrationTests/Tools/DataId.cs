@@ -6,14 +6,14 @@ namespace RefDocGen.IntegrationTests.Tools;
 /// </summary>
 internal enum DataId
 {
-    MemberName,
+    MemberDeclaration,
     AttributeData,
     ReturnTypeName,
     ParameterElement,
-    ParameterName,
+    ParameterDeclaration,
     ParameterDoc,
     TypeParameterElement,
-    TypeParameterName,
+    TypeParameterDeclaration,
     TypeParameterDoc,
     SummaryDoc,
     RemarksDoc,
@@ -39,7 +39,7 @@ internal enum DataId
     TypeRowName,
     TypeRowDoc,
     NamespaceName,
-    DeclaredTypeSignature,
+    TypeDeclaration,
     TypeDataSection,
     NestedTypeData,
     NestedTypeName,
@@ -65,14 +65,14 @@ internal static class DataIdExtensions
     {
         return dataId switch
         {
-            DataId.MemberName => "member-name",
+            DataId.MemberDeclaration => "member-declaration",
             DataId.AttributeData => "attribute-data",
             DataId.ReturnTypeName => "return-type-name",
             DataId.ParameterElement => "parameter-data",
-            DataId.ParameterName => "parameter-name",
+            DataId.ParameterDeclaration => "parameter-declaration",
             DataId.ParameterDoc => "parameter-doc",
             DataId.TypeParameterElement => "type-parameter-data",
-            DataId.TypeParameterName => "type-parameter-name",
+            DataId.TypeParameterDeclaration => "type-parameter-declaration",
             DataId.TypeParameterDoc => "type-parameter-doc",
             DataId.SummaryDoc => "summary-doc",
             DataId.RemarksDoc => "remarks-doc",
@@ -96,7 +96,7 @@ internal static class DataIdExtensions
             DataId.TypeRowName => "type-row-name",
             DataId.TypeRowDoc => "type-row-doc",
             DataId.NamespaceName => "namespace-name",
-            DataId.DeclaredTypeSignature => "type-name-title",
+            DataId.TypeDeclaration => "type-declaration",
             DataId.TypeDataSection => "declared-type-data",
             DataId.DeclaringType => "declaring-type",
             DataId.NestedTypeData => "nested-type-data",

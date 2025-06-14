@@ -5,7 +5,7 @@ using Shouldly;
 namespace RefDocGen.IntegrationTests;
 
 /// <summary>
-/// This class contains tests for the 'Parameters' section - i.e. the individual parameter signatures and doc comments.
+/// This class contains tests for the 'Parameters' section - i.e. the individual parameter declarations and doc comments.
 /// </summary>
 [Collection(DocumentationTestCollection.Name)]
 public class ParameterSectionTests
@@ -20,7 +20,7 @@ public class ParameterSectionTests
         "AddAnimalsByType(System.Collections.Generic.Dictionary(System.String,System.Collections.Generic.List(RefDocGen.TestingLibrary.Animal)))",
         "Dictionary<string, List<Animal>> animals",
         "Animals to add. Key: animal type, Value: list of animals of the given type.")]
-    public void Section_WithSingleParameter_Matches(string pageName, string memberId, string parameterSignature, string expectedDoc)
+    public void Section_WithSingleParameter_Matches(string pageName, string memberId, string parameterDeclaration, string expectedDoc)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
@@ -28,8 +28,8 @@ public class ParameterSectionTests
 
         parameters.Length.ShouldBe(1);
 
-        string paramSignature = TypePageTools.GetParameterName(parameters[0]);
-        paramSignature.ShouldBe(parameterSignature);
+        string paramDeclaration = TypePageTools.GetParameterName(parameters[0]);
+        paramDeclaration.ShouldBe(parameterDeclaration);
 
         string paramDoc = TypePageTools.GetParameterDoc(parameters[0]);
         paramDoc.ShouldBe(expectedDoc);
@@ -45,7 +45,7 @@ public class ParameterSectionTests
 
         parameters.Length.ShouldBe(5);
 
-        (string signature, string doc)[] expectedValues = [
+        (string declaration, string doc)[] expectedValues = [
             ("in int inValue", "An input value."),
             ("ref int refValue", "A reference value."),
             ("string s1", ""),
@@ -56,7 +56,7 @@ public class ParameterSectionTests
         for (int i = 0; i < expectedValues.Length; i++)
         {
             string paramName = TypePageTools.GetParameterName(parameters[i]);
-            paramName.ShouldBe(expectedValues[i].signature);
+            paramName.ShouldBe(expectedValues[i].declaration);
 
             string paramDoc = TypePageTools.GetParameterDoc(parameters[i]);
             paramDoc.ShouldBe(expectedValues[i].doc);

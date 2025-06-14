@@ -1,7 +1,7 @@
 namespace RefDocGen.DocExtraction.Tools;
 
 /// <summary>
-/// Class containing methods for parsing type member signatures.
+/// Class containing methods for parsing type member signatures, contained in the XML documentation file.
 /// </summary>
 internal class MemberSignatureParser
 {
