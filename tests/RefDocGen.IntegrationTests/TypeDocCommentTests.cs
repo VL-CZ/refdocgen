@@ -11,12 +11,12 @@ namespace RefDocGen.IntegrationTests;
 public class TypeDocCommentTests
 {
     [Theory]
-    [InlineData("RefDocGen.TestingLibrary.User", "Class representing an user of our app.")]
-    [InlineData("RefDocGen.TestingLibrary.Tools.Collections.IMyCollection-1", "My collection interface.")]
-    [InlineData("RefDocGen.TestingLibrary.Tools.Point", "Struct representing a point.")]
-    [InlineData("RefDocGen.TestingLibrary.Tools.Season", "Represents season of a year.")]
-    [InlineData("RefDocGen.TestingLibrary.Tools.ObjectPredicate", "Predicate about an object.")]
-    [InlineData("RefDocGen.TestingLibrary.Tools.Collections.MyCollection-1.MyCollectionEnumerator", "Custom collection enumerator.")]
+    [InlineData("RefDocGen.ExampleLibrary.User", "Class representing an user of our app.")]
+    [InlineData("RefDocGen.ExampleLibrary.Tools.Collections.IMyCollection-1", "My collection interface.")]
+    [InlineData("RefDocGen.ExampleLibrary.Tools.Point", "Struct representing a point.")]
+    [InlineData("RefDocGen.ExampleLibrary.Tools.Season", "Represents season of a year.")]
+    [InlineData("RefDocGen.ExampleLibrary.Tools.ObjectPredicate", "Predicate about an object.")]
+    [InlineData("RefDocGen.ExampleLibrary.Tools.Collections.MyCollection-1.MyCollectionEnumerator", "Custom collection enumerator.")]
     public void SummaryDoc_Matches(string pageName, string expectedDoc)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
@@ -29,7 +29,7 @@ public class TypeDocCommentTests
     [Fact]
     public void RemarksDoc_Matches()
     {
-        using var document = DocumentationTools.GetApiPage("RefDocGen.TestingLibrary.Animal.html");
+        using var document = DocumentationTools.GetApiPage("RefDocGen.ExampleLibrary.Animal.html");
 
         string remarksDoc = TypePageTools.GetRemarksDoc(document.GetTypeDataSection());
 
@@ -39,7 +39,7 @@ public class TypeDocCommentTests
     [Fact]
     public void SeeAlsoDocs_Match()
     {
-        using var document = DocumentationTools.GetApiPage("RefDocGen.TestingLibrary.Tools.Collections.MyStringCollection.html");
+        using var document = DocumentationTools.GetApiPage("RefDocGen.ExampleLibrary.Tools.Collections.MyStringCollection.html");
 
         string[] seeAlsoDocs = TypePageTools.GetSeeAlsoDocs(document.GetTypeDataSection());
 

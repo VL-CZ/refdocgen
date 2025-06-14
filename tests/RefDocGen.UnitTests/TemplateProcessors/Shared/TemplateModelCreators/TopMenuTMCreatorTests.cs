@@ -27,7 +27,7 @@ public class TopMenuTMCreatorTests
 
 
     [Fact]
-    public void CreateFrom_ReturnsCorrectData_ForNonIndexPage()
+    public void CreateFrom_ReturnsApiHomepageAndStaticPage_WhenNonIndexPageProvided()
     {
         var page = new StaticPage(".", "custom-page", "");
 
@@ -38,7 +38,7 @@ public class TopMenuTMCreatorTests
     }
 
     [Fact]
-    public void CreateFrom_ReturnsCorrectData_ForIndexPage()
+    public void CreateFrom_ReturnsIndexPageAndApiHomepage_WhenIndexPageProvided()
     {
         var page = new StaticPage(".", "index", "");
 
@@ -49,7 +49,7 @@ public class TopMenuTMCreatorTests
     }
 
     [Fact]
-    public void CreateFrom_ReturnsCorrectData_ForComplexPageStructure()
+    public void CreateFrom_ReturnsExpectedData_ForComplexPageStructure()
     {
         StaticPage[] pages = [
             new(".", "contact", ""),

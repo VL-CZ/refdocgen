@@ -45,7 +45,7 @@ public class TypeUrlResolverTests
     [Theory]
     [InlineData("MyApp.Person", "./MyApp.Person.html")]
     [InlineData("MyApp.Dictionary`2", "./MyApp.Dictionary-2.html")]
-    public void GetUrlOf_ReturnsCorrectData_ForDeclaredType(string typeId, string expectedUrl)
+    public void GetUrlOf_ReturnsTypeUrl_ForTypeIncludedInTheDocumentation(string typeId, string expectedUrl)
     {
         string? result = typeUrlResolver.GetUrlOf(typeId);
 
@@ -55,7 +55,7 @@ public class TypeUrlResolverTests
     [Theory]
     [InlineData("MyApp.Person", "Name", "./MyApp.Person.html#Name")]
     [InlineData("MyApp.Dictionary`2", "Add(System.String,`0)", "./MyApp.Dictionary-2.html#Add(System.String,-0)")]
-    public void GetUrlOf_ReturnsCorrectData_ForDeclaredTypeAndMember(string typeId, string memberId, string expectedUrl)
+    public void GetUrlOf_ReturnsMemberUrl_ForMemberIncludedInTheDocumentation(string typeId, string memberId, string expectedUrl)
     {
         string? result = typeUrlResolver.GetUrlOf(typeId, memberId);
 
@@ -65,7 +65,7 @@ public class TypeUrlResolverTests
     [Theory]
     [InlineData("System.String", "https://learn.microsoft.com/dotnet/api/system.string")]
     [InlineData("System.Collections.Generic.Dictionary`2", "https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2")]
-    public void GetUrlOf_ReturnsCorrectData_ForSystemType(string typeId, string expectedUrl)
+    public void GetUrlOf_ReturnsMicrosoftDocumentationUrl_ForSystemType(string typeId, string expectedUrl)
     {
         string? result = typeUrlResolver.GetUrlOf(typeId);
 
@@ -75,7 +75,7 @@ public class TypeUrlResolverTests
     [Theory]
     [InlineData("System.String", "ToLower", "https://learn.microsoft.com/dotnet/api/system.string.tolower")]
     [InlineData("System.Collections.Generic.Dictionary`2", "Add(`0,`1)", "https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2.add")]
-    public void GetUrlOf_ReturnsCorrectData_ForSystemTypeAndMember(string typeId, string memberId, string expectedUrl)
+    public void GetUrlOf_MicrosoftDocumentationUrl_ForSystemMember(string typeId, string memberId, string expectedUrl)
     {
         string? result = typeUrlResolver.GetUrlOf(typeId, memberId);
 

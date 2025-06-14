@@ -27,7 +27,7 @@ public class DictionaryExtensionsTests
     }
 
     [Fact]
-    public void Merge_ReturnsCorrectData_WhenNoDuplicateKeys()
+    public void Merge_ReturnsExpectedData_WhenNoDuplicateKeys()
     {
         var expectedResult = new Dictionary<int, string>()
         {
@@ -43,7 +43,7 @@ public class DictionaryExtensionsTests
     }
 
     [Fact]
-    public void Merge_ReturnsCorrectData_ForDuplicateKeys()
+    public void Merge_ReturnsExpectedData_ForDuplicateKeys()
     {
         dictionary1[3] = "newValue"; // add the value
 

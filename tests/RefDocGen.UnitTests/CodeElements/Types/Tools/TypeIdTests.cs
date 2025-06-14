@@ -50,7 +50,7 @@ public class TypeIdTests
     [Theory]
     [InlineData("MyApp.Entities", "Person", "MyApp.Entities.Person")]
     [InlineData("MyApp.Entities", "Person[]", "MyApp.Entities.Person[]")]
-    public void Of_ReturnsCorrectData_ForNonGenericType(string typeNamespace, string typeShortName, string expectedId)
+    public void Of_ReturnsFullyQualifiedTypeName_ForNonGenericType(string typeNamespace, string typeShortName, string expectedId)
     {
         var typeMock = MockHelper.MockNonGenericType(typeNamespace, typeShortName);
 
@@ -60,7 +60,7 @@ public class TypeIdTests
     }
 
     [Fact]
-    public void Of_ReturnsCorrectData_ForTypeWithTypeParameters()
+    public void Of_ReturnsExpectedData_ForTypeWithTypeParameters()
     {
         var innerInnerTypeMock = MockHelper.MockNonGenericType("MyApp.Entities", "Person");
 
@@ -76,7 +76,7 @@ public class TypeIdTests
     }
 
     [Fact]
-    public void Of_ReturnsCorrectData_ForTypeWithGenericTypeParameter()
+    public void Of_ReturnsExpectedData_ForTypeWithGenericTypeParameter()
     {
         var genericParamMock = Substitute.For<Type>();
         genericParamMock.Name.Returns("TKey");
@@ -91,7 +91,7 @@ public class TypeIdTests
     }
 
     [Fact]
-    public void Of_ReturnsCorrectData_ForGenericParameterType()
+    public void Of_ReturnsGenericParameterIndex_ForGenericParameterType()
     {
         var typeMock = Substitute.For<Type>();
         typeMock.Name.Returns("TValue");
@@ -104,7 +104,7 @@ public class TypeIdTests
     }
 
     [Fact]
-    public void Of_ReturnsCorrectData_ForGenericParameterOfArrayType()
+    public void Of_ReturnsExpectedData_ForGenericParameterOfArrayType()
     {
         var type = typeof(Helper<,>).GetGenericArguments()[0].MakeArrayType(); // get 'TKey[]' type.
 
@@ -116,7 +116,7 @@ public class TypeIdTests
     }
 
     [Fact]
-    public void Of_ReturnsCorrectData_ForGenericParameterOfPointerType()
+    public void Of_ReturnsExpectedData_ForGenericParameterOfPointerType()
     {
         var type = typeof(Helper<,>).GetGenericArguments()[0].MakePointerType(); // get 'TKey*' type.
 
@@ -128,7 +128,7 @@ public class TypeIdTests
     }
 
     [Fact]
-    public void Of_ReturnsCorrectData_ForGenericParameterDeclaredInAMember()
+    public void Of_ReturnsGenericParameterIndex_ForGenericParameterDeclaredInAMember()
     {
         var typeMock = Substitute.For<Type>();
         typeMock.Name.Returns("TMethodType");

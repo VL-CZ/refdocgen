@@ -11,19 +11,19 @@ namespace RefDocGen.IntegrationTests;
 public class MemberDocCommentTests
 {
     [Theory]
-    [InlineData("RefDocGen.TestingLibrary.User", "MaxAge", "Maximum age of the user.")]
-    [InlineData("RefDocGen.TestingLibrary.User", "FirstName", "First name of the user.")]
-    [InlineData("RefDocGen.TestingLibrary.User", ".ctor(System.String,System.Int32)", "Initializes a new user using the provided username and age.")]
-    [InlineData("RefDocGen.TestingLibrary.Animal", "GetAverageLifespan(System.String)", "Static method returning the average lifespan of an animal.")]
-    [InlineData("RefDocGen.TestingLibrary.Dog", "Owner", "Dog's owner; NULL if the dog doesn't have any owner.")]
-    [InlineData("RefDocGen.TestingLibrary.Tools.Collections.IMyCollection-1", "AddRange(System.Collections.Generic.IEnumerable(-0))", "Add range of items into the collection.")]
-    [InlineData("RefDocGen.TestingLibrary.Tools.Season", "Summer", "Represents summer.")]
-    [InlineData("RefDocGen.TestingLibrary.Tools.WeatherStation", "OnTemperatureChange", "Temperature change event.")]
-    [InlineData("RefDocGen.TestingLibrary.Tools.Collections.MyCollection-1",
+    [InlineData("RefDocGen.ExampleLibrary.User", "MaxAge", "Maximum age of the user.")]
+    [InlineData("RefDocGen.ExampleLibrary.User", "FirstName", "First name of the user.")]
+    [InlineData("RefDocGen.ExampleLibrary.User", ".ctor(System.String,System.Int32)", "Initializes a new user using the provided username and age.")]
+    [InlineData("RefDocGen.ExampleLibrary.Animal", "GetAverageLifespan(System.String)", "Static method returning the average lifespan of an animal.")]
+    [InlineData("RefDocGen.ExampleLibrary.Dog", "Owner", "Dog's owner; NULL if the dog doesn't have any owner.")]
+    [InlineData("RefDocGen.ExampleLibrary.Tools.Collections.IMyCollection-1", "AddRange(System.Collections.Generic.IEnumerable(-0))", "Add range of items into the collection.")]
+    [InlineData("RefDocGen.ExampleLibrary.Tools.Season", "Summer", "Represents summer.")]
+    [InlineData("RefDocGen.ExampleLibrary.Tools.WeatherStation", "OnTemperatureChange", "Temperature change event.")]
+    [InlineData("RefDocGen.ExampleLibrary.Tools.Collections.MyCollection-1",
         "System.Collections.IEnumerable.GetEnumerator",
         "Returns an enumerator that iterates through the collection.")]
-    [InlineData("RefDocGen.TestingLibrary.Tools.MyPredicate-1", "delegate-method", "Predicate about a generic type T.")]
-    [InlineData("RefDocGen.TestingLibrary.Tools.Collections.MyCollection-1.MyCollectionEnumerator", "Reset", "Resets the enumerator.")]
+    [InlineData("RefDocGen.ExampleLibrary.Tools.MyPredicate-1", "delegate-method", "Predicate about a generic type T.")]
+    [InlineData("RefDocGen.ExampleLibrary.Tools.Collections.MyCollection-1.MyCollectionEnumerator", "Reset", "Resets the enumerator.")]
     public void SummaryDoc_Matches(string pageName, string memberId, string expectedDoc)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
@@ -36,7 +36,7 @@ public class MemberDocCommentTests
     [Fact]
     public void RemarksDoc_Matches()
     {
-        using var document = DocumentationTools.GetApiPage("RefDocGen.TestingLibrary.Animal.html");
+        using var document = DocumentationTools.GetApiPage("RefDocGen.ExampleLibrary.Animal.html");
 
         string remarksDoc = TypePageTools.GetRemarksDoc(document.GetMemberElement("weight"));
 
@@ -46,7 +46,7 @@ public class MemberDocCommentTests
     [Fact]
     public void ValueDoc_Matches()
     {
-        using var document = DocumentationTools.GetApiPage("RefDocGen.TestingLibrary.User.html");
+        using var document = DocumentationTools.GetApiPage("RefDocGen.ExampleLibrary.User.html");
 
         string valueDoc = TypePageTools.GetValueDoc(document.GetMemberElement("Age"));
 
@@ -54,9 +54,9 @@ public class MemberDocCommentTests
     }
 
     [Theory]
-    [InlineData("RefDocGen.TestingLibrary.Animal", "GetAverageLifespan(System.String)", "int", "The average lifespan.")]
-    [InlineData("RefDocGen.TestingLibrary.User", "GetAnimalsByType", "Dictionary<string, List<Animal>>", "Dictionary of animals, indexed by their type.")]
-    [InlineData("RefDocGen.TestingLibrary.Tools.Point", "op_Equality(RefDocGen.TestingLibrary.Tools.Point,RefDocGen.TestingLibrary.Tools.Point)", "bool", "Are the 2 points equal?")]
+    [InlineData("RefDocGen.ExampleLibrary.Animal", "GetAverageLifespan(System.String)", "int", "The average lifespan.")]
+    [InlineData("RefDocGen.ExampleLibrary.User", "GetAnimalsByType", "Dictionary<string, List<Animal>>", "Dictionary of animals, indexed by their type.")]
+    [InlineData("RefDocGen.ExampleLibrary.Tools.Point", "op_Equality(RefDocGen.ExampleLibrary.Tools.Point,RefDocGen.ExampleLibrary.Tools.Point)", "bool", "Are the 2 points equal?")]
     public void ReturnsDoc_Matches(string pageName, string memberId, string expectedReturnType, string expectedDoc)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
@@ -71,7 +71,7 @@ public class MemberDocCommentTests
     [Fact]
     public void SeeAlsoDocs_Match()
     {
-        using var document = DocumentationTools.GetApiPage("RefDocGen.TestingLibrary.User.html");
+        using var document = DocumentationTools.GetApiPage("RefDocGen.ExampleLibrary.User.html");
 
         string[] seeAlsoDocs = TypePageTools.GetSeeAlsoDocs(document.GetMemberElement("username"));
 

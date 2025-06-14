@@ -11,7 +11,7 @@ public class StringExtensionsTests
     [Theory]
     [InlineData("12345", '1', 0)]
     [InlineData("John Doe", 'o', 1)]
-    public void TryGetIndex_ReturnsCorrectIndex_IfTheValueIsFound(string s, char value, int expectedIndex)
+    public void TryGetIndex_ReturnsExpectedIndex_IfTheValueIsFound(string s, char value, int expectedIndex)
     {
         bool found = StringExtensions.TryGetIndex(s, value, out int index);
 

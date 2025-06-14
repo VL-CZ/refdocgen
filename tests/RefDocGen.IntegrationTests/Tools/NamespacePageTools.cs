@@ -3,7 +3,7 @@ using AngleSharp.Dom;
 namespace RefDocGen.IntegrationTests.Tools;
 
 /// <summary>
-/// A class that contains additional tool methods related to all <c>namespace</c> pages.
+/// A class that contains additional tool methods related to the <c>namespace</c> page.
 /// </summary>
 internal class NamespacePageTools
 {
@@ -65,25 +65,5 @@ internal class NamespacePageTools
     internal static IElement[] GetNamespaceStructs(IDocument document)
     {
         return [.. document.DocumentElement.GetByDataId(DataId.NamespaceStructs).GetByDataIds(DataId.TypeRowElement)];
-    }
-
-    /// <summary>
-    /// Retrieves the names of the namespaces from the given document.
-    /// </summary>
-    /// <param name="document">The HTML page representing the namespace detail.</param>
-    /// <returns>An array of strings, each representing a namespace name.</returns>
-    internal static string[] GetNamespaceNames(IDocument document)
-    {
-        return [.. document.DocumentElement.GetByDataIds(DataId.NamespaceName).Select(e => e.GetParsedContent())];
-    }
-
-    /// <summary>
-    /// Retrieves the names of the types defined within a given element.
-    /// </summary>
-    /// <param name="element">The HTML element containing the type rows.</param>
-    /// <returns>An array of strings, each representing a type name within the element.</returns>
-    internal static string[] GetNamespaceTypeNames(IElement element)
-    {
-        return [.. element.GetByDataIds(DataId.TypeRowElement).Select(GetTypeRowName)];
     }
 }
