@@ -5,7 +5,7 @@ using Shouldly;
 namespace RefDocGen.IntegrationTests;
 
 /// <summary>
-/// This class tests the documentation inheritance (i.e. that <c>&lt;inheritdoc /&gt;</c> elements are correctly resolved).
+/// This class tests the documentation inheritance (i.e. that <c>&lt;inheritdoc /&gt;</c> elements are inherited as expected).
 /// </summary>
 [Collection(DocumentationTestCollection.Name)]
 public class HierarchyDocTests
@@ -14,7 +14,7 @@ public class HierarchyDocTests
     [InlineData("Child", "Parent class.")]
     [InlineData("ChildChild", "IChild Print the object.")]
     [InlineData("ChildChildChild", "Before parent. Parent class. After parent.")]
-    public void Type_SummaryDoc_Matches(string typeName, string expectedSummaryDoc)
+    public void TypeSummaryDoc_IsInherited(string typeName, string expectedSummaryDoc)
     {
         using var document = DocumentationTools.GetApiPage($"RefDocGen.TestingLibrary.Hierarchy.{typeName}.html");
 
@@ -27,7 +27,7 @@ public class HierarchyDocTests
     [Theory]
     [InlineData("Child")]
     [InlineData("ChildChild")]
-    public void HandleMethod_Docs_Match(string typeName)
+    public void HandleMethodDocs_AreInherited(string typeName)
     {
         using var document = DocumentationTools.GetApiPage($"RefDocGen.TestingLibrary.Hierarchy.{typeName}.html");
 
@@ -47,7 +47,7 @@ public class HierarchyDocTests
     [InlineData("Child", "IChild Print the object.", "Object to print.")]
     [InlineData("ChildChild", "ChildChild Print", "Object to print.", "IChild Print the object. Object to print.")]
     [InlineData("ChildChildChild", "ChildChild Print", "Object to print.", "IChild Print the object. Object to print.")]
-    public void PrintMethod_Docs_Match(string typeName, string expectedSummaryDoc, string expectedParamDoc, string? expectedRemarksDoc = null)
+    public void PrintMethodDocs_AreInherited(string typeName, string expectedSummaryDoc, string expectedParamDoc, string? expectedRemarksDoc = null)
     {
         using var document = DocumentationTools.GetApiPage($"RefDocGen.TestingLibrary.Hierarchy.{typeName}.html");
 
@@ -68,7 +68,7 @@ public class HierarchyDocTests
     }
 
     [Fact]
-    public void PrintDataMethod_SummaryDoc_Matches()
+    public void PrintDataMethodSummaryDoc_IsInherited()
     {
         using var document = DocumentationTools.GetApiPage("RefDocGen.TestingLibrary.Hierarchy.ChildChild.html");
 

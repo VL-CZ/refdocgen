@@ -10,8 +10,11 @@ using RefDocGen.TemplateProcessors.Shared.Languages;
 namespace RefDocGen.IntegrationTests.Fixtures;
 
 /// <summary>
-/// Fixture responsible for setting up and tearing down the reference documentation for testing purposes.
+/// Fixture responsible for setting up and tearing down the (non-versioned) reference documentation for testing purposes.
 /// </summary>
+/// <remarks>
+/// This fixture uses the DLL and XML documentation of the 'RefDocGen.TestingLibrary'
+/// </remarks>
 public class DocumentationFixture : IDisposable
 {
     /// <summary>

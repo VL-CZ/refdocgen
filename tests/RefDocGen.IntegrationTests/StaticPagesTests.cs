@@ -5,7 +5,7 @@ using Shouldly;
 namespace RefDocGen.IntegrationTests;
 
 /// <summary>
-/// This class tests that user-specified static pages are correctly included in the documentation.
+/// This class tests that user-specified static pages and files are included in the documentation.
 /// </summary>
 [Collection(DocumentationTestCollection.Name)]
 public class StaticPagesTests
@@ -13,7 +13,7 @@ public class StaticPagesTests
     [Theory]
     [InlineData("helloworld.js")]
     [InlineData("css/styles.css")]
-    public void NonPage_File_Is_Copied(string filePath)
+    public void NonPageFile_IsCopied(string filePath)
     {
         string outputfilePath = Path.Join("output", filePath);
         var file = new FileInfo(outputfilePath);
@@ -32,7 +32,7 @@ public class StaticPagesTests
     [InlineData("htmlPage.html", "<h1>Heading 1</h1> <h2>Heading 2</h2>")]
     [InlineData("folder/anotherPage.html", "<div>Text</div>")]
     [InlineData("markdownPage.html", "<h1>Markdown page</h1> <p>Text</p>")]
-    public void StaticPage_Is_Created(string filePath, string expectedHtml)
+    public void StaticPage_IsCreated(string filePath, string expectedHtml)
     {
         var page = DocumentationTools.GetPage(filePath);
 

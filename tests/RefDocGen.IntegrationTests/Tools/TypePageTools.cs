@@ -82,7 +82,7 @@ internal class TypePageTools
     /// </summary>
     /// <param name="paramElement">The HTML element representing the parameter.</param>
     /// <returns>The parameter name.</returns>
-    internal static string GetParameterName(IElement paramElement)
+    internal static string GetParameterDeclaration(IElement paramElement)
     {
         return paramElement.GetParsedContent(DataId.ParameterDeclaration);
     }
@@ -102,7 +102,7 @@ internal class TypePageTools
     /// </summary>
     /// <param name="typeParamElement">The HTML element representing the type parameter.</param>
     /// <returns>The type parameter name.</returns>
-    internal static string GetTypeParameterName(IElement typeParamElement)
+    internal static string GetTypeParameterDeclaration(IElement typeParamElement)
     {
         return typeParamElement.GetParsedContent(DataId.TypeParameterDeclaration);
     }

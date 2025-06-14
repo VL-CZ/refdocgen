@@ -12,6 +12,9 @@ namespace RefDocGen.IntegrationTests.Fixtures;
 /// <summary>
 /// Fixture responsible for setting up and tearing down the reference documentation consisting of multiple versions.
 /// </summary>
+/// <remarks>
+/// This fixture uses the DLL and XML documentation of the 'RefDocGen.TestingLibrary'
+/// </remarks>
 public class VersionedDocumentationFixture : IDisposable
 {
     /// <summary>

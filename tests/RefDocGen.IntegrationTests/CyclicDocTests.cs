@@ -14,7 +14,7 @@ public class CyclicDocTests
     [InlineData("Cycle1")]
     [InlineData("Cycle2")]
     [InlineData("CycleReference")]
-    public void Check_That_No_SummaryDoc_Is_Present(string typeName)
+    public void NoSummaryDoc_IsPresent_WhenCrefInheritdocsFormCycle(string typeName)
     {
         using var document = DocumentationTools.GetApiPage($"RefDocGen.TestingLibrary.CyclicDoc.{typeName}.html");
 

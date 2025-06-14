@@ -48,7 +48,8 @@ internal enum DataId
     MemberExplicitlyImplements,
     MemberImplements,
     PageBody,
-    AttributesSection
+    AttributesSection,
+    AssemblyName
 }
 
 /// <summary>
@@ -107,6 +108,7 @@ internal static class DataIdExtensions
             DataId.MemberImplements => "member-implements",
             DataId.PageBody => "page-body",
             DataId.TypeAssembly => "type-assembly",
+            DataId.AssemblyName => "assembly-name",
             DataId.AttributesSection => "attributes-section",
             _ => throw new ArgumentException($"The provided DataId '{dataId}' has no string representation.")
         };

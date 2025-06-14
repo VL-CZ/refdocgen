@@ -20,7 +20,7 @@ public class ParameterSectionTests
         "AddAnimalsByType(System.Collections.Generic.Dictionary(System.String,System.Collections.Generic.List(RefDocGen.TestingLibrary.Animal)))",
         "Dictionary<string, List<Animal>> animals",
         "Animals to add. Key: animal type, Value: list of animals of the given type.")]
-    public void Section_WithSingleParameter_Matches(string pageName, string memberId, string parameterDeclaration, string expectedDoc)
+    public void ParameterData_Matches_ForSingleParameter(string pageName, string memberId, string parameterDeclaration, string expectedDoc)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
@@ -28,7 +28,7 @@ public class ParameterSectionTests
 
         parameters.Length.ShouldBe(1);
 
-        string paramDeclaration = TypePageTools.GetParameterName(parameters[0]);
+        string paramDeclaration = TypePageTools.GetParameterDeclaration(parameters[0]);
         paramDeclaration.ShouldBe(parameterDeclaration);
 
         string paramDoc = TypePageTools.GetParameterDoc(parameters[0]);
@@ -36,7 +36,7 @@ public class ParameterSectionTests
     }
 
     [Fact]
-    public void Section_WithMultipleParameter_Matches()
+    public void ParameterData_Match_ForMultipleParameters()
     {
         using var document = DocumentationTools.GetApiPage("RefDocGen.TestingLibrary.User.html");
         var memberElement = document.GetMemberElement("ProcessValues(System.Int32-,System.Int32-,System.String,System.Int32-,System.Double)");
@@ -55,7 +55,7 @@ public class ParameterSectionTests
 
         for (int i = 0; i < expectedValues.Length; i++)
         {
-            string paramName = TypePageTools.GetParameterName(parameters[i]);
+            string paramName = TypePageTools.GetParameterDeclaration(parameters[i]);
             paramName.ShouldBe(expectedValues[i].declaration);
 
             string paramDoc = TypePageTools.GetParameterDoc(parameters[i]);
