@@ -14,7 +14,7 @@ public class CSharpTypeNameTests
     [Theory]
     [InlineData(typeof(int), "int")]
     [InlineData(typeof(string), "string")]
-    public void GetBuiltInName_ReturnsBuiltInName_WhenPresent(Type type, string expectedName)
+    public void GetBuiltInName_ReturnsBuiltInName_ForBuiltInTypes(Type type, string expectedName)
     {
         var typeData = Substitute.For<ITypeNameData>();
         typeData.TypeObject.Returns(type);
@@ -29,7 +29,7 @@ public class CSharpTypeNameTests
     [InlineData(typeof(ITypeNameData))]
     [InlineData(typeof(Type[]))]
     [InlineData(typeof(Dictionary<string, int>))]
-    public void GetBuiltInName_ReturnsNull_WhenThereIsNoBuiltInName(Type type)
+    public void GetBuiltInName_ReturnsNull_ForNonBuiltInTypes(Type type)
     {
         var typeData = Substitute.For<ITypeNameData>();
         typeData.TypeObject.Returns(type);
@@ -61,7 +61,7 @@ public class CSharpTypeNameTests
     [InlineData(typeof(double), "Double", "double", false)]
     [InlineData(typeof(int[]), "Int32[]", "int[]", true)]
     [InlineData(typeof(byte[][]), "Byte[][]", "byte[][]", true)]
-    public void Of_ReturnsCorrectName_ForNonGenericType(Type type, string shortName, string expectedName, bool isArray)
+    public void Of_ReturnsExpectedName_ForNonGenericType(Type type, string shortName, string expectedName, bool isArray)
     {
         var typeData = MockTypeData(type, shortName, [], isArray);
 
@@ -71,7 +71,7 @@ public class CSharpTypeNameTests
     }
 
     [Fact]
-    public void Of_ReturnsCorrectName_ForSimpleGenericType()
+    public void Of_ReturnsExpectedName_ForSimpleGenericType()
     {
         var param = MockTypeData(typeof(int), "Int32", []);
         var typeData = MockTypeData(typeof(List<int>), "List", [param]);
@@ -82,7 +82,7 @@ public class CSharpTypeNameTests
     }
 
     [Fact]
-    public void Of_ReturnsCorrectName_ForComplexGenericType()
+    public void Of_ReturnsExpectedName_ForComplexGenericType()
     {
         var innerInnerType = MockTypeData(typeof(FileInfo), "FileInfo", []);
         var innerType1 = MockTypeData(typeof(string), "String", []);

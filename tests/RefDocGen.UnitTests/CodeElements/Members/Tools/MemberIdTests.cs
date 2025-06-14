@@ -23,7 +23,7 @@ public class MemberIdTests
     }
 
     [Fact]
-    public void Of_ReturnsCorrectData_ForMethodWithASingleParameter()
+    public void Of_ReturnsExpectedData_ForMethodWithASingleParameter()
     {
         var param = MockParameterData(typeof(string));
         var method = MockMethodData("Execute", typeof(void), [param]);
@@ -32,7 +32,7 @@ public class MemberIdTests
     }
 
     [Fact]
-    public void Of_ReturnsCorrectData_ForMethodWithASingleRefParameter()
+    public void Of_ReturnsExpectedData_ForMethodWithASingleRefParameter()
     {
         var param = MockParameterData(typeof(string), isByRef: true);
         var method = MockMethodData("Execute", typeof(void), [param]);
@@ -41,7 +41,7 @@ public class MemberIdTests
     }
 
     [Fact]
-    public void Of_ReturnsCorrectData_ForExplicitlyImplementedMethod()
+    public void Of_ReturnsExpectedData_ForExplicitlyImplementedMethod()
     {
         var explicitInterfaceType = Substitute.For<ITypeNameData>();
         explicitInterfaceType.Id.Returns("MyApp.MyInterface");
@@ -53,7 +53,7 @@ public class MemberIdTests
     }
 
     [Fact]
-    public void Of_ReturnsCorrectData_ForMethodWithMultipleParameters()
+    public void Of_ReturnsExpectedData_ForMethodWithMultipleParameters()
     {
         var param1 = MockParameterData(typeof(string));
         var param2 = MockParameterData(typeof(Type));
@@ -67,7 +67,7 @@ public class MemberIdTests
     }
 
     [Fact]
-    public void Of_ReturnsCorrectData_ForConversionOperator()
+    public void Of_ReturnsExpectedData_ForConversionOperator()
     {
         var returnType = Substitute.For<ITypeNameData>();
         returnType.Id.Returns("MyApp.MyClass");
@@ -87,7 +87,7 @@ public class MemberIdTests
     }
 
     [Fact]
-    public void Of_ReturnsCorrectData_ForIndexer()
+    public void Of_ReturnsExpectedData_ForIndexer()
     {
         var param = MockParameterData(typeof(int));
 

@@ -10,7 +10,7 @@ namespace RefDocGen.UnitTests.CodeElements.Types.Concrete.TypeName;
 public class TypeNameDataTests
 {
     [Fact]
-    public void ShortName_ReturnsCorrectData_ForNonGenericType()
+    public void ShortName_ReturnsTypeName_ForNonGenericType()
     {
         var mock = MockHelper.MockNonGenericType("MyApp.Entities", "Person");
 
@@ -20,7 +20,7 @@ public class TypeNameDataTests
     }
 
     [Fact]
-    public void ShortName_ReturnsCorrectData_ForGenericType()
+    public void ShortName_ReturnsTypeNameWithoutGenericParameters_ForGenericType()
     {
         var paramMock = MockHelper.MockNonGenericType("System", "Int32");
         var typeMock = MockHelper.MockType("System.Collections.Generic", "List`1", [paramMock]);
@@ -31,7 +31,7 @@ public class TypeNameDataTests
     }
 
     [Fact]
-    public void FullName_ReturnsCorrectData_ForNonGenericType()
+    public void FullName_ReturnsExpectedData_ForNonGenericType()
     {
         var mock = MockHelper.MockNonGenericType("MyApp.Entities", "Person");
 
@@ -41,7 +41,7 @@ public class TypeNameDataTests
     }
 
     [Fact]
-    public void FullName_ReturnsCorrectData_ForGenericType()
+    public void FullName_ReturnsFullyQualifiedNameWithoutGenericParameters_ForGenericType()
     {
         var param1Mock = MockHelper.MockNonGenericType("System", "Int32");
         var param2Mock = MockHelper.MockNonGenericType("System", "String");

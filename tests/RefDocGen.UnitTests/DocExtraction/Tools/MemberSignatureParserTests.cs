@@ -9,7 +9,7 @@ namespace RefDocGen.UnitTests.DocExtraction.Tools;
 public class MemberSignatureParserTests
 {
     [Fact]
-    public void Parse_ReturnsCorrectData_ForMemberWithNoParameters()
+    public void Parse_ReturnsExpectedData_ForMemberWithNoParameters()
     {
         string memberString = "MyLibrary.Animal.weight";
 
@@ -19,7 +19,7 @@ public class MemberSignatureParserTests
     }
 
     [Fact]
-    public void Parse_ReturnsCorrectData_ForMethodWithParameters()
+    public void Parse_ReturnsExpectedData_ForMethodWithParameters()
     {
         string memberString = "MyLibrary.Animal.GenerateAnimalProfile(System.String,System.String,System.DateTime)";
 

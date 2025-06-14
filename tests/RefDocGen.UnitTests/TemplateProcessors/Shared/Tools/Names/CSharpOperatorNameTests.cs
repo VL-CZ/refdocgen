@@ -17,7 +17,7 @@ public class CSharpOperatorNameTests
     [InlineData(OperatorKind.Addition, "operator +")]
     [InlineData(OperatorKind.Inequality, "operator !=")]
     [InlineData(OperatorKind.True, "operator true")]
-    public void Of_ReturnsCorrectName_ForNonConversionOperator(OperatorKind kind, string expectedName)
+    public void Of_ReturnsExpectedData_ForNonConversionOperator(OperatorKind kind, string expectedName)
     {
         var operatorData = Substitute.For<IOperatorData>();
         operatorData.Kind.Returns(kind);
@@ -27,7 +27,7 @@ public class CSharpOperatorNameTests
     }
 
     [Fact]
-    public void Of_ReturnsCorrectName_ForConversionOperator()
+    public void Of_ReturnsExpectedData_ForConversionOperator()
     {
         var returnType = Substitute.For<ITypeNameData>();
 

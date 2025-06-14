@@ -30,7 +30,7 @@ public class DocCommentTransformerTests
     }
 
     [Fact]
-    public void ToHtmlString_ReturnsCorrectData_ForBasicElements()
+    public void ToHtmlString_ReturnsTransformedData_ForBasicElements()
     {
         var docComment = XElement.Parse(
             """
@@ -126,7 +126,7 @@ public class DocCommentTransformerTests
     [Theory]
     [InlineData("T:type1", "./type1.html", "type1")]
     [InlineData("F:type1.field1", "./type1.html#field1", "type1.field1")]
-    public void ToHtmlString_ReturnsLink_ForCrefElement_WhenLinkFound(string crefValue, string expectedHref, string expectedText)
+    public void ToHtmlString_ReturnsLink_ForCrefElementWhenLinkFound(string crefValue, string expectedHref, string expectedText)
     {
         var docComment = XElement.Parse(
             $"""
@@ -147,7 +147,7 @@ public class DocCommentTransformerTests
     }
 
     [Fact]
-    public void ToHtmlString_ReturnsHighlightedText_ForCrefElement_WhenLinkNotFound()
+    public void ToHtmlString_ReturnsHighlightedText_ForCrefElementWhenLinkNotFound()
     {
         var docComment = XElement.Parse(
             $"""
