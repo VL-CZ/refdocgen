@@ -7,15 +7,14 @@ namespace RefDocGen.IntegrationTests.Tools;
 /// </summary>
 internal class TypePageTools
 {
-
     /// <summary>
-    /// Gets signature of the member.
+    /// Gets the declaration string of the member in the reference documentation.
     /// </summary>
     /// <param name="memberElement">The HTML element representing the member.</param>
     /// <returns></returns>
-    internal static string GetMemberSignature(IElement memberElement)
+    internal static string GetMemberDeclaration(IElement memberElement)
     {
-        var memberNameElement = memberElement.GetByDataId(DataId.MemberName);
+        var memberNameElement = memberElement.GetByDataId(DataId.MemberDeclaration);
         string content = memberNameElement.GetParsedContent();
 
         if (content.EndsWith(" #", StringComparison.InvariantCulture)) // remove the anchor tag
@@ -85,7 +84,7 @@ internal class TypePageTools
     /// <returns>The parameter name.</returns>
     internal static string GetParameterName(IElement paramElement)
     {
-        return paramElement.GetParsedContent(DataId.ParameterName);
+        return paramElement.GetParsedContent(DataId.ParameterDeclaration);
     }
 
     /// <summary>
@@ -105,7 +104,7 @@ internal class TypePageTools
     /// <returns>The type parameter name.</returns>
     internal static string GetTypeParameterName(IElement typeParamElement)
     {
-        return typeParamElement.GetParsedContent(DataId.TypeParameterName);
+        return typeParamElement.GetParsedContent(DataId.TypeParameterDeclaration);
     }
 
     /// <summary>
@@ -325,6 +324,6 @@ internal class TypePageTools
     /// <returns>The declared type signature.</returns>
     internal static string GetTypeSignature(IDocument document)
     {
-        return document.DocumentElement.GetByDataId(DataId.DeclaredTypeSignature).GetParsedContent();
+        return document.DocumentElement.GetByDataId(DataId.TypeDeclaration).GetParsedContent();
     }
 }

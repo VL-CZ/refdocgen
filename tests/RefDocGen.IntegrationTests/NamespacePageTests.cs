@@ -9,14 +9,14 @@ namespace RefDocGen.IntegrationTests;
 /// This class contains tests for 'namespace detail' page.
 /// </summary>
 [Collection(DocumentationTestCollection.Name)]
-public class NamespaceDetailsPageTests : IDisposable
+public class NamespacePageTests : IDisposable
 {
     /// <summary>
     /// The HTML page representing the <c>RefDocGen.TestingLibrary.Tools</c> namespace.
     /// </summary>
     private readonly IDocument document;
 
-    public NamespaceDetailsPageTests()
+    public NamespacePageTests()
     {
         document = DocumentationTools.GetApiPage("RefDocGen.TestingLibrary.Tools.html");
     }

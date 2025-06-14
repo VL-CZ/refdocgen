@@ -5,10 +5,10 @@ using Shouldly;
 namespace RefDocGen.IntegrationTests;
 
 /// <summary>
-/// This class contains tests of member signatures (including methods, fields, properties, etc.).
+/// This class contains tests of member declarations (including methods, fields, properties, etc.).
 /// </summary>
 [Collection(DocumentationTestCollection.Name)]
-public class MemberSignatureTests
+public class MemberDeclarationTests
 {
     [Theory]
     [InlineData("RefDocGen.TestingLibrary.Animal", "GetSound", "internal abstract string GetSound()")]
@@ -31,14 +31,14 @@ public class MemberSignatureTests
     [InlineData("RefDocGen.TestingLibrary.Tools.Collections.MyCollection-1",
         "AddGeneric--1(--0)",
         "public void AddGeneric<T2>(T2 item)")]
-    public void MethodSignature_Matches(string pageName, string methodId, string expectedSignature)
+    public void MethodDeclaration_Matches(string pageName, string methodId, string expectedDeclaration)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         var method = document.GetMemberElement(methodId);
 
-        string signature = TypePageTools.GetMemberSignature(method);
-        signature.ShouldBe(expectedSignature);
+        string declaration = TypePageTools.GetMemberDeclaration(method);
+        declaration.ShouldBe(expectedDeclaration);
     }
 
     [Theory]
@@ -46,14 +46,14 @@ public class MemberSignatureTests
     [InlineData("RefDocGen.TestingLibrary.User", "MaxAge", "private const int MaxAge = 150")]
     [InlineData("RefDocGen.TestingLibrary.Animal", "weight", "private int weight")]
     [InlineData("RefDocGen.TestingLibrary.Tools.WeatherStation", "location", "private readonly Point location")]
-    public void FieldSignature_Matches(string pageName, string fieldId, string expectedSignature)
+    public void FieldDeclaration_Matches(string pageName, string fieldId, string expectedDeclaration)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         var field = document.GetMemberElement(fieldId);
 
-        string signature = TypePageTools.GetMemberSignature(field);
-        signature.ShouldBe(expectedSignature);
+        string declaration = TypePageTools.GetMemberDeclaration(field);
+        declaration.ShouldBe(expectedDeclaration);
     }
 
     [Theory]
@@ -64,41 +64,41 @@ public class MemberSignatureTests
         "RefDocGen.TestingLibrary.Tools.Collections.NonGenericCollection",
         "System.Collections.ICollection.IsSynchronized",
         "bool ICollection.IsSynchronized { get; }")]
-    public void PropertySignature_Matches(string pageName, string propertyId, string expectedSignature)
+    public void PropertyDeclaration_Matches(string pageName, string propertyId, string expectedDeclaration)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         var property = document.GetMemberElement(propertyId);
 
-        string signature = TypePageTools.GetMemberSignature(property);
-        signature.ShouldBe(expectedSignature);
+        string declaration = TypePageTools.GetMemberDeclaration(property);
+        declaration.ShouldBe(expectedDeclaration);
     }
 
     [Theory]
     [InlineData("RefDocGen.TestingLibrary.Tools.Collections.MyCollection-1", "Item(System.Int32)", "public T this[int index] { get; private set; }")]
     [InlineData("RefDocGen.TestingLibrary.Tools.Collections.MyCollection-1", "Item(System.Index)", "public T this[Index index] { get; private set; }")]
-    public void IndexerSignature_Matches(string pageName, string indexerId, string expectedSignature)
+    public void IndexerDeclaration_Matches(string pageName, string indexerId, string expectedDeclaration)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         var indexer = document.GetMemberElement(indexerId);
 
-        string signature = TypePageTools.GetMemberSignature(indexer);
-        signature.ShouldBe(expectedSignature);
+        string declaration = TypePageTools.GetMemberDeclaration(indexer);
+        declaration.ShouldBe(expectedDeclaration);
     }
 
     [Theory]
     [InlineData("RefDocGen.TestingLibrary.User", ".ctor", "public User()")]
     [InlineData("RefDocGen.TestingLibrary.User", ".ctor(System.String,System.Int32)", "public User(string username, int age)")]
     [InlineData("RefDocGen.TestingLibrary.Tools.Point", ".ctor(System.Double,System.Double)", "internal Point(double x, double y)")]
-    public void ConstructorSignature_Matches(string pageName, string constructorId, string expectedSignature)
+    public void ConstructorDeclaration_Matches(string pageName, string constructorId, string expectedDeclaration)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         var constructor = document.GetMemberElement(constructorId);
 
-        string signature = TypePageTools.GetMemberSignature(constructor);
-        signature.ShouldBe(expectedSignature);
+        string declaration = TypePageTools.GetMemberDeclaration(constructor);
+        declaration.ShouldBe(expectedDeclaration);
     }
 
     [Theory]
@@ -106,49 +106,49 @@ public class MemberSignatureTests
     [InlineData("RefDocGen.TestingLibrary.Tools.Point", "op_UnaryNegation(RefDocGen.TestingLibrary.Tools.Point)", "public static Point operator -(Point point)")]
     [InlineData("RefDocGen.TestingLibrary.Tools.Point", "op_Explicit(RefDocGen.TestingLibrary.Tools.Point)~System.Numerics.Vector2", "public static explicit operator Vector2(Point point)")]
     [InlineData("RefDocGen.TestingLibrary.Tools.Point", "op_Implicit(System.Numerics.Vector2)~RefDocGen.TestingLibrary.Tools.Point", "public static implicit operator Point(Vector2 vector)")]
-    public void OperatorSignature_Matches(string pageName, string operatorId, string expectedSignature)
+    public void OperatorDeclaration_Matches(string pageName, string operatorId, string expectedDeclaration)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         var operatorMember = document.GetMemberElement(operatorId);
 
-        string signature = TypePageTools.GetMemberSignature(operatorMember);
-        signature.ShouldBe(expectedSignature);
+        string declaration = TypePageTools.GetMemberDeclaration(operatorMember);
+        declaration.ShouldBe(expectedDeclaration);
     }
 
     [Theory]
     [InlineData("RefDocGen.TestingLibrary.Tools.WeatherStation", "OnTemperatureChange", "public event Action OnTemperatureChange")]
-    public void EventSignature_Matches(string pageName, string eventId, string expectedSignature)
+    public void EventDeclaration_Matches(string pageName, string eventId, string expectedDeclaration)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
 
         var eventMember = document.GetMemberElement(eventId);
 
-        string signature = TypePageTools.GetMemberSignature(eventMember);
-        signature.ShouldBe(expectedSignature);
+        string declaration = TypePageTools.GetMemberDeclaration(eventMember);
+        declaration.ShouldBe(expectedDeclaration);
     }
 
     [Theory]
     [InlineData("Spring", "Spring = 0")]
     [InlineData("Winter", "Winter = 3")]
-    public void EnumMemberSignature_Matches(string enumMemberId, string expectedSignature)
+    public void EnumMemberDeclaration_Matches(string enumMemberId, string expectedDeclaration)
     {
         using var document = DocumentationTools.GetApiPage("RefDocGen.TestingLibrary.Tools.Season.html");
 
         var enumMember = document.GetMemberElement(enumMemberId);
 
-        string signature = TypePageTools.GetMemberSignature(enumMember);
-        signature.ShouldBe(expectedSignature);
+        string declaration = TypePageTools.GetMemberDeclaration(enumMember);
+        declaration.ShouldBe(expectedDeclaration);
     }
 
     [Fact]
-    public void DelegateMethodSignature_Matches()
+    public void DelegateMethodDeclaration_Matches()
     {
         using var document = DocumentationTools.GetApiPage("RefDocGen.TestingLibrary.Tools.MyPredicate-1.html");
 
         var delegateMethod = document.DocumentElement.GetByDataId(DataId.DelegateMethod);
 
-        string signature = TypePageTools.GetMemberSignature(delegateMethod);
-        signature.ShouldBe("internal delegate bool MyPredicate<T>(T obj)");
+        string declaration = TypePageTools.GetMemberDeclaration(delegateMethod);
+        declaration.ShouldBe("internal delegate bool MyPredicate<T>(T obj)");
     }
 }
