@@ -13,7 +13,7 @@ namespace RefDocGen.IntegrationTests.Fixtures;
 /// Fixture responsible for setting up and tearing down the (non-versioned) reference documentation for testing purposes.
 /// </summary>
 /// <remarks>
-/// This fixture uses the DLL and XML documentation of the 'RefDocGen.TestingLibrary'
+/// This fixture uses the DLL and XML documentation of the 'RefDocGen.ExampleLibrary'
 /// </remarks>
 public class DocumentationFixture : IDisposable
 {
@@ -62,14 +62,14 @@ public class DocumentationFixture : IDisposable
         var assemblyDataConfig = new AssemblyDataConfiguration(
             AccessModifier.Private,
             MemberInheritanceMode.NonObject,
-            NamespacesToExclude: ["RefDocGen.TestingLibrary.Exclude", "RefDocGen.TestingLibrary.Tools.Exclude"],
+            NamespacesToExclude: ["RefDocGen.ExampleLibrary.Exclude", "RefDocGen.ExampleLibrary.Tools.Exclude"],
             AssembliesToExclude: []);
 
         var logger = Substitute.For<ILogger>();
 
         var generator = new DocGenerator(
-            ["data/Debug/net8.0/RefDocGen.TestingLibrary.dll"],
-            ["data/Debug/net8.0/RefDocGen.TestingLibrary.xml"],
+            ["data/Debug/net8.0/RefDocGen.ExampleLibrary.dll"],
+            ["data/Debug/net8.0/RefDocGen.ExampleLibrary.xml"],
             templateProcessor,
             assemblyDataConfig,
             outputDir,

@@ -16,7 +16,7 @@ public class HierarchyDocTests
     [InlineData("ChildChildChild", "Before parent. Parent class. After parent.")]
     public void TypeSummaryDoc_IsInherited(string typeName, string expectedSummaryDoc)
     {
-        using var document = DocumentationTools.GetApiPage($"RefDocGen.TestingLibrary.Hierarchy.{typeName}.html");
+        using var document = DocumentationTools.GetApiPage($"RefDocGen.ExampleLibrary.Hierarchy.{typeName}.html");
 
         var typeDataSection = document.GetTypeDataSection();
         string summaryDoc = TypePageTools.GetSummaryDoc(typeDataSection);
@@ -29,7 +29,7 @@ public class HierarchyDocTests
     [InlineData("ChildChild")]
     public void HandleMethodDocs_AreInherited(string typeName)
     {
-        using var document = DocumentationTools.GetApiPage($"RefDocGen.TestingLibrary.Hierarchy.{typeName}.html");
+        using var document = DocumentationTools.GetApiPage($"RefDocGen.ExampleLibrary.Hierarchy.{typeName}.html");
 
         var handleMethod = document.GetMemberElement("Handle(System.Object)");
         var parameter = TypePageTools.GetMemberParameters(handleMethod).First();
@@ -49,7 +49,7 @@ public class HierarchyDocTests
     [InlineData("ChildChildChild", "ChildChild Print", "Object to print.", "IChild Print the object. Object to print.")]
     public void PrintMethodDocs_AreInherited(string typeName, string expectedSummaryDoc, string expectedParamDoc, string? expectedRemarksDoc = null)
     {
-        using var document = DocumentationTools.GetApiPage($"RefDocGen.TestingLibrary.Hierarchy.{typeName}.html");
+        using var document = DocumentationTools.GetApiPage($"RefDocGen.ExampleLibrary.Hierarchy.{typeName}.html");
 
         var handleMethod = document.GetMemberElement("Print(System.Object)");
         var parameter = TypePageTools.GetMemberParameters(handleMethod).First();
@@ -70,7 +70,7 @@ public class HierarchyDocTests
     [Fact]
     public void PrintDataMethodSummaryDoc_IsInherited()
     {
-        using var document = DocumentationTools.GetApiPage("RefDocGen.TestingLibrary.Hierarchy.ChildChild.html");
+        using var document = DocumentationTools.GetApiPage("RefDocGen.ExampleLibrary.Hierarchy.ChildChild.html");
 
         var handleMethod = document.GetMemberElement("PrintData");
 

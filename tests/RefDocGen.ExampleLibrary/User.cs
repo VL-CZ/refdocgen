@@ -60,7 +60,7 @@ public class User
     /// <seealso href="http://www.google.com"/>
     /// <seealso cref="MaxAge">max age constant</seealso>
     /// <seealso cref="System.Reflection.FieldInfo.IsLiteral" />
-    /// <seealso cref="RefDocGen.TestingLibrary.Tools.Point"/>
+    /// <seealso cref="RefDocGen.ExampleLibrary.Tools.Point"/>
     /// <seealso cref="notFound"/>
     protected readonly string username;
 

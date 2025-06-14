@@ -11,13 +11,13 @@ namespace RefDocGen.IntegrationTests;
 public class ParameterSectionTests
 {
     [Theory]
-    [InlineData("RefDocGen.TestingLibrary.Animal", "GetAverageLifespan(System.String)", "string species", "The species of the animal.")]
-    [InlineData("RefDocGen.TestingLibrary.Tools.Point", "op_UnaryNegation(RefDocGen.TestingLibrary.Tools.Point)", "Point point", "The provided point.")]
-    [InlineData("RefDocGen.TestingLibrary.Tools.WeatherStation", ".ctor(RefDocGen.TestingLibrary.Tools.Point)", "Point location", "Location of the weather station.")]
-    [InlineData("RefDocGen.TestingLibrary.Tools.Collections.MyCollection-1", "Item(System.Index)", "Index index", "An Index struct.")]
+    [InlineData("RefDocGen.ExampleLibrary.Animal", "GetAverageLifespan(System.String)", "string species", "The species of the animal.")]
+    [InlineData("RefDocGen.ExampleLibrary.Tools.Point", "op_UnaryNegation(RefDocGen.ExampleLibrary.Tools.Point)", "Point point", "The provided point.")]
+    [InlineData("RefDocGen.ExampleLibrary.Tools.WeatherStation", ".ctor(RefDocGen.ExampleLibrary.Tools.Point)", "Point location", "Location of the weather station.")]
+    [InlineData("RefDocGen.ExampleLibrary.Tools.Collections.MyCollection-1", "Item(System.Index)", "Index index", "An Index struct.")]
     [InlineData(
-        "RefDocGen.TestingLibrary.User",
-        "AddAnimalsByType(System.Collections.Generic.Dictionary(System.String,System.Collections.Generic.List(RefDocGen.TestingLibrary.Animal)))",
+        "RefDocGen.ExampleLibrary.User",
+        "AddAnimalsByType(System.Collections.Generic.Dictionary(System.String,System.Collections.Generic.List(RefDocGen.ExampleLibrary.Animal)))",
         "Dictionary<string, List<Animal>> animals",
         "Animals to add. Key: animal type, Value: list of animals of the given type.")]
     public void ParameterData_Matches_ForSingleParameter(string pageName, string memberId, string parameterDeclaration, string expectedDoc)
@@ -38,7 +38,7 @@ public class ParameterSectionTests
     [Fact]
     public void ParameterData_Match_ForMultipleParameters()
     {
-        using var document = DocumentationTools.GetApiPage("RefDocGen.TestingLibrary.User.html");
+        using var document = DocumentationTools.GetApiPage("RefDocGen.ExampleLibrary.User.html");
         var memberElement = document.GetMemberElement("ProcessValues(System.Int32-,System.Int32-,System.String,System.Int32-,System.Double)");
 
         var parameters = TypePageTools.GetMemberParameters(memberElement);

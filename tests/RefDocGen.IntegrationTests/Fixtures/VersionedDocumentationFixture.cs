@@ -13,7 +13,7 @@ namespace RefDocGen.IntegrationTests.Fixtures;
 /// Fixture responsible for setting up and tearing down the reference documentation consisting of multiple versions.
 /// </summary>
 /// <remarks>
-/// This fixture uses the DLL and XML documentation of the 'RefDocGen.TestingLibrary'
+/// This fixture uses the DLL and XML documentation of the 'RefDocGen.ExampleLibrary'
 /// </remarks>
 public class VersionedDocumentationFixture : IDisposable
 {
@@ -68,8 +68,8 @@ public class VersionedDocumentationFixture : IDisposable
             var logger = Substitute.For<ILogger>();
 
             var generator = new DocGenerator(
-                ["data/Debug/net8.0/RefDocGen.TestingLibrary.dll"],
-                ["data/Debug/net8.0/RefDocGen.TestingLibrary.xml"],
+                ["data/Debug/net8.0/RefDocGen.ExampleLibrary.dll"],
+                ["data/Debug/net8.0/RefDocGen.ExampleLibrary.xml"],
                 templateProcessor,
                 assemblyDataConfig,
                 outputDir,

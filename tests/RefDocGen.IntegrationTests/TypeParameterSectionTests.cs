@@ -11,8 +11,8 @@ namespace RefDocGen.IntegrationTests;
 public class TypeParameterSectionTests
 {
     [Theory]
-    [InlineData("RefDocGen.TestingLibrary.Tools.Collections.MyCollection-1", "T", "The type of the items in the collection.")]
-    [InlineData("RefDocGen.TestingLibrary.Tools.MyPredicate-1", "T", "The type of the object.")]
+    [InlineData("RefDocGen.ExampleLibrary.Tools.Collections.MyCollection-1", "T", "The type of the items in the collection.")]
+    [InlineData("RefDocGen.ExampleLibrary.Tools.MyPredicate-1", "T", "The type of the object.")]
     public void TypeParameterData_Match_ForSingleTypeParameter(string pageName, string parameterDeclaration, string expectedDoc)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
@@ -31,7 +31,7 @@ public class TypeParameterSectionTests
     [Fact]
     public void TypeParameterData_Match_ForMethodTypeParameter()
     {
-        using var document = DocumentationTools.GetApiPage("RefDocGen.TestingLibrary.Tools.Collections.MyCollection-1.html");
+        using var document = DocumentationTools.GetApiPage("RefDocGen.ExampleLibrary.Tools.Collections.MyCollection-1.html");
 
         var parameters = TypePageTools.GetTypeParameters(document.GetMemberElement("AddGeneric--1(--0)"));
 
@@ -47,7 +47,7 @@ public class TypeParameterSectionTests
     [Fact]
     public void TypeParameterData_Match_ForMultipleTypeParameters()
     {
-        using var document = DocumentationTools.GetApiPage("RefDocGen.TestingLibrary.Tools.Collections.IMyDictionary-2.html");
+        using var document = DocumentationTools.GetApiPage("RefDocGen.ExampleLibrary.Tools.Collections.IMyDictionary-2.html");
 
         var parameters = TypePageTools.GetTypeParameters(document.GetTypeDataSection());
 

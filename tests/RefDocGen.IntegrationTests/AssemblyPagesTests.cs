@@ -12,18 +12,18 @@ public class AssemblyPagesTests
 {
     [Theory]
     [InlineData("index")]
-    [InlineData("RefDocGen.TestingLibrary-DLL")]
+    [InlineData("RefDocGen.ExampleLibrary-DLL")]
     public void NamespaceNames_Match(string pageName)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
         string[] namespaces = AssemblyPageTools.GetNamespaceNames(document);
 
         string[] expected = [
-            "namespace RefDocGen.TestingLibrary",
-            "namespace RefDocGen.TestingLibrary.CyclicDoc",
-            "namespace RefDocGen.TestingLibrary.Hierarchy",
-            "namespace RefDocGen.TestingLibrary.Tools",
-            "namespace RefDocGen.TestingLibrary.Tools.Collections"
+            "namespace RefDocGen.ExampleLibrary",
+            "namespace RefDocGen.ExampleLibrary.CyclicDoc",
+            "namespace RefDocGen.ExampleLibrary.Hierarchy",
+            "namespace RefDocGen.ExampleLibrary.Tools",
+            "namespace RefDocGen.ExampleLibrary.Tools.Collections"
         ];
 
         namespaces.ShouldBe(expected);
@@ -31,11 +31,11 @@ public class AssemblyPagesTests
 
     [Theory]
     [InlineData("index")]
-    [InlineData("RefDocGen.TestingLibrary-DLL")]
+    [InlineData("RefDocGen.ExampleLibrary-DLL")]
     public void NamespaceTypeNames_Match(string pageName)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
-        var ns = document.GetNamespaceElement("RefDocGen.TestingLibrary.Tools");
+        var ns = document.GetNamespaceElement("RefDocGen.ExampleLibrary.Tools");
 
         string[] nsTypes = AssemblyPageTools.GetNamespaceTypeNames(ns);
 
@@ -60,7 +60,7 @@ public class AssemblyPagesTests
         using var document = DocumentationTools.GetApiPage("index.html"); // use the API Homepage
         string[] assemblies = AssemblyPageTools.GetAssemblyNames(document);
 
-        string[] expected = ["assembly RefDocGen.TestingLibrary"];
+        string[] expected = ["assembly RefDocGen.ExampleLibrary"];
 
         assemblies.ShouldBe(expected);
     }

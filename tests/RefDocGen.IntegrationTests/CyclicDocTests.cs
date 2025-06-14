@@ -16,7 +16,7 @@ public class CyclicDocTests
     [InlineData("CycleReference")]
     public void NoSummaryDoc_IsPresent_WhenCrefInheritdocsFormCycle(string typeName)
     {
-        using var document = DocumentationTools.GetApiPage($"RefDocGen.TestingLibrary.CyclicDoc.{typeName}.html");
+        using var document = DocumentationTools.GetApiPage($"RefDocGen.ExampleLibrary.CyclicDoc.{typeName}.html");
 
         var typeDataSection = document.GetTypeDataSection();
         typeDataSection.GetByDataIdOrDefault(DataId.SummaryDoc).ShouldBeNull(); // no summary doc should be present.

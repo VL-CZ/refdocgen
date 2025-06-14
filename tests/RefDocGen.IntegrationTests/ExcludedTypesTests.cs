@@ -10,9 +10,9 @@ namespace RefDocGen.IntegrationTests;
 public class ExcludedTypesTests
 {
     [Theory]
-    [InlineData("RefDocGen.TestingLibrary.Exclude.ClassToExclude")]
-    [InlineData("RefDocGen.TestingLibrary.Exclude.Sub.AnotherClassToExclude")]
-    [InlineData("RefDocGen.TestingLibrary.Tools.Exclude.ToolToExclude")]
+    [InlineData("RefDocGen.ExampleLibrary.Exclude.ClassToExclude")]
+    [InlineData("RefDocGen.ExampleLibrary.Exclude.Sub.AnotherClassToExclude")]
+    [InlineData("RefDocGen.ExampleLibrary.Tools.Exclude.ToolToExclude")]
     public void Type_IsNotPresent_WhenContainedInExcludedNamespace(string excludedTypeName)
     {
         Should.Throw<FileNotFoundException>(() => DocumentationTools.GetApiPage($"{excludedTypeName}.html"));
