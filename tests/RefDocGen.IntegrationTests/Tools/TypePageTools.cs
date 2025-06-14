@@ -318,11 +318,11 @@ internal class TypePageTools
     }
 
     /// <summary>
-    /// Gets the declared type signature.
+    /// Gets the type declaration string in the reference documentation.
     /// </summary>
     /// <param name="document">The document representing the type.</param>
-    /// <returns>The declared type signature.</returns>
-    internal static string GetTypeSignature(IDocument document)
+    /// <returns>The type declaration string.</returns>
+    internal static string GetTypeDeclaration(IDocument document)
     {
         return document.DocumentElement.GetByDataId(DataId.TypeDeclaration).GetParsedContent();
     }
