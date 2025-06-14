@@ -59,7 +59,7 @@ public class DocumentationFixture : IDisposable
         var assemblyDataConfig = new AssemblyDataConfiguration(
             AccessModifier.Private,
             MemberInheritanceMode.NonObject,
-            NamespacesToExclude: ["MyLibrary.Exclude", "MyLibrary.Tools.Exclude"],
+            NamespacesToExclude: ["RefDocGen.TestingLibrary.Exclude", "RefDocGen.TestingLibrary.Tools.Exclude"],
             AssembliesToExclude: []);
 
         var logger = Substitute.For<ILogger>();

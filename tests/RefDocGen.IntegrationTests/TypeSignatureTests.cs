@@ -11,17 +11,17 @@ namespace RefDocGen.IntegrationTests;
 public class TypeSignatureTests
 {
     [Theory]
-    [InlineData("MyLibrary.Dog", "public class Dog")]
-    [InlineData("MyLibrary.Animal", "public abstract class Animal")]
-    [InlineData("MyLibrary.Tools.Collections.MyDictionary-2", "internal class MyDictionary<TKey, TValue>")]
-    [InlineData("MyLibrary.Tools.StringExtensions", "public static class StringExtensions")]
-    [InlineData("MyLibrary.Tools.Point", "internal struct Point")]
-    [InlineData("MyLibrary.Tools.Collections.IMyCollection-1", "internal interface IMyCollection<T>")]
-    [InlineData("MyLibrary.Tools.ICovariant-1", "internal interface ICovariant<out T>")]
-    [InlineData("MyLibrary.Tools.IContravariant-1", "internal interface IContravariant<in T>")]
-    [InlineData("MyLibrary.Tools.Season", "internal enum Season")]
-    [InlineData("MyLibrary.Tools.ObjectPredicate", "internal delegate ObjectPredicate")]
-    [InlineData("MyLibrary.Tools.MyPredicate-1", "internal delegate MyPredicate<T>")]
+    [InlineData("RefDocGen.TestingLibrary.Dog", "public class Dog")]
+    [InlineData("RefDocGen.TestingLibrary.Animal", "public abstract class Animal")]
+    [InlineData("RefDocGen.TestingLibrary.Tools.Collections.MyDictionary-2", "internal class MyDictionary<TKey, TValue>")]
+    [InlineData("RefDocGen.TestingLibrary.Tools.StringExtensions", "public static class StringExtensions")]
+    [InlineData("RefDocGen.TestingLibrary.Tools.Point", "internal struct Point")]
+    [InlineData("RefDocGen.TestingLibrary.Tools.Collections.IMyCollection-1", "internal interface IMyCollection<T>")]
+    [InlineData("RefDocGen.TestingLibrary.Tools.ICovariant-1", "internal interface ICovariant<out T>")]
+    [InlineData("RefDocGen.TestingLibrary.Tools.IContravariant-1", "internal interface IContravariant<in T>")]
+    [InlineData("RefDocGen.TestingLibrary.Tools.Season", "internal enum Season")]
+    [InlineData("RefDocGen.TestingLibrary.Tools.ObjectPredicate", "internal delegate ObjectPredicate")]
+    [InlineData("RefDocGen.TestingLibrary.Tools.MyPredicate-1", "internal delegate MyPredicate<T>")]
     public void TypeSignature_Matches(string pageName, string expectedSignature)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");

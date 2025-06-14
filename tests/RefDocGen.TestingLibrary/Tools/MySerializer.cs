@@ -1,6 +1,6 @@
 ﻿//using YamlDotNet.Serialization;
 
-//namespace MyLibrary.Tools;
+//namespace RefDocGen.TestingLibrary.Tools;
 
 //internal class MySerializer
 //{

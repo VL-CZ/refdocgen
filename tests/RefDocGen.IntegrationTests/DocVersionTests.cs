@@ -19,7 +19,7 @@ public class DocVersionTests
     /// <summary>
     /// Collection of pages to test
     /// </summary>
-    private static readonly string[] pagesToTest = ["htmlPage.html", "folder/anotherPage.html", "api/index.html", "api/MyLibrary.html", "api/MyLibrary.Dog.html"];
+    private static readonly string[] pagesToTest = ["htmlPage.html", "folder/anotherPage.html", "api/index.html", "api/RefDocGen.TestingLibrary.html", "api/RefDocGen.TestingLibrary.Dog.html"];
 
     [Theory]
     [MemberData(nameof(GetVersionedPages))]

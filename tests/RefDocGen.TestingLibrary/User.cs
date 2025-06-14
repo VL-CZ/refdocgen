@@ -17,11 +17,11 @@ public class User
 
     /// <summary>
     /// Name of the user. <c>var name = user.username</c>
-    /// 
+    ///
     /// <code>
     /// var name = user.username;
     /// var userValidator = new UserValidator();
-    /// 
+    ///
     /// var isValid = userValidator.Validate(name);
     /// Console.WriteLine($"Valid: {isValid}");
     /// </code>
@@ -31,7 +31,7 @@ public class User
     /// <list type="bullet">
     ///   <item>ABC</item>
     ///   <item>
-    ///     <term>ddd</term> 
+    ///     <term>ddd</term>
     ///     <description>DEF</description>
     ///   </item>
     /// </list>
@@ -39,7 +39,7 @@ public class User
     ///   <item>First</item>
     ///   <item>Second</item>
     /// </list>
-    /// 
+    ///
     /// <list type="table">
     /// <listheader>
     /// <term>name</term>
@@ -60,13 +60,13 @@ public class User
     /// <seealso href="http://www.google.com"/>
     /// <seealso cref="MaxAge">max age constant</seealso>
     /// <seealso cref="System.Reflection.FieldInfo.IsLiteral" />
-    /// <seealso cref="MyLibrary.Tools.Point"/>
+    /// <seealso cref="RefDocGen.TestingLibrary.Tools.Point"/>
     /// <seealso cref="notFound"/>
     protected readonly string username;
 
     /// <summary>
     /// Default constructor.
-    /// </summary>  
+    /// </summary>
     public User()
     {
         username = "DefaultUser";

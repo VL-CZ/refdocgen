@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -52,12 +52,6 @@
         </None>
         <None Update="data\Debug\net8.0\RefDocGen.TestingLibrary.xml">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="data\MyLibrary.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="data\MyLibrary.xml">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="data\static-pages\css\styles.css">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
