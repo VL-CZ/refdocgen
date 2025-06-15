@@ -472,9 +472,15 @@ internal class RazorTemplateProcessor<
 
             logger?.LogInformation("Page {Name} created", outputFileName);
         }
-        catch (AggregateException ex) // Template compilation failed -> delete the directory & throw an exception
+        catch (Exception ex) // Template compilation failed -> delete the directory & throw an exception
         {
             Directory.Delete(outputDirectory, true);
+
+            if (ex.InnerException is RefDocGenFatalException rfex) // if the inner exception is a custom one, rethrow it
+            {
+                throw rfex;
+            }
+
             throw new TemplateRenderingException(typeof(TTemplate), ex);
         }
     }
