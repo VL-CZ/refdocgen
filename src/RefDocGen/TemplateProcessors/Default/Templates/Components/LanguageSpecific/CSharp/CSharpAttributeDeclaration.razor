@@ -8,7 +8,7 @@
 }
 
 
-[<CodeLink Type="@Attribute.Type" />
+[<CodeLink Type="@Attribute.Type" LanguageId="csharp-lang" />
 
 @if (Attribute.ConstructorArguments.Any() || Attribute.NamedArguments.Any())
 {
@@ -32,7 +32,7 @@
 
     @foreach (var namedArg in Attribute.NamedArguments)
     {
-        <CodeLink Type="@namedArg.Name" />
+        <CodeLink Type="@namedArg.Name" LanguageId="csharp-lang" />
         <LiteralValueSuffix Value="@namedArg.Value" />
 
         @if (namedArg != Attribute.NamedArguments.Last())

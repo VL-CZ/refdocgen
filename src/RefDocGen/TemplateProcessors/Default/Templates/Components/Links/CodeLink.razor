@@ -4,6 +4,12 @@
 @code {
     [Parameter]
     public required CodeLinkTM Type { get; set; }
+
+    /// <summary>
+    /// ID of the language, in which the link text will be displayed. <c>null</c> if the text should be displayed in all available languages.
+    /// </summary>
+    [Parameter]
+    public string? LanguageId { get; set; } = null;
 }
 
 @{
@@ -13,14 +19,28 @@
 }
 
 <span class="refdocgen-text-secondary">
-    @if (Type.Url is not null)
+    @if (Type.Url is not null) // display the link, if the URL is available
     {
         <a href="@Type.Url" class="refdocgen-link-secondary">
-            <LanguageSpecificStrings Data="Type.Name" DataSuffix="@memberSuffix" />
+            @if (LanguageId is not null) // display the text only in the selected language
+            {
+                @(Type.Name[LanguageId] + memberSuffix)
+            }
+            else // display the text in all available language
+            {
+                <LanguageSpecificStrings Data="Type.Name" DataSuffix="@memberSuffix" />
+            }
         </a>
     }
-    else
+    else // display only the text if the URL is not available
     {
-        <LanguageSpecificStrings Data="Type.Name" DataSuffix="@memberSuffix" />
+        @if (LanguageId is not null) // display the text only in the selected language
+        {
+            @(Type.Name[LanguageId] + memberSuffix)
+        }
+        else // display the text in all available language
+        {
+            <LanguageSpecificStrings Data="Type.Name" DataSuffix="@memberSuffix" />
+        }
     }
 </span>
