@@ -168,7 +168,7 @@ internal class RazorTemplateProcessor<
         defaultIndexPage = Path.Join("TemplateProcessors", "Shared", "StaticData", "defaultIndexPage.html");
         templatesDirectory = GetTemplatesDirectory();
 
-        languageTMs = [.. this.availableLanguages.Select(lang => new LanguageTM(lang.LanguageName, lang.LanguageId))];
+        languageTMs = [.. this.availableLanguages.Select(lang => new LanguageTM(lang.LanguageName, lang.LanguageId, lang.ComponentsFolderName))];
 
         ValidateLanguageData(availableLanguages);
     }

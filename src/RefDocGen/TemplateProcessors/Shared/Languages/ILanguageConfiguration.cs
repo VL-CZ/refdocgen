@@ -134,4 +134,9 @@ internal interface ILanguageConfiguration
     /// A unique identifier of the language.
     /// </summary>
     string LanguageId { get; }
+
+    /// <summary>
+    /// Name of the folder inside the 'TemplateProcessors/Default/Templates/Components/LanguageSpecific' directory that contains the language-specific components.
+    /// </summary>
+    string ComponentsFolderName { get; }
 }

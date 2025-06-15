@@ -12,7 +12,7 @@
 
     @foreach (var tp in TypeParameters)
     {
-        <TypeParameterDeclaration TypeParameter="@tp" />
+        <CSharpTypeParameterDeclaration TypeParameter="@tp" />
 
         @if (tp != TypeParameters[^1])
         {

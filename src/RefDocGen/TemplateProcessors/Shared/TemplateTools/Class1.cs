@@ -9,6 +9,8 @@ class LanguageFragmentType
         var ns = typeof(LanguageFragments).Namespace;
         var componentName = specificComponent.ToString();
 
-        return Type.GetType($"{ns}.{folderName}.{componentName}") ?? throw new Exception("");
+        var fullName = $"{ns}.{folderName}.{folderName}{componentName}";
+
+        return Type.GetType(fullName) ?? throw new Exception(fullName);
     }
 }
