@@ -13,6 +13,7 @@ public enum LanguageSpecificComponent
     EnumMemberDeclaration,
     EventDeclaration,
     FieldDeclaration,
+    GenericTypeLink,
     IndexerDeclaration,
     MethodDeclaration,
     OperatorDeclaration,
@@ -21,6 +22,5 @@ public enum LanguageSpecificComponent
     TypeDeclaration,
     TypeParameterDeclaration,
     TypeParameterConstraints,
-    GenericTypeLink
 }
 #pragma warning restore CS1591

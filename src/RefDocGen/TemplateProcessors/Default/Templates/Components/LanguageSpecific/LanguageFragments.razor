@@ -1,5 +1,3 @@
-@using RefDocGen.TemplateProcessors.Default.Templates.Components.LanguageSpecific.CSharp
-@using RefDocGen.TemplateProcessors.Default.Templates.Components.LanguageSpecific.Todo
 @using RefDocGen.TemplateProcessors.Shared.TemplateModels.Language
 @using RefDocGen.TemplateProcessors.Shared.TemplateTools
 
@@ -17,70 +15,26 @@
     public required LanguageTM[] Languages { get; set; }
 
     private Dictionary<LanguageSpecificComponent, string> templateParameterNames = new()
-        {
-            [LanguageSpecificComponent.AttributeDeclaration] = "Attribute",
-            [LanguageSpecificComponent.ConstructorDeclaration] = "Constructor",
-            [LanguageSpecificComponent.DelegateMethodDeclaration] = "Delegate",
-            [LanguageSpecificComponent.EnumMemberDeclaration] = "EnumMember",
-            [LanguageSpecificComponent.EventDeclaration] = "Event",
-            [LanguageSpecificComponent.FieldDeclaration] = "Field",
-            [LanguageSpecificComponent.IndexerDeclaration] = "Indexer",
-            [LanguageSpecificComponent.MethodDeclaration] = "Method",
-            [LanguageSpecificComponent.OperatorDeclaration] = "Operator",
-            [LanguageSpecificComponent.ParameterDeclaration] = "Parameter",
-            [LanguageSpecificComponent.PropertyDeclaration] = "Property",
-            [LanguageSpecificComponent.TypeDeclaration] = "Type",
-            [LanguageSpecificComponent.TypeParameterDeclaration] = "TypeParameter",
-            [LanguageSpecificComponent.TypeParameterConstraints] = "TypeParameter",
-            [LanguageSpecificComponent.GenericTypeLink] = "Type",
-        };
+    {
+        [LanguageSpecificComponent.AttributeDeclaration] = "Attribute",
+        [LanguageSpecificComponent.ConstructorDeclaration] = "Constructor",
+        [LanguageSpecificComponent.DelegateMethodDeclaration] = "Delegate",
+        [LanguageSpecificComponent.EnumMemberDeclaration] = "EnumMember",
+        [LanguageSpecificComponent.EventDeclaration] = "Event",
+        [LanguageSpecificComponent.FieldDeclaration] = "Field",
+        [LanguageSpecificComponent.IndexerDeclaration] = "Indexer",
+        [LanguageSpecificComponent.MethodDeclaration] = "Method",
+        [LanguageSpecificComponent.OperatorDeclaration] = "Operator",
+        [LanguageSpecificComponent.ParameterDeclaration] = "Parameter",
+        [LanguageSpecificComponent.PropertyDeclaration] = "Property",
+        [LanguageSpecificComponent.TypeDeclaration] = "Type",
+        [LanguageSpecificComponent.TypeParameterDeclaration] = "TypeParameter",
+        [LanguageSpecificComponent.TypeParameterConstraints] = "TypeParameter",
+        [LanguageSpecificComponent.GenericTypeLink] = "Type",
+    };
 }
 
 @{
-    Dictionary<LanguageSpecificComponent, Type> csharpComponents = new()
-            {
-                [LanguageSpecificComponent.AttributeDeclaration] = typeof(CSharpAttributeDeclaration),
-                [LanguageSpecificComponent.ConstructorDeclaration] = typeof(CSharpConstructorDeclaration),
-                [LanguageSpecificComponent.DelegateMethodDeclaration] = typeof(CSharpDelegateMethodDeclaration),
-                [LanguageSpecificComponent.EnumMemberDeclaration] = typeof(CSharpEnumMemberDeclaration),
-                [LanguageSpecificComponent.EventDeclaration] = typeof(CSharpEventDeclaration),
-                [LanguageSpecificComponent.FieldDeclaration] = typeof(CSharpFieldDeclaration),
-                [LanguageSpecificComponent.IndexerDeclaration] = typeof(CSharpIndexerDeclaration),
-                [LanguageSpecificComponent.MethodDeclaration] = typeof(CSharpMethodDeclaration),
-                [LanguageSpecificComponent.OperatorDeclaration] = typeof(CSharpOperatorDeclaration),
-                [LanguageSpecificComponent.ParameterDeclaration] = typeof(CSharpParameterDeclaration),
-                [LanguageSpecificComponent.PropertyDeclaration] = typeof(CSharpPropertyDeclaration),
-                [LanguageSpecificComponent.TypeDeclaration] = typeof(CSharpTypeDeclaration),
-                [LanguageSpecificComponent.TypeParameterDeclaration] = typeof(CSharpTypeParameterDeclaration),
-                [LanguageSpecificComponent.TypeParameterConstraints] = typeof(CSharpTypeParametersConstraints),
-                [LanguageSpecificComponent.GenericTypeLink] = typeof(CSharpGenericTypeLink)
-            };
-
-    Dictionary<LanguageSpecificComponent, Type> todoComponents = new()
-            {
-                [LanguageSpecificComponent.AttributeDeclaration] = typeof(TodoAttributeDeclaration),
-                [LanguageSpecificComponent.ConstructorDeclaration] = typeof(TodoConstructorDeclaration),
-                [LanguageSpecificComponent.DelegateMethodDeclaration] = typeof(TodoDelegateMethodDeclaration),
-                [LanguageSpecificComponent.EnumMemberDeclaration] = typeof(TodoEnumMemberDeclaration),
-                [LanguageSpecificComponent.EventDeclaration] = typeof(TodoEventDeclaration),
-                [LanguageSpecificComponent.FieldDeclaration] = typeof(TodoFieldDeclaration),
-                [LanguageSpecificComponent.IndexerDeclaration] = typeof(TodoIndexerDeclaration),
-                [LanguageSpecificComponent.MethodDeclaration] = typeof(TodoMethodDeclaration),
-                [LanguageSpecificComponent.OperatorDeclaration] = typeof(TodoOperatorDeclaration),
-                [LanguageSpecificComponent.ParameterDeclaration] = typeof(TodoParameterDeclaration),
-                [LanguageSpecificComponent.PropertyDeclaration] = typeof(TodoPropertyDeclaration),
-                [LanguageSpecificComponent.TypeDeclaration] = typeof(TodoTypeDeclaration),
-                [LanguageSpecificComponent.TypeParameterDeclaration] = typeof(TodoTypeParameterDeclaration),
-                [LanguageSpecificComponent.TypeParameterConstraints] = typeof(TodoTypeParametersConstraints),
-                [LanguageSpecificComponent.GenericTypeLink] = typeof(TodoGenericTypeLink)
-            };
-
-    Dictionary<string, Dictionary<LanguageSpecificComponent, Type>> languageComponents = new()
-            {
-                ["csharp-lang"] = csharpComponents,
-                ["other-lang"] = todoComponents
-            };
-
     var parameterName = templateParameterNames[Type];
     var templateParameters = new Dictionary<string, object> { [parameterName] = Parameter };
 }
@@ -88,6 +42,9 @@
 @foreach (var lang in Languages)
 {
     <span class="not-visible" data-language="@lang.Id">
-        <DynamicComponent Type="@languageComponents[lang.Id][Type]" Parameters="@templateParameters" />
+        @{
+            var type = LanguageFragmentType.Get("CSharp", Type);
+        }
+        <DynamicComponent Type="@type" Parameters="@templateParameters" />
     </span>
 }
