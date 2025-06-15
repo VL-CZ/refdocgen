@@ -68,8 +68,6 @@ public static class Program
 
         try
         {
-            var type = Type.GetType("RefDocGen.TemplateProcessors.Default.Templates.Components.LanguageSpecific.CSharp.CSharpFieldDeclaration");
-
             var templateProcessor = new DefaultTemplateProcessor(htmlRenderer, availableLanguages, staticPagesDir, version);
 
             var docGenerator = new DocGenerator(dllPaths, docPaths, templateProcessor, assemblyDataConfig, outputDir, logger);
