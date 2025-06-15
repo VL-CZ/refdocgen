@@ -26,6 +26,9 @@ internal class CSharpLanguageConfiguration : ILanguageConfiguration
     public string LanguageId => languageId;
 
     /// <inheritdoc/>
+    public string ComponentsFolderName => "CSharp";
+
+    /// <inheritdoc/>
     public string FormatLiteralValue(object? literalValue)
     {
         return CSharpLiteralValueFormatter.Format(literalValue);

@@ -163,6 +163,19 @@ internal class DuplicateLanguageIdException : RefDocGenFatalException
 }
 
 /// <summary>
+/// Thrown when a language-specific component is not found.
+/// </summary>
+internal class LanguageSpecificComponentNotFoundException : RefDocGenFatalException
+{
+    private const string messageTemplate = "The language-specific component '{0}' wasn't found.";
+
+    public LanguageSpecificComponentNotFoundException(string componentName)
+        : base(messageTemplate, componentName)
+    {
+    }
+}
+
+/// <summary>
 /// Thrown when rendering of a template fails (typically due to errors in the template or its data).
 /// </summary>
 internal class TemplateRenderingException : RefDocGenFatalException

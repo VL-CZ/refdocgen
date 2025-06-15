@@ -20,6 +20,9 @@ internal class OtherLanguageConfiguration : ILanguageConfiguration
     public string LanguageId => "other-lang";
 
     /// <inheritdoc />
+    public string ComponentsFolderName => "Todo";
+
+    /// <inheritdoc />
     public string FormatLiteralValue(object? literalValue)
     {
         return "";
