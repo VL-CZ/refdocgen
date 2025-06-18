@@ -45,5 +45,11 @@
         <None Update="TemplateProcessors\Shared\StaticData\defaultIndexPage.html">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="TemplateProcessors\Todo\Templates\Static\script.js">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="TemplateProcessors\Todo\Templates\Static\styles.css">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 </Project>
