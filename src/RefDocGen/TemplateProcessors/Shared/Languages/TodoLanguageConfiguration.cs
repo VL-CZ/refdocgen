@@ -4,20 +4,19 @@ using RefDocGen.CodeElements.Types.Abstract.Delegate;
 using RefDocGen.CodeElements.Types.Abstract.Enum;
 using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
-using RefDocGen.TemplateProcessors.Shared.Languages;
 
-namespace RefDocGen;
+namespace RefDocGen.TemplateProcessors.Shared.Languages;
 
 /// <summary>
-/// This class shows an example empty configuration of an 'other' language.
+/// This class shows an example empty configuration of a 'TODO' language.
 /// </summary>
-internal class OtherLanguageConfiguration : ILanguageConfiguration
+internal class TodoLanguageConfiguration : ILanguageConfiguration
 {
     /// <inheritdoc />
-    public string LanguageName => "Other";
+    public string LanguageName => "TODO";
 
     /// <inheritdoc />
-    public string LanguageId => "other-lang";
+    public string LanguageId => "todo-lang";
 
     /// <inheritdoc />
     public string ComponentsFolderName => "Todo";

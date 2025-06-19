@@ -29,8 +29,8 @@ internal class SearchResultTMCreator : BaseTMCreator
     /// </summary>
     /// <param name="typeRegistry">A registry containing the types to be included in the documentation.
     /// </param>
-    /// <returns>An enumerable of <see cref="SearchResultTM"/> instances based on the data stored in the <paramref name="typeRegistry"/>.</returns>
-    internal IEnumerable<SearchResultTM> GetFrom(ITypeRegistry typeRegistry)
+    /// <returns>An array of <see cref="SearchResultTM"/> instances representing the possible search results.</returns>
+    internal SearchResultTM[] GetFrom(ITypeRegistry typeRegistry)
     {
         var nsModels = typeRegistry.Namespaces.Select(GetFrom);
         var assemblyModels = typeRegistry.Assemblies.Select(GetFrom);

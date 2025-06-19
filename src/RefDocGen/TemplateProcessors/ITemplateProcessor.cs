@@ -14,5 +14,5 @@ public interface ITemplateProcessor
     /// <param name="typeRegistry">A registry of declared type data to be used in the templates.</param>
     /// <param name="outputDirectory">The directory, where the ouput will be stored.</param>
     /// <param name="logger">A logger instance.</param>
-    void ProcessTemplates(ITypeRegistry typeRegistry, string outputDirectory, ILogger? logger = null);
+    void ProcessTemplates(ITypeRegistry typeRegistry, string outputDirectory, ILogger logger);
 }

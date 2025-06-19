@@ -1,0 +1,35 @@
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Language
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Menu
+@using RefDocGen.TemplateProcessors.Shared.TemplateModels.Types
+@using System.Text.Json
+@inherits ComponentBase
+
+@code {
+
+    /// <summary>
+    /// An array of template models representing all possible search results.
+    /// </summary>
+    [Parameter]
+    public required SearchResultTM[] Model { get; set; }
+
+    /// <summary>
+    /// The links and folders to be included in the top menu.
+    /// </summary>
+    [Parameter]
+    public required TopMenuDataTM TopMenuData { get; set; }
+
+    /// <summary>
+    /// An array containing the available versions of the page;
+    /// for each version, its identifier is stored.
+    ///
+    /// <c>null</c>, if the documentation is not versioned.
+    /// </summary>
+    [Parameter]
+    public required string[]? Versions { get; set; }
+
+    /// <summary>
+    /// An array of the available languages.
+    /// </summary>
+    [Parameter]
+    public required LanguageTM[] Languages { get; set; }
+}

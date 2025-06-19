@@ -61,7 +61,7 @@ public static class Program
 
         ILanguageConfiguration[] availableLanguages = [
             new CSharpLanguageConfiguration(),
-            new OtherLanguageConfiguration()
+            new TodoLanguageConfiguration()
         ];
 
         var logger = loggerFactory.CreateLogger("RefDocGen");
