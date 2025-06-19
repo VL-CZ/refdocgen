@@ -174,7 +174,7 @@ internal class RazorTemplateProcessor<
     }
 
     /// <inheritdoc/>
-    public void ProcessTemplates(ITypeRegistry typeRegistry, string outputDirectory, ILogger? logger = null)
+    public void ProcessTemplates(ITypeRegistry typeRegistry, string outputDirectory, ILogger logger)
     {
         this.outputDirectory = outputDirectory;
         this.logger = logger;
