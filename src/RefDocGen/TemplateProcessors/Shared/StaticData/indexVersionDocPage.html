@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home</title>
+
+    <script>
+        const defaultVersion = "{VERSION}";
+        const newUrl = new URL(`./${defaultVersion}/index.html`, window.location.href);
+        newUrl.search = window.location.search; // keep the original URL params
+
+        window.location.replace(newUrl); // redirect to api/index.html before rendering
+    </script>
+
+</head>
+
+<body>
+</body>
+
+</html>

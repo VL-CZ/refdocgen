@@ -82,7 +82,7 @@ public static class Program
             }
             else
             {
-                logger.LogError(ex, "An error occurred");
+                logger.LogError(ex, "An error occurred, use the --verbose option to see detailed output");
             }
 
         }

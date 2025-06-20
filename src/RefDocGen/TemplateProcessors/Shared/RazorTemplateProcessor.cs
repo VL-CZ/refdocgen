@@ -210,6 +210,11 @@ internal class RazorTemplateProcessor<
 
         CopyStaticTemplateFilesDirectory();
 
+        if (docVersion is not null) // if the documentation is versioned, create an index page redirecting to the most recent doc version
+        {
+            CreateVersionedDocIndexPage();
+        }
+
         versionManager?.UpdateOlderVersions(pagesGenerated);
         versionManager?.SaveCurrentVersionData(pagesGenerated);
     }
@@ -510,6 +515,22 @@ internal class RazorTemplateProcessor<
         {
             throw new DuplicateLanguageIdException(groupped.First().Key); // duplicate language ID -> throw
         }
+    }
 
+    /// <summary>
+    /// Creates an 'index' page of a versioned documentation, which redirects to the most recent version.
+    /// </summary>
+    private void CreateVersionedDocIndexPage()
+    {
+        string indexPage = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "TemplateProcessors", "Shared", "StaticData", "indexVersionDocPage.html");
+        const string versionPlaceholder = "{VERSION}";
+
+        string indexPageContent = File.ReadAllText(indexPage);
+        string updatedContent = indexPageContent.Replace(versionPlaceholder, docVersion); // replace the version placeholder with the actual version
+
+        string outputIndexPage = Path.Join(outputDirectory, "..", indexPageId + ".html");
+        File.WriteAllText(outputIndexPage, updatedContent);
+
+        logger?.LogInformation("Index page of a versioned documentation created.");
     }
 }
