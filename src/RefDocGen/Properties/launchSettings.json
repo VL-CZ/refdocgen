@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RefDocGen": {
+        "commandName": "Project",
+        "commandLineArgs": "C:\\\\Users\\\\vojta\\\\UK\\\\mgr-thesis\\\\refdocgen\\\\tests\\\\RefDocGen.IntegrationTests\\\\data\\\\Debug\\\\net8.0\\\\RefDocGen.ExampleLibrary.dll -o C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\src\\RefDocGen\\out"
+    }
+  }
+}
