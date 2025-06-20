@@ -207,7 +207,8 @@ internal class AssemblyTypeExtractor
         // get nested types
         var allNestedTypes = type
             .GetNestedTypes(bindingFlags)
-            .Where(f => !f.IsCompilerGenerated());
+            .Where(f => !f.IsCompilerGenerated())
+            .Where(t => t.IsVisible(minVisibility));
 
         var nestedDelegates = allNestedTypes
             .Where(t => t.IsDelegate())

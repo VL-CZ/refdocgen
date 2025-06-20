@@ -180,15 +180,19 @@ internal class RazorTemplateProcessor<
         this.logger = logger;
         docCommentTransformer.TypeRegistry = typeRegistry;
 
-        if (docVersion is not null) // a specific version of documentation is being generated
+        if (docVersion is not null) // a specific version of the documentation is being generated
         {
             string rootOutputDirectory = outputDirectory;
 
             this.outputDirectory = Path.Join(outputDirectory, docVersion); // set output directory
+            _ = Directory.CreateDirectory(this.outputDirectory);
+
             versionManager = new(rootOutputDirectory, docVersion);
         }
-
-        _ = Directory.CreateDirectory(this.outputDirectory);
+        else
+        {
+            _ = Directory.CreateDirectory(this.outputDirectory);
+        }
 
         this.logger?.LogInformation("Generating documentation in {Folder} folder", this.outputDirectory);
 
@@ -531,6 +535,6 @@ internal class RazorTemplateProcessor<
         string outputIndexPage = Path.Join(outputDirectory, "..", indexPageId + ".html");
         File.WriteAllText(outputIndexPage, updatedContent);
 
-        logger?.LogInformation("Index page of a versioned documentation created.");
+        logger?.LogInformation("Index page of the versioned documentation created.");
     }
 }
