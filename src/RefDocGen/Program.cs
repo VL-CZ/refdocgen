@@ -39,7 +39,7 @@ public static class Program
             );
 
 
-        bool verbose = false;
+        bool verbose = true;
         string outputTemplate = verbose
             ? "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"
             : "[{Level:u}] {Message:lj}{NewLine}";
@@ -82,7 +82,7 @@ public static class Program
             }
             else
             {
-                logger.LogError(ex, "An exception occurred");
+                logger.LogError(ex, "An error occurred, use the --verbose option to see detailed output");
             }
 
         }

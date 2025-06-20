@@ -42,6 +42,9 @@
         <None Update="TemplateProcessors\Default\Templates\Static\styles.css">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="TemplateProcessors\Shared\StaticData\indexVersionDocPage.html">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Update="TemplateProcessors\Shared\StaticData\defaultIndexPage.html">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>

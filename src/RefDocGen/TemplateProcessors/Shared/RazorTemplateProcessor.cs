@@ -165,7 +165,7 @@ internal class RazorTemplateProcessor<
         this.docVersion = docVersion;
         this.availableLanguages = availableLanguages;
 
-        defaultIndexPage = Path.Join("TemplateProcessors", "Shared", "StaticData", "defaultIndexPage.html");
+        defaultIndexPage = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "TemplateProcessors", "Shared", "StaticData", "defaultIndexPage.html");
         templatesDirectory = GetTemplatesDirectory();
 
         languageTMs = [.. this.availableLanguages.Select(lang => new LanguageTM(lang.LanguageName, lang.LanguageId, lang.ComponentsFolderName))];
@@ -180,15 +180,19 @@ internal class RazorTemplateProcessor<
         this.logger = logger;
         docCommentTransformer.TypeRegistry = typeRegistry;
 
-        if (docVersion is not null) // a specific version of documentation is being generated
+        if (docVersion is not null) // a specific version of the documentation is being generated
         {
             string rootOutputDirectory = outputDirectory;
 
             this.outputDirectory = Path.Join(outputDirectory, docVersion); // set output directory
+            _ = Directory.CreateDirectory(this.outputDirectory);
+
             versionManager = new(rootOutputDirectory, docVersion);
         }
-
-        _ = Directory.CreateDirectory(this.outputDirectory);
+        else
+        {
+            _ = Directory.CreateDirectory(this.outputDirectory);
+        }
 
         this.logger?.LogInformation("Generating documentation in {Folder} folder", this.outputDirectory);
 
@@ -209,6 +213,11 @@ internal class RazorTemplateProcessor<
         }
 
         CopyStaticTemplateFilesDirectory();
+
+        if (docVersion is not null) // if the documentation is versioned, create an index page redirecting to the most recent doc version
+        {
+            CreateVersionedDocIndexPage();
+        }
 
         versionManager?.UpdateOlderVersions(pagesGenerated);
         versionManager?.SaveCurrentVersionData(pagesGenerated);
@@ -353,7 +362,7 @@ internal class RazorTemplateProcessor<
     /// <summary>
     /// Returns base directory containing the Razor templates and static files.
     /// </summary>
-    /// <returns>Path to the directory containing the Razor templates and static files.</returns>
+    /// <returns>Absolute path to the directory containing the Razor templates and static files.</returns>
     /// <exception cref="InvalidTemplateLocationException">
     /// Thrown in 2 cases
     /// <list type="bullet">
@@ -385,7 +394,7 @@ internal class RazorTemplateProcessor<
 
         string relativeTemplateNs = templatesNs[templateProcessorsNsPrefix.Length..];
 
-        string[] templatePathFragments = [baseFolder, .. relativeTemplateNs.Split('.')];
+        string[] templatePathFragments = [AppDomain.CurrentDomain.BaseDirectory, baseFolder, .. relativeTemplateNs.Split('.')];
         return Path.Combine(templatePathFragments);
     }
 
@@ -510,6 +519,22 @@ internal class RazorTemplateProcessor<
         {
             throw new DuplicateLanguageIdException(groupped.First().Key); // duplicate language ID -> throw
         }
+    }
 
+    /// <summary>
+    /// Creates an 'index' page of a versioned documentation, which redirects to the most recent version.
+    /// </summary>
+    private void CreateVersionedDocIndexPage()
+    {
+        string indexPage = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "TemplateProcessors", "Shared", "StaticData", "indexVersionDocPage.html");
+        const string versionPlaceholder = "{VERSION}";
+
+        string indexPageContent = File.ReadAllText(indexPage);
+        string updatedContent = indexPageContent.Replace(versionPlaceholder, docVersion); // replace the version placeholder with the actual version
+
+        string outputIndexPage = Path.Join(outputDirectory, "..", indexPageId + ".html");
+        File.WriteAllText(outputIndexPage, updatedContent);
+
+        logger?.LogInformation("Index page of the versioned documentation created.");
     }
 }
