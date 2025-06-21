@@ -138,7 +138,8 @@ internal class DocCommentExtractor
             }
             catch (FileNotFoundException)
             {
-                throw new XmlDocFileNotFoundException(xmlPath); // XML documentation file not found
+                logger.LogWarning("The XML documentation file at path {Path} was not found.", xmlPath); // XML documentation file not found -> log and continue
+                continue;
             }
 
             var memberNodes = xmlDocument.Descendants(XmlDocIdentifiers.Member);

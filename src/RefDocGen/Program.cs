@@ -19,31 +19,31 @@ internal class Options
     [Value(0, Required = true)]
     public string Source { get; set; }
 
-    [Option('o', "output-dir", HelpText = "The directory where output files will be saved.", Default = "reference-docs")]
+    [Option('o', "output-dir", HelpText = "The directory where the documentation will be saved.", Default = "reference-docs")]
     public string OutputDirectory { get; set; }
 
-    [Option('v', "verbose", HelpText = "Enable verbose mode.", Default = false)]
+    [Option('v', "verbose", HelpText = "Use verbose mode.", Default = false)]
     public bool Verbose { get; set; }
 
     [Option('t', "template-processor", HelpText = "The template processor to use.", Default = "default")]
     public string TemplateProcessor { get; set; }
 
-    [Option('s', "static-pages-dir", HelpText = "Path to the folder containing static pages.", Default = null)]
+    [Option('s', "static-pages-dir", HelpText = "Path to the directory containing user-specified static pages.", Default = null)]
     public string? StaticPagesDirectory { get; set; }
 
-    [Option("version", HelpText = "The version string to use.", Default = null)]
+    [Option("version", HelpText = "Generate a specific version of the documentation.", Default = null)]
     public string? Version { get; set; }
 
-    [Option("min-visibility", HelpText = "Minimum visibility (e.g., Public, Internal).", Default = AccessModifier.Family)]
+    [Option("min-visibility", HelpText = "Minimum visibility of the types and members to be included in the documentation.", Default = AccessModifier.Family)]
     public AccessModifier MinVisibility { get; set; }
 
     [Option("inheritance-mode", HelpText = "Member inheritance mode.", Default = MemberInheritanceMode.NonObject)]
     public MemberInheritanceMode InheritanceMode { get; set; }
 
-    [Option("assemblies-to-exclude", HelpText = "Assemblies to exclude from processing.")]
+    [Option("assemblies-to-exclude", HelpText = "Assemblies to exclude from the documentation.")]
     public IEnumerable<string> AssembliesToExclude { get; set; }
 
-    [Option("namespaces-to-exclude", HelpText = "Namespaces to exclude from processing.")]
+    [Option("namespaces-to-exclude", HelpText = "Namespaces to exclude from the documentation.")]
     public IEnumerable<string> NamespacesToExclude { get; set; }
 }
 
