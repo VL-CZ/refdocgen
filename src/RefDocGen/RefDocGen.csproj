@@ -13,6 +13,8 @@
         <ToolCommandName>refdocgen</ToolCommandName>
         <PackageOutputPath>./nupkg</PackageOutputPath>
         <PackageVersion>0.0.1</PackageVersion>
+
+        <Version>0.0.1</Version>
     </PropertyGroup>
 
     <ItemGroup>

@@ -12,42 +12,51 @@ using RefDocGen.Tools.Exceptions;
 using Serilog;
 using Serilog.Events;
 using System.Globalization;
+using System.Reflection;
 
 namespace RefDocGen;
 
-internal class Options
+internal class Configuration
 {
-    [Value(0, Required = true, MetaName = "source", MetaValue = "SOURCE", HelpText = "The assembly/project/solution to analyze.")]
-    public string Source { get; set; }
+    [Usage(ApplicationAlias = "refdocgen INPUT [OPTIONS]")]
+    public static IEnumerable<Example> Examples => [
+        new("Generate reference documentation", new object())
+    ];
 
-    [Option('o', "output-dir", HelpText = "The directory where the documentation will be saved.", Default = "reference-docs", MetaValue = "DIR")]
-    public string OutputDirectory { get; set; }
+    [Value(0, Required = true, MetaName = "INPUT", HelpText = "The assembly, project, or solution to document.")]
+    public required string Input { get; set; }
 
-    [Option('t', "template-processor", HelpText = "The template processor to use.", Default = "default", MetaValue = "PROCESSOR")]
-    public string TemplateProcessor { get; set; }
+    [Option('o', "output-dir", HelpText = "The output directory for the generated documentation.", Default = "reference-docs", MetaValue = "DIR")]
+    public required string OutputDirectory { get; set; }
 
-    [Option('s', "static-pages-dir", HelpText = "Path to the directory containing user-specified static pages.", Default = null, MetaValue = "DIR")]
+    [Option('t', "template", HelpText = "The template to use for the documentation.", Default = DocumentationTemplate.Default, MetaValue = "TEMPLATE")]
+    public DocumentationTemplate Template { get; set; }
+
+    [Option('s', "static-pages-dir", HelpText = "Directory containing additional static pages to include in the documentation.", Default = null, MetaValue = "DIR")]
     public string? StaticPagesDirectory { get; set; }
 
-    [Option('v', "verbose", HelpText = "Use verbose mode.", Default = false)]
+    [Option('v', "verbose", HelpText = "Enable verbose output.", Default = false)]
     public bool Verbose { get; set; }
 
     [Option("doc-version", HelpText = "Generate a specific version of the documentation.", Default = null, MetaValue = "VERSION")]
     public string? Version { get; set; }
 
-    [Option("min-visibility", HelpText = "Minimum visibility of the types and members to be included in the documentation.",
+    [Option("min-visibility", HelpText = "Minimum visibility level of types and members to include in the documentation.",
         Default = AccessModifier.Family, MetaValue = "VISIBILITY")]
     public AccessModifier MinVisibility { get; set; }
 
-    [Option("inheritance-mode", HelpText = "Member inheritance mode.", Default = MemberInheritanceMode.NonObject, MetaValue = "MODE")]
-    public MemberInheritanceMode InheritanceMode { get; set; }
+    [Option("inherit-members", Default = MemberInheritanceMode.NonObject, MetaValue = "MODE",
+        HelpText = "Specify which inherited members to include in the documentation.")]
+    public MemberInheritanceMode MemberInheritance { get; set; }
 
-    [Option("assemblies-to-exclude", HelpText = "Assemblies to exclude from the documentation.", MetaValue = "ASSEMBLY...")]
-    public IEnumerable<string> AssembliesToExclude { get; set; }
+    [Option("exclude-projects", HelpText = "Projects to exclude from the documentation.", MetaValue = "PROJECT [PROJECT...]")]
+    public required IEnumerable<string> ProjectsToExclude { get; set; }
 
-    [Option("namespaces-to-exclude", HelpText = "Namespaces to exclude from the documentation.", MetaValue = "NAMESPACE...")]
-    public IEnumerable<string> NamespacesToExclude { get; set; }
+    [Option("exclude-namespaces", HelpText = "Namespaces to exclude from the documentation.", MetaValue = "NAMESPACE [NAMESPACE...]")]
+    public required IEnumerable<string> NamespacesToExclude { get; set; }
 }
+
+enum DocumentationTemplate { Default }
 
 /// <summary>
 /// Program class, containing main method
@@ -60,27 +69,27 @@ public static class Program
     public static async Task Main(string[] args)
     {
         var parser = new Parser(with => with.HelpWriter = null);
-        var parserResult = parser.ParseArguments<Options>(args);
+        var parserResult = parser.ParseArguments<Configuration>(args);
 
         await parserResult.MapResult(
-            Do,
-            errs => DisplayHelp(parserResult, errs)
+            Run,
+            _ => DisplayHelp(parserResult)
         );
     }
 
-    private static async Task Do(Options o)
+    private static async Task Run(Configuration config)
     {
-        string[] dllPaths = [o.Source];
+        string[] dllPaths = [config.Input];
         string[] docPaths = dllPaths.Select(p => p.Replace(".dll", ".xml")).ToArray();
 
         var assemblyDataConfig = new AssemblyDataConfiguration(
-            MinVisibility: o.MinVisibility,
-            MemberInheritanceMode: o.InheritanceMode,
-            AssembliesToExclude: o.AssembliesToExclude,
-            NamespacesToExclude: o.NamespacesToExclude
+            MinVisibility: config.MinVisibility,
+            MemberInheritanceMode: config.MemberInheritance,
+            AssembliesToExclude: config.ProjectsToExclude,
+            NamespacesToExclude: config.NamespacesToExclude
             );
 
-        var serilogLogger = GetSerilogLogger(o.Verbose);
+        var serilogLogger = GetSerilogLogger(config.Verbose);
 
         IServiceCollection services = new ServiceCollection();
         _ = services.AddLogging(builder => builder.AddSerilog(serilogLogger, dispose: true));
@@ -92,20 +101,20 @@ public static class Program
         await using var htmlRenderer = new HtmlRenderer(serviceProvider, loggerFactory);
 
         ILanguageConfiguration[] availableLanguages = [
-          new CSharpLanguageConfiguration(),
-                        new TodoLanguageConfiguration()
+            new CSharpLanguageConfiguration(),
+            new TodoLanguageConfiguration()
         ];
 
-        Dictionary<string, ITemplateProcessor> templateProcessors = new()
+        Dictionary<DocumentationTemplate, ITemplateProcessor> templateProcessors = new()
         {
-            ["default"] = new DefaultTemplateProcessor(htmlRenderer, availableLanguages, o.StaticPagesDirectory, o.Version)
+            [DocumentationTemplate.Default] = new DefaultTemplateProcessor(htmlRenderer, availableLanguages, config.StaticPagesDirectory, config.Version)
         };
 
         try
         {
-            var templateProcessor = templateProcessors[o.TemplateProcessor];
+            var templateProcessor = templateProcessors[config.Template];
 
-            var docGenerator = new DocGenerator(dllPaths, docPaths, templateProcessor, assemblyDataConfig, o.OutputDirectory, logger);
+            var docGenerator = new DocGenerator(dllPaths, docPaths, templateProcessor, assemblyDataConfig, config.OutputDirectory, logger);
             docGenerator.GenerateDoc();
             Console.WriteLine("Done...");
         }
@@ -123,6 +132,11 @@ public static class Program
         }
     }
 
+    /// <summary>
+    /// Gets a Serilog logger instance.
+    /// </summary>
+    /// <param name="verbose">Indicates whether the verbose mode is used.</param>
+    /// <returns>An instance of Serilog logger.</returns>
     private static Serilog.Core.Logger GetSerilogLogger(bool verbose)
     {
         string outputTemplate = verbose
@@ -139,12 +153,42 @@ public static class Program
             .CreateLogger();
     }
 
-    static async Task DisplayHelp<T>(ParserResult<T> result, IEnumerable<Error> errs)
+    static async Task DisplayHelp(ParserResult<Configuration> result)
     {
+        var version = Assembly.GetExecutingAssembly().GetName().Version;
+
         var helpText = HelpText.AutoBuild(result, h =>
         {
+            string? versionSuffix = version is not null
+                ? $", version {version?.Major}.{version?.Minor}.{version?.Build}"
+                : null;
+
             h.AddEnumValuesToHelpText = true;
             h.MaximumDisplayWidth = 100;
+            h.AddNewLineBetweenHelpSections = true;
+            h.Heading = $"{nameof(RefDocGen)} - reference documentation generator for .NET{versionSuffix}";
+            h.OptionComparison = (o1, o2) =>
+            {
+                if (o1.IsValue && !o2.IsValue)
+                {
+                    return -1; // value before option
+                }
+                if (!o1.IsValue && o2.IsValue)
+                {
+                    return 1; // option after value
+                }
+
+                // else keep the original order
+                if (o1.Index < o2.Index)
+                {
+                    return -1;
+                }
+                else if (o1.Index > o2.Index)
+                {
+                    return 1;
+                }
+                return 0;
+            };
 
             return HelpText.DefaultParsingErrorsHandler(result, h);
         }, e => e);

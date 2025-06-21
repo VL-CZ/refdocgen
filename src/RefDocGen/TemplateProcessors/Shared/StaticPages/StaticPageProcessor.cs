@@ -130,7 +130,7 @@ internal class StaticPageProcessor
     /// <returns>The HTML content with all Markdown links resolved.</returns>
     private string ResolveLinksToMarkdownFiles(string html)
     {
-        var config = Configuration.Default;
+        var config = AngleSharp.Configuration.Default;
         var context = BrowsingContext.New(config);
 
         // Load the HTML document directly from the file

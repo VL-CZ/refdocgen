@@ -127,7 +127,7 @@ internal class DocVersionManager
             string olderVersionHtml = File.ReadAllText(olderVersionFile); // load the older version HTML
 
             // Create a new browsing context (configurations for AngleSharp)
-            var config = Configuration.Default.WithDefaultLoader();
+            var config = AngleSharp.Configuration.Default.WithDefaultLoader();
 
             // Parse the HTML content using AngleSharp's context
             var context = BrowsingContext.New(config);
