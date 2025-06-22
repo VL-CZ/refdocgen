@@ -103,6 +103,7 @@ public static class Program
         ILanguageConfiguration[] availableLanguages = [
             new CSharpLanguageConfiguration(),
             new TodoLanguageConfiguration()
+            // #ADD_LANGUAGE: instantiate the custom language configuration here
         ];
 
         Dictionary<DocumentationTemplate, ITemplateProcessor> templateProcessors = new()
@@ -116,7 +117,8 @@ public static class Program
 
             var docGenerator = new DocGenerator(dllPaths, docPaths, templateProcessor, assemblyDataConfig, config.OutputDirectory, logger);
             docGenerator.GenerateDoc();
-            Console.WriteLine("Done...");
+
+            Console.WriteLine($"Documentation generated in {config.OutputDirectory} folder");
         }
         catch (Exception ex)
         {

@@ -8,7 +8,7 @@ using RefDocGen.CodeElements.Types.Abstract.TypeName;
 namespace RefDocGen.TemplateProcessors.Shared.Languages;
 
 /// <summary>
-/// Provides syntax-related data a programming language.
+/// A configuration containing selected syntax-related data of a programming language.
 /// </summary>
 internal interface ILanguageConfiguration
 {
@@ -97,11 +97,11 @@ internal interface ILanguageConfiguration
     string[] GetModifiers(ITypeParameterData typeParameter);
 
     /// <summary>
-    /// Gets the type name (including its generic parameters) of the given <paramref name="type"/>.
+    /// Gets the type name of the given <paramref name="type"/>.
     /// </summary>
     /// <param name="type">The type, whose name is returned.</param>
-    /// <param name="includeTypeParameters">Specifies whether the type paramters should be included in the result.</param>
-    /// <returns>The name of the type.</returns>
+    /// <param name="includeTypeParameters">Specifies whether the type paramters should be included in the type name.</param>
+    /// <returns>The name of the type. No modifiers should be included in the name.</returns>
     string GetTypeName(ITypeNameData type, bool includeTypeParameters = true);
 
     /// <summary>
@@ -122,7 +122,7 @@ internal interface ILanguageConfiguration
     /// Gets name of the operator.
     /// </summary>
     /// <param name="operatorData">The operator, whose name is returned.</param>
-    /// <returns>Name of the operator.</returns>
+    /// <returns>Name of the operator. No modifiers or parameters should be included.</returns>
     string GetOperatorName(IOperatorData operatorData);
 
     /// <summary>
@@ -136,7 +136,7 @@ internal interface ILanguageConfiguration
     string LanguageId { get; }
 
     /// <summary>
-    /// Name of the folder inside the 'TemplateProcessors/Default/Templates/Components/LanguageSpecific' directory that contains the language-specific components.
+    /// Name of the folder inside the <c>TemplateProcessors/Default/Templates/Components/LanguageSpecific</c> directory that contains the language-specific components.
     /// </summary>
     string ComponentsFolderName { get; }
 }

@@ -12,7 +12,7 @@ using RefDocGen.TemplateProcessors.Shared.Tools.Names;
 namespace RefDocGen.TemplateProcessors.Shared.Languages;
 
 /// <summary>
-/// Provides syntax-related data the C# language.
+/// A configuration of the C# language.
 /// </summary>
 internal class CSharpLanguageConfiguration : ILanguageConfiguration
 {
