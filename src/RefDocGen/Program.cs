@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RefDocGen.AssemblyAnalysis;
-using RefDocGen.CodeElements;
 using RefDocGen.TemplateProcessors;
 using RefDocGen.TemplateProcessors.Default;
 using RefDocGen.TemplateProcessors.Shared.Languages;
+using RefDocGen.Tools.Config;
 using RefDocGen.Tools.Exceptions;
 using Serilog;
 using Serilog.Events;
@@ -16,60 +16,27 @@ using System.Reflection;
 
 namespace RefDocGen;
 
-internal class Configuration
+/// <summary>
+/// Enum specifying the available documentation templates.
+/// </summary>
+internal enum DocumentationTemplate
 {
-    [Usage(ApplicationAlias = "refdocgen INPUT [OPTIONS]")]
-    public static IEnumerable<Example> Examples => [
-        new("Generate reference documentation", new object())
-    ];
-
-    [Value(0, Required = true, MetaName = "INPUT", HelpText = "The assembly, project, or solution to document.")]
-    public required string Input { get; set; }
-
-    [Option('o', "output-dir", HelpText = "The output directory for the generated documentation.", Default = "reference-docs", MetaValue = "DIR")]
-    public required string OutputDirectory { get; set; }
-
-    [Option('t', "template", HelpText = "The template to use for the documentation.", Default = DocumentationTemplate.Default, MetaValue = "TEMPLATE")]
-    public DocumentationTemplate Template { get; set; }
-
-    [Option('s', "static-pages-dir", HelpText = "Directory containing additional static pages to include in the documentation.", Default = null, MetaValue = "DIR")]
-    public string? StaticPagesDirectory { get; set; }
-
-    [Option('v', "verbose", HelpText = "Enable verbose output.", Default = false)]
-    public bool Verbose { get; set; }
-
-    [Option("doc-version", HelpText = "Generate a specific version of the documentation.", Default = null, MetaValue = "VERSION")]
-    public string? Version { get; set; }
-
-    [Option("min-visibility", HelpText = "Minimum visibility level of types and members to include in the documentation.",
-        Default = AccessModifier.Family, MetaValue = "VISIBILITY")]
-    public AccessModifier MinVisibility { get; set; }
-
-    [Option("inherit-members", Default = MemberInheritanceMode.NonObject, MetaValue = "MODE",
-        HelpText = "Specify which inherited members to include in the documentation.")]
-    public MemberInheritanceMode MemberInheritance { get; set; }
-
-    [Option("exclude-projects", HelpText = "Projects to exclude from the documentation.", MetaValue = "PROJECT [PROJECT...]")]
-    public required IEnumerable<string> ProjectsToExclude { get; set; }
-
-    [Option("exclude-namespaces", HelpText = "Namespaces to exclude from the documentation.", MetaValue = "NAMESPACE [NAMESPACE...]")]
-    public required IEnumerable<string> NamespacesToExclude { get; set; }
+    Default
+    // #ADD_TEMPLATE: add an enum value representing the template here (e.g., 'Custom')
 }
 
-enum DocumentationTemplate { Default }
-
 /// <summary>
-/// Program class, containing main method
+/// Program class, containing main method.
 /// </summary>
 public static class Program
 {
     /// <summary>
-    /// Main method, entry point of the RefDocGen app
+    /// Main method, the entry point of the <c>RefDocGen</c> app.
     /// </summary>
     public static async Task Main(string[] args)
     {
         var parser = new Parser(with => with.HelpWriter = null);
-        var parserResult = parser.ParseArguments<Configuration>(args);
+        var parserResult = parser.ParseArguments<CommandLineConfiguration>(args);
 
         await parserResult.MapResult(
             Run,
@@ -77,10 +44,15 @@ public static class Program
         );
     }
 
-    private static async Task Run(Configuration config)
+    /// <summary>
+    /// Runs the app using the provided configuration.
+    /// </summary>
+    /// <param name="config">The command-line configuration.</param>
+    /// <returns>A completed task.</returns>
+    private static async Task Run(CommandLineConfiguration config)
     {
         string[] dllPaths = [config.Input];
-        string[] docPaths = dllPaths.Select(p => p.Replace(".dll", ".xml")).ToArray();
+        string[] docPaths = [.. dllPaths.Select(p => p.Replace(".dll", ".xml"))];
 
         var assemblyDataConfig = new AssemblyDataConfiguration(
             MinVisibility: config.MinVisibility,
@@ -96,7 +68,7 @@ public static class Program
 
         IServiceProvider serviceProvider = services.BuildServiceProvider();
         var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
-        var logger = loggerFactory.CreateLogger("RefDocGen");
+        var logger = loggerFactory.CreateLogger(nameof(RefDocGen));
 
         await using var htmlRenderer = new HtmlRenderer(serviceProvider, loggerFactory);
 
@@ -109,6 +81,24 @@ public static class Program
         Dictionary<DocumentationTemplate, ITemplateProcessor> templateProcessors = new()
         {
             [DocumentationTemplate.Default] = new DefaultTemplateProcessor(htmlRenderer, availableLanguages, config.StaticPagesDirectory, config.Version)
+            // #ADD_TEMPLATE: use the enum value together with the RazorTemplateProcessor with 8 type parameters, representing the templates
+            //                pass the 'DocCommentHtmlConfiguration' or a custom configuration (if provided).
+            //
+            // Example:
+            // [DocumentationTemplate.Custom] = new RazorTemplateProcessor<
+            //                                        CustomObjectTypePage,
+            //                                        CustomDelegateTypePage,
+            //                                        CustomEnumTypePage,
+            //                                        CustomNamespacePage,
+            //                                        CustomAssemblyPage,
+            //                                        CustomApiHomePage,
+            //                                        CustomStaticPage,
+            //                                        CustomSearchPage>(
+            //                                          htmlRenderer,
+            //                                          new DocCommentTransformer(new DocCommentHtmlConfiguration()), // if a custom configuration is provided, use CustomHtmlConfiguration.
+            //                                          availableLanguages,
+            //                                          config.StaticPagesDirectory,
+            //                                          config.Version)
         };
 
         try
@@ -118,7 +108,7 @@ public static class Program
             var docGenerator = new DocGenerator(dllPaths, docPaths, templateProcessor, assemblyDataConfig, config.OutputDirectory, logger);
             docGenerator.GenerateDoc();
 
-            Console.WriteLine($"Documentation generated in {config.OutputDirectory} folder");
+            Console.WriteLine($"Documentation generated in the '{config.OutputDirectory}' folder");
         }
         catch (Exception ex)
         {
@@ -155,7 +145,12 @@ public static class Program
             .CreateLogger();
     }
 
-    static async Task DisplayHelp(ParserResult<Configuration> result)
+    /// <summary>
+    /// Displays the help text on the command line.
+    /// </summary>
+    /// <param name="result">Command line parser result.</param>
+    /// <returns>A completed task.</returns>
+    private static Task DisplayHelp(ParserResult<CommandLineConfiguration> result)
     {
         var version = Assembly.GetExecutingAssembly().GetName().Version;
 
@@ -195,6 +190,8 @@ public static class Program
             return HelpText.DefaultParsingErrorsHandler(result, h);
         }, e => e);
 
-        Console.WriteLine(helpText);
+        Console.WriteLine(helpText); // print the help
+
+        return Task.CompletedTask;
     }
 }
