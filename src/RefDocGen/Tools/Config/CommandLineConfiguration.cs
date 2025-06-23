@@ -30,6 +30,9 @@ internal class CommandLineConfiguration
     [Option('v', "verbose", HelpText = "Enable verbose output.", Default = false)]
     public bool Verbose { get; set; }
 
+    [Option('f', "force-create", HelpText = "Forces the creation of the documentation. If the output directory already exists, it will be deleted first.", Default = false)]
+    public bool ForceCreate { get; set; }
+
     [Option("doc-version", HelpText = "Generate a specific version of the documentation.", Default = null, MetaValue = "VERSION")]
     public string? Version { get; set; }
 

@@ -138,7 +138,7 @@ internal class DocCommentExtractor
             }
             catch (FileNotFoundException)
             {
-                logger.LogWarning("The XML documentation file at path {Path} was not found.", xmlPath); // XML documentation file not found -> log and continue
+                logger.LogWarning("The XML documentation file at path {Path} was not found", xmlPath); // XML documentation file not found -> log and continue
                 continue;
             }
 

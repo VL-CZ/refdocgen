@@ -103,6 +103,21 @@ public static class Program
 
         try
         {
+            if (config.Version is null && Directory.Exists(config.OutputDirectory) 
+                && Directory.EnumerateFileSystemEntries(config.OutputDirectory).Any()) // the output directory exists and it its not empty and the documentation is not versioned
+            {
+                if (config.ForceCreate)
+                {
+                    Directory.Delete(config.OutputDirectory, true); // delete the output directory
+                }
+                else
+                {
+                    throw new OutputDirectoryNotEmptyException(config.OutputDirectory); // throw an exception
+                }
+            }
+
+            _ = Directory.CreateDirectory(config.OutputDirectory); // create the output directory
+
             var templateProcessor = templateProcessors[config.Template];
 
             var docGenerator = new DocGenerator(dllPaths, docPaths, templateProcessor, assemblyDataConfig, config.OutputDirectory, logger);
