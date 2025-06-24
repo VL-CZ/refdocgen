@@ -1,6 +1,7 @@
 using CommandLine;
 using CommandLine.Text;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RefDocGen.AssemblyAnalysis;
@@ -52,7 +53,14 @@ public static class Program
     /// <returns>A completed task.</returns>
     private static async Task Run(CommandLineConfiguration config)
     {
-        string[] dllPaths = [config.Input];
+        var projectPath = config.Input;
+
+        var workspace = MSBuildWorkspace.Create();
+        var project = await workspace.OpenProjectAsync(config.Input);
+
+        var path = project.CompilationOutputInfo.AssemblyPath;
+
+        string[] dllPaths = [path];
         string[] docPaths = [.. dllPaths.Select(p => p.Replace(".dll", ".xml"))];
 
         var assemblyDataConfig = new AssemblyDataConfiguration(
