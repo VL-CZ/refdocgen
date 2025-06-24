@@ -5,7 +5,7 @@
 @code {
 
     /// <summary>
-    /// HTML contents of the static page body.
+    /// HTML contents of the static page body (&lt;body&gt; element not included).
     /// </summary>
     [Parameter]
     public required string Contents { get; set; }
@@ -46,3 +46,7 @@
     [Parameter]
     public required LanguageTM[] Languages { get; set; }
 }
+
+@*
+    This template should represent the template for all user-defined static pages.
+*@

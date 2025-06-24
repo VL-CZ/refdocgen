@@ -537,4 +537,32 @@ internal class RazorTemplateProcessor<
 
         logger?.LogInformation("Index page of the versioned documentation created.");
     }
+
+    /// <summary>
+    /// Creates a new instance using the provided data.
+    /// </summary>
+    /// <param name="htmlRenderer">Renderer of the Razor components.</param>
+    /// <param name="docCommentHtmlConfiguration">The configuration describing mapping of the inner XML tags into HTML.</param>
+    /// <param name="staticPagesDirectory">Path to the directory containing the static pages created by user. <c>null</c> indicates that the directory is not specified.</param>
+    /// <param name="docVersion">Version of the documentation (e.g. 'v1.0'). Pass <c>null</c> if no specific version should be generated.</param>
+    /// <param name="availableLanguages"><inheritdoc cref="availableLanguages"/></param>
+    /// <returns>An instance of <see cref="RazorTemplateProcessor{TObjectTypeTemplate, TDelegateTemplate, TEnumTemplate, TNamespaceTemplate, TAssemblyTemplate, TApiTemplate, TStaticPageTemplate, TSearchPageTemplate}"/> class.</returns>
+    internal static ITemplateProcessor With(
+            IDocCommentHtmlConfiguration docCommentHtmlConfiguration,
+            HtmlRenderer htmlRenderer,
+            IEnumerable<ILanguageConfiguration> availableLanguages,
+            string? staticPagesDirectory = null,
+            string? docVersion = null)
+    {
+        return new RazorTemplateProcessor<
+            TObjectTypePageTemplate,
+            TDelegatePageTemplate,
+            TEnumPageTemplate,
+            TNamespacePageTemplate,
+            TAssemblyPageTemplate,
+            TApiHomePageTemplate,
+            TStaticPageTemplate,
+            TSearchPageTemplate
+        >(htmlRenderer, new DocCommentTransformer(docCommentHtmlConfiguration), availableLanguages, staticPagesDirectory, docVersion);
+    }
 }

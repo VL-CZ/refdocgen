@@ -19,17 +19,17 @@ internal class RefDocGenFatalException : Exception
     /// <param name="innerException">
     /// The optional inner exception.
     /// </param>
-    /// <param name="messageTemplateArguments">
+    /// <param name="messageTemplateArgs">
     /// An array of arguments to be passed into the <paramref name="messageTemplate"/>.
     /// </param>
-    protected RefDocGenFatalException(string messageTemplate, Exception? innerException, params string[] messageTemplateArguments)
-        : base(string.Format(CultureInfo.InvariantCulture, messageTemplate, messageTemplateArguments), innerException)
+    protected RefDocGenFatalException(string messageTemplate, Exception? innerException, params string[] messageTemplateArgs)
+        : base(string.Format(CultureInfo.InvariantCulture, messageTemplate, messageTemplateArgs), innerException)
     {
     }
 
     /// <inheritdoc cref="RefDocGenFatalException(string, Exception?, string[])"/>
-    protected RefDocGenFatalException(string messageTemplate, params string[] messageTemplateArguments)
-        : this(messageTemplate, null, messageTemplateArguments)
+    protected RefDocGenFatalException(string messageTemplate, params string[] messageTemplateArgs)
+        : this(messageTemplate, null, messageTemplateArgs)
     {
     }
 }
@@ -42,6 +42,18 @@ internal class AssemblyNotFoundException : RefDocGenFatalException
     private const string messageTemplate = "The assembly at path '{0}' was not found.";
 
     public AssemblyNotFoundException(string assemblyPath) : base(messageTemplate, assemblyPath)
+    {
+    }
+}
+
+/// <summary>
+/// Thrown when the provided assembly is not found.
+/// </summary>
+internal class OutputDirectoryNotEmptyException : RefDocGenFatalException
+{
+    private const string messageTemplate = "The output directory at path '{0}' is not empty. Use the '--force-create' option to overwrite it.";
+
+    public OutputDirectoryNotEmptyException(string outputDirPath) : base(messageTemplate, outputDirPath)
     {
     }
 }
@@ -65,7 +77,7 @@ internal class XmlDocFileNotFoundException : RefDocGenFatalException
 internal class InvalidDocVersionNameException : RefDocGenFatalException
 {
     private const string messageTemplate = "The documentation version name '{0}' is invalid. " +
-        "A valid documentation version name may contain only ASCII letters, digits, and the characters '-','.' '_', and '~'";
+        "A valid documentation version name may contain only ASCII letters, digits, and the characters '-','.' '_', and '~'.";
 
     public InvalidDocVersionNameException(string version)
         : base(messageTemplate, version)

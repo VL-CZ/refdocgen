@@ -7,7 +7,6 @@ using RefDocGen.DocExtraction.Handlers.Members.Enum;
 using RefDocGen.DocExtraction.Handlers.Types;
 using RefDocGen.DocExtraction.InheritDoc;
 using RefDocGen.DocExtraction.Tools;
-using RefDocGen.Tools.Exceptions;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 
@@ -138,7 +137,8 @@ internal class DocCommentExtractor
             }
             catch (FileNotFoundException)
             {
-                throw new XmlDocFileNotFoundException(xmlPath); // XML documentation file not found
+                logger.LogWarning("The XML documentation file at path {Path} was not found", xmlPath); // XML documentation file not found -> log and continue
+                continue;
             }
 
             var memberNodes = xmlDocument.Descendants(XmlDocIdentifiers.Member);
