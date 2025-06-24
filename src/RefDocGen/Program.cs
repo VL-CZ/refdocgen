@@ -62,7 +62,8 @@ public static class Program
 
         //var paths = solution.ProjectsInOrder.Select(p => p.AbsolutePath);
 
-        var project = new Project(config.Input);
+        var projectPath = Path.Join(AppDomain.CurrentDomain.BaseDirectory, config.Input);
+        var project = new Project(projectPath);
 
         //var outputPath = project.GetPropertyValue("OutputPath");
         //var assemblyName = project.GetPropertyValue("AssemblyName");
