@@ -65,11 +65,20 @@ public static class Program
         var projectPath = Path.Join(AppDomain.CurrentDomain.BaseDirectory, config.Input);
         var project = new Project(projectPath);
 
-        //var outputPath = project.GetPropertyValue("OutputPath");
-        //var assemblyName = project.GetPropertyValue("AssemblyName");
-        //var outputType = project.GetPropertyValue("OutputType");
+        var outputPath = Path.Combine(project.DirectoryPath, project.GetPropertyValue("OutputPath"));
+        var assemblyName = project.GetPropertyValue("AssemblyName");
+        var outputType = project.GetPropertyValue("OutputType");
 
-        string[] dllPaths = [project.FullPath];
+        var extension = outputType switch
+        {
+            "Library" => ".dll",
+            "Exe" or "WinExe" => ".exe",
+            _ => ".dll"
+        };
+
+        var outputAssembly = Path.GetFullPath(Path.Combine(outputPath, assemblyName + extension));
+
+        string[] dllPaths = [outputAssembly];
         string[] docPaths = [.. dllPaths.Select(p => p.Replace(".dll", ".xml"))];
 
         var assemblyDataConfig = new AssemblyDataConfiguration(
