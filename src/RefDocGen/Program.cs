@@ -103,7 +103,7 @@ public static class Program
 
         try
         {
-            if (config.Version is null && Directory.Exists(config.OutputDirectory) 
+            if (config.Version is null && Directory.Exists(config.OutputDirectory)
                 && Directory.EnumerateFileSystemEntries(config.OutputDirectory).Any()) // the output directory exists and it its not empty and the documentation is not versioned
             {
                 if (config.ForceCreate)

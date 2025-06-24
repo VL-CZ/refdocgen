@@ -7,7 +7,6 @@ using RefDocGen.DocExtraction.Handlers.Members.Enum;
 using RefDocGen.DocExtraction.Handlers.Types;
 using RefDocGen.DocExtraction.InheritDoc;
 using RefDocGen.DocExtraction.Tools;
-using RefDocGen.Tools.Exceptions;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 
