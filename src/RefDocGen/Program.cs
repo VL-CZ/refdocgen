@@ -1,7 +1,9 @@
 using CommandLine;
 using CommandLine.Text;
 using Microsoft.AspNetCore.Components.Web;
-using Microsoft.CodeAnalysis.MSBuild;
+using Microsoft.Build.Construction;
+using Microsoft.Build.Evaluation;
+using Microsoft.Build.Locator;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RefDocGen.AssemblyAnalysis;
@@ -37,6 +39,7 @@ public static class Program
     /// </summary>
     public static async Task Main(string[] args)
     {
+        MSBuildLocator.RegisterDefaults();
         var parser = new Parser(with => with.HelpWriter = null);
         var parserResult = parser.ParseArguments<CommandLineConfiguration>(args);
 
@@ -53,14 +56,18 @@ public static class Program
     /// <returns>A completed task.</returns>
     private static async Task Run(CommandLineConfiguration config)
     {
-        var projectPath = config.Input;
+        var slnPath = "C:\\Users\\vojta\\source\\repos\\FSharpLibrary\\FSharpLibrary.sln";
+        var solution = SolutionFile.Parse(slnPath);
 
-        var workspace = MSBuildWorkspace.Create();
-        var project = await workspace.OpenProjectAsync(config.Input);
+        var paths = solution.ProjectsInOrder.Select(p => p.AbsolutePath);
 
-        var path = project.CompilationOutputInfo.AssemblyPath;
+        var project = new Project(paths.First());
 
-        string[] dllPaths = [path];
+        //var outputPath = project.GetPropertyValue("OutputPath");
+        //var assemblyName = project.GetPropertyValue("AssemblyName");
+        //var outputType = project.GetPropertyValue("OutputType");
+
+        string[] dllPaths = [.. paths];
         string[] docPaths = [.. dllPaths.Select(p => p.Replace(".dll", ".xml"))];
 
         var assemblyDataConfig = new AssemblyDataConfiguration(
