@@ -1,8 +1,8 @@
 {
-  "profiles": {
-    "RefDocGen": {
-        "commandName": "Project",
-        "commandLineArgs": "../../../../../tests/RefDocGen.ExampleLibrary/RefDocGen.ExampleLibrary.csproj -o ../../../out -f --static-pages-dir ../../../../../tests/RefDocGen.IntegrationTests/data/static-pages --min-visibility Private --exclude-namespaces RefDocGen.ExampleLibrary.Exclude RefDocGen.ExampleLibrary.Tools.Exclude --verbose"
+    "profiles": {
+        "RefDocGen": {
+            "commandName": "Project",
+            "commandLineArgs": "C:/Users/vojta/UK/mgr-thesis/refdocgen/tests/RefDocGen.ExampleLibrary/RefDocGen.ExampleLibrary.csproj -o ../../../out -f --static-pages-dir ../../../../../tests/RefDocGen.IntegrationTests/data/static-pages --min-visibility Private --exclude-namespaces RefDocGen.ExampleLibrary.Exclude RefDocGen.ExampleLibrary.Tools.Exclude --verbose"
+        }
     }
-  }
 }

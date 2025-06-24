@@ -1,6 +1,8 @@
 using CommandLine;
 using CommandLine.Text;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.Build.Evaluation;
+using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -37,6 +39,8 @@ public static class Program
     /// </summary>
     public static async Task Main(string[] args)
     {
+        MSBuildLocator.RegisterDefaults();
+
         var parser = new Parser(with => with.HelpWriter = null);
         var parserResult = parser.ParseArguments<CommandLineConfiguration>(args);
 
@@ -55,12 +59,31 @@ public static class Program
     {
         var projectPath = config.Input;
 
-        var workspace = MSBuildWorkspace.Create();
-        var project = await workspace.OpenProjectAsync(config.Input);
+        var props = new Dictionary<string, string>
+        {
+            ["Configuration"] = "Debug",
+            ["Platform"] = "AnyCPU"
+        };
 
-        var path = project.CompilationOutputInfo.AssemblyPath;
+        
+        var project = new Project(projectPath, props, null);
 
-        string[] dllPaths = [path];
+        var outputPathProp = project.GetPropertyValue("OutputPath");
+        var assemblyName = project.GetPropertyValue("AssemblyName");
+        var outputType = project.GetPropertyValue("OutputType");
+
+        // Determine extension
+        string extension = outputType switch
+        {
+            "Library" => ".dll",
+            "Exe" or "WinExe" => ".exe",
+            _ => ".dll" // fallback
+        };
+
+        var outputDir = Path.Combine(project.DirectoryPath, outputPathProp);
+        var outputAssembly = Path.Combine(outputDir, assemblyName + extension);
+
+        string[] dllPaths = [outputAssembly];
         string[] docPaths = [.. dllPaths.Select(p => p.Replace(".dll", ".xml"))];
 
         var assemblyDataConfig = new AssemblyDataConfiguration(
