@@ -39,7 +39,8 @@ public static class Program
     /// </summary>
     public static async Task Main(string[] args)
     {
-        MSBuildLocator.RegisterDefaults();
+        var instance = MSBuildLocator.RegisterDefaults();
+
         var parser = new Parser(with => with.HelpWriter = null);
         var parserResult = parser.ParseArguments<CommandLineConfiguration>(args);
 
