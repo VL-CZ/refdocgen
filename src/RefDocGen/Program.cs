@@ -23,6 +23,7 @@ internal enum DocumentationTemplate
 {
     Default
     // #ADD_TEMPLATE: add an enum value representing the template here (e.g., 'Custom')
+    // #ADD_TEMPLATE_PROCESSOR: add an enum value representing the template processor here (e.g., 'Liquid')
 }
 
 /// <summary>
@@ -82,7 +83,7 @@ public static class Program
         {
             [DocumentationTemplate.Default] = new DefaultTemplateProcessor(htmlRenderer, availableLanguages, config.StaticPagesDirectory, config.Version)
             // #ADD_TEMPLATE: use the enum value together with the RazorTemplateProcessor with 8 type parameters, representing the templates
-            //                pass the 'DocCommentHtmlConfiguration' or a custom configuration (if provided).
+            //                additionally, pass the 'DocCommentHtmlConfiguration' or a custom configuration (if provided)
             //
             // Example:
             // [DocumentationTemplate.Custom] = RazorTemplateProcessor<
@@ -100,6 +101,12 @@ public static class Program
             //                                        availableLanguages,
             //                                        config.StaticPagesDirectory,
             //                                        config.Version)
+            //
+            // #ADD_TEMPLATE_PROCESSOR: use the enum value together with the custom template processor
+            //
+            // Example:
+            // [DocumentationTemplate.Liquid] = CustomLiquidTemplateProcessor(...args...)
+            //
         };
 
         try
