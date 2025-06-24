@@ -85,7 +85,7 @@ public static class Program
             //                pass the 'DocCommentHtmlConfiguration' or a custom configuration (if provided).
             //
             // Example:
-            // [DocumentationTemplate.Custom] = new RazorTemplateProcessor<
+            // [DocumentationTemplate.Custom] = RazorTemplateProcessor<
             //                                        CustomObjectTypePage,
             //                                        CustomDelegateTypePage,
             //                                        CustomEnumTypePage,
@@ -93,12 +93,13 @@ public static class Program
             //                                        CustomAssemblyPage,
             //                                        CustomApiHomePage,
             //                                        CustomStaticPage,
-            //                                        CustomSearchPage>(
-            //                                          htmlRenderer,
-            //                                          new DocCommentTransformer(new DocCommentHtmlConfiguration()), // if a custom configuration is provided, use CustomHtmlConfiguration.
-            //                                          availableLanguages,
-            //                                          config.StaticPagesDirectory,
-            //                                          config.Version)
+            //                                        CustomSearchPage
+            //                                    >.With(
+            //                                        new DocCommentHtmlConfiguration(), // if a custom configuration is provided, use CustomHtmlConfiguration.
+            //                                        htmlRenderer,
+            //                                        availableLanguages,
+            //                                        config.StaticPagesDirectory,
+            //                                        config.Version)
         };
 
         try
