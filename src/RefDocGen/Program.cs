@@ -57,18 +57,18 @@ public static class Program
     /// <returns>A completed task.</returns>
     private static async Task Run(CommandLineConfiguration config)
     {
-        var slnPath = "C:\\Users\\vojta\\source\\repos\\FSharpLibrary\\FSharpLibrary.sln";
-        var solution = SolutionFile.Parse(slnPath);
+        //var slnPath = Path.Combine(Environment.CurrentDirectory, config.Input);
+        //var solution = SolutionFile.Parse(slnPath);
 
-        var paths = solution.ProjectsInOrder.Select(p => p.AbsolutePath);
+        //var paths = solution.ProjectsInOrder.Select(p => p.AbsolutePath);
 
-        var project = new Project(paths.First());
+        var project = new Project(config.Input);
 
         //var outputPath = project.GetPropertyValue("OutputPath");
         //var assemblyName = project.GetPropertyValue("AssemblyName");
         //var outputType = project.GetPropertyValue("OutputType");
 
-        string[] dllPaths = [.. paths];
+        string[] dllPaths = [project.FullPath];
         string[] docPaths = [.. dllPaths.Select(p => p.Replace(".dll", ".xml"))];
 
         var assemblyDataConfig = new AssemblyDataConfiguration(
