@@ -41,7 +41,34 @@ internal class AssemblyNotFoundException : RefDocGenFatalException
 {
     private const string messageTemplate = "The assembly at path '{0}' was not found.";
 
-    public AssemblyNotFoundException(string assemblyPath) : base(messageTemplate, assemblyPath)
+    public AssemblyNotFoundException(string assemblyPath, Exception innerException)
+        : base(messageTemplate, innerException, assemblyPath)
+    {
+    }
+}
+
+/// <summary>
+/// Thrown when the provided solution cannot be loaded.
+/// </summary>
+internal class SolutionNotLoadedException : RefDocGenFatalException
+{
+    private const string messageTemplate = "The solution at path '{0}' cannot be loaded. Ensure the file exists and is a valid .sln file.";
+
+    public SolutionNotLoadedException(string slnPath, Exception innerException)
+        : base(messageTemplate, innerException, slnPath)
+    {
+    }
+}
+
+/// <summary>
+/// Thrown when the provided .NET project cannot be loaded.
+/// </summary>
+internal class ProjectNotLoadedException : RefDocGenFatalException
+{
+    private const string messageTemplate = "The project at path '{0}' cannot be loaded. Ensure the file exists and is a valid .NET project file.";
+
+    public ProjectNotLoadedException(string projectPath, Exception innerException)
+        : base(messageTemplate, innerException, projectPath)
     {
     }
 }
@@ -51,7 +78,7 @@ internal class AssemblyNotFoundException : RefDocGenFatalException
 /// </summary>
 internal class OutputDirectoryNotEmptyException : RefDocGenFatalException
 {
-    private const string messageTemplate = "The output directory at path '{0}' is not empty. Use the '--force-create' option to overwrite it.";
+    private const string messageTemplate = "The output directory at path '{0}' is not empty. Use the '-f' option to overwrite it.";
 
     public OutputDirectoryNotEmptyException(string outputDirPath) : base(messageTemplate, outputDirPath)
     {

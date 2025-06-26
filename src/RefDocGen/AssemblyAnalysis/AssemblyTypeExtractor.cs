@@ -76,7 +76,7 @@ internal class AssemblyTypeExtractor
     /// <summary>
     /// Initializes a new instance of the <see cref="AssemblyTypeExtractor"/> class with the specified assembly path.
     /// </summary>
-    /// <param name="assemblyPaths">The path to the DLL assembly files.</param>
+    /// <param name="assemblyPaths">Paths to the assembly files that should be documented.</param>
     /// <param name="configuration">Configuration describing what data should be extracted.</param>
     /// <param name="logger">A logger instance.</param>
     internal AssemblyTypeExtractor(IEnumerable<string> assemblyPaths, AssemblyDataConfiguration configuration, ILogger logger)
@@ -114,7 +114,7 @@ internal class AssemblyTypeExtractor
             }
             catch (Exception e) when (e is FileNotFoundException or ArgumentNullException or ArgumentException)
             {
-                throw new AssemblyNotFoundException(assemblyPath); // Assembly not found
+                throw new AssemblyNotFoundException(assemblyPath, e); // Assembly not found
             }
 
             // load types

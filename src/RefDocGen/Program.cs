@@ -1,8 +1,6 @@
 using CommandLine;
 using CommandLine.Text;
 using Microsoft.AspNetCore.Components.Web;
-using Microsoft.Build.Construction;
-using Microsoft.Build.Evaluation;
 using Microsoft.Build.Locator;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -57,37 +55,6 @@ public static class Program
     /// <returns>A completed task.</returns>
     private static async Task Run(CommandLineConfiguration config)
     {
-        //var slnPath = Path.Combine(Environment.CurrentDirectory, config.Input);
-        //var solution = SolutionFile.Parse(slnPath);
-
-        //var paths = solution.ProjectsInOrder.Select(p => p.AbsolutePath);
-
-        var projectPath = Path.Join(AppDomain.CurrentDomain.BaseDirectory, config.Input);
-        var project = new Project(projectPath);
-
-        var outputPath = Path.Combine(project.DirectoryPath, project.GetPropertyValue("OutputPath"));
-        var assemblyName = project.GetPropertyValue("AssemblyName");
-        var outputType = project.GetPropertyValue("OutputType");
-
-        var extension = outputType switch
-        {
-            "Library" => ".dll",
-            "Exe" or "WinExe" => ".exe",
-            _ => ".dll"
-        };
-
-        var outputAssembly = Path.GetFullPath(Path.Combine(outputPath, assemblyName + extension));
-
-        string[] dllPaths = [outputAssembly];
-        string[] docPaths = [.. dllPaths.Select(p => p.Replace(".dll", ".xml"))];
-
-        var assemblyDataConfig = new AssemblyDataConfiguration(
-            MinVisibility: config.MinVisibility,
-            MemberInheritanceMode: config.MemberInheritance,
-            AssembliesToExclude: config.ProjectsToExclude,
-            NamespacesToExclude: config.NamespacesToExclude
-            );
-
         var serilogLogger = GetSerilogLogger(config.Verbose);
 
         IServiceCollection services = new ServiceCollection();
@@ -137,6 +104,16 @@ public static class Program
 
         try
         {
+            string[] assemblyPaths = AssemblyLocator.GetAssemblies(config.Input);
+            string[] docPaths = [.. assemblyPaths.Select(p => Path.ChangeExtension(p, ".xml"))];
+
+            var assemblyDataConfig = new AssemblyDataConfiguration(
+                MinVisibility: config.MinVisibility,
+                MemberInheritanceMode: config.MemberInheritance,
+                AssembliesToExclude: config.ProjectsToExclude,
+                NamespacesToExclude: config.NamespacesToExclude
+                );
+
             if (config.Version is null && Directory.Exists(config.OutputDirectory)
                 && Directory.EnumerateFileSystemEntries(config.OutputDirectory).Any()) // the output directory exists and it its not empty and the documentation is not versioned
             {
@@ -154,7 +131,7 @@ public static class Program
 
             var templateProcessor = templateProcessors[config.Template];
 
-            var docGenerator = new DocGenerator(dllPaths, docPaths, templateProcessor, assemblyDataConfig, config.OutputDirectory, logger);
+            var docGenerator = new DocGenerator(assemblyPaths, docPaths, templateProcessor, assemblyDataConfig, config.OutputDirectory, logger);
             docGenerator.GenerateDoc();
 
             Console.WriteLine($"Documentation generated in the '{config.OutputDirectory}' folder");
@@ -169,7 +146,6 @@ public static class Program
             {
                 logger.LogError(ex, "An error occurred, use the --verbose option to see detailed output");
             }
-
         }
     }
 

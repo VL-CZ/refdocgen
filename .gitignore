@@ -7,6 +7,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# Reference documentation
+reference-docs
+
 # DLL code
 demo-lib
 refdocgen-lib
