@@ -2,7 +2,7 @@
   "profiles": {
     "RefDocGen": {
         "commandName": "Project",
-        "commandLineArgs": "../../../../../tests/RefDocGen.IntegrationTests/data/Debug/net8.0/RefDocGen.ExampleLibrary.dll -o ../../../out -f --static-pages-dir ../../../../../tests/RefDocGen.IntegrationTests/data/static-pages --min-visibility Private --exclude-namespaces RefDocGen.ExampleLibrary.Exclude RefDocGen.ExampleLibrary.Tools.Exclude --verbose"
+        "commandLineArgs": "../../../../../tests/RefDocGen.ExampleLibrary/RefDocGen.ExampleLibrary.csproj -o ../../../out -f --static-pages-dir ../../../../../tests/RefDocGen.IntegrationTests/data/static-pages --min-visibility Private --exclude-namespaces RefDocGen.ExampleLibrary.Exclude RefDocGen.ExampleLibrary.Tools.Exclude --verbose"
     }
   }
 }

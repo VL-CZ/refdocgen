@@ -1,6 +1,8 @@
 using AngleSharp;
 using AngleSharp.Dom;
 
+namespace RefDocGen.IntegrationTests.Tools;
+
 /// <summary>
 /// Class containing static methods related to documentation pages.
 /// </summary>

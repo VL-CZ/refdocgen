@@ -1,4 +1,5 @@
 using RefDocGen.IntegrationTests.Fixtures;
+using RefDocGen.IntegrationTests.Tools;
 using Shouldly;
 
 namespace RefDocGen.IntegrationTests;

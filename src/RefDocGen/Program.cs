@@ -1,6 +1,7 @@
 using CommandLine;
 using CommandLine.Text;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.Build.Locator;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RefDocGen.AssemblyAnalysis;
@@ -23,6 +24,7 @@ internal enum DocumentationTemplate
 {
     Default
     // #ADD_TEMPLATE: add an enum value representing the template here (e.g., 'Custom')
+    // #ADD_TEMPLATE_PROCESSOR: add an enum value representing the template processor here (e.g., 'Liquid')
 }
 
 /// <summary>
@@ -35,6 +37,8 @@ public static class Program
     /// </summary>
     public static async Task Main(string[] args)
     {
+        _ = MSBuildLocator.RegisterDefaults(); // register the MSBuild instance, see https://learn.microsoft.com/en-us/visualstudio/msbuild/find-and-use-msbuild-versions?view=vs-2022#register-instance-before-calling-msbuild
+
         var parser = new Parser(with => with.HelpWriter = null);
         var parserResult = parser.ParseArguments<CommandLineConfiguration>(args);
 
@@ -51,16 +55,6 @@ public static class Program
     /// <returns>A completed task.</returns>
     private static async Task Run(CommandLineConfiguration config)
     {
-        string[] dllPaths = [config.Input];
-        string[] docPaths = [.. dllPaths.Select(p => p.Replace(".dll", ".xml"))];
-
-        var assemblyDataConfig = new AssemblyDataConfiguration(
-            MinVisibility: config.MinVisibility,
-            MemberInheritanceMode: config.MemberInheritance,
-            AssembliesToExclude: config.ProjectsToExclude,
-            NamespacesToExclude: config.NamespacesToExclude
-            );
-
         var serilogLogger = GetSerilogLogger(config.Verbose);
 
         IServiceCollection services = new ServiceCollection();
@@ -82,7 +76,7 @@ public static class Program
         {
             [DocumentationTemplate.Default] = new DefaultTemplateProcessor(htmlRenderer, availableLanguages, config.StaticPagesDirectory, config.Version)
             // #ADD_TEMPLATE: use the enum value together with the RazorTemplateProcessor with 8 type parameters, representing the templates
-            //                pass the 'DocCommentHtmlConfiguration' or a custom configuration (if provided).
+            //                additionally, pass the 'DocCommentHtmlConfiguration' or a custom configuration (if provided)
             //
             // Example:
             // [DocumentationTemplate.Custom] = RazorTemplateProcessor<
@@ -100,10 +94,26 @@ public static class Program
             //                                        availableLanguages,
             //                                        config.StaticPagesDirectory,
             //                                        config.Version)
+            //
+            // #ADD_TEMPLATE_PROCESSOR: use the enum value together with the custom template processor
+            //
+            // Example:
+            // [DocumentationTemplate.Liquid] = CustomLiquidTemplateProcessor(...args...)
+            //
         };
 
         try
         {
+            string[] assemblyPaths = AssemblyLocator.GetAssemblies(config.Input);
+            string[] docPaths = [.. assemblyPaths.Select(p => Path.ChangeExtension(p, ".xml"))];
+
+            var assemblyDataConfig = new AssemblyDataConfiguration(
+                MinVisibility: config.MinVisibility,
+                MemberInheritanceMode: config.MemberInheritance,
+                AssembliesToExclude: config.ProjectsToExclude,
+                NamespacesToExclude: config.NamespacesToExclude
+                );
+
             if (config.Version is null && Directory.Exists(config.OutputDirectory)
                 && Directory.EnumerateFileSystemEntries(config.OutputDirectory).Any()) // the output directory exists and it its not empty and the documentation is not versioned
             {
@@ -121,7 +131,7 @@ public static class Program
 
             var templateProcessor = templateProcessors[config.Template];
 
-            var docGenerator = new DocGenerator(dllPaths, docPaths, templateProcessor, assemblyDataConfig, config.OutputDirectory, logger);
+            var docGenerator = new DocGenerator(assemblyPaths, docPaths, templateProcessor, assemblyDataConfig, config.OutputDirectory, logger);
             docGenerator.GenerateDoc();
 
             Console.WriteLine($"Documentation generated in the '{config.OutputDirectory}' folder");
@@ -136,7 +146,6 @@ public static class Program
             {
                 logger.LogError(ex, "An error occurred, use the --verbose option to see detailed output");
             }
-
         }
     }
 
