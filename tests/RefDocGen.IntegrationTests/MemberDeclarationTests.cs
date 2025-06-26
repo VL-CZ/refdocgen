@@ -31,6 +31,7 @@ public class MemberDeclarationTests
     [InlineData("RefDocGen.ExampleLibrary.Tools.Collections.MyCollection-1",
         "AddGeneric--1(--0)",
         "public void AddGeneric<T2>(T2 item)")]
+    [InlineData("RefDocGen.ExampleLibrary.User", "ToYaml", "public YamlDotNet.RepresentationModel.YamlNode ToYaml()")]
     public void MethodDeclaration_Matches(string pageName, string methodId, string expectedDeclaration)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");

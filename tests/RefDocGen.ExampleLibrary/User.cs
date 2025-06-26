@@ -1,5 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using YamlDotNet.RepresentationModel;
 
 namespace RefDocGen.ExampleLibrary;
 
@@ -177,5 +179,14 @@ public class User
     public void AddAnimalsByType(Dictionary<string, List<Animal>> animals)
     {
 
+    }
+
+    /// <summary>
+    /// Gets YAML representation of the user.
+    /// </summary>
+    /// <returns><see cref="YamlNode"/> representation of the user.</returns>
+    public YamlNode ToYaml()
+    {
+        throw new NotImplementedException();
     }
 }
