@@ -1,5 +1,7 @@
 using RefDocGen.CodeElements;
 using RefDocGen.CodeElements.Shared;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace RefDocGen.AssemblyAnalysis.Extensions;
 
@@ -17,5 +19,17 @@ internal static class TypeExtensions
     internal static bool IsVisible(this Type type, AccessModifier minVisibility)
     {
         return AccessModifierHelper.GetAccessModifier(type).IsAtMostAsRestrictiveAs(minVisibility);
+    }
+
+    internal static bool IsCompilerGenerated(this Type type)
+    {
+        if (type.GetCustomAttribute<CompilerGeneratedAttribute>() is not null)
+        {
+            return true; // YES, compiler generated
+        }
+
+        return type.FullName?.StartsWith("<StartupCode$", StringComparison.Ordinal) // detect F# Startup code
+                ?? false;
+
     }
 }

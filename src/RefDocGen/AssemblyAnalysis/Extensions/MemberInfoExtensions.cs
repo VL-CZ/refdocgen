@@ -16,6 +16,7 @@ internal static class MemberInfoExtensions
     internal static bool IsCompilerGenerated(this MemberInfo memberInfo)
     {
         return memberInfo.GetCustomAttribute<CompilerGeneratedAttribute>() is not null;
+        // see https://learn.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.compilergeneratedattribute?view=net-9.0&devlangs=csharp&f1url=%3FappId%3DDev17IDEF1%26l%3DEN-US%26k%3Dk(System.Runtime.CompilerServices.CompilerGeneratedAttribute)%3Bk(DevLang-csharp)%26rd%3Dtrue
     }
 
     /// <summary>
