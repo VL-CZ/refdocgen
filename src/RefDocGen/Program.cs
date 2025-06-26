@@ -37,7 +37,7 @@ public static class Program
     /// </summary>
     public static async Task Main(string[] args)
     {
-        var instance = MSBuildLocator.RegisterDefaults();
+        _ = MSBuildLocator.RegisterDefaults(); // register the MSBuild instance, see https://learn.microsoft.com/en-us/visualstudio/msbuild/find-and-use-msbuild-versions?view=vs-2022#register-instance-before-calling-msbuild
 
         var parser = new Parser(with => with.HelpWriter = null);
         var parserResult = parser.ParseArguments<CommandLineConfiguration>(args);
