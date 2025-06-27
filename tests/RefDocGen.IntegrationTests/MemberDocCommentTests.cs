@@ -24,6 +24,8 @@ public class MemberDocCommentTests
         "Returns an enumerator that iterates through the collection.")]
     [InlineData("RefDocGen.ExampleLibrary.Tools.MyPredicate-1", "delegate-method", "Predicate about a generic type T.")]
     [InlineData("RefDocGen.ExampleLibrary.Tools.Collections.MyCollection-1.MyCollectionEnumerator", "Reset", "Resets the enumerator.")]
+    [InlineData("RefDocGen.ExampleFSharpLibrary.FSharpMathTools", "Add(System.Int32,System.Int32)", "Adds two integers.")]
+    [InlineData("RefDocGen.ExampleVbLibrary.VbMathTools", "Add(System.Int32,System.Int32)", "Adds two integers.")]
     public void SummaryDoc_Matches(string pageName, string memberId, string expectedDoc)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");
