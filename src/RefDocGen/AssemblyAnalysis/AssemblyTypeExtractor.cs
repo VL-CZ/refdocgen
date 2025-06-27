@@ -13,6 +13,38 @@ using System.Reflection;
 
 namespace RefDocGen.AssemblyAnalysis;
 
+using System.Reflection;
+using System.Runtime.Loader;
+
+class FolderAssemblyLoadContext : AssemblyLoadContext
+{
+    private readonly string _folderPath;
+
+    public FolderAssemblyLoadContext(string folderPath) : base(isCollectible: false)
+    {
+        _folderPath = folderPath;
+        Resolving += OnResolving;
+    }
+
+    private Assembly? OnResolving(AssemblyLoadContext context, AssemblyName assemblyName)
+    {
+        string dependencyName = assemblyName.Name + ".dll";
+
+        // Look for dependency DLL in the folder (non-recursive, change if needed)
+        string dependencyPath = Path.Combine(_folderPath, dependencyName);
+
+        if (File.Exists(dependencyPath) && assemblyName.Name != "System.Windows.Forms")
+        {
+            return LoadFromAssemblyPath(dependencyPath);
+        }
+
+        // Fallback: try default context (resolves framework assemblies like WindowsBase)
+        return AssemblyLoadContext.Default.Assemblies
+            .FirstOrDefault(a => a.GetName().Name == assemblyName.Name);
+    }
+}
+
+
 /// <summary>
 /// Class responsible for extracting type information from a selected assembly.
 /// </summary>
@@ -110,7 +142,10 @@ internal class AssemblyTypeExtractor
             Assembly? assembly = null;
             try
             {
-                assembly = Assembly.LoadFrom(assemblyPath);
+                string assemblyFolder = Path.GetDirectoryName(assemblyPath);
+                var alc = new FolderAssemblyLoadContext(assemblyFolder);
+
+                assembly = alc.LoadFromAssemblyPath(assemblyPath);
             }
             catch (Exception e) when (e is FileNotFoundException or ArgumentNullException or ArgumentException)
             {
