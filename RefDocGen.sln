@@ -14,6 +14,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefDocGen.IntegrationTests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefDocGen.ExampleLibrary", "tests\RefDocGen.ExampleLibrary\RefDocGen.ExampleLibrary.csproj", "{8EFA7142-1CA6-4C82-B5B7-7E0D7F1EDAA3}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "RefDocGen.ExampleFSharpLibrary", "tests\RefDocGen.ExampleFSharpLibrary\RefDocGen.ExampleFSharpLibrary.fsproj", "{69A517C5-3634-4A00-BF6E-AB2D4D98F603}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "RefDocGen.ExampleVbLibrary", "tests\RefDocGen.ExampleVbLibrary\RefDocGen.ExampleVbLibrary.vbproj", "{43E1A8E5-C3CA-4BAB-87D4-8E3788515C59}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +40,14 @@ Global
 		{8EFA7142-1CA6-4C82-B5B7-7E0D7F1EDAA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EFA7142-1CA6-4C82-B5B7-7E0D7F1EDAA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EFA7142-1CA6-4C82-B5B7-7E0D7F1EDAA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69A517C5-3634-4A00-BF6E-AB2D4D98F603}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69A517C5-3634-4A00-BF6E-AB2D4D98F603}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69A517C5-3634-4A00-BF6E-AB2D4D98F603}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69A517C5-3634-4A00-BF6E-AB2D4D98F603}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43E1A8E5-C3CA-4BAB-87D4-8E3788515C59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43E1A8E5-C3CA-4BAB-87D4-8E3788515C59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43E1A8E5-C3CA-4BAB-87D4-8E3788515C59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43E1A8E5-C3CA-4BAB-87D4-8E3788515C59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
