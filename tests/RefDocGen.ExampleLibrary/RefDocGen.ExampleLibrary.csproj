@@ -5,16 +5,15 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <BaseOutputPath>../RefDocGen.IntegrationTests/data</BaseOutputPath>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-      <WarningLevel>0</WarningLevel>
+        <WarningLevel>0</WarningLevel>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-      <WarningLevel>0</WarningLevel>
+        <WarningLevel>0</WarningLevel>
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,11 +23,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      
+
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="YamlDotNet" Version="16.3.0" />
+        <PackageReference Include="YamlDotNet" Version="16.3.0" />
     </ItemGroup>
 
 </Project>
