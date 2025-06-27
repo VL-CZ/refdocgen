@@ -1,7 +1,7 @@
 ''' <summary>
 ''' Performs mathematical operations.
 ''' </summary>
-Public Module VbMathTools
+Public Class VbMathTools
 
     ''' <summary>
     ''' Adds two integers.
@@ -9,8 +9,9 @@ Public Module VbMathTools
     ''' <param name="x">The first integer.</param>
     ''' <param name="y">The second integer.</param>
     ''' <returns>The sum <paramref name="x"/> and <paramref name="y"/>.</returns>
-    Public Function Add(x As Integer, y As Integer) As Integer
+    Public Shared Function Add(x As Integer, y As Integer) As Integer
         Return x + y
     End Function
 
-End Module
+End Class
+

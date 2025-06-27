@@ -115,15 +115,16 @@ internal static class MemberCreatorHelper
     /// <remarks>Compiler generated attributes are excluded from the result.</remarks>
     private static AttributeData[] GetAttributeData(IEnumerable<CustomAttributeData> attributes, IReadOnlyDictionary<string, TypeParameterData> availableTypeParameters)
     {
-        string[] fsharpCompilerGeneratedAttrs = [
+        string[] otherCompilerGeneratedAttrs = [
             "Microsoft.FSharp.Core.CompilationArgumentCountsAttribute",
             "Microsoft.FSharp.Core.CompilationMappingAttribute",
             "Microsoft.FSharp.Core.CompilationSourceNameAttribute",
-            "Microsoft.FSharp.Core.OptionalArgumentAttribute"
+            "Microsoft.FSharp.Core.OptionalArgumentAttribute",
+            "Microsoft.VisualBasic.CompilerServices.StandardModuleAttribute"
         ];
 
         return [.. attributes
-            .Where(a => !a.IsCompilerGenerated() && !fsharpCompilerGeneratedAttrs.Contains(a.AttributeType.FullName))
+            .Where(a => !a.IsCompilerGenerated() && !otherCompilerGeneratedAttrs.Contains(a.AttributeType.FullName))
             .Select(a => new AttributeData(a, availableTypeParameters))];
     }
 
