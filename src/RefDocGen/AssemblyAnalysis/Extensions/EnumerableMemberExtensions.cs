@@ -16,7 +16,8 @@ internal static class EnumerableMemberDataExtensions
     internal static Dictionary<string, TMember> ToIdDictionary<TMember>(this IEnumerable<TMember> members)
         where TMember : IMemberData
     {
-        return members.ToDictionary(m => m.Id);
-        // return members.DistinctBy(m => m.Id).ToDictionary(m => m.Id);
+        return members
+            .OrderBy(m => m.IsInherited).DistinctBy(m => m.Id) // if duplicate members detected (e.g., virtual/new), return the non-inherited one.
+            .ToDictionary(m => m.Id);
     }
 }
