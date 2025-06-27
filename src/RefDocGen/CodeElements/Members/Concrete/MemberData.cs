@@ -93,6 +93,6 @@ internal abstract class MemberData : IMemberData
     /// <inheritdoc/>
     public override string? ToString()
     {
-        return $"{MemberKindId}:{ContainingType}.{Id}";
+        return $"{MemberKindId}:{ContainingType.Id}.{Id}";
     }
 }

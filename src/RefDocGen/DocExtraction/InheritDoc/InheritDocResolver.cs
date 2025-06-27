@@ -103,7 +103,7 @@ internal abstract class InheritDocResolver<TNode>
     /// </para>
     /// </summary>
     /// <param name="node">
-    ///     <inheritdoc cref="DfsResolve(TNode)" path="/param[@name='node']/text()"/>
+    ///     <inheritdoc cref="DfsResolve(TNode)" path="/param[@name='node']"/>
     /// </param>
     /// <param name="inheritDocElement">The <c>inheritdoc</c> XML element to resolve.</param>
     private void DfsResolve(TNode node, XElement inheritDocElement)

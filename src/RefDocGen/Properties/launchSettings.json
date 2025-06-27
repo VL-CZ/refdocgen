@@ -2,7 +2,7 @@
   "profiles": {
     "RefDocGen": {
         "commandName": "Project",
-        "commandLineArgs": "C:\\Users\\vojta\\UK\\19-20_S\\csharp-advanced\\01-Physics-kostra\\JumpingPlatformGame\\JumpingPlatformGame\\bin\\Debug\\JumpingPlatformGame.exe -o ../../../out -f --static-pages-dir ../../../../../tests/RefDocGen.IntegrationTests/data/static-pages --min-visibility Private --exclude-namespaces RefDocGen.ExampleLibrary.Exclude RefDocGen.ExampleLibrary.Tools.Exclude --verbose"
+        "commandLineArgs": "C:\\Users\\vojta\\UK\\mgr-thesis\\refdocgen\\src\\RefDocGen\\bin\\Debug\\net8.0\\RefDocGen.dll --min-visibility Private --exclude-namespaces RefDocGen.ExampleLibrary.Exclude RefDocGen.ExampleLibrary.Tools.Exclude --verbose"
     }
   }
 }
