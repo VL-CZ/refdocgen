@@ -53,8 +53,13 @@ public static class Program
     /// </summary>
     /// <param name="config">The command-line configuration.</param>
     /// <returns>A completed task.</returns>
-    private static async Task Run(CommandLineConfiguration config)
+    private static async Task Run(IConfiguration config)
     {
+        if (config.Input.EndsWith(".yaml")) // YAML
+        {
+            config = YamlConfiguration.FromFile(config.Input);
+        }
+
         var serilogLogger = GetSerilogLogger(config.Verbose);
 
         IServiceCollection services = new ServiceCollection();
@@ -74,7 +79,7 @@ public static class Program
 
         Dictionary<DocumentationTemplate, ITemplateProcessor> templateProcessors = new()
         {
-            [DocumentationTemplate.Default] = new DefaultTemplateProcessor(htmlRenderer, availableLanguages, config.StaticPagesDirectory, config.Version)
+            [DocumentationTemplate.Default] = new DefaultTemplateProcessor(htmlRenderer, availableLanguages, config.StaticPagesDir, config.DocVersion)
             // #ADD_TEMPLATE: use the enum value together with the RazorTemplateProcessor with 8 type parameters, representing the templates
             //                additionally, pass the 'DocCommentHtmlConfiguration' or a custom configuration (if provided)
             //
@@ -109,32 +114,32 @@ public static class Program
 
             var assemblyDataConfig = new AssemblyDataConfiguration(
                 MinVisibility: config.MinVisibility,
-                MemberInheritanceMode: config.MemberInheritance,
-                AssembliesToExclude: config.ProjectsToExclude,
-                NamespacesToExclude: config.NamespacesToExclude
+                MemberInheritanceMode: config.InheritMembers,
+                AssembliesToExclude: config.ExcludeProjects,
+                NamespacesToExclude: config.ExcludeNamespaces
                 );
 
-            if (config.Version is null && Directory.Exists(config.OutputDirectory)
-                && Directory.EnumerateFileSystemEntries(config.OutputDirectory).Any()) // the output directory exists and it its not empty and the documentation is not versioned
+            if (config.DocVersion is null && Directory.Exists(config.OutputDir)
+                && Directory.EnumerateFileSystemEntries(config.OutputDir).Any()) // the output directory exists and it its not empty and the documentation is not versioned
             {
                 if (config.ForceCreate)
                 {
-                    Directory.Delete(config.OutputDirectory, true); // delete the output directory
+                    Directory.Delete(config.OutputDir, true); // delete the output directory
                 }
                 else
                 {
-                    throw new OutputDirectoryNotEmptyException(config.OutputDirectory); // throw an exception
+                    throw new OutputDirectoryNotEmptyException(config.OutputDir); // throw an exception
                 }
             }
 
-            _ = Directory.CreateDirectory(config.OutputDirectory); // create the output directory
+            _ = Directory.CreateDirectory(config.OutputDir); // create the output directory
 
             var templateProcessor = templateProcessors[config.Template];
 
-            var docGenerator = new DocGenerator(assemblyPaths, docPaths, templateProcessor, assemblyDataConfig, config.OutputDirectory, logger);
+            var docGenerator = new DocGenerator(assemblyPaths, docPaths, templateProcessor, assemblyDataConfig, config.OutputDir, logger);
             docGenerator.GenerateDoc();
 
-            Console.WriteLine($"Documentation generated in the '{config.OutputDirectory}' folder");
+            Console.WriteLine($"Documentation generated in the '{config.OutputDir}' folder");
         }
         catch (Exception ex)
         {

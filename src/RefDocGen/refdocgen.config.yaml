@@ -1,0 +1,7 @@
+input: C:\Users\vojta\UK\mgr-thesis\refdocgen\src\RefDocGen\bin\Debug\net8.0\RefDocGen.dll
+minVisibility: Private
+excludeNamespaces:
+  - RefDocGen.ExampleLibrary.Exclude
+  - RefDocGen.ExampleLibrary.Tools.Exclude
+verbose: true
+forceCreate: true

@@ -34,9 +34,13 @@
         <PackageReference Include="Serilog" Version="4.3.0" />
         <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.2" />
         <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+        <PackageReference Include="YamlDotNet" Version="16.3.0" />
     </ItemGroup>
 
     <ItemGroup>
+        <None Update="refdocgen.config.yaml">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Update="TemplateProcessors\Default\Templates\Static\bootstrap-5.3.5-dist.bundle.min.js">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
