@@ -18,10 +18,10 @@ internal class CommandLineConfiguration : IConfiguration
     [Value(0, Required = true, MetaName = "INPUT", HelpText = "The assembly, project, or solution to document.")]
     public required string Input { get; set; }
 
-    [Option('o', "output-dir", HelpText = "The output directory for the generated documentation.", Default = "reference-docs", MetaValue = "DIR")]
+    [Option('o', "output-dir", HelpText = "The output directory for the generated documentation.", Default = DefaultConfigValues.OutputDir, MetaValue = "DIR")]
     public required string OutputDir { get; set; }
 
-    [Option('t', "template", HelpText = "The template to use for the documentation.", Default = DocumentationTemplate.Default, MetaValue = "TEMPLATE")]
+    [Option('t', "template", HelpText = "The template to use for the documentation.", Default = DefaultConfigValues.Template, MetaValue = "TEMPLATE")]
     public DocumentationTemplate Template { get; set; }
 
     [Option('v', "verbose", HelpText = "Enable verbose output.", Default = false)]
@@ -40,10 +40,10 @@ internal class CommandLineConfiguration : IConfiguration
     public string? DocVersion { get; set; }
 
     [Option("min-visibility", HelpText = "Minimum visibility level of types and members to include in the documentation.",
-        Default = AccessModifier.Family, MetaValue = "VISIBILITY")]
+        Default = DefaultConfigValues.MinVisibility, MetaValue = "VISIBILITY")]
     public AccessModifier MinVisibility { get; set; }
 
-    [Option("inherit-members", Default = MemberInheritanceMode.NonObject, MetaValue = "MODE",
+    [Option("inherit-members", Default = DefaultConfigValues.InheritMembers, MetaValue = "MODE",
         HelpText = "Specify which inherited members to include in the documentation.")]
     public MemberInheritanceMode InheritMembers { get; set; }
 

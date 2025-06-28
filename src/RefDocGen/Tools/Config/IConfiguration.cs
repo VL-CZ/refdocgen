@@ -7,6 +7,14 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace RefDocGen.Tools.Config;
 
+internal static class DefaultConfigValues
+{
+    internal const MemberInheritanceMode InheritMembers = MemberInheritanceMode.NonObject;
+    internal const AccessModifier MinVisibility = AccessModifier.Family;
+    internal const string OutputDir = "reference-docs";
+    public const DocumentationTemplate Template = DocumentationTemplate.Default;
+}
+
 internal interface IConfiguration
 {
     string Input { get; }
@@ -28,13 +36,13 @@ internal class YamlFileConfiguration : IConfiguration
 {
     public string Input { get; set; } = string.Empty;
     public bool ForceCreate { get; set; }
-    public MemberInheritanceMode InheritMembers { get; set; } = MemberInheritanceMode.NonObject;
-    public AccessModifier MinVisibility { get; set; } = AccessModifier.Family;
+    public MemberInheritanceMode InheritMembers { get; set; } = DefaultConfigValues.InheritMembers;
+    public AccessModifier MinVisibility { get; set; } = DefaultConfigValues.MinVisibility;
     public IEnumerable<string> ExcludeNamespaces { get; set; } = [];
-    public string OutputDir { get; set; } = "reference-docs";
+    public string OutputDir { get; set; } = DefaultConfigValues.OutputDir;
     public IEnumerable<string> ExcludeProjects { get; set; } = [];
     public string? StaticPagesDir { get; set; }
-    public DocumentationTemplate Template { get; set; } = DocumentationTemplate.Default;
+    public DocumentationTemplate Template { get; set; } = DefaultConfigValues.Template;
     public bool Verbose { get; set; }
     public string? DocVersion { get; set; }
 

@@ -56,9 +56,8 @@ public static class Program
     private static async Task Run(IConfiguration config)
     {
         RefDocGenFatalException? yamlConfigException = null;
-        bool verbose = config.Verbose;
 
-        if (Path.GetExtension(config.Input) == ".yaml") // YAML configuration
+        if (Path.GetExtension(config.Input) == ".yaml") // use YAML configuration
         {
             try
             {
@@ -67,11 +66,12 @@ public static class Program
             catch (RefDocGenFatalException ex)
             {
                 yamlConfigException = ex;
-                verbose = true;
             }
         }
 
-        var serilogLogger = GetSerilogLogger(verbose);
+        bool useVerbose = yamlConfigException is null || config.Verbose; // if there's YAML exception, always use verbose mode
+
+        var serilogLogger = GetSerilogLogger(useVerbose);
 
         IServiceCollection services = new ServiceCollection();
         _ = services.AddLogging(builder => builder.AddSerilog(serilogLogger, dispose: true));
