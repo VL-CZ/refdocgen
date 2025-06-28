@@ -1,9 +1,5 @@
 using RefDocGen.AssemblyAnalysis;
 using RefDocGen.CodeElements;
-using RefDocGen.Tools.Exceptions;
-using YamlDotNet.Core;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
 namespace RefDocGen.Config;
 
