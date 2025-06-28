@@ -38,7 +38,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="refdocgen.config.yaml">
+        <None Update="refdocgen.yaml">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="TemplateProcessors\Default\Templates\Static\bootstrap-5.3.5-dist.bundle.min.js">

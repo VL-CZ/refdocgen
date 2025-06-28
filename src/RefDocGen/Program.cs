@@ -53,7 +53,7 @@ public static class Program
     /// </summary>
     /// <param name="config">The command-line configuration.</param>
     /// <returns>A completed task.</returns>
-    private static async Task Run(IConfiguration config)
+    private static async Task Run(IProgramConfiguration config)
     {
         RefDocGenFatalException? yamlConfigException = null;
 
@@ -61,7 +61,7 @@ public static class Program
         {
             try
             {
-                config = YamlConfiguration.FromFile(config.Input);
+                config = YamlFileConfiguration.FromFile(config.Input);
             }
             catch (RefDocGenFatalException ex)
             {
@@ -85,7 +85,7 @@ public static class Program
         ILanguageConfiguration[] availableLanguages = [
             new CSharpLanguageConfiguration(),
             new TodoLanguageConfiguration()
-            // #ADD_LANGUAGE: instantiate the custom language configuration here
+            // #ADD_LANGUAGE: instantiate the custom language configuration here (e.g., new CustomLanguageConfiguration())
         ];
 
         Dictionary<DocumentationTemplate, ITemplateProcessor> templateProcessors = new()
@@ -144,10 +144,8 @@ public static class Program
 
             if (config.SaveConfig) // save the configuration
             {
-                string configFile = YamlConfiguration.fileName;
-                YamlConfiguration.Save(config, configFile);
-
-                logger.LogInformation("Configuration saved into {File} file", configFile);
+                YamlFileConfiguration.SaveToFile(config);
+                logger.LogInformation("Configuration saved into {File} file", YamlFileConfiguration.FileName);
             }
 
             Console.WriteLine($"Documentation generated in the '{config.OutputDir}' folder");
@@ -170,7 +168,7 @@ public static class Program
     /// </summary>
     /// <param name="config">The provided configuration.</param>
     /// <exception cref="OutputDirectoryNotEmptyException">Thrown if the 'force' option is <c>false</c> and the output directory is not empty (and the doc isn't versioned).</exception>
-    private static void CheckOutputDirectory(IConfiguration config)
+    private static void CheckOutputDirectory(IProgramConfiguration config)
     {
         if (config.DocVersion is null && Directory.Exists(config.OutputDir)
                && Directory.EnumerateFileSystemEntries(config.OutputDir).Any()) // the output directory exists and it its not empty and the documentation is not versioned

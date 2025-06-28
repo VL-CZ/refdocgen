@@ -2,7 +2,7 @@
   "profiles": {
     "RefDocGen": {
         "commandName": "Project",
-        "commandLineArgs": "refdocgen.config.yaml"
+        "commandLineArgs": "refdocgen.yaml"
     }
   }
 }

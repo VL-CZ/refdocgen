@@ -6,9 +6,9 @@ using RefDocGen.CodeElements;
 namespace RefDocGen.Tools.Config;
 
 /// <summary>
-/// Represents the command-line configuration of the program.
+/// Represents the command-line configuration of <c>RefDocGen</c>.
 /// </summary>
-internal class CommandLineConfiguration : IConfiguration
+internal class CommandLineConfiguration : IProgramConfiguration
 {
     [Usage(ApplicationAlias = "refdocgen INPUT [OPTIONS]")]
     public static IEnumerable<Example> Examples => [
