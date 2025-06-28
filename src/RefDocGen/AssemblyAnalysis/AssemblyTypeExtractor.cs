@@ -203,6 +203,8 @@ internal class AssemblyTypeExtractor
     /// <returns><see cref="ObjectTypeData"/> object representing the type.</returns>
     private ObjectTypeData ConstructObjectType(Type type)
     {
+        var (ifaceProperties, ifaceMethods, ifaceEvents) = GetInheritedInterfaceMembers(type); // if the type is an interface, the inherited members must be resolve manually
+
         // get members
         var constructors = type
             .GetConstructors(bindingFlags)
@@ -214,24 +216,29 @@ internal class AssemblyTypeExtractor
 
         var indexers = type
             .GetProperties(bindingFlags)
+            .Concat(ifaceProperties)
             .Where(p => !p.IsCompilerGenerated() && p.IsIndexer());
 
         var properties = type
             .GetProperties(bindingFlags)
+            .Concat(ifaceProperties)
             .Where(p => !p.IsCompilerGenerated())
             .Except(indexers);
 
         var operators = type
             .GetMethods(bindingFlags)
+            .Concat(ifaceMethods)
             .Where(m => !m.IsCompilerGenerated() && m.IsOperator());
 
         var methods = type
             .GetMethods(bindingFlags)
+            .Concat(ifaceMethods)
             .Where(m => !m.IsCompilerGenerated() && !m.IsSpecialName)
             .Except(operators);
 
         var events = type
             .GetEvents(bindingFlags)
+            .Concat(ifaceEvents)
             .Where(e => !e.IsCompilerGenerated());
 
         if (excludeObjectMethods) // exclude methods inherited from 'object' and 'ValueType' types (if requested)
@@ -280,6 +287,36 @@ internal class AssemblyTypeExtractor
         allNestedEnums.AddRange(nestedEnums);
 
         return objectType;
+    }
+
+    /// <summary>
+    /// Gets all inherited interface methods for an interface type.
+    /// </summary>
+    /// <param name="type">The selected type.</param>
+    /// <returns>
+    /// All properties, methods and events inherited from other interfaces, if the <paramref name="type"/> is an interface.
+    /// <br/>
+    /// If the <paramref name="type"/> is not an interface all enumerables are empty.
+    /// </returns>
+    private (IEnumerable<PropertyInfo> Properties, IEnumerable<MethodInfo> Methods, IEnumerable<EventInfo> Events)
+            GetInheritedInterfaceMembers(Type type)
+    {
+        if (!type.IsInterface || bindingFlags.HasFlag(BindingFlags.DeclaredOnly)) // the type is not an interface
+                                                                                  // OR the inherited members are to not meant to be included in the docs
+        {
+            return ([], [], []);
+        }
+
+        var interfaceMethods = type.GetInterfaces()
+                .SelectMany(i => i.GetMethods(bindingFlags));
+
+        var interfaceProperties = type.GetInterfaces()
+                .SelectMany(i => i.GetProperties(bindingFlags));
+
+        var interfaceEvents = type.GetInterfaces()
+                .SelectMany(i => i.GetEvents(bindingFlags));
+
+        return (interfaceProperties, interfaceMethods, interfaceEvents);
     }
 
     /// <summary>
