@@ -3,7 +3,7 @@ using CommandLine.Text;
 using RefDocGen.AssemblyAnalysis;
 using RefDocGen.CodeElements;
 
-namespace RefDocGen.Tools.Config;
+namespace RefDocGen.Config;
 
 /// <summary>
 /// Represents the command-line configuration of <c>RefDocGen</c>.

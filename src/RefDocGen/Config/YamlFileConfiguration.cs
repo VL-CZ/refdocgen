@@ -5,7 +5,7 @@ using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace RefDocGen.Tools.Config;
+namespace RefDocGen.Config;
 
 /// <summary>
 /// Represents YAML configuration of <c>RefDocGen</c>.

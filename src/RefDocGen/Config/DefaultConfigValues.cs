@@ -1,10 +1,10 @@
 using RefDocGen.AssemblyAnalysis;
 using RefDocGen.CodeElements;
 
-namespace RefDocGen.Tools.Config;
+namespace RefDocGen.Config;
 
 /// <summary>
-/// Contains default values for <c>RefDocGen</c> configuration.
+/// Contains the default values for <c>RefDocGen</c> configurations.
 /// </summary>
 internal static class DefaultConfigValues
 {
