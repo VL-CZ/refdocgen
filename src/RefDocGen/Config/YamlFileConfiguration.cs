@@ -8,7 +8,7 @@ using YamlDotNet.Serialization.NamingConventions;
 namespace RefDocGen.Config;
 
 /// <summary>
-/// Represents YAML configuration of <c>RefDocGen</c>.
+/// Represents the YAML configuration of <c>RefDocGen</c>.
 /// </summary>
 internal class YamlFileConfiguration : IProgramConfiguration
 {
@@ -134,6 +134,7 @@ internal class YamlFileConfiguration : IProgramConfiguration
 
         var serializer = new SerializerBuilder()
             .WithNamingConvention(namingConvention)
+            .WithIndentedSequences()
             .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitEmptyCollections)
             .Build();
 
