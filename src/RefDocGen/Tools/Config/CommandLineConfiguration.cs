@@ -15,7 +15,7 @@ internal class CommandLineConfiguration : IConfiguration
         new("Generate reference documentation", new object())
     ];
 
-    [Value(0, Required = true, MetaName = "INPUT", HelpText = "The assembly, project, or solution to document.")]
+    [Value(0, Required = true, MetaName = "INPUT", HelpText = "The assembly, project, or solution to document, or a YAML configuration file.")]
     public required string Input { get; set; }
 
     [Option('o', "output-dir", HelpText = "The output directory for the generated documentation.", Default = DefaultConfigValues.OutputDir, MetaValue = "DIR")]
@@ -30,7 +30,7 @@ internal class CommandLineConfiguration : IConfiguration
     [Option('f', "force-create", HelpText = "Forces the creation of the documentation. If the output directory already exists, it will be deleted first.", Default = false)]
     public bool ForceCreate { get; set; }
 
-    [Option('s', "save-config", HelpText = "Save the current configuration into a YAML file.", Default = false)]
+    [Option('s', "save-config", HelpText = "Save the current configuration to a YAML file.", Default = false)]
     public bool SaveConfig { get; set; }
 
     [Option("static-pages-dir", HelpText = "Directory containing additional static pages to include in the documentation.", Default = null, MetaValue = "DIR")]
