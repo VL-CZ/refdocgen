@@ -24,14 +24,17 @@ internal class CommandLineConfiguration : IConfiguration
     [Option('t', "template", HelpText = "The template to use for the documentation.", Default = DocumentationTemplate.Default, MetaValue = "TEMPLATE")]
     public DocumentationTemplate Template { get; set; }
 
-    [Option('s', "static-pages-dir", HelpText = "Directory containing additional static pages to include in the documentation.", Default = null, MetaValue = "DIR")]
-    public string? StaticPagesDir { get; set; }
-
     [Option('v', "verbose", HelpText = "Enable verbose output.", Default = false)]
     public bool Verbose { get; set; }
 
     [Option('f', "force-create", HelpText = "Forces the creation of the documentation. If the output directory already exists, it will be deleted first.", Default = false)]
     public bool ForceCreate { get; set; }
+
+    [Option('s', "save-config", HelpText = "Save the current configuration into a YAML file.", Default = false)]
+    public bool SaveConfig { get; set; }
+
+    [Option("static-pages-dir", HelpText = "Directory containing additional static pages to include in the documentation.", Default = null, MetaValue = "DIR")]
+    public string? StaticPagesDir { get; set; }
 
     [Option("doc-version", HelpText = "Generate a specific version of the documentation.", Default = null, MetaValue = "VERSION")]
     public string? DocVersion { get; set; }

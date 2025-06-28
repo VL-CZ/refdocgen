@@ -139,6 +139,14 @@ public static class Program
             var docGenerator = new DocGenerator(assemblyPaths, docPaths, templateProcessor, assemblyDataConfig, config.OutputDir, logger);
             docGenerator.GenerateDoc();
 
+            if (config.SaveConfig)
+            {
+                var configFile = Path.Combine(Environment.CurrentDirectory, YamlConfiguration.fileName);
+                YamlConfiguration.Save(config, configFile);
+
+                logger.LogInformation("Configuration save into {File} file", configFile);
+            }
+
             Console.WriteLine($"Documentation generated in the '{config.OutputDir}' folder");
         }
         catch (Exception ex)

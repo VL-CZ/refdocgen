@@ -7,20 +7,22 @@ namespace RefDocGen.Tools.Config;
 
 internal interface IConfiguration
 {
-    string Input { get; set; }
-    bool ForceCreate { get; set; }
-    MemberInheritanceMode InheritMembers { get; set; }
-    AccessModifier MinVisibility { get; set; }
-    IEnumerable<string> ExcludeNamespaces { get; set; }
-    string OutputDir { get; set; }
-    IEnumerable<string> ExcludeProjects { get; set; }
-    string? StaticPagesDir { get; set; }
-    DocumentationTemplate Template { get; set; }
-    bool Verbose { get; set; }
-    string? DocVersion { get; set; }
+    string Input { get; }
+    bool ForceCreate { get; }
+    MemberInheritanceMode InheritMembers { get; }
+    AccessModifier MinVisibility { get; }
+    IEnumerable<string> ExcludeNamespaces { get; }
+    string OutputDir { get; }
+    IEnumerable<string> ExcludeProjects { get; }
+    string? StaticPagesDir { get; }
+    DocumentationTemplate Template { get; }
+    bool Verbose { get; }
+    string? DocVersion { get; }
+    bool SaveConfig { get; }
+
 }
 
-class YamlFileConfiguration : IConfiguration
+internal class YamlFileConfiguration : IConfiguration
 {
     public string Input { get; set; } = string.Empty;
     public bool ForceCreate { get; set; }
@@ -34,17 +36,40 @@ class YamlFileConfiguration : IConfiguration
     public bool Verbose { get; set; }
     public string? DocVersion { get; set; }
 
+    [YamlIgnore]
+    public bool SaveConfig => false;
+
     public YamlFileConfiguration()
     {
+    }
+
+    internal static YamlFileConfiguration From(IConfiguration configuration)
+    {
+        return new YamlFileConfiguration
+        {
+            Input = configuration.Input,
+            ForceCreate = configuration.ForceCreate,
+            InheritMembers = configuration.InheritMembers,
+            MinVisibility = configuration.MinVisibility,
+            ExcludeNamespaces = configuration.ExcludeNamespaces,
+            OutputDir = configuration.OutputDir,
+            ExcludeProjects = configuration.ExcludeProjects,
+            StaticPagesDir = configuration.StaticPagesDir,
+            Template = configuration.Template,
+            Verbose = configuration.Verbose,
+            DocVersion = configuration.DocVersion,
+        };
     }
 }
 
 class YamlConfiguration
 {
+    internal const string fileName = "refdocgen.config.yaml";
+
     internal static IConfiguration FromFile(string filePath)
     {
         var deserializer = new DeserializerBuilder()
-            .WithNamingConvention(CamelCaseNamingConvention.Instance)
+            .WithNamingConvention(HyphenatedNamingConvention.Instance)
             .Build();
 
         var text = File.ReadAllText(filePath);
@@ -56,5 +81,19 @@ class YamlConfiguration
         }
 
         return config;
+    }
+
+    internal static void Save(IConfiguration configuration, string filePath)
+    {
+        var yamlConfig = YamlFileConfiguration.From(configuration);
+
+        var serializer = new SerializerBuilder()
+            .WithNamingConvention(HyphenatedNamingConvention.Instance)
+            .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitEmptyCollections)
+            .Build();
+
+        string yaml = serializer.Serialize(yamlConfig);
+
+        File.WriteAllText(filePath, yaml);
     }
 }
