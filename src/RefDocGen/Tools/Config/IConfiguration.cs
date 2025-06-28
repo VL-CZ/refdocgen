@@ -72,7 +72,7 @@ internal class YamlFileConfiguration : IConfiguration
     }
 }
 
-class YamlConfiguration
+internal class YamlConfiguration
 {
     internal const string fileName = "refdocgen.config.yaml";
 
@@ -87,7 +87,7 @@ class YamlConfiguration
             .WithNamingConvention(HyphenatedNamingConvention.Instance)
             .Build();
 
-        var text = File.ReadAllText(filePath);
+        string text = File.ReadAllText(filePath);
         YamlFileConfiguration? config;
 
         try

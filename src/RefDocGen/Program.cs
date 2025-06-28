@@ -65,11 +65,11 @@ public static class Program
             }
             catch (RefDocGenFatalException ex)
             {
-                yamlConfigException = ex;
+                yamlConfigException = ex; // for now, just store the exception, and rethrow it after the logger is initialized
             }
         }
 
-        bool useVerbose = yamlConfigException is null || config.Verbose; // if there's YAML exception, always use verbose mode
+        bool useVerbose = yamlConfigException is not null || config.Verbose; // if there's YAML exception, always use verbose mode
 
         var serilogLogger = GetSerilogLogger(useVerbose);
 
@@ -108,8 +108,8 @@ public static class Program
             //                                        new DocCommentHtmlConfiguration(), // if a custom configuration is provided, use CustomHtmlConfiguration.
             //                                        htmlRenderer,
             //                                        availableLanguages,
-            //                                        config.StaticPagesDirectory,
-            //                                        config.Version)
+            //                                        config.StaticPagesDir,
+            //                                        config.DocVersion)
             //
             // #ADD_TEMPLATE_PROCESSOR: use the enum value together with the custom template processor
             //
@@ -144,10 +144,10 @@ public static class Program
 
             if (config.SaveConfig) // save the configuration
             {
-                var configFile = Path.Combine(Environment.CurrentDirectory, YamlConfiguration.fileName);
+                string configFile = YamlConfiguration.fileName;
                 YamlConfiguration.Save(config, configFile);
 
-                logger.LogInformation("Configuration save into {File} file", configFile);
+                logger.LogInformation("Configuration saved into {File} file", configFile);
             }
 
             Console.WriteLine($"Documentation generated in the '{config.OutputDir}' folder");
