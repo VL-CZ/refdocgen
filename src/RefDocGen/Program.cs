@@ -14,6 +14,7 @@ using Serilog;
 using Serilog.Events;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 
 namespace RefDocGen;
 
@@ -55,7 +56,7 @@ public static class Program
     /// <returns>A completed task.</returns>
     private static async Task Run(IProgramConfiguration config)
     {
-        RefDocGenFatalException? yamlConfigException = null;
+        ExceptionDispatchInfo? yamlConfigException = null;
 
         if (Path.GetExtension(config.Input) == ".yaml") // use YAML configuration
         {
@@ -65,7 +66,7 @@ public static class Program
             }
             catch (RefDocGenFatalException ex)
             {
-                yamlConfigException = ex; // for now, just store the exception, and rethrow it after the logger is initialized
+                yamlConfigException = ExceptionDispatchInfo.Capture(ex); // for now, just capture the exception with its stacktrace, and rethrow it after the logger is initialized
             }
         }
 
@@ -73,6 +74,7 @@ public static class Program
 
         var serilogLogger = GetSerilogLogger(useVerbose);
 
+        // configure the service collection
         IServiceCollection services = new ServiceCollection();
         _ = services.AddLogging(builder => builder.AddSerilog(serilogLogger, dispose: true));
 
@@ -120,10 +122,7 @@ public static class Program
 
         try
         {
-            if (yamlConfigException is not null) // rethrow the YAML configuration exception (if there's any)
-            {
-                throw yamlConfigException;
-            }
+            yamlConfigException?.Throw(); // rethrow the YAML configuration exception (if there's any)
 
             string[] assemblyPaths = AssemblyLocator.GetAssemblies(config.Input);
             string[] docPaths = [.. assemblyPaths.Select(p => Path.ChangeExtension(p, ".xml"))];
