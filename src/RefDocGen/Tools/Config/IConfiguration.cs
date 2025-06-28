@@ -22,15 +22,15 @@ internal interface IConfiguration
 
 class YamlFileConfiguration : IConfiguration
 {
-    public required string Input { get; set; }
+    public string Input { get; set; } = string.Empty;
     public bool ForceCreate { get; set; }
-    public MemberInheritanceMode InheritMembers { get; set; }
-    public AccessModifier MinVisibility { get; set; }
+    public MemberInheritanceMode InheritMembers { get; set; } = MemberInheritanceMode.NonObject;
+    public AccessModifier MinVisibility { get; set; } = AccessModifier.Family;
     public IEnumerable<string> ExcludeNamespaces { get; set; } = [];
     public string OutputDir { get; set; } = "reference-docs";
     public IEnumerable<string> ExcludeProjects { get; set; } = [];
     public string? StaticPagesDir { get; set; }
-    public DocumentationTemplate Template { get; set; }
+    public DocumentationTemplate Template { get; set; } = DocumentationTemplate.Default;
     public bool Verbose { get; set; }
     public string? DocVersion { get; set; }
 
@@ -48,6 +48,13 @@ class YamlConfiguration
             .Build();
 
         var text = File.ReadAllText(filePath);
-        return deserializer.Deserialize<YamlFileConfiguration>(text);
+        var config = deserializer.Deserialize<YamlFileConfiguration>(text);
+
+        if (config.Input == string.Empty)
+        {
+            throw new ArgumentException();
+        }
+
+        return config;
     }
 }
