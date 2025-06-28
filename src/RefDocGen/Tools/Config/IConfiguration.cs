@@ -1,5 +1,7 @@
 using RefDocGen.AssemblyAnalysis;
 using RefDocGen.CodeElements;
+using RefDocGen.Tools.Exceptions;
+using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -68,16 +70,30 @@ class YamlConfiguration
 
     internal static IConfiguration FromFile(string filePath)
     {
+        if (!Path.Exists(filePath))
+        {
+            throw new YamlConfigurationNotFoundException(filePath); // YAML configuration not found
+        }
+
         var deserializer = new DeserializerBuilder()
             .WithNamingConvention(HyphenatedNamingConvention.Instance)
             .Build();
 
         var text = File.ReadAllText(filePath);
-        var config = deserializer.Deserialize<YamlFileConfiguration>(text);
+        YamlFileConfiguration? config;
+
+        try
+        {
+            config = deserializer.Deserialize<YamlFileConfiguration>(text);
+        }
+        catch (YamlException e)
+        {
+            throw new InvalidYamlConfigurationException(filePath, e);
+        }
 
         if (config.Input == string.Empty)
         {
-            throw new ArgumentException();
+            throw new InvalidYamlConfigurationException(filePath, new ArgumentException("The required property 'input' is missing."));
         }
 
         return config;

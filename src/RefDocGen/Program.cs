@@ -55,12 +55,23 @@ public static class Program
     /// <returns>A completed task.</returns>
     private static async Task Run(IConfiguration config)
     {
-        if (config.Input.EndsWith(".yaml")) // YAML
+        RefDocGenFatalException? yamlConfigException = null;
+        bool verbose = config.Verbose;
+
+        if (Path.GetExtension(config.Input) == ".yaml") // YAML configuration
         {
-            config = YamlConfiguration.FromFile(config.Input);
+            try
+            {
+                config = YamlConfiguration.FromFile(config.Input);
+            }
+            catch (RefDocGenFatalException ex)
+            {
+                yamlConfigException = ex;
+                verbose = true;
+            }
         }
 
-        var serilogLogger = GetSerilogLogger(config.Verbose);
+        var serilogLogger = GetSerilogLogger(verbose);
 
         IServiceCollection services = new ServiceCollection();
         _ = services.AddLogging(builder => builder.AddSerilog(serilogLogger, dispose: true));
@@ -109,6 +120,11 @@ public static class Program
 
         try
         {
+            if (yamlConfigException is not null) // rethrow the YAML configuration exception (if there's any)
+            {
+                throw yamlConfigException;
+            }
+
             string[] assemblyPaths = AssemblyLocator.GetAssemblies(config.Input);
             string[] docPaths = [.. assemblyPaths.Select(p => Path.ChangeExtension(p, ".xml"))];
 
@@ -119,27 +135,14 @@ public static class Program
                 NamespacesToExclude: config.ExcludeNamespaces
                 );
 
-            if (config.DocVersion is null && Directory.Exists(config.OutputDir)
-                && Directory.EnumerateFileSystemEntries(config.OutputDir).Any()) // the output directory exists and it its not empty and the documentation is not versioned
-            {
-                if (config.ForceCreate)
-                {
-                    Directory.Delete(config.OutputDir, true); // delete the output directory
-                }
-                else
-                {
-                    throw new OutputDirectoryNotEmptyException(config.OutputDir); // throw an exception
-                }
-            }
-
-            _ = Directory.CreateDirectory(config.OutputDir); // create the output directory
+            CheckOutputDirectory(config);
 
             var templateProcessor = templateProcessors[config.Template];
 
             var docGenerator = new DocGenerator(assemblyPaths, docPaths, templateProcessor, assemblyDataConfig, config.OutputDir, logger);
             docGenerator.GenerateDoc();
 
-            if (config.SaveConfig)
+            if (config.SaveConfig) // save the configuration
             {
                 var configFile = Path.Combine(Environment.CurrentDirectory, YamlConfiguration.fileName);
                 YamlConfiguration.Save(config, configFile);
@@ -160,6 +163,29 @@ public static class Program
                 logger.LogError(ex, "An error occurred, use the --verbose option to see detailed output");
             }
         }
+    }
+
+    /// <summary>
+    /// Checks if the output directory already exists, and possibly creates it.
+    /// </summary>
+    /// <param name="config">The provided configuration.</param>
+    /// <exception cref="OutputDirectoryNotEmptyException">Thrown if the 'force' option is <c>false</c> and the output directory is not empty (and the doc isn't versioned).</exception>
+    private static void CheckOutputDirectory(IConfiguration config)
+    {
+        if (config.DocVersion is null && Directory.Exists(config.OutputDir)
+               && Directory.EnumerateFileSystemEntries(config.OutputDir).Any()) // the output directory exists and it its not empty and the documentation is not versioned
+        {
+            if (config.ForceCreate)
+            {
+                Directory.Delete(config.OutputDir, true); // delete the output directory
+            }
+            else
+            {
+                throw new OutputDirectoryNotEmptyException(config.OutputDir); // throw an exception
+            }
+        }
+
+        _ = Directory.CreateDirectory(config.OutputDir); // create the output directory
     }
 
     /// <summary>
