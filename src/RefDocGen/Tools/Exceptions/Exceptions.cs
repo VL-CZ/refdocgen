@@ -48,6 +48,32 @@ internal class AssemblyNotFoundException : RefDocGenFatalException
 }
 
 /// <summary>
+/// Thrown when the YAML configuration file is not found.
+/// </summary>
+internal class YamlConfigurationNotFoundException : RefDocGenFatalException
+{
+    private const string messageTemplate = "The YAML configuration at path '{0}' was not found.";
+
+    public YamlConfigurationNotFoundException(string yamlConfigPath)
+        : base(messageTemplate, yamlConfigPath)
+    {
+    }
+}
+
+/// <summary>
+/// Thrown when the YAML configuration is invalid.
+/// </summary>
+internal class InvalidYamlConfigurationException : RefDocGenFatalException
+{
+    private const string messageTemplate = "The YAML configuration at path '{0}' is invalid.";
+
+    public InvalidYamlConfigurationException(string yamlConfigPath, Exception innerException)
+        : base(messageTemplate, innerException, yamlConfigPath)
+    {
+    }
+}
+
+/// <summary>
 /// Thrown when the provided solution cannot be loaded.
 /// </summary>
 internal class SolutionNotLoadedException : RefDocGenFatalException
