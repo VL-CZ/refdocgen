@@ -3,7 +3,7 @@ using Microsoft.Build.Evaluation;
 using Microsoft.Build.Exceptions;
 using RefDocGen.Tools.Exceptions;
 
-namespace RefDocGen.Tools.Config;
+namespace RefDocGen.Config;
 
 /// <summary>
 /// Class responsible for locating assemblies.

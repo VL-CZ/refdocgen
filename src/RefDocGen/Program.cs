@@ -5,15 +5,16 @@ using Microsoft.Build.Locator;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RefDocGen.AssemblyAnalysis;
+using RefDocGen.Config;
 using RefDocGen.TemplateProcessors;
 using RefDocGen.TemplateProcessors.Default;
 using RefDocGen.TemplateProcessors.Shared.Languages;
-using RefDocGen.Tools.Config;
 using RefDocGen.Tools.Exceptions;
 using Serilog;
 using Serilog.Events;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 
 namespace RefDocGen;
 
@@ -53,10 +54,27 @@ public static class Program
     /// </summary>
     /// <param name="config">The command-line configuration.</param>
     /// <returns>A completed task.</returns>
-    private static async Task Run(CommandLineConfiguration config)
+    private static async Task Run(IProgramConfiguration config)
     {
-        var serilogLogger = GetSerilogLogger(config.Verbose);
+        ExceptionDispatchInfo? yamlConfigException = null;
 
+        if (Path.GetExtension(config.Input) == ".yaml") // use YAML configuration
+        {
+            try
+            {
+                config = YamlFileConfiguration.FromFile(config.Input);
+            }
+            catch (RefDocGenFatalException ex)
+            {
+                yamlConfigException = ExceptionDispatchInfo.Capture(ex); // for now, just capture the exception with its stacktrace, and rethrow it after the logger is initialized
+            }
+        }
+
+        bool useVerbose = yamlConfigException is not null || config.Verbose; // if there's YAML exception, always use verbose mode
+
+        var serilogLogger = GetSerilogLogger(useVerbose);
+
+        // configure the service collection
         IServiceCollection services = new ServiceCollection();
         _ = services.AddLogging(builder => builder.AddSerilog(serilogLogger, dispose: true));
 
@@ -69,12 +87,12 @@ public static class Program
         ILanguageConfiguration[] availableLanguages = [
             new CSharpLanguageConfiguration(),
             new TodoLanguageConfiguration()
-            // #ADD_LANGUAGE: instantiate the custom language configuration here
+            // #ADD_LANGUAGE: instantiate the custom language configuration here (e.g., new CustomLanguageConfiguration())
         ];
 
         Dictionary<DocumentationTemplate, ITemplateProcessor> templateProcessors = new()
         {
-            [DocumentationTemplate.Default] = new DefaultTemplateProcessor(htmlRenderer, availableLanguages, config.StaticPagesDirectory, config.Version)
+            [DocumentationTemplate.Default] = new DefaultTemplateProcessor(htmlRenderer, availableLanguages, config.StaticPagesDir, config.DocVersion)
             // #ADD_TEMPLATE: use the enum value together with the RazorTemplateProcessor with 8 type parameters, representing the templates
             //                additionally, pass the 'DocCommentHtmlConfiguration' or a custom configuration (if provided)
             //
@@ -92,8 +110,8 @@ public static class Program
             //                                        new DocCommentHtmlConfiguration(), // if a custom configuration is provided, use CustomHtmlConfiguration.
             //                                        htmlRenderer,
             //                                        availableLanguages,
-            //                                        config.StaticPagesDirectory,
-            //                                        config.Version)
+            //                                        config.StaticPagesDir,
+            //                                        config.DocVersion)
             //
             // #ADD_TEMPLATE_PROCESSOR: use the enum value together with the custom template processor
             //
@@ -104,37 +122,32 @@ public static class Program
 
         try
         {
+            yamlConfigException?.Throw(); // rethrow the YAML configuration exception (if there's any)
+
             string[] assemblyPaths = AssemblyLocator.GetAssemblies(config.Input);
             string[] docPaths = [.. assemblyPaths.Select(p => Path.ChangeExtension(p, ".xml"))];
 
             var assemblyDataConfig = new AssemblyDataConfiguration(
                 MinVisibility: config.MinVisibility,
-                MemberInheritanceMode: config.MemberInheritance,
-                AssembliesToExclude: config.ProjectsToExclude,
-                NamespacesToExclude: config.NamespacesToExclude
+                MemberInheritanceMode: config.InheritMembers,
+                AssembliesToExclude: config.ExcludeProjects,
+                NamespacesToExclude: config.ExcludeNamespaces
                 );
 
-            if (config.Version is null && Directory.Exists(config.OutputDirectory)
-                && Directory.EnumerateFileSystemEntries(config.OutputDirectory).Any()) // the output directory exists and it its not empty and the documentation is not versioned
-            {
-                if (config.ForceCreate)
-                {
-                    Directory.Delete(config.OutputDirectory, true); // delete the output directory
-                }
-                else
-                {
-                    throw new OutputDirectoryNotEmptyException(config.OutputDirectory); // throw an exception
-                }
-            }
-
-            _ = Directory.CreateDirectory(config.OutputDirectory); // create the output directory
+            CheckOutputDirectory(config);
 
             var templateProcessor = templateProcessors[config.Template];
 
-            var docGenerator = new DocGenerator(assemblyPaths, docPaths, templateProcessor, assemblyDataConfig, config.OutputDirectory, logger);
+            var docGenerator = new DocGenerator(assemblyPaths, docPaths, templateProcessor, assemblyDataConfig, config.OutputDir, logger);
             docGenerator.GenerateDoc();
 
-            Console.WriteLine($"Documentation generated in the '{config.OutputDirectory}' folder");
+            if (config.SaveConfig) // save the configuration
+            {
+                YamlFileConfiguration.SaveToFile(config);
+                logger.LogInformation("Configuration saved into {File} file", YamlFileConfiguration.FileName);
+            }
+
+            Console.WriteLine($"Documentation generated in the '{config.OutputDir}' folder");
         }
         catch (Exception ex)
         {
@@ -147,6 +160,29 @@ public static class Program
                 logger.LogError(ex, "An error occurred, use the --verbose option to see detailed output");
             }
         }
+    }
+
+    /// <summary>
+    /// Checks if the output directory already exists, and possibly creates it.
+    /// </summary>
+    /// <param name="config">The provided configuration.</param>
+    /// <exception cref="OutputDirectoryNotEmptyException">Thrown if the 'force' option is <c>false</c> and the output directory is not empty (and the doc isn't versioned).</exception>
+    private static void CheckOutputDirectory(IProgramConfiguration config)
+    {
+        if (config.DocVersion is null && Directory.Exists(config.OutputDir)
+               && Directory.EnumerateFileSystemEntries(config.OutputDir).Any()) // the output directory exists and it its not empty and the documentation is not versioned
+        {
+            if (config.ForceCreate)
+            {
+                Directory.Delete(config.OutputDir, true); // delete the output directory
+            }
+            else
+            {
+                throw new OutputDirectoryNotEmptyException(config.OutputDir); // throw an exception
+            }
+        }
+
+        _ = Directory.CreateDirectory(config.OutputDir); // create the output directory
     }
 
     /// <summary>

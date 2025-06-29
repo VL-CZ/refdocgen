@@ -1,0 +1,10 @@
+input: C:\Users\vojta\UK\mgr-thesis\refdocgen\src\RefDocGen\bin\Debug\net8.0\RefDocGen.dll
+force-create: true
+inherit-members: NonObject
+min-visibility: Private
+exclude-namespaces:
+  - RefDocGen.ExampleLibrary.Tools.Exclude
+  - RefDocGen.ExampleLibrary.Exclude
+output-dir: reference-docs
+template: Default
+verbose: true
