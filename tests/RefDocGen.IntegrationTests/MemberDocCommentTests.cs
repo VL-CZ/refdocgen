@@ -46,6 +46,16 @@ public class MemberDocCommentTests
     }
 
     [Fact]
+    public void ExampleDoc_Matches()
+    {
+        using var document = DocumentationTools.GetApiPage("RefDocGen.ExampleLibrary.User.html");
+
+        string remarksDoc = TypePageTools.GetExampleDoc(document.GetMemberElement("ToYaml"));
+
+        remarksDoc.ShouldBe("user.ToYaml()");
+    }
+
+    [Fact]
     public void ValueDoc_Matches()
     {
         using var document = DocumentationTools.GetApiPage("RefDocGen.ExampleLibrary.User.html");

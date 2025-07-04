@@ -3,6 +3,9 @@ namespace RefDocGen.ExampleLibrary.Tools;
 /// <summary>
 /// Extension class for <see cref="string"/> type.
 /// </summary>
+/// <example>
+/// StringExtensions
+/// </example>
 public static class StringExtensions
 {
     /// <summary>

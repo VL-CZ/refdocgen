@@ -39,6 +39,16 @@ public class TypeDocCommentTests
     }
 
     [Fact]
+    public void ExampleDoc_Matches()
+    {
+        using var document = DocumentationTools.GetApiPage("RefDocGen.ExampleLibrary.StringExtensions.html");
+
+        string remarksDoc = TypePageTools.GetExampleDoc(document.GetTypeDataSection());
+
+        remarksDoc.ShouldBe("StringExtensions");
+    }
+
+    [Fact]
     public void SeeAlsoDocs_Match()
     {
         using var document = DocumentationTools.GetApiPage("RefDocGen.ExampleLibrary.Tools.Collections.MyStringCollection.html");
