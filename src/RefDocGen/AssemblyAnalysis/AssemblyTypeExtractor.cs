@@ -283,7 +283,7 @@ internal class AssemblyTypeExtractor
             GetInheritedInterfaceMembers(Type type)
     {
         if (!type.IsInterface || bindingFlags.HasFlag(BindingFlags.DeclaredOnly)) // the type is not an interface
-                                                                                  // OR the inherited members are to not meant to be included
+                                                                                  // OR the inherited members are to not meant to be included in the docs
         {
             return ([], [], []);
         }
