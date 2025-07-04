@@ -33,6 +33,7 @@ namespace RefDocGen.TemplateProcessors.Shared.TemplateModels.Members;
 /// <param name="ImplementedInterfaces">
 /// Returns the types of the interfaces, whose part of contract this event implements.
 /// </param>
+/// <param name="ExampleDocComment"><c>example</c> documentation comment for the event. <c>null</c> if the doc comment is not provided.</param>
 public record EventTM(
     string Id,
     string Name,
@@ -41,6 +42,7 @@ public record EventTM(
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,
+    string? ExampleDocComment,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions,
     CodeLinkTM? InheritedFrom,

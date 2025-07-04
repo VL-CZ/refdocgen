@@ -39,6 +39,7 @@ namespace RefDocGen.TemplateProcessors.Shared.TemplateModels.Members;
 /// <param name="ImplementedInterfaces">
 /// Returns the types of the interfaces, whose part of contract this indexer implements.
 /// </param>
+/// <param name="ExampleDocComment"><c>example</c> documentation comment for the indexer. <c>null</c> if the doc comment is not provided.</param>
 public record IndexerTM(
     string Id,
     GenericTypeLinkTM Type,
@@ -53,6 +54,7 @@ public record IndexerTM(
     string? SummaryDocComment,
     string? RemarksDocComment,
     string? ValueDocComment,
+    string? ExampleDocComment,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions,
     CodeLinkTM? InheritedFrom,

@@ -25,6 +25,7 @@ namespace RefDocGen.TemplateProcessors.Shared.TemplateModels.Members;
 /// If the field is inherited, this represents the type from which it originates.
 /// <c>null</c> if the field is not inherited.
 /// </param>
+/// <param name="ExampleDocComment"><c>example</c> documentation comment for the field. <c>null</c> if the doc comment is not provided.</param>
 public record FieldTM(
     string Id,
     string Name,
@@ -34,5 +35,6 @@ public record FieldTM(
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,
+    string? ExampleDocComment,
     string[] SeeAlsoDocComments,
     CodeLinkTM? InheritedFrom);

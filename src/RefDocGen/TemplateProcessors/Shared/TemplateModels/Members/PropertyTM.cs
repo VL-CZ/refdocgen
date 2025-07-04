@@ -45,6 +45,7 @@ namespace RefDocGen.TemplateProcessors.Shared.TemplateModels.Members;
 /// <param name="ImplementedInterfaces">
 /// Returns the types of the interfaces, whose part of contract this property implements.
 /// </param>
+/// <param name="ExampleDocComment"><c>example</c> documentation comment for the property. <c>null</c> if the doc comment is not provided.</param>
 public record PropertyTM(
     string Id,
     string Name,
@@ -60,6 +61,7 @@ public record PropertyTM(
     string? SummaryDocComment,
     string? RemarksDocComment,
     string? ValueDocComment,
+    string? ExampleDocComment,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions,
     CodeLinkTM? InheritedFrom,
