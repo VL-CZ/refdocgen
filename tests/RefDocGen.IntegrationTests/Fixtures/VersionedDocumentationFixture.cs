@@ -69,7 +69,6 @@ public class VersionedDocumentationFixture : IDisposable
 
             var generator = new DocGenerator(
                 ["../../../../RefDocGen.ExampleLibrary/bin/Debug/net8.0/RefDocGen.ExampleLibrary.dll"], // use only the ExampleLibrary
-                ["../../../../RefDocGen.ExampleLibrary/bin/Debug/net8.0/RefDocGen.ExampleLibrary.xml"],
                 templateProcessor,
                 assemblyDataConfig,
                 outputDir,

@@ -10,37 +10,8 @@ using RefDocGen.CodeElements.Types.Concrete.Delegate;
 using RefDocGen.CodeElements.Types.Concrete.Enum;
 using RefDocGen.Tools.Exceptions;
 using System.Reflection;
-using System.Runtime.Loader;
 
 namespace RefDocGen.AssemblyAnalysis;
-class FolderAssemblyLoadContext : AssemblyLoadContext
-{
-    private readonly string _folderPath;
-
-    public FolderAssemblyLoadContext(string folderPath) : base(isCollectible: false)
-    {
-        _folderPath = folderPath;
-        Resolving += OnResolving;
-    }
-
-    private Assembly? OnResolving(AssemblyLoadContext context, AssemblyName assemblyName)
-    {
-        string dependencyName = assemblyName.Name + ".dll";
-
-        // Look for dependency DLL in the folder (non-recursive, change if needed)
-        string dependencyPath = Path.Combine(_folderPath, dependencyName);
-
-        if (File.Exists(dependencyPath) && assemblyName.Name != "System.Windows.Forms")
-        {
-            return LoadFromAssemblyPath(dependencyPath);
-        }
-
-        // Fallback: try default context (resolves framework assemblies like WindowsBase)
-        return AssemblyLoadContext.Default.Assemblies
-            .FirstOrDefault(a => a.GetName().Name == assemblyName.Name);
-    }
-}
-
 
 /// <summary>
 /// Class responsible for extracting type information from a selected assembly.
@@ -51,11 +22,6 @@ internal class AssemblyTypeExtractor
     /// Name of the delegate 'invoke' method.
     /// </summary>
     private const string delegateMethodName = "Invoke";
-
-    /// <summary>
-    /// Path to the DLL assembly to analyze and extract types.
-    /// </summary>
-    private readonly IEnumerable<string> assemblyPaths;
 
     /// <summary>
     /// Names of assemblies to be excluded from the reference documentation.
@@ -103,6 +69,19 @@ internal class AssemblyTypeExtractor
     private readonly ILogger logger;
 
     /// <summary>
+    /// Absolute paths to the DLL assemblies to analyze and extract types.
+    /// </summary>
+    private readonly IEnumerable<string> assemblyPaths;
+
+    /// <summary>
+    /// Absolute paths to the assemblies that are to be documented.
+    /// </summary>
+    /// <remarks>
+    /// The assemblies marked as excluded are not contained in this collection.
+    /// </remarks>
+    internal IEnumerable<string> AnalyzedAssemblies { get; private set; } = [];
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="AssemblyTypeExtractor"/> class with the specified assembly path.
     /// </summary>
     /// <param name="assemblyPaths">Paths to the assembly files that should be documented.</param>
@@ -110,7 +89,7 @@ internal class AssemblyTypeExtractor
     /// <param name="logger">A logger instance.</param>
     internal AssemblyTypeExtractor(IEnumerable<string> assemblyPaths, AssemblyDataConfiguration configuration, ILogger logger)
     {
-        this.assemblyPaths = assemblyPaths;
+        this.assemblyPaths = assemblyPaths.Select(Path.GetFullPath); // use absolute paths
         this.logger = logger;
 
         minVisibility = configuration.MinVisibility;
@@ -133,14 +112,15 @@ internal class AssemblyTypeExtractor
     internal TypeRegistry GetDeclaredTypes()
     {
         List<Type> types = [];
+        List<string> includedAssemblies = [];
 
         foreach (string assemblyPath in assemblyPaths)
         {
             Assembly? assembly = null;
             try
             {
-                string assemblyFolder = Path.GetDirectoryName(assemblyPath);
-                var alc = new FolderAssemblyLoadContext(assemblyFolder);
+                string assemblyFolder = Path.GetDirectoryName(assemblyPath) ?? "";
+                var alc = new AssemblyDependencyLoadContext(assemblyFolder);
 
                 assembly = alc.LoadFromAssemblyPath(assemblyPath);
             }
@@ -152,14 +132,18 @@ internal class AssemblyTypeExtractor
             // load types
             if (!assembliesToExclude.Contains(assembly.GetName().Name))
             {
-                logger.LogInformation("Assembly {Name} loaded", assemblyPath);
                 types.AddRange(assembly.GetTypes());
+                includedAssemblies.Add(assemblyPath);
+
+                logger.LogInformation("Assembly {Name} loaded", assemblyPath);
             }
             else
             {
                 logger.LogInformation("Assembly {Name} excluded", assemblyPath);
             }
         }
+
+        AnalyzedAssemblies = includedAssemblies; // set the analyzed assemblies
 
         var visibleTypes = types
             .Where(t => !IsInExcludedNamespace(t))

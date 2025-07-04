@@ -1,8 +1,9 @@
 {
-  "profiles": {
-    "RefDocGen": {
-        "commandName": "Project",
-        "commandLineArgs": "refdocgen.yaml"
+    "profiles": {
+        "RefDocGen": {
+            "commandName": "Project",
+            "commandLineArgs": "../../RefDocGen.sln -f -v",
+            "workingDirectory": "$(ProjectDir)"
+        }
     }
-  }
 }

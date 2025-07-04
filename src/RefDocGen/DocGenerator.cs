@@ -16,11 +16,6 @@ public class DocGenerator
     private readonly IEnumerable<string> assemblyPaths;
 
     /// <summary>
-    /// Paths to the XML documentation files.
-    /// </summary>
-    private readonly IEnumerable<string> docXmlPaths;
-
-    /// <summary>
     /// An instance used for processing the templates.
     /// </summary>
     private readonly ITemplateProcessor templateProcessor;
@@ -44,16 +39,14 @@ public class DocGenerator
     /// Initialize a new instance of <see cref="DocGenerator"/> class.
     /// </summary>
     /// <param name="assemblyPaths">Paths to the DLL assemblies.</param>
-    /// <param name="docXmlPaths">Path to the XML documentation files.</param>
     /// <param name="templateProcessor">An instance used for processing the templates.</param>
     /// <param name="assemblyDataConfiguration">Configuration describing what data should be extracted from the assemblies.</param>
     /// <param name="outputDirectory">The directory, where the generated output will be stored.</param>
     /// <param name="logger">A logger instance.</param>
-    public DocGenerator(IEnumerable<string> assemblyPaths, IEnumerable<string> docXmlPaths, ITemplateProcessor templateProcessor,
+    public DocGenerator(IEnumerable<string> assemblyPaths, ITemplateProcessor templateProcessor,
         AssemblyDataConfiguration assemblyDataConfiguration, string outputDirectory, ILogger logger)
     {
         this.assemblyPaths = assemblyPaths;
-        this.docXmlPaths = docXmlPaths;
         this.templateProcessor = templateProcessor;
         this.assemblyDataConfiguration = assemblyDataConfiguration;
         this.outputDirectory = outputDirectory;
@@ -66,11 +59,13 @@ public class DocGenerator
     public void GenerateDoc()
     {
         var assemblyAnalyzer = new AssemblyTypeExtractor(assemblyPaths, assemblyDataConfiguration, logger);
-        var typeRegistry = assemblyAnalyzer.GetDeclaredTypes();
+        var typeRegistry = assemblyAnalyzer.GetDeclaredTypes(); // get the TypeRegistry
+
+        string[] docXmlPaths = [.. assemblyAnalyzer.AnalyzedAssemblies.Select(p => Path.ChangeExtension(p, ".xml"))]; // get XML documentation files
 
         var docCommentExtractor = new DocCommentExtractor(docXmlPaths, typeRegistry, logger);
-        docCommentExtractor.AddComments();
+        docCommentExtractor.AddComments(); // add the doc comments
 
-        templateProcessor.ProcessTemplates(typeRegistry, outputDirectory, logger);
+        templateProcessor.ProcessTemplates(typeRegistry, outputDirectory, logger); // create the documentation pages
     }
 }

@@ -73,11 +73,6 @@ public class DocumentationFixture : IDisposable
                 "../../../../RefDocGen.ExampleFSharpLibrary/bin/Debug/net8.0/RefDocGen.ExampleFSharpLibrary.dll", // ExampleFSharpLibrary
                 "../../../../RefDocGen.ExampleVbLibrary/bin/Debug/net8.0/RefDocGen.ExampleVbLibrary.dll", // ExampleVbLibrary
             ],
-            [
-                "../../../../RefDocGen.ExampleLibrary/bin/Debug/net8.0/RefDocGen.ExampleLibrary.xml", // ExampleLibrary
-                "../../../../RefDocGen.ExampleFSharpLibrary/bin/Debug/net8.0/RefDocGen.ExampleFSharpLibrary.xml", // ExampleFSharpLibrary
-                "../../../../RefDocGen.ExampleVbLibrary/bin/Debug/net8.0/RefDocGen.ExampleVbLibrary.xml", // ExampleVbLibrary
-            ],
             templateProcessor,
             assemblyDataConfig,
             outputDir,

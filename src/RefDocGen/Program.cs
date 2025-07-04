@@ -125,7 +125,6 @@ public static class Program
             yamlConfigException?.Throw(); // rethrow the YAML configuration exception (if there's any)
 
             string[] assemblyPaths = AssemblyLocator.GetAssemblies(config.Input);
-            string[] docPaths = [.. assemblyPaths.Select(p => Path.ChangeExtension(p, ".xml"))];
 
             var assemblyDataConfig = new AssemblyDataConfiguration(
                 MinVisibility: config.MinVisibility,
@@ -138,7 +137,7 @@ public static class Program
 
             var templateProcessor = templateProcessors[config.Template];
 
-            var docGenerator = new DocGenerator(assemblyPaths, docPaths, templateProcessor, assemblyDataConfig, config.OutputDir, logger);
+            var docGenerator = new DocGenerator(assemblyPaths, templateProcessor, assemblyDataConfig, config.OutputDir, logger);
             docGenerator.GenerateDoc();
 
             if (config.SaveConfig) // save the configuration
