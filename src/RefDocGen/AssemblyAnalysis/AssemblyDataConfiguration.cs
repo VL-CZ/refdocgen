@@ -2,6 +2,9 @@ using RefDocGen.CodeElements;
 
 namespace RefDocGen.AssemblyAnalysis;
 
+/// <summary>
+/// A configuration describing what types and members to extract from an assembly.
+/// </summary>
 /// <param name="MinVisibility">Minimal visibility of the types and members to include.</param>
 /// <param name="MemberInheritanceMode">Specifies which inherited members should be included in types.</param>
 /// <param name="AssembliesToExclude">Names of assemblies to be excluded from the reference documentation.</param>

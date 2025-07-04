@@ -163,7 +163,7 @@ public class User
     }
 
     /// <summary>
-    /// Get dictionary of animals, whose keys are animal type and values are the animals of given type.
+    /// Get dictionary of animals, whose keys are of animal type and values are the <see cref="Animal"/> objects of given type.
     /// </summary>
     /// <returns>Dictionary of animals, indexed by their type.</returns>
     public Dictionary<string, List<Animal>> GetAnimalsByType()

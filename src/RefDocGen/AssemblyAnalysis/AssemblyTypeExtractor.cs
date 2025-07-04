@@ -10,12 +10,9 @@ using RefDocGen.CodeElements.Types.Concrete.Delegate;
 using RefDocGen.CodeElements.Types.Concrete.Enum;
 using RefDocGen.Tools.Exceptions;
 using System.Reflection;
-
-namespace RefDocGen.AssemblyAnalysis;
-
-using System.Reflection;
 using System.Runtime.Loader;
 
+namespace RefDocGen.AssemblyAnalysis;
 class FolderAssemblyLoadContext : AssemblyLoadContext
 {
     private readonly string _folderPath;
