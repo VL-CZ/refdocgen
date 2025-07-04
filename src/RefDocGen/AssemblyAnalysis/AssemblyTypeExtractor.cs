@@ -282,8 +282,9 @@ internal class AssemblyTypeExtractor
     private (IEnumerable<PropertyInfo> Properties, IEnumerable<MethodInfo> Methods, IEnumerable<EventInfo> Events)
             GetInheritedInterfaceMembers(Type type)
     {
-        if (!type.IsInterface || bindingFlags.HasFlag(BindingFlags.DeclaredOnly)) // the type is not an interface
-                                                                                  // OR the inherited members are to not meant to be included in the docs
+        if (!type.IsInterface || bindingFlags.HasFlag(BindingFlags.DeclaredOnly))
+        // the type is not an interface
+        // OR the inherited members are to not meant to be included in the docs
         {
             return ([], [], []);
         }
