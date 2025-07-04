@@ -22,7 +22,8 @@
     /// <returns>Boolean indicating whether the model is documented.</returns>
     private bool IsModelDocumented()
     {
-        return Model.SummaryDocComment is not null || Model.RemarksDocComment is not null || Model.SeeAlsoDocComments.Any();
+        return Model.SummaryDocComment is not null || Model.RemarksDocComment is not null
+            || Model.ExampleDocComment is not null || Model.SeeAlsoDocComments.Any();
     }
 }
 
@@ -31,7 +32,7 @@
         <CascadingValue Value="Languages">
             <LayoutView Layout="typeof(AppLayout)">
                 <div data-id="declared-type-data">
-                    <TypeNameTitle Type="@Model"/>
+                    <TypeNameTitle Type="@Model" />
 
                     <AssemblyLink Assembly="@Model.Assembly" />
 
@@ -45,8 +46,9 @@
 
                     <AttributesSection Attributes="@Model.Attributes" />
 
-                    <!-- Remarks doc comment -->
                     <RemarksDoc DocComment="@Model.RemarksDocComment" />
+
+                    <ExampleDoc DocComment="@Model.ExampleDocComment" />
 
                     <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
 
