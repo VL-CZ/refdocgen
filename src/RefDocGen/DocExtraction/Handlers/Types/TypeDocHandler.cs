@@ -31,7 +31,7 @@ internal class TypeDocHandler
         }
 
         // add 'example' doc comment
-        if (docComment.TryGetRemarksElement(out var exampleNode))
+        if (docComment.TryGetExampleElement(out var exampleNode))
         {
             type.ExampleDocComment = exampleNode;
         }

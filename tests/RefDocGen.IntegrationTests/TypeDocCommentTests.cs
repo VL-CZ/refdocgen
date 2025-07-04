@@ -41,7 +41,7 @@ public class TypeDocCommentTests
     [Fact]
     public void ExampleDoc_Matches()
     {
-        using var document = DocumentationTools.GetApiPage("RefDocGen.ExampleLibrary.StringExtensions.html");
+        using var document = DocumentationTools.GetApiPage("RefDocGen.ExampleLibrary.Tools.StringExtensions.html");
 
         string remarksDoc = TypePageTools.GetExampleDoc(document.GetTypeDataSection());
 
