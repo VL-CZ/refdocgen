@@ -1,5 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using YamlDotNet.RepresentationModel;
 
 namespace RefDocGen.ExampleLibrary;
 
@@ -161,7 +163,7 @@ public class User
     }
 
     /// <summary>
-    /// Get dictionary of animals, whose keys are animal type and values are the animals of given type.
+    /// Get dictionary of animals, whose keys are of animal type and values are the <see cref="Animal"/> objects of given type.
     /// </summary>
     /// <returns>Dictionary of animals, indexed by their type.</returns>
     public Dictionary<string, List<Animal>> GetAnimalsByType()
@@ -177,5 +179,14 @@ public class User
     public void AddAnimalsByType(Dictionary<string, List<Animal>> animals)
     {
 
+    }
+
+    /// <summary>
+    /// Gets YAML representation of the user.
+    /// </summary>
+    /// <returns><see cref="YamlNode"/> representation of the user.</returns>
+    public YamlNode ToYaml()
+    {
+        throw new NotImplementedException();
     }
 }

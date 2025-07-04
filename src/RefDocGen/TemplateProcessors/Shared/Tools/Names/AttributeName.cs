@@ -18,10 +18,11 @@ internal static class AttributeName
     /// </summary>
     /// <param name="language">Language, in which the attribute name is returned.</param>
     /// <param name="attribute">The attribute instance, whose name is retrieved.</param>
+    /// <param name="useFullName">Whether the full name of the attribute should be used.</param>
     /// <returns>Name of the attribute instance.</returns>
-    internal static string Of(ILanguageConfiguration language, IAttributeData attribute)
+    internal static string Of(ILanguageConfiguration language, IAttributeData attribute, bool useFullName)
     {
-        string name = language.GetTypeName(attribute.Type);
+        string name = language.GetTypeName(attribute.Type, true, useFullName);
 
         int attributeSuffixPosition = name.LastIndexOf(attributeSuffix, StringComparison.Ordinal);
 

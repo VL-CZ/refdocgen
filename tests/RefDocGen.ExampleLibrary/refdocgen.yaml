@@ -1,0 +1,15 @@
+input: ../../RefDocGen.sln
+force-create: true
+inherit-members: NonObject
+min-visibility: Private
+exclude-namespaces:
+  - RefDocGen.ExampleLibrary.Exclude
+  - RefDocGen.ExampleLibrary.Tools.Exclude
+output-dir: reference-docs
+exclude-projects:
+  - RefDocGen
+  - RefDocGen.UnitTests
+  - RefDocGen.IntegrationTests
+template: Default
+verbose: true
+static-pages-dir: ../../out/static-pages

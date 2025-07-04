@@ -43,12 +43,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="data\Debug\net8.0\RefDocGen.ExampleLibrary.dll">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="data\Debug\net8.0\RefDocGen.ExampleLibrary.xml">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
         <None Update="data\static-pages\css\styles.css">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>

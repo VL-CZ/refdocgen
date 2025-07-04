@@ -17,6 +17,8 @@ public class TypeDocCommentTests
     [InlineData("RefDocGen.ExampleLibrary.Tools.Season", "Represents season of a year.")]
     [InlineData("RefDocGen.ExampleLibrary.Tools.ObjectPredicate", "Predicate about an object.")]
     [InlineData("RefDocGen.ExampleLibrary.Tools.Collections.MyCollection-1.MyCollectionEnumerator", "Custom collection enumerator.")]
+    [InlineData("RefDocGen.ExampleFSharpLibrary.FSharpMathTools", "Performs mathematical operations.")]
+    [InlineData("RefDocGen.ExampleVbLibrary.VbMathTools", "Performs mathematical operations.")]
     public void SummaryDoc_Matches(string pageName, string expectedDoc)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");

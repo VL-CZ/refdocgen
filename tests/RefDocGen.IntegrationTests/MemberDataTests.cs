@@ -37,6 +37,7 @@ public class MemberDataTests
     [Theory]
     [InlineData("RefDocGen.ExampleLibrary.Dog", "Owner", "Animal")]
     [InlineData("RefDocGen.ExampleLibrary.Tools.Collections.MySortedList-1", "Contains(-0)", "MyCollection<T>")]
+    [InlineData("RefDocGen.ExampleLibrary.Tools.Collections.IMyCollection-1", "Remove(-0)", "ICollection<T>")]
     public void InheritedFromString_Matches(string pageName, string memberId, string expectedInheritedFromTypeName)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");

@@ -6,7 +6,7 @@ using Shouldly;
 namespace RefDocGen.IntegrationTests;
 
 /// <summary>
-/// This class contains tests for 'namespace detail' page.
+/// This class contains tests for 'namespace' page.
 /// </summary>
 [Collection(DocumentationTestCollection.Name)]
 public class NamespacePageTests : IDisposable

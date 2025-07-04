@@ -22,6 +22,8 @@ public class TypeDeclarationTests
     [InlineData("RefDocGen.ExampleLibrary.Tools.Season", "internal enum Season")]
     [InlineData("RefDocGen.ExampleLibrary.Tools.ObjectPredicate", "internal delegate ObjectPredicate")]
     [InlineData("RefDocGen.ExampleLibrary.Tools.MyPredicate-1", "internal delegate MyPredicate<T>")]
+    [InlineData("RefDocGen.ExampleFSharpLibrary.FSharpMathTools", "public static class FSharpMathTools")]
+    [InlineData("RefDocGen.ExampleVbLibrary.VbMathTools", "public class VbMathTools")]
     public void TypeDeclaration_Matches(string pageName, string expectedDeclarationString)
     {
         using var document = DocumentationTools.GetApiPage($"{pageName}.html");

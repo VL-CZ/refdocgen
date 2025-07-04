@@ -1,4 +1,4 @@
-using System.Xml.Linq;
+using AngleSharp.Dom;
 using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
@@ -7,6 +7,7 @@ using RefDocGen.TemplateProcessors.Shared.Tools;
 using RefDocGen.TemplateProcessors.Shared.Tools.Names;
 using RefDocGen.Tools.Exceptions;
 using RefDocGen.Tools.Xml;
+using System.Xml.Linq;
 
 namespace RefDocGen.TemplateProcessors.Shared.DocComments.Html;
 
@@ -97,7 +98,8 @@ internal class DocCommentTransformer : IDocCommentTransformer
         var docCommentCopy = new XElement(docComment);
         TransformToHtml(docCommentCopy);
 
-        if (!docCommentCopy.Nodes().Any()) // no content -> return null
+        if (!docCommentCopy.Nodes().Any() || // no content -> return null
+            docCommentCopy.Nodes().All(node => node is XText text && string.IsNullOrEmpty(text.Value))) // empty content -> return null
         {
             return null;
         }
@@ -149,6 +151,11 @@ internal class DocCommentTransformer : IDocCommentTransformer
 
         if (transformedElement is not null)
         {
+            if (!transformedElement.Nodes().Any())
+            {
+                transformedElement.Add(new XText("")); // force add empty text to each transformed HTML element, to make it paired element
+            }
+
             // replace the element by HTML representation
             element.ReplaceDataBy(transformedElement);
         }

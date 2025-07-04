@@ -139,12 +139,14 @@ internal abstract class TypeTMCreator : BaseTMCreator
         LanguageSpecificData<string>?[] constructorArgumentTMs = [.. attribute.ConstructorArgumentValues.Select(GetLanguageSpecificDefaultValue)];
         var namedArgumentTMs = attribute.NamedArguments.Select(na => GetFrom(na, attribute)).ToArray();
 
-        var typeLink = new CodeLinkTM(
-                GetLanguageSpecificData(lang => AttributeName.Of(lang, attribute)),
-                typeUrlResolver.GetUrlOf(attribute.Type));
+        string? attributeUrl = typeUrlResolver.GetUrlOf(attribute.Type);
+
+        var attributeLink = new CodeLinkTM(
+                GetLanguageSpecificData(lang => AttributeName.Of(lang, attribute, attributeUrl is null)),
+                attributeUrl);
 
         return new AttributeTM(
-               typeLink,
+               attributeLink,
                constructorArgumentTMs,
                namedArgumentTMs);
     }
