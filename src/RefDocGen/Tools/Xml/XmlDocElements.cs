@@ -28,6 +28,11 @@ internal static class XmlDocElements
     internal static XElement EmptyRemarks => new(XmlDocIdentifiers.Remarks);
 
     /// <summary>
+    /// Create new empty 'example' <see cref="XElement"/>.
+    /// </summary>
+    internal static XElement EmptyExample => new(XmlDocIdentifiers.Example);
+
+    /// <summary>
     /// Create new 'param' <see cref="XElement"/> with the given 'name' attribute and no children.
     /// </summary>
     /// <param name="name">Name attribute value.</param>

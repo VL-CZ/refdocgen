@@ -25,5 +25,6 @@ public record ConstructorTM(
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,
+    string? ExampleDocComment,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions);

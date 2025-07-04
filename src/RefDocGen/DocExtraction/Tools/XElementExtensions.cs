@@ -69,6 +69,17 @@ internal static class XElementExtensions
     }
 
     /// <summary>
+    /// Tries to get the 'example' child element.
+    /// </summary>
+    /// <param name="element">The current <see cref="XElement"/> to search within.</param>
+    /// <param name="exampleNode">The found 'example' <see cref="XElement"/>, or <see langword="null"/> if not found.</param>
+    /// <returns><see langword="true"/> if the 'example' element is found; otherwise, <see langword="false"/>.</returns>
+    internal static bool TryGetExampleElement(this XElement element, [MaybeNullWhen(false)] out XElement exampleNode)
+    {
+        return element.TryGetElement(XmlDocIdentifiers.Example, out exampleNode);
+    }
+
+    /// <summary>
     /// Tries to get the 'returns' child element.
     /// </summary>
     /// <param name="element">The current <see cref="XElement"/> to search within.</param>

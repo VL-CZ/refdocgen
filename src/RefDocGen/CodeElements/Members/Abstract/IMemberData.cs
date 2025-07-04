@@ -55,6 +55,11 @@ public interface IMemberData
     XElement RemarksDocComment { get; }
 
     /// <summary>
+    /// 'example' doc comment provided for the member.
+    /// </summary>
+    XElement ExampleDocComment { get; }
+
+    /// <summary>
     /// Collection of 'seealso' doc comments for the member.
     /// </summary>
     IEnumerable<XElement> SeeAlsoDocComments { get; }
