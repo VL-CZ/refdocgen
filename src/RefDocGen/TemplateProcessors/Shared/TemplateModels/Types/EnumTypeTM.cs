@@ -23,6 +23,7 @@ namespace RefDocGen.TemplateProcessors.Shared.TemplateModels.Types;
 /// <c>null</c> if the type is not nested.
 /// </para>
 /// </param>
+/// <param name="ExampleDocComment">'example' documentation comment for the enum. <c>null</c> if the doc comment is not provided.</param>
 public record EnumTypeTM(
     string Id,
     string Name,
@@ -34,6 +35,7 @@ public record EnumTypeTM(
     CodeLinkTM? DeclaringType,
     string? SummaryDocComment,
     string? RemarksDocComment,
+    string? ExampleDocComment,
     string[] SeeAlsoDocComments) : ITemplateModelWithId, ITypeDeclarationNameTM
 {
     /// <inheritdoc/>

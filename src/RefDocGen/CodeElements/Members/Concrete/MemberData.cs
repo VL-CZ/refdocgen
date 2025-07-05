@@ -59,6 +59,9 @@ internal abstract class MemberData : IMemberData
     public XElement RemarksDocComment { get; internal set; } = XmlDocElements.EmptyRemarks;
 
     /// <inheritdoc/>
+    public XElement ExampleDocComment { get; internal set; } = XmlDocElements.EmptyExample;
+
+    /// <inheritdoc/>
     public IEnumerable<XElement> SeeAlsoDocComments { get; internal set; } = [];
 
     /// <inheritdoc/>

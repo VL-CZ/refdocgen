@@ -48,6 +48,16 @@ internal class TypePageTools
     }
 
     /// <summary>
+    /// Gets the <c>example</c> doc comment of the type/member.
+    /// </summary>
+    /// <param name="element">The HTML element representing the type/member.</param>
+    /// <returns><c>example</c> doc comment of the type/member.</returns>
+    internal static string GetExampleDoc(IElement element)
+    {
+        return element.GetParsedContent(DataId.ExampleDoc);
+    }
+
+    /// <summary>
     /// Gets the <c>value</c> doc comment of the member.
     /// </summary>
     /// <param name="memberElement">The HTML element representing the member.</param>

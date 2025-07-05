@@ -26,6 +26,11 @@ public interface ITypeDeclaration : ITypeNameBaseData
     XElement RemarksDocComment { get; }
 
     /// <summary>
+    /// 'example' doc comment provided to the type.
+    /// </summary>
+    XElement ExampleDocComment { get; }
+
+    /// <summary>
     /// Collection of 'seealso' doc comments for the member.
     /// </summary>
     IEnumerable<XElement> SeeAlsoDocComments { get; }

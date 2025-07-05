@@ -63,6 +63,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             DeclaringType: GetCodeLinkOrNull(type.DeclaringType),
             SummaryDocComment: ToHtmlString(type.SummaryDocComment),
             RemarksDocComment: ToHtmlString(type.RemarksDocComment),
+            ExampleDocComment: ToHtmlString(type.ExampleDocComment),
             SeeAlsoDocComments: GetHtmlStrings(type.SeeAlsoDocComments)
         );
     }
@@ -85,6 +86,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             SummaryDocComment: ToHtmlString(constructor.SummaryDocComment),
             RemarksDocComment: ToHtmlString(constructor.RemarksDocComment),
             SeeAlsoDocComments: GetHtmlStrings(constructor.SeeAlsoDocComments),
+            ExampleDocComment: ToHtmlString(constructor.ExampleDocComment),
             Exceptions: GetTemplateModels(constructor.DocumentedExceptions));
     }
 
@@ -106,6 +108,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             Attributes: GetTemplateModels(field.Attributes),
             SummaryDocComment: ToHtmlString(field.SummaryDocComment),
             RemarksDocComment: ToHtmlString(field.RemarksDocComment),
+            ExampleDocComment: ToHtmlString(field.ExampleDocComment),
             SeeAlsoDocComments: GetHtmlStrings(field.SeeAlsoDocComments),
             InheritedFrom: GetCodeLinkOrNull(field.InheritedFrom));
     }
@@ -136,6 +139,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             SummaryDocComment: ToHtmlString(property.SummaryDocComment),
             RemarksDocComment: ToHtmlString(property.RemarksDocComment),
             ValueDocComment: ToHtmlString(property.ValueDocComment),
+            ExampleDocComment: ToHtmlString(property.ExampleDocComment),
             SeeAlsoDocComments: GetHtmlStrings(property.SeeAlsoDocComments),
             Exceptions: GetTemplateModels(property.DocumentedExceptions),
             InheritedFrom: GetCodeLinkOrNull(property.InheritedFrom),
@@ -169,6 +173,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             SummaryDocComment: ToHtmlString(indexer.SummaryDocComment),
             RemarksDocComment: ToHtmlString(indexer.RemarksDocComment),
             ValueDocComment: ToHtmlString(indexer.ValueDocComment),
+            ExampleDocComment: ToHtmlString(indexer.ExampleDocComment),
             SeeAlsoDocComments: GetHtmlStrings(indexer.SeeAlsoDocComments),
             Exceptions: GetTemplateModels(indexer.DocumentedExceptions),
             InheritedFrom: GetCodeLinkOrNull(indexer.InheritedFrom),
@@ -198,6 +203,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             SummaryDocComment: ToHtmlString(method.SummaryDocComment),
             RemarksDocComment: ToHtmlString(method.RemarksDocComment),
             ReturnsDocComment: ToHtmlString(method.ReturnValueDocComment),
+            ExampleDocComment: ToHtmlString(method.ExampleDocComment),
             SeeAlsoDocComments: GetHtmlStrings(method.SeeAlsoDocComments),
             Exceptions: GetTemplateModels(method.DocumentedExceptions),
             InheritedFrom: GetCodeLinkOrNull(method.InheritedFrom),
@@ -229,6 +235,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             SummaryDocComment: ToHtmlString(operatorData.SummaryDocComment),
             RemarksDocComment: ToHtmlString(operatorData.RemarksDocComment),
             ReturnsDocComment: ToHtmlString(operatorData.ReturnValueDocComment),
+            ExampleDocComment: ToHtmlString(operatorData.ExampleDocComment),
             SeeAlsoDocComments: GetHtmlStrings(operatorData.SeeAlsoDocComments),
             Exceptions: GetTemplateModels(operatorData.DocumentedExceptions),
             InheritedFrom: GetCodeLinkOrNull(operatorData.InheritedFrom),
@@ -254,6 +261,7 @@ internal class ObjectTypeTMCreator : TypeTMCreator
             Attributes: GetTemplateModels(eventData.Attributes),
             SummaryDocComment: ToHtmlString(eventData.SummaryDocComment),
             RemarksDocComment: ToHtmlString(eventData.RemarksDocComment),
+            ExampleDocComment: ToHtmlString(eventData.ExampleDocComment),
             SeeAlsoDocComments: GetHtmlStrings(eventData.SeeAlsoDocComments),
             Exceptions: GetTemplateModels(eventData.DocumentedExceptions),
             InheritedFrom: GetCodeLinkOrNull(eventData.InheritedFrom),

@@ -17,6 +17,7 @@ namespace RefDocGen.TemplateProcessors.Shared.TemplateModels.Members;
 /// A collection of user-documented exceptions (using the <c>exception</c> XML tag) the constructor might throw.
 /// </param>
 /// <param name="Attributes">Array of attributes applied to the constructor.</param>
+/// <param name="ExampleDocComment"><c>example</c> documentation comment for the constructor. <c>null</c> if the doc comment is not provided.</param>
 public record ConstructorTM(
     string Id,
     LanguageSpecificData<string> TypeName,
@@ -25,5 +26,6 @@ public record ConstructorTM(
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,
+    string? ExampleDocComment,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions);

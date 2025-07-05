@@ -39,6 +39,7 @@ internal class EnumTMCreator : TypeTMCreator
             DeclaringType: GetCodeLinkOrNull(enumType.DeclaringType),
             SummaryDocComment: ToHtmlString(enumType.SummaryDocComment),
             RemarksDocComment: ToHtmlString(enumType.RemarksDocComment),
+            ExampleDocComment: ToHtmlString(enumType.ExampleDocComment),
             SeeAlsoDocComments: GetHtmlStrings(enumType.SeeAlsoDocComments));
     }
 
@@ -57,6 +58,7 @@ internal class EnumTMCreator : TypeTMCreator
             Attributes: GetTemplateModels(enumMember.Attributes),
             SummaryDocComment: ToHtmlString(enumMember.SummaryDocComment),
             RemarksDocComment: ToHtmlString(enumMember.RemarksDocComment),
+            ExampleDocComment: ToHtmlString(enumMember.ExampleDocComment),
             SeeAlsoDocComments: GetHtmlStrings(enumMember.SeeAlsoDocComments));
     }
 }

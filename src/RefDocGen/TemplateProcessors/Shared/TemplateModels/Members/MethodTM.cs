@@ -37,6 +37,7 @@ namespace RefDocGen.TemplateProcessors.Shared.TemplateModels.Members;
 /// <param name="ImplementedInterfaces">
 /// Returns the types of the interfaces, whose part of contract this method implements.
 /// </param>
+/// <param name="ExampleDocComment"><c>example</c> documentation comment for the method. <c>null</c> if the doc comment is not provided.</param>
 public record MethodTM(
     string Id,
     string Name,
@@ -49,6 +50,7 @@ public record MethodTM(
     string? SummaryDocComment,
     string? RemarksDocComment,
     string? ReturnsDocComment,
+    string? ExampleDocComment,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions,
     CodeLinkTM? InheritedFrom,

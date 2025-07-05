@@ -184,6 +184,9 @@ public class User
     /// <summary>
     /// Gets YAML representation of the user.
     /// </summary>
+    /// <example>
+    /// user.ToYaml()
+    /// </example>
     /// <returns><see cref="YamlNode"/> representation of the user.</returns>
     public YamlNode ToYaml()
     {

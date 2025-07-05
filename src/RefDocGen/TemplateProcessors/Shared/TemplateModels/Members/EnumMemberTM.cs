@@ -13,6 +13,7 @@ namespace RefDocGen.TemplateProcessors.Shared.TemplateModels.Members;
 /// <param name="SeeAlsoDocComments">Collection of <c>seealso</c> documentation comments for the enum member.</param>
 /// <param name="Value">String representation of the underlying integral value of the enum member.</param>
 /// <param name="Attributes">Array of attributes applied to the member.</param>
+/// <param name="ExampleDocComment"><c>example</c> documentation comment for the enum member. <c>null</c> if the doc comment is not provided.</param>
 public record EnumMemberTM(
     string Id,
     string Name,
@@ -20,4 +21,5 @@ public record EnumMemberTM(
     AttributeTM[] Attributes,
     string? SummaryDocComment,
     string? RemarksDocComment,
+    string? ExampleDocComment,
     string[] SeeAlsoDocComments);

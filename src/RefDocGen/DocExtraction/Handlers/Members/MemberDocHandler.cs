@@ -44,6 +44,12 @@ internal abstract class MemberDocHandler<TType, TMember> : IMemberDocHandler<TTy
             member.RemarksDocComment = remarksNode;
         }
 
+        // add 'example' doc comment
+        if (memberDocComment.TryGetExampleElement(out var exampleNode))
+        {
+            member.ExampleDocComment = exampleNode;
+        }
+
         // add 'seealso' doc comments
         member.SeeAlsoDocComments = memberDocComment.Elements(XmlDocIdentifiers.SeeAlso);
 

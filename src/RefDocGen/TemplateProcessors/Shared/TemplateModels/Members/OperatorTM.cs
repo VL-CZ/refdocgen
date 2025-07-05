@@ -38,6 +38,7 @@ namespace RefDocGen.TemplateProcessors.Shared.TemplateModels.Members;
 /// Returns the types of the interfaces, whose part of contract this operator implements.
 /// </param>
 /// <param name="IsConversionOperator">Indicates whether the operator is a conversion operator.</param>
+/// <param name="ExampleDocComment"><c>example</c> documentation comment for the operator. <c>null</c> if the doc comment is not provided.</param>
 public record OperatorTM(
     string Id,
     LanguageSpecificData<string> Name,
@@ -51,6 +52,7 @@ public record OperatorTM(
     string? SummaryDocComment,
     string? RemarksDocComment,
     string? ReturnsDocComment,
+    string? ExampleDocComment,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions,
     CodeLinkTM? InheritedFrom,

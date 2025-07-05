@@ -40,6 +40,7 @@ internal class DelegateTMCreator : TypeTMCreator
             SummaryDocComment: ToHtmlString(delegateType.SummaryDocComment),
             RemarksDocComment: ToHtmlString(delegateType.RemarksDocComment),
             ReturnsDocComment: ToHtmlString(delegateType.ReturnValueDocComment),
+            ExampleDocComment: ToHtmlString(delegateType.ExampleDocComment),
             SeeAlsoDocComments: GetHtmlStrings(delegateType.SeeAlsoDocComments),
             Exceptions: GetTemplateModels(delegateType.Exceptions));
     }

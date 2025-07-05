@@ -30,6 +30,7 @@ namespace RefDocGen.TemplateProcessors.Shared.TemplateModels.Types;
 /// <c>null</c> if the type is not nested.
 /// </para>
 /// </param>
+/// <param name="ExampleDocComment">'example' documentation comment for the delegate. <c>null</c> if the doc comment is not provided.</param>
 public record DelegateTypeTM(
     string Id,
     string Name,
@@ -45,5 +46,6 @@ public record DelegateTypeTM(
     string? SummaryDocComment,
     string? RemarksDocComment,
     string? ReturnsDocComment,
+    string? ExampleDocComment,
     string[] SeeAlsoDocComments,
     ExceptionTM[] Exceptions) : ITemplateModelWithId, ITypeDeclarationNameTM;

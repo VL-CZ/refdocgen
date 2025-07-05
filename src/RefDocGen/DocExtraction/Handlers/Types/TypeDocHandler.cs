@@ -30,6 +30,12 @@ internal class TypeDocHandler
             type.RemarksDocComment = remarksNode;
         }
 
+        // add 'example' doc comment
+        if (docComment.TryGetExampleElement(out var exampleNode))
+        {
+            type.ExampleDocComment = exampleNode;
+        }
+
         // add 'seealso' doc comments
         type.SeeAlsoDocComments = docComment.Elements(XmlDocIdentifiers.SeeAlso);
 

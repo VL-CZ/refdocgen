@@ -22,7 +22,8 @@
     /// <returns>Boolean indicating whether the model is documented.</returns>
     private bool IsModelDocumented()
     {
-        return Model.SummaryDocComment is not null || Model.RemarksDocComment is not null || Model.SeeAlsoDocComments.Any() || Model.TypeParameters.Any();
+        return Model.SummaryDocComment is not null || Model.RemarksDocComment is not null
+            || Model.ExampleDocComment is not null || Model.SeeAlsoDocComments.Any() || Model.TypeParameters.Any();
     }
 }
 
@@ -50,6 +51,8 @@
                     <AttributesSection Attributes="@Model.Attributes" />
 
                     <RemarksDoc DocComment="@Model.RemarksDocComment" />
+
+                    <ExampleDoc DocComment="@Model.ExampleDocComment" />
 
                     <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
 
