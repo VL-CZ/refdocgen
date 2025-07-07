@@ -23,7 +23,6 @@
             <LayoutView Layout="typeof(AppLayout)">
                 @foreach (var assembly in Model)
                 {
-
                     <h1 class="display-4" data-id="assembly-name">
                         <samp>
                             <a href="@(assembly.Name)-DLL.html" class="refdocgen-link-primary">
@@ -32,8 +31,6 @@
                             </a>
                         </samp>
                     </h1>
-
-                    @* <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false">Toggle all</button> *@
 
                     <hr />
 

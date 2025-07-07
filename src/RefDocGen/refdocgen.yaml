@@ -3,6 +3,7 @@ inherit-members: NonObject
 min-visibility: Private
 exclude-namespaces:
   - RefDocGen.TemplateProcessors.Default.Templates
+  - __Blazor
 output-dir: reference-docs
 template: Default
 verbose: true
