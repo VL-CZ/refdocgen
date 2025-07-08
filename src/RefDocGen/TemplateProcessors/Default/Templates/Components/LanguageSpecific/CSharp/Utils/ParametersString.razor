@@ -12,7 +12,7 @@
     public required string Suffix { get; set; } = ")";
 }
 
-<span>@Prefix</span>
+<span>@Prefix</span><wbr />
 @if (Parameters.Any())
 {
     var lastParam = Parameters.Last();
@@ -26,6 +26,7 @@
         if (p != lastParam)
         {
             <span>, </span>
+            <wbr />
         }
     }
 }
