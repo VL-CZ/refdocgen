@@ -6,15 +6,22 @@
     [Parameter]
     public required TypeNameTM Type { get; set; }
 
+    [Parameter]
+    public bool ExtraIndent { get; set; } = false;
+
     [CascadingParameter]
     public required LanguageTM[] Languages { get; set; }
 }
 
 @{
     var typeUrl = $"./{Type.Id}.html";
+
+    var bsIndentClass = ExtraIndent
+        ? "ms-4"
+        : "ms-3";
 }
 
-<div class="row align-items-center mx-3" data-id="type-row-element">
+<div class="row align-items-center @bsIndentClass" data-id="type-row-element">
     <div class="col-md-6" data-id="type-row-name">
         <samp>
             <a href="@typeUrl" class="refdocgen-link-secondary">

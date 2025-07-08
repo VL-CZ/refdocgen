@@ -4,16 +4,23 @@
 @code {
     [Parameter]
     public required NamespaceTM Namespace { get; set; }
+
+    [Parameter]
+    public bool ExtraIndent { get; set; } = false;
 }
 
 @{
     var namespaceUrl = $"./{Namespace.Id}.html";
+
+    var bsIndentClass = ExtraIndent
+        ? "ms-3"
+        : "ms-0";
 }
 
 <div data-id="namespace-section" id="@Namespace.Id">
 
     <div class="d-flex justify-content-between align-items-center">
-        <h1 class="display-6 my-1 text-break" data-id="namespace-name">
+        <h1 class="display-6 my-1 text-break @bsIndentClass" data-id="namespace-name">
             <samp>
                 <a href="@namespaceUrl" class="refdocgen-link-primary">
                     <span class="refdocgen-text-tertiary">namespace</span>
@@ -36,7 +43,7 @@
         <div data-id="namespace-types">
             @foreach (var type in Namespace.AllTypes)
             {
-                <TypeNameRow Type="@type" />
+                <TypeNameRow Type="@type" ExtraIndent="@ExtraIndent" />
             }
         </div>
     </div>
