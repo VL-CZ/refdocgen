@@ -3,19 +3,10 @@
 @code {
     [Parameter]
     public required string CollapseTarget { get; set; }
-
-    [Parameter]
-    public bool Small { get; set; } = false;
-}
-
-@{
-    string bsClasses = Small
-                ? "btn btn-sm"
-                : "btn";
 }
 
 <!-- chevron icon, taken from https://icons.getbootstrap.com/icons/chevron-down/ -->
-<button class="@bsClasses" data-bs-toggle="collapse" data-bs-target="#@CollapseTarget" aria-expanded="false" aria-controls="@CollapseTarget">
+<button class="btn btn-sm" data-bs-toggle="collapse" data-bs-target="#@CollapseTarget" aria-expanded="false" aria-controls="@CollapseTarget">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
         <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
     </svg>
