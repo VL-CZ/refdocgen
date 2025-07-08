@@ -8,26 +8,28 @@
 
 @if (Parameters.Any())
 {
-    <h3 class="lead my-2">Parameters</h3>
-    <div class="mx-3" data-id="parameters-section">
-        @foreach (var parameter in Parameters)
-        {
-            <div data-id="parameter-data">
-                <AttributeList Attributes="@parameter.Attributes" />
+    <div class="my-3">
+        <div class="lead">Parameters</div>
+        <div class="mx-3" data-id="parameters-section">
+            @foreach (var parameter in Parameters)
+            {
+                <div data-id="parameter-data">
+                    <AttributeList Attributes="@parameter.Attributes" />
 
-                <div data-id="parameter-declaration" class="text-break">
-                    <samp>
-                        <ParameterDeclaration Parameter="@parameter" />
-                    </samp>
-                </div>
+                    <div data-id="parameter-declaration" class="text-break">
+                        <samp>
+                            <ParameterDeclaration Parameter="@parameter" />
+                        </samp>
+                    </div>
 
-                <div class="text-body-secondary fst-italic mb-2" data-id="parameter-doc">
-                    @if (parameter.DocComment is not null)
-                    {
-                        @((MarkupString)parameter.DocComment)
-                    }
+                    <div class="text-body-secondary fst-italic mb-2" data-id="parameter-doc">
+                        @if (parameter.DocComment is not null)
+                        {
+                            @((MarkupString)parameter.DocComment)
+                        }
+                    </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
 }

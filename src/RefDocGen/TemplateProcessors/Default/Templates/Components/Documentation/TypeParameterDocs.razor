@@ -8,21 +8,23 @@
 
 @if (TypeParameters.Any())
 {
-    <h3 class="lead my-2">Type parameters</h3>
-    <div class="mx-3" data-id="type-parameters-section">
-        @foreach (var typeParam in TypeParameters)
-        {
-            <div data-id="type-parameter-data">
-                <samp data-id="type-parameter-declaration">
-                    <TypeParameterDeclaration TypeParameter="@typeParam" />
-                </samp>
-                <div class="text-body-secondary fst-italic mb-2" data-id="type-parameter-doc">
-                    @if (typeParam.DocComment is not null)
-                    {
-                        @((MarkupString)typeParam.DocComment)
-                    }
+    <div class="my-3">
+        <div class="lead">Type parameters</div>
+        <div class="mx-3" data-id="type-parameters-section">
+            @foreach (var typeParam in TypeParameters)
+            {
+                <div data-id="type-parameter-data">
+                    <samp data-id="type-parameter-declaration">
+                        <TypeParameterDeclaration TypeParameter="@typeParam" />
+                    </samp>
+                    <div class="text-body-secondary fst-italic mb-2" data-id="type-parameter-doc">
+                        @if (typeParam.DocComment is not null)
+                        {
+                            @((MarkupString)typeParam.DocComment)
+                        }
+                    </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
 }
