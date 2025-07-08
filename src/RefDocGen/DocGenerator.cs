@@ -36,6 +36,11 @@ public class DocGenerator
     private readonly ILogger logger;
 
     /// <summary>
+    /// Name of the assembly/project/solution to be documented (without file extension).
+    /// </summary>
+    private readonly string projectName;
+
+    /// <summary>
     /// Initialize a new instance of <see cref="DocGenerator"/> class.
     /// </summary>
     /// <param name="assemblyPaths">Paths to the DLL assemblies.</param>
@@ -43,13 +48,15 @@ public class DocGenerator
     /// <param name="assemblyDataConfiguration">Configuration describing what data should be extracted from the assemblies.</param>
     /// <param name="outputDirectory">The directory, where the generated output will be stored.</param>
     /// <param name="logger">A logger instance.</param>
+    /// <param name="projectName">Name of the assembly/project/solution to be documented (without file extension).</param>
     public DocGenerator(IEnumerable<string> assemblyPaths, ITemplateProcessor templateProcessor,
-        AssemblyDataConfiguration assemblyDataConfiguration, string outputDirectory, ILogger logger)
+        AssemblyDataConfiguration assemblyDataConfiguration, string outputDirectory, string projectName, ILogger logger)
     {
         this.assemblyPaths = assemblyPaths;
         this.templateProcessor = templateProcessor;
         this.assemblyDataConfiguration = assemblyDataConfiguration;
         this.outputDirectory = outputDirectory;
+        this.projectName = projectName;
         this.logger = logger;
     }
 
@@ -66,6 +73,6 @@ public class DocGenerator
         var docCommentExtractor = new DocCommentExtractor(docXmlPaths, typeRegistry, logger);
         docCommentExtractor.AddComments(); // add the doc comments
 
-        templateProcessor.ProcessTemplates(typeRegistry, outputDirectory, logger); // create the documentation pages
+        templateProcessor.ProcessTemplates(typeRegistry, outputDirectory, projectName, logger); // create the documentation pages
     }
 }

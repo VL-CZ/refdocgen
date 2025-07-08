@@ -15,31 +15,36 @@
 
     [Parameter]
     public required LanguageTM[] Languages { get; set; }
+
+    [Parameter]
+    public required string ProjectName { get; set; }
 }
 
 <CascadingValue Value="TopMenuData">
     <CascadingValue Value="Versions">
         <CascadingValue Value="Languages">
-            <LayoutView Layout="typeof(AppLayout)">
+            <CascadingValue Value="ProjectName">
+                <LayoutView Layout="typeof(AppLayout)">
 
-                <div class="d-flex justify-content-between align-items-center">
-                    <h1 class="display-4 text-break">
-                        <samp>
-                            <span class="refdocgen-text-tertiary">assembly</span>
-                            <span class="refdocgen-text-primary">@((MarkupString)Model.Name.WithWbrAfterDots())</span>
-                        </samp>
-                    </h1>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h1 class="display-4 text-break">
+                            <samp>
+                                <span class="refdocgen-text-tertiary">assembly</span>
+                                <span class="refdocgen-text-primary">@((MarkupString)Model.Name.WithWbrAfterDots())</span>
+                            </samp>
+                        </h1>
 
-                    <CollapseAllButton />
-                </div>
+                        <CollapseAllButton />
+                    </div>
 
-                <hr class="my-2" />
+                    <hr class="my-2" />
 
-                @foreach (var ns in Model.Namespaces)
-                {
-                    <NamespaceTypeList Namespace="@ns" />
-                }
-            </LayoutView>
+                    @foreach (var ns in Model.Namespaces)
+                    {
+                        <NamespaceTypeList Namespace="@ns" />
+                    }
+                </LayoutView>
+            </CascadingValue>
         </CascadingValue>
     </CascadingValue>
 </CascadingValue>

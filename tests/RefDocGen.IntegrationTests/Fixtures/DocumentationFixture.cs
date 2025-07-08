@@ -76,6 +76,7 @@ public class DocumentationFixture : IDisposable
             templateProcessor,
             assemblyDataConfig,
             outputDir,
+            "RefDocGen",
             logger);
 
         generator.GenerateDoc();

@@ -134,6 +134,11 @@ internal class RazorTemplateProcessor<
     private readonly LanguageTM[] languageTMs;
 
     /// <summary>
+    /// Name of the assembly/project/solution to be documented (without file extension).
+    /// </summary>
+    private string projectName = "";
+
+    /// <summary>
     /// The directory, where the generated output API pages will be stored.
     /// </summary>
     private string OutputApiDirectory => Path.Join(outputDirectory, "api");
@@ -174,9 +179,10 @@ internal class RazorTemplateProcessor<
     }
 
     /// <inheritdoc/>
-    public void ProcessTemplates(ITypeRegistry typeRegistry, string outputDirectory, ILogger logger)
+    public void ProcessTemplates(ITypeRegistry typeRegistry, string outputDirectory, string projectName, ILogger logger)
     {
         this.outputDirectory = outputDirectory;
+        this.projectName = projectName;
         this.logger = logger;
         docCommentTransformer.TypeRegistry = typeRegistry;
 
@@ -464,7 +470,8 @@ internal class RazorTemplateProcessor<
                 {
                     ["TopMenuData"] = topMenuData,
                     ["Versions"] = versions,
-                    ["Languages"] = languageTMs
+                    ["Languages"] = languageTMs,
+                    ["ProjectName"] = projectName
                 };
 
                 var templateParameters = sharedTemplateParameters.Merge(customTemplateParameters);

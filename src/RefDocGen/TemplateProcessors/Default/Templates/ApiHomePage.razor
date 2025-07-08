@@ -15,49 +15,56 @@
 
     [Parameter]
     public required LanguageTM[] Languages { get; set; }
+
+    [Parameter]
+    public required string ProjectName { get; set; }
 }
 
 <CascadingValue Value="TopMenuData">
     <CascadingValue Value="Versions">
         <CascadingValue Value="Languages">
-            <LayoutView Layout="typeof(AppLayout)">
-
-                <div class="d-flex justify-content-between align-items-center">
-                    <h1 class="display-4">API homepage</h1>
-
-                    <CollapseAllButton />
-                </div>
-
-                <hr class="my-2" />
-
-                @foreach (var assembly in Model)
-                {
-                    string collapseId = $"{assembly.Name}-DLL-collapse";
+            <CascadingValue Value="ProjectName">
+                <LayoutView Layout="typeof(AppLayout)">
 
                     <div class="d-flex justify-content-between align-items-center">
-                        <h1 class="display-5 my-2" data-id="assembly-name">
-                            <samp>
-                                <a href="@(assembly.Name)-DLL.html" class="refdocgen-link-primary">
-                                    <span class="refdocgen-text-tertiary">assembly</span>
-                                    <span class="refdocgen-text-primary">@((MarkupString)assembly.Name.WithWbrAfterDots())</span>
-                                </a>
-                            </samp>
+                        <h1 class="display-3 refdocgen-text-primary">
+                            @ProjectName API
                         </h1>
 
-                        <CollapseButton CollapseTarget="@collapseId" />
+                        <CollapseAllButton />
                     </div>
 
                     <hr class="my-2" />
 
-                    <div class="collapse show multi-collapse" id="@collapseId">
-                        @foreach (var ns in assembly.Namespaces)
-                        {
-                            <NamespaceTypeList Namespace="@ns" ExtraIndent="true" />
-                        }
-                    </div>
-                }
+                    @foreach (var assembly in Model)
+                    {
+                        string collapseId = $"{assembly.Name}-DLL-collapse";
 
-            </LayoutView>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h1 class="display-5 my-2" data-id="assembly-name">
+                                <samp>
+                                    <a href="@(assembly.Name)-DLL.html" class="refdocgen-link-primary">
+                                        <span class="refdocgen-text-tertiary">assembly</span>
+                                        <span class="refdocgen-text-primary">@((MarkupString)assembly.Name.WithWbrAfterDots())</span>
+                                    </a>
+                                </samp>
+                            </h1>
+
+                            <CollapseButton CollapseTarget="@collapseId" />
+                        </div>
+
+                        <hr class="my-2" />
+
+                        <div class="collapse show multi-collapse" id="@collapseId">
+                            @foreach (var ns in assembly.Namespaces)
+                            {
+                                <NamespaceTypeList Namespace="@ns" ExtraIndent="true" />
+                            }
+                        </div>
+                    }
+
+                </LayoutView>
+            </CascadingValue>
         </CascadingValue>
     </CascadingValue>
 </CascadingValue>

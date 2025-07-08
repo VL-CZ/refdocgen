@@ -17,6 +17,9 @@
     [Parameter]
     public required LanguageTM[] Languages { get; set; }
 
+    [Parameter]
+    public required string ProjectName { get; set; }
+
     /// <summary>
     /// Checks if the model has any (summary, remarks,...) doc comments.
     /// </summary>
@@ -40,72 +43,74 @@
 <CascadingValue Value="TopMenuData">
     <CascadingValue Value="Versions">
         <CascadingValue Value="Languages">
-            <LayoutView Layout="typeof(AppLayout)">
-                <div data-id="declared-type-data">
-                    <TypeNameTitle Type="@Model" />
+            <CascadingValue Value="ProjectName">
+                <LayoutView Layout="typeof(AppLayout)">
+                    <div data-id="declared-type-data">
+                        <TypeNameTitle Type="@Model" />
 
-                    <AssemblyLink Assembly="@Model.Assembly" />
+                        <AssemblyLink Assembly="@Model.Assembly" />
 
-                    <NamespaceLink Namespace="@Model.Namespace" />
+                        <NamespaceLink Namespace="@Model.Namespace" />
 
-                    <DeclaringTypeSection DeclaringType="@Model.DeclaringType" />
+                        <DeclaringTypeSection DeclaringType="@Model.DeclaringType" />
 
-                    <hr />
-
-                    <SummaryDoc DocComment="@Model.SummaryDocComment" />
-
-                    <AttributesSection Attributes="@Model.Attributes" />
-
-                    <RemarksDoc DocComment="@Model.RemarksDocComment" />
-
-                    <ExampleDoc DocComment="@Model.ExampleDocComment" />
-
-                    <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
-
-
-                    @if (IsModelDocumented())
-                    {
                         <hr />
-                    }
-                </div>
 
-                <h2 class="display-5 mt-2">Members</h2>
-                <div class="row">
-                    <div class="col-md-12">
-                        @foreach (var (index, enumMember) in Model.Members.Enumerate())
+                        <SummaryDoc DocComment="@Model.SummaryDocComment" />
+
+                        <AttributesSection Attributes="@Model.Attributes" />
+
+                        <RemarksDoc DocComment="@Model.RemarksDocComment" />
+
+                        <ExampleDoc DocComment="@Model.ExampleDocComment" />
+
+                        <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
+
+
+                        @if (IsModelDocumented())
                         {
-                            string collapseId = $"member-{index}-collapse";
-
-                            <div class="border px-2 py-1 mb-2" id="@enumMember.Id" data-id="enum-member">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h6 class="mb-0" data-id="member-declaration">
-                                        <samp>
-                                            <EnumMemberDeclaration EnumMember="@enumMember" />
-
-                                            <AnchorLink Id="@enumMember.Id" />
-                                        </samp>
-                                    </h6>
-
-                                    <CollapseButton CollapseTarget="@collapseId" IsVisible="@HasAnyDocSection(enumMember)" />
-                                </div>
-
-                                <div class="collapse show multi-collapse" id="@collapseId">
-
-                                    <SummaryDoc DocComment="@enumMember.SummaryDocComment" />
-
-                                    <AttributesSection Attributes="@enumMember.Attributes" />
-
-                                    <RemarksDoc DocComment="@enumMember.RemarksDocComment" />
-
-                                    <SeeAlsoDocs DocComments="@enumMember.SeeAlsoDocComments" />
-
-                                    <div class="mt-1" />
-                                </div>
-                            </div>
+                            <hr />
                         }
                     </div>
-                </div>
-            </LayoutView>
+
+                    <h2 class="display-5 mt-2">Members</h2>
+                    <div class="row">
+                        <div class="col-md-12">
+                            @foreach (var (index, enumMember) in Model.Members.Enumerate())
+                            {
+                                string collapseId = $"member-{index}-collapse";
+
+                                <div class="border px-2 py-1 mb-2" id="@enumMember.Id" data-id="enum-member">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h6 class="mb-0" data-id="member-declaration">
+                                            <samp>
+                                                <EnumMemberDeclaration EnumMember="@enumMember" />
+
+                                                <AnchorLink Id="@enumMember.Id" />
+                                            </samp>
+                                        </h6>
+
+                                        <CollapseButton CollapseTarget="@collapseId" IsVisible="@HasAnyDocSection(enumMember)" />
+                                    </div>
+
+                                    <div class="collapse show multi-collapse" id="@collapseId">
+
+                                        <SummaryDoc DocComment="@enumMember.SummaryDocComment" />
+
+                                        <AttributesSection Attributes="@enumMember.Attributes" />
+
+                                        <RemarksDoc DocComment="@enumMember.RemarksDocComment" />
+
+                                        <SeeAlsoDocs DocComments="@enumMember.SeeAlsoDocComments" />
+
+                                        <div class="mt-1" />
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </LayoutView>
+            </CascadingValue>
         </CascadingValue>
     </CascadingValue>
 </CascadingValue>

@@ -10,6 +10,9 @@
     [CascadingParameter]
     public required LanguageTM[] Languages { get; set; }
 
+    [CascadingParameter]
+    public required string ProjectName { get; set; }
+
     [Parameter]
     public required int NestingLevel { get; set; }
 }
@@ -23,7 +26,7 @@
             string searchPagePath = UrlHelper.GetRelativeUrl("search.html", NestingLevel);
         }
 
-        <a class="navbar-brand" href="@indexPagePath">Project name</a>
+        <a class="navbar-brand" href="@indexPagePath">@ProjectName</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>

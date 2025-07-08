@@ -30,6 +30,12 @@
     /// </summary>
     [Parameter]
     public required LanguageTM[] Languages { get; set; }
+
+    /// <summary>
+    /// Name of the assembly/project/solution to be documented (without file extension).
+    /// </summary>
+    [Parameter]
+    public required string ProjectName { get; set; }
 }
 
 @*
