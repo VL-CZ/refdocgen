@@ -85,8 +85,7 @@ public static class Program
         await using var htmlRenderer = new HtmlRenderer(serviceProvider, loggerFactory);
 
         ILanguageConfiguration[] availableLanguages = [
-            new CSharpLanguageConfiguration(),
-            new TodoLanguageConfiguration()
+            new CSharpLanguageConfiguration()
             // #ADD_LANGUAGE: instantiate the custom language configuration here (e.g., new CustomLanguageConfiguration())
         ];
 
