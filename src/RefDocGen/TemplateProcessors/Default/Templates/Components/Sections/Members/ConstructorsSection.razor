@@ -4,6 +4,15 @@
 @code {
     [Parameter]
     public required ConstructorTM[] Constructors { get; set; }
+
+    /// <summary>
+    /// Checks whether the constructor has any documentation section ('summary', 'remarks', etc.)
+    /// </summary>
+    private bool HasAnyDocSection(ConstructorTM constructor)
+    {
+        return Checks.AnyNotNull(constructor.SummaryDocComment, constructor.RemarksDocComment, constructor.ExampleDocComment)
+            || Checks.AnyNonEmpty(constructor.Parameters, constructor.Attributes, constructor.Exceptions, constructor.SeeAlsoDocComments);
+    }
 }
 
 <h2 class="display-5 mt-2">Constructors</h2>
@@ -25,7 +34,7 @@
 
                     </h6>
 
-                    <CollapseButton CollapseTarget="@collapseId" />
+                    <CollapseButton CollapseTarget="@collapseId" IsVisible="@HasAnyDocSection(constructor)" />
                 </div>
 
                 <div class="collapse show multi-collapse" id="@collapseId">

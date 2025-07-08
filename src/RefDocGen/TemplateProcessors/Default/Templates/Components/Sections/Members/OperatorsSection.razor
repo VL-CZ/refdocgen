@@ -4,6 +4,18 @@
 @code {
     [Parameter]
     public required OperatorTM[] Operators { get; set; }
+
+    /// <summary>
+    /// Checks whether the operator has any documentation section ('summary', 'remarks', etc.)
+    /// </summary>
+    private bool HasAnyDocSection(OperatorTM op)
+    {
+        return Checks.AnyNotNull(op.SummaryDocComment, op.ReturnsDocComment, op.RemarksDocComment, op.ExampleDocComment,
+                op.InheritedFrom, op.BaseDeclaringType, op.ExplicitInterfaceType)
+            || Checks.AnyNonEmpty(op.TypeParameters, op.Parameters, op.Attributes, op.Exceptions, op.SeeAlsoDocComments,
+                op.ImplementedInterfaces)
+            || !op.ReturnsVoid;
+    }
 }
 
 <h2 class="display-5 mt-2">Operators</h2>
@@ -23,7 +35,7 @@
                         </samp>
                     </h6>
 
-                    <CollapseButton CollapseTarget="@collapseId" />
+                    <CollapseButton CollapseTarget="@collapseId" IsVisible="@HasAnyDocSection(op)" />
                 </div>
 
                 <div class="collapse show multi-collapse" id="@collapseId">

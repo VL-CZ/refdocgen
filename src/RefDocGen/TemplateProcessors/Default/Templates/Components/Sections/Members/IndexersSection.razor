@@ -4,6 +4,17 @@
 @code {
     [Parameter]
     public required IndexerTM[] Indexers { get; set; }
+
+    /// <summary>
+    /// Checks whether the indexer has any documentation section ('summary', 'remarks', etc.)
+    /// </summary>
+    private bool HasAnyDocSection(IndexerTM indexer)
+    {
+        return Checks.AnyNotNull(indexer.SummaryDocComment, indexer.ValueDocComment, indexer.RemarksDocComment, indexer.ExampleDocComment,
+                indexer.InheritedFrom, indexer.BaseDeclaringType, indexer.ExplicitInterfaceType)
+            || Checks.AnyNonEmpty(indexer.Parameters, indexer.Attributes, indexer.Exceptions, indexer.SeeAlsoDocComments,
+                indexer.ImplementedInterfaces);
+    }
 }
 
 <h2 class="display-5 mt-2">Indexers</h2>
@@ -23,7 +34,7 @@
                         </samp>
                     </h6>
 
-                    <CollapseButton CollapseTarget="@collapseId" />
+                    <CollapseButton CollapseTarget="@collapseId" IsVisible="@HasAnyDocSection(indexer)" />
                 </div>
 
                 <div class="collapse show multi-collapse" id="@collapseId">

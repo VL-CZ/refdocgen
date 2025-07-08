@@ -4,6 +4,17 @@
 @code {
     [Parameter]
     public required EventTM[] Events { get; set; }
+
+    /// <summary>
+    /// Checks whether the event has any documentation section ('summary', 'remarks', etc.)
+    /// </summary>
+    private bool HasAnyDocSection(EventTM e)
+    {
+        return Checks.AnyNotNull(e.SummaryDocComment, e.RemarksDocComment, e.ExampleDocComment,
+                e.InheritedFrom, e.BaseDeclaringType, e.ExplicitInterfaceType)
+            || Checks.AnyNonEmpty(e.Attributes, e.Exceptions, e.SeeAlsoDocComments,
+                e.ImplementedInterfaces);
+    }
 }
 
 <h2 class="display-5 mt-2">Events</h2>
@@ -24,7 +35,7 @@
                         </samp>
                     </h6>
 
-                    <CollapseButton CollapseTarget="@collapseId" />
+                    <CollapseButton CollapseTarget="@collapseId" IsVisible="@HasAnyDocSection(e)"/>
                 </div>
 
                 <div class="collapse show multi-collapse" id="@collapseId">

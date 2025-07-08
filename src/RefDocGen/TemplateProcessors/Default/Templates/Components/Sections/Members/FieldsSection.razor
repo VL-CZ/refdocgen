@@ -4,6 +4,17 @@
 @code {
     [Parameter]
     public required FieldTM[] Fields { get; set; }
+
+    /// <summary>
+    /// Checks whether the field has any documentation section ('summary', 'remarks', etc.)
+    /// </summary>
+    private bool HasAnyDocSection(FieldTM field)
+    {
+        return Checks.AnyNotNull(field.SummaryDocComment, field.RemarksDocComment, field.ExampleDocComment,
+                field.InheritedFrom)
+            || Checks.AnyNonEmpty(field.Attributes, field.SeeAlsoDocComments);
+
+    }
 }
 
 <h2 class="display-5 mt-2">Fields</h2>
@@ -22,10 +33,9 @@
 
                             <AnchorLink Id="@field.Id" />
                         </samp>
-
                     </h6>
 
-                    <CollapseButton CollapseTarget="@collapseId" />
+                    <CollapseButton CollapseTarget="@collapseId" IsVisible="@HasAnyDocSection(field)" />
                 </div>
 
                 <div class="collapse show multi-collapse" id="@collapseId">

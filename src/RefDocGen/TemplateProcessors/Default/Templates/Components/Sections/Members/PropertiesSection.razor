@@ -4,6 +4,17 @@
 @code {
     [Parameter]
     public required PropertyTM[] Properties { get; set; }
+
+    /// <summary>
+    /// Checks whether the property has any documentation section ('summary', 'remarks', etc.)
+    /// </summary>
+    private bool HasAnyDocSection(PropertyTM property)
+    {
+        return Checks.AnyNotNull(property.SummaryDocComment, property.ValueDocComment, property.RemarksDocComment, property.ExampleDocComment,
+                property.InheritedFrom, property.BaseDeclaringType, property.ExplicitInterfaceType)
+            || Checks.AnyNonEmpty(property.Attributes, property.Exceptions, property.SeeAlsoDocComments,
+                property.ImplementedInterfaces);
+    }
 }
 
 <h2 class="display-5 mt-2">Properties</h2>
@@ -23,7 +34,7 @@
                         </samp>
                     </h6>
 
-                    <CollapseButton CollapseTarget="@collapseId" />
+                    <CollapseButton CollapseTarget="@collapseId" IsVisible="@HasAnyDocSection(property)" />
                 </div>
 
                 <div class="collapse show multi-collapse" id="@collapseId">

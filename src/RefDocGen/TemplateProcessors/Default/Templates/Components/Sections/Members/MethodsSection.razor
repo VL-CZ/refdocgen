@@ -4,6 +4,18 @@
 @code {
     [Parameter]
     public required MethodTM[] Methods { get; set; }
+
+    /// <summary>
+    /// Checks whether the method has any documentation section ('summary', 'remarks', etc.)
+    /// </summary>
+    private bool HasAnyDocSection(MethodTM method)
+    {
+        return Checks.AnyNotNull(method.SummaryDocComment, method.ReturnsDocComment, method.RemarksDocComment, method.ExampleDocComment,
+                method.InheritedFrom, method.BaseDeclaringType, method.ExplicitInterfaceType)
+            || Checks.AnyNonEmpty(method.TypeParameters, method.Parameters, method.Attributes, method.Exceptions, method.SeeAlsoDocComments,
+                method.ImplementedInterfaces)
+            || !method.ReturnsVoid;
+    }
 }
 
 <h2 class="display-5 mt-2">Methods</h2>
@@ -24,7 +36,7 @@
                         </samp>
                     </h6>
 
-                    <CollapseButton CollapseTarget="@collapseId" />
+                    <CollapseButton CollapseTarget="@collapseId" IsVisible="@HasAnyDocSection(method)" />
                 </div>
 
                 <div class="collapse show multi-collapse" id="@collapseId">
@@ -60,6 +72,8 @@
                     <ExceptionDocs Exceptions="@method.Exceptions" />
 
                     <SeeAlsoDocs DocComments="@method.SeeAlsoDocComments" />
+
+                    <div class="mt-1" />
                 </div>
             </div>
         }

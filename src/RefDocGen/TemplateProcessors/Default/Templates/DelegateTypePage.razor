@@ -25,6 +25,16 @@
         return Model.SummaryDocComment is not null || Model.RemarksDocComment is not null
             || Model.ExampleDocComment is not null || Model.SeeAlsoDocComments.Any() || Model.TypeParameters.Any();
     }
+
+    /// <summary>
+    /// Checks whether the delegate method has any documentation section ('summary', 'remarks', etc.)
+    /// </summary>
+    private bool HasAnyDocSection(DelegateTypeTM del)
+    {
+        return Checks.AnyNotNull(del.SummaryDocComment, del.ReturnsDocComment)
+            || Checks.AnyNonEmpty(del.Parameters, del.Exceptions, del.SeeAlsoDocComments)
+            || !del.ReturnsVoid;
+    }
 }
 
 <CascadingValue Value="TopMenuData">
@@ -77,7 +87,7 @@
                                     </samp>
                                 </h6>
 
-                                <CollapseButton CollapseTarget="@collapseId" />
+                                <CollapseButton CollapseTarget="@collapseId" IsVisible="@HasAnyDocSection(Model)" />
                             </div>
 
                             <div class="collapse show multi-collapse" id="@collapseId">
