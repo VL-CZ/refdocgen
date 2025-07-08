@@ -162,7 +162,7 @@ function main() {
     // go to search page on search bar click
     const menuSearchBar = document.getElementById("menu-search-bar");
     menuSearchBar.addEventListener("focus", () => {
-        const targetRelativeUrl = menuSearchBar.getAttribute("url-target");
+        const targetRelativeUrl = menuSearchBar.getAttribute("data-url-target");
 
         const currentUrl = new URL(window.location.href);
         const newUrl = new URL(targetRelativeUrl, window.location.href);
