@@ -25,7 +25,7 @@
                 <h1 class="display-4 text-break" data-id="namespace-title">
                     <samp>
                         <span class="refdocgen-text-tertiary">namespace</span>
-                        <span class="refdocgen-text-primary">@Model.Name</span>
+                        <span class="refdocgen-text-primary">@((MarkupString)Model.Name.WithWbrAfterDots())</span>
                     </samp>
                 </h1>
 

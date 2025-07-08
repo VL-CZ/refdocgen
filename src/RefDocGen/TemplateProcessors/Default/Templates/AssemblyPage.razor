@@ -26,7 +26,7 @@
                     <h1 class="display-4 text-break">
                         <samp>
                             <span class="refdocgen-text-tertiary">assembly</span>
-                            <span class="refdocgen-text-primary">@Model.Name</span>
+                            <span class="refdocgen-text-primary">@((MarkupString)Model.Name.WithWbrAfterDots())</span>
                         </samp>
                     </h1>
 
@@ -38,7 +38,7 @@
                     </button>
                 </div>
 
-                <hr />
+                <hr class="mb-2" />
 
                 @foreach (var ns in Model.Namespaces)
                 {
