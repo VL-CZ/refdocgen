@@ -36,7 +36,8 @@
                 <!-- Classes -->
                 @if (Model.Classes.Any())
                 {
-                    <h2 class="display-5 my-2">Classes</h2>
+                    <h2 class="display-5">Classes</h2>
+                    <hr class="my-2" />
                     <div data-id="namespace-classes">
                         @foreach (var type in Model.Classes)
                         {
@@ -48,7 +49,8 @@
                 <!-- Structures -->
                 @if (Model.ValueTypes.Any())
                 {
-                    <h2 class="display-5 my-2">Structs</h2>
+                    <h2 class="display-5">Structs</h2>
+                    <hr class="my-2" />
                     <div data-id="namespace-structs">
                         @foreach (var type in Model.ValueTypes)
                         {
@@ -60,7 +62,8 @@
                 <!-- Interfaces -->
                 @if (Model.Interfaces.Any())
                 {
-                    <h2 class="display-5 my-2">Interfaces</h2>
+                    <h2 class="display-5">Interfaces</h2>
+                    <hr class="my-2" />
                     <div data-id="namespace-interfaces">
 
                         @foreach (var type in Model.Interfaces)
@@ -74,7 +77,8 @@
                 <!-- Enums -->
                 @if (Model.Enums.Any())
                 {
-                    <h2 class="display-5 my-2">Enums</h2>
+                    <h2 class="display-5">Enums</h2>
+                    <hr class="my-2" />
                     <div data-id="namespace-enums">
 
                         @foreach (var type in Model.Enums)
@@ -88,7 +92,8 @@
                 <!-- Delegates -->
                 @if (Model.Delegates.Any())
                 {
-                    <h2 class="display-5 my-2">Delegates</h2>
+                    <h2 class="display-5">Delegates</h2>
+                    <hr class="my-2" />
                     <div data-id="namespace-delegates">
 
                         @foreach (var type in Model.Delegates)
