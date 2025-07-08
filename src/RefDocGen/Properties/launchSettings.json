@@ -2,7 +2,7 @@
     "profiles": {
         "RefDocGen": {
             "commandName": "Project",
-            "commandLineArgs": "../../RefDocGen.sln -f -v",
+            "commandLineArgs": "../../RefDocGen.sln --min-visibility Private -f -v",
             "workingDirectory": "$(ProjectDir)"
         }
     }

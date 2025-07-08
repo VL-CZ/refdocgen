@@ -9,39 +9,48 @@
 <h2 class="display-5 mt-2">Properties</h2>
 <div class="row" data-id="properties-section">
     <div class="col-md-12">
-        @foreach (var property in Properties)
+        @foreach (var (index, property) in Properties.Enumerate())
         {
+            string collapseId = $"property-{index}-collapse";
+
             <div class="border p-2 mb-2" id="@property.Id" data-id="member-data">
-                <h6 class="mb-1 text-break" data-id="member-declaration">
-                    <samp>
-                        <PropertyDeclaration Property="@property" />
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-1 text-break" data-id="member-declaration">
+                        <samp>
+                            <PropertyDeclaration Property="@property" />
 
-                        <AnchorLink Id="@property.Id" />
-                    </samp>
-                </h6>
+                            <AnchorLink Id="@property.Id" />
+                        </samp>
+                    </h6>
 
-                <MemberInheritedFrom OriginalType="@property.InheritedFrom" />
+                    <CollapseButton CollapseTarget="@collapseId" Small="true" />
+                </div>
 
-                <MemberOverrides BaseType="@property.BaseDeclaringType" />
+                <div class="collapse show multi-collapse" id="@collapseId">
 
-                <MemberExplicitlyImplements Interface="@property.ExplicitInterfaceType" />
+                    <MemberInheritedFrom OriginalType="@property.InheritedFrom" />
 
-                <MemberImplements Interfaces="@property.ImplementedInterfaces" />
+                    <MemberOverrides BaseType="@property.BaseDeclaringType" />
 
-                <SummaryDoc DocComment="@property.SummaryDocComment" />
+                    <MemberExplicitlyImplements Interface="@property.ExplicitInterfaceType" />
 
-                <ValueDoc DocComment="@property.ValueDocComment" />
+                    <MemberImplements Interfaces="@property.ImplementedInterfaces" />
 
-                <AttributesSection Attributes="@property.Attributes" />
+                    <SummaryDoc DocComment="@property.SummaryDocComment" />
 
-                <!-- Remarks doc comment -->
-                <RemarksDoc DocComment="@property.RemarksDocComment" />
+                    <ValueDoc DocComment="@property.ValueDocComment" />
 
-                <ExampleDoc DocComment="@property.ExampleDocComment" />
+                    <AttributesSection Attributes="@property.Attributes" />
 
-                <ExceptionDocs Exceptions="@property.Exceptions" />
+                    <!-- Remarks doc comment -->
+                    <RemarksDoc DocComment="@property.RemarksDocComment" />
 
-                <SeeAlsoDocs DocComments="@property.SeeAlsoDocComments" />
+                    <ExampleDoc DocComment="@property.ExampleDocComment" />
+
+                    <ExceptionDocs Exceptions="@property.Exceptions" />
+
+                    <SeeAlsoDocs DocComments="@property.SeeAlsoDocComments" />
+                </div>
             </div>
         }
     </div>

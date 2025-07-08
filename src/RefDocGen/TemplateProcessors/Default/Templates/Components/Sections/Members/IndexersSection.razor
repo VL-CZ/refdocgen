@@ -9,41 +9,51 @@
 <h2 class="display-5 mt-2">Indexers</h2>
 <div class="row" data-id="indexers-section">
     <div class="col-md-12">
-        @foreach (var indexer in Indexers)
+        @foreach (var (index, indexer) in Indexers.Enumerate())
         {
+            string collapseId = $"indexer-{index}-collapse";
+
             <div class="border p-2 mb-2" id="@indexer.Id" data-id="member-data">
-                <h6 class="mb-1 text-break" data-id="member-declaration">
-                    <samp>
-                        <IndexerDeclaration Indexer="@indexer" />
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-1 text-break" data-id="member-declaration">
+                        <samp>
+                            <IndexerDeclaration Indexer="@indexer" />
 
-                        <AnchorLink Id="@indexer.Id" />
-                    </samp>
-                </h6>
+                            <AnchorLink Id="@indexer.Id" />
+                        </samp>
+                    </h6>
 
-                <MemberInheritedFrom OriginalType="@indexer.InheritedFrom" />
+                    <CollapseButton CollapseTarget="@collapseId" Small="true" />
+                </div>
 
-                <MemberOverrides BaseType="@indexer.BaseDeclaringType" />
+                <div class="collapse show multi-collapse" id="@collapseId">
 
-                <MemberExplicitlyImplements Interface="@indexer.ExplicitInterfaceType" />
+                    <MemberInheritedFrom OriginalType="@indexer.InheritedFrom" />
 
-                <MemberImplements Interfaces="@indexer.ImplementedInterfaces" />
+                    <MemberOverrides BaseType="@indexer.BaseDeclaringType" />
 
-                <SummaryDoc DocComment="@indexer.SummaryDocComment" />
+                    <MemberExplicitlyImplements Interface="@indexer.ExplicitInterfaceType" />
 
-                <ParameterDocs Parameters="@indexer.Parameters" />
+                    <MemberImplements Interfaces="@indexer.ImplementedInterfaces" />
 
-                <ValueDoc DocComment="@indexer.ValueDocComment" />
+                    <SummaryDoc DocComment="@indexer.SummaryDocComment" />
 
-                <AttributesSection Attributes="@indexer.Attributes" />
+                    <ParameterDocs Parameters="@indexer.Parameters" />
 
-                <!-- Remarks doc comment -->
-                <RemarksDoc DocComment="@indexer.RemarksDocComment" />
+                    <ValueDoc DocComment="@indexer.ValueDocComment" />
 
-                <ExampleDoc DocComment="@indexer.ExampleDocComment" />
+                    <AttributesSection Attributes="@indexer.Attributes" />
 
-                <ExceptionDocs Exceptions="@indexer.Exceptions" />
+                    <!-- Remarks doc comment -->
+                    <RemarksDoc DocComment="@indexer.RemarksDocComment" />
 
-                <SeeAlsoDocs DocComments="@indexer.SeeAlsoDocComments" />
+                    <ExampleDoc DocComment="@indexer.ExampleDocComment" />
+
+                    <ExceptionDocs Exceptions="@indexer.Exceptions" />
+
+                    <SeeAlsoDocs DocComments="@indexer.SeeAlsoDocComments" />
+
+                </div>
             </div>
         }
     </div>

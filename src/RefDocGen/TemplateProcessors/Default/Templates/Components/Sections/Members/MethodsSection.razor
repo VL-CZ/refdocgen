@@ -9,48 +9,58 @@
 <h2 class="display-5 mt-2">Methods</h2>
 <div class="row" data-id="methods-section">
     <div class="col-md-12">
-        @foreach (var method in Methods)
+        @foreach (var (index, method) in Methods.Enumerate())
         {
+            string collapseId = $"method-{index}-collapse";
+
             <div class="border p-2 mb-2" id="@method.Id" data-id="member-data">
-                <h6 class="mb-1 text-break" data-id="member-declaration">
-                    <samp>
-                        <MethodDeclaration Method="@method" />
 
-                        <AnchorLink Id="@method.Id" />
-                    </samp>
-                </h6>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-1 text-break" data-id="member-declaration">
+                        <samp>
+                            <MethodDeclaration Method="@method" />
 
-                <TypeParametersConstraintsSection TypeParameters="@method.TypeParameters" />
+                            <AnchorLink Id="@method.Id" />
+                        </samp>
+                    </h6>
 
-                <MemberInheritedFrom OriginalType="@method.InheritedFrom" />
+                    <CollapseButton CollapseTarget="@collapseId" Small="true" />
+                </div>
 
-                <MemberOverrides BaseType="@method.BaseDeclaringType" />
+                <div class="collapse show multi-collapse" id="@collapseId">
 
-                <MemberExplicitlyImplements Interface="@method.ExplicitInterfaceType" />
+                    <TypeParametersConstraintsSection TypeParameters="@method.TypeParameters" />
 
-                <MemberImplements Interfaces="@method.ImplementedInterfaces" />
+                    <MemberInheritedFrom OriginalType="@method.InheritedFrom" />
 
-                <SummaryDoc DocComment="@method.SummaryDocComment" />
+                    <MemberOverrides BaseType="@method.BaseDeclaringType" />
 
-                <TypeParameterDocs TypeParameters="@method.TypeParameters" />
+                    <MemberExplicitlyImplements Interface="@method.ExplicitInterfaceType" />
 
-                <ParameterDocs Parameters="@method.Parameters" />
+                    <MemberImplements Interfaces="@method.ImplementedInterfaces" />
 
-                @if (!method.ReturnsVoid)
-                {
-                    <ReturnValueDoc DocComment="@method.ReturnsDocComment" Type="@method.ReturnType" />
-                }
+                    <SummaryDoc DocComment="@method.SummaryDocComment" />
 
-                <AttributesSection Attributes="@method.Attributes" />
+                    <TypeParameterDocs TypeParameters="@method.TypeParameters" />
 
-                <!-- Remarks doc comment -->
-                <RemarksDoc DocComment="@method.RemarksDocComment" />
+                    <ParameterDocs Parameters="@method.Parameters" />
 
-                <ExampleDoc DocComment="@method.ExampleDocComment" />
+                    @if (!method.ReturnsVoid)
+                    {
+                        <ReturnValueDoc DocComment="@method.ReturnsDocComment" Type="@method.ReturnType" />
+                    }
 
-                <ExceptionDocs Exceptions="@method.Exceptions" />
+                    <AttributesSection Attributes="@method.Attributes" />
 
-                <SeeAlsoDocs DocComments="@method.SeeAlsoDocComments" />
+                    <!-- Remarks doc comment -->
+                    <RemarksDoc DocComment="@method.RemarksDocComment" />
+
+                    <ExampleDoc DocComment="@method.ExampleDocComment" />
+
+                    <ExceptionDocs Exceptions="@method.Exceptions" />
+
+                    <SeeAlsoDocs DocComments="@method.SeeAlsoDocComments" />
+                </div>
             </div>
         }
     </div>

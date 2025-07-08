@@ -16,6 +16,6 @@ internal static class EnumerableTypeDataExtensions
     internal static Dictionary<string, TType> ToIdDictionary<TType>(this IEnumerable<TType> types)
         where TType : ITypeDeclaration
     {
-        return types.ToDictionary(m => m.Id);
+        return types.DistinctBy(m => m.Id).ToDictionary(m => m.Id);
     }
 }

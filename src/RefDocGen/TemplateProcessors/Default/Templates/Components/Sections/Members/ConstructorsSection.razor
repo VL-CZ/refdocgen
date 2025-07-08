@@ -9,32 +9,43 @@
 <h2 class="display-5 mt-2">Constructors</h2>
 <div class="row" data-id="constructors-section">
     <div class="col-md-12">
-        @foreach (var constructor in Constructors)
+        @foreach (var (index, constructor) in Constructors.Enumerate())
         {
+            string collapseId = $"ctor-{index}-collapse";
+
             <div class="border p-2 mb-2" id="@constructor.Id" data-id="member-data">
-                <h6 class="mb-1 text-break" data-id="member-declaration">
-                    <samp>
-                        <ConstructorDeclaration Constructor="@constructor"/>
 
-                        <AnchorLink Id="@constructor.Id" />
-                    </samp>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-1 text-break" data-id="member-declaration">
+                        <samp>
+                            <ConstructorDeclaration Constructor="@constructor" />
 
-                </h6>
+                            <AnchorLink Id="@constructor.Id" />
+                        </samp>
 
-                <SummaryDoc DocComment="@constructor.SummaryDocComment" />
+                    </h6>
 
-                <ParameterDocs Parameters="@constructor.Parameters" />
+                    <CollapseButton CollapseTarget="@collapseId" Small="true" />
+                </div>
 
-                <AttributesSection Attributes="@constructor.Attributes" />
+                <div class="collapse show multi-collapse" id="@collapseId">
 
-                <!-- Remarks doc comment -->
-                <RemarksDoc DocComment="@constructor.RemarksDocComment" />
+                    <SummaryDoc DocComment="@constructor.SummaryDocComment" />
 
-                <ExampleDoc DocComment="@constructor.ExampleDocComment" />
+                    <ParameterDocs Parameters="@constructor.Parameters" />
 
-                <ExceptionDocs Exceptions="@constructor.Exceptions" />
+                    <AttributesSection Attributes="@constructor.Attributes" />
 
-                <SeeAlsoDocs DocComments="@constructor.SeeAlsoDocComments" />
+                    <!-- Remarks doc comment -->
+                    <RemarksDoc DocComment="@constructor.RemarksDocComment" />
+
+                    <ExampleDoc DocComment="@constructor.ExampleDocComment" />
+
+                    <ExceptionDocs Exceptions="@constructor.Exceptions" />
+
+                    <SeeAlsoDocs DocComments="@constructor.SeeAlsoDocComments" />
+
+                </div>
             </div>
         }
     </div>

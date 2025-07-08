@@ -9,29 +9,40 @@
 <h2 class="display-5 mt-2">Fields</h2>
 <div class="row" data-id="fields-section">
     <div class="col-md-12">
-        @foreach (var field in Fields)
+        @foreach (var (index, field) in Fields.Enumerate())
         {
+            string collapseId = $"field-{index}-collapse";
+
             <div class="border p-2 mb-2" id="@field.Id" data-id="member-data">
-                <h6 class="mb-1 text-break" data-id="member-declaration">
-                    <samp>
-                        <FieldDeclaration Field="@field" />
 
-                        <AnchorLink Id="@field.Id" />
-                    </samp>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-1 text-break" data-id="member-declaration">
+                        <samp>
+                            <FieldDeclaration Field="@field" />
 
-                </h6>
+                            <AnchorLink Id="@field.Id" />
+                        </samp>
 
-                <MemberInheritedFrom OriginalType="@field.InheritedFrom" />
+                    </h6>
 
-                <SummaryDoc DocComment="@field.SummaryDocComment" />
+                    <CollapseButton CollapseTarget="@collapseId" Small="true" />
+                </div>
 
-                <AttributesSection Attributes="@field.Attributes" />
+                <div class="collapse show multi-collapse" id="@collapseId">
 
-                <RemarksDoc DocComment="@field.RemarksDocComment" />
+                    <MemberInheritedFrom OriginalType="@field.InheritedFrom" />
 
-                <ExampleDoc DocComment="@field.ExampleDocComment" />
+                    <SummaryDoc DocComment="@field.SummaryDocComment" />
 
-                <SeeAlsoDocs DocComments="@field.SeeAlsoDocComments" />
+                    <AttributesSection Attributes="@field.Attributes" />
+
+                    <RemarksDoc DocComment="@field.RemarksDocComment" />
+
+                    <ExampleDoc DocComment="@field.ExampleDocComment" />
+
+                    <SeeAlsoDocs DocComments="@field.SeeAlsoDocComments" />
+
+                </div>
             </div>
         }
     </div>

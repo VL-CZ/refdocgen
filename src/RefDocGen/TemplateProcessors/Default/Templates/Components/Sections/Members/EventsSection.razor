@@ -9,36 +9,46 @@
 <h2 class="display-5 mt-2">Events</h2>
 <div class="row" data-id="events-section">
     <div class="col-md-12">
-        @foreach (var e in Events)
+        @foreach (var (index, e) in Events.Enumerate())
         {
+            string collapseId = $"event-{index}-collapse";
+
             <div class="border p-2 mb-2" id="@e.Id" data-id="member-data">
-                <h6 class="mb-1 text-break" data-id="member-declaration">
-                    <samp>
-                        <EventDeclaration Event="@e"/>
 
-                        <AnchorLink Id="@e.Id" />
-                    </samp>
-                </h6>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-1 text-break" data-id="member-declaration">
+                        <samp>
+                            <EventDeclaration Event="@e" />
 
-                <MemberInheritedFrom OriginalType="@e.InheritedFrom" />
+                            <AnchorLink Id="@e.Id" />
+                        </samp>
+                    </h6>
 
-                <MemberOverrides BaseType="@e.BaseDeclaringType" />
+                    <CollapseButton CollapseTarget="@collapseId" Small="true" />
+                </div>
 
-                <MemberExplicitlyImplements Interface="@e.ExplicitInterfaceType" />
+                <div class="collapse show multi-collapse" id="@collapseId">
 
-                <MemberImplements Interfaces="@e.ImplementedInterfaces" />
+                    <MemberInheritedFrom OriginalType="@e.InheritedFrom" />
 
-                <SummaryDoc DocComment="@e.SummaryDocComment" />
+                    <MemberOverrides BaseType="@e.BaseDeclaringType" />
 
-                <AttributesSection Attributes="@e.Attributes" />
+                    <MemberExplicitlyImplements Interface="@e.ExplicitInterfaceType" />
 
-                <RemarksDoc DocComment="@e.RemarksDocComment" />
+                    <MemberImplements Interfaces="@e.ImplementedInterfaces" />
 
-                <ExampleDoc DocComment="@e.ExampleDocComment" />
+                    <SummaryDoc DocComment="@e.SummaryDocComment" />
 
-                <ExceptionDocs Exceptions="@e.Exceptions" />
+                    <AttributesSection Attributes="@e.Attributes" />
 
-                <SeeAlsoDocs DocComments="@e.SeeAlsoDocComments" />
+                    <RemarksDoc DocComment="@e.RemarksDocComment" />
+
+                    <ExampleDoc DocComment="@e.ExampleDocComment" />
+
+                    <ExceptionDocs Exceptions="@e.Exceptions" />
+
+                    <SeeAlsoDocs DocComments="@e.SeeAlsoDocComments" />
+                </div>
             </div>
         }
     </div>

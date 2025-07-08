@@ -9,48 +9,57 @@
 <h2 class="display-5 mt-2">Operators</h2>
 <div class="row" data-id="operators-section">
     <div class="col-md-12">
-        @foreach (var op in Operators)
+        @foreach (var (index, op) in Operators.Enumerate())
         {
+            string collapseId = $"operator-{index}-collapse";
+
             <div class="border p-2 mb-2" id="@op.Id" data-id="member-data">
-                <h6 class="mb-1 text-break" data-id="member-declaration">
-                    <samp>
-                        <OperatorDeclaration Operator="@op" />
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-1 text-break" data-id="member-declaration">
+                        <samp>
+                            <OperatorDeclaration Operator="@op" />
 
-                        <AnchorLink Id="@op.Id" />
-                    </samp>
-                </h6>
+                            <AnchorLink Id="@op.Id" />
+                        </samp>
+                    </h6>
 
-                <TypeParametersConstraintsSection TypeParameters="@op.TypeParameters" />
+                    <CollapseButton CollapseTarget="@collapseId" Small="true" />
+                </div>
 
-                <MemberInheritedFrom OriginalType="@op.InheritedFrom" />
+                <div class="collapse show multi-collapse" id="@collapseId">
 
-                <MemberOverrides BaseType="@op.BaseDeclaringType" />
+                    <TypeParametersConstraintsSection TypeParameters="@op.TypeParameters" />
 
-                <MemberExplicitlyImplements Interface="@op.ExplicitInterfaceType" />
+                    <MemberInheritedFrom OriginalType="@op.InheritedFrom" />
 
-                <MemberImplements Interfaces="@op.ImplementedInterfaces" />
+                    <MemberOverrides BaseType="@op.BaseDeclaringType" />
 
-                <SummaryDoc DocComment="@op.SummaryDocComment" />
+                    <MemberExplicitlyImplements Interface="@op.ExplicitInterfaceType" />
 
-                <TypeParameterDocs TypeParameters="@op.TypeParameters" />
+                    <MemberImplements Interfaces="@op.ImplementedInterfaces" />
 
-                <ParameterDocs Parameters="@op.Parameters" />
+                    <SummaryDoc DocComment="@op.SummaryDocComment" />
 
-                @if (!op.ReturnsVoid)
-                {
-                    <ReturnValueDoc DocComment="@op.ReturnsDocComment" Type="@op.ReturnType" />
-                }
+                    <TypeParameterDocs TypeParameters="@op.TypeParameters" />
 
-                <AttributesSection Attributes="@op.Attributes" />
+                    <ParameterDocs Parameters="@op.Parameters" />
 
-                <!-- Remarks doc comment -->
-                <RemarksDoc DocComment="@op.RemarksDocComment" />
+                    @if (!op.ReturnsVoid)
+                    {
+                        <ReturnValueDoc DocComment="@op.ReturnsDocComment" Type="@op.ReturnType" />
+                    }
 
-                <ExampleDoc DocComment="@op.ExampleDocComment" />
+                    <AttributesSection Attributes="@op.Attributes" />
 
-                <ExceptionDocs Exceptions="@op.Exceptions" />
+                    <!-- Remarks doc comment -->
+                    <RemarksDoc DocComment="@op.RemarksDocComment" />
 
-                <SeeAlsoDocs DocComments="@op.SeeAlsoDocComments" />
+                    <ExampleDoc DocComment="@op.ExampleDocComment" />
+
+                    <ExceptionDocs Exceptions="@op.Exceptions" />
+
+                    <SeeAlsoDocs DocComments="@op.SeeAlsoDocComments" />
+                </div>
             </div>
         }
     </div>
