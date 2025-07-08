@@ -25,18 +25,15 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="display-4">API homepage</h1>
 
-                    <!-- chevron icon, taken from https://icons.getbootstrap.com/icons/chevron-down/ -->
-                    <button class="btn" id="toggleAllBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
-                        </svg>
-                    </button>
+                    <CollapseAllButton />
                 </div>
 
                 <hr class="my-2" />
 
                 @foreach (var assembly in Model)
                 {
+                    string collapseId = $"{assembly.Name}-DLL-collapse";
+
                     <div class="d-flex justify-content-between align-items-center">
                         <h1 class="display-5 my-2" data-id="assembly-name">
                             <samp>
@@ -47,17 +44,12 @@
                             </samp>
                         </h1>
 
-                        <!-- chevron icon, taken from https://icons.getbootstrap.com/icons/chevron-down/ -->
-                        <button class="btn" data-bs-toggle="collapse" data-bs-target="#@(assembly.Name)-DLL-collapse" aria-expanded="false" aria-controls="@(assembly.Name)-DLL-collapse">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
-                            </svg>
-                        </button>
+                        <CollapseButton CollapseTarget="@collapseId" />
                     </div>
 
                     <hr class="my-2" />
 
-                    <div class="collapse show multi-collapse" id="@(assembly.Name)-DLL-collapse">
+                    <div class="collapse show multi-collapse" id="@collapseId">
                         @foreach (var ns in assembly.Namespaces)
                         {
                             <NamespaceTypeList Namespace="@ns" ExtraIndent="true" />
@@ -69,21 +61,3 @@
         </CascadingValue>
     </CascadingValue>
 </CascadingValue>
-
-<script>
-    const toggleBtn = document.getElementById('toggleAllBtn');
-    const namespaces = Array.from(document.getElementsByClassName('multi-collapse'));
-
-    toggleBtn.addEventListener('click', () => {
-      const allShown = namespaces.every(ns => ns.classList.contains('show'));
-
-      namespaces.forEach(el => {
-        const instance = bootstrap.Collapse.getOrCreateInstance(el);
-        if (allShown) {
-          instance.hide(); // Collapse if all were shown
-        } else {
-          instance.show(); // Otherwise expand all
-        }
-      });
-    });
-</script>

@@ -15,6 +15,8 @@
     var bsIndentClass = ExtraIndent
         ? "ms-3"
         : "ms-0";
+
+    string collapseId = $"{Namespace.Name}-collapse";
 }
 
 <div data-id="namespace-section" id="@Namespace.Id">
@@ -29,17 +31,12 @@
             </samp>
         </h1>
 
-        <!-- chevron icon, taken from https://icons.getbootstrap.com/icons/chevron-down/ -->
-        <button class="btn" data-bs-toggle="collapse" data-bs-target="#@(Namespace.Name)-collapse" aria-expanded="false" aria-controls="@(Namespace.Name)-collapse">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
-            </svg>
-        </button>
+        <CollapseButton CollapseTarget="@collapseId" />
     </div>
 
     <hr class="my-2" />
 
-    <div class="collapse show multi-collapse" id="@(Namespace.Name)-collapse">
+    <div class="collapse show multi-collapse" id="@collapseId">
         <div data-id="namespace-types">
             @foreach (var type in Namespace.AllTypes)
             {
