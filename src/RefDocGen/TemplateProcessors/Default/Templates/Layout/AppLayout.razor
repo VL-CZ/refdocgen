@@ -3,7 +3,7 @@
 @inherits LayoutComponentBase
 
 @code {
-    [CascadingParameter]
+    [CascadingParameter(Name = "CustomStyles")]
     public string? CustomStyles { get; set; } = null;
 
     [CascadingParameter]
@@ -12,7 +12,7 @@
     [CascadingParameter]
     public required LanguageTM[] Languages { get; set; }
 
-    [CascadingParameter]
+    [CascadingParameter(Name = "ProjectName")]
     public required string ProjectName { get; set; }
 
     [CascadingParameter]

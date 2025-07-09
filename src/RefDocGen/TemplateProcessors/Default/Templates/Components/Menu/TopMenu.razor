@@ -10,7 +10,7 @@
     [CascadingParameter]
     public required LanguageTM[] Languages { get; set; }
 
-    [CascadingParameter]
+    [CascadingParameter(Name = "ProjectName")]
     public required string ProjectName { get; set; }
 
     [Parameter]

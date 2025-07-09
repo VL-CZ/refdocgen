@@ -23,8 +23,6 @@
         toggleBtn.addEventListener('click', () => {
           const allShown = namespaces.every(ns => ns.classList.contains('show'));
 
-          console.log(allShown);
-
           namespaces.forEach(el => {
             let instance = bootstrap.Collapse.getInstance(el);
             if (!instance) {
