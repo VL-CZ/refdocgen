@@ -4,37 +4,58 @@
 @code {
     [Parameter]
     public required ConstructorTM[] Constructors { get; set; }
+
+    /// <summary>
+    /// Checks whether the constructor has any documentation section ('summary', 'remarks', etc.)
+    /// </summary>
+    private bool HasAnyDocSection(ConstructorTM constructor)
+    {
+        return Checks.AnyNotNull(constructor.SummaryDocComment, constructor.RemarksDocComment, constructor.ExampleDocComment)
+            || Checks.AnyNonEmpty(constructor.Parameters, constructor.Attributes, constructor.Exceptions, constructor.SeeAlsoDocComments);
+    }
 }
 
 <h2 class="display-5 mt-2">Constructors</h2>
 <div class="row" data-id="constructors-section">
     <div class="col-md-12">
-        @foreach (var constructor in Constructors)
+        @foreach (var (index, constructor) in Constructors.Enumerate())
         {
-            <div class="border p-2 mb-2" id="@constructor.Id" data-id="member-data">
-                <h6 class="mb-1" data-id="member-declaration">
-                    <samp>
-                        <ConstructorDeclaration Constructor="@constructor"/>
+            string collapseId = $"ctor-{index}-collapse";
 
-                        <AnchorLink Id="@constructor.Id" />
-                    </samp>
+            <div class="border px-2 py-1 mb-2" id="@constructor.Id" data-id="member-data">
 
-                </h6>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 text-break" data-id="member-declaration">
+                        <samp>
+                            <ConstructorDeclaration Constructor="@constructor" />
 
-                <SummaryDoc DocComment="@constructor.SummaryDocComment" />
+                            <AnchorLink Id="@constructor.Id" />
+                        </samp>
 
-                <ParameterDocs Parameters="@constructor.Parameters" />
+                    </h6>
 
-                <AttributesSection Attributes="@constructor.Attributes" />
+                    <CollapseButton CollapseTarget="@collapseId" IsVisible="@HasAnyDocSection(constructor)" />
+                </div>
 
-                <!-- Remarks doc comment -->
-                <RemarksDoc DocComment="@constructor.RemarksDocComment" />
+                <div class="collapse show multi-collapse" id="@collapseId">
 
-                <ExampleDoc DocComment="@constructor.ExampleDocComment" />
+                    <SummaryDoc DocComment="@constructor.SummaryDocComment" />
 
-                <ExceptionDocs Exceptions="@constructor.Exceptions" />
+                    <ParameterDocs Parameters="@constructor.Parameters" />
 
-                <SeeAlsoDocs DocComments="@constructor.SeeAlsoDocComments" />
+                    <AttributesSection Attributes="@constructor.Attributes" />
+
+                    <!-- Remarks doc comment -->
+                    <RemarksDoc DocComment="@constructor.RemarksDocComment" />
+
+                    <ExampleDoc DocComment="@constructor.ExampleDocComment" />
+
+                    <ExceptionDocs Exceptions="@constructor.Exceptions" />
+
+                    <SeeAlsoDocs DocComments="@constructor.SeeAlsoDocComments" />
+
+                    <div class="mt-1" />
+                </div>
             </div>
         }
     </div>

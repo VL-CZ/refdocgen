@@ -16,6 +16,9 @@
     [Parameter]
     public required LanguageTM[] Languages { get; set; }
 
+    [Parameter]
+    public required string ProjectName { get; set; }
+
     /// <summary>
     /// Checks if the model has any (summary, remarks,...) doc comments.
     /// </summary>
@@ -25,68 +28,92 @@
         return Model.SummaryDocComment is not null || Model.RemarksDocComment is not null
             || Model.ExampleDocComment is not null || Model.SeeAlsoDocComments.Any() || Model.TypeParameters.Any();
     }
+
+    /// <summary>
+    /// Checks whether the delegate method has any documentation section ('summary', 'remarks', etc.)
+    /// </summary>
+    private bool HasAnyDocSection(DelegateTypeTM del)
+    {
+        return Checks.AnyNotNull(del.SummaryDocComment, del.ReturnsDocComment)
+            || Checks.AnyNonEmpty(del.Parameters, del.Exceptions, del.SeeAlsoDocComments)
+            || !del.ReturnsVoid;
+    }
 }
 
 <CascadingValue Value="TopMenuData">
     <CascadingValue Value="Versions">
         <CascadingValue Value="Languages">
-            <LayoutView Layout="typeof(AppLayout)">
-                <div data-id="declared-type-data">
-                    <TypeNameTitle Type="@Model" />
+            <CascadingValue Value="ProjectName" Name="ProjectName">
+                <LayoutView Layout="typeof(AppLayout)">
+                    <div data-id="declared-type-data">
+                        <TypeNameTitle Type="@Model" />
 
-                    <TypeParametersConstraintsSection TypeParameters="@Model.TypeParameters" />
+                        <TypeParametersConstraintsSection TypeParameters="@Model.TypeParameters" />
 
-                    <AssemblyLink Assembly="@Model.Assembly" />
+                        <AssemblyLink Assembly="@Model.Assembly" />
 
-                    <NamespaceLink Namespace="@Model.Namespace" />
+                        <NamespaceLink Namespace="@Model.Namespace" />
 
-                    <DeclaringTypeSection DeclaringType="@Model.DeclaringType" />
+                        <DeclaringTypeSection DeclaringType="@Model.DeclaringType" />
 
-                    <hr />
-
-                    <SummaryDoc DocComment="@Model.SummaryDocComment" />
-
-                    <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
-
-                    <AttributesSection Attributes="@Model.Attributes" />
-
-                    <RemarksDoc DocComment="@Model.RemarksDocComment" />
-
-                    <ExampleDoc DocComment="@Model.ExampleDocComment" />
-
-                    <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
-
-                    @if (IsModelDocumented())
-                    {
                         <hr />
-                    }
-                </div>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="border p-2 mb-2" data-id="delegate-method" id="delegate-method">
-                            <h6 class="mb-1" data-id="member-declaration">
-                                <samp>
-                                    <DelegateMethodDeclaration Delegate="@Model" />
-                                </samp>
-                            </h6>
+                        <SummaryDoc DocComment="@Model.SummaryDocComment" />
 
-                            <SummaryDoc DocComment="@Model.SummaryDocComment" />
+                        <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
 
-                            <ParameterDocs Parameters="@Model.Parameters" />
+                        <AttributesSection Attributes="@Model.Attributes" />
 
-                            @if (!Model.ReturnsVoid)
-                            {
-                                <ReturnValueDoc DocComment="@Model.ReturnsDocComment" Type="@Model.ReturnType" />
+                        <RemarksDoc DocComment="@Model.RemarksDocComment" />
+
+                        <ExampleDoc DocComment="@Model.ExampleDocComment" />
+
+                        <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
+
+                        @if (IsModelDocumented())
+                        {
+                            <hr />
+                        }
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            @{
+                                string collapseId = "delegate-invoke-collapse";
                             }
 
-                            <ExceptionDocs Exceptions="@Model.Exceptions" />
+                            <div class="border px-2 py-1 mb-2" data-id="delegate-method" id="delegate-method">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0 text-break" data-id="member-declaration">
+                                        <samp>
+                                            <DelegateMethodDeclaration Delegate="@Model" />
+                                        </samp>
+                                    </h6>
 
-                            <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
+                                    <CollapseButton CollapseTarget="@collapseId" IsVisible="@HasAnyDocSection(Model)" />
+                                </div>
+
+                                <div class="collapse show multi-collapse" id="@collapseId">
+
+                                    <SummaryDoc DocComment="@Model.SummaryDocComment" />
+
+                                    <ParameterDocs Parameters="@Model.Parameters" />
+
+                                    @if (!Model.ReturnsVoid)
+                                    {
+                                        <ReturnValueDoc DocComment="@Model.ReturnsDocComment" Type="@Model.ReturnType" />
+                                    }
+
+                                    <ExceptionDocs Exceptions="@Model.Exceptions" />
+
+                                    <div class="mt-1" />
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </LayoutView>
+                </LayoutView>
+            </CascadingValue>
         </CascadingValue>
     </CascadingValue>
 </CascadingValue>

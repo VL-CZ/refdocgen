@@ -12,30 +12,32 @@
 
 @if (NestedTypes.Any())
 {
-    <h3 class="lead mt-3">Nested types</h3>
-    <div class="mx-2" data-id="nested-types-section">
-        @foreach (var nestedType in NestedTypes)
-        {
-            var nestedTypeUrl = $"./{nestedType.Id}.html";
+    <div class="mt-3">
+        <div class="lead">Nested types</div>
+        <div class="mx-3" data-id="nested-types-section">
+            @foreach (var nestedType in NestedTypes)
+            {
+                var nestedTypeUrl = $"./{nestedType.Id}.html";
 
-            <div data-id="nested-type-data">
-                <samp data-id="nested-type-name">
-                    <a href="@nestedTypeUrl" class="refdocgen-link-secondary">
-                        <span class="refdocgen-text-tertiary">
-                            @nestedType.TypeKindName
-                        </span>
-                        <span> </span>
+                <div data-id="nested-type-data">
+                    <samp data-id="nested-type-name" class="text-break">
+                        <a href="@nestedTypeUrl" class="refdocgen-link-secondary">
+                            <span class="refdocgen-text-tertiary">
+                                @nestedType.TypeKindName
+                            </span>
+                            <span> </span>
 
-                        <LanguageSpecificStrings Data="@nestedType.Name" />
-                    </a>
-                </samp>
-                <div class="text-body-secondary fst-italic mb-2" data-id="summary-doc">
-                    @if (nestedType.DocComment is not null)
-                    {
-                        @((MarkupString)nestedType.DocComment)
-                    }
+                            <LanguageSpecificStrings Data="@nestedType.Name" />
+                        </a>
+                    </samp>
+                    <div class="text-body-secondary fst-italic mb-2" data-id="summary-doc">
+                        @if (nestedType.DocComment is not null)
+                        {
+                            @((MarkupString)nestedType.DocComment)
+                        }
+                    </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
 }

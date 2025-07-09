@@ -4,44 +4,66 @@
 @code {
     [Parameter]
     public required PropertyTM[] Properties { get; set; }
+
+    /// <summary>
+    /// Checks whether the property has any documentation section ('summary', 'remarks', etc.)
+    /// </summary>
+    private bool HasAnyDocSection(PropertyTM property)
+    {
+        return Checks.AnyNotNull(property.SummaryDocComment, property.ValueDocComment, property.RemarksDocComment, property.ExampleDocComment,
+                property.InheritedFrom, property.BaseDeclaringType, property.ExplicitInterfaceType)
+            || Checks.AnyNonEmpty(property.Attributes, property.Exceptions, property.SeeAlsoDocComments,
+                property.ImplementedInterfaces);
+    }
 }
 
 <h2 class="display-5 mt-2">Properties</h2>
 <div class="row" data-id="properties-section">
     <div class="col-md-12">
-        @foreach (var property in Properties)
+        @foreach (var (index, property) in Properties.Enumerate())
         {
-            <div class="border p-2 mb-2" id="@property.Id" data-id="member-data">
-                <h6 class="mb-1" data-id="member-declaration">
-                    <samp>
-                        <PropertyDeclaration Property="@property" />
+            string collapseId = $"property-{index}-collapse";
 
-                        <AnchorLink Id="@property.Id" />
-                    </samp>
-                </h6>
+            <div class="border px-2 py-1 mb-2" id="@property.Id" data-id="member-data">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 text-break" data-id="member-declaration">
+                        <samp>
+                            <PropertyDeclaration Property="@property" />
 
-                <MemberInheritedFrom OriginalType="@property.InheritedFrom" />
+                            <AnchorLink Id="@property.Id" />
+                        </samp>
+                    </h6>
 
-                <MemberOverrides BaseType="@property.BaseDeclaringType" />
+                    <CollapseButton CollapseTarget="@collapseId" IsVisible="@HasAnyDocSection(property)" />
+                </div>
 
-                <MemberExplicitlyImplements Interface="@property.ExplicitInterfaceType" />
+                <div class="collapse show multi-collapse" id="@collapseId">
 
-                <MemberImplements Interfaces="@property.ImplementedInterfaces" />
+                    <MemberInheritedFrom OriginalType="@property.InheritedFrom" />
 
-                <SummaryDoc DocComment="@property.SummaryDocComment" />
+                    <MemberOverrides BaseType="@property.BaseDeclaringType" />
 
-                <ValueDoc DocComment="@property.ValueDocComment" />
+                    <MemberExplicitlyImplements Interface="@property.ExplicitInterfaceType" />
 
-                <AttributesSection Attributes="@property.Attributes" />
+                    <MemberImplements Interfaces="@property.ImplementedInterfaces" />
 
-                <!-- Remarks doc comment -->
-                <RemarksDoc DocComment="@property.RemarksDocComment" />
+                    <SummaryDoc DocComment="@property.SummaryDocComment" />
 
-                <ExampleDoc DocComment="@property.ExampleDocComment" />
+                    <ValueDoc DocComment="@property.ValueDocComment" />
 
-                <ExceptionDocs Exceptions="@property.Exceptions" />
+                    <AttributesSection Attributes="@property.Attributes" />
 
-                <SeeAlsoDocs DocComments="@property.SeeAlsoDocComments" />
+                    <!-- Remarks doc comment -->
+                    <RemarksDoc DocComment="@property.RemarksDocComment" />
+
+                    <ExampleDoc DocComment="@property.ExampleDocComment" />
+
+                    <ExceptionDocs Exceptions="@property.Exceptions" />
+
+                    <SeeAlsoDocs DocComments="@property.SeeAlsoDocComments" />
+
+                    <div class="mt-1" />
+                </div>
             </div>
         }
     </div>

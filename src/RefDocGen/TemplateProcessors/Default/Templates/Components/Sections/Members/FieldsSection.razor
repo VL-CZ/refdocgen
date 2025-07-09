@@ -4,34 +4,56 @@
 @code {
     [Parameter]
     public required FieldTM[] Fields { get; set; }
+
+    /// <summary>
+    /// Checks whether the field has any documentation section ('summary', 'remarks', etc.)
+    /// </summary>
+    private bool HasAnyDocSection(FieldTM field)
+    {
+        return Checks.AnyNotNull(field.SummaryDocComment, field.RemarksDocComment, field.ExampleDocComment,
+                field.InheritedFrom)
+            || Checks.AnyNonEmpty(field.Attributes, field.SeeAlsoDocComments);
+
+    }
 }
 
 <h2 class="display-5 mt-2">Fields</h2>
 <div class="row" data-id="fields-section">
     <div class="col-md-12">
-        @foreach (var field in Fields)
+        @foreach (var (index, field) in Fields.Enumerate())
         {
-            <div class="border p-2 mb-2" id="@field.Id" data-id="member-data">
-                <h6 class="mb-1" data-id="member-declaration">
-                    <samp>
-                        <FieldDeclaration Field="@field" />
+            string collapseId = $"field-{index}-collapse";
 
-                        <AnchorLink Id="@field.Id" />
-                    </samp>
+            <div class="border px-2 py-1 mb-2" id="@field.Id" data-id="member-data">
 
-                </h6>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 text-break" data-id="member-declaration">
+                        <samp>
+                            <FieldDeclaration Field="@field" />
 
-                <MemberInheritedFrom OriginalType="@field.InheritedFrom" />
+                            <AnchorLink Id="@field.Id" />
+                        </samp>
+                    </h6>
 
-                <SummaryDoc DocComment="@field.SummaryDocComment" />
+                    <CollapseButton CollapseTarget="@collapseId" IsVisible="@HasAnyDocSection(field)" />
+                </div>
 
-                <AttributesSection Attributes="@field.Attributes" />
+                <div class="collapse show multi-collapse" id="@collapseId">
 
-                <RemarksDoc DocComment="@field.RemarksDocComment" />
+                    <MemberInheritedFrom OriginalType="@field.InheritedFrom" />
 
-                <ExampleDoc DocComment="@field.ExampleDocComment" />
+                    <SummaryDoc DocComment="@field.SummaryDocComment" />
 
-                <SeeAlsoDocs DocComments="@field.SeeAlsoDocComments" />
+                    <AttributesSection Attributes="@field.Attributes" />
+
+                    <RemarksDoc DocComment="@field.RemarksDocComment" />
+
+                    <ExampleDoc DocComment="@field.ExampleDocComment" />
+
+                    <SeeAlsoDocs DocComments="@field.SeeAlsoDocComments" />
+
+                    <div class="mt-1" />
+                </div>
             </div>
         }
     </div>

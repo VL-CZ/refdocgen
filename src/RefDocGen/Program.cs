@@ -85,8 +85,7 @@ public static class Program
         await using var htmlRenderer = new HtmlRenderer(serviceProvider, loggerFactory);
 
         ILanguageConfiguration[] availableLanguages = [
-            new CSharpLanguageConfiguration(),
-            new TodoLanguageConfiguration()
+            new CSharpLanguageConfiguration()
             // #ADD_LANGUAGE: instantiate the custom language configuration here (e.g., new CustomLanguageConfiguration())
         ];
 
@@ -125,6 +124,7 @@ public static class Program
             yamlConfigException?.Throw(); // rethrow the YAML configuration exception (if there's any)
 
             string[] assemblyPaths = AssemblyLocator.GetAssemblies(config.Input);
+            string projectName = Path.GetFileNameWithoutExtension(config.Input);
 
             var assemblyDataConfig = new AssemblyDataConfiguration(
                 MinVisibility: config.MinVisibility,
@@ -137,7 +137,7 @@ public static class Program
 
             var templateProcessor = templateProcessors[config.Template];
 
-            var docGenerator = new DocGenerator(assemblyPaths, templateProcessor, assemblyDataConfig, config.OutputDir, logger);
+            var docGenerator = new DocGenerator(assemblyPaths, templateProcessor, assemblyDataConfig, config.OutputDir, projectName, logger);
             docGenerator.GenerateDoc();
 
             if (config.SaveConfig) // save the configuration

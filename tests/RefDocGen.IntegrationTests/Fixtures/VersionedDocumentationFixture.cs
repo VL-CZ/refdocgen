@@ -72,6 +72,7 @@ public class VersionedDocumentationFixture : IDisposable
                 templateProcessor,
                 assemblyDataConfig,
                 outputDir,
+                "RefDocGen.ExampleLibrary",
                 logger);
 
             generator.GenerateDoc();

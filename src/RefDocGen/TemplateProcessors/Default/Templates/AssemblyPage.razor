@@ -15,26 +15,36 @@
 
     [Parameter]
     public required LanguageTM[] Languages { get; set; }
+
+    [Parameter]
+    public required string ProjectName { get; set; }
 }
 
 <CascadingValue Value="TopMenuData">
     <CascadingValue Value="Versions">
         <CascadingValue Value="Languages">
-            <LayoutView Layout="typeof(AppLayout)">
+            <CascadingValue Value="ProjectName" Name="ProjectName">
+                <LayoutView Layout="typeof(AppLayout)">
 
-                <h1 class="display-4">
-                    <samp>
-                        <span class="refdocgen-text-tertiary">assembly</span>
-                        <span class="refdocgen-text-primary">@Model.Name</span>
-                    </samp>
-                </h1>
-                <hr />
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h1 class="display-4 text-break">
+                            <samp>
+                                <span class="refdocgen-text-tertiary">assembly</span>
+                                <span class="refdocgen-text-primary">@((MarkupString)Model.Name.WithWbrAfterDots())</span>
+                            </samp>
+                        </h1>
 
-                @foreach (var ns in Model.Namespaces)
-                {
-                    <NamespaceTypeList Namespace="@ns" />
-                }
-            </LayoutView>
+                        <CollapseAllButton />
+                    </div>
+
+                    <hr class="my-2" />
+
+                    @foreach (var ns in Model.Namespaces)
+                    {
+                        <NamespaceTypeList Namespace="@ns" />
+                    }
+                </LayoutView>
+            </CascadingValue>
         </CascadingValue>
     </CascadingValue>
 </CascadingValue>

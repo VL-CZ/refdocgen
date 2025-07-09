@@ -3,7 +3,7 @@
 @inherits LayoutComponentBase
 
 @code {
-    [CascadingParameter]
+    [CascadingParameter(Name = "CustomStyles")]
     public string? CustomStyles { get; set; } = null;
 
     [CascadingParameter]
@@ -11,6 +11,9 @@
 
     [CascadingParameter]
     public required LanguageTM[] Languages { get; set; }
+
+    [CascadingParameter(Name = "ProjectName")]
+    public required string ProjectName { get; set; }
 
     [CascadingParameter]
     public int NestingLevel { get; set; } = 1;
@@ -29,7 +32,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Reference documentation</title>
+    <title>@ProjectName documentation</title>
 
     <script>
 

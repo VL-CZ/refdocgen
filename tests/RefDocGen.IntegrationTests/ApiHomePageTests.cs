@@ -79,4 +79,12 @@ public class ApiHomePageTests : IDisposable
 
         assemblies.ShouldBe(expected);
     }
+
+    [Fact]
+    public void Title_Matches()
+    {
+        string title = AssemblyPageTools.GetApiHomepageTitle(document);
+
+        title.ShouldBe("RefDocGen API");
+    }
 }

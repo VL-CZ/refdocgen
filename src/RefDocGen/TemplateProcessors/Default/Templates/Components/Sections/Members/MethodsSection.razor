@@ -4,53 +4,77 @@
 @code {
     [Parameter]
     public required MethodTM[] Methods { get; set; }
+
+    /// <summary>
+    /// Checks whether the method has any documentation section ('summary', 'remarks', etc.)
+    /// </summary>
+    private bool HasAnyDocSection(MethodTM method)
+    {
+        return Checks.AnyNotNull(method.SummaryDocComment, method.ReturnsDocComment, method.RemarksDocComment, method.ExampleDocComment,
+                method.InheritedFrom, method.BaseDeclaringType, method.ExplicitInterfaceType)
+            || Checks.AnyNonEmpty(method.TypeParameters, method.Parameters, method.Attributes, method.Exceptions, method.SeeAlsoDocComments,
+                method.ImplementedInterfaces)
+            || !method.ReturnsVoid;
+    }
 }
 
 <h2 class="display-5 mt-2">Methods</h2>
 <div class="row" data-id="methods-section">
     <div class="col-md-12">
-        @foreach (var method in Methods)
+        @foreach (var (index, method) in Methods.Enumerate())
         {
-            <div class="border p-2 mb-2" id="@method.Id" data-id="member-data">
-                <h6 class="mb-1" data-id="member-declaration">
-                    <samp>
-                        <MethodDeclaration Method="@method" />
+            string collapseId = $"method-{index}-collapse";
 
-                        <AnchorLink Id="@method.Id" />
-                    </samp>
-                </h6>
+            <div class="border px-2 py-1 mb-2" id="@method.Id" data-id="member-data">
 
-                <TypeParametersConstraintsSection TypeParameters="@method.TypeParameters" />
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 text-break" data-id="member-declaration">
+                        <samp>
+                            <MethodDeclaration Method="@method" />
 
-                <MemberInheritedFrom OriginalType="@method.InheritedFrom" />
+                            <AnchorLink Id="@method.Id" />
+                        </samp>
+                    </h6>
 
-                <MemberOverrides BaseType="@method.BaseDeclaringType" />
+                    <CollapseButton CollapseTarget="@collapseId" IsVisible="@HasAnyDocSection(method)" />
+                </div>
 
-                <MemberExplicitlyImplements Interface="@method.ExplicitInterfaceType" />
+                <div class="collapse show multi-collapse" id="@collapseId">
 
-                <MemberImplements Interfaces="@method.ImplementedInterfaces" />
+                    <TypeParametersConstraintsSection TypeParameters="@method.TypeParameters" />
 
-                <SummaryDoc DocComment="@method.SummaryDocComment" />
+                    <MemberInheritedFrom OriginalType="@method.InheritedFrom" />
 
-                <TypeParameterDocs TypeParameters="@method.TypeParameters" />
+                    <MemberOverrides BaseType="@method.BaseDeclaringType" />
 
-                <ParameterDocs Parameters="@method.Parameters" />
+                    <MemberExplicitlyImplements Interface="@method.ExplicitInterfaceType" />
 
-                @if (!method.ReturnsVoid)
-                {
-                    <ReturnValueDoc DocComment="@method.ReturnsDocComment" Type="@method.ReturnType" />
-                }
+                    <MemberImplements Interfaces="@method.ImplementedInterfaces" />
 
-                <AttributesSection Attributes="@method.Attributes" />
+                    <SummaryDoc DocComment="@method.SummaryDocComment" />
 
-                <!-- Remarks doc comment -->
-                <RemarksDoc DocComment="@method.RemarksDocComment" />
+                    <TypeParameterDocs TypeParameters="@method.TypeParameters" />
 
-                <ExampleDoc DocComment="@method.ExampleDocComment" />
+                    <ParameterDocs Parameters="@method.Parameters" />
 
-                <ExceptionDocs Exceptions="@method.Exceptions" />
+                    @if (!method.ReturnsVoid)
+                    {
+                        <ReturnValueDoc DocComment="@method.ReturnsDocComment" Type="@method.ReturnType" />
+                    }
 
-                <SeeAlsoDocs DocComments="@method.SeeAlsoDocComments" />
+                    <AttributesSection Attributes="@method.Attributes" />
+
+                    <!-- Remarks doc comment -->
+                    <RemarksDoc DocComment="@method.RemarksDocComment" />
+
+                    <ExampleDoc DocComment="@method.ExampleDocComment" />
+
+                    <ExceptionDocs Exceptions="@method.Exceptions" />
+
+                    <SeeAlsoDocs DocComments="@method.SeeAlsoDocComments" />
+
+                    <div class="mt-1" />
+                </div>
             </div>
         }
     </div>

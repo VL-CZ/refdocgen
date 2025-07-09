@@ -46,4 +46,14 @@ internal class AssemblyPageTools
     {
         return [.. element.GetByDataIds(DataId.TypeRowElement).Select(GetTypeRowName)];
     }
+
+    /// <summary>
+    /// Gets the API homepage title.
+    /// </summary>
+    /// <param name="document">The API homepage.</param>
+    /// <returns>The title of API homepage.</returns>
+    internal static string GetApiHomepageTitle(IDocument document)
+    {
+        return document.DocumentElement.GetParsedContent(DataId.ApiHomepageTitle);
+    }
 }

@@ -4,53 +4,76 @@
 @code {
     [Parameter]
     public required OperatorTM[] Operators { get; set; }
+
+    /// <summary>
+    /// Checks whether the operator has any documentation section ('summary', 'remarks', etc.)
+    /// </summary>
+    private bool HasAnyDocSection(OperatorTM op)
+    {
+        return Checks.AnyNotNull(op.SummaryDocComment, op.ReturnsDocComment, op.RemarksDocComment, op.ExampleDocComment,
+                op.InheritedFrom, op.BaseDeclaringType, op.ExplicitInterfaceType)
+            || Checks.AnyNonEmpty(op.TypeParameters, op.Parameters, op.Attributes, op.Exceptions, op.SeeAlsoDocComments,
+                op.ImplementedInterfaces)
+            || !op.ReturnsVoid;
+    }
 }
 
 <h2 class="display-5 mt-2">Operators</h2>
 <div class="row" data-id="operators-section">
     <div class="col-md-12">
-        @foreach (var op in Operators)
+        @foreach (var (index, op) in Operators.Enumerate())
         {
-            <div class="border p-2 mb-2" id="@op.Id" data-id="member-data">
-                <h6 class="mb-1" data-id="member-declaration">
-                    <samp>
-                        <OperatorDeclaration Operator="@op" />
+            string collapseId = $"operator-{index}-collapse";
 
-                        <AnchorLink Id="@op.Id" />
-                    </samp>
-                </h6>
+            <div class="border px-2 py-1 mb-2" id="@op.Id" data-id="member-data">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 text-break" data-id="member-declaration">
+                        <samp>
+                            <OperatorDeclaration Operator="@op" />
 
-                <TypeParametersConstraintsSection TypeParameters="@op.TypeParameters" />
+                            <AnchorLink Id="@op.Id" />
+                        </samp>
+                    </h6>
 
-                <MemberInheritedFrom OriginalType="@op.InheritedFrom" />
+                    <CollapseButton CollapseTarget="@collapseId" IsVisible="@HasAnyDocSection(op)" />
+                </div>
 
-                <MemberOverrides BaseType="@op.BaseDeclaringType" />
+                <div class="collapse show multi-collapse" id="@collapseId">
 
-                <MemberExplicitlyImplements Interface="@op.ExplicitInterfaceType" />
+                    <TypeParametersConstraintsSection TypeParameters="@op.TypeParameters" />
 
-                <MemberImplements Interfaces="@op.ImplementedInterfaces" />
+                    <MemberInheritedFrom OriginalType="@op.InheritedFrom" />
 
-                <SummaryDoc DocComment="@op.SummaryDocComment" />
+                    <MemberOverrides BaseType="@op.BaseDeclaringType" />
 
-                <TypeParameterDocs TypeParameters="@op.TypeParameters" />
+                    <MemberExplicitlyImplements Interface="@op.ExplicitInterfaceType" />
 
-                <ParameterDocs Parameters="@op.Parameters" />
+                    <MemberImplements Interfaces="@op.ImplementedInterfaces" />
 
-                @if (!op.ReturnsVoid)
-                {
-                    <ReturnValueDoc DocComment="@op.ReturnsDocComment" Type="@op.ReturnType" />
-                }
+                    <SummaryDoc DocComment="@op.SummaryDocComment" />
 
-                <AttributesSection Attributes="@op.Attributes" />
+                    <TypeParameterDocs TypeParameters="@op.TypeParameters" />
 
-                <!-- Remarks doc comment -->
-                <RemarksDoc DocComment="@op.RemarksDocComment" />
+                    <ParameterDocs Parameters="@op.Parameters" />
 
-                <ExampleDoc DocComment="@op.ExampleDocComment" />
+                    @if (!op.ReturnsVoid)
+                    {
+                        <ReturnValueDoc DocComment="@op.ReturnsDocComment" Type="@op.ReturnType" />
+                    }
 
-                <ExceptionDocs Exceptions="@op.Exceptions" />
+                    <AttributesSection Attributes="@op.Attributes" />
 
-                <SeeAlsoDocs DocComments="@op.SeeAlsoDocComments" />
+                    <!-- Remarks doc comment -->
+                    <RemarksDoc DocComment="@op.RemarksDocComment" />
+
+                    <ExampleDoc DocComment="@op.ExampleDocComment" />
+
+                    <ExceptionDocs Exceptions="@op.Exceptions" />
+
+                    <SeeAlsoDocs DocComments="@op.SeeAlsoDocComments" />
+
+                    <div class="mt-1" />
+                </div>
             </div>
         }
     </div>

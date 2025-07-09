@@ -16,6 +16,9 @@
     [Parameter]
     public required LanguageTM[] Languages { get; set; }
 
+    [Parameter]
+    public required string ProjectName { get; set; }
+
     /// <summary>
     /// Checks if the model has any additional (remarks, type parameters, etc.) doc comments other than 'summary'.
     /// </summary>
@@ -30,87 +33,89 @@
 <CascadingValue Value="TopMenuData">
     <CascadingValue Value="Versions">
         <CascadingValue Value="Languages">
-            <LayoutView Layout="typeof(AppLayout)">
-                <div data-id="declared-type-data">
-                    <TypeNameTitle Type="@Model" />
+            <CascadingValue Value="ProjectName" Name="ProjectName">
+                <LayoutView Layout="typeof(AppLayout)">
+                    <div data-id="declared-type-data">
+                        <TypeNameTitle Type="@Model" />
 
-                    <TypeParametersConstraintsSection TypeParameters="@Model.TypeParameters" />
+                        <TypeParametersConstraintsSection TypeParameters="@Model.TypeParameters" />
 
-                    <AssemblyLink Assembly="@Model.Assembly" />
+                        <AssemblyLink Assembly="@Model.Assembly" />
 
-                    <NamespaceLink Namespace="@Model.Namespace" />
+                        <NamespaceLink Namespace="@Model.Namespace" />
 
-                    <BaseTypeSection BaseType="@Model.BaseType" />
+                        <BaseTypeSection BaseType="@Model.BaseType" />
 
-                    <ImplementedInterfacesSection ImplementedInterfaces="@Model.ImplementedInterfaces" />
+                        <ImplementedInterfacesSection ImplementedInterfaces="@Model.ImplementedInterfaces" />
 
-                    <DeclaringTypeSection DeclaringType="@Model.DeclaringType" />
+                        <DeclaringTypeSection DeclaringType="@Model.DeclaringType" />
 
-                    <hr />
-
-                    <!-- Doc comments -->
-                    <SummaryDoc DocComment="@Model.SummaryDocComment" />
-
-                    @if (!String.IsNullOrEmpty(Model.SummaryDocComment))
-                    {
                         <hr />
+
+                        <!-- Doc comments -->
+                        <SummaryDoc DocComment="@Model.SummaryDocComment" />
+
+                        @if (!String.IsNullOrEmpty(Model.SummaryDocComment))
+                        {
+                            <hr />
+                        }
+
+                        <!-- Type parameter doc comments -->
+                        <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
+
+                        <AttributesSection Attributes="@Model.Attributes" />
+
+                        <NestedTypesSection NestedTypes="@Model.NestedTypes" />
+
+                        <!-- Remarks doc comment -->
+                        <RemarksDoc DocComment="@Model.RemarksDocComment" />
+
+                        <ExampleDoc DocComment="@Model.ExampleDocComment" />
+
+                        <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
+
+                        @if (HasAdditionalDocs())
+                        {
+                            <hr />
+                        }
+                    </div>
+
+                    @if (Model.Constructors.Any())
+                    {
+                        <ConstructorsSection Constructors="@Model.Constructors" />
                     }
 
-                    <!-- Type parameter doc comments -->
-                    <TypeParameterDocs TypeParameters="@Model.TypeParameters" />
-
-                    <AttributesSection Attributes="@Model.Attributes" />
-
-                    <NestedTypesSection NestedTypes="@Model.NestedTypes" />
-
-                    <!-- Remarks doc comment -->
-                    <RemarksDoc DocComment="@Model.RemarksDocComment" />
-
-                    <ExampleDoc DocComment="@Model.ExampleDocComment" />
-
-                    <SeeAlsoDocs DocComments="@Model.SeeAlsoDocComments" />
-
-                    @if (HasAdditionalDocs())
+                    @if (Model.Fields.Any())
                     {
-                        <hr />
+                        <FieldsSection Fields="@Model.Fields" />
                     }
-                </div>
 
-                @if (Model.Constructors.Any())
-                {
-                    <ConstructorsSection Constructors="@Model.Constructors" />
-                }
+                    @if (Model.Events.Any())
+                    {
+                        <EventsSection Events="@Model.Events" />
+                    }
 
-                @if (Model.Fields.Any())
-                {
-                    <FieldsSection Fields="@Model.Fields" />
-                }
+                    @if (Model.Properties.Any())
+                    {
+                        <PropertiesSection Properties="@Model.Properties" />
+                    }
 
-                @if (Model.Events.Any())
-                {
-                    <EventsSection Events="@Model.Events" />
-                }
+                    @if (Model.Indexers.Any())
+                    {
+                        <IndexersSection Indexers="@Model.Indexers" />
+                    }
 
-                @if (Model.Properties.Any())
-                {
-                    <PropertiesSection Properties="@Model.Properties" />
-                }
+                    @if (Model.Methods.Any())
+                    {
+                        <MethodsSection Methods="@Model.Methods" />
+                    }
 
-                @if (Model.Indexers.Any())
-                {
-                    <IndexersSection Indexers="@Model.Indexers" />
-                }
-
-                @if (Model.Methods.Any())
-                {
-                    <MethodsSection Methods="@Model.Methods" />
-                }
-
-                @if (Model.Operators.Any())
-                {
-                    <OperatorsSection Operators="@Model.Operators" />
-                }
-            </LayoutView>
+                    @if (Model.Operators.Any())
+                    {
+                        <OperatorsSection Operators="@Model.Operators" />
+                    }
+                </LayoutView>
+            </CascadingValue>
         </CascadingValue>
     </CascadingValue>
 </CascadingValue>

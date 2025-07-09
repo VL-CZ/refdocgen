@@ -15,90 +15,100 @@
 
     [Parameter]
     public required LanguageTM[] Languages { get; set; }
+
+    [Parameter]
+    public required string ProjectName { get; set; }
 }
 
 <CascadingValue Value="TopMenuData">
     <CascadingValue Value="Versions">
         <CascadingValue Value="Languages">
-            <LayoutView Layout="typeof(AppLayout)">
+            <CascadingValue Value="ProjectName" Name="ProjectName">
+                <LayoutView Layout="typeof(AppLayout)">
 
-                <h1 class="display-4" data-id="namespace-title">
-                    <samp>
-                        <span class="refdocgen-text-tertiary">namespace</span>
-                        <span class="refdocgen-text-primary">@Model.Name</span>
-                    </samp>
-                </h1>
+                    <h1 class="display-4 text-break" data-id="namespace-title">
+                        <samp>
+                            <span class="refdocgen-text-tertiary">namespace</span>
+                            <span class="refdocgen-text-primary">@((MarkupString)Model.Name.WithWbrAfterDots())</span>
+                        </samp>
+                    </h1>
 
-                <AssemblyLink Assembly="@Model.AssemblyName" />
+                    <AssemblyLink Assembly="@Model.AssemblyName" />
 
-                <hr />
+                    <hr class="mb-2" />
 
-                <!-- Classes -->
-                @if (Model.Classes.Any())
-                {
-                    <h2 class="display-5 my-2">Classes</h2>
-                    <div data-id="namespace-classes">
-                        @foreach (var type in Model.Classes)
-                        {
-                            <TypeNameRow Type="@type" />
-                        }
-                    </div>
-                }
+                    <!-- Classes -->
+                    @if (Model.Classes.Any())
+                    {
+                        <h2 class="display-5">Classes</h2>
+                        <hr class="my-2" />
+                        <div data-id="namespace-classes">
+                            @foreach (var type in Model.Classes)
+                            {
+                                <TypeNameRow Type="@type" />
+                            }
+                        </div>
+                    }
 
-                <!-- Structures -->
-                @if (Model.ValueTypes.Any())
-                {
-                    <h2 class="display-5 my-2">Structs</h2>
-                    <div data-id="namespace-structs">
-                        @foreach (var type in Model.ValueTypes)
-                        {
-                            <TypeNameRow Type="@type" />
-                        }
-                    </div>
-                }
+                    <!-- Structures -->
+                    @if (Model.ValueTypes.Any())
+                    {
+                        <h2 class="display-5">Structs</h2>
+                        <hr class="my-2" />
+                        <div data-id="namespace-structs">
+                            @foreach (var type in Model.ValueTypes)
+                            {
+                                <TypeNameRow Type="@type" />
+                            }
+                        </div>
+                    }
 
-                <!-- Interfaces -->
-                @if (Model.Interfaces.Any())
-                {
-                    <h2 class="display-5 my-2">Interfaces</h2>
-                    <div data-id="namespace-interfaces">
+                    <!-- Interfaces -->
+                    @if (Model.Interfaces.Any())
+                    {
+                        <h2 class="display-5">Interfaces</h2>
+                        <hr class="my-2" />
+                        <div data-id="namespace-interfaces">
 
-                        @foreach (var type in Model.Interfaces)
-                        {
-                            <TypeNameRow Type="@type" />
-                        }
+                            @foreach (var type in Model.Interfaces)
+                            {
+                                <TypeNameRow Type="@type" />
+                            }
 
-                    </div>
-                }
+                        </div>
+                    }
 
-                <!-- Enums -->
-                @if (Model.Enums.Any())
-                {
-                    <h2 class="display-5 my-2">Enums</h2>
-                    <div data-id="namespace-enums">
+                    <!-- Enums -->
+                    @if (Model.Enums.Any())
+                    {
+                        <h2 class="display-5">Enums</h2>
+                        <hr class="my-2" />
+                        <div data-id="namespace-enums">
 
-                        @foreach (var type in Model.Enums)
-                        {
-                            <TypeNameRow Type="@type" />
-                        }
+                            @foreach (var type in Model.Enums)
+                            {
+                                <TypeNameRow Type="@type" />
+                            }
 
-                    </div>
-                }
+                        </div>
+                    }
 
-                <!-- Delegates -->
-                @if (Model.Delegates.Any())
-                {
-                    <h2 class="display-5 my-2">Delegates</h2>
-                    <div data-id="namespace-delegates">
+                    <!-- Delegates -->
+                    @if (Model.Delegates.Any())
+                    {
+                        <h2 class="display-5">Delegates</h2>
+                        <hr class="my-2" />
+                        <div data-id="namespace-delegates">
 
-                        @foreach (var type in Model.Delegates)
-                        {
-                            <TypeNameRow Type="@type" />
-                        }
+                            @foreach (var type in Model.Delegates)
+                            {
+                                <TypeNameRow Type="@type" />
+                            }
 
-                    </div>
-                }
-            </LayoutView>
+                        </div>
+                    }
+                </LayoutView>
+            </CascadingValue>
         </CascadingValue>
     </CascadingValue>
 </CascadingValue>

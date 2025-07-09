@@ -4,46 +4,68 @@
 @code {
     [Parameter]
     public required IndexerTM[] Indexers { get; set; }
+
+    /// <summary>
+    /// Checks whether the indexer has any documentation section ('summary', 'remarks', etc.)
+    /// </summary>
+    private bool HasAnyDocSection(IndexerTM indexer)
+    {
+        return Checks.AnyNotNull(indexer.SummaryDocComment, indexer.ValueDocComment, indexer.RemarksDocComment, indexer.ExampleDocComment,
+                indexer.InheritedFrom, indexer.BaseDeclaringType, indexer.ExplicitInterfaceType)
+            || Checks.AnyNonEmpty(indexer.Parameters, indexer.Attributes, indexer.Exceptions, indexer.SeeAlsoDocComments,
+                indexer.ImplementedInterfaces);
+    }
 }
 
 <h2 class="display-5 mt-2">Indexers</h2>
 <div class="row" data-id="indexers-section">
     <div class="col-md-12">
-        @foreach (var indexer in Indexers)
+        @foreach (var (index, indexer) in Indexers.Enumerate())
         {
-            <div class="border p-2 mb-2" id="@indexer.Id" data-id="member-data">
-                <h6 class="mb-1" data-id="member-declaration">
-                    <samp>
-                        <IndexerDeclaration Indexer="@indexer" />
+            string collapseId = $"indexer-{index}-collapse";
 
-                        <AnchorLink Id="@indexer.Id" />
-                    </samp>
-                </h6>
+            <div class="border px-2 py-1 mb-2" id="@indexer.Id" data-id="member-data">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 text-break" data-id="member-declaration">
+                        <samp>
+                            <IndexerDeclaration Indexer="@indexer" />
 
-                <MemberInheritedFrom OriginalType="@indexer.InheritedFrom" />
+                            <AnchorLink Id="@indexer.Id" />
+                        </samp>
+                    </h6>
 
-                <MemberOverrides BaseType="@indexer.BaseDeclaringType" />
+                    <CollapseButton CollapseTarget="@collapseId" IsVisible="@HasAnyDocSection(indexer)" />
+                </div>
 
-                <MemberExplicitlyImplements Interface="@indexer.ExplicitInterfaceType" />
+                <div class="collapse show multi-collapse" id="@collapseId">
 
-                <MemberImplements Interfaces="@indexer.ImplementedInterfaces" />
+                    <MemberInheritedFrom OriginalType="@indexer.InheritedFrom" />
 
-                <SummaryDoc DocComment="@indexer.SummaryDocComment" />
+                    <MemberOverrides BaseType="@indexer.BaseDeclaringType" />
 
-                <ParameterDocs Parameters="@indexer.Parameters" />
+                    <MemberExplicitlyImplements Interface="@indexer.ExplicitInterfaceType" />
 
-                <ValueDoc DocComment="@indexer.ValueDocComment" />
+                    <MemberImplements Interfaces="@indexer.ImplementedInterfaces" />
 
-                <AttributesSection Attributes="@indexer.Attributes" />
+                    <SummaryDoc DocComment="@indexer.SummaryDocComment" />
 
-                <!-- Remarks doc comment -->
-                <RemarksDoc DocComment="@indexer.RemarksDocComment" />
+                    <ParameterDocs Parameters="@indexer.Parameters" />
 
-                <ExampleDoc DocComment="@indexer.ExampleDocComment" />
+                    <ValueDoc DocComment="@indexer.ValueDocComment" />
 
-                <ExceptionDocs Exceptions="@indexer.Exceptions" />
+                    <AttributesSection Attributes="@indexer.Attributes" />
 
-                <SeeAlsoDocs DocComments="@indexer.SeeAlsoDocComments" />
+                    <!-- Remarks doc comment -->
+                    <RemarksDoc DocComment="@indexer.RemarksDocComment" />
+
+                    <ExampleDoc DocComment="@indexer.ExampleDocComment" />
+
+                    <ExceptionDocs Exceptions="@indexer.Exceptions" />
+
+                    <SeeAlsoDocs DocComments="@indexer.SeeAlsoDocComments" />
+
+                    <div class="mt-1" />
+                </div>
             </div>
         }
     </div>
