@@ -82,7 +82,7 @@ internal static class AssemblyLocator
 
             var project = new Project(projectPath, globalProperties, null);
 
-            string outputPath = Path.Combine(project.DirectoryPath, project.GetPropertyValue("OutputPath"));
+            string outputPath = project.GetPropertyValue("OutputPath").Replace('\\', Path.DirectorySeparatorChar);
             string assemblyName = project.GetPropertyValue("AssemblyName");
             string outputType = project.GetPropertyValue("OutputType");
 
@@ -92,7 +92,7 @@ internal static class AssemblyLocator
                 _ => ".dll"
             };
 
-            string outputFile = Path.Combine(outputPath, assemblyName + extension);
+            string outputFile = Path.Combine(project.DirectoryPath, outputPath, assemblyName + extension);
 
             if (extension == ".exe")
             {
