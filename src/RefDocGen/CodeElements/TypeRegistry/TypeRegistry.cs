@@ -1,6 +1,4 @@
-using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.Members.Concrete;
-using RefDocGen.CodeElements.Members.Tools;
 using RefDocGen.CodeElements.Shared;
 using RefDocGen.CodeElements.Types.Abstract;
 using RefDocGen.CodeElements.Types.Abstract.Delegate;

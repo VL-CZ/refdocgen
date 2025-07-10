@@ -1,11 +1,9 @@
-using AngleSharp.Dom;
 using RefDocGen.CodeElements.Members.Abstract;
 using RefDocGen.CodeElements.Members.Concrete;
 using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.CodeElements.Types.Concrete;
 using RefDocGen.DocExtraction.Tools;
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace RefDocGen.DocExtraction.InheritDoc;
