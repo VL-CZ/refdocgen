@@ -76,7 +76,6 @@
         </None>
         <None Include="..\..\README.md" Pack="true" PackagePath="" />
         <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
-        <None Include="..\..\imgs\**\*" Pack="true" PackagePath="imgs" />
     </ItemGroup>
 </Project>
  
