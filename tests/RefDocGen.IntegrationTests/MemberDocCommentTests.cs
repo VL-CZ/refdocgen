@@ -92,7 +92,7 @@ public class MemberDocCommentTests
             "max age constant",
             "FieldInfo.IsLiteral",
             "Point",
-            "!:notFound"
+            "!:notFoundReferenceExample"
             ];
 
         seeAlsoDocs.ShouldBe(expectedDocs);

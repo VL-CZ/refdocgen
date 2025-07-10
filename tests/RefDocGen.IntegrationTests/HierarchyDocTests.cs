@@ -7,6 +7,9 @@ namespace RefDocGen.IntegrationTests;
 /// <summary>
 /// This class tests the documentation inheritance (i.e. that <c>&lt;inheritdoc /&gt;</c> elements are inherited as expected).
 /// </summary>
+/// <remarks>
+/// This class used classes from RefDocGen.ExampleLibrary.Hierarchy namespace designed specifically to test more complex doc inheritance.
+/// </remarks>
 [Collection(DocumentationTestCollection.Name)]
 public class HierarchyDocTests
 {
