@@ -63,7 +63,7 @@ public class User
     /// <seealso cref="MaxAge">max age constant</seealso>
     /// <seealso cref="System.Reflection.FieldInfo.IsLiteral" />
     /// <seealso cref="RefDocGen.ExampleLibrary.Tools.Point"/>
-    /// <seealso cref="notFound"/>
+    /// <seealso cref="notFoundReferenceExample"/>
     protected readonly string username;
 
     /// <summary>
