@@ -24,17 +24,12 @@ internal class MemberInheritDocResolver : InheritDocResolver<MemberData>
     /// <inheritdoc/>
     protected override IReadOnlyList<MemberData> GetParentNodes(MemberData member)
     {
-        var parents = typeRegistry.GetDeclaredBaseTypes(member.ContainingType);
-
-        var result = new List<MemberData>();
-
-        foreach (var p in parents)
+        if (member.Name == "AddRange" && member.ContainingType.ShortName == "MyStringCollection")
         {
-            if (p.AllMembers.TryGetValue(member.Id, out var parentMember)) // TODO: explicit interface implementation & inheriting generic type
-            {
-                result.Add(parentMember);
-            }
+            int x = 0;
         }
+
+        var result = typeRegistry.GetDeclaredBaseMembers(member);
 
         return result;
     }
