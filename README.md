@@ -14,9 +14,9 @@ RefDocGen is a reference documentation generator for .NET.
 
 Default UI:
 
-![](imgs/docs-index.png)
+![](./imgs/docs-index.png)
 
-![](imgs/docs-type1.png)
+![](./imgs/docs-type1.png)
 
 ## Demos
 - [reference documentation of an example library]()

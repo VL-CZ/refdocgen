@@ -12,7 +12,7 @@
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>refdocgen</ToolCommandName>
         <PackageOutputPath>./nupkg</PackageOutputPath>
-        <Version>0.2.0</Version>
+        <Version>0.2.1</Version>
         <Authors>Vojtěch Lengál</Authors>
         <Title>RefDocGen</Title>
         <Description>Reference Documentation Generator for .NET</Description>
@@ -76,6 +76,7 @@
         </None>
         <None Include="..\..\README.md" Pack="true" PackagePath="" />
         <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+        <None Include="..\..\imgs\**\*" Pack="true" PackagePath="imgs" />
     </ItemGroup>
 </Project>
  
