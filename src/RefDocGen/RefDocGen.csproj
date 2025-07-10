@@ -12,9 +12,15 @@
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>refdocgen</ToolCommandName>
         <PackageOutputPath>./nupkg</PackageOutputPath>
-        <PackageVersion>0.0.1</PackageVersion>
-
-        <Version>0.0.1</Version>
+        <Version>0.0.2</Version>
+        <Authors>Vojtěch Lengál</Authors>
+        <Title>RefDocGen</Title>
+        <Description>Reference Documentation Generator for .NET</Description>
+        <PackageProjectUrl>https://github.com/VL-CZ/refdocgen</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/VL-CZ/refdocgen</RepositoryUrl>
+        <PackageTags>documentation; reference documentation; documentation generator</PackageTags>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -68,5 +74,8 @@
         <None Update="TemplateProcessors\Todo\Templates\Static\styles.css">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Include="..\..\README.md" Pack="true" PackagePath="" />
+        <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
     </ItemGroup>
 </Project>
+ 
