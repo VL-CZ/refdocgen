@@ -50,9 +50,6 @@
         <None Update="TemplateProcessors\Default\Templates\Static\bootstrap-5.3.5-dist.bundle.min.js">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="TemplateProcessors\Default\Templates\Static\fuse-7.1.0.min.js">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
         <None Update="TemplateProcessors\Default\Templates\Static\search.js">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
