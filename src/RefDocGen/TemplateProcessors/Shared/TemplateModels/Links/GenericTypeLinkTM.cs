@@ -5,6 +5,6 @@ namespace RefDocGen.TemplateProcessors.Shared.TemplateModels.Links;
 /// </summary>
 /// <param name="TypeLink"><see cref="CodeLinkTM"/> representing the type, excluding its generic paramters.</param>
 /// <param name="TypeParameters">
-/// <see cref="GenericTypeLinkTM"> instance representing the type paramters of the type.</see>
+/// <see cref="GenericTypeLinkTM" /> instance representing the type paramters of the type.
 /// </param>
 public record GenericTypeLinkTM(CodeLinkTM TypeLink, GenericTypeLinkTM[] TypeParameters);
