@@ -12,16 +12,16 @@ public abstract class Animal
 {
     /// <summary>
     /// Animal weight.
-    /// 
+    ///
     /// Note that this also applies for <see cref="Dog"/>.
     /// <br/>
-    /// 
+    ///
     /// See also <see cref="User.username"/>
     /// <br/>
-    /// 
+    ///
     /// See also <see cref="MyCollection{T}.Add"/>
     /// <br/>
-    /// 
+    ///
     /// See also <see cref="MyCollection{T}.IsReadOnly"/>
     /// </summary>
     /// <remarks>
@@ -33,7 +33,7 @@ public abstract class Animal
     /// Dog's owner; NULL if the dog doesn't have any owner.
     /// </summary>
     /// <exception cref="NullReferenceException">User not found.</exception>.
-    /// <exception cref="InvalidOperationException">Blah blah blah.</exception>.
+    /// <exception cref="InvalidOperationException">Invalid operation.</exception>.
     protected User Owner { get; set; }
 
     /// <summary>
