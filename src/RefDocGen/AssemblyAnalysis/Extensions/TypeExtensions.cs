@@ -28,6 +28,11 @@ internal static class TypeExtensions
             return true; // YES, compiler generated
         }
 
+        if (type.Name.StartsWith("<>", StringComparison.Ordinal)) // C# compiler generated types
+        {
+            return true;
+        }
+
         return type.FullName?.StartsWith("<StartupCode$", StringComparison.Ordinal) // detect F# Startup code
                 ?? false;
 
