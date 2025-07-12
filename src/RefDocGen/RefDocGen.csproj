@@ -12,7 +12,7 @@
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>refdocgen</ToolCommandName>
         <PackageOutputPath>./nupkg</PackageOutputPath>
-        <Version>0.2.1</Version>
+        <Version>1.0.0</Version>
         <Authors>Vojtěch Lengál</Authors>
         <Title>RefDocGen</Title>
         <Description>Reference Documentation Generator for .NET</Description>
@@ -50,9 +50,6 @@
         <None Update="TemplateProcessors\Default\Templates\Static\bootstrap-5.3.5-dist.bundle.min.js">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="TemplateProcessors\Default\Templates\Static\fuse-7.1.0.min.js">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
         <None Update="TemplateProcessors\Default\Templates\Static\search.js">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
@@ -76,6 +73,7 @@
         </None>
         <None Include="..\..\README.md" Pack="true" PackagePath="" />
         <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+        <None Include="..\..\THIRD-PARTY-LICENSES.md" Pack="true" PackagePath="" />
     </ItemGroup>
 </Project>
  

@@ -12,4 +12,4 @@ exclude-projects:
   - RefDocGen.IntegrationTests
 template: Default
 verbose: true
-static-pages-dir: ../../out/static-pages
+static-pages-dir: static-pages

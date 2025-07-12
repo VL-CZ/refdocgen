@@ -19,11 +19,11 @@ Default UI:
 ![Screenshot of type page](./imgs/docs-type1.png)
 
 ## Demos
-- [reference documentation of an example library]()
-- [reference documentation of this project]()
-- [reference documentation of `Newtonsoft.JSON`]()
-- [reference documentation of `YamlDotNet`]()
-- [reference documentation of `Serilog`]()
+- [reference documentation of an example library](https://vl-cz.github.io/refdocgen-demo-example-library/)
+- [reference documentation of this project](https://vl-cz.github.io/refdocgen-demo-refdocgen/)
+- [reference documentation of `Newtonsoft.JSON`](https://vl-cz.github.io/refdocgen-demo-third-party/v-newtonsoft/)
+- [reference documentation of `YamlDotNet`](https://vl-cz.github.io/refdocgen-demo-third-party/v-yamldotnet/)
+- [reference documentation of `Serilog`](https://vl-cz.github.io/refdocgen-demo-third-party/v-serilog/)
 
 ## Installation
 
@@ -138,7 +138,7 @@ You can include static pages (like *index* or *FAQ*) in the generated documentat
 Additional notes:
 - it is possible to use relative links between pages
 - you can include images, JS, or any other resources in the static pages directory, and then reference them from the pages
-- to add custom CSS styles, put them into `/css/styles.css` and they will be included automatically (however, use custom styles only for minor tweaks, rather than completely changing the overall appearance)
+- to add custom CSS styles, put them into `/css/styles.css` and they will be included automatically (however, use custom styles only for minor tweaks, rather than completely changing the overall appearance of the page)
 - it is possible to put the pages (and other files) into subdirectories of the `static-pages/` directory (however, pages nested three or more levels deep will not appear in the top menu)
 
 #### Example
@@ -255,7 +255,7 @@ However, the default UI is designed to be extensible, so adding support for othe
 However, some modifiers are not supported and therefore do not appear in the generated documentation.  
 These are typically implementation details that do not affect the public API.
 
-More specifically, the following modifiers are not supported: `extern`, `file`, `managed`, `partial`, `record`, `scoped`, `unmanaged`, `unsafe`, `volatile`.
+More specifically, the following modifiers are not supported: `extern`, `file`, `managed`, `new`, `partial`, `record`, `scoped`, `unmanaged`, `unsafe`, `volatile`.
 
 Additionally, these type parameter constraints are not supported:
 `notnull`, `unmanaged`, `default`, `allows ref struct`.
