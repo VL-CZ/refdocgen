@@ -203,6 +203,11 @@ internal class DocCommentTransformer : IDocCommentTransformer
 
         emptyDescendant.Add(source.Nodes());
 
+        if (!emptyDescendant.Nodes().Any())
+        {
+            emptyDescendant.Add(new XText("")); // force add empty text to the HTML element, to make it paired
+        }
+
         return result;
     }
 
