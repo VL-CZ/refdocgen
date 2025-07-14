@@ -150,39 +150,13 @@ internal class DocCommentExtractor
             }
         }
 
+        // add 'inheritdoc' to all inherited members
+        AddInheritDocsToInheritedMembers();
+
         // from now on, we're adding the resolved inheritdocs
         addingInheritedDocs = true;
 
-        // resolve member inheritdoc comments (excluding 'cref')
-        foreach (var member in inheritDocMembers)
-        {
-            memberInheritDocResolver.Resolve(member);
-            AddInheritedDocComment(member.RawDocComment);
-        }
-
-        // resolve type inheritdoc comments (excluding 'cref')
-        foreach (var type in inheritDocTypes)
-        {
-            typeInheritDocResolver.Resolve(type);
-            AddInheritedDocComment(type.RawDocComment);
-        }
-
-        // resolve 'cref' inheritdoc comments
-        ResolveCrefInheritDocs();
-
-        foreach (var member in typeRegistry.AllTypes.Values.SelectMany(t => t.AllMembers.Values))
-        {
-            if (member.IsInherited)
-            {
-                member.RawDocComment = new XElement("member", new XElement("inheritdoc"));
-                memberInheritDocResolver.Resolve(member);
-
-                if (member.RawDocComment?.Nodes().Any() ?? false)
-                {
-                    AddMemberDocComment(member.MemberKindId, $"{member.ContainingType.Id}.{member.Id}", member.RawDocComment);
-                }
-            }
-        }
+        ResolveInheritDocs();
     }
 
     /// <summary>
@@ -309,6 +283,51 @@ internal class DocCommentExtractor
         if (docComment?.Nodes().Any() ?? false)
         {
             AddDocComment(docComment);
+        }
+    }
+
+    /// <summary>
+    /// Resolves all inheritdoc comments applied to types and member within the <see cref="typeRegistry"/>.
+    /// </summary>
+    private void ResolveInheritDocs()
+    {
+        // resolve member inheritdoc comments (excluding 'cref')
+        foreach (var member in inheritDocMembers)
+        {
+            memberInheritDocResolver.Resolve(member);
+            AddInheritedDocComment(member.RawDocComment);
+        }
+
+        // resolve type inheritdoc comments (excluding 'cref')
+        foreach (var type in inheritDocTypes)
+        {
+            typeInheritDocResolver.Resolve(type);
+            AddInheritedDocComment(type.RawDocComment);
+        }
+
+        // resolve 'cref' inheritdoc comments
+        ResolveCrefInheritDocs();
+    }
+
+    /// <summary>
+    /// Adds inheritdoc comment to each inherited member contained in the <see cref="typeRegistry"/>.
+    /// </summary>
+    private void AddInheritDocsToInheritedMembers()
+    {
+        foreach (var member in typeRegistry.AllTypes.Values.SelectMany(t => t.AllMembers.Values)) // iterate over all members
+        {
+            if (member.IsInherited)
+            {
+                string fullTypeMemberId = $"{member.MemberKindId}:{member.ContainingType.Id}.{member.Id}";
+
+                var memberComment = new XElement(XmlDocIdentifiers.Member,
+                    new XAttribute(XmlDocIdentifiers.Name, fullTypeMemberId),
+                    new XElement(XmlDocIdentifiers.InheritDoc)); // create the member element with inheritdoc
+
+                member.RawDocComment = memberComment;
+
+                inheritDocMembers.Add(member); // add member to the collection of members with inheritdocs
+            }
         }
     }
 
