@@ -90,6 +90,9 @@
     <!-- Global CSS (Bootstrap + custom styles) -->
     <link href="@stylesUrl" rel="stylesheet" />
 
+    <!-- Highlight.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/github-dark.min.css">
+
     @if (CustomStyles is not null)
     {
         string customStylesUrl = UrlHelper.GetRelativeUrl(CustomStyles, NestingLevel);
@@ -129,6 +132,10 @@
 
     <!-- Bootstrap JS -->
     <script src="@boostrapJsUrl"></script>
+
+    <!-- Highlight.js -->
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
 
     <!-- Custom JS -->
     <script src="@customJsUrl"></script>

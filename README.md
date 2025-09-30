@@ -1,5 +1,9 @@
 # RefDocGen - Reference Documentation Generator for .NET
 
+[![NuGet Version](https://img.shields.io/nuget/v/RefDocGen)](https://www.nuget.org/packages/RefDocGen)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/RefDocGen)](https://www.nuget.org/packages/RefDocGen)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/VL-CZ/refdocgen/dotnet.yml)](https://github.com/VL-CZ/refdocgen/actions/workflows/dotnet.yml)
+
 RefDocGen is a reference documentation generator for .NET.
 
 ## Features
