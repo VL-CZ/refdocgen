@@ -9,24 +9,42 @@ on:
   pull_request:
     branches: ["master"]
 
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   ci:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 8.0.x
+
       - name: Restore dependencies
         run: dotnet restore
+
       - name: Build
         run: dotnet build --no-restore -warnaserror
+
       - name: Unit tests
         run: dotnet test ./tests/RefDocGen.UnitTests --no-build --verbosity normal
+
       - name: Integration tests
         run: dotnet test ./tests/RefDocGen.IntegrationTests --no-build --verbosity normal
+
       - name: Check formatting
         run: dotnet format style --verify-no-changes --exclude tests/RefDocGen.ExampleLibrary tests/RefDocGen.ExampleFSharpLibrary tests/RefDocGen.ExampleVbLibrary # exclude test libraries
 
@@ -34,7 +52,8 @@ jobs:
         run: dotnet run -- RefDocGen.csproj --static-pages-dir ./static-pages --verbose
         working-directory: ./src/RefDocGen
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload docs artifact
+        uses: actions/upload-artifact@v4
         with:
           name: refdocgen-docs
           path: ./src/RefDocGen/reference-docs
@@ -47,11 +66,6 @@ jobs:
     # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
 
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: refdocgen-docs
-
       - name: Download build artifact from latest successful build
         uses: actions/download-artifact@v5
         with:
