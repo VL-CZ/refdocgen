@@ -4,7 +4,7 @@ name: Deploy static content to Pages
 on:
   # Runs on pushes targeting the default branch
   workflow_run:
-    workflows: [".NET workflow"]   # Trigger after build workflow completes
+    workflows: [.NET workflow]   # Trigger after build workflow completes
     types:
       - completed
     branches:
