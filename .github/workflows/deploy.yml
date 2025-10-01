@@ -28,9 +28,9 @@ defaults:
 jobs:
   # Single deploy job since we're just deploying
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    # environment:
+    #   name: github-pages
+    #   url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -45,7 +45,7 @@ jobs:
         run: dotnet build --configuration Debug
 
       - name: Generate docs
-        run: dotnet run -- RefDocGen.csproj --static-pages-dir static-pages
+        run: dotnet run -- RefDocGen.csproj --static-pages-dir static-pages --verbose
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
