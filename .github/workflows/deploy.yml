@@ -7,6 +7,8 @@ on:
     workflows: [".NET workflow"]   # Trigger after build workflow completes
     types:
       - completed
+    branches:
+      - 'feature/**'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
