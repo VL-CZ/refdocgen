@@ -39,7 +39,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download build artifact from latest successful build
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v5
         with:
           name: refdocgen-docs
           path: ./reference-docs
