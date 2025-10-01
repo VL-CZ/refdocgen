@@ -38,3 +38,35 @@ jobs:
         with:
           name: refdocgen-docs
           path: ./src/RefDocGen/reference-docs
+  deploy:
+    needs: ci
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: refdocgen-docs
+
+      - name: Download build artifact from latest successful build
+        uses: actions/download-artifact@v5
+        with:
+          name: refdocgen-docs
+          path: ./reference-docs
+
+      - name: Test XX
+        run: ls
+        working-directory: ./reference-docs
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./reference-docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
