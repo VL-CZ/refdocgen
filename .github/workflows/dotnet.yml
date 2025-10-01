@@ -34,7 +34,7 @@ jobs:
         run: dotnet run -- RefDocGen.csproj --static-pages-dir ./static-pages --verbose
         working-directory: ./src/RefDocGen
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: refdocgen-docs
           path: ./reference-docs
