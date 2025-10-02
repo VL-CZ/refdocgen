@@ -18,7 +18,7 @@
         <Description>Reference Documentation Generator for .NET</Description>
         <PackageProjectUrl>https://vl-cz.github.io/refdocgen/</PackageProjectUrl>
         <RepositoryUrl>https://github.com/VL-CZ/refdocgen</RepositoryUrl>
-        <PackageTags>doc; docs; documentation; reference-documentation; generator; documentation-generator</PackageTags>
+        <PackageTags>doc; docs; documentation; reference; generator;</PackageTags>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
