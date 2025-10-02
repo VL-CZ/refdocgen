@@ -1,10 +1,12 @@
 input: RefDocGen.csproj
+force-create: true
 inherit-members: NonObject
-min-visibility: Private
+min-visibility: Public
 exclude-namespaces:
   - RefDocGen.TemplateProcessors.Default.Templates
+  - RefDocGen.TemplateProcessors.Todo.Templates
   - __Blazor
 output-dir: reference-docs
+static-pages-dir: ./docs-static-pages
 template: Default
 verbose: true
-doc-version: v-private

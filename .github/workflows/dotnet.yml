@@ -49,7 +49,7 @@ jobs:
         run: dotnet format style --verify-no-changes --exclude tests/RefDocGen.ExampleLibrary tests/RefDocGen.ExampleFSharpLibrary tests/RefDocGen.ExampleVbLibrary # exclude test libraries
 
       - name: Generate reference docs
-        run: dotnet run -- RefDocGen.csproj --static-pages-dir ./static-pages --verbose
+        run: dotnet run -- refdocgen.yaml
         working-directory: ./src/RefDocGen
 
       - name: Upload reference docs artifact
