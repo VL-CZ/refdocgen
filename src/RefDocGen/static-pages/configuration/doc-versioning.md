@@ -23,3 +23,6 @@ For instance, we may create two documentation versions, one showing the public A
 refdocgen MyLibrary.dll --doc-version v1.0-public
 refdocgen MyLibrary.dll --doc-version v1.0-private --min-visibility Private
 ```
+
+An example of versioned documentation can be found [here](https://vl-cz.github.io/refdocgen-demo-refdocgen/index.html). \
+Note that the documentations consists of two versions: `v-public` - displays only the public API and `v-private` displaying all types and members

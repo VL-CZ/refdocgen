@@ -46,3 +46,8 @@ INPUT (pos. 0)                                  Required. The assembly, project,
 
 --version                                       Display version information.
 ```
+
+#### Links
+- [Custom static pages](./custom-static-pages.md)
+- [Doc versioning](./doc-versioning.md)
+- [YAML config](./YAML-config.md)

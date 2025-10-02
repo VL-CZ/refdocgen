@@ -6,9 +6,11 @@
 
 RefDocGen is a reference documentation generator for .NET.
 
+> 💡 The README covers everything you’ll need for most scenarios. For the complete reference, please visit the [documentation on GitHub Pages](https://vl-cz.github.io/refdocgen/).
+
 ## Features
 
-- easy to use
+- easy to use (installed as a [.NET tool](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools))
 - supports all standard XML documentation tags
 - resolves `inheritdoc` tags
 - modern, responsive UI supporting both light and dark mode
@@ -24,7 +26,7 @@ Default UI:
 
 ## Demos
 - [reference documentation of an example library](https://vl-cz.github.io/refdocgen-demo-example-library/)
-- [reference documentation of this project](https://vl-cz.github.io/refdocgen-demo-refdocgen/)
+- [reference documentation of this project](https://vl-cz.github.io/refdocgen/api/index.html)
 - [reference documentation of `Newtonsoft.JSON`](https://vl-cz.github.io/refdocgen-demo-third-party/v-newtonsoft/)
 - [reference documentation of `YamlDotNet`](https://vl-cz.github.io/refdocgen-demo-third-party/v-yamldotnet/)
 - [reference documentation of `Serilog`](https://vl-cz.github.io/refdocgen-demo-third-party/v-serilog/)
@@ -172,7 +174,7 @@ static-pages/
 ## A1: ...
 ```
 
-### Versioned documentation
+### Documentation versioning
 
 You can optionally generate versioned documentation, allowing users to switch between multiple versions.
 To do this, it is necessary to use the `--doc-version` option.
@@ -197,6 +199,9 @@ For instance, we may create two documentation versions, one showing the public A
 refdocgen MyLibrary.dll --doc-version v1.0-public
 refdocgen MyLibrary.dll --doc-version v1.0-private --min-visibility Private
 ```
+
+An example of versioned documentation can be found [here](https://vl-cz.github.io/refdocgen-demo-refdocgen/index.html). \
+Note that the documentations consists of two versions: `v-public` - displays only the public API and `v-private` displaying all types and members
 
 ### YAML configuration
 Instead of using command line arguments, it is possible to use a YAML file for configuration. \
