@@ -12,13 +12,13 @@
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>refdocgen</ToolCommandName>
         <PackageOutputPath>./nupkg</PackageOutputPath>
-        <Version>1.0.3</Version>
+        <Version>1.0.4</Version>
         <Authors>Vojtěch Lengál</Authors>
         <Title>RefDocGen</Title>
         <Description>Reference Documentation Generator for .NET</Description>
-        <PackageProjectUrl>https://github.com/VL-CZ/refdocgen</PackageProjectUrl>
+        <PackageProjectUrl>https://vl-cz.github.io/refdocgen/</PackageProjectUrl>
         <RepositoryUrl>https://github.com/VL-CZ/refdocgen</RepositoryUrl>
-        <PackageTags>documentation; reference documentation; documentation generator</PackageTags>
+        <PackageTags>doc; docs; documentation; reference; generator;</PackageTags>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
@@ -76,4 +76,3 @@
         <None Include="..\..\THIRD-PARTY-LICENSES.md" Pack="true" PackagePath="" />
     </ItemGroup>
 </Project>
- 
