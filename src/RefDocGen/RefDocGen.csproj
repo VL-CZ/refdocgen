@@ -12,7 +12,7 @@
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>refdocgen</ToolCommandName>
         <PackageOutputPath>./nupkg</PackageOutputPath>
-        <Version>1.0.4</Version>
+        <Version>1.0.5</Version>
         <Authors>Vojtěch Lengál</Authors>
         <Title>RefDocGen</Title>
         <Description>Reference Documentation Generator for .NET</Description>
@@ -27,7 +27,7 @@
         <PackageReference Include="AngleSharp" Version="1.3.0" />
         <PackageReference Include="CommandLineParser" Version="2.9.1" />
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.11" />
-        <PackageReference Include="Microsoft.Build" Version="17.8.3" ExcludeAssets="runtime" />
+        <PackageReference Include="Microsoft.Build" Version="17.8.43" ExcludeAssets="runtime" />
         <PackageReference Include="Microsoft.Build.Locator" Version="1.8.1" />
         <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
