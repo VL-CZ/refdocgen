@@ -2,7 +2,7 @@ using RefDocGen.IntegrationTests.Fixtures;
 using RefDocGen.IntegrationTests.Tools;
 using Shouldly;
 
-namespace RefDocGen.IntegrationTests;
+namespace RefDocGen.IntegrationTests.Tests.TypePage;
 
 /// <summary>
 /// This class tests the documentation inheritance (i.e. that <c>&lt;inheritdoc /&gt;</c> elements are inherited as expected).

@@ -3,22 +3,22 @@ using RefDocGen.IntegrationTests.Fixtures;
 using RefDocGen.IntegrationTests.Tools;
 using Shouldly;
 
-namespace RefDocGen.IntegrationTests;
+namespace RefDocGen.IntegrationTests.Tests.ApiHomePage;
 
 /// <summary>
-/// This class contains tests for the 'assembly' page.
+/// This class contains tests for the API homepage.
 /// </summary>
 [Collection(DocumentationTestCollection.Name)]
-public class AssemblyPageTests : IDisposable
+public class ApiHomePageTests : IDisposable
 {
     /// <summary>
-    /// The HTML page representing the <c>RefDocGen.ExampleLibrary</c> assembly.
+    /// The HTML page representing the API homepage.
     /// </summary>
     private readonly IDocument document;
 
-    public AssemblyPageTests()
+    public ApiHomePageTests()
     {
-        document = DocumentationTools.GetApiPage("RefDocGen.ExampleLibrary-DLL.html");
+        document = DocumentationTools.GetApiPage("index.html");
     }
 
     public void Dispose()
@@ -32,11 +32,13 @@ public class AssemblyPageTests : IDisposable
         string[] namespaces = AssemblyPageTools.GetNamespaceNames(document);
 
         string[] expected = [
+            "namespace RefDocGen.ExampleFSharpLibrary",
             "namespace RefDocGen.ExampleLibrary",
             "namespace RefDocGen.ExampleLibrary.CyclicDoc",
             "namespace RefDocGen.ExampleLibrary.Hierarchy",
             "namespace RefDocGen.ExampleLibrary.Tools",
             "namespace RefDocGen.ExampleLibrary.Tools.Collections",
+            "namespace RefDocGen.ExampleVbLibrary",
         ];
 
         namespaces.ShouldBe(expected);
@@ -62,5 +64,27 @@ public class AssemblyPageTests : IDisposable
         ];
 
         nsTypes.ShouldBe(expected);
+    }
+
+    [Fact]
+    public void AssemblyNames_Match()
+    {
+        string[] assemblies = AssemblyPageTools.GetAssemblyNames(document);
+
+        string[] expected = [
+            "assembly RefDocGen.ExampleFSharpLibrary",
+            "assembly RefDocGen.ExampleLibrary",
+            "assembly RefDocGen.ExampleVbLibrary"
+        ];
+
+        assemblies.ShouldBe(expected);
+    }
+
+    [Fact]
+    public void Title_Matches()
+    {
+        string title = AssemblyPageTools.GetApiHomepageTitle(document);
+
+        title.ShouldBe("RefDocGen API");
     }
 }

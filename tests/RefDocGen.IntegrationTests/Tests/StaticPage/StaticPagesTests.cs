@@ -2,7 +2,7 @@ using RefDocGen.IntegrationTests.Fixtures;
 using RefDocGen.IntegrationTests.Tools;
 using Shouldly;
 
-namespace RefDocGen.IntegrationTests;
+namespace RefDocGen.IntegrationTests.Tests.StaticPage;
 
 /// <summary>
 /// This class tests that user-specified static pages and files are included in the documentation.

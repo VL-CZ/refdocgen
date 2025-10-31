@@ -2,7 +2,7 @@ using RefDocGen.IntegrationTests.Fixtures;
 using RefDocGen.IntegrationTests.Tools;
 using Shouldly;
 
-namespace RefDocGen.IntegrationTests;
+namespace RefDocGen.IntegrationTests.Tests.TypePage;
 
 /// <summary>
 /// This class tests that cyclic inheritdocs are resolved as null.
