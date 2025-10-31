@@ -7,6 +7,6 @@ exclude-namespaces:
   - RefDocGen.TemplateProcessors.Todo.Templates
   - __Blazor
 output-dir: reference-docs
-static-pages-dir: ./docs-static-pages
+static-pages-dir: ../../docs
 template: Default
 verbose: true
