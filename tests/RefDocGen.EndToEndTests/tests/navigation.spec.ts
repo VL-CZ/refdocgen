@@ -34,4 +34,3 @@ test("Go to static page in a subfolder", async ({ page }) => {
 
     await expect(page).toHaveURL(/folder\/anotherPage.html/);
 });
-
