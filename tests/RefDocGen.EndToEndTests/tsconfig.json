@@ -11,7 +11,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "outDir": "dist",
-    "rootDir": "tests",
+    "rootDir": ".",
     "skipLibCheck": true
   },
   "include": ["tests/**/*.ts", "playwright.config.ts"],
