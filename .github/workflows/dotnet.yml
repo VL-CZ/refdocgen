@@ -58,6 +58,16 @@ jobs:
           name: refdocgen-docs
           path: ./src/RefDocGen/reference-docs
 
+      - name: Generate reference docs for e2e tests
+        run: dotnet run -- refdocgen.yaml
+        working-directory: ./tests/RefDocGen.ExampleLibrary
+
+      - name: Upload reference docs for e2e tests
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-tests-docs
+          path: ./tests/RefDocGen.ExampleLibrary/reference-docs
+
   e2e-tests:
     needs: ci
     timeout-minutes: 10
@@ -78,7 +88,7 @@ jobs:
       - name: Download the reference docs artifact
         uses: actions/download-artifact@v5
         with:
-          name: refdocgen-docs
+          name: e2e-tests-docs
           path: ./reference-docs
       - name: Install dependencies
         run: npm ci
