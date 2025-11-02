@@ -1,55 +1,90 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test('has title', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
+test("API pages navigation", async ({ page }) => {
+    await page.goto("index.html");
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
+    await page
+        .getByRole("link", { name: "assembly RefDocGen.ExampleLibrary" })
+        .click();
+
+    await page
+        .getByRole("link", {
+            name: "namespace RefDocGen.ExampleLibrary",
+            exact: true,
+        })
+        .click();
+
+    await page.getByRole("link", { name: "class User" }).click();
+
+    await expect(page).toHaveURL(/RefDocGen\.ExampleLibrary\.User\.html/);
 });
 
-test('get started link', async ({ page }) => {
-  await page.goto('https://vl-cz.github.io/refdocgen-demo-example-library/api/index.html');
+test("Search for class", async ({ page }) => {
+    await page.goto("index.html");
 
-  // Click the get started link.
-  await page.getByRole('link', { name: 'assembly RefDocGen.ExampleLibrary' }).click();
+    await page.getByRole("searchbox", { name: "Search" }).click();
 
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'assembly RefDocGen.ExampleLibrary' })).toBeVisible();
+    const searchBox = page.getByRole("textbox", { name: "Search input" });
+
+    await searchBox.click();
+    await searchBox.fill("animal");
+    await searchBox.dispatchEvent("input");
+
+    await page
+        .getByRole("link", { name: "RefDocGen.ExampleLibrary.Animal class" })
+        .click();
+
+    await expect(page).toHaveURL(
+        /api\/RefDocGen\.ExampleLibrary\.Animal\.html/,
+    );
 });
 
-test('test', async ({ page }) => {
-  await page.goto('https://vl-cz.github.io/refdocgen-demo-example-library/api/index.html');
-  await expect(page.locator('body')).toMatchAriaSnapshot(`- heading "RefDocGen API" [level=1]`);
-  await page.getByRole('link', { name: 'assembly RefDocGen.ExampleLibrary' }).click();
-  await expect(page.locator('body')).toMatchAriaSnapshot(`
-    - heading "assembly RefDocGen.ExampleLibrary" [level=1]
-    - button:
-      - img
-    `);
-  await page.getByRole('link', { name: 'namespace RefDocGen.ExampleLibrary', exact: true }).click();
-  await expect(page.locator('h1')).toMatchAriaSnapshot(`- heading "namespace RefDocGen.ExampleLibrary" [level=1]`);
-  await page.getByRole('link', { name: 'class User' }).click();
-  await expect(page.locator('body')).toMatchAriaSnapshot(`
-    - heading "public class User" [level=1]
-    - button:
-      - img
-    `);
-  await page.getByRole('link', { name: 'API' }).click();
-  await expect(page.locator('body')).toMatchAriaSnapshot(`
-    - heading "RefDocGen API" [level=1]
-    - button:
-      - img
-    `);
+test("Search for member", async ({ page }) => {
+    await page.goto("index.html");
+
+    await page.getByRole("searchbox", { name: "Search" }).click();
+
+    const searchBox = page.getByRole("textbox", { name: "Search input" });
+
+    await searchBox.click();
+    await searchBox.fill("firstname");
+    await searchBox.dispatchEvent("input");
+
+    await page
+        .getByRole("link", {
+            name: "RefDocGen.ExampleLibrary.User.FirstName property",
+        })
+        .click();
+
+    await expect(page).toHaveURL(
+        /api\/RefDocGen\.ExampleLibrary\.User\.html.*#FirstName/,
+    );
 });
 
-test('test', async ({ page }) => {
-  await page.goto('https://vl-cz.github.io/refdocgen-demo-example-library/api/index.html');
-  await page.getByRole('searchbox', { name: 'Search' }).click();
-  await page.getByRole('textbox', { name: 'Search input' }).fill('user');
-  await page.getByRole('link', { name: 'RefDocGen.ExampleLibrary.User class' }).click();
-  await expect(page.locator('body')).toMatchAriaSnapshot(`
-    - heading "public class User" [level=1]
-    - button:
-      - img
-    `);
+test("Go to static page", async ({ page }) => {
+    await page.goto("index.html");
+
+    await page.getByRole("link", { name: "HtmlPage" }).click();
+    await expect(page).toHaveURL(/htmlPage.html/);
+});
+
+test("Go to static page in a subfolder", async ({ page }) => {
+    await page.goto("index.html");
+
+    await page.getByRole("button", { name: "Folder" }).click();
+    await page.getByRole("link", { name: "AnotherPage" }).click();
+
+    await expect(page).toHaveURL(/folder\/anotherPage.html/);
+});
+
+test("Switch documentation version", async ({ page }) => {
+    await page.goto("index.html");
+
+    await page.getByRole("link", { name: "class User" }).click();
+    await page.getByRole("button", { name: "v-privatexxx" }).click();
+    await page.getByRole("link", { name: "v-public" }).click();
+
+    await expect(page).toHaveURL(
+        /v-public\/api\/RefDocGen\.ExampleLibrary\.User\.html/,
+    );
 });
