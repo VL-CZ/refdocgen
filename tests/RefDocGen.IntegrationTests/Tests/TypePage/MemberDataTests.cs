@@ -2,7 +2,7 @@ using RefDocGen.IntegrationTests.Fixtures;
 using RefDocGen.IntegrationTests.Tools;
 using Shouldly;
 
-namespace RefDocGen.IntegrationTests;
+namespace RefDocGen.IntegrationTests.Tests.TypePage;
 
 /// <summary>
 /// This class tests that attributes and exceptions are present in the resulting documentation at member level.

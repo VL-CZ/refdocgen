@@ -3,7 +3,7 @@ using RefDocGen.IntegrationTests.Tools;
 using Shouldly;
 using System.Text.Json;
 
-namespace RefDocGen.IntegrationTests;
+namespace RefDocGen.IntegrationTests.Tests;
 
 /// <summary>
 /// This class tests that documentation versioning works as expected.

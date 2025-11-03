@@ -2,7 +2,7 @@ using RefDocGen.IntegrationTests.Fixtures;
 using RefDocGen.IntegrationTests.Tools;
 using Shouldly;
 
-namespace RefDocGen.IntegrationTests;
+namespace RefDocGen.IntegrationTests.Tests;
 
 /// <summary>
 /// This class tests that the types in namespaces marked as excluded are excluded from the documentation.

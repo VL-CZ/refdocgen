@@ -3,7 +3,7 @@ using RefDocGen.IntegrationTests.Fixtures;
 using RefDocGen.IntegrationTests.Tools;
 using Shouldly;
 
-namespace RefDocGen.IntegrationTests;
+namespace RefDocGen.IntegrationTests.Tests.NamespacePage;
 
 /// <summary>
 /// This class contains tests for 'namespace' page.
