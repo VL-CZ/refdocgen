@@ -32,5 +32,5 @@ test("Go to static page in a subfolder", async ({ page }) => {
     await page.getByRole("button", { name: "Tutorial" }).click();
     await page.getByRole("link", { name: "Installation" }).click();
 
-    await expect(page).toHaveURL(/tutorial\/installation.html/);
+    await expect(page).toHaveURL(/Tutorial\/installation.html/);
 });
