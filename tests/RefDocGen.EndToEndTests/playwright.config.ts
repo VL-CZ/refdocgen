@@ -27,7 +27,7 @@ export default defineConfig({
         // Base URL to use in actions like `await page.goto('/')`.
         baseURL:
             process.env.BASE_URL ||
-            `file://${process.cwd()}/reference-docs/index.html`,
+            `file://${process.cwd()}/e2e-tests-docs/index.html`,
 
         // Collect trace when retrying the failed test.
         trace: "on-first-retry",

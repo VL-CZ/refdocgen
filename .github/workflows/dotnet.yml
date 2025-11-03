@@ -22,7 +22,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  ci:
+  ci: # .NET CI: build, test, check formatting, generate docs
     runs-on: ubuntu-latest
 
     steps:
@@ -48,26 +48,29 @@ jobs:
       - name: Check formatting
         run: dotnet format style --verify-no-changes --exclude tests/RefDocGen.ExampleLibrary tests/RefDocGen.ExampleFSharpLibrary tests/RefDocGen.ExampleVbLibrary # exclude test libraries
 
-      - name: Generate reference docs
+      - name: Generate reference docs of 'RefDocGen' project
         run: dotnet run -- refdocgen.yaml
-        working-directory: ./src/RefDocGen
 
-      - name: Upload reference docs artifact
+      - name: Upload reference docs of 'RefDocGen' project
         uses: actions/upload-artifact@v4
         with:
           name: refdocgen-docs
-          path: ./src/RefDocGen/reference-docs
+          path: ./reference-docs
 
       - name: Generate reference docs for e2e tests
-        run: dotnet run --project ./src/RefDocGen/ -- tests/RefDocGen.ExampleLibrary/RefDocGen.ExampleLibrary.csproj
+        run: |
+          dotnet run --project ./src/RefDocGen/ -- tests/RefDocGen.ExampleLibrary/RefDocGen.ExampleLibrary.csproj \
+            --static-pages-dir tests/RefDocGen.ExampleLibrary/static-pages --doc-version v1.0 -o e2e-tests-docs
+          dotnet run --project ./src/RefDocGen/ -- tests/RefDocGen.ExampleLibrary/RefDocGen.ExampleLibrary.csproj \
+            --static-pages-dir tests/RefDocGen.ExampleLibrary/static-pages --doc-version v1.1 -o e2e-tests-docs
 
       - name: Upload reference docs for e2e tests
         uses: actions/upload-artifact@v4
         with:
           name: e2e-tests-docs
-          path: ./reference-docs
+          path: ./e2e-tests-docs
 
-  e2e-tests:
+  e2e-tests: # Run end-to-end tests using Playwright
     needs: ci
     timeout-minutes: 10
     runs-on: ubuntu-latest
@@ -77,26 +80,32 @@ jobs:
         working-directory: tests/RefDocGen.EndToEndTests
 
     env:
-      BASE_URL: http://127.0.0.1:3000  # set the env variable
+      BASE_URL: http://127.0.0.1:3000 # set the env variable
 
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
           node-version-file: tests/RefDocGen.EndToEndTests/.node-version
+
       - name: Download the reference docs artifact
         uses: actions/download-artifact@v5
         with:
           name: e2e-tests-docs
-          path: tests/RefDocGen.EndToEndTests/reference-docs
+          path: tests/RefDocGen.EndToEndTests/e2e-tests-docs
+
       - name: Install dependencies
         run: npm ci
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+
       - name: Start HTTP server
-        run: npx http-server reference-docs -p 3000 &
+        run: npx http-server e2e-tests-docs -p 3000 &
+
       - name: Run Playwright tests
         run: npx playwright test --reporter=list
+
       # - uses: actions/upload-artifact@v4
       #   if: ${{ !cancelled() }}
       #   with:
@@ -104,7 +113,7 @@ jobs:
       #     path: playwright-report/
       #     retention-days: 30
 
-  deploy:
+  deploy: # Deploy the documentation to GitHub Pages (only from master branch)
     needs: ci
     runs-on: ubuntu-latest
     environment:

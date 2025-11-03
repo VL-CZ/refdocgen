@@ -22,15 +22,15 @@ test("API pages navigation", async ({ page }) => {
 test("Go to static page", async ({ page }) => {
     await page.goto("index.html");
 
-    await page.getByRole("link", { name: "HtmlPage" }).click();
-    await expect(page).toHaveURL(/htmlPage.html/);
+    await page.getByRole("link", { name: "Contact" }).click();
+    await expect(page).toHaveURL(/contact.html/);
 });
 
 test("Go to static page in a subfolder", async ({ page }) => {
     await page.goto("index.html");
 
-    await page.getByRole("button", { name: "Folder" }).click();
-    await page.getByRole("link", { name: "AnotherPage" }).click();
+    await page.getByRole("button", { name: "Tutorial" }).click();
+    await page.getByRole("link", { name: "Installation" }).click();
 
-    await expect(page).toHaveURL(/folder\/anotherPage.html/);
+    await expect(page).toHaveURL(/tutorial\/installation.html/);
 });
