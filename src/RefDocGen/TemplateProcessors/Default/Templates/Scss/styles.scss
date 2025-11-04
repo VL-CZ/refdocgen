@@ -37,17 +37,9 @@
         @extend .refdocgen-link;
     }
 
-    .menu-bg {
-        @extend .bg-body;
-    }
-
-    body {
-        @extend .bg-body-tertiary;
-    }
-
-    /*.static-page-content {
+    .static-page-content {
         @extend .text-body-secondary;
-    }*/
+    }
 }
 
 // Dark theme styles
@@ -70,10 +62,6 @@
         @extend .refdocgen-link;
     }
 
-    .menu-bg {
-        @extend .bg-body-tertiary;
-    }
-
     .anchor-link {
         @extend .text-success-emphasis;
     }
@@ -92,6 +80,10 @@
 .bottom-menu {
     @extend .border-top;
     @extend .border-1;
+}
+
+.menu-bg {
+    @extend .bg-body-tertiary;
 }
 
 // Inner XML tags
@@ -189,22 +181,31 @@ h6:hover .anchor-link {
 // Static pages content
 .static-page-content {
     h1 {
-        @extend .display-3;
+        font-size: 2.25rem !important;
     }
 
     h2 {
-        @extend .display-4;
+        font-size: 1.75rem !important;
     }
 
     h3 {
-        @extend .display-5;
+        font-size: 1.5rem !important;
     }
 
     h4 {
-        @extend .display-6;
+        font-size: 1.25rem !important;
     }
 
-    h1, h2, h3, h4 {
+    h5 {
+        font-size: 1.15rem !important;
+    }
+
+    h6 {
+        font-size: 1.05rem !important;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        @extend .lead;
         @extend .refdocgen-text-primary;
     }
 }

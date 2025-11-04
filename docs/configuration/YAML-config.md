@@ -1,5 +1,4 @@
-
-## YAML configuration
+# YAML configuration
 Instead of using command line arguments, it is possible to use a YAML file for configuration. \
 Then:
 - we don't need to repeat the options every time
@@ -15,7 +14,7 @@ The structure of YAML and command line configuration is very similar:
 - `save-config` option is not supported, as it does not make sense here
 - the default values are the same as in the command-line configuration
 
-#### Examples
+## Examples
 
 The following command results in creating the YAML displayed below:
 

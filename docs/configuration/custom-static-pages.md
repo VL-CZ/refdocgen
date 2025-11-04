@@ -1,4 +1,4 @@
-## Adding custom static pages
+# Adding custom static pages
 
 You can include static pages (like *index* or *FAQ*) in the generated documentation, following the steps below:
 
@@ -19,7 +19,7 @@ Additional notes:
 - to add custom CSS styles, put them into `/css/styles.css` and they will be included automatically (however, use custom styles only for minor tweaks, rather than completely changing the overall appearance of the page)
 - it is possible to put the pages (and other files) into subdirectories of the `static-pages/` directory (however, pages nested three or more levels deep will not appear in the top menu)
 
-#### Example
+## Example
 
 Directory structure:
 ```
