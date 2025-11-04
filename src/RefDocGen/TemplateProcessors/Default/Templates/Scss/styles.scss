@@ -38,8 +38,18 @@
     }
 
     .menu-bg {
-        @extend .bg-body-secondary;
+        @extend .bg-body-tertiary;
+        @extend .border-bottom;
+        @extend .border-2;
     }
+
+    body {
+        @extend .bg-body-tertiary;
+    }
+
+    /*.static-page-content {
+        @extend .text-body-secondary;
+    }*/
 }
 
 // Dark theme styles
@@ -63,7 +73,9 @@
     }
 
     .menu-bg {
-        @extend .bg-body-tertiary;
+        @extend .bg-body;
+        @extend .border-bottom;
+        @extend .border-2;
     }
 
     .anchor-link {
@@ -97,7 +109,8 @@
 .refdocgen-see-cref,
 .refdocgen-see-href,
 .refdocgen-seealso-cref,
-.refdocgen-seealso-href {
+.refdocgen-seealso-href,
+.static-page-content a {
     @extend .link-offset-2;
     @extend .link-underline-opacity-50;
     @extend .link-underline-opacity-100-hover;
@@ -160,4 +173,29 @@ h6:hover .anchor-link {
 
 .not-visible {
     display: none;
+}
+
+// Static pages content
+.static-page-content {
+    @extend .text-body;
+
+    h1 {
+        @extend .display-3;
+    }
+
+    h2 {
+        @extend .display-4;
+    }
+
+    h3 {
+        @extend .display-5;
+    }
+
+    h4 {
+        @extend .display-6;
+    }
+
+    h1, h2, h3, h4 {
+        @extend .refdocgen-text-primary;
+    }
 }
