@@ -38,9 +38,7 @@
     }
 
     .menu-bg {
-        @extend .bg-body-tertiary;
-        @extend .border-bottom;
-        @extend .border-2;
+        @extend .bg-body;
     }
 
     body {
@@ -73,14 +71,27 @@
     }
 
     .menu-bg {
-        @extend .bg-body;
-        @extend .border-bottom;
-        @extend .border-2;
+        @extend .bg-body-tertiary;
     }
 
     .anchor-link {
         @extend .text-success-emphasis;
     }
+
+    .static-page-content {
+        @extend .text-body-secondary;
+    }
+}
+
+// Menu
+.top-menu {
+    @extend .border-bottom;
+    @extend .border-1;
+}
+
+.bottom-menu {
+    @extend .border-top;
+    @extend .border-1;
 }
 
 // Inner XML tags
@@ -177,8 +188,6 @@ h6:hover .anchor-link {
 
 // Static pages content
 .static-page-content {
-    @extend .text-body;
-
     h1 {
         @extend .display-3;
     }
