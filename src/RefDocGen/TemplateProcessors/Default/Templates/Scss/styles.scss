@@ -37,8 +37,12 @@
         @extend .refdocgen-link;
     }
 
-    .menu-bg {
-        @extend .bg-body-secondary;
+    .static-page-content {
+        @extend .text-body-secondary;
+    }
+
+    #icon-moon {
+        display: inline;
     }
 }
 
@@ -62,13 +66,32 @@
         @extend .refdocgen-link;
     }
 
-    .menu-bg {
-        @extend .bg-body-tertiary;
-    }
-
     .anchor-link {
         @extend .text-success-emphasis;
     }
+
+    .static-page-content {
+        @extend .text-body-secondary;
+    }
+
+    #icon-brightness {
+        display: inline;
+    }
+}
+
+// Menu
+.top-menu {
+    @extend .border-bottom;
+    @extend .border-1;
+}
+
+.bottom-menu {
+    @extend .border-top;
+    @extend .border-1;
+}
+
+.menu-bg {
+    @extend .bg-body-tertiary;
 }
 
 // Inner XML tags
@@ -97,7 +120,8 @@
 .refdocgen-see-cref,
 .refdocgen-see-href,
 .refdocgen-seealso-cref,
-.refdocgen-seealso-href {
+.refdocgen-seealso-href,
+.static-page-content a {
     @extend .link-offset-2;
     @extend .link-underline-opacity-50;
     @extend .link-underline-opacity-100-hover;
@@ -160,4 +184,48 @@ h6:hover .anchor-link {
 
 .not-visible {
     display: none;
+}
+
+// Static pages content
+.static-page-content {
+    h1 {
+        font-size: 2.5rem !important;
+    }
+
+    h2 {
+        font-size: 1.75rem !important;
+    }
+
+    h3 {
+        font-size: 1.5rem !important;
+    }
+
+    h4 {
+        font-size: 1.25rem !important;
+    }
+
+    h5 {
+        font-size: 1.15rem !important;
+    }
+
+    h6 {
+        font-size: 1.05rem !important;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        @extend .lead;
+        @extend .refdocgen-text-primary;
+    }
+
+    blockquote {
+        @extend .border-start;
+        @extend .border-5;
+        @extend .ps-3;
+        @extend .bg-body-tertiary;
+        @extend .fst-italic;
+
+        div, p {
+            @extend .py-2;
+        }
+    }
 }

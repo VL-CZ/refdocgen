@@ -33,7 +33,9 @@
                 <CascadingValue Value="Languages">
                     <CascadingValue Value="ProjectName" Name="ProjectName">
                         <LayoutView Layout="typeof(AppLayout)">
-                            @((MarkupString)Contents)
+                            <div class="static-page-content">
+                                @((MarkupString)Contents)
+                            </div>
                         </LayoutView>
                     </CascadingValue>
                 </CascadingValue>

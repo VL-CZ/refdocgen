@@ -2,7 +2,7 @@
 
 RefDocGen is a reference documentation generator for .NET.
 
-### Features
+## Features
 
 - easy to use (installed as a [.NET tool](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools))
 - supports all standard XML documentation tags
@@ -12,14 +12,14 @@ RefDocGen is a reference documentation generator for .NET.
 - option to add custom pages (*index*, *FAQ*, ...)
 - built-in search functionality
 
-### Demos
+## Demos
 - [reference documentation of this project](./api/index.html) (also accessible via the *API* link in the top menu)
 - [reference documentation of an example library](https://vl-cz.github.io/refdocgen-demo-example-library/)
 - [reference documentation of `Newtonsoft.JSON`](https://vl-cz.github.io/refdocgen-demo-third-party/v-newtonsoft/)
 - [reference documentation of `YamlDotNet`](https://vl-cz.github.io/refdocgen-demo-third-party/v-yamldotnet/)
 - [reference documentation of `Serilog`](https://vl-cz.github.io/refdocgen-demo-third-party/v-serilog/)
 
-### Installation
+## Installation
 
 Prerequisites:
 - .NET 8 (or higher)
@@ -32,8 +32,8 @@ dotnet tool install --global RefDocGen
 
 This makes the `refdocgen` command available on the command line.
 
-### Usage
-#### Prerequisites
+## Usage
+### Prerequisites
 
 Before generating documentation, it is necessary to build the project/solution in *Debug* configuration.
 The following MSBuild properties must be set:
@@ -50,7 +50,7 @@ It is also possible to set them in the project file or in the *Directory.Build.p
 
 **Important: RefDocGen doesn't support .NET Framework projects.**
 
-#### Running
+### Running
 
 Run the following command to generate reference documentation:
 
@@ -60,7 +60,7 @@ refdocgen INPUT [OPTIONS]
 
 The only mandatory argument is the `INPUT` - an assembly/project/solution to document, or a YAML configuration file (further explained below).
 
-#### Examples
+### Examples
 
 ```bash
 refdocgen MyLibrary.dll
@@ -68,19 +68,19 @@ refdocgen MyLibrary.csproj
 refdocgen MyLibrary.sln
 ```
 
-#### Configuration
+### Configuration
 - [Basic config](./configuration/basic-config.md)
 - [Custom static pages](./configuration/custom-static-pages.md)
 - [Doc versioning](./configuration/doc-versioning.md)
 - [YAML config](./configuration/YAML-config.md)
 
-### Limitations 
+## Limitations 
 
-#### Default UI languages
+### Default UI languages
 While *RefDocGen* supports programs written in any .NET language, the default UI displays type and member signatures only in C# syntax.
 However, the default UI is designed to be extensible, so adding support for other languages, such as F#, is possible in the future.
 
-#### Supported modifiers
+### Supported modifiers
 *RefDocGen* recognizes most of the C# modifiers and displays them.
 However, some modifiers are not supported and therefore do not appear in the generated documentation.  
 These are typically implementation details that do not affect the public API.
@@ -90,5 +90,5 @@ More specifically, the following modifiers are not supported: `extern`, `file`, 
 Additionally, these type parameter constraints are not supported:
 `notnull`, `unmanaged`, `default`, `allows ref struct`.
 
-#### Non-nullable reference types
+### Non-nullable reference types
 Currently, *RefDocGen* doesn't differentiate between nullable non-nullable reference types.

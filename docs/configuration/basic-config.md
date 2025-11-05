@@ -1,4 +1,4 @@
-## Basic configuration
+# Basic configuration
 
 All available options are listed below (the same output can be displayed by running `refdocgen --help`):
 

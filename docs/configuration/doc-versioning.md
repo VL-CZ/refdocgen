@@ -1,11 +1,11 @@
-## Documentation versioning
+# Documentation versioning
 
 You can optionally generate versioned documentation, allowing users to switch between multiple versions.
 To do this, it is necessary to use the `--doc-version` option.
 
 The version can be switched using the dropdown in the bottom menu.
 
-#### Examples
+## Examples
 
 Generate two versions of the documentation, using these commands (the output directory needs to be the same):
 
