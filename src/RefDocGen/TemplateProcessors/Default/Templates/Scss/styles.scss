@@ -40,6 +40,10 @@
     .static-page-content {
         @extend .text-body-secondary;
     }
+
+    #icon-moon {
+        display: inline;
+    }
 }
 
 // Dark theme styles
@@ -68,6 +72,10 @@
 
     .static-page-content {
         @extend .text-body-secondary;
+    }
+
+    #icon-brightness {
+        display: inline;
     }
 }
 
@@ -181,7 +189,7 @@ h6:hover .anchor-link {
 // Static pages content
 .static-page-content {
     h1 {
-        font-size: 2.25rem !important;
+        font-size: 2.5rem !important;
     }
 
     h2 {
@@ -207,5 +215,17 @@ h6:hover .anchor-link {
     h1, h2, h3, h4, h5, h6 {
         @extend .lead;
         @extend .refdocgen-text-primary;
+    }
+
+    blockquote {
+        @extend .border-start;
+        @extend .border-5;
+        @extend .ps-3;
+        @extend .bg-body-tertiary;
+        @extend .fst-italic;
+
+        div, p {
+            @extend .py-2;
+        }
     }
 }
