@@ -29,9 +29,9 @@ public class StaticPagesTests
     }
 
     [Theory]
-    [InlineData("htmlPage.html", "<h1>Heading 1</h1> <h2>Heading 2</h2>")]
-    [InlineData("folder/anotherPage.html", "<div>Text</div>")]
-    [InlineData("markdownPage.html", "<h1>Markdown page</h1> <p>Text</p>")]
+    [InlineData("htmlPage.html", "<div class=\"static-page-content\"><h1>Heading 1</h1> <h2>Heading 2</h2> </div>")]
+    [InlineData("folder/anotherPage.html", "<div class=\"static-page-content\"><div>Text</div> </div>")]
+    [InlineData("markdownPage.html", "<div class=\"static-page-content\"><h1>Markdown page</h1> <p>Text</p> </div>")]
     public void StaticPage_IsCreated(string filePath, string expectedHtml)
     {
         var page = DocumentationTools.GetPage(filePath);
