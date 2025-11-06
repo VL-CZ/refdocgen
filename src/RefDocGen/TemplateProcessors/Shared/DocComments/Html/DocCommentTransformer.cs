@@ -5,6 +5,7 @@ using RefDocGen.CodeElements.Types.Abstract.TypeName;
 using RefDocGen.DocExtraction.Tools;
 using RefDocGen.TemplateProcessors.Shared.Tools;
 using RefDocGen.TemplateProcessors.Shared.Tools.Names;
+using RefDocGen.Tools;
 using RefDocGen.Tools.Exceptions;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
@@ -382,7 +383,12 @@ internal class DocCommentTransformer : IDocCommentTransformer
     /// <returns>The HTML representation of the <c>&lt;code&gt;</c> element.</returns>
     protected virtual XElement TransformCodeBlockElement(XElement element)
     {
-        return CopyChildNodes(element, htmlConfiguration.CodeBlockElement);
+        string[] codeBlockLines = element.Value.TrimStart('\n').TrimEnd().Replace("\r", "").Split("\n");
+        string dedentedCodeBlock = string.Join("\n", codeBlockLines.Dedent());
+
+        var dedentedCodeElement = new XElement(element.Name, new XText(dedentedCodeBlock));
+
+        return CopyChildNodes(dedentedCodeElement, htmlConfiguration.CodeBlockElement);
     }
 
     /// <summary>

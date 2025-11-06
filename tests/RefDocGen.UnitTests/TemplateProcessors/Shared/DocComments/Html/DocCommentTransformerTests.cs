@@ -66,9 +66,7 @@ public class DocCommentTransformerTests
                   <li class="refdocgen-list-item">item2</li>
                 </ol>
                 <pre>
-                <code class="refdocgen-code-block">
-                int result = 1;
-                </code>
+                <code class="refdocgen-code-block">int result = 1;</code>
                 </pre>
             </div>
             """;
