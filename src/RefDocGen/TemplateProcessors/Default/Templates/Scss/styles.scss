@@ -234,6 +234,8 @@ h6:hover .anchor-link {
 .refdocgen-code-block {
     @extend .px-4;
     @extend .m-2;
+    @extend .border;
+    @extend .border-1;
 }
 
 pre:has(> .refdocgen-code-block) {

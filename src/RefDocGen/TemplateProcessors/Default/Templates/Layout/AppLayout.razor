@@ -23,9 +23,9 @@
 <html lang="en">
 
 @{
-    string stylesUrl = UrlHelper.GetRelativeUrl("Static/styles.css", NestingLevel);
-    string customJsUrl = UrlHelper.GetRelativeUrl("Static/script.js", NestingLevel);
-    string boostrapJsUrl = UrlHelper.GetRelativeUrl("Static/bootstrap-5.3.5-dist.bundle.min.js", NestingLevel);
+            string stylesUrl = UrlHelper.GetRelativeUrl("Static/styles.css", NestingLevel);
+            string customJsUrl = UrlHelper.GetRelativeUrl("Static/script.js", NestingLevel);
+            string boostrapJsUrl = UrlHelper.GetRelativeUrl("Static/bootstrap-5.3.5-dist.bundle.min.js", NestingLevel);
 }
 
 <head>
@@ -91,7 +91,7 @@
     <link href="@stylesUrl" rel="stylesheet" />
 
     <!-- Highlight.js -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/github-dark.min.css">
+    <link id="highlight-js-styles" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/atom-one-dark.min.css">
 
     @if (CustomStyles is not null)
     {
@@ -104,7 +104,7 @@
     @{
         string GetCssRule(LanguageTM lang) // build the CSS rule "html[data-language=XX] [data-language=XX] { display: inline !important }"
         {
-            return $"html[data-language=\"{lang.Id}\"] [data-language=\"{lang.Id}\"] {{ display: inline !important; }}\n" ;
+            return $"html[data-language=\"{lang.Id}\"] [data-language=\"{lang.Id}\"] {{ display: inline !important; }}\n";
         }
     }
 
@@ -132,7 +132,15 @@
 
     <!-- Highlight.js -->
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
-    <script>hljs.highlightAll();</script>
+    <script>
+
+        // set Highlight.js theme according to Bootstrap theme
+        const highlightJsTheme = document.documentElement.getAttribute("data-bs-theme") == "dark" ? "atom-one-dark" : "atom-one-light";
+        document.getElementById("highlight-js-styles").setAttribute("href", `https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/${highlightJsTheme}.min.css`);
+
+        hljs.highlightAll();
+
+    </script>
 
     <!-- Custom JS -->
     <script src="@customJsUrl"></script>
