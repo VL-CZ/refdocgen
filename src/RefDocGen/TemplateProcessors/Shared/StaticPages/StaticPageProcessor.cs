@@ -1,4 +1,6 @@
 using AngleSharp;
+using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
 using Markdig;
 using Microsoft.Extensions.Logging;
 using RefDocGen.Tools.Exceptions;
@@ -78,7 +80,7 @@ internal class StaticPageProcessor
                     fileText = Markdown.ToHtml(md);
                 }
 
-                fileText = ResolveLinksToMarkdownFiles(fileText);
+                fileText = ProcessPage(fileText);
                 string pageDir = Path.GetRelativePath(staticPagesDirectory, file.DirectoryName ?? staticPagesDirectory);
 
                 yield return new(pageDir, Path.GetFileNameWithoutExtension(filePath), fileText);
@@ -124,11 +126,15 @@ internal class StaticPageProcessor
     }
 
     /// <summary>
-    /// Seaches for all links leading to Markdown files and updates them to point to the corresponding HTML pages.
+    /// Processes the static page, the following operations are performed:
+    /// <list type="number">
+    /// <item>Seaching for all links leading to Markdown files and updating them to point to the corresponding HTML pages.</item>
+    /// <item>Wrapping images inside &lt;a&gt; elements.</item>
+    /// </list>
     /// </summary>
     /// <param name="html">The provided HTML content.</param>
     /// <returns>The HTML content with all Markdown links resolved.</returns>
-    private string ResolveLinksToMarkdownFiles(string html)
+    private string ProcessPage(string html)
     {
         var config = Configuration.Default;
         var context = BrowsingContext.New(config);
@@ -136,6 +142,19 @@ internal class StaticPageProcessor
         // Load the HTML document directly from the file
         var document = context.OpenAsync((req) => req.Content(html)).Result;
 
+        document = ResolveLinksToMarkdownFiles(document);
+        document = AddImageLinks(document);
+
+        return document.Body?.InnerHtml ?? "";
+    }
+
+    /// <summary>
+    /// Seaches for all links leading to Markdown files and updates them to point to the corresponding HTML pages.
+    /// </summary>
+    /// <param name="document">The provided HTML document.</param>
+    /// <returns>The HTML document with all Markdown links updated to point to the corresponding HTML pages.</returns>
+    private IDocument ResolveLinksToMarkdownFiles(IDocument document)
+    {
         var links = document.QuerySelectorAll("a[href]");
         const string href = "href";
 
@@ -148,6 +167,33 @@ internal class StaticPageProcessor
             }
         }
 
-        return document.Body?.InnerHtml ?? "";
+        return document;
+    }
+
+    /// <summary>
+    /// Wraps all <c>&lt;img&gt;</c> elements in the document with <c>&lt;a&gt;</c> elements,
+    /// pointing to the image source.
+    /// </summary>
+    /// <param name="document">The provided HTML document.</param>
+    /// <returns>The modified <see cref="IDocument"/> with images wrapped in <c>&lt;a&gt;</c> elements.</returns>
+    private IDocument AddImageLinks(IDocument document)
+    {
+        var images = document.QuerySelectorAll("img");
+
+        foreach (var image in images) // browse all images and wrap them inside <a> elements
+        {
+            if (image.GetAttribute("src") is string imagePath)
+            {
+                // Create <a> element
+                var link = document.CreateElement<IHtmlAnchorElement>();
+                link.Href = imagePath;
+
+                // Wrap the image with <a>
+                image.Replace(link);
+                _ = link.AppendChild(image);
+            }
+        }
+
+        return document;
     }
 }

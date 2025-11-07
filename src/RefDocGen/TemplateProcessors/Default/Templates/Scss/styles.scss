@@ -228,6 +228,13 @@ h6:hover .anchor-link {
             @extend .py-2;
         }
     }
+
+    a > img {
+        width: 50%;
+        @extend .border;
+        @extend .border-1;
+        @extend .m-2;
+    }
 }
 
 // code blocks
