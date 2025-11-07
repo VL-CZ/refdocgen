@@ -23,9 +23,9 @@
 <html lang="en">
 
 @{
-    string stylesUrl = UrlHelper.GetRelativeUrl("Static/styles.css", NestingLevel);
-    string customJsUrl = UrlHelper.GetRelativeUrl("Static/script.js", NestingLevel);
-    string boostrapJsUrl = UrlHelper.GetRelativeUrl("Static/bootstrap-5.3.5-dist.bundle.min.js", NestingLevel);
+        string stylesUrl = UrlHelper.GetRelativeUrl("Static/styles.css", NestingLevel);
+        string customJsUrl = UrlHelper.GetRelativeUrl("Static/script.js", NestingLevel);
+        string boostrapJsUrl = UrlHelper.GetRelativeUrl("Static/bootstrap-5.3.5-dist.bundle.min.js", NestingLevel);
 }
 
 <head>
@@ -93,6 +93,9 @@
     <!-- Highlight.js -->
     <link id="highlight-js-styles" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.min.css">
 
+    <!-- GLightBox -->
+    <link href="https://cdn.jsdelivr.net/npm/glightbox@3.3.1/dist/css/glightbox.min.css" rel="stylesheet">
+
     @if (CustomStyles is not null)
     {
         string customStylesUrl = UrlHelper.GetRelativeUrl(CustomStyles, NestingLevel);
@@ -132,6 +135,17 @@
 
     <!-- Highlight.js -->
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+
+    <!-- GLightBox -->
+    <script src="https://cdn.jsdelivr.net/npm/glightbox@3.3.1/dist/js/glightbox.min.js"></script>
+
+    <script>
+        const lightbox = GLightbox({
+            selector: '.static-page-content a > img',
+            loop: true,
+            zoomable: true
+        });
+    </script>
 
     <!-- Custom JS -->
     <script src="@customJsUrl"></script>
