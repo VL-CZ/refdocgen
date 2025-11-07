@@ -231,13 +231,13 @@ h6:hover .anchor-link {
 }
 
 // code blocks
-.refdocgen-code-block {
+pre .refdocgen-code-block, .static-page-content pre code {
     @extend .px-4;
-    @extend .m-2;
+    @extend .mx-2;
     @extend .border;
     @extend .border-1;
 }
 
 pre:has(> .refdocgen-code-block) {
-    @extend .my-2;
+    @extend .my-3;
 }
