@@ -230,10 +230,16 @@ h6:hover .anchor-link {
     }
 
     a > img {
-        width: 50%;
+        width: 100%;
+        max-height: 100vh;
         @extend .border;
         @extend .border-1;
         @extend .m-2;
+
+        @media (min-width: 992px) { // Bootstrap "lg" breakpoint (laptops)
+            width: 75%;
+            max-height: 75vh;
+        }
     }
 }
 
