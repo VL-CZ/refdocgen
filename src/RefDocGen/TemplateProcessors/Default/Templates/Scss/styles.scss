@@ -228,16 +228,34 @@ h6:hover .anchor-link {
             @extend .py-2;
         }
     }
+
+    a:has(> img) {
+        @extend .m-2;
+
+        > img {
+            width: 100%;
+            max-height: 100vh;
+            @extend .border;
+            @extend .border-1;
+            @extend .d-block;
+            @extend .mx-auto;
+
+            @media (min-width: 992px) { // Bootstrap "lg" breakpoint (laptops)
+                width: 75%;
+                max-height: 75vh;
+            }
+        }
+    }
 }
 
 // code blocks
-.refdocgen-code-block {
-    @extend .px-4;
-    @extend .m-2;
+pre .refdocgen-code-block, .static-page-content pre code {
+    @extend .px-3;
+    @extend .mx-2;
     @extend .border;
     @extend .border-1;
 }
 
 pre:has(> .refdocgen-code-block) {
-    @extend .my-2;
+    @extend .my-3;
 }

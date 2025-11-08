@@ -70,6 +70,8 @@ function switchTheme() {
         htmlElement.setAttribute("data-bs-theme", newTheme);
         localStorage.setItem("refdocgen-theme", newTheme);
     }
+
+    highlightCodeBlocks(); // re-apply code highlighting for the new theme
 }
 
 /**
@@ -106,7 +108,7 @@ function setLanguageVisibility(selectedLang) {
  */
 function isAbsoluteUrl(url) {
     return /^(https?:)?\/\//.test(url); // check for 'http' or 'https' or '//', which is enough in our case
-                                        // https://stackoverflow.com/questions/10687099/how-to-test-if-a-url-string-is-absolute-or-relative
+    // https://stackoverflow.com/questions/10687099/how-to-test-if-a-url-string-is-absolute-or-relative
 }
 
 /**
@@ -143,6 +145,17 @@ function updateRelativeLinks() {
     }
 }
 
+/**
+ * Highlights all code blocks using Highlight.js library
+ */
+function highlightCodeBlocks() {
+    // set Highlight.js theme according to Bootstrap theme
+    const highlightJsTheme = document.documentElement.getAttribute("data-bs-theme") == "dark" ? "obsidian" : "atom-one-light";
+    document.getElementById("highlight-js-styles").setAttribute("href", `https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/${highlightJsTheme}.min.css`);
+
+    hljs.highlightAll();
+}
+
 function main() {
     const languageSelector = document.getElementById("language-selector");
     const savedLang = document.documentElement.getAttribute("data-language");
@@ -154,6 +167,9 @@ function main() {
 
     // load versions, and create version selector dropdown
     loadVersions();
+
+    // highlight code blocks
+    highlightCodeBlocks();
 
     // switch theme on click
     const themeSwitcher = document.getElementById("theme-switcher");

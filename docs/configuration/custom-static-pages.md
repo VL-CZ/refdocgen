@@ -45,3 +45,5 @@ static-pages/
 ## Q1: How to install the library?
 ## A1: ...
 ```
+
+![](../imgs/img.png)
