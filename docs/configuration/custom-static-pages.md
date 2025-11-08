@@ -47,5 +47,3 @@ static-pages/
 ```
 
 ![](../imgs/img.png)
-![](../imgs/img.png)
-![](../imgs/img.png)

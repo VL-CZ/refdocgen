@@ -229,7 +229,7 @@ h6:hover .anchor-link {
         }
     }
 
-    a {
+    a:has(> img) {
         @extend .m-2;
 
         > img {
