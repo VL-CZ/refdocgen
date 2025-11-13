@@ -1,22 +1,20 @@
-# YAML configuration
-Instead of using command line arguments, it is possible to use a YAML file for configuration. \
-Then:
-- we don't need to repeat the options every time
-- the configuration can be easily shared
+# YAML Configuration
+
+You can use a YAML file to configure RefDocGen instead of specifying options on the command line. This approach makes it easy to reuse and share your configuration.
 
 The YAML file can be generated automatically using the `--save-config` flag (preferred) or created manually.
 It is recommended to name the file `refdocgen.yaml`.
 
-The structure of YAML and command line configuration is very similar:
+YAML configuration closely mirrors the command-line options:
 
-- all the keys in YAML have the same name as the matching command-line option (without the starting dashes), e.g. the `output-dir` key corresponds to the `--output-dir` option
-- the only mandatory key is the `input` (similar to the command-line configuration)
-- `save-config` option is not supported, as it does not make sense here
-- the default values are the same as in the command-line configuration
+- Each YAML key matches its corresponding command-line option (without leading dashes). For example, the `output-dir` key in YAML corresponds to the `--output-dir` option.
+- The only required key is `input`, just as on the command line.
+- The `save-config` option is not supported in YAML, as it doesn't make sense here
+- Default values are the same as those used for command-line options.
 
-## Examples
+## Example
 
-The following command results in creating the YAML displayed below:
+The following command generates a YAML configuration file as shown below:
 
 ```bash
 refdocgen MyLibrary.sln 

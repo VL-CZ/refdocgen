@@ -73,6 +73,7 @@ refdocgen MyLibrary.sln
 - [Custom static pages](./configuration/custom-static-pages.md)
 - [Doc versioning](./configuration/doc-versioning.md)
 - [YAML config](./configuration/YAML-config.md)
+- [Templates](./templates/available-templates.md)
 
 ## Limitations 
 
