@@ -50,5 +50,5 @@ To install, run `dotnet tool install my-library`.
 ### Result
 The resulting static pages are shown below:
 
-![index page](../imgs/static-pages-index.png)
-![FAQ page](../imgs/static-pages-faq.png)
+![](../imgs/static-pages-index.png)
+![](../imgs/static-pages-faq.png)
