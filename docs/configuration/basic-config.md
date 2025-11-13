@@ -51,3 +51,4 @@ INPUT (pos. 0)                                  Required. The assembly, project,
 - [Custom static pages](./custom-static-pages.md)
 - [Doc versioning](./doc-versioning.md)
 - [YAML config](./YAML-config.md)
+- [Templates](../templates/available-templates.md)

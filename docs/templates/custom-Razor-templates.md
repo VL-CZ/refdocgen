@@ -1,11 +1,9 @@
-# Templates
-Currently, only the `Default` documentation template is available.
-
-## Adding custom Razor templates
+# Creating custom Razor templates
 
 You can use custom Razor templates with the `RazorTemplateProcessor` class to define your own documentation UI. The overall structure and output folder layout will remain the same as with the default templates.
 
-### Steps to add custom Razor templates:
+Follow these steps:
+
 1. Clone the `RefDocGen` project and navigate to the `src/RefDocGen/TemplateProcessors` folder.
 2. Copy the `Todo` subfolder and rename it to match your template design (e.g., `RazorMinimal`).
 3. Implement the eight Razor templates in the `Templates` subfolder. Each template includes a description of its intended usage and parameters.
@@ -16,10 +14,10 @@ You can use custom Razor templates with the `RazorTemplateProcessor` class to de
 	- To support versioning, each page must include an element with `id="version-list"`. The available version identifiers will be inserted automatically and can be processed with JavaScript.
 	- Data such as field modifiers are represented as `LanguageSpecificData<T>`, which works as a dictionary indexed by language IDs. For C#, use the `CSharpData` property.
 
-### Configuration for XML tag transformation
+## Configuration for XML tag transformation
 In addition to the templates, you must configure how the inner XML tags are transformed to HTML. There are two options:
 
-##### 1. Reuse the default configuration (recommended)
+#### 1. Reuse the default configuration (recommended)
 
 The default configuration is represented by the `DocCommentHtmlConfiguration` class, which:
     - Replaces XML tags (including `<seealso>` tags) with HTML elements (see Table 4.2 in the docs).
@@ -63,7 +61,7 @@ All of these CSS classes can be styled as needed. For example:
 
 You can also inherit existing CSS classes using a CSS preprocessor, similar to how the default UI does it (see `TemplateProcessors/Default/Templates/Scss/styles.scss`).
 
-##### 2. Create a custom configuration
+#### 2. Create a custom configuration
 
 For more control over the transformation, you can create a custom configuration.
 
@@ -76,7 +74,7 @@ public XElement InlineCodeElement => new XElement("span",
 );
 ```
 
-### Registering Custom Templates
+## Registering Custom Templates
 
 After you create the templates and configuration, you must register the templates:
 1. Open `Program.cs` and find the comments marked `#ADD_TEMPLATE`.
