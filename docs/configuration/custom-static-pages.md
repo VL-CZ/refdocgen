@@ -14,14 +14,15 @@ You can include static pages (like *index* or *FAQ*) in the generated documentat
 **Important: The static pages are not designed to offer the functionality of a full-fledged SSG. If you want more control over the pages, is advised to use an SSG, such as Jekyll, for user documentation.**
 
 Additional notes:
-- it is possible to use relative links between pages
+- It is possible to use relative links between pages. (Links to `.md` files are automatically updated to point to the correct output HTML files in the generated documentation.)
 - you can include images, JS, or any other resources in the static pages directory, and then reference them from the pages
 - it is possible to put the pages (and other files) into subdirectories of the `static-pages/` directory (however, pages nested three or more levels deep will not appear in the top menu)
 - in case you use HTML pages, to add custom CSS styles, put them into `/css/styles.css` and they will be included automatically (however, use custom styles only for minor tweaks, rather than completely changing the overall appearance of the page)
 
+
 ## Example
 
-Directory structure:
+Example directory structure:
 ```
 static-pages/
     index.md
@@ -30,21 +31,23 @@ static-pages/
 
 `index.md`
 ```markdown
-# MyLibrary reference documentation
+# MyLibrary Reference Documentation
 
-This page contains the reference documentation of MyLibrary.
+This page contains the reference documentation for MyLibrary.
 
 ## Installation
-- run `dotnet tool install my-library`
-
+To install, run `dotnet tool install my-library`.
 ```
 
 `FAQ.html`
 ```html
 <h1>FAQ</h1>
 
-<h6 class="text-bold">Q1: How to install the library?</h6>
-<div>A1: ...</div>
+<h6>Q1: How to install the library?</h6>
+<div class="fw-light">A1: ...</div>
 ```
 
-![](../imgs/img.png)
+### Result
+
+![index page](../imgs/static-pages-index.png)
+![FAQ page](../imgs/static-pages-faq.png)
