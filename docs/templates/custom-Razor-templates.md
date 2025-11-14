@@ -30,25 +30,25 @@ XML Tag                                         HTML Representation
 <list type="bullet">                        	<ul class="refdocgen-bullet-list">
 <list type="number">                        	<ol class="refdocgen-number-list">
 <list type="table">                         	<table class="refdocgen-table">
-<listheader>                                	<thead class="refdocgen-tableheader">
+<listheader>                                	<thead class="refdocgen-table-header">
 <c>                                         	<code class="refdocgen-inline-code">
 <example>                                   	<div class="refdocgen-example">
 <paramref>                                  	<code class="refdocgen-paramref">
-<typeparamref>                              	<code class="refdocgentypeparamref">
-<see href="...">                            	<a href="..." class="refdocgen-seehref">
-<see langword="...">                        	<code class="refdocgen-seelangword">
-<seealso href="...">                        	<a href="..." class="refdocgenseealso-href">
-<code>                                      	<pre><code class="refdocgen-codeblock"></code></pre>
+<typeparamref>                              	<code class="refdocgen-typeparamref">
+<see href="...">                            	<a href="..." class="refdocgen-see-href">
+<see langword="...">                        	<code class="refdocgen-see-langword">
+<seealso href="...">                        	<a href="..." class="refdocgen-seealso-href">
+<code>                                      	<pre><code class="refdocgen-code-block"></code></pre>
 <term> within a bullet/number list          	<span class="refdocgen-list-term">
-<description> within a bullet/number list   	<span class="refdocgen-listdescription">
+<description> within a bullet/number list   	<span class="refdocgen-list-description">
 <item> within a bullet/number list          	<li class="refdocgen-list-item">
 <term> within a table                       	<td class="refdocgen-table-term">
 <description> within a table                	<td class="refdocgen-table-element">
 <item> within a table                       	<tr class="refdocgen-table-item">
-<see cref="..."> (link resolved)            	<a href="..." class="refdocgen-seecref">
-<seealso cref="..."> (link resolved)        	<a href="..." class="refdocgenseealso-cref">
-<see cref="..."> (link not resolved)        	<code class="refdocgen-see-cref-notfound">
-<seealso cref="..."> (link not resolved)    	<code class="refdocgen-seealso-crefnot-found">
+<see cref="..."> (link resolved)            	<a href="..." class="refdocgen-see-cref">
+<seealso cref="..."> (link resolved)        	<a href="..." class="refdocgen-seealso-cref">
+<see cref="..."> (link not resolved)        	<code class="refdocgen-see-cref-not-found">
+<seealso cref="..."> (link not resolved)    	<code class="refdocgen-seealso-cre-fnot-found">
 ```
 
 All of these CSS classes can be styled as needed. For example:
@@ -59,6 +59,7 @@ All of these CSS classes can be styled as needed. For example:
 }
 ```
 
+Ideally, use the `styles.css` file in `Todo/Templates/Static`, as this directory is copied directly to the output documentation folder.
 You can also inherit existing CSS classes using a CSS preprocessor, similar to how the default UI does it (see `TemplateProcessors/Default/Templates/Scss/styles.scss`).
 
 #### 2. Create a custom configuration
