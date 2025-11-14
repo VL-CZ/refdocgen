@@ -48,7 +48,7 @@ XML Tag                                         HTML Representation
 <see cref="..."> (link resolved)            	<a href="..." class="refdocgen-see-cref">
 <seealso cref="..."> (link resolved)        	<a href="..." class="refdocgen-seealso-cref">
 <see cref="..."> (link not resolved)        	<code class="refdocgen-see-cref-not-found">
-<seealso cref="..."> (link not resolved)    	<code class="refdocgen-seealso-cre-fnot-found">
+<seealso cref="..."> (link not resolved)    	<code class="refdocgen-seealso-cref-not-found">
 ```
 
 All of these CSS classes can be styled as needed. For example:
@@ -59,7 +59,7 @@ All of these CSS classes can be styled as needed. For example:
 }
 ```
 
-Ideally, use the `styles.css` file in `Todo/Templates/Static`, as this directory is copied directly to the output documentation folder.
+Ideally, use the `styles.css` file in `Todo/Templates/Static`, as this directory is copied to the output documentation folder.
 You can also inherit existing CSS classes using a CSS preprocessor, similar to how the default UI does it (see `TemplateProcessors/Default/Templates/Scss/styles.scss`).
 
 #### 2. Create a custom configuration
