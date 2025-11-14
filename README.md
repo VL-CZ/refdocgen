@@ -11,7 +11,7 @@ RefDocGen is a reference documentation generator for .NET.
 ## Features
 
 - easy to use (installed as a [.NET tool](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools))
-- supports all standard XML documentation tags
+- supports all [standard XML documentation tags](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/recommended-tags)
 - resolves `inheritdoc` tags
 - modern, responsive UI supporting both light and dark mode
 - support for documentation versioning
@@ -130,7 +130,7 @@ INPUT (pos. 0)                                  Required. The assembly, project,
 
 You can include static pages (like *index* or *FAQ*) in the generated documentation, following the steps below:
 
-- create a directory (e.g., `static-pages/`) with `.html` or `.md` files
+- create a directory (e.g., `static-pages/`) with `.md` (preferred) or `.html` files
 - each file represents a page and should contain its the body content
 - run the generator with:
 
@@ -142,28 +142,37 @@ You can include static pages (like *index* or *FAQ*) in the generated documentat
 **Important: The static pages are not designed to offer the functionality of a full-fledged SSG. If you want more control over the pages, is advised to use an SSG, such as Jekyll, for user documentation.**
 
 Additional notes:
-- it is possible to use relative links between pages
+- It is possible to use relative links between pages. (Links to `.md` files are automatically updated to point to the correct output HTML files in the generated documentation.)
 - you can include images, JS, or any other resources in the static pages directory, and then reference them from the pages
-- to add custom CSS styles, put them into `/css/styles.css` and they will be included automatically (however, use custom styles only for minor tweaks, rather than completely changing the overall appearance of the page)
 - it is possible to put the pages (and other files) into subdirectories of the `static-pages/` directory (however, pages nested three or more levels deep will not appear in the top menu)
+- in case you use HTML pages, to add custom CSS styles, put them into `/css/styles.css` and they will be included automatically (however, use custom styles only for minor tweaks, rather than completely changing the overall appearance of the page)
 
-#### Example
 
-Directory structure:
+## Example
+
+Example directory structure:
 ```
 static-pages/
-    index.html
-    FAQ.md
+    index.md
+    FAQ.html
 ```
 
-`index.html`
+`index.md`
+```markdown
+# MyLibrary Reference Documentation
+
+This page contains the reference documentation for MyLibrary.
+
+## Installation
+To install, run `dotnet tool install my-library`.
+```
+
+`FAQ.html`
 ```html
-<h1>
-    MyLibrary reference documentation
-</h1>
-<div>
-    This page contains the reference documentation of MyLibrary.
-</div>
+<h1>FAQ</h1>
+
+<h6>Q1: How to install the library?</h6>
+<div class="fw-light">A1: ...</div>
 ```
 
 `FAQ.md`
@@ -176,14 +185,14 @@ static-pages/
 
 ### Documentation versioning
 
-You can optionally generate versioned documentation, allowing users to switch between multiple versions.
-To do this, it is necessary to use the `--doc-version` option.
+You can optionally generate versioned documentation, which allows users to switch between multiple versions.
+To do this, use the `--doc-version` option.
 
-The version can be switched using the dropdown in the bottom menu.
+The version can then be switched using the dropdown menu at the bottom of the page.
 
 #### Examples
 
-Generate two versions of the documentation, using these commands (the output directory needs to be the same):
+Generate two versions of the documentation using these commands (the output directory must be the same):
 
 ```bash
 refdocgen MyLibrary.dll --doc-version v1.0
@@ -193,35 +202,31 @@ refdocgen MyLibrary.dll --doc-version v1.1
 ```
 
 The documentation versions do not necessarily have to match the library versions.
-For instance, we may create two documentation versions, one showing the public API, and the other including even private members, as illustrated below:
+For example, you may create two documentation versions: one showing only the public API, and another including private members, as illustrated below:
 
 ```
 refdocgen MyLibrary.dll --doc-version v1.0-public
 refdocgen MyLibrary.dll --doc-version v1.0-private --min-visibility Private
 ```
 
-An example of versioned documentation can be found [here](https://vl-cz.github.io/refdocgen-demo-refdocgen/index.html). \
-Note that the documentations consists of two versions: `v-public` - displays only the public API and `v-private` displaying all types and members
+An example of versioned documentation can be found [here](https://vl-cz.github.io/refdocgen-demo-example-library/index.html).
 
 ### YAML configuration
-Instead of using command line arguments, it is possible to use a YAML file for configuration. \
-Then:
-- we don't need to repeat the options every time
-- the configuration can be easily shared
+You can use a YAML file to configure RefDocGen instead of specifying options on the command line. This approach makes it easy to reuse and share your configuration.
 
 The YAML file can be generated automatically using the `--save-config` flag (preferred) or created manually.
 It is recommended to name the file `refdocgen.yaml`.
 
-The structure of YAML and command line configuration is very similar:
+YAML configuration closely mirrors the command-line options:
 
-- all the keys in YAML have the same name as the matching command-line option (without the starting dashes), e.g. the `output-dir` key corresponds to the `--output-dir` option
-- the only mandatory key is the `input` (similar to the command-line configuration)
-- `save-config` option is not supported, as it does not make sense here
-- the default values are the same as in the command-line configuration
+- Each YAML key matches its corresponding command-line option (without leading dashes). For example, the `output-dir` key in YAML corresponds to the `--output-dir` option.
+- The only required key is `input`, just as on the command line.
+- The `save-config` option is not supported in YAML, as it doesn't make sense here
+- Default values are the same as those used for command-line options.
 
-#### Examples
+#### Example
 
-The following command results in creating the YAML displayed below:
+The following command generates a YAML configuration file as shown below:
 
 ```bash
 refdocgen MyLibrary.sln 
@@ -252,6 +257,10 @@ exclude-namespaces:
 ```
 
 The next time we want to use the same configuration, we just need to run `refdocgen refdocgen.yaml` and the configuration will be loaded from the YAML.
+
+### Templates
+Currently, only the `Default` documentation template is available.
+However, it is possible to create custom templates, as described in the [official documentation](https://vl-cz.github.io/refdocgen/templates/available-templates.html).
 
 ### Limitations 
 
