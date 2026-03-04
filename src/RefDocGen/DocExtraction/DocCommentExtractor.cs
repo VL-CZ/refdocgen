@@ -7,6 +7,7 @@ using RefDocGen.DocExtraction.Handlers.Members.Enum;
 using RefDocGen.DocExtraction.Handlers.Types;
 using RefDocGen.DocExtraction.InheritDoc;
 using RefDocGen.DocExtraction.Tools;
+using RefDocGen.Tools.Logging;
 using RefDocGen.Tools.Xml;
 using System.Xml.Linq;
 
@@ -133,7 +134,7 @@ internal class DocCommentExtractor
             {
                 // load the document (preserve the whitespace, as the documentation is to be converted into HTML)
                 xmlDocument = XDocument.Load(xmlPath, LoadOptions.PreserveWhitespace);
-                logger.LogInformation("XML documentation file {Name} loaded", xmlPath);
+                RefDocGenLogMessages.LogXmlDocFileLoaded(logger, xmlPath);
             }
             catch (FileNotFoundException)
             {

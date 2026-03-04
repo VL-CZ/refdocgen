@@ -46,7 +46,7 @@ internal class ParameterData : IParameterData
     public ITypeNameData Type { get; }
 
     /// <inheritdoc/>
-    public bool IsParamsCollection => ParameterInfo.GetCustomAttribute(typeof(ParamArrayAttribute)) != null;
+    public bool IsParamsCollection => ParameterInfo.GetCustomAttribute<ParamArrayAttribute>() != null;
 
     /// <inheritdoc/>
     public bool IsInput => ParameterInfo.IsIn;

@@ -92,7 +92,7 @@ internal class MethodData : MethodLikeMemberData, IMethodData
     public bool IsFinal => MethodInfo.IsFinal;
 
     /// <inheritdoc/>
-    public bool IsAsync => MethodInfo.GetCustomAttribute(typeof(AsyncStateMachineAttribute)) != null;
+    public bool IsAsync => MethodInfo.GetCustomAttribute<AsyncStateMachineAttribute>() != null;
 
     /// <inheritdoc/>
     public bool IsSealed => OverridesAnotherMember && IsFinal;
