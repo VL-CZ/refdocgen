@@ -68,7 +68,7 @@ public class VersionedDocumentationFixture : IDisposable
             var logger = Substitute.For<ILogger>();
 
             var generator = new DocGenerator(
-                ["../../../../RefDocGen.ExampleLibrary/bin/Debug/net8.0/RefDocGen.ExampleLibrary.dll"], // use only the ExampleLibrary
+                ["../../../../RefDocGen.ExampleLibrary/bin/Debug/net10.0/RefDocGen.ExampleLibrary.dll"], // use only the ExampleLibrary
                 templateProcessor,
                 assemblyDataConfig,
                 outputDir,

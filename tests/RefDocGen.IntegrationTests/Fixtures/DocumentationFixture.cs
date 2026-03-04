@@ -69,9 +69,9 @@ public class DocumentationFixture : IDisposable
 
         var generator = new DocGenerator(
             [
-                "../../../../RefDocGen.ExampleLibrary/bin/Debug/net8.0/RefDocGen.ExampleLibrary.dll", // ExampleLibrary
-                "../../../../RefDocGen.ExampleFSharpLibrary/bin/Debug/net8.0/RefDocGen.ExampleFSharpLibrary.dll", // ExampleFSharpLibrary
-                "../../../../RefDocGen.ExampleVbLibrary/bin/Debug/net8.0/RefDocGen.ExampleVbLibrary.dll", // ExampleVbLibrary
+                "../../../../RefDocGen.ExampleLibrary/bin/Debug/net10.0/RefDocGen.ExampleLibrary.dll", // ExampleLibrary
+                "../../../../RefDocGen.ExampleFSharpLibrary/bin/Debug/net10.0/RefDocGen.ExampleFSharpLibrary.dll", // ExampleFSharpLibrary
+                "../../../../RefDocGen.ExampleVbLibrary/bin/Debug/net10.0/RefDocGen.ExampleVbLibrary.dll", // ExampleVbLibrary
             ],
             templateProcessor,
             assemblyDataConfig,

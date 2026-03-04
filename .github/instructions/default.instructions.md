@@ -6,7 +6,7 @@ RefDocGen is a **reference documentation generator for .NET**, installed as a .N
 
 ## Tech Stack
 
-- **.NET 8** (target framework: `net8.0`)
+- **.NET 10** (target framework: `net10.0`)
 - **C#** with nullable reference types enabled and implicit usings
 - **Razor SDK** (`Microsoft.NET.Sdk.Razor`) — used for server-side HTML rendering via `HtmlRenderer`, not as a web app
 - **Key libraries**: AngleSharp (HTML parsing), CommandLineParser (CLI), Markdig (Markdown), YamlDotNet (YAML config), Serilog (logging), Microsoft.Build (MSBuild integration)

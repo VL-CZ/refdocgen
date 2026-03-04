@@ -22,7 +22,7 @@ RefDocGen is a reference documentation generator for .NET.
 ## Installation
 
 Prerequisites:
-- .NET 8 (or higher)
+- .NET 10 (or higher)
 
 Install as a .NET global tool from [NuGet](https://www.nuget.org/packages/RefDocGen):
 
