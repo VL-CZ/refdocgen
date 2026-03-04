@@ -10,6 +10,7 @@ using RefDocGen.TemplateProcessors;
 using RefDocGen.TemplateProcessors.Default;
 using RefDocGen.TemplateProcessors.Shared.Languages;
 using RefDocGen.Tools.Exceptions;
+using RefDocGen.Tools.Logging;
 using Serilog;
 using Serilog.Events;
 using System.Globalization;
@@ -143,7 +144,7 @@ public static class Program
             if (config.SaveConfig) // save the configuration
             {
                 YamlFileConfiguration.SaveToFile(config);
-                logger.LogInformation("Configuration saved into {File} file", YamlFileConfiguration.FileName);
+                RefDocGenLogMessages.LogConfigurationSaved(logger, YamlFileConfiguration.FileName);
             }
 
             Console.WriteLine($"Documentation generated in the '{config.OutputDir}' folder");

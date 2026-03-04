@@ -19,6 +19,7 @@ using RefDocGen.TemplateProcessors.Shared.TemplateModels.Types;
 using RefDocGen.TemplateProcessors.Shared.Tools;
 using RefDocGen.Tools;
 using RefDocGen.Tools.Exceptions;
+using RefDocGen.Tools.Logging;
 
 namespace RefDocGen.TemplateProcessors.Shared;
 
@@ -200,7 +201,10 @@ internal class RazorTemplateProcessor<
             _ = Directory.CreateDirectory(this.outputDirectory);
         }
 
-        this.logger?.LogInformation("Generating documentation in {Folder} folder", this.outputDirectory);
+        if (this.logger is not null)
+        {
+            RefDocGenLogMessages.LogGeneratingDocumentation(this.logger, this.outputDirectory);
+        }
 
         CopyStaticPages();
 
@@ -357,11 +361,17 @@ internal class RazorTemplateProcessor<
         if (staticFilesDir.Exists)
         {
             staticFilesDir.CopyTo(outputDirPath, true);
-            logger?.LogInformation("A directory containing static template data copied to {Directory}", outputDirPath);
+            if (logger is not null)
+            {
+                RefDocGenLogMessages.LogStaticTemplateDataCopied(logger, outputDirPath);
+            }
         }
         else
         {
-            logger?.LogInformation("No directory containing static template data found at path {Directory}", staticFilesDir);
+            if (logger is not null)
+            {
+                RefDocGenLogMessages.LogNoStaticTemplateDataFound(logger, staticFilesDir.FullName);
+            }
         }
     }
 
@@ -430,7 +440,11 @@ internal class RazorTemplateProcessor<
 
         foreach (var page in pages) // wrap each page in the static page template, process it, and copy it into the output directory
         {
-            logger?.LogInformation("Static page {Path} found", Path.Combine(staticPagesDirectory, page.FullName));
+            if (logger is not null)
+            {
+                RefDocGenLogMessages.LogStaticPageFound(logger, staticPagesDirectory, page.FullName);
+            }
+
             string outputPath = Path.Combine(outputDirectory, page.PageDirectory);
 
             var paramDictionary = new Dictionary<string, object?>()
@@ -486,7 +500,10 @@ internal class RazorTemplateProcessor<
             File.WriteAllText(outputFileName, html);
             _ = pagesGenerated.Add(pagePath);
 
-            logger?.LogInformation("Page {Name} created", outputFileName);
+            if (logger is not null)
+            {
+                RefDocGenLogMessages.LogPageCreated(logger, outputFileName);
+            }
         }
         catch (Exception ex) // Template compilation failed -> delete the directory & throw an exception
         {

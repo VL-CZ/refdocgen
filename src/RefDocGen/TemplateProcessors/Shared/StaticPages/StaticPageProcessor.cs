@@ -3,6 +3,7 @@ using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using Markdig;
 using Microsoft.Extensions.Logging;
+using RefDocGen.Tools.Logging;
 using RefDocGen.Tools.Exceptions;
 
 namespace RefDocGen.TemplateProcessors.Shared.StaticPages;
@@ -120,7 +121,10 @@ internal class StaticPageProcessor
                 }
 
                 File.Copy(file.FullName, outputPath, true);
-                logger?.LogInformation("Static file {FilePath} copied to {OutputPath}", filePath, outputPath);
+                if (logger is not null)
+                {
+                    RefDocGenLogMessages.LogStaticFileCopied(logger, filePath, outputPath);
+                }
             }
         }
     }

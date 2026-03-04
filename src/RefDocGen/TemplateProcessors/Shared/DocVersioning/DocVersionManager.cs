@@ -135,10 +135,7 @@ internal class DocVersionManager
 
             var versionList = document.GetElementById(versionListElementId);
 
-            if (versionList is not null)
-            {
-                versionList.InnerHtml = JsonSerializer.Serialize(versions); // add the current version to the 'Version list' element
-            }
+            _ = (versionList?.InnerHtml = JsonSerializer.Serialize(versions)); // add the current version to the 'Version list' element
 
             File.WriteAllText(olderVersionFile, document.ToHtml()); // Write the updated HTML
         }

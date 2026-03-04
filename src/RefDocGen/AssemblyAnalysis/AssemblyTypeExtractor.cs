@@ -8,6 +8,7 @@ using RefDocGen.CodeElements.TypeRegistry;
 using RefDocGen.CodeElements.Types.Concrete;
 using RefDocGen.CodeElements.Types.Concrete.Delegate;
 using RefDocGen.CodeElements.Types.Concrete.Enum;
+using RefDocGen.Tools.Logging;
 using RefDocGen.Tools.Exceptions;
 using System.Reflection;
 
@@ -135,11 +136,11 @@ internal class AssemblyTypeExtractor
                 types.AddRange(assembly.GetTypes());
                 includedAssemblies.Add(assemblyPath);
 
-                logger.LogInformation("Assembly {Name} loaded", assemblyPath);
+                RefDocGenLogMessages.LogAssemblyLoaded(logger, assemblyPath);
             }
             else
             {
-                logger.LogInformation("Assembly {Name} excluded", assemblyPath);
+                RefDocGenLogMessages.LogAssemblyExcluded(logger, assemblyPath);
             }
         }
 

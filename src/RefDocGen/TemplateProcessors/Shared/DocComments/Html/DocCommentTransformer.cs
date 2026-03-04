@@ -32,9 +32,6 @@ internal class DocCommentTransformer : IDocCommentTransformer
     /// </summary>
     private readonly IDocCommentHtmlConfiguration htmlConfiguration;
 
-    /// <inheritdoc cref="TypeUrlResolver"/>
-    private TypeUrlResolver? typeUrlResolver;
-
     /// <inheritdoc cref="TypeRegistry"/>
     private ITypeRegistry? typeRegistry;
 
@@ -89,8 +86,8 @@ internal class DocCommentTransformer : IDocCommentTransformer
     /// </summary>
     private TypeUrlResolver TypeUrlResolver
     {
-        get => typeUrlResolver ?? throw new InvalidOperationException("Type registry not provided");
-        set => typeUrlResolver = value;
+        get => field ?? throw new InvalidOperationException("Type registry not provided");
+        set;
     }
 
     /// <inheritdoc/>
