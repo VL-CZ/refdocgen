@@ -440,7 +440,7 @@ internal class RazorTemplateProcessor<
 
         foreach (var page in pages) // wrap each page in the static page template, process it, and copy it into the output directory
         {
-            if (logger is not null && logger.IsEnabled(LogLevel.Information))
+            if (logger is not null)
             {
                 RefDocGenLogMessages.LogStaticPageFound(logger, staticPagesDirectory, page.FullName);
             }
