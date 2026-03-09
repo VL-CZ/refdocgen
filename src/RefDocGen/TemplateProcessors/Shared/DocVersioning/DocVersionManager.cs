@@ -41,7 +41,11 @@ internal class DocVersionManager
     /// </summary>
     /// <param name="baseOutputDirectory">Base output directory, containing the JSON versions file.</param>
     /// <param name="currentVersion">Current version of the documentation being generated.</param>
-    public DocVersionManager(string baseOutputDirectory, string currentVersion)
+    /// <param name="forceCreate">
+    /// If <see langword="true"/> and a version with the same name already exists, the existing version will be overwritten.
+    /// If <see langword="false"/> and a duplicate version is found, a <see cref="DuplicateDocVersionNameException"/> is thrown.
+    /// </param>
+    public DocVersionManager(string baseOutputDirectory, string currentVersion, bool forceCreate = false)
     {
         this.baseOutputDirectory = baseOutputDirectory;
         this.currentVersion = currentVersion;
@@ -60,7 +64,20 @@ internal class DocVersionManager
 
             if (versions.Any(v => v.Version == currentVersion))
             {
-                throw new DuplicateDocVersionNameException(currentVersion); // there's already a version with the same name -> throw an exception
+                if (forceCreate)
+                {
+                    _ = versions.RemoveAll(v => v.Version == currentVersion); // remove the existing version from the list
+
+                    string existingVersionDir = Path.Join(baseOutputDirectory, currentVersion);
+                    if (Directory.Exists(existingVersionDir))
+                    {
+                        Directory.Delete(existingVersionDir, true); // delete the existing version directory
+                    }
+                }
+                else
+                {
+                    throw new DuplicateDocVersionNameException(currentVersion); // there's already a version with the same name -> throw an exception
+                }
             }
         }
         else

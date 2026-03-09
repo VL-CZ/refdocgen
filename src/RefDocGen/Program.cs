@@ -92,7 +92,7 @@ public static class Program
 
         Dictionary<DocumentationTemplate, ITemplateProcessor> templateProcessors = new()
         {
-            [DocumentationTemplate.Default] = new DefaultTemplateProcessor(htmlRenderer, availableLanguages, config.StaticPagesDir, config.DocVersion)
+            [DocumentationTemplate.Default] = new DefaultTemplateProcessor(htmlRenderer, availableLanguages, config.StaticPagesDir, config.DocVersion, config.ForceCreate)
             // #ADD_TEMPLATE: use the enum value together with the RazorTemplateProcessor with 8 type parameters, representing the templates
             //                additionally, pass the 'DocCommentHtmlConfiguration' or a custom configuration (if provided)
             //
@@ -111,7 +111,8 @@ public static class Program
             //                                        htmlRenderer,
             //                                        availableLanguages,
             //                                        config.StaticPagesDir,
-            //                                        config.DocVersion)
+            //                                        config.DocVersion,
+            //                                        config.ForceCreate)
             //
             // #ADD_TEMPLATE_PROCESSOR: use the enum value together with the custom template processor
             //
