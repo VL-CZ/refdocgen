@@ -115,6 +115,11 @@ internal class RazorTemplateProcessor<
     private readonly string? docVersion;
 
     /// <summary>
+    /// Indicates whether an existing documentation version with the same name should be overwritten.
+    /// </summary>
+    private readonly bool forceCreate;
+
+    /// <summary>
     /// Set of paths of all generated pages in the current doc version, relative to <see cref="outputDirectory"/>.
     /// </summary>
     private readonly HashSet<string> pagesGenerated = [];
@@ -157,18 +162,21 @@ internal class RazorTemplateProcessor<
     /// <param name="docCommentTransformer">Transformer of the XML doc comments into HTML.</param>
     /// <param name="staticPagesDirectory">Path to the directory containing the static pages created by user. <c>null</c> indicates that the directory is not specified.</param>
     /// <param name="docVersion">Version of the documentation (e.g. 'v1.0'). Pass <c>null</c> if no specific version should be generated.</param>
+    /// <param name="forceCreate">If <see langword="true"/> and the <paramref name="docVersion"/> already exists, the existing version will be overwritten.</param>
     /// <param name="availableLanguages"><inheritdoc cref="availableLanguages"/></param>
     internal RazorTemplateProcessor(
         HtmlRenderer htmlRenderer,
         IDocCommentTransformer docCommentTransformer,
         IEnumerable<ILanguageConfiguration> availableLanguages,
         string? staticPagesDirectory = null,
-        string? docVersion = null)
+        string? docVersion = null,
+        bool forceCreate = false)
     {
         this.htmlRenderer = htmlRenderer;
         this.docCommentTransformer = docCommentTransformer;
         this.staticPagesDirectory = staticPagesDirectory;
         this.docVersion = docVersion;
+        this.forceCreate = forceCreate;
         this.availableLanguages = availableLanguages;
 
         defaultIndexPage = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "TemplateProcessors", "Shared", "StaticData", "defaultIndexPage.html");
@@ -191,10 +199,10 @@ internal class RazorTemplateProcessor<
         {
             string rootOutputDirectory = outputDirectory;
 
+            versionManager = new(rootOutputDirectory, docVersion, forceCreate);
+
             this.outputDirectory = Path.Join(outputDirectory, docVersion); // set output directory
             _ = Directory.CreateDirectory(this.outputDirectory);
-
-            versionManager = new(rootOutputDirectory, docVersion);
         }
         else
         {
@@ -569,6 +577,7 @@ internal class RazorTemplateProcessor<
     /// <param name="docCommentHtmlConfiguration">The configuration describing mapping of the inner XML tags into HTML.</param>
     /// <param name="staticPagesDirectory">Path to the directory containing the static pages created by user. <c>null</c> indicates that the directory is not specified.</param>
     /// <param name="docVersion">Version of the documentation (e.g. 'v1.0'). Pass <c>null</c> if no specific version should be generated.</param>
+    /// <param name="forceCreate">If <see langword="true"/> and the <paramref name="docVersion"/> already exists, the existing version will be overwritten.</param>
     /// <param name="availableLanguages"><inheritdoc cref="availableLanguages"/></param>
     /// <returns>An instance of <see cref="RazorTemplateProcessor{TObjectTypeTemplate, TDelegateTemplate, TEnumTemplate, TNamespaceTemplate, TAssemblyTemplate, TApiTemplate, TStaticPageTemplate, TSearchPageTemplate}"/> class.</returns>
     internal static ITemplateProcessor With(
@@ -576,7 +585,8 @@ internal class RazorTemplateProcessor<
             HtmlRenderer htmlRenderer,
             IEnumerable<ILanguageConfiguration> availableLanguages,
             string? staticPagesDirectory = null,
-            string? docVersion = null)
+            string? docVersion = null,
+            bool forceCreate = false)
     {
         return new RazorTemplateProcessor<
             TObjectTypePageTemplate,
@@ -587,6 +597,6 @@ internal class RazorTemplateProcessor<
             TApiHomePageTemplate,
             TStaticPageTemplate,
             TSearchPageTemplate
-        >(htmlRenderer, new DocCommentTransformer(docCommentHtmlConfiguration), availableLanguages, staticPagesDirectory, docVersion);
+        >(htmlRenderer, new DocCommentTransformer(docCommentHtmlConfiguration), availableLanguages, staticPagesDirectory, docVersion, forceCreate);
     }
 }

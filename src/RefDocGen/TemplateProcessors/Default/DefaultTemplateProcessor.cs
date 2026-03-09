@@ -28,15 +28,17 @@ internal class DefaultTemplateProcessor : RazorTemplateProcessor<
     /// <param name="htmlRenderer">Renderer of the Razor components.</param>
     /// <param name="staticPagesDirectory">Path to the directory containing the static pages created by user. <c>null</c> indicates that the directory is not specified.</param>
     /// <param name="docVersion">Version of the documentation (e.g. 'v1.0'). Pass <c>null</c> if no specific version should be generated.</param>
+    /// <param name="forceCreate">If <see langword="true"/> and the <paramref name="docVersion"/> already exists, the existing version will be overwritten.</param>
     /// <param name="availableLanguages">Configuration of languages available in the documentation.</param>
     internal DefaultTemplateProcessor(HtmlRenderer htmlRenderer, ILanguageConfiguration[] availableLanguages,
-        string? staticPagesDirectory = null, string? docVersion = null)
+        string? staticPagesDirectory = null, string? docVersion = null, bool forceCreate = false)
         : base(
             htmlRenderer,
             new DocCommentTransformer(new DocCommentHtmlConfiguration()),
             availableLanguages,
             staticPagesDirectory,
-            docVersion)
+            docVersion,
+            forceCreate)
     {
     }
 }
